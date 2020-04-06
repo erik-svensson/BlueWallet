@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Modal from 'react-native-modal';
 
 import MainBottomTabs from './MainBottomTabs';
-import { MainTabNavigator } from 'navigators';
+import { RootNavigator } from 'navigators';
 import NavigationService from './NavigationService';
 import { BlueTextCentered, BlueButton } from './BlueComponents';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
@@ -38,7 +38,7 @@ const loc = require('./loc');
 /** @type {AppStorage} */
 const BlueApp = require('./BlueApp');
 
-const AppContainer = createAppContainer(MainTabNavigator);
+const AppContainer = createAppContainer(RootNavigator);
 
 export default class App extends React.Component {
   navigator = null;

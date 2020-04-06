@@ -1,3 +1,4 @@
+import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import SettingsContainer from './screen/settings/settings';
@@ -43,99 +44,101 @@ import Confirm from './screen/send/confirm';
 import PsbtWithHardwareWallet from './screen/send/psbtWithHardwareWallet';
 import Success from './screen/send/success';
 
+import { HeaderTitle } from 'components';
+
 const ReorderWalletsStackNavigator = createStackNavigator({
   ReorderWallets: {
     screen: ReorderWallets,
   },
 });
 
-const WalletsStackNavigator = createStackNavigator(
-  {
-    Wallets: {
-      screen: WalletsList,
-      path: 'wallets',
-    },
-    WalletTransactions: {
-      screen: WalletTransactions,
-      path: 'WalletTransactions',
-      routeName: 'WalletTransactions',
-    },
-    TransactionStatus: {
-      screen: TransactionStatus,
-    },
-    TransactionDetails: {
-      screen: details,
-    },
-    WalletDetails: {
-      screen: WalletDetails,
-    },
-    RBF: {
-      screen: rbf,
-    },
-    CreateRBF: {
-      screen: createrbf,
-    },
-    CPFP: {
-      screen: cpfp,
-    },
-    RBFBumpFee: {
-      screen: rbfBumpFee,
-    },
-    RBFCancel: {
-      screen: rbfCancel,
-    },
-    Settings: {
-      screen: SettingsContainer,
-      path: 'Settings',
-      navigationOptions: {
-        headerStyle: {
-          backgroundColor: '#FFFFFF',
-          borderBottomWidth: 0,
-          elevation: 0,
-        },
-        headerTintColor: '#0c2550',
-      },
-    },
-    SelectWallet: {
-      screen: SelectWallet,
-    },
-    Currency: {
-      screen: Currency,
-    },
-    About: {
-      screen: About,
-      path: 'About',
-    },
-    ReleaseNotes: {
-      screen: ReleaseNotes,
-      path: 'ReleaseNotes',
-    },
-    Selftest: {
-      screen: Selftest,
-    },
-    DefaultView: {
-      screen: DefaultView,
-      path: 'DefaultView',
-    },
-    Language: {
-      screen: Language,
-      path: 'Language',
-    },
-    EncryptStorage: {
-      screen: EncryptStorage,
-      path: 'EncryptStorage',
-    },
-    PlausibleDeniability: {
-      screen: PlausibleDeniability,
-      path: 'PlausibleDeniability',
-    },
-    ElectrumSettings: {
-      screen: ElectrumSettings,
-      path: 'ElectrumSettings',
+const WalletsStackNavigator = createStackNavigator({
+  Wallets: {
+    screen: WalletsList,
+    path: 'wallets',
+    navigationOptions: {
+      headerTitle: () => <HeaderTitle title="Wallets" />,
     },
   },
-  { headerBackTitleVisible: false },
-);
+  WalletTransactions: {
+    screen: WalletTransactions,
+    path: 'WalletTransactions',
+    routeName: 'WalletTransactions',
+  },
+  TransactionStatus: {
+    screen: TransactionStatus,
+  },
+  TransactionDetails: {
+    screen: details,
+  },
+  WalletDetails: {
+    screen: WalletDetails,
+  },
+  RBF: {
+    screen: rbf,
+  },
+  CreateRBF: {
+    screen: createrbf,
+  },
+  CPFP: {
+    screen: cpfp,
+  },
+  RBFBumpFee: {
+    screen: rbfBumpFee,
+  },
+  RBFCancel: {
+    screen: rbfCancel,
+  },
+  Settings: {
+    screen: SettingsContainer,
+    path: 'Settings',
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: '#FFFFFF',
+        borderBottomWidth: 0,
+        elevation: 0,
+      },
+      headerTintColor: '#0c2550',
+    },
+  },
+  SelectWallet: {
+    screen: SelectWallet,
+  },
+  Currency: {
+    screen: Currency,
+  },
+  About: {
+    screen: About,
+    path: 'About',
+  },
+  ReleaseNotes: {
+    screen: ReleaseNotes,
+    path: 'ReleaseNotes',
+  },
+  Selftest: {
+    screen: Selftest,
+  },
+  DefaultView: {
+    screen: DefaultView,
+    path: 'DefaultView',
+  },
+  Language: {
+    screen: Language,
+    path: 'Language',
+  },
+  EncryptStorage: {
+    screen: EncryptStorage,
+    path: 'EncryptStorage',
+  },
+  PlausibleDeniability: {
+    screen: PlausibleDeniability,
+    path: 'PlausibleDeniability',
+  },
+  ElectrumSettings: {
+    screen: ElectrumSettings,
+    path: 'ElectrumSettings',
+  },
+});
 
 const CreateTransactionStackNavigator = createStackNavigator({
   SendDetails: {
@@ -186,14 +189,14 @@ const MainBottomTabs = createStackNavigator(
       screen: WalletsStackNavigator,
       path: 'wallets',
       navigationOptions: {
-        header: null,
+        headerTitle: () => <HeaderTitle title="Wallets" />,
       },
     },
     AddWallet: {
       screen: CreateWalletStackNavigator,
-      navigationOptions: {
-        header: null,
-      },
+      // navigationOptions: {
+      //   header: null,
+      // },
     },
     ScanQrWif: {
       screen: scanQrWif,
@@ -213,15 +216,15 @@ const MainBottomTabs = createStackNavigator(
     //
     SendDetails: {
       screen: CreateTransactionStackNavigator,
-      navigationOptions: {
-        header: null,
-      },
+      // navigationOptions: {
+      //   header: null,
+      // },
     },
     SelectWallet: {
       screen: SelectWallet,
-      navigationOptions: {
-        headerLeft: null,
-      },
+      // navigationOptions: {
+      //   headerLeft: null,
+      // },
     },
 
     //
@@ -244,12 +247,10 @@ const MainBottomTabs = createStackNavigator(
 
     ReorderWallets: {
       screen: ReorderWalletsStackNavigator,
-      navigationOptions: {
-        header: null,
-      },
     },
   },
   {
+    headerMode: 'none',
     mode: 'modal',
   },
 );

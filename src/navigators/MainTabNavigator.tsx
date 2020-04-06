@@ -5,7 +5,7 @@ import MainBottomTabs from '../../MainBottomTabs';
 import { AddressBookNavigator } from './AddressBookNavigator';
 import { BottomTabBarIcon } from 'components';
 import { images } from 'assets';
-import { palette } from 'style';
+import { palette } from 'styles';
 
 export const MainTabNavigator = createBottomTabNavigator(
   {
@@ -39,9 +39,12 @@ export const MainTabNavigator = createBottomTabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: palette.textWhite,
-      inactiveTintColor: palette.textWhiteDisabled,
-      labelStyle: tabStyle.label,
+      activeTintColor: palette.secondary,
+      inactiveTintColor: palette.textWhiteMuted,
+
+      style: {
+        backgroundColor: 'grey',
+      },
     },
   },
 );
