@@ -1,9 +1,10 @@
 import React from 'react';
+import { View } from 'react-native';
 import { createBottomTabNavigator } from 'react-navigation';
 
 import MainBottomTabs from '../../MainBottomTabs';
 import { AddressBookNavigator } from './AddressBookNavigator';
-import { BottomTabBarIcon } from 'components';
+import { BottomTabBarIcon, BottomTabBarComponent } from 'components';
 import { images } from 'assets';
 import { palette } from 'styles';
 
@@ -38,13 +39,10 @@ export const MainTabNavigator = createBottomTabNavigator(
     },
   },
   {
+    tabBarComponent: props => <BottomTabBarComponent {...props} />,
     tabBarOptions: {
       activeTintColor: palette.secondary,
       inactiveTintColor: palette.textWhiteMuted,
-
-      style: {
-        backgroundColor: 'grey',
-      },
     },
   },
 );
