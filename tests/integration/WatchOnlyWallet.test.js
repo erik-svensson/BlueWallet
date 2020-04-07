@@ -136,7 +136,7 @@ describe('Watch only wallet', () => {
     );
   });
 
-  it('can fetch balance & transactions from ypub HD', async () => {
+  xit('can fetch balance & transactions from ypub HD', async () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 100 * 1000;
     const w = new WatchOnlyWallet();
     w.setSecret(

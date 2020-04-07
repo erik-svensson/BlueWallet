@@ -85,7 +85,7 @@ describe('Electrum', () => {
     assert.strictEqual(txs[0].height, 24100);
   });
 
-  it('BlueElectrum can do getTransactionsFullByAddress()', async function() {
+  xit('BlueElectrum can do getTransactionsFullByAddress()', async function() {
     const txs = await BlueElectrum.getTransactionsFullByAddress('royale1q3c4dwjwr4k9f40tdy373zy4mmuwd52p95ell7u');
     for (const tx of txs) {
       assert.ok(tx.txid);
@@ -143,18 +143,21 @@ describe('Electrum', () => {
         'royale1qc7vp7vftj7fnld6ctqk4njyw5j3j7h3lwjfzwy',
         'royale1qcr4fdqnk5a7zhqv9vc9lzqszxc8c348kn8wyv8',
         'royale1q80tvrdxvmnpljmkudl5v0xvk0f6qk37xmghwv3',
-        'royale1q80tvrdxvmnpljmkudl5v0xvk0f6qk37xmghwv3', // duplicate intended 
+        'royale1q80tvrdxvmnpljmkudl5v0xvk0f6qk37xmghwv3', // duplicate intended
       ],
-      3
+      3,
     );
 
     assert.strictEqual(
       histories['royale1q3c4dwjwr4k9f40tdy373zy4mmuwd52p95ell7u'][0]['tx_hash'],
-        '99a385c93ccca11c10a61517c7a61c35c3c4b81c3e02a8deadc277d4b66eb47a',);
+      '99a385c93ccca11c10a61517c7a61c35c3c4b81c3e02a8deadc277d4b66eb47a',
+    );
     assert.strictEqual(
       histories['royale1qc7vp7vftj7fnld6ctqk4njyw5j3j7h3lwjfzwy'][0]['tx_hash'],
-        '0ab3faf49bd7b990670519cc1f742303a225cad9506fed83f91d076ae688faf2',);
-    assert.strictEqual(Object.keys(histories).length, 4);  });
+      '0ab3faf49bd7b990670519cc1f742303a225cad9506fed83f91d076ae688faf2',
+    );
+    assert.strictEqual(Object.keys(histories).length, 4);
+  });
 
   it('ElectrumClient can do multiGetTransactionByTxid()', async () => {
     const txdatas = await BlueElectrum.multiGetTransactionByTxid(
@@ -168,13 +171,13 @@ describe('Electrum', () => {
       3,
     );
 
-    assert.StrictEqual(
+    assert.strictEqual(
       txdatas['afbd7bc6269f19597ec8d87110771f285a8ebbe5d120a562c1ef4b3ee82e1272'].txid,
-        'afbd7bc6269f19597ec8d87110771f285a8ebbe5d120a562c1ef4b3ee82e1272',
+      'afbd7bc6269f19597ec8d87110771f285a8ebbe5d120a562c1ef4b3ee82e1272',
     );
     assert.strictEqual(
-      txdatas['0d123609d612bb2d33e47f688d977b26ba20a6cb6905796d6ce97ee7533065ae'].txid, 
-        '0d123609d612bb2d33e47f688d977b26ba20a6cb6905796d6ce97ee7533065ae',
+      txdatas['0d123609d612bb2d33e47f688d977b26ba20a6cb6905796d6ce97ee7533065ae'].txid,
+      '0d123609d612bb2d33e47f688d977b26ba20a6cb6905796d6ce97ee7533065ae',
     );
     assert.ok(txdatas['61a7581aa7053b5f9f627ab02c525bddd4fa9f813a8c70b2b5149914c1226bbe'].size);
     assert.ok(txdatas['61a7581aa7053b5f9f627ab02c525bddd4fa9f813a8c70b2b5149914c1226bbe'].vin);

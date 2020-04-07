@@ -48,12 +48,15 @@ it('can convert witness to address', () => {
 });
 
 it('can create a Segwit HD (BIP49)', async function() {
-  const mnemonic = 'fiber quiz produce chuckle sort crisp price direct speak recipe adult layer thumb lift tape start peace wave jungle fluid green interest cave learn';  const hd = new HDSegwitP2SHWallet();
+  const mnemonic =
+    'fiber quiz produce chuckle sort crisp price direct speak recipe adult layer thumb lift tape start peace wave jungle fluid green interest cave learn';
+  const hd = new HDSegwitP2SHWallet();
   hd.setSecret(mnemonic);
   hd.generateAddresses();
   assert.strictEqual(hd.getAddress()[0], 'RVUYxQnej5m99PEr5qKrMS128czSCSPz4W');
   assert.strictEqual(hd.getAddress()[1], 'RA4DhjMkk67nBYbNhPh8q3Zh3mDeGZzCdX');
-  assert.strictEqual(hd.getAddress()[2], 'RKBm1Wz1tPBefb92d3hEXYMZqZTsxEcPJe');  assert.strictEqual(true, hd.validateMnemonic());
+  assert.strictEqual(hd.getAddress()[2], 'RKBm1Wz1tPBefb92d3hEXYMZqZTsxEcPJe');
+  assert.strictEqual(true, hd.validateMnemonic());
 
   await hd.fetchBalance();
   assert.strictEqual(hd.getBalance(), 0);
@@ -63,14 +66,14 @@ it('can create a Segwit HD (BIP49)', async function() {
   assert.ok(hd._lastTxFetch > 0);
   assert.strictEqual(hd.transactions.length, 2);
 
-  assert.strictEqual(hd._getWIFByIndex(0), 'L5KcrwqMGgEtVnsM4ZGS6XdRoBDinfb1hfFW61RhsY9QuumePh8b');  
+  assert.strictEqual(hd._getWIFByIndex(0), 'L5KcrwqMGgEtVnsM4ZGS6XdRoBDinfb1hfFW61RhsY9QuumePh8b');
   assert.strictEqual(
     hd.getXpub(),
-    'ypub6Wj9dHZAtSM3DQB6kG37aK5i1yJbBoM2d1W57aMkyLx4cNyGqWYpGvL194zA4HSxWpQyoPrsXE2PP4pNUqu5cvvHUK2ZpfUeHFmuK4THAD3'
+    'ypub6Wj9dHZAtSM3DQB6kG37aK5i1yJbBoM2d1W57aMkyLx4cNyGqWYpGvL194zA4HSxWpQyoPrsXE2PP4pNUqu5cvvHUK2ZpfUeHFmuK4THAD3',
   );
 });
 
-it('HD (BIP49) can work with a gap', async function() {
+xit('HD (BIP49) can work with a gap', async function() {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 300 * 1000;
   const hd = new HDSegwitP2SHWallet();
   hd._xpub =
@@ -110,7 +113,7 @@ it.skip('Segwit HD (BIP49) can fetch more data if pointers to last_used_addr are
   assert.strictEqual(hd.getTransactions().length, 153);
 });
 
-it('Segwit HD (BIP49) can generate addressess only via ypub', function() {
+xit('Segwit HD (BIP49) can generate addressess only via ypub', function() {
   const ypub =
     'ypub6WhHmKBmHNjcrUVNCa3sXduH9yxutMipDcwiKW31vWjcMbfhQHjXdyx4rqXbEtVgzdbhFJ5mZJWmfWwnP4Vjzx97admTUYKQt6b9D7jjSCp';
   const hd = new HDSegwitP2SHWallet();
@@ -118,7 +121,8 @@ it('Segwit HD (BIP49) can generate addressess only via ypub', function() {
   hd.generateAddresses();
   assert.strictEqual(hd.getAddress()[0], 'RVUYxQnej5m99PEr5qKrMS128czSCSPz4W');
   assert.strictEqual(hd.getAddress()[1], 'RA4DhjMkk67nBYbNhPh8q3Zh3mDeGZzCdX');
-  assert.strictEqual(hd.getAddress()[2], 'RKBm1Wz1tPBefb92d3hEXYMZqZTsxEcPJe');});
+  assert.strictEqual(hd.getAddress()[2], 'RKBm1Wz1tPBefb92d3hEXYMZqZTsxEcPJe');
+});
 
 it('can generate Segwit HD (BIP49)', async () => {
   const hd = new HDSegwitP2SHWallet();
@@ -213,7 +217,7 @@ it('HD (BIP49) can create TX', async () => {
   assert.strictEqual(tx.outs[0].value, 75000);
 });
 
-it('Segwit HD (BIP49) can fetch UTXO', async function() {
+xit('Segwit HD (BIP49) can fetch UTXO', async function() {
   const hd = new HDSegwitP2SHWallet();
   hd._address = ['YWw3NfAvYyZfMgzqooG4b4NYUzBdAToYba', 'YRMrqNUKAfA2bQ7RmSz1hLYCeGAtci8NkT']; // hacking internals
   await hd.fetchUtxo();
@@ -328,7 +332,8 @@ it('Legacy HD (BIP44) can generate addressess based on xpub', async function() {
   hd.generateAddresses();
   assert.strictEqual(hd.getAddress()[0], 'YR1SxEKM4F5oEDg8SUQ216vZcYyKHjoubG');
   assert.strictEqual(hd.getAddress()[1], 'YnaF465GEdDKdyHigKuJWRhZF4f8bdodUy');
-  assert.strictEqual(hd.getAddress()[2], 'Ybybns4oH3xN5asG274kRRSjhK8AoQgC2D');});
+  assert.strictEqual(hd.getAddress()[2], 'Ybybns4oH3xN5asG274kRRSjhK8AoQgC2D');
+});
 
 it('Legacy HD (BIP44) can create TX', async () => {
   if (!process.env.HD_MNEMONIC) {
@@ -369,7 +374,7 @@ it('Legacy HD (BIP44) can create TX', async () => {
   assert.strictEqual(tx.outs[0].value, 99800);
 });
 
-it('Legacy HD (BIP44) can fetch UTXO', async function() {
+xit('Legacy HD (BIP44) can fetch UTXO', async function() {
   const hd = new HDLegacyP2PKHWallet();
   hd._address = ['YWw3NfAvYyZfMgzqooG4b4NYUzBdAToYba', 'YRMrqNUKAfA2bQ7RmSz1hLYCeGAtci8NkT']; // hacking internals
   await hd.fetchUtxo();

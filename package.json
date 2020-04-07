@@ -161,8 +161,8 @@
   },
   "lint-staged": {
     "./**/*.{ts,tsx,js,jsx}": [
-      "npm run test",
-      "npm run lint:fix"
+      "yarn test",
+      "yarn lint:fix"
     ]
   },
   "husky": {

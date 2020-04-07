@@ -1,5 +1,7 @@
 import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock';
 
+global.net = require('net');
+
 jest.mock('react-native-watch-connectivity', () => {
   return {
     getIsWatchAppInstalled: jest.fn(),

@@ -7,29 +7,29 @@ describe('unit - signer', function() {
     it('should return valid tx hex for segwit transactions', function(done) {
       const signer = require('../../models/signer');
       const utxos = [
-        { 
-          txid: '1e1a8cced5580eecd0ac15845fc3adfafbb0f5944a54950e4a16b8f6d1e9b715', 
-          vout: 1, 
+        {
+          txid: '1e1a8cced5580eecd0ac15845fc3adfafbb0f5944a54950e4a16b8f6d1e9b715',
+          vout: 1,
           address: 'RSvwNKBtqEhbNNF4A7mcUcJ3ZiR7FUSJVn',
-          account: 'RSvwNKBtqEhbNNF4A7mcUcJ3ZiR7FUSJVn', 
-          scriptPubKey: 'a914c19daa4f3035e18a71abc63ababc4d3da8f2840f87', 
-          value: 0.001, 
-          confirmations: 108, 
-          spendable: true, 
-          solvable: false, 
-          safe: true 
-        }
-      ]
+          account: 'RSvwNKBtqEhbNNF4A7mcUcJ3ZiR7FUSJVn',
+          scriptPubKey: 'a914c19daa4f3035e18a71abc63ababc4d3da8f2840f87',
+          value: 0.001,
+          confirmations: 108,
+          spendable: true,
+          solvable: false,
+          safe: true,
+        },
+      ];
       const tx = signer.createSegwitTransaction(
-        utxos, 
-        'YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht', 
-        0.001, 
-        0.0001, 
-        'KxAQ435Q193azgg8qgP5GY9291roo2kTRniSxmaWaHy3SfB1si3E'
+        utxos,
+        'YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht',
+        0.001,
+        0.0001,
+        'KxAQ435Q193azgg8qgP5GY9291roo2kTRniSxmaWaHy3SfB1si3E',
       );
       assert.strictEqual(
-        tx, 
-        '0100000000010115b7e9d1f6b8164a0e95544a94f5b0fbfaadc35f8415acd0ec0e58d5ce8c1a1e0100000017160014cdcbe2bdb67b6ceece9f96f917362396a0697775ffffffff01905f0100000000001976a9140e75eb2af3599acf900cf0b7e666027b105cf3db88ac02473044022062dd7f00917781bd12cf59649f53f8b57d1bf83168d8bf295b3ae80d183df72402207b102b3158064eeddb6d951b3df00b0efafdb5c6fede25ba43226dab73895a96012102504f1fce9ec0517c2997374a69637fb7a351a2a3e3cf82457bfe0a894eb1821500000000'
+        tx,
+        '0100000000010115b7e9d1f6b8164a0e95544a94f5b0fbfaadc35f8415acd0ec0e58d5ce8c1a1e0100000017160014cdcbe2bdb67b6ceece9f96f917362396a0697775ffffffff01905f0100000000001976a9140e75eb2af3599acf900cf0b7e666027b105cf3db88ac02473044022062dd7f00917781bd12cf59649f53f8b57d1bf83168d8bf295b3ae80d183df72402207b102b3158064eeddb6d951b3df00b0efafdb5c6fede25ba43226dab73895a96012102504f1fce9ec0517c2997374a69637fb7a351a2a3e3cf82457bfe0a894eb1821500000000',
       );
       done();
     });
@@ -85,7 +85,7 @@ describe('unit - signer', function() {
       const newhex = signer.createRBFSegwitTransaction(
         txhex,
         {
-          'YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht': 'RNAFqLmCjZunuhnNpmgF6nTs8KzQddnZDm',
+          YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht: 'RNAFqLmCjZunuhnNpmgF6nTs8KzQddnZDm',
         },
         0.0001,
         'KwWc7DAYgzgRdBcvKD844SC5cHWZ1HY5TxqUACohH59uiH4RNrXT',
