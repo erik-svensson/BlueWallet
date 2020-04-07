@@ -3,11 +3,11 @@ import { BottomTabBar } from 'react-navigation-tabs';
 import { StyleSheet } from 'react-native';
 
 import { palette } from 'styles';
-import { GradientView, GradientVariants } from './GradientView';
+import { GradientView } from './GradientView';
 
 export const BottomTabBarComponent = (props: any) => {
   return (
-    <GradientView variant={GradientVariants.main}>
+    <GradientView variant={GradientView.Variant.Primary}>
       <BottomTabBar {...props} style={styles.tabBar} />
     </GradientView>
   );

@@ -1,22 +1,27 @@
 import { LinearGradient } from './Gradient';
-import React, { ReactChild } from 'react';
+import React, { PureComponent, ReactChild } from 'react';
 import { ViewStyle } from 'react-native';
 
-import { GradientVariants } from 'consts';
 import { gradients } from 'styles';
 
+enum GradientVariant {
+  Primary = 'Primary',
+  Secondary = 'Secondary',
+}
 interface Props {
   children?: ReactChild;
-  variant: GradientVariants;
+  variant: GradientVariant;
   style?: ViewStyle;
 }
 
-export const GradientView = ({ children, variant, style, ...props }: Props) => {
-  return (
-    <LinearGradient colors={gradients[variant]} style={style} {...props}>
-      {children}
-    </LinearGradient>
-  );
-};
-
-export { GradientVariants };
+export class GradientView extends PureComponent<Props> {
+  static Variant = GradientVariant;
+  render() {
+    const { variant, style, children } = this.props;
+    return (
+      <LinearGradient colors={gradients[variant]} style={style} {...this.props}>
+        {children}
+      </LinearGradient>
+    );
+  }
+}

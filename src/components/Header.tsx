@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-import { GradientView, GradientVariants } from './GradientView';
+import { GradientView } from './GradientView';
 import { getStatusBarHeight, palette, typography } from 'styles';
 
 export const Header = ({ title }: { title: string }) => {
   return (
-    <GradientView variant={GradientVariants.main} style={styles.container}>
+    <GradientView variant={GradientView.Variant.Primary} style={styles.container}>
       <Text style={styles.title}>{title}</Text>
     </GradientView>
   );
