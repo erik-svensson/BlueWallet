@@ -20,5 +20,6 @@
     "node_modules",
     "babel.config.js",
     "jest.config.js"
-  ]
+  ],
+  "baseUrl": "./src",
 }
