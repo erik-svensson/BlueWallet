@@ -10,17 +10,22 @@ interface Props {
 }
 
 interface State {
+  isActive: boolean;
   isAnimatedFocused: Animated.Value;
   value: string;
 }
 
 export class InputItem extends Component<Props, State> {
   state = {
+    isActive: false,
     isAnimatedFocused: new Animated.Value(0),
     value: '',
   };
 
   onFocus = () => {
+    this.setState({
+      isActive: true,
+    });
     // @ts-ignore
     Animated.timing(this.state.isAnimatedFocused, {
       toValue: 1,
@@ -29,6 +34,9 @@ export class InputItem extends Component<Props, State> {
   };
 
   onBlur = () => {
+    this.setState({
+      isActive: false,
+    });
     if (!this.state.value) {
       // @ts-ignore
       Animated.timing(this.state.isAnimatedFocused, {
@@ -43,9 +51,8 @@ export class InputItem extends Component<Props, State> {
   };
 
   render() {
-    const { isAnimatedFocused } = this.state;
+    const { isAnimatedFocused, isActive } = this.state;
     const { label, suffix, error } = this.props;
-
     const top = this.state.isAnimatedFocused.interpolate({
       inputRange: [0, 1],
       outputRange: [12, -8],
@@ -60,7 +67,13 @@ export class InputItem extends Component<Props, State> {
         {!!suffix && <Text style={styles.suffix}>{suffix}</Text>}
         <BaseTextInput
           {...this.props}
-          style={[styles.input, !!suffix && styles.isSuffix, !!error && styles.isError]}
+          style={[
+            styles.input,
+            !!suffix && styles.isSuffix,
+            isActive && styles.isActiveInput,
+            !!error && styles.isError,
+          ]}
+          selectionColor={palette.textSecondary}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChangeText={this.onChangeText}
@@ -73,8 +86,7 @@ export class InputItem extends Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    height: 53,
+    height: 70,
   },
   label: {
     position: 'absolute',
@@ -94,6 +106,9 @@ const styles = StyleSheet.create({
   },
   isError: {
     borderBottomColor: palette.error,
+  },
+  isActiveInput: {
+    borderBottomColor: palette.textSecondary,
   },
   suffix: {
     position: 'absolute',
