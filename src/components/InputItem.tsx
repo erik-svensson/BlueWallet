@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, TextInput as BaseTextInput, View, Text } from 'react-native';
+import { StyleSheet, TextInput as BaseTextInput, View, Text, Animated } from 'react-native';
 
-import { palette, typography } from 'styles';
+import { palette, typography, fonts } from 'styles';
 
 interface Props {
   label: string;
@@ -10,28 +10,53 @@ interface Props {
 }
 
 interface State {
-  isFocused: boolean;
+  isAnimatedFocused: Animated.Value;
   value: string;
 }
 
 export class InputItem extends Component<Props, State> {
   state = {
-    isFocused: false,
+    isAnimatedFocused: new Animated.Value(0),
     value: '',
   };
 
-  onFocus = () => this.setState({ isFocused: true });
-  onBlur = () => this.setState({ isFocused: false });
+  onFocus = () => {
+    // @ts-ignore
+    Animated.timing(this.state.isAnimatedFocused, {
+      toValue: 1,
+      duration: 200,
+    }).start();
+  };
+
+  onBlur = () => {
+    if (!this.state.value) {
+      // @ts-ignore
+      Animated.timing(this.state.isAnimatedFocused, {
+        toValue: 0,
+        duration: 200,
+      }).start();
+    }
+  };
+
   onChangeText = (text: string) => {
     this.setState({ value: text });
   };
 
   render() {
-    const { isFocused, value } = this.state;
+    const { isAnimatedFocused } = this.state;
     const { label, suffix, error } = this.props;
+
+    const top = this.state.isAnimatedFocused.interpolate({
+      inputRange: [0, 1],
+      outputRange: [12, -8],
+    });
+    const fontSize = isAnimatedFocused.interpolate({
+      inputRange: [0, 1],
+      outputRange: [14, 12],
+    });
     return (
       <View style={styles.container}>
-        <Text style={[styles.label, isFocused || !!value ? styles.labelActive : styles.labelInActive]}>{label}</Text>
+        <Animated.Text style={[styles.label, { top, fontSize }]}>{label}</Animated.Text>
         {!!suffix && <Text style={styles.suffix}>{suffix}</Text>}
         <BaseTextInput
           {...this.props}
@@ -55,15 +80,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     color: palette.textGrey,
-  },
-  labelActive: {
-    ...typography.overline,
-    top: -8,
-  },
-  labelInActive: {
-    ...typography.caption,
-    lineHeight: 19,
-    top: 12,
+    fontFamily: fonts.ubuntu.light,
   },
   input: {
     paddingRight: 50,
