@@ -12,6 +12,7 @@ import { Icon } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import PropTypes from 'prop-types';
+import { ListEmptyState } from 'components';
 
 const EV = require('../../events');
 /** @type {AppStorage} */
@@ -250,8 +251,13 @@ export default class WalletsList extends Component {
     return <BlueTransactionListItem item={data.item} itemPriceUnit={data.item.walletPreferredBalanceUnit} />;
   };
   render() {
+    const { wallets } = this.state;
+    console.warn('wallets', wallets);
     if (this.state.isLoading) {
       return <BlueLoading />;
+    }
+    if (wallets[0] === false) {
+      return <ListEmptyState />;
     }
     return (
       <SafeBlueArea style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
