@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { Image } from './Image';
@@ -6,27 +6,52 @@ import { images } from 'assets';
 import { typography, palette } from 'styles';
 
 import { en } from 'locale';
+import { StyledText } from './StyledText';
 
+enum ImageVariant {
+  Dashboard = 'dashboardNoWallet',
+  AddressBook = 'addressBookNoContacts',
+}
 interface Props {
-  variant: string;
+  variant: ImageVariant;
   onPress: () => void;
 }
 
-export const ListEmptyState = ({ variant, onPress }: Props) => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{en.dashboard.noWallets}</Text>
-      <Image source={images.dashboardNoWallet} style={styles.image} resizeMode="contain" />
+export class ListEmptyState extends PureComponent<Props> {
+  static Variant = ImageVariant;
+
+  renderDashboardDescription = () => (
+    <>
+      <Text style={styles.description}>{en.dashboard.noWalletsDesc1}</Text>
       <Text style={styles.description}>
-        {en.dashboard.noWalletsDesc1}
-        <Text style={styles.link} onPress={onPress}>
-          Click
-        </Text>
-        {en.dashboard.noWalletsDesc2}
+        <StyledText onPress={this.props.onPress} title="Click" /> {en.dashboard.noWalletsDesc2}
       </Text>
-    </View>
+    </>
   );
-};
+
+  renderAddressBookDescription = () => (
+    <>
+      <Text style={styles.description}>
+        {en.addressBook.noContactsDesc1}
+        <StyledText onPress={this.props.onPress} title="here" />
+        {en.addressBook.noContactsDesc2}
+      </Text>
+    </>
+  );
+
+  render() {
+    const { variant } = this.props;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>
+          {variant == ImageVariant.Dashboard ? en.dashboard.noWallets : en.addressBook.noContacts}
+        </Text>
+        <Image source={images[variant]} style={styles.image} resizeMode="contain" />
+        {variant == ImageVariant.Dashboard ? this.renderDashboardDescription() : this.renderAddressBookDescription()}
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

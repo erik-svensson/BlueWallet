@@ -252,12 +252,16 @@ export default class WalletsList extends Component {
   };
   render() {
     const { wallets } = this.state;
-    console.warn('wallets', wallets);
     if (this.state.isLoading) {
       return <BlueLoading />;
     }
     if (wallets[0] === false) {
-      return <ListEmptyState />;
+      return (
+        <ListEmptyState
+          variant={ListEmptyState.Variant.AddressBook}
+          onPress={() => this.props.navigation.navigate('AddWallet')}
+        />
+      );
     }
     return (
       <SafeBlueArea style={{ flex: 1, backgroundColor: '#FFFFFF' }}>

@@ -6,4 +6,5 @@ export const images = {
   settings: require('./images/settings.png'),
   settingsInactive: require('./images/settingsInactive.png'),
   dashboardNoWallet: require('./images/bvWalletIconNoCards.png'),
+  addressBookNoContacts: require('./images/addressBookNoContacts.png'),
 };
