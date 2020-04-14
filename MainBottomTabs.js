@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { DashboardScreen } from 'screens';
 
 import { Header } from 'app/components';
 
@@ -50,7 +51,7 @@ const ReorderWalletsStackNavigator = createStackNavigator({
 
 const WalletsStackNavigator = createStackNavigator({
   Wallets: {
-    screen: WalletsList,
+    screen: DashboardScreen,
     path: 'wallets',
     navigationOptions: {
       header: () => <Header title="Wallets" />,
