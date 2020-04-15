@@ -13,8 +13,11 @@ export const images = {
   yellowMinus: require('./images/yellowMinus.png'),
   yellowPlus: require('./images/yellowPlus.png'),
   coin: require('./images/coin.png'),
+  noTransactions: require('./images/bvWalletIconNoTransactions.png'),
+  coinLogoInCircle: require('./images/coinLogoInCircle.png'),
 };
 
 export const icons = {
   iconDropdown: require('./images/iconDropdown.png'),
+  addIcon: require('./images/addIcon.png'),
 };

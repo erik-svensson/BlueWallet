@@ -9,11 +9,12 @@ import { en } from 'locale';
 interface Props {
   balance: number;
   unit: string;
+  label: string;
   onSendPress: () => void;
   onReceivePress: () => void;
 }
 
-export const Header = ({ balance, unit, onSendPress, onReceivePress }: Props) => {
+export const DashboardHeader = ({ balance, unit, label, onSendPress, onReceivePress }: Props) => {
   return (
     <View style={styles.header}>
       <TouchableOpacity style={styles.chooseWalletButton}>
@@ -21,7 +22,7 @@ export const Header = ({ balance, unit, onSendPress, onReceivePress }: Props) =>
         <Image source={icons.iconDropdown} style={styles.icon} />
       </TouchableOpacity>
       <View style={styles.descriptionContainer}>
-        <Text style={styles.buttonDescription}>{en.dashboard.allWallets}</Text>
+        <Text style={styles.buttonDescription}>{label}</Text>
         <Image source={images.coin} style={styles.coinIcon} />
       </View>
       <View style={styles.buttonsContainer}>
