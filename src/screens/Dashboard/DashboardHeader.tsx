@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { Image } from 'components';
-import { icons, images } from 'assets';
-import { typography, palette } from 'styles';
-import { en } from 'locale';
+import { icons, images } from 'app/assets';
+import { Image } from 'app/components';
+import { en } from 'app/locale';
+import { typography, palette } from 'app/styles';
 
 interface Props {
   balance: number;

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 
-import { images } from 'app/assets';
+import { images, icons } from 'app/assets';
 import { getStatusBarHeight, palette, typography } from 'app/styles';
 
 import { FlatButton } from './FlatButton';

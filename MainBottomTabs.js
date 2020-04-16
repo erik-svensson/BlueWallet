@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import { DashboardScreen } from 'screens';
-import { NavigationService } from 'services';
 
 import { Header } from 'app/components';
+import { DashboardScreen } from 'app/screens';
+import { NavigationService } from 'app/services';
 
 import PlausibleDeniability from './screen/plausibledeniability';
 import receiveDetails from './screen/receive/details';

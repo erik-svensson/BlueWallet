@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, InteractionManager, ScrollView, RefreshControl } from 'react-native';
 import { NavigationEvents, NavigationScreenProp, NavigationState, NavigationParams } from 'react-navigation';
 
-import { Wallet, Route } from 'consts';
-import { DashboardHeader } from './DashboardHeader';
-import { WalletsCarousel } from './WalletsCarousel';
-import { ListEmptyState, Image } from 'components';
-import { typography, palette } from 'styles';
-import { images } from 'assets';
-import { en } from 'locale';
+import { images } from 'app/assets';
+import { ListEmptyState, Image } from 'app/components';
+import { Wallet, Route } from 'app/consts';
+import { en } from 'app/locale';
+import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../../BlueApp';
 import EV from '../../../events';
+import { DashboardHeader } from './DashboardHeader';
+import { WalletsCarousel } from './WalletsCarousel';
 
 const BlueElectrum = require('../../../BlueElectrum');
 

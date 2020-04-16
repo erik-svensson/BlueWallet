@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { View, Dimensions, Text, StyleSheet, ScrollViewProps, TouchableOpacity } from 'react-native';
 import Carousel, { CarouselStatic } from 'react-native-snap-carousel';
 
-import { Image, GradientView, StyledText } from 'components';
-import { typography, palette } from 'styles';
-import { en } from 'locale';
-import { images } from 'assets';
-import { Wallet } from 'consts';
+import { images } from 'app/assets';
+import { Image, GradientView, StyledText } from 'app/components';
+import { Wallet } from 'app/consts';
+import { en } from 'app/locale';
+import { typography, palette } from 'app/styles';
 
 const loc = require('./../../../loc/');
 
