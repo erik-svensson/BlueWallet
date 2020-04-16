@@ -1,34 +1,46 @@
 import React, { Component } from 'react';
-import { View, Dimensions, Text, StyleSheet, ScrollViewProps } from 'react-native';
+import { View, Dimensions, Text, StyleSheet, ScrollViewProps, TouchableOpacity } from 'react-native';
 import Carousel, { CarouselStatic } from 'react-native-snap-carousel';
 
 import { Image, GradientView, StyledText } from 'components';
 import { typography, palette } from 'styles';
 import { en } from 'locale';
 import { images } from 'assets';
+import { Wallet } from 'consts';
+
+const loc = require('./../../../loc/');
+
+interface Props {
+  data: any;
+  keyExtractor: string;
+  onSnapToItem: (index: number) => void;
+}
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const ITEM_WIDTH = SCREEN_WIDTH * 0.82;
 const ITEM_HEIGHT = ITEM_WIDTH * 0.63;
-export class WalletsCarousel extends Component {
-  carouselRef = React.createRef<Carousel<any> & CarouselStatic<any> & ScrollViewProps>();
+export class WalletsCarousel extends Component<Props> {
+  carouselRef = React.createRef();
 
-  renderItem({ item, index }) {
-    console.log('item', item);
+  renderItem({ item }: { item: Wallet }) {
     return (
       <GradientView style={styles.itemContainer} variant={GradientView.Variant.Primary}>
         <>
           <Image source={images.coinLogoInCircle} style={styles.iconInCircle} resizeMode="contain" />
           <View style={styles.cardContent}>
             <View style={styles.row}>
-              <Text style={styles.walletType}>{item.label}</Text>
+              <Text style={styles.walletType}>{item.getLabel()}</Text>
               <StyledText title="Edit" onPress={() => {}} />
             </View>
 
-            <Text style={styles.balance}>{`2.12542532 ${item.preferredBalanceUnit}`}</Text>
+            <Text style={styles.balance}>
+              {loc.formatBalance(Number(item.balance), item.preferredBalanceUnit, true)}
+            </Text>
             <View>
               <Text style={styles.latestTransactionTitle}>{en.wallet.latest}</Text>
-              <Text style={styles.latestTransaction}>{item.transactions[0] || en.wallet.none}</Text>
+              <Text style={styles.latestTransaction}>
+                {loc.transactionTimeToReadable(item.getLatestTransactionTime())}
+              </Text>
             </View>
           </View>
         </>
@@ -38,15 +50,18 @@ export class WalletsCarousel extends Component {
 
   render() {
     return (
-      <Carousel
-        ref={this.carouselRef as any}
-        removeClippedSubviews={false}
-        data={this.props.data}
-        renderItem={this.renderItem}
-        sliderWidth={SCREEN_WIDTH}
-        itemWidth={SCREEN_WIDTH * 0.82}
-        onSnapToItem={item => this.props.onSnapItem(item)}
-      />
+      <View>
+        <Carousel
+          {...this.props}
+          ref={this.carouselRef}
+          renderItem={this.renderItem}
+          sliderWidth={SCREEN_WIDTH}
+          itemWidth={SCREEN_WIDTH * 0.82}
+          onSnapToItem={(index: number) => {
+            this.props.onSnapToItem(index);
+          }}
+        />
+      </View>
     );
   }
 }
@@ -64,6 +79,7 @@ const styles = StyleSheet.create({
   walletType: {
     ...typography.headline7,
     color: palette.white,
+    maxWidth: ITEM_WIDTH - 60,
   },
   balance: {
     ...typography.headline3,

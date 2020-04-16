@@ -44,42 +44,42 @@ export default class WalletsList extends Component {
   //   ),
   // });
 
-  // constructor(props) {
-  //   super(props);
-  state = {
-    isLoading: true,
-    isFlatListRefreshControlHidden: true,
-    wallets: BlueApp.getWallets().concat(false),
-    lastSnappedTo: 0,
-  };
-  //   EV(EV.enum.WALLETS_COUNT_CHANGED, this.redrawScreen.bind(this));
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      isFlatListRefreshControlHidden: true,
+      wallets: BlueApp.getWallets().concat(false),
+      lastSnappedTo: 0,
+    };
+    EV(EV.enum.WALLETS_COUNT_CHANGED, this.redrawScreen.bind(this));
 
-  //   // here, when we receive TRANSACTIONS_COUNT_CHANGED we do not query
-  //   // remote server, we just redraw the screen
-  //   EV(EV.enum.TRANSACTIONS_COUNT_CHANGED, this.redrawScreen.bind(this));
-  // }
+    // here, when we receive TRANSACTIONS_COUNT_CHANGED we do not query
+    // remote server, we just redraw the screen
+    EV(EV.enum.TRANSACTIONS_COUNT_CHANGED, this.redrawScreen.bind(this));
+  }
 
   componentDidMount() {
     this.redrawScreen();
     // the idea is that upon wallet launch we will refresh
     // all balances and all transactions here:
-    // InteractionManager.runAfterInteractions(async () => {
-    //   let noErr = true;
-    //   try {
-    //     await BlueElectrum.waitTillConnected();
-    //     const balanceStart = +new Date();
-    //     await BlueApp.fetchWalletBalances();
-    //     const balanceEnd = +new Date();
-    //     console.log('fetch all wallet balances took', (balanceEnd - balanceStart) / 1000, 'sec');
-    //     const start = +new Date();
-    //     await BlueApp.fetchWalletTransactions();
-    //     const end = +new Date();
-    //     console.log('fetch all wallet txs took', (end - start) / 1000, 'sec');
-    //   } catch (_) {
-    //     noErr = false;
-    //   }
-    //   if (noErr) this.redrawScreen();
-    // });
+    InteractionManager.runAfterInteractions(async () => {
+      let noErr = true;
+      try {
+        await BlueElectrum.waitTillConnected();
+        const balanceStart = +new Date();
+        await BlueApp.fetchWalletBalances();
+        const balanceEnd = +new Date();
+        console.log('fetch all wallet balances took', (balanceEnd - balanceStart) / 1000, 'sec');
+        const start = +new Date();
+        await BlueApp.fetchWalletTransactions();
+        const end = +new Date();
+        console.log('fetch all wallet txs took', (end - start) / 1000, 'sec');
+      } catch (_) {
+        noErr = false;
+      }
+      if (noErr) this.redrawScreen();
+    });
   }
 
   /**
@@ -257,14 +257,14 @@ export default class WalletsList extends Component {
     if (this.state.isLoading) {
       return <BlueLoading />;
     }
-    if (wallets[0] === false) {
-      return (
-        <ListEmptyState
-          variant={ListEmptyState.Variant.Dashboard}
-          onPress={() => this.props.navigation.navigate('AddWallet')}
-        />
-      );
-    }
+    // if (wallets[0] === false) {
+    //   return (
+    //     <ListEmptyState
+    //       variant={ListEmptyState.Variant.Dashboard}
+    //       onPress={() => this.props.navigation.navigate('AddWallet')}
+    //     />
+    //   );
+    // }
     return (
       <SafeBlueArea style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         <NavigationEvents
