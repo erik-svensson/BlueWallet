@@ -3,4 +3,5 @@ export enum Route {
   WalletDetails = 'WalletDetails',
   AddressBook = 'AddressBook',
   Settings = 'Settings',
+  Message = 'Message',
 }

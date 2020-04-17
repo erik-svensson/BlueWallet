@@ -6,6 +6,7 @@ import { palette, typography } from 'styles';
 interface Props {
   style?: StyleProp<ViewStyle>;
   placeholder?: string;
+  onChangeText?: (text: string) => void;
 }
 
 interface State {
@@ -20,7 +21,7 @@ export class TextAreaItem extends PureComponent<Props, State> {
   onBlur = () => this.setState({ isActive: false });
 
   render() {
-    const { style, placeholder } = this.props;
+    const { style, placeholder, onChangeText } = this.props;
     const { isActive } = this.state;
     return (
       <BaseTextInput
@@ -32,6 +33,7 @@ export class TextAreaItem extends PureComponent<Props, State> {
         multiline={true}
         onFocus={this.onFocus}
         onBlur={this.onBlur}
+        onChangeText={onChangeText}
       />
     );
   }

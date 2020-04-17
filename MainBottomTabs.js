@@ -17,7 +17,6 @@ import WalletsList from './screen/wallets/list';
 import WalletTransactions from './screen/wallets/transactions';
 import AddWallet from './screen/wallets/add';
 import PleaseBackup from './screen/wallets/pleaseBackup';
-import ImportWallet from './screen/wallets/import';
 import WalletDetails from './screen/wallets/details';
 import WalletExport from './screen/wallets/export';
 import WalletXpub from './screen/wallets/xpub';
@@ -46,6 +45,7 @@ import PsbtWithHardwareWallet from './screen/send/psbtWithHardwareWallet';
 import Success from './screen/send/success';
 
 import { Header } from 'components';
+import { ImportWalletScreen } from 'screens/ImportWalletScreen';
 
 const ReorderWalletsStackNavigator = createStackNavigator({
   ReorderWallets: {
@@ -177,7 +177,7 @@ const CreateWalletStackNavigator = createStackNavigator({
     screen: AddWallet,
   },
   ImportWallet: {
-    screen: ImportWallet,
+    screen: ImportWalletScreen,
   },
   PleaseBackup: {
     screen: PleaseBackup,
