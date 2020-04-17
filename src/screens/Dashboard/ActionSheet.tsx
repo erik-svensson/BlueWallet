@@ -21,9 +21,10 @@ export const ActionSheet = (props: Props) => {
     const onPress = props.navigation.getParam('onPress');
     return wallets.map((wallet: Wallet, index: number) => (
       <WalletItem
-        value={wallet.balance.toString()}
+        variant={wallet.label === 'All Wallets' ? 'Secondary' : 'Primary'}
+        value={wallet.balance.toString() || '123'}
         name={wallet.label}
-        title={wallet.label[0]}
+        title={wallet.label === 'All Wallets' ? 'AW' : wallet.label[0]}
         selected={index == selectedIndex}
         key={index}
         onPress={() => {
