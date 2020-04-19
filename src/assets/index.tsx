@@ -12,4 +12,14 @@ export const images = {
   successBadge: require('./images/groupCopy2.png'),
   processingState: require('./images/processingState.png'),
   errorState: require('./images/errorState.png'),
+  yellowMinus: require('./images/yellowMinus.png'),
+  yellowPlus: require('./images/yellowPlus.png'),
+  coin: require('./images/coin.png'),
+  noTransactions: require('./images/bvWalletIconNoTransactions.png'),
+  coinLogoInCircle: require('./images/coinLogoInCircle.png'),
+};
+
+export const icons = {
+  iconDropdown: require('./images/iconDropdown.png'),
+  addIcon: require('./images/addIcon.png'),
 };

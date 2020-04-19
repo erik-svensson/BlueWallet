@@ -1,20 +1,24 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-
-import { GradientView } from './GradientView';
-import { getStatusBarHeight, palette, typography } from 'styles';
-import { Image } from './Image';
-import { images } from 'assets';
 import { NavigationScreenProps } from 'react-navigation';
+
+import { images, icons } from 'app/assets';
+import { getStatusBarHeight, palette, typography } from 'app/styles';
+
 import { FlatButton } from './FlatButton';
+import { GradientView } from './GradientView';
+import { Image } from './Image';
+
+const HEADER_HEIGHT = 38;
 
 interface Props extends Partial<NavigationScreenProps> {
   title: string;
   isBackArrow?: boolean;
   isCancelButton?: boolean;
+  addFunction?: () => void;
 }
 
-export const Header = ({ title, isBackArrow, isCancelButton, navigation }: Props) => {
+export const Header = ({ title, isBackArrow, isCancelButton, navigation, addFunction }: Props) => {
   const onLeftItemPress = () => navigation!.pop();
   const renderBackArrow = () => <Image style={styles.image} source={images.backArrow} />;
   const renderCancelButton = () => (
@@ -39,6 +43,11 @@ export const Header = ({ title, isBackArrow, isCancelButton, navigation }: Props
       <>
         {renderLeftItem()}
         <Text style={styles.title}>{title}</Text>
+        {!!addFunction && (
+          <TouchableOpacity style={styles.rightElement} onPress={addFunction}>
+            <Image source={icons.addIcon} style={styles.addIcon} />
+          </TouchableOpacity>
+        )}
       </>
     </GradientView>
   );
@@ -46,10 +55,11 @@ export const Header = ({ title, isBackArrow, isCancelButton, navigation }: Props
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: getStatusBarHeight() + 11,
-    paddingBottom: 11,
+    paddingTop: getStatusBarHeight(),
+    height: HEADER_HEIGHT + getStatusBarHeight(),
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
   },
   title: {
@@ -58,8 +68,12 @@ const styles = StyleSheet.create({
   },
   backArrowContainer: {
     position: 'absolute',
-    bottom: 14,
-    left: 28,
+    height: HEADER_HEIGHT,
+    width: HEADER_HEIGHT,
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: getStatusBarHeight(),
+    left: 10,
   },
   cancelButtonContainer: {
     position: 'absolute',
@@ -69,5 +83,18 @@ const styles = StyleSheet.create({
   image: {
     width: 8,
     height: 13,
+  },
+  addIcon: {
+    height: 12,
+    width: 12,
+  },
+  rightElement: {
+    position: 'absolute',
+    height: HEADER_HEIGHT,
+    width: HEADER_HEIGHT,
+    justifyContent: 'center',
+    alignItems: 'center',
+    right: 10,
+    top: getStatusBarHeight(),
   },
 });

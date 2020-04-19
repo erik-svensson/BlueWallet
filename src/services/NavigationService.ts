@@ -1,10 +1,13 @@
-import { MessageProps } from 'screens/MessageScreen';
-import { EditTextProps } from 'screens/EditTextScreen';
 import { NavigationContainerComponent, NavigationActions, StackActions } from 'react-navigation';
+import { EditTextProps } from 'screens/EditTextScreen';
+import { MessageProps } from 'screens/MessageScreen';
+
+import { Wallet } from 'app/consts';
 
 type MessageScreenProps = Partial<MessageProps>;
 type EditTextScreenProps = Partial<EditTextProps>;
-type ScreenProps = MessageScreenProps | EditTextScreenProps;
+type WalletDetailsScreenProps = { wallet: Wallet };
+type ScreenProps = MessageScreenProps | EditTextScreenProps | WalletDetailsScreenProps;
 
 export default class NavigationService {
   navigator?: NavigationContainerComponent;

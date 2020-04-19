@@ -1,5 +1,12 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { View, TouchableOpacity, Text, FlatList, InteractionManager, RefreshControl, ScrollView } from 'react-native';
+import { Icon } from 'react-native-elements';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { NavigationEvents } from 'react-navigation';
+
+import { ListEmptyState } from 'app/components';
+
 import {
   BlueLoading,
   SafeBlueArea,
@@ -8,17 +15,12 @@ import {
   BlueHeaderDefaultMain,
   BlueTransactionListItem,
 } from '../../BlueComponents';
-import { Icon } from 'react-native-elements';
-import { NavigationEvents } from 'react-navigation';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import PropTypes from 'prop-types';
-import { ListEmptyState } from 'components';
 
-const EV = require('../../events');
-/** @type {AppStorage} */
 const BlueApp = require('../../BlueApp');
-const loc = require('../../loc');
+/** @type {AppStorage} */
 const BlueElectrum = require('../../BlueElectrum');
+const EV = require('../../events');
+const loc = require('../../loc');
 
 export default class WalletsList extends Component {
   // static navigationOptions = ({ navigation }) => ({
@@ -148,7 +150,7 @@ export default class WalletsList extends Component {
       });
     } else {
       // if its out of index - this must be last card with incentive to create wallet
-      this.props.navigation.navigate('AddWallet');
+      this.props.navigation.navigate('CreateWallet');
     }
   }
 
@@ -255,14 +257,14 @@ export default class WalletsList extends Component {
     if (this.state.isLoading) {
       return <BlueLoading />;
     }
-    if (wallets[0] === false) {
-      return (
-        <ListEmptyState
-          variant={ListEmptyState.Variant.Dashboard}
-          onPress={() => this.props.navigation.navigate('AddWallet')}
-        />
-      );
-    }
+    // if (wallets[0] === false) {
+    //   return (
+    //     <ListEmptyState
+    //       variant={ListEmptyState.Variant.Dashboard}
+    //       onPress={() => this.props.navigation.navigate('AddWallet')}
+    //     />
+    //   );
+    // }
     return (
       <SafeBlueArea style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         <NavigationEvents
@@ -279,7 +281,7 @@ export default class WalletsList extends Component {
           }>
           <BlueHeaderDefaultMain
             leftText={loc.wallets.list.title}
-            onNewWalletPress={() => this.props.navigation.navigate('AddWallet')}
+            onNewWalletPress={() => this.props.navigation.navigate('CreateWallet')}
           />
           <WalletsCarousel
             removeClippedSubviews={false}

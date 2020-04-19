@@ -1,8 +1,9 @@
-import { LinearGradient } from './Gradient';
 import React, { PureComponent, ReactChild } from 'react';
-import { ViewStyle } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 
-import { gradients } from 'styles';
+import { gradients } from 'app/styles';
+
+import { LinearGradient } from './Gradient';
 
 export enum GradientVariant {
   Primary = 'Primary',
@@ -11,7 +12,7 @@ export enum GradientVariant {
 interface Props {
   children?: ReactChild;
   variant: GradientVariant;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
 }
 
 export class GradientView extends PureComponent<Props> {

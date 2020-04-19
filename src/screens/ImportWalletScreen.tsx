@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { Header, TextAreaItem, FlatButton } from 'components';
-import { Button } from 'components/Button';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { NavigationScreenProps } from 'react-navigation';
-import { typography, palette } from 'styles';
-import { en } from 'locale';
+
+import { Header, TextAreaItem, FlatButton } from 'app/components';
+import { Button } from 'app/components/Button';
+import { Route } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { en } from 'app/locale';
+import { NavigationService } from 'app/services';
+import { typography, palette } from 'app/styles';
+
 import {
   SegwitP2SHWallet,
   LegacyWallet,
@@ -13,46 +19,50 @@ import {
   HDLegacyP2PKHWallet,
   HDSegwitBech32Wallet,
 } from '../../class';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { NavigationService } from 'services';
-import { images } from 'assets';
-import { Route } from 'consts';
 
 const BlueApp = require('../../BlueApp');
-const loc = require('../../loc');
 const EV = require('../../events');
+const loc = require('../../loc');
 
 export const ImportWalletScreen = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [text, setText] = useState('');
+  const [validationError, setValidationError] = useState('');
 
   const showErrorMessageScreen = () =>
-    NavigationService.navigate(Route.Message, {
+    CreateMessage({
       title: en.message.somethingWentWrong,
       description: en.message.somethingWentWrongWhileCreatingWallet,
-      source: images.errorState,
+      type: MessageType.error,
       buttonProps: {
         title: en.message.returnToDashboard,
-        onPress: () => NavigationService.navigateWithReset('MainTabNavigator'),
+        onPress: () => NavigationService.navigateWithReset('MainCardStackNavigator'),
+      },
+    });
+
+  const showSuccessImportMessageScreen = () =>
+    CreateMessage({
+      title: en.message.success,
+      description: en.message.successfullWalletImport,
+      type: MessageType.success,
+      buttonProps: {
+        title: en.message.returnToDashboard,
+        onPress: () => NavigationService.navigateWithReset('MainCardStackNavigator'),
       },
     });
 
   const onImportButtonPress = async () => {
-    NavigationService.navigate(Route.Message, {
+    CreateMessage({
       title: en.message.creatingWallet,
       description: en.message.creatingWalletDescription,
-      source: images.processingState,
-      imageStyle: {
-        height: 180,
-        width: 161,
-        marginVertical: 36,
-      },
+      type: MessageType.processingState,
       asyncTask: () => importMnemonic(text),
     });
   };
 
   const onChangeText = (text: string) => {
     setText(text);
+    setValidationError('');
     if (isButtonDisabled !== (text.length === 0)) {
       setIsButtonDisabled(!isButtonDisabled);
     }
@@ -63,12 +73,10 @@ export const ImportWalletScreen = () => {
   };
 
   const saveWallet = async (w: any) => {
-    console.log('saveWallet');
     if (BlueApp.getWallets().some(wallet => wallet.getSecret() === w.secret)) {
-      showErrorMessageScreen();
+      NavigationService.navigate(Route.ImportWallet);
+      setValidationError(en.importWallet.walletInUseValidationError);
     } else {
-      alert(loc.wallets.import.success);
-      NavigationService.navigateWithReset('MainTabNavigator');
       ReactNativeHapticFeedback.trigger('notificationSuccess', {
         ignoreAndroidSystemSettings: false,
       });
@@ -76,6 +84,7 @@ export const ImportWalletScreen = () => {
       BlueApp.wallets.push(w);
       await BlueApp.saveToDisk();
       EV(EV.enum.WALLETS_COUNT_CHANGED);
+      showSuccessImportMessageScreen();
       // this.props.navigation.dismiss();
     }
   };
@@ -189,7 +198,6 @@ export const ImportWalletScreen = () => {
 
       // TODO: try a raw private key
     } catch (Err) {
-      console.log('error');
       showErrorMessageScreen();
     }
     showErrorMessageScreen();
@@ -213,7 +221,12 @@ export const ImportWalletScreen = () => {
       <View style={styles.inputItemContainer}>
         <Text style={styles.title}>{en.importWallet.title}</Text>
         <Text style={styles.subtitle}>{en.importWallet.subtitle}</Text>
-        <TextAreaItem onChangeText={onChangeText} placeholder={en.importWallet.placeholder} style={styles.textArea} />
+        <TextAreaItem
+          error={validationError}
+          onChangeText={onChangeText}
+          placeholder={en.importWallet.placeholder}
+          style={styles.textArea}
+        />
       </View>
       <Button
         disabled={isButtonDisabled}
@@ -229,16 +242,16 @@ export const ImportWalletScreen = () => {
 ImportWalletScreen.navigationOptions = (props: NavigationScreenProps) => ({
   header: (
     <View>
-      <Header navigation={props.navigation} isBackArrow={true} title="Import wallet" />
+      <Header navigation={props.navigation} isBackArrow={true} title={en.importWallet.header} />
     </View>
   ),
-  tabBarVisible: false,
 });
 
 const styles = StyleSheet.create({
   inputItemContainer: {
     paddingTop: 16,
     width: '100%',
+    flexGrow: 1,
   },
   title: {
     ...typography.headline4,
@@ -254,11 +267,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingTop: 32,
     paddingBottom: 20,
-    flex: 1,
   },
   textArea: {
     marginTop: 24,
-    height: 243,
+    height: 250,
   },
   container: {
     flex: 1,

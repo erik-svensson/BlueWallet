@@ -12,11 +12,13 @@ export const palette = {
   gradientSecondaryFirst: 'rgb(255, 214, 99)',
   gradientSecondarySecond: 'rgb(200, 156, 101)',
   background: '#fff',
+  backgroundDarker: 'rgb(234, 234, 234)',
   border: 'rgb(204, 204, 204)',
   error: 'rgb(244, 94, 89)',
   shadow: 'rgba(0, 0, 0, 0.12)',
   transparent: 'transparent',
   white: 'rgb(255, 255, 255)',
+  modalTransparent: 'rgba(0,0,0,0.5)',
 };
 
 export const gradients = {

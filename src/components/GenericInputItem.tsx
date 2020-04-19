@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+
+import { NavigationService } from 'app/services';
+
 import { InputItem } from './InputItem';
-import { NavigationService } from 'services';
 
 interface Props {
   label: string;
@@ -21,5 +23,5 @@ export const GenericInputItem = (props: Props) => {
       onSave: handleValueSave,
     });
 
-  return <InputItem value={value} onFocus={onFocus} label={label} />;
+  return <InputItem focused value={value} onFocus={onFocus} label={label} />;
 };

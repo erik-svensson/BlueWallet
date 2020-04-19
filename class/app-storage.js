@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
+
+import WatchConnectivity from '../WatchConnectivity';
 import {
   HDSegwitP2SHWallet,
   HDLegacyP2PKHWallet,
@@ -9,7 +11,6 @@ import {
   SegwitBech32Wallet,
   HDSegwitBech32Wallet,
 } from './';
-import WatchConnectivity from '../WatchConnectivity';
 import DeviceQuickActions from './quickActions';
 
 const encryption = require('../encryption');
@@ -343,7 +344,7 @@ export class AppStorage {
    * To access transactions - get them from each respective wallet.
    * If index is present then fetch only from this specific wallet.
    *
-   * @param index {Integer} Index of the wallet in this.wallets array,
+   * @param index {Integer=} Index of the wallet in this.wallets array,
    *                        blank to fetch from all wallets
    * @return {Promise.<void>}
    */

@@ -1,51 +1,43 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-import SettingsContainer from './screen/settings/settings';
-import About from './screen/settings/about';
-import ReleaseNotes from './screen/settings/releasenotes';
-import Selftest from './screen/selftest';
-import Language from './screen/settings/language';
-import Currency from './screen/settings/currency';
-import EncryptStorage from './screen/settings/encryptStorage';
+import { Header } from 'app/components';
+import { DashboardScreen } from 'app/screens';
+import { NavigationService } from 'app/services';
+
 import PlausibleDeniability from './screen/plausibledeniability';
-import ElectrumSettings from './screen/settings/electrumSettings';
-import DefaultView from './screen/settings/defaultView';
-
-import WalletsList from './screen/wallets/list';
-import WalletTransactions from './screen/wallets/transactions';
-import AddWallet from './screen/wallets/add';
-import PleaseBackup from './screen/wallets/pleaseBackup';
-import WalletDetails from './screen/wallets/details';
-import WalletExport from './screen/wallets/export';
-import WalletXpub from './screen/wallets/xpub';
-import BuyBitcoin from './screen/wallets/buyBitcoin';
-import Marketplace from './screen/wallets/marketplace';
-import scanQrWif from './screen/wallets/scanQrWif';
-import ReorderWallets from './screen/wallets/reorderWallets';
-import SelectWallet from './screen/wallets/selectWallet';
-
-import details from './screen/transactions/details';
-import TransactionStatus from './screen/transactions/transactionStatus';
-import rbf from './screen/transactions/RBF';
-import createrbf from './screen/transactions/RBF-create';
-import cpfp from './screen/transactions/CPFP';
-import rbfBumpFee from './screen/transactions/RBFBumpFee';
-import rbfCancel from './screen/transactions/RBFCancel';
-
 import receiveDetails from './screen/receive/details';
 import setReceiveAmount from './screen/receive/receiveAmount';
-
-import sendDetails from './screen/send/details';
-import ScanQRCode from './screen/send/scanQrAddress';
-import sendCreate from './screen/send/create';
+import Selftest from './screen/selftest';
 import Confirm from './screen/send/confirm';
+import sendCreate from './screen/send/create';
+import sendDetails from './screen/send/details';
 import PsbtWithHardwareWallet from './screen/send/psbtWithHardwareWallet';
+import ScanQRCode from './screen/send/scanQrAddress';
 import Success from './screen/send/success';
-
-import { Header } from 'components';
-import { ImportWalletScreen } from 'screens/ImportWalletScreen';
+import About from './screen/settings/about';
+import Currency from './screen/settings/currency';
+import DefaultView from './screen/settings/defaultView';
+import ElectrumSettings from './screen/settings/electrumSettings';
+import EncryptStorage from './screen/settings/encryptStorage';
+import Language from './screen/settings/language';
+import ReleaseNotes from './screen/settings/releasenotes';
+import SettingsContainer from './screen/settings/settings';
+import cpfp from './screen/transactions/CPFP';
+import rbf from './screen/transactions/RBF';
+import createrbf from './screen/transactions/RBF-create';
+import rbfBumpFee from './screen/transactions/RBFBumpFee';
+import rbfCancel from './screen/transactions/RBFCancel';
+import details from './screen/transactions/details';
+import TransactionStatus from './screen/transactions/transactionStatus';
+import BuyBitcoin from './screen/wallets/buyBitcoin';
+import WalletExport from './screen/wallets/export';
+import Marketplace from './screen/wallets/marketplace';
+import ReorderWallets from './screen/wallets/reorderWallets';
+import scanQrWif from './screen/wallets/scanQrWif';
+import SelectWallet from './screen/wallets/selectWallet';
+import WalletTransactions from './screen/wallets/transactions';
+import WalletXpub from './screen/wallets/xpub';
 
 const ReorderWalletsStackNavigator = createStackNavigator({
   ReorderWallets: {
@@ -55,10 +47,12 @@ const ReorderWalletsStackNavigator = createStackNavigator({
 
 const WalletsStackNavigator = createStackNavigator({
   Wallets: {
-    screen: WalletsList,
+    // screen: WalletsList,
+    screen: DashboardScreen,
     path: 'wallets',
+    // headerMode: 'none',
     navigationOptions: {
-      header: () => <Header title="Wallets" />,
+      header: () => <Header title="Wallets" addFunction={() => NavigationService.navigate('CreateWallet')} />,
     },
   },
   WalletTransactions: {
@@ -71,9 +65,6 @@ const WalletsStackNavigator = createStackNavigator({
   },
   TransactionDetails: {
     screen: details,
-  },
-  WalletDetails: {
-    screen: WalletDetails,
   },
   RBF: {
     screen: rbf,
@@ -172,29 +163,11 @@ const CreateTransactionStackNavigator = createStackNavigator({
   },
 });
 
-const CreateWalletStackNavigator = createStackNavigator({
-  AddWallet: {
-    screen: AddWallet,
-  },
-  ImportWallet: {
-    screen: ImportWalletScreen,
-  },
-  PleaseBackup: {
-    screen: PleaseBackup,
-  },
-});
-
 const MainBottomTabs = createStackNavigator(
   {
     Wallets: {
       screen: WalletsStackNavigator,
       path: 'wallets',
-    },
-    AddWallet: {
-      screen: CreateWalletStackNavigator,
-      // navigationOptions: {
-      //   header: null,
-      // },
     },
     ScanQrWif: {
       screen: scanQrWif,

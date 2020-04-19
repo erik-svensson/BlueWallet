@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import { Image, FastImageSource } from 'components/Image';
-import { ButtonProps } from 'react-native-elements';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { Text, View, StyleSheet, StyleProp, ViewStyle, BackHandler } from 'react-native';
+import { ButtonProps } from 'react-native-elements';
 import { useNavigationParam } from 'react-navigation-hooks';
-import { Button } from 'components/Button';
 
-import { typography, palette } from 'styles';
+import { Button, Image, FastImageSource } from 'app/components';
+import { typography, palette } from 'app/styles';
 
 export interface MessageProps {
   title: string;
@@ -32,6 +31,7 @@ export const MessageScreen = () => {
       const asynchrousTask = async () => {
         await asyncTask();
       };
+
       asynchrousTask();
     }
 
