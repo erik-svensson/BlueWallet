@@ -12,7 +12,7 @@ export interface MessageProps {
   description: string;
   buttonProps?: ButtonProps;
   imageStyle?: StyleProp<ViewStyle>;
-  asyncTask?: any;
+  asyncTask?: () => void;
 }
 
 export const MessageScreen = () => {
