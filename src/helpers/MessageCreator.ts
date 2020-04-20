@@ -1,7 +1,7 @@
 import { StyleProp, ViewStyle } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 
-import { images } from 'app/assets';
+import { images as appImages } from 'app/assets';
 import { Route } from 'app/consts';
 import { NavigationService } from 'app/services';
 
@@ -10,6 +10,12 @@ export enum MessageType {
   error,
   processingState,
 }
+
+const images = {
+  [MessageType.success]: appImages.success,
+  [MessageType.error]: appImages.errorState,
+  [MessageType.processingState]: appImages.processingState,
+};
 
 interface Message {
   title: string;
@@ -26,21 +32,10 @@ export const CreateMessage = (message: Message) => {
     marginVertical: 36,
   };
 
-  const getImageSource = () => {
-    switch (message.type) {
-      case MessageType.success:
-        return images.success;
-      case MessageType.error:
-        return images.errorState;
-      case MessageType.processingState:
-        return images.processingState;
-    }
-  };
-
   return NavigationService.navigate(Route.Message, {
     title: message.title,
     description: message.description,
-    source: getImageSource(),
+    source: images[message.type],
     imageStyle: message.type === MessageType.processingState ? processingImageStyle : null,
     buttonProps: message.buttonProps,
     asyncTask: message.asyncTask,

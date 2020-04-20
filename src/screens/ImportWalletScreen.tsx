@@ -11,6 +11,7 @@ import { en } from 'app/locale';
 import { NavigationService } from 'app/services';
 import { typography, palette } from 'app/styles';
 
+import BlueApp from '../../BlueApp';
 import {
   SegwitP2SHWallet,
   LegacyWallet,
@@ -19,10 +20,8 @@ import {
   HDLegacyP2PKHWallet,
   HDSegwitBech32Wallet,
 } from '../../class';
-
-const BlueApp = require('../../BlueApp');
-const EV = require('../../events');
-const loc = require('../../loc');
+import EV from '../../events';
+import loc from '../../loc';
 
 export const ImportWalletScreen = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
