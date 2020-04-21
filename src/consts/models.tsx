@@ -7,6 +7,7 @@ export enum Route {
   CreateWallet = 'CreateWallet',
   ImportWallet = 'ImportWallet',
   ExportWallet = 'ExportWallet',
+  ImportWalletQRCode = 'ImportWalletQRCode',
   DeleteWallet = 'DeleteWallet',
   ExportWalletXpub = 'ExportWalletXub',
 }
