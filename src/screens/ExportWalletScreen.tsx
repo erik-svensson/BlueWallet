@@ -8,9 +8,8 @@ import { images } from 'app/assets';
 import { Header, Chip, ScreenTemplate } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
 import { Wallet } from 'app/consts';
-import { BlueApp } from 'app/legacy';
 import { en } from 'app/locale';
-import { typography } from 'app/styles';
+import { typography, palette } from 'app/styles';
 
 export const ExportWalletScreen = () => {
   const wallet: Wallet = useNavigationParam('wallet');
@@ -33,8 +32,7 @@ export const ExportWalletScreen = () => {
             logo={images.qrCode}
             size={160}
             logoSize={40}
-            color={BlueApp.settings.foregroundColor}
-            logoBackgroundColor={BlueApp.settings.brandingColor}
+            logoBackgroundColor={palette.background}
             ecl={'H'}
           />
         )}
