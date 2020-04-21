@@ -2,14 +2,21 @@ import moment from 'moment';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import i18n, { en } from 'app/locale';
+import i18n from 'app/locale';
 import { typography, palette } from 'app/styles';
 
-export const TransactionItem = ({ item }) => {
+export interface TransactionItemProps {
+  confirmations: number;
+  walletLabel: string;
+  time: number;
+  walletPreferredBalanceUnit: string;
+  value: number;
+}
+
+export const TransactionItem = ({ item }: { item: TransactionItemProps }) => {
   const confirmations = () => {
     return i18n.transactions.list.conf + ': ' + (item.confirmations < 7 ? item.confirmations : '6') + '/6 ';
   };
-  console.log('transaction item', item);
   return (
     <View style={styles.container}>
       <View style={styles.leftColumn}>

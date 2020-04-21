@@ -37,9 +37,6 @@ export class WalletsCarousel extends Component<Props> {
           renderItem={this.renderItem}
           sliderWidth={SCREEN_WIDTH}
           itemWidth={SCREEN_WIDTH * 0.82}
-          onSnapToItem={(index: number) => {
-            this.props.onSnapToItem(index);
-          }}
         />
       </View>
     );

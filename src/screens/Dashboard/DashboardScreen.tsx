@@ -28,9 +28,12 @@ type Props = NavigationInjectedProps;
 
 export class DashboardScreen extends Component<Props, State> {
   constructor(props: Props) {
-    super(props);
+    super(props);   
+  
+    const allWalletsBalance = BlueApp.getBalance()
     const AllWallets = BlueApp.getWallets()
-    const wallets = AllWallets.length > 1 ? [{ label: 'All wallets' }, ...AllWallets] : AllWallets
+    const wallets = AllWallets.length >1 ? [{ label: 'All wallets', balance: allWalletsBalance, preferredBalanceUnit: 'BTCV' }, ...AllWallets] : AllWallets
+
     this.state = {
       isLoading: true,
       isFlatListRefreshControlHidden: true,
@@ -109,13 +112,11 @@ export class DashboardScreen extends Component<Props, State> {
   redrawScreen() {
     console.log('wallets/list redrawScreen()');
     const dataSource = BlueApp.getTransactions(null, 10);
-    console.log('dataSource', JSON.stringify(dataSource));
     
     const allWalletsBalance = BlueApp.getBalance()
     const AllWallets = BlueApp.getWallets()
     const wallets = AllWallets.length >1 ? [{ label: 'All wallets', balance: allWalletsBalance, preferredBalanceUnit: 'BTCV' }, ...AllWallets] : AllWallets
 
-    // const allWalletsBalance = AllWallets.reduce((acc, wallet) => acc + wallet.balance, 0);
     this.setState({
       isLoading: false,
       isFlatListRefreshControlHidden: true,
@@ -126,7 +127,6 @@ export class DashboardScreen extends Component<Props, State> {
 
   chooseItemFromModal = async (index: number) => {
     this.setState({ lastSnappedTo: index });
-    this.walletCarouselRef!.current.snap(index - 1);
   };
 
   onSnapToItem = async (index: number) => {
@@ -187,7 +187,8 @@ export class DashboardScreen extends Component<Props, State> {
 
   sendCoins = () => {
     const { wallets, lastSnappedTo } = this.state;
-    const activeWallet = wallets[lastSnappedTo] as Wallet;
+    const activeWallet = wallets[lastSnappedTo].label === 'All wallets' ? wallets[1] : wallets[lastSnappedTo];
+
     this.props.navigation.navigate('SendDetails', {
       fromAddress: activeWallet.getAddress(),
       fromSecret: activeWallet.getSecret(),
@@ -197,15 +198,11 @@ export class DashboardScreen extends Component<Props, State> {
 
   receiveCoins = () => {
     const { wallets, lastSnappedTo } = this.state;
-    const activeWallet = wallets[lastSnappedTo];
+    const activeWallet = wallets[lastSnappedTo].label === 'All wallets' ? wallets[1] : wallets[lastSnappedTo];
     this.props.navigation.navigate('ReceiveDetails', {
       secret: activeWallet.getSecret(),
     });
   };
-
-  // _renderItem = data => {
-  //   return <BlueTransactionListItem item={data.item} itemPriceUnit={data.item.walletPreferredBalanceUnit} />;
-  // };
 
   showModal = () => {
     const { wallets, lastSnappedTo } = this.state;
@@ -218,10 +215,11 @@ export class DashboardScreen extends Component<Props, State> {
   };
 
   renderTransactionList = () => {
-    const { wallets, lastSnappedTo, isLoading, dataSource } = this.state;
+    const { wallets, lastSnappedTo, dataSource } = this.state;
     const activeWallet = wallets[lastSnappedTo];
 
     if(activeWallet.label !== 'All wallets') {
+      // eslint-disable-next-line prettier/prettier
       return activeWallet.transactions?.length ? (
         <TransactionList data={activeWallet.transactions} label={activeWallet.label} />
       ) : (
@@ -231,11 +229,16 @@ export class DashboardScreen extends Component<Props, State> {
         </View>
       )
     }
-    return <TransactionList data={dataSource} label={activeWallet.label} />
+    return dataSource.length ? <TransactionList data={dataSource} label={activeWallet.label} /> : (
+      <View style={styles.noTransactionsContainer}>
+        <Image source={images.noTransactions} style={styles.noTransactionsImage} />
+        <Text style={styles.noTransactionsLabel}>{en.dashboard.noTransactions}</Text>
+      </View>
+    )
   }
 
   render() {
-    const { wallets, lastSnappedTo, isLoading, dataSource } = this.state;
+    const { wallets, lastSnappedTo, isLoading } = this.state;
     const activeWallet = wallets[lastSnappedTo];
     if (isLoading) {
       return <View />;
@@ -268,7 +271,7 @@ export class DashboardScreen extends Component<Props, State> {
             ref={this.walletCarouselRef as any}
             data={wallets.filter(wallet => wallet.label !== 'All wallets')}
             keyExtractor={this._keyExtractor as any}
-            onSnapToItem={index => {
+            onSnapToItem={(index: number) => {
               this.onSnapToItem(index);
             }}
           />

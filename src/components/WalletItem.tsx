@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { images } from 'app/assets';
-import i18n, { en } from 'app/locale';
+import i18n from 'app/locale';
 import { typography, palette } from 'app/styles';
 
 import { Avatar } from './Avatar';
@@ -11,12 +11,13 @@ import { Image } from './Image';
 
 export interface WalletItemProps {
   name: string;
-  value: string;
+  value: number;
   title: string;
   key: number;
   onPress: (key: number) => void;
   variant?: GradientVariant;
   selected?: boolean;
+  unit?: string;
 }
 
 export const WalletItem = (props: WalletItemProps) => {

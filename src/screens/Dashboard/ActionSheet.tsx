@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, StyleSheet, View, ScrollView, Dimensions } from 'react-native';
 import { NavigationInjectedProps } from 'react-navigation';
 
-import { WalletItemProps, WalletItem } from 'app/components';
+import { WalletItemProps, WalletItem, GradientView } from 'app/components';
 import { Wallet } from 'app/consts';
 import { en } from 'app/locale';
 import { typography, palette } from 'app/styles';
@@ -21,7 +21,7 @@ export const ActionSheet = (props: Props) => {
     const onPress = props.navigation.getParam('onPress');
     return wallets.map((wallet: Wallet, index: number) => (
       <WalletItem
-        variant={wallet.label === 'All wallets' ? 'Secondary' : 'Primary'}
+        variant={wallet.label === 'All wallets' ? GradientView.Variant.Secondary : GradientView.Variant.Primary}
         value={wallet.balance}
         unit="BTCV"
         name={wallet.label}

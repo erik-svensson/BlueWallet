@@ -46,6 +46,7 @@
     "test": "yarn jest",
     "jest": "node node_modules/jest/bin/jest.js tests/integration/*",
     "lint": "eslint '**/*.{js,ts,tsx}'",
+    "install_local": "cd src && yarn install",
     "lint:fix": "eslint '**/*.{js,ts,tsx}' --fix",
     "lint-src": "eslint screen/** class/** models/** loc/** tests/**",
     "lint-src:fix": "yarn lint-src -- --fix --quiet",

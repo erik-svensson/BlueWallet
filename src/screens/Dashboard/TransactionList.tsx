@@ -5,27 +5,28 @@ import { View, Text, SectionList } from 'react-native';
 import { TransactionItem } from 'app/components';
 import { palette, typography } from 'app/styles';
 
-export class TransactionList extends Component {
+interface Props {
+  data: any;
+  label: string;
+}
+
+export class TransactionList extends Component<Props> {
   state = {
     transactions: [],
   };
 
-  static getDerivedStateFromProps(props, state) {
-    // if (state.transactions.length) {
-    //   return null;
-    // }
-    const groupedTransactions = [];
-    const dataToGroup = props.data.map(transaction => ({
+  static getDerivedStateFromProps(props: Props) {
+    const groupedTransactions = [] as any;
+    const dataToGroup = props.data.map((transaction: any) => ({
       ...transaction,
       day: moment.unix(transaction.time).format('ll'),
-      label: props.label,
+      walletLabel: transaction.walletLabel || props.label,
     }));
-    const uniqueValues = [...new Set(dataToGroup.map(item => item.day))];
-    console.log('props.data', dataToGroup);
+    const uniqueValues = [...new Set(dataToGroup.map((item: any) => item.day))];
     uniqueValues.map(uniqueValue =>
       groupedTransactions.push({
         title: uniqueValue,
-        data: dataToGroup.filter(transaction => transaction.day === uniqueValue),
+        data: dataToGroup.filter((transaction: any) => transaction.day === uniqueValue),
       }),
     );
     return {
@@ -33,17 +34,15 @@ export class TransactionList extends Component {
     };
   }
 
-  renderSectionTitle = ({ section: { title } }) => {
+  renderSectionTitle = ({ section }: { section: any }) => {
     return (
       <View style={{ marginTop: 30, marginBottom: 10 }}>
-        <Text style={{ ...typography.caption, color: palette.textGrey }}>{title}</Text>
+        <Text style={{ ...typography.caption, color: palette.textGrey }}>{section.title}</Text>
       </View>
     );
   };
 
   render() {
-    // console.log('transactions', this.state.transactions);
-
     return (
       <View style={{ padding: 20 }}>
         <SectionList
