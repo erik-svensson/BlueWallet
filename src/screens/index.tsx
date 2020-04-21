@@ -6,3 +6,4 @@ export { default as CreateWalletScreen } from './CreateWalletScreen';
 export { default as WalletDetailsScreen } from './WalletDetailsScreen';
 export { ImportWalletScreen } from './ImportWalletScreen';
 export { ExportWalletScreen } from './ExportWalletScreen';
+export { DeleteWalletScreen } from './DeleteWalletScreen';

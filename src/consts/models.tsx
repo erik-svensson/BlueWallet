@@ -7,6 +7,7 @@ export enum Route {
   CreateWallet = 'CreateWallet',
   ImportWallet = 'ImportWallet',
   ExportWallet = 'ExportWallet',
+  DeleteWallet = 'DeleteWallet',
 }
 
 export interface Wallet {
@@ -17,6 +18,8 @@ export interface Wallet {
   getBalance: () => void;
   getLatestTransactionTime: () => void;
   getLabel: () => string;
+  getAddress: () => string;
+  getSecret: () => string;
   address: string;
   secret: string;
   typeReadable: string;

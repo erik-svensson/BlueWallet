@@ -30,7 +30,10 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   showWalletXPUB = () => null;
 
-  deleteWallet = () => null;
+  deleteWallet = () =>
+    this.props.navigation.navigate(Route.DeleteWallet, {
+      wallet: this.props.navigation.getParam('wallet'),
+    });
 
   render() {
     const wallet = this.props.navigation.getParam('wallet');
