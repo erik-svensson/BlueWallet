@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { images } from 'app/assets';
-import { en } from 'app/locale';
+import i18n, { en } from 'app/locale';
 import { typography, palette } from 'app/styles';
 
 import { Avatar } from './Avatar';
@@ -20,19 +20,17 @@ export interface WalletItemProps {
 }
 
 export const WalletItem = (props: WalletItemProps) => {
-  const { name, value, title, selected, onPress, key, variant } = props;
+  const { name, value, title, selected, onPress, key, variant, unit } = props;
   const onWalletPress = () => onPress(key);
 
   return (
     <TouchableOpacity key={key} style={styles.container} onPress={onWalletPress}>
       <View>
-        <Avatar variant={variant || GradientVariant.Primary} title={title} />
+        <Avatar variant={variant} title={title} />
         {selected && <Image style={styles.image} source={images.successBadge} />}
       </View>
       <View style={styles.textContainer}>
-        <Text style={typography.headline5}>
-          {value} {en.walletModal.btcv}
-        </Text>
+        <Text style={typography.headline5}>{i18n.formatBalance(Number(value), unit, true)}</Text>
         <Text style={styles.name}>{name}</Text>
       </View>
     </TouchableOpacity>

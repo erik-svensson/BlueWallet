@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions } from 'react-native';
+import { View, Dimensions, StyleSheet } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
 import { WalletCard } from 'app/components';
@@ -16,7 +16,13 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 export class WalletsCarousel extends Component<Props> {
   carouselRef = React.createRef<any>();
 
-  renderItem = ({ item }: { item: Wallet }) => <WalletCard wallet={item} showEditButton />;
+  renderItem = ({ item }: { item: Wallet }) => {
+    return (
+      <View style={styles.walletCard}>
+        <WalletCard wallet={item} showEditButton />
+      </View>
+    );
+  };
 
   snap = (index: number) => {
     this.carouselRef.current!.snapToItem(index, true);
@@ -39,3 +45,7 @@ export class WalletsCarousel extends Component<Props> {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  walletCard: { alignItems: 'center' },
+});

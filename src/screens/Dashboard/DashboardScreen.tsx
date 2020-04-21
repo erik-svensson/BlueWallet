@@ -3,15 +3,15 @@ import { View, Text, StyleSheet, InteractionManager, ScrollView, RefreshControl,
 import { NavigationEvents, NavigationInjectedProps } from 'react-navigation';
 
 import { images } from 'app/assets';
-import { ListEmptyState, Image } from 'app/components';
+import { ListEmptyState, Image, WalletCard } from 'app/components';
 import { Wallet, Route } from 'app/consts';
 import { en } from 'app/locale';
 import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../../BlueApp';
-import { BlueTransactionListItem } from '../../../BlueComponents';
 import EV from '../../../events';
 import { DashboardHeader } from './DashboardHeader';
+import { TransactionList } from './TransactionList';
 import { WalletsCarousel } from './WalletsCarousel';
 
 const BlueElectrum = require('../../../BlueElectrum');
@@ -29,10 +29,12 @@ type Props = NavigationInjectedProps;
 export class DashboardScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    const AllWallets = BlueApp.getWallets()
+    const wallets = AllWallets.length > 1 ? [{ label: 'All wallets' }, ...AllWallets] : AllWallets
     this.state = {
       isLoading: true,
       isFlatListRefreshControlHidden: true,
-      wallets: [{ label: 'All wallets' }, ...BlueApp.getWallets()],
+      wallets,
       lastSnappedTo: 0,
       dataSource: null,
     };
@@ -107,18 +109,24 @@ export class DashboardScreen extends Component<Props, State> {
   redrawScreen() {
     console.log('wallets/list redrawScreen()');
     const dataSource = BlueApp.getTransactions(null, 10);
-    console.log('dataSource', dataSource);
+    console.log('dataSource', JSON.stringify(dataSource));
+    
+    const allWalletsBalance = BlueApp.getBalance()
+    const AllWallets = BlueApp.getWallets()
+    const wallets = AllWallets.length >1 ? [{ label: 'All wallets', balance: allWalletsBalance, preferredBalanceUnit: 'BTCV' }, ...AllWallets] : AllWallets
+
+    // const allWalletsBalance = AllWallets.reduce((acc, wallet) => acc + wallet.balance, 0);
     this.setState({
       isLoading: false,
       isFlatListRefreshControlHidden: true,
       dataSource,
-      wallets: [{ label: 'All wallets' }, ...BlueApp.getWallets()],
+      wallets,
     });
   }
 
   chooseItemFromModal = async (index: number) => {
     this.setState({ lastSnappedTo: index });
-    this.walletCarouselRef!.current.snap(index);
+    this.walletCarouselRef!.current.snap(index - 1);
   };
 
   onSnapToItem = async (index: number) => {
@@ -130,7 +138,7 @@ export class DashboardScreen extends Component<Props, State> {
   };
 
   async lazyRefreshWallet(index: number) {
-    const wallets = BlueApp.getWallets();
+    const wallets = BlueApp.getWallets()
     if (!wallets[index]) {
       return;
     }
@@ -201,6 +209,7 @@ export class DashboardScreen extends Component<Props, State> {
 
   showModal = () => {
     const { wallets, lastSnappedTo } = this.state;
+    console.log('wallets', wallets);
     this.props.navigation.navigate('ActionSheet', {
       wallets: wallets,
       selectedIndex: lastSnappedTo,
@@ -208,10 +217,26 @@ export class DashboardScreen extends Component<Props, State> {
     });
   };
 
+  renderTransactionList = () => {
+    const { wallets, lastSnappedTo, isLoading, dataSource } = this.state;
+    const activeWallet = wallets[lastSnappedTo];
+
+    if(activeWallet.label !== 'All wallets') {
+      return activeWallet.transactions?.length ? (
+        <TransactionList data={activeWallet.transactions} label={activeWallet.label} />
+      ) : (
+        <View style={styles.noTransactionsContainer}>
+          <Image source={images.noTransactions} style={styles.noTransactionsImage} />
+          <Text style={styles.noTransactionsLabel}>{en.dashboard.noTransactions}</Text>
+        </View>
+      )
+    }
+    return <TransactionList data={dataSource} label={activeWallet.label} />
+  }
+
   render() {
     const { wallets, lastSnappedTo, isLoading, dataSource } = this.state;
     const activeWallet = wallets[lastSnappedTo];
-    console.log('dataSource', dataSource);
     if (isLoading) {
       return <View />;
     }
@@ -238,6 +263,7 @@ export class DashboardScreen extends Component<Props, State> {
             onReceivePress={this.receiveCoins}
             onSendPress={this.sendCoins}
           />
+          {activeWallet.label === 'All wallets' ? 
           <WalletsCarousel
             ref={this.walletCarouselRef as any}
             data={wallets.filter(wallet => wallet.label !== 'All wallets')}
@@ -246,19 +272,12 @@ export class DashboardScreen extends Component<Props, State> {
               this.onSnapToItem(index);
             }}
           />
-          {/* {!activeWallet.transactions.length ? (
-            <View style={styles.noTransactionsContainer}>
-              <Image source={images.noTransactions} style={styles.noTransactionsImage} />
-              <Text style={styles.noTransactionsLabel}>{en.dashboard.noTransactions}</Text>
-            </View>
-          ) : (
-            <FlatList
-              data={this.state.dataSource}
-              extraData={this.state.dataSource}
-              keyExtractor={this._keyExtractor}
-              renderItem={this._renderItem}
-            />
-          )} */}
+          : 
+          <View style={{ alignItems: 'center' }}>
+          <WalletCard wallet={activeWallet} showEditButton />
+        </View>
+        }
+          {this.renderTransactionList()}
         </ScrollView>
       );
     }
