@@ -62,8 +62,6 @@ const styles = StyleSheet.create({
   title: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
   address: {
     ...typography.caption,
-    textAlign: 'center',
-    lineHeight: 19,
     marginTop: 18,
     flexGrow: 1,
   },

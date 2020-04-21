@@ -5,7 +5,7 @@ import { NavigationScreenProps } from 'react-navigation';
 import { useNavigationParam } from 'react-navigation-hooks';
 
 import { images } from 'app/assets';
-import { Header, Chip, ScreenTemplate } from 'app/components';
+import { Header, ScreenTemplate } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
 import { Wallet } from 'app/consts';
 import { en } from 'app/locale';
@@ -13,35 +13,23 @@ import { typography, palette } from 'app/styles';
 
 export const ExportWalletXpubScreen = () => {
   const wallet: Wallet = useNavigationParam('wallet');
-  const secret = wallet.getSecret();
-  const address = wallet.getAddress()!.join('');
+  const xpub = wallet.getXpub();
 
   return (
     <ScreenTemplate>
-      <Text style={styles.title}>{en.exportWallet.title}</Text>
-      {address && (
-        <>
-          <Text style={styles.address}>{address}</Text>
-          <CopyButton textToCopy={address} />
-        </>
-      )}
+      <Text style={styles.title}>{wallet.label}</Text>
       <View style={styles.qrCodeContainer}>
-        {secret && (
-          <QRCode
-            value={secret}
-            logo={images.qrCode}
-            size={160}
-            logoSize={40}
-            logoBackgroundColor={palette.background}
-            ecl={'H'}
-          />
-        )}
+        <QRCode
+          value={xpub}
+          logo={images.qrCode}
+          size={160}
+          logoSize={40}
+          logoBackgroundColor={palette.background}
+          ecl={'H'}
+        />
       </View>
-      <View style={styles.mnemonicPhraseContainer}>
-        {secret.split(' ').map((secret, index) => (
-          <Chip key={index.toString()} label={`${index + 1}. ${secret}`} />
-        ))}
-      </View>
+      <Text style={styles.xpub}>{xpub}</Text>
+      <CopyButton textToCopy={xpub} />
     </ScreenTemplate>
   );
 };
@@ -49,7 +37,7 @@ export const ExportWalletXpubScreen = () => {
 ExportWalletXpubScreen.navigationOptions = (props: NavigationScreenProps) => ({
   header: (
     <View>
-      <Header title={en.exportWallet.header} isCancelButton={true} navigation={props.navigation} />
+      <Header title={en.exportWalletXpub.header} isCancelButton={true} navigation={props.navigation} />
     </View>
   ),
 });
@@ -60,17 +48,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
-  address: {
+  xpub: {
     ...typography.caption,
-    textAlign: 'center',
-    lineHeight: 19,
-    marginTop: 18,
-    flexGrow: 1,
-  },
-  mnemonicPhraseContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    paddingHorizontal: 12,
   },
 });
