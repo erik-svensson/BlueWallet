@@ -40,7 +40,7 @@ export const ExportWalletScreen = () => {
         )}
       </View>
       <View style={styles.mnemonicPhraseContainer}>
-        {wallet.secret.split(' ').map((secret, index) => (
+        {secret.split(' ').map((secret, index) => (
           <Chip key={index.toString()} label={`${index + 1}. ${secret}`} />
         ))}
       </View>
