@@ -12,6 +12,7 @@ export enum Route {
   ImportWalletQRCode = 'ImportWalletQRCode',
   DeleteWallet = 'DeleteWallet',
   ExportWalletXpub = 'ExportWalletXub',
+  TransactionDetails = 'TransactionDetails',
 }
 
 export interface Wallet {

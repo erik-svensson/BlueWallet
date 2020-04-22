@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { View, Text, SectionList } from 'react-native';
 
 import { TransactionItem } from 'app/components';
+import { NavigationService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
 interface Props {
@@ -42,13 +43,18 @@ export class TransactionList extends Component<Props> {
     );
   };
 
+  onTransactionItemPress = (item: any) => {
+    // @ts-ignore
+    NavigationService.navigate('TransactionDetails', { item });
+  };
+
   render() {
     return (
       <View style={{ padding: 20 }}>
         <SectionList
           sections={this.state.transactions}
           keyExtractor={(item, index) => item + index}
-          renderItem={item => <TransactionItem item={item.item} />}
+          renderItem={item => <TransactionItem item={item.item} onPress={this.onTransactionItemPress} />}
           renderSectionHeader={this.renderSectionTitle}
         />
       </View>
