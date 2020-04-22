@@ -8,6 +8,7 @@ import { palette } from 'app/styles';
 
 import MainBottomTabs from '../../MainBottomTabs';
 import { AddressBookNavigator } from './AddressBookNavigator';
+import { SettingsNavigator } from './SettingsNavigator';
 
 export const MainTabNavigator = createBottomTabNavigator(
   {
@@ -30,7 +31,7 @@ export const MainTabNavigator = createBottomTabNavigator(
       },
     },
     [Route.Settings]: {
-      screen: AddressBookNavigator,
+      screen: SettingsNavigator,
       navigationOptions: {
         title: 'Settings',
         tabBarIcon: ({ focused }: { focused: boolean }) => (

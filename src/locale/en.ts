@@ -56,4 +56,16 @@ export const en = {
     none: 'None',
     latest: 'Latest transaction',
   },
+  settings: {
+    language: 'Language',
+    general: 'General',
+    security: 'Security',
+    about: 'About',
+    electrumServer: 'Electrum server',
+    advancedOptions: 'Advanced options',
+    changePin: 'Change PIN',
+    fingerprintLogin: 'Fingerprint login',
+    aboutUs: 'About us',
+    header: 'Settings',
+  },
 };

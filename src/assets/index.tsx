@@ -20,9 +20,16 @@ export const images = {
   qrCode: require('./images/qr-code.png'),
   close: require('./images/close.png'),
   scanQRcrosshair: require('./images/scanQRcrosshair.png'),
+  goldWalletLogoBlack: require('./images/bv017LogoGoldWalletRgbV3HorizontalBlack.png'),
 };
 
 export const icons = {
   iconDropdown: require('./images/iconDropdown.png'),
   addIcon: require('./images/addIcon.png'),
+  buildIcon: require('./images/buildIcon.png'),
+  dataUsageIcon: require('./images/dataUsageIcon.png'),
+  languageIcon: require('./images/languageIcon.png'),
+  lockIcon: require('./images/lockIcon.png'),
+  infoIcon: require('./images/infoIcon.png'),
+  fingerprintIcon: require('./images/fingerprintIcon.png'),
 };
