@@ -1,12 +1,13 @@
 // @ts-nocheck
 import moment from 'moment';
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, Linking } from 'react-native';
-import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
+import { View, StyleSheet, Text, Linking, TouchableOpacity } from 'react-native';
+import { NavigationScreenProps } from 'react-navigation';
 
 import { images } from 'app/assets';
 import { Image, Header, StyledText, Chip, ScreenTemplate } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
+import { Transaction } from 'app/consts';
 import i18n from 'app/locale';
 import { typography, palette } from 'app/styles';
 
@@ -26,7 +27,7 @@ function arrDiff(a1, a2) {
   return ret;
 }
 
-type Props = Partial<NavigationScreenProps>;
+type Props = NavigationScreenProps<{ transaction: Transaction }>;
 
 interface State {
   isLoading: boolean;
@@ -34,11 +35,12 @@ interface State {
   from: any[];
   to: any[];
   wallet: any;
+  note: string;
 }
 
 export class TransactionDetailsScreen extends Component<Props, State> {
-  static navigationOptions = (props: NavigationScreenProps) => {
-    const transaction = props.navigation.getParam('item');
+  static navigationOptions = (props: NavigationScreenProps<{ transaction: Transaction }>) => {
+    const transaction = props.navigation.getParam('transaction');
     return {
       header: <Header navigation={props.navigation} isBackArrow title={moment.unix(transaction.time).format('lll')} />,
     };
@@ -46,7 +48,7 @@ export class TransactionDetailsScreen extends Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    const { hash } = props.navigation.getParam('item');
+    const { hash } = props.navigation.getParam('transaction');
     let foundTx = {};
     let from = [];
     let to = [];
@@ -78,6 +80,7 @@ export class TransactionDetailsScreen extends Component<Props, State> {
       from,
       to,
       wallet,
+      note: '',
     };
   }
 
@@ -98,22 +101,59 @@ export class TransactionDetailsScreen extends Component<Props, State> {
     });
   };
 
+  updateNote = (note: string) => {
+    this.setState({
+      note,
+    });
+  };
+
+  renderHeader = () => {
+    const transaction: Transaction = this.props.navigation.getParam('transaction');
+
+    return (
+      <View style={styles.headerContainer}>
+        <Image source={transaction.value < 0 ? images.bigMinus : images.bigPlus} style={styles.image} />
+        <Text style={styles.walletLabel}>{transaction.walletLabel}</Text>
+        <Text style={[styles.value, { color: transaction.value < 0 ? palette.textRed : palette.textBlack }]}>
+          {i18n.formatBalanceWithoutSuffix(Number(transaction.value))}
+        </Text>
+        <Chip
+          label={`${transaction.confirmations < 7 ? transaction.confirmations : '6'} ${
+            i18n.transactions.details.confirmations
+          }`}
+          textStyle={typography.overline}
+        />
+      </View>
+    );
+  };
+
+  editNote = () => {
+    const transaction: Transaction = this.props.navigation.getParam('transaction');
+    this.props.navigation.navigate('EditText', {
+      title: moment.unix(transaction.time).format('lll'),
+      label: 'Note',
+      onSave: this.updateNote,
+      value: this.state.note,
+      header: this.renderHeader(),
+    });
+  };
+
   render() {
-    const transaction = this.props.navigation.getParam('item');
+    const transaction: Transaction = this.props.navigation.getParam('transaction');
     return (
       <ScreenTemplate>
-        <View style={styles.headerContainer}>
-          <Image source={transaction.value < 0 ? images.bigMinus : images.bigPlus} style={styles.image} />
-          <Text style={styles.walletLabel}>{transaction.walletLabel}</Text>
-          <Text style={styles.value}>{i18n.formatBalanceWithoutSuffix(Number(transaction.value))}</Text>
-          <Chip
-            label={`${transaction.confirmations < 7 ? transaction.confirmations : '6'} ${
-              i18n.transactions.details.confirmations
-            }`}
-            textStyle={typography.overline}
-          />
-          <StyledText title={i18n.transactions.details.addNote} />
-        </View>
+        {this.renderHeader()}
+
+        {this.state.note ? (
+          <TouchableOpacity style={styles.noteContainer} onPress={this.editNote}>
+            <Text style={styles.contentRowTitle}>{i18n.transactions.details.note}</Text>
+            <Text style={styles.contentRowBody}>{this.state.note}</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.headerContainer}>
+            <StyledText title={i18n.transactions.details.addNote} onPress={this.editNote} />
+          </View>
+        )}
         <View style={styles.contentRowContainer}>
           <Text style={styles.contentRowTitle}>{i18n.transactions.details.from}</Text>
           <Text style={styles.contentRowBody}>{this.state.from.filter(onlyUnique).join(', ')}</Text>
@@ -172,6 +212,14 @@ const styles = StyleSheet.create({
     height: 90,
     width: 90,
     margin: 15,
+  },
+  noteContainer: {
+    width: '100%',
+    alignSelf: 'flex-start',
+    borderBottomColor: palette.border,
+    borderBottomWidth: 1,
+    paddingBottom: 2,
+    marginBottom: 13,
   },
   contentRowContainer: { marginVertical: 14 },
   contentRowTitle: { ...typography.overline, color: palette.textGrey },

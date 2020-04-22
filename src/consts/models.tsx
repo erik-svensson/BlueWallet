@@ -37,3 +37,12 @@ export interface Contact {
   name: string;
   address: string;
 }
+
+export interface Transaction {
+  value: number;
+  time: number;
+  walletLabel: string;
+  confirmations: number;
+  inputs: any[];
+  outputs: any[];
+}

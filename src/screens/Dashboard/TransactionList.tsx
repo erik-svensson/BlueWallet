@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { View, Text, SectionList } from 'react-native';
 
 import { TransactionItem } from 'app/components';
+import { Route, Transaction } from 'app/consts';
 import { NavigationService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
@@ -43,9 +44,9 @@ export class TransactionList extends Component<Props> {
     );
   };
 
-  onTransactionItemPress = (item: any) => {
+  onTransactionItemPress = (item: Transaction) => {
     // @ts-ignore
-    NavigationService.navigate('TransactionDetails', { item });
+    NavigationService.navigate(Route.TransactionDetails, { transaction: item });
   };
 
   render() {
