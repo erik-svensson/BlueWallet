@@ -259,5 +259,6 @@ module.exports = {
     sendCoinsButton: 'Send coins',
     showQRCodeButton: 'Show QR code',
     deleteButton: 'Delete contact',
+    share: 'Share',
   },
 };
