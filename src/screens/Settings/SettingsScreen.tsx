@@ -1,12 +1,12 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 
 import { images, icons } from 'app/assets';
 import { Image, ScreenTemplate, Header, ListItem } from 'app/components';
 import { AppStorage, Biometric } from 'app/legacy';
-import { en } from 'app/locale';
+import i18n from 'app/locale';
 
 import { LabeledSettingsRow } from './LabeledSettingsRow';
 
@@ -53,10 +53,10 @@ export const SettingsScreen = () => {
 
   const renderGeneralSettings = () => (
     <>
-      <ListItem title={en.settings.language} source={icons.languageIcon} />
-      <ListItem title={en.settings.electrumServer} source={icons.dataUsageIcon} />
+      <ListItem title={i18n.settings.language} source={icons.languageIcon} />
+      <ListItem title={i18n.settings.electrumServer} source={icons.dataUsageIcon} />
       <ListItem
-        title={en.settings.advancedOptions}
+        title={i18n.settings.advancedOptions}
         source={icons.buildIcon}
         switchValue={isAdvancedOptions}
         onSwitchValueChange={onAdvancedOptionsChange}
@@ -68,9 +68,9 @@ export const SettingsScreen = () => {
 
   const renderSecuritySettings = () => (
     <>
-      <ListItem title={en.settings.changePin} source={icons.lockIcon} iconWidth={15} iconHeight={20} />
+      <ListItem title={i18n.settings.changePin} source={icons.lockIcon} iconWidth={15} iconHeight={20} />
       <ListItem
-        title={en.settings.fingerprintLogin}
+        title={i18n.settings.fingerprintLogin}
         source={icons.fingerprintIcon}
         switchValue={biometrics.isBiometricsEnabled}
         onSwitchValueChange={onFingerprintLoginChange}
@@ -80,22 +80,20 @@ export const SettingsScreen = () => {
     </>
   );
 
-  const renderAboutSettings = () => <ListItem title={en.settings.aboutUs} source={icons.infoIcon} />;
+  const renderAboutSettings = () => <ListItem title={i18n.settings.aboutUs} source={icons.infoIcon} />;
 
-  return isLoading ? (
-    <View />
-  ) : (
+  return isLoading ? null : (
     <ScreenTemplate>
       <Image source={images.goldWalletLogoBlack} style={styles.logo} resizeMode="contain" />
-      <LabeledSettingsRow label={en.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
-      <LabeledSettingsRow label={en.settings.security}>{renderSecuritySettings()}</LabeledSettingsRow>
-      <LabeledSettingsRow label={en.settings.about}>{renderAboutSettings()}</LabeledSettingsRow>
+      <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
+      <LabeledSettingsRow label={i18n.settings.security}>{renderSecuritySettings()}</LabeledSettingsRow>
+      <LabeledSettingsRow label={i18n.settings.about}>{renderAboutSettings()}</LabeledSettingsRow>
     </ScreenTemplate>
   );
 };
 
 SettingsScreen.navigationOptions = (props: NavigationScreenProps) => ({
-  header: <Header navigation={props.navigation} title={en.settings.header} />,
+  header: <Header navigation={props.navigation} title={i18n.settings.header} />,
 });
 
 const styles = StyleSheet.create({

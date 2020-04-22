@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     marginVertical: 24,
     borderColor: palette.grey,
     width: '120%',
-    borderWidth: 0.2,
+    borderWidth: StyleSheet.hairlineWidth,
     left: -20,
   },
 });
