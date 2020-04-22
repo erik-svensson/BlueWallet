@@ -21,6 +21,8 @@ export const images = {
   close: require('./images/close.png'),
   scanQRcrosshair: require('./images/scanQRcrosshair.png'),
   goldWalletLogoBlack: require('./images/bv017LogoGoldWalletRgbV3HorizontalBlack.png'),
+  bigMinus: require('./images/bigMinus.png'),
+  bigPlus: require('./images/bigPlus.png'),
 };
 
 export const icons = {
@@ -32,4 +34,5 @@ export const icons = {
   lockIcon: require('./images/lockIcon.png'),
   infoIcon: require('./images/infoIcon.png'),
   fingerprintIcon: require('./images/fingerprintIcon.png'),
+  qrCode: require('./images/qrCode.png'),
 };

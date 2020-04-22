@@ -1,10 +1,10 @@
-import React, { useEffect, useLayoutEffect } from 'react';
-import { Text, View, StyleSheet, StyleProp, ViewStyle, BackHandler } from 'react-native';
+import React, { useEffect } from 'react';
+import { Text, View, StyleSheet, StyleProp, ViewStyle, BackHandler, StatusBar } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 import { useNavigationParam } from 'react-navigation-hooks';
 
 import { Button, Image, FastImageSource } from 'app/components';
-import { typography, palette } from 'app/styles';
+import { typography, palette, ifIphoneX } from 'app/styles';
 
 export interface MessageProps {
   title: string;
@@ -42,6 +42,7 @@ export const MessageScreen = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <Text style={styles.title}>{title}</Text>
       <Image source={source} style={[styles.image, imageStyle]} resizeMode="contain" />
       <Text style={styles.description}>{description}</Text>
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 20,
+    paddingBottom: ifIphoneX(54, 20),
   },
   title: { ...typography.headline4, marginTop: '30%' },
   image: {

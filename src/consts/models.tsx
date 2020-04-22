@@ -1,7 +1,9 @@
 export enum Route {
   Dashboard = 'Dashboard',
   WalletDetails = 'WalletDetails',
-  AddressBook = 'AddressBook',
+  ContactList = 'ContactList',
+  ContactDetails = 'ContactDetails',
+  CreateContact = 'CreateContact',
   Settings = 'Settings',
   Message = 'Message',
   CreateWallet = 'CreateWallet',
@@ -10,6 +12,7 @@ export enum Route {
   ImportWalletQRCode = 'ImportWalletQRCode',
   DeleteWallet = 'DeleteWallet',
   ExportWalletXpub = 'ExportWalletXub',
+  TransactionDetails = 'TransactionDetails',
 }
 
 export interface Wallet {
@@ -20,10 +23,26 @@ export interface Wallet {
   getBalance: () => void;
   getLatestTransactionTime: () => void;
   getLabel: () => string;
+  setLabel: (label: string) => void;
   getAddress: () => string;
   getSecret: () => string;
   getXpub: () => string;
   address: string;
   secret: string;
   typeReadable: string;
+}
+
+export interface Contact {
+  id: string;
+  name: string;
+  address: string;
+}
+
+export interface Transaction {
+  value: number;
+  time: number;
+  walletLabel: string;
+  confirmations: number;
+  inputs: any[];
+  outputs: any[];
 }

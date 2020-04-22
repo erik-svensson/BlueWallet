@@ -21,3 +21,5 @@ export { GenericInputItem } from './GenericInputItem';
 export { Chip } from './Chip';
 export { TransactionItem } from './TransactionItem';
 export { ListItem } from './ListItem';
+export { SearchBar } from './SearchBar';
+export { ContactAvatar } from './ContactAvatar';
