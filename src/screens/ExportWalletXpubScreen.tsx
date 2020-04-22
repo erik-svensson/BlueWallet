@@ -35,11 +35,7 @@ export const ExportWalletXpubScreen = () => {
 };
 
 ExportWalletXpubScreen.navigationOptions = (props: NavigationScreenProps) => ({
-  header: (
-    <View>
-      <Header title={en.exportWalletXpub.header} isCancelButton={true} navigation={props.navigation} />
-    </View>
-  ),
+  header: <Header title={en.exportWalletXpub.header} isCancelButton={true} navigation={props.navigation} />,
 });
 
 const styles = StyleSheet.create({
