@@ -13,7 +13,7 @@ import { typography, palette } from 'app/styles';
 import BlueApp from '../../BlueApp';
 import { Chain } from '../../models/bitcoinUnits';
 
-type Props = NavigationInjectedProps;
+type Props = NavigationInjectedProps<{ secret: string }>;
 
 interface State {
   secret: string;
@@ -34,7 +34,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     const secret = props.navigation.getParam('secret') || '';
 
     this.state = {
-      secret: secret,
+      secret,
       addressText: '',
       bip21encoded: undefined,
       amount: 0,
@@ -155,7 +155,6 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
             color={BlueApp.settings.foregroundColor}
             logoBackgroundColor={BlueApp.settings.brandingColor}
             ecl={'H'}
-            // @ts-ignore
             getRef={c => (this.qrCodeSVG = c)}
           />
         </View>
