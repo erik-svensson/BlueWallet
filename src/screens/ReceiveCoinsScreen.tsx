@@ -12,6 +12,7 @@ import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../BlueApp';
 import { Chain } from '../../models/bitcoinUnits';
+import { DashboardHeader } from './Dashboard/DashboardHeader';
 
 type Props = NavigationInjectedProps<{ secret: string }>;
 
@@ -47,57 +48,59 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
   async componentDidMount() {
     console.log('receive/details - componentDidMount');
 
-    {
-      let address;
-      let wallet;
-      for (const w of BlueApp.getWallets()) {
-        if (w.getSecret() === this.state.secret) {
-          // found our wallet
-          wallet = w;
-        }
+    await this.updateData();
+  }
+
+  updateData = async () => {
+    let address;
+    let wallet;
+    for (const w of BlueApp.getWallets()) {
+      if (w.getSecret() === this.state.secret) {
+        // found our wallet
+        wallet = w;
       }
-      if (wallet) {
-        if (wallet.getAddressForTransaction) {
-          if (wallet.chain === Chain.ONCHAIN) {
-            try {
-              address = await Promise.race([wallet.getAddressForTransaction(), BlueApp.sleep(1000)]);
-            } catch (_) {}
-            if (!address) {
-              // either sleep expired or getAddressAsync threw an exception
-              console.warn('either sleep expired or getAddressAsync threw an exception');
-              address = wallet.getAddressForTransaction();
-            } else {
-              BlueApp.saveToDisk(); // caching whatever getAddressAsync() generated internally
-            }
-            this.setState({
-              address: address,
-              addressText: address,
-            });
-          } else if (wallet.chain === Chain.OFFCHAIN) {
-            try {
-              await Promise.race([wallet.getAddressForTransaction(), BlueApp.sleep(1000)]);
-              address = wallet.getAddress();
-            } catch (_) {}
-            if (!address) {
-              // either sleep expired or getAddressAsync threw an exception
-              console.warn('either sleep expired or getAddressAsync threw an exception');
-              address = wallet.getAddress();
-            } else {
-              BlueApp.saveToDisk(); // caching whatever getAddressAsync() generated internally
-            }
+    }
+    if (wallet) {
+      if (wallet.getAddressForTransaction) {
+        if (wallet.chain === Chain.ONCHAIN) {
+          try {
+            address = await Promise.race([wallet.getAddressForTransaction(), BlueApp.sleep(1000)]);
+          } catch (_) {}
+          if (!address) {
+            // either sleep expired or getAddressAsync threw an exception
+            console.warn('either sleep expired or getAddressAsync threw an exception');
+            address = wallet.getAddressForTransaction();
+          } else {
+            BlueApp.saveToDisk(); // caching whatever getAddressAsync() generated internally
           }
           this.setState({
             address: address,
             addressText: address,
-            wallet,
           });
-        } else if (wallet.getAddress) {
-          this.setState({
-            address: wallet.getAddress(),
-            addressText: wallet.getAddress(),
-            wallet,
-          });
+        } else if (wallet.chain === Chain.OFFCHAIN) {
+          try {
+            await Promise.race([wallet.getAddressForTransaction(), BlueApp.sleep(1000)]);
+            address = wallet.getAddress();
+          } catch (_) {}
+          if (!address) {
+            // either sleep expired or getAddressAsync threw an exception
+            console.warn('either sleep expired or getAddressAsync threw an exception');
+            address = wallet.getAddress();
+          } else {
+            BlueApp.saveToDisk(); // caching whatever getAddressAsync() generated internally
+          }
         }
+        this.setState({
+          address: address,
+          addressText: address,
+          wallet,
+        });
+      } else if (wallet.getAddress) {
+        this.setState({
+          address: wallet.getAddress(),
+          addressText: wallet.getAddress(),
+          wallet,
+        });
       }
     }
 
@@ -105,7 +108,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
       const bip21encoded = bip21.encode(this.state.address);
       this.setState({ bip21encoded });
     });
-  }
+  };
 
   updateAmount = (amount: number) => {
     const bip21encoded = bip21.encode(this.state.address, {
@@ -144,12 +147,20 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     }
   };
 
+  chooseItemFromModal = async (index: number) => {
+    const wallets = BlueApp.getWallets();
+
+    const wallet = wallets[index];
+    this.setState({ wallet, secret: wallet.getSecret() }, this.updateData);
+  };
+
   showModal = () => {
     const wallets = BlueApp.getWallets();
     const selectedIndex = wallets.findIndex(wallet => wallet.label === this.state.wallet.label);
     this.props.navigation.navigate('ActionSheet', {
       wallets: wallets,
       selectedIndex,
+      onPress: this.chooseItemFromModal,
     });
   };
 

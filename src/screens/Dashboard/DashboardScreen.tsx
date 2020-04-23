@@ -28,8 +28,8 @@ type Props = NavigationInjectedProps;
 
 export class DashboardScreen extends Component<Props, State> {
   constructor(props: Props) {
-    super(props);   
-  
+    super(props);
+
     const allWalletsBalance = BlueApp.getBalance()
     const AllWallets = BlueApp.getWallets()
     const wallets = AllWallets.length > 1 ? [{ label: 'All wallets', balance: allWalletsBalance, preferredBalanceUnit: 'BTCV' }, ...AllWallets] : AllWallets
@@ -112,10 +112,10 @@ export class DashboardScreen extends Component<Props, State> {
   redrawScreen() {
     console.log('wallets/list redrawScreen()');
     const dataSource = BlueApp.getTransactions(null, 10);
-    
+
     const allWalletsBalance = BlueApp.getBalance()
     const AllWallets = BlueApp.getWallets()
-    const wallets = AllWallets.length >1 ? [{ label: 'All wallets', balance: allWalletsBalance, preferredBalanceUnit: 'BTCV' }, ...AllWallets] : AllWallets
+    const wallets = AllWallets.length > 1 ? [{ label: 'All wallets', balance: allWalletsBalance, preferredBalanceUnit: 'BTCV' }, ...AllWallets] : AllWallets
 
     this.setState({
       isLoading: false,
@@ -217,21 +217,21 @@ export class DashboardScreen extends Component<Props, State> {
     const { wallets, lastSnappedTo, dataSource } = this.state;
     const activeWallet = wallets[lastSnappedTo];
 
-    if(activeWallet.label !== 'All wallets') {
+    if (activeWallet.label !== 'All wallets') {
       // eslint-disable-next-line prettier/prettier
       return activeWallet.transactions?.length ? (
-        <TransactionList data={activeWallet.transactions} label={activeWallet.label} />
+        <TransactionList data={ activeWallet.transactions } label={ activeWallet.label } />
       ) : (
-        <View style={styles.noTransactionsContainer}>
-          <Image source={images.noTransactions} style={styles.noTransactionsImage} />
-          <Text style={styles.noTransactionsLabel}>{en.dashboard.noTransactions}</Text>
-        </View>
-      )
+          <View style={ styles.noTransactionsContainer }>
+            <Image source={ images.noTransactions } style={ styles.noTransactionsImage } />
+            <Text style={ styles.noTransactionsLabel }>{ en.dashboard.noTransactions }</Text>
+          </View>
+        )
     }
-    return dataSource.length ? <TransactionList data={dataSource} label={activeWallet.label} /> : (
-      <View style={styles.noTransactionsContainer}>
-        <Image source={images.noTransactions} style={styles.noTransactionsImage} />
-        <Text style={styles.noTransactionsLabel}>{en.dashboard.noTransactions}</Text>
+    return dataSource.length ? <TransactionList data={ dataSource } label={ activeWallet.label } /> : (
+      <View style={ styles.noTransactionsContainer }>
+        <Image source={ images.noTransactions } style={ styles.noTransactionsImage } />
+        <Text style={ styles.noTransactionsLabel }>{ en.dashboard.noTransactions }</Text>
       </View>
     )
   }
@@ -246,54 +246,58 @@ export class DashboardScreen extends Component<Props, State> {
     if (wallets.length) {
       return (
         <ScreenTemplate
-          // refreshControl={
-          //   <RefreshControl
-          //     onRefresh={() => this.refreshTransactions()}
-          //     refreshing={!this.state.isFlatListRefreshControlHidden}
-          //   />
-          // }
-          >
+          contentContainer={ styles.contentContainer }
+          refreshControl={
+            <RefreshControl
+              onRefresh={ () => this.refreshTransactions() }
+              refreshing={ !this.state.isFlatListRefreshControlHidden }
+            />
+          }
+        >
           <NavigationEvents
-            onWillFocus={() => {
+            onWillFocus={ () => {
               this.redrawScreen();
-            }}
+            } }
           />
           <DashboardHeader
-            onSelectPress={this.showModal}
-            balance={activeWallet.balance}
-            label={activeWallet.label}
-            unit={activeWallet.preferredBalanceUnit}
-            onReceivePress={this.receiveCoins}
-            onSendPress={this.sendCoins}
+            onSelectPress={ this.showModal }
+            balance={ activeWallet.balance }
+            label={ activeWallet.label }
+            unit={ activeWallet.preferredBalanceUnit }
+            onReceivePress={ this.receiveCoins }
+            onSendPress={ this.sendCoins }
           />
-          {activeWallet.label === 'All wallets' ? 
-          <WalletsCarousel
-            ref={this.walletCarouselRef as any}
-            data={wallets.filter(wallet => wallet.label !== 'All wallets')}
-            keyExtractor={this._keyExtractor as any}
-            onSnapToItem={(index: number) => {
-              this.onSnapToItem(index);
-            }}
-          />
-          : 
-          <View style={{ alignItems: 'center' }}>
-          <WalletCard wallet={activeWallet} showEditButton />
-        </View>
-        }
-          {this.renderTransactionList()}
+          { activeWallet.label === 'All wallets' ?
+            <WalletsCarousel
+              ref={ this.walletCarouselRef as any }
+              data={ wallets.filter(wallet => wallet.label !== 'All wallets') }
+              keyExtractor={ this._keyExtractor as any }
+              onSnapToItem={ (index: number) => {
+                this.onSnapToItem(index);
+              } }
+            />
+            :
+            <View style={ { alignItems: 'center' } }>
+              <WalletCard wallet={ activeWallet } showEditButton />
+            </View>
+          }
+          { this.renderTransactionList() }
         </ScreenTemplate>
       );
     }
     return (
       <ListEmptyState
-        variant={ListEmptyState.Variant.Dashboard}
-        onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
+        variant={ ListEmptyState.Variant.Dashboard }
+        onPress={ () => this.props.navigation.navigate(Route.CreateWallet) }
       />
     );
   }
 }
 
 const styles = StyleSheet.create({
+  contentContainer: {
+    paddingHorizontal: 0,
+  },
   noTransactionsContainer: {
     alignItems: 'center',
   },
