@@ -95,7 +95,7 @@ export class TransactionDetailsScreen extends Component<Props, State> {
       from,
       to,
       wallet,
-      note: note,
+      note,
     };
   }
 
