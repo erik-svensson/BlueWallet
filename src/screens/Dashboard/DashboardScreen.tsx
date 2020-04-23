@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, InteractionManager, ScrollView, RefreshControl,
 import { NavigationEvents, NavigationInjectedProps } from 'react-navigation';
 
 import { images } from 'app/assets';
-import { ListEmptyState, Image, WalletCard } from 'app/components';
+import { ListEmptyState, Image, WalletCard, ScreenTemplate } from 'app/components';
 import { Wallet, Route } from 'app/consts';
 import { en } from 'app/locale';
 import { typography, palette } from 'app/styles';
@@ -245,13 +245,14 @@ export class DashboardScreen extends Component<Props, State> {
 
     if (wallets.length) {
       return (
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              onRefresh={() => this.refreshTransactions()}
-              refreshing={!this.state.isFlatListRefreshControlHidden}
-            />
-          }>
+        <ScreenTemplate
+          // refreshControl={
+          //   <RefreshControl
+          //     onRefresh={() => this.refreshTransactions()}
+          //     refreshing={!this.state.isFlatListRefreshControlHidden}
+          //   />
+          // }
+          >
           <NavigationEvents
             onWillFocus={() => {
               this.redrawScreen();
@@ -280,7 +281,7 @@ export class DashboardScreen extends Component<Props, State> {
         </View>
         }
           {this.renderTransactionList()}
-        </ScrollView>
+        </ScreenTemplate>
       );
     }
     return (

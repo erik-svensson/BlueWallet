@@ -21,6 +21,7 @@ interface State {
   bip21encoded: any;
   amount: number;
   address: string;
+  wallet: any;
 }
 export class ReceiveCoinsScreen extends Component<Props, State> {
   static navigationOptions = (props: NavigationScreenProps<{ transaction: Transaction }>) => {
@@ -34,11 +35,12 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     const secret = props.navigation.getParam('secret') || '';
 
     this.state = {
-      secret,
+      secret: secret,
       addressText: '',
       bip21encoded: undefined,
       amount: 0,
       address: '',
+      wallet: {},
     };
   }
   qrCodeSVG: any = null;
@@ -87,11 +89,13 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
           this.setState({
             address: address,
             addressText: address,
+            wallet,
           });
         } else if (wallet.getAddress) {
           this.setState({
             address: wallet.getAddress(),
             addressText: wallet.getAddress(),
+            wallet,
           });
         }
       }
@@ -140,6 +144,15 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     }
   };
 
+  showModal = () => {
+    const wallets = BlueApp.getWallets();
+    const selectedIndex = wallets.findIndex(wallet => wallet.label === this.state.wallet.label);
+    this.props.navigation.navigate('ActionSheet', {
+      wallets: wallets,
+      selectedIndex,
+    });
+  };
+
   render() {
     const { amount, addressText, bip21encoded } = this.state;
     return (
@@ -148,6 +161,12 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
           <Button title={i18n.receive.details.share} onPress={this.share} containerStyle={styles.buttonContainer} />
         }
       >
+        <DashboardHeader
+          onSelectPress={this.showModal}
+          balance={BlueApp.getBalance()}
+          label={this.state.wallet.label}
+          unit={this.state.wallet.preferredBalanceUnit}
+        />
         <View style={styles.qrcontainer}>
           <QRCode
             value={bip21encoded}
@@ -175,7 +194,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 140,
     height: 140,
-    marginTop: 150,
   },
   address: { ...typography.headline9, alignSelf: 'center', marginVertical: 30 },
   inputTitle: { ...typography.headline4, alignSelf: 'center', marginVertical: 20 },
