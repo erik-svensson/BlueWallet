@@ -1375,6 +1375,11 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/bip21@^1.1.30":
+  version "1.1.30"
+  resolved "https://registry.yarnpkg.com/@types/bip21/-/bip21-1.1.30.tgz#a507cb2fa03bd3b0521e6d2672f86f77fecf0a93"
+  integrity sha512-zpTgKZrNyy85cfC5uD9enraE6HTVwxnlk5/BWwF7T3IN2TZaN5/+aqzGdPG2BxuM0DvztWpt8idrO5MnJT/Z1Q==
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
