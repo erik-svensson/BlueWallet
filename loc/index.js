@@ -219,4 +219,12 @@ strings.formatBalanceWithoutSuffix = (balance = 0, toUnit, withFormatting = fals
   return balance.toString();
 };
 
+strings.formatBalance = number => {
+  console.log('number', number);
+  if (number === parseInt(number)) {
+    return parseInt(number).toString();
+  }
+  return parseFloat(number.toFixed(8));
+};
+
 module.exports = strings;
