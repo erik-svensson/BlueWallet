@@ -115,7 +115,7 @@ module.exports = {
     },
   },
   send: {
-    header: 'Send',
+    header: 'Send coins',
     success: {
       done: 'Done',
     },

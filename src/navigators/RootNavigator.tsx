@@ -13,7 +13,7 @@ export const RootNavigator = createStackNavigator(
   {
     MainCardStackNavigator,
     [Route.ImportWalletQRCode]: ImportWalletQRCodeScreen,
-    ActionSheet,
+    [Route.ActionSheet]: ActionSheet,
     EditTextNavigator,
     MessageNavigator,
   },
