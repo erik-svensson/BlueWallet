@@ -117,7 +117,10 @@ module.exports = {
   send: {
     header: 'Send coins',
     success: {
+      title: 'Success',
+      description: 'Hooray! You have successfully finished the transaction.',
       done: 'Done',
+      return: 'Return to Dashboard',
     },
     details: {
       title: 'create transaction',

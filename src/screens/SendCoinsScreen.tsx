@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, InteractionManager, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
 import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
 import { images, icons } from 'app/assets';
@@ -36,28 +36,6 @@ export class SendCoinsScreen extends Component<Props, State> {
       header: <Header navigation={props.navigation} isBackArrow title={i18n.send.header} />,
     };
   };
-
-  // state = {
-  //   fromAddress: null,
-  //   fromSecret: null,
-  //   fromWallet: null,
-  //   wallets: null,
-  //   isLoading: false,
-  // };
-
-  // static getDerivedStateFromProps(props, state) {
-  //   const { navigation } = props;
-  //   const fromAddress = navigation.getParam('fromAddress');
-  //   const fromSecret = navigation.getParam('fromSecret');
-  //   const fromWallet = navigation.getParam('fromWallet');
-  //   const addresses = [new BitcoinTransaction()];
-  //   const wallets = BlueApp.getWallets();
-  //   if (state.fromWallet) {
-  //     return null;
-  //   }
-  //   return { fromAddress, fromSecret, fromWallet, wallets, fee: 1, isLoading: false, addresses, tx :bitcoin.Transaction.fromHex(txhex);
-  //   };
-  // }
 
   constructor(props) {
     super(props);
@@ -218,25 +196,6 @@ export class SendCoinsScreen extends Component<Props, State> {
       bip21encoded,
     });
   };
-
-  // confirmTransaction = () => {
-  //   console.log('state', this.state);
-  //   const { amount, fromWallet, address, fee, memo } = this.state;
-  //   this.props.navigation.navigate(Route.SendCoinsConfirm, {
-  //     amount,
-  //     fromWallet,
-  //     address,
-  //     fee,
-  //     memo,
-  //   });
-  // };
-
-  // chooseItemFromModal = async (index: number) => {
-  //   const wallets = BlueApp.getWallets();
-
-  //   const fromWallet = wallets[index];
-  //   this.setState({ fromWallet, wallets });
-  // };
 
   processBIP70Invoice = async text => {
     try {
@@ -405,7 +364,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     };
     await BlueApp.saveToDisk();
     this.setState({ isLoading: false }, () =>
-      this.props.navigation.navigate('Confirm', {
+      this.props.navigation.navigate(Route.SendCoinsConfirm, {
         fee: new BigNumber(fee).dividedBy(100000000).toNumber(),
         memo: this.state.memo,
         fromWallet: wallet,
@@ -564,16 +523,13 @@ export class SendCoinsScreen extends Component<Props, State> {
         await BlueApp.saveToDisk();
       } catch (err) {
         console.log(err);
-        // ReactNativeHapticFeedback.trigger('notificationError', {
-        //   ignoreAndroidSystemSettings: false,
-        // });
         alert(err);
         this.setState({ isLoading: false });
         return;
       }
 
       this.setState({ isLoading: false }, () =>
-        this.props.navigation.navigate('Confirm', {
+        this.props.navigation.navigate(Route.SendCoinsConfirm, {
           recipients: [firstTransaction],
           // HD wallet's utxo is in sats, classic segwit wallet utxos are in btc
           fee: this.calculateFee(
@@ -612,6 +568,68 @@ export class SendCoinsScreen extends Component<Props, State> {
     return { address, amount, memo };
   };
 
+  renderAmountInput = () => {
+    const rows = [];
+    for (const [index, item] of this.state.addresses.entries()) {
+      rows.push(
+        <InputItem
+          label="Amount"
+          suffix="BTCV"
+          keyboardType="numeric"
+          // setValue={amount => this.setState({ amount })}
+          value={item.amount ? item.amount.toString() : null}
+          setValue={text => {
+            item.amount = text;
+            const transactions = this.state.addresses;
+            transactions[index] = item;
+            this.setState({ addresses: transactions });
+          }}
+        />,
+      );
+    }
+    return rows;
+  };
+
+  renderAddressInput = () => {
+    const rows = [];
+    for (const [index, item] of this.state.addresses.entries()) {
+      rows.push(
+        <InputItem
+          label="Address"
+          suffix=""
+          setValue={async text => {
+            text = text.trim();
+            const transactions = this.state.addresses;
+            try {
+              const { recipient, memo, fee, feeSliderValue } = await this.processBIP70Invoice(text);
+              transactions[index].address = recipient.address;
+              transactions[index].amount = recipient.amount;
+              this.setState({
+                addresses: transactions,
+                memo: memo,
+                fee,
+                feeSliderValue,
+                isLoading: false,
+              });
+            } catch (_e) {
+              const { address, amount, memo } = this.decodeBitcoinUri(text);
+              item.address = address || text;
+              item.amount = amount || item.amount;
+              transactions[index] = item;
+              this.setState({
+                addresses: transactions,
+                memo: memo || this.state.memo,
+                isLoading: false,
+                bip70TransactionExpiration: null,
+              });
+            }
+          }}
+        />,
+      );
+    }
+    return rows;
+  };
+
   render() {
     const { fromWallet, fee, amount, address, fromSecret, addresses, isLoading } = this.state;
     for (const [index, item] of this.state.addresses.entries()) {
@@ -635,59 +653,14 @@ export class SendCoinsScreen extends Component<Props, State> {
           unit={fromWallet.preferredBalanceUnit}
         />
         <View style={styles.inputsContainer}>
-          <InputItem
-            label="Amount"
-            suffix="BTCV"
-            keyboardType="numeric"
-            // setValue={amount => this.setState({ amount })}
-            value={this.state.addresses.entries().amount ? this.state.addresses.entries().amount.toString() : null}
-            setValue={text => {
-              const item = this.state.addresses.entries();
-              // console.log('item', item);
-              item.amount = text;
-              const transactions = this.state.addresses;
-              transactions[0] = item;
-              this.setState({ addresses: transactions });
-            }}
-          />
+          {this.renderAmountInput()}
 
           <View style={styles.fee}>
             <Text>{i18n.send.details.fee}</Text>
             <StyledText title={`${fee} ${i18n.send.details.feeUnit}`} onPress={this.setTransactionFee} />
           </View>
           <View style={styles.addressContainer}>
-            <InputItem
-              label="Address"
-              suffix=""
-              setValue={async text => {
-                text = text.trim();
-                const transactions = this.state.addresses;
-                try {
-                  const { recipient, memo, fee, feeSliderValue } = await this.processBIP70Invoice(text);
-                  transactions[0].address = recipient.address;
-                  transactions[0].amount = recipient.amount;
-                  this.setState({
-                    addresses: transactions,
-                    memo: memo,
-                    fee,
-                    feeSliderValue,
-                    isLoading: false,
-                  });
-                } catch (_e) {
-                  const { address, amount, memo } = this.decodeBitcoinUri(text);
-                  const item = this.state.addresses.entries();
-                  item.address = address || text;
-                  item.amount = amount || item.amount;
-                  transactions[0] = item;
-                  this.setState({
-                    addresses: transactions,
-                    memo: memo || this.state.memo,
-                    isLoading: false,
-                    bip70TransactionExpiration: null,
-                  });
-                }
-              }}
-            />
+            {this.renderAddressInput()}
             <TouchableOpacity style={styles.addressBookIcon}>
               <Image style={styles.icon} source={images.addressBook} />
             </TouchableOpacity>

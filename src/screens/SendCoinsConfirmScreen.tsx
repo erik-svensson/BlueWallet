@@ -10,17 +10,22 @@ import { palette, typography } from 'app/styles';
 
 import BlueApp from '../../BlueApp';
 import BitcoinBIP70TransactionDecode from '../../bip70/bip70';
+import { HDSegwitBech32Wallet } from '../../class';
 import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
-import { Chain } from '../../models/bitcoinUnits';
+import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
 import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
 
-const BigNumber = require('bignumber.js');
+const Bignumber = require('bignumber.js');
 const bip21 = require('bip21');
 const bitcoin = require('bitcoinjs-lib');
 
-const ScreenFooter = () => (
+const BlueElectrum = require('../../BlueElectrum');
+const currency = require('../../currency');
+const EV = require('../../events');
+
+const ScreenFooter = onPress => (
   <View style={styles.footer}>
-    <Button title={i18n.send.confirm.sendNow} containerStyle={styles.buttonContainer} disabled={true} />
+    <Button title={i18n.send.confirm.sendNow} containerStyle={styles.buttonContainer} onPress={onPress} />
     <StyledText title={i18n.transactions.details.transactionDetails} />
   </View>
 );
@@ -34,160 +39,71 @@ export class SendCoinsConfirmScreen extends Component {
 
   constructor(props) {
     super(props);
-    const { navigation } = props;
-    const fromAddress = navigation.getParam('fromAddress');
-    const fromSecret = navigation.getParam('fromSecret');
-    const fromWallet = navigation.getParam('fromWallet');
 
-    const wallets = BlueApp.getWallets();
-
-    if (wallets.length === 0) {
-      alert('Before creating a transaction, you must first add a Bitcoin wallet.');
-      return props.navigation.goBack(null);
-    } else {
-      if (!fromWallet && wallets.length > 0) {
-        fromWallet = wallets[0];
-        fromAddress = fromWallet.getAddress();
-        fromSecret = fromWallet.getSecret();
-      }
-      this.state = {
-        isLoading: false,
-        amount: 0,
-        wallets,
-        showSendMax: false,
-        isFeeSelectionModalVisible: false,
-        isAdvancedTransactionOptionsVisible: false,
-        recipientsScrollIndex: 0,
-        fromAddress,
-        fromWallet,
-        fromSecret,
-        addresses: [],
-        memo: '',
-        networkTransactionFees: new NetworkTransactionFee(1, 1, 1),
-        fee: 1,
-        feeSliderValue: 1,
-        bip70TransactionExpiration: null,
-        renderWalletSelectionButtonHidden: false,
-      };
-    }
+    this.state = {
+      isLoading: false,
+      fee: props.navigation.getParam('fee'),
+      feeSatoshi: new Bignumber(props.navigation.getParam('fee')).multipliedBy(100000000).toNumber(),
+      memo: props.navigation.getParam('memo'),
+      recipients: props.navigation.getParam('recipients'),
+      size: Math.round(props.navigation.getParam('tx').length / 2),
+      tx: props.navigation.getParam('tx'),
+      satoshiPerByte: props.navigation.getParam('satoshiPerByte'),
+      fromWallet: props.navigation.getParam('fromWallet'),
+    };
   }
 
-  async componentDidMount() {
-    console.log('send/details - componentDidMount');
+  broadcast = () => {
+    this.setState({ isLoading: true }, async () => {
+      try {
+        await BlueElectrum.ping();
+        await BlueElectrum.waitTillConnected();
 
-    const addresses = [];
-    let initialMemo = '';
-    if (this.props.navigation.state.params.uri) {
-      const uri = this.props.navigation.state.params.uri;
-      if (BitcoinBIP70TransactionDecode.matchesPaymentURL(uri)) {
-        const { recipient, memo, fee, feeSliderValue } = await this.processBIP70Invoice(uri);
-        addresses.push(recipient);
-        initialMemo = memo;
-        this.setState({
-          addresses,
-          memo: initialMemo,
-          fee,
-          feeSliderValue,
-          isLoading: false,
-        });
-      } else {
-        try {
-          const { address, amount, memo } = this.decodeBitcoinUri(uri);
-          addresses.push(new BitcoinTransaction(address, amount));
-          initialMemo = memo;
-          this.setState({ addresses, memo: initialMemo, isLoading: false });
-        } catch (error) {
-          console.log(error);
-          alert('Error: Unable to decode Bitcoin address');
-        }
-      }
-    } else if (this.props.navigation.state.params.address) {
-      addresses.push(new BitcoinTransaction(this.props.navigation.state.params.address));
-      if (this.props.navigation.state.params.memo) initialMemo = this.props.navigation.state.params.memo;
-      this.setState({ addresses, memo: initialMemo, isLoading: false });
-    } else {
-      this.setState({
-        addresses: [new BitcoinTransaction()],
-        isLoading: false,
-      });
-    }
-
-    try {
-      const cachedNetworkTransactionFees = JSON.parse(await AsyncStorage.getItem(NetworkTransactionFee.StorageKey));
-
-      if (cachedNetworkTransactionFees && cachedNetworkTransactionFees.hasOwnProperty('halfHourFee')) {
-        this.setState({
-          fee: cachedNetworkTransactionFees.fastestFee,
-          networkTransactionFees: cachedNetworkTransactionFees,
-          feeSliderValue: cachedNetworkTransactionFees.fastestFee,
-        });
-      }
-    } catch (_) {}
-
-    try {
-      const recommendedFees = await NetworkTransactionFees.recommendedFees();
-      if (recommendedFees && recommendedFees.hasOwnProperty('fastestFee')) {
-        await AsyncStorage.setItem(NetworkTransactionFee.StorageKey, JSON.stringify(recommendedFees));
-        this.setState({
-          fee: recommendedFees.fastestFee,
-          networkTransactionFees: recommendedFees,
-          feeSliderValue: recommendedFees.fastestFee,
-        });
-
-        if (this.props.navigation.state.params.uri) {
-          if (BitcoinBIP70TransactionDecode.matchesPaymentURL(this.props.navigation.state.params.uri)) {
-            this.processBIP70Invoice(this.props.navigation.state.params.uri);
+        const result = await this.state.fromWallet.broadcastTx(this.state.tx);
+        if (result && result.code) {
+          if (result.code === 1) {
+            const message = result.message.split('\n');
+            throw new Error(`${message[0]}: ${message[2]}`);
+          }
+        } else {
+          EV(EV.enum.REMOTE_TRANSACTIONS_COUNT_CHANGED); // someone should fetch txs
+          let amount = 0;
+          const recipients = this.state.recipients;
+          if (recipients[0].amount === BitcoinUnit.MAX) {
+            amount = this.state.fromWallet.getBalance() - this.state.feeSatoshi;
           } else {
-            try {
-              const { address, amount, memo } = this.decodeBitcoinUri(this.props.navigation.getParam('uri'));
-              this.setState({ address, amount, memo, isLoading: false });
-            } catch (error) {
-              console.log(error);
-              this.setState({ isLoading: false });
-              alert('Error: Unable to decode Bitcoin address');
+            for (const recipient of recipients) {
+              amount += recipient.amount ? +recipient.amount : recipient.value;
             }
           }
-        }
-      } else {
-        this.setState({ isLoading: false });
-      }
-    } catch (_e) {}
-  }
 
-  decodeBitcoinUri(uri) {
-    let amount = '';
-    let parsedBitcoinUri = null;
-    let address = uri || '';
-    let memo = '';
-    try {
-      parsedBitcoinUri = bip21.decode(uri);
-      address = parsedBitcoinUri.hasOwnProperty('address') ? parsedBitcoinUri.address : address;
-      if (parsedBitcoinUri.hasOwnProperty('options')) {
-        if (parsedBitcoinUri.options.hasOwnProperty('amount')) {
-          amount = parsedBitcoinUri.options.amount.toString();
-          amount = parsedBitcoinUri.options.amount;
+          if (this.state.fromWallet.type === HDSegwitBech32Wallet.type) {
+            amount = i18n.formatBalanceWithoutSuffix(amount, BitcoinUnit.BTC, false);
+          }
+
+          this.props.navigation.navigate(Route.TransactionSuccess);
+          this.setState({ isLoading: false });
         }
-        if (parsedBitcoinUri.options.hasOwnProperty('label')) {
-          memo = parsedBitcoinUri.options.label || memo;
-        }
+      } catch (error) {
+        this.setState({ isLoading: false });
+        alert(error.message);
       }
-    } catch (_) {}
-    return { address, amount, memo };
-  }
+    });
+  };
 
   render() {
     const { navigation } = this.props;
-    const amount = navigation.getParam('amount');
     const fromWallet = navigation.getParam('fromWallet');
-    const address = navigation.getParam('address');
+    const recipients = navigation.getParam('recipients');
+    const item = recipients[0];
     const fee = navigation.getParam('fee');
     return (
-      <ScreenTemplate footer={ScreenFooter()}>
+      <ScreenTemplate footer={ScreenFooter(this.broadcast)}>
         <View style={styles.container}>
           <View>
             <View style={styles.chooseWalletButton}>
               <Text style={typography.headline4}>
-                {i18n.formatBalanceWithoutSuffix(Number(amount))} {fromWallet.preferredBalanceUnit}
+                {item.amount || currency.satoshiToBTC(item.value)} {fromWallet.preferredBalanceUnit}
               </Text>
             </View>
             <View style={styles.descriptionContainer}>
@@ -196,7 +112,7 @@ export class SendCoinsConfirmScreen extends Component {
             </View>
           </View>
           <Text style={[styles.buttonDescription, { alignSelf: 'center' }]}>{i18n.send.details.to}</Text>
-          <Text style={styles.address}>{address}</Text>
+          <Text style={styles.address}>{item.address}</Text>
           <View style={styles.feeBoxContainer}>
             <Text style={typography.caption}>{i18n.send.details.fee}</Text>
             <View style={styles.feeBox}>

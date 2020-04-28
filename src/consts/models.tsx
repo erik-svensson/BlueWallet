@@ -24,6 +24,7 @@ export enum Route {
   SelectLanguage = 'SelectLanguage',
   ReleaseNotes = 'ReleaseNotes',
   ActionSheet = 'ActionSheet',
+  TransactionSuccess = 'TransactionSuccessScreen',
 }
 
 export interface Wallet {
