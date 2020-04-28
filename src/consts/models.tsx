@@ -17,6 +17,7 @@ export enum Route {
   TransactionDetails = 'TransactionDetails',
   ReceiveCoins = 'ReceiveCoins',
   SendCoins = 'SendCoins',
+  SendCoinsConfirm = 'SendCoinsConfirm',
   EditText = 'EditText',
   ElectrumServer = 'ElectrumServer',
   AboutUs = 'AboutUs',

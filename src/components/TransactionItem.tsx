@@ -14,7 +14,6 @@ export interface TransactionItemProps {
 }
 
 export const TransactionItem = ({ item, onPress }: { item: TransactionItemProps; onPress: (item: any) => void }) => {
-  console.log('item', item);
   const confirmations = () => {
     return i18n.transactions.list.conf + ': ' + (item.confirmations < 7 ? item.confirmations : '6') + '/6 ';
   };

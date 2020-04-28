@@ -188,7 +188,7 @@ export class DashboardScreen extends Component<Props, State> {
   sendCoins = () => {
     const { wallets, lastSnappedTo } = this.state;
     const activeWallet = wallets[lastSnappedTo].label === 'All wallets' ? wallets[1] : wallets[lastSnappedTo];
-
+    console.log('activeWallet.getAddress(),',activeWallet.getAddress(),)
     this.props.navigation.navigate(Route.SendCoins, {
       fromAddress: activeWallet.getAddress(),
       fromSecret: activeWallet.getSecret(),
@@ -239,6 +239,7 @@ export class DashboardScreen extends Component<Props, State> {
   render() {
     const { wallets, lastSnappedTo, isLoading } = this.state;
     const activeWallet = wallets[lastSnappedTo];
+    console.log('activeWallet',activeWallet)
     if (isLoading) {
       return <View />;
     }
