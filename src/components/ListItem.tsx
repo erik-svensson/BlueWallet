@@ -48,7 +48,7 @@ export const ListItem = ({
         </View>
       </TouchableOpacity>
       {typeof switchValue === 'boolean' && (
-        <View style={styles.switchContainer}>
+        <View>
           <StyledSwitch onValueChange={onSwitchValueChange} value={switchValue} />
         </View>
       )}
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 8,
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   touchableOpacityContainer: {
     flexDirection: 'row',
@@ -80,8 +81,5 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: 21,
     height: 21,
-  },
-  switchContainer: {
-    flexGrow: 1,
   },
 });
