@@ -12,7 +12,7 @@ import BlueApp from '../../BlueApp';
 import BitcoinBIP70TransactionDecode from '../../bip70/bip70';
 import { HDLegacyP2PKHWallet, HDSegwitBech32Wallet, HDSegwitP2SHWallet, WatchOnlyWallet } from '../../class';
 import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
-import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
+import { BitcoinUnit } from '../../models/bitcoinUnits';
 import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
 import { DashboardHeader } from './Dashboard/DashboardHeader';
 
@@ -20,15 +20,26 @@ const BigNumber = require('bignumber.js');
 const bip21 = require('bip21');
 const bitcoin = require('bitcoinjs-lib');
 
-type Props = NavigationInjectedProps<{ secret: string }>;
+type Props = NavigationInjectedProps<{ fromSecret: string; fromAddress: string; fromWallet: any }>;
 
 interface State {
-  secret: string;
-  addressText: string;
-  bip21encoded: any;
+  isLoading: boolean;
   amount: number;
-  address: string;
-  wallet: any;
+  wallets: any;
+  showSendMax: boolean;
+  isFeeSelectionModalVisible: boolean;
+  isAdvancedTransactionOptionsVisible: boolean;
+  recipientsScrollIndex: number;
+  fromAddress: string;
+  fromWallet: any;
+  fromSecret: string;
+  addresses: any;
+  memo: string;
+  networkTransactionFees: any;
+  fee: number;
+  feeSliderValue: number;
+  bip70TransactionExpiration: null;
+  renderWalletSelectionButtonHidden: boolean;
 }
 export class SendCoinsScreen extends Component<Props, State> {
   static navigationOptions = (props: NavigationScreenProps<{ transaction: Transaction }>) => {
@@ -37,18 +48,18 @@ export class SendCoinsScreen extends Component<Props, State> {
     };
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     const { navigation } = props;
-    const fromAddress = navigation.getParam('fromAddress');
-    const fromSecret = navigation.getParam('fromSecret');
-    const fromWallet = navigation.getParam('fromWallet');
+    let fromAddress = navigation.getParam('fromAddress');
+    let fromSecret = navigation.getParam('fromSecret');
+    let fromWallet = navigation.getParam('fromWallet');
     const wallets = BlueApp.getWallets();
 
     if (wallets.length === 0) {
-      alert('Before creating a transaction, you must first add a Bitcoin wallet.');
-      return props.navigation.goBack(null);
+      Alert.alert('Before creating a transaction, you must first add a Bitcoin wallet.');
+      props.navigation.goBack(null);
     } else {
       if (!fromWallet && wallets.length > 0) {
         fromWallet = wallets[0];
@@ -78,44 +89,10 @@ export class SendCoinsScreen extends Component<Props, State> {
   }
 
   async componentDidMount() {
-    console.log('send/details - componentDidMount');
-
-    const addresses = [];
-    let initialMemo = '';
-    if (this.props.navigation.state.params.uri) {
-      const uri = this.props.navigation.state.params.uri;
-      if (BitcoinBIP70TransactionDecode.matchesPaymentURL(uri)) {
-        const { recipient, memo, fee, feeSliderValue } = await this.processBIP70Invoice(uri);
-        addresses.push(recipient);
-        initialMemo = memo;
-        this.setState({
-          addresses,
-          memo: initialMemo,
-          fee,
-          feeSliderValue,
-          isLoading: false,
-        });
-      } else {
-        try {
-          const { address, amount, memo } = this.decodeBitcoinUri(uri);
-          addresses.push(new BitcoinTransaction(address, amount));
-          initialMemo = memo;
-          this.setState({ addresses, memo: initialMemo, isLoading: false });
-        } catch (error) {
-          console.log(error);
-          alert('Error: Unable to decode Bitcoin address');
-        }
-      }
-    } else if (this.props.navigation.state.params.address) {
-      addresses.push(new BitcoinTransaction(this.props.navigation.state.params.address));
-      if (this.props.navigation.state.params.memo) initialMemo = this.props.navigation.state.params.memo;
-      this.setState({ addresses, memo: initialMemo, isLoading: false });
-    } else {
-      this.setState({
-        addresses: [new BitcoinTransaction()],
-        isLoading: false,
-      });
-    }
+    this.setState({
+      addresses: [new BitcoinTransaction()],
+      isLoading: false,
+    });
 
     try {
       const cachedNetworkTransactionFees = JSON.parse(await AsyncStorage.getItem(NetworkTransactionFee.StorageKey));
@@ -138,28 +115,13 @@ export class SendCoinsScreen extends Component<Props, State> {
           networkTransactionFees: recommendedFees,
           feeSliderValue: recommendedFees.fastestFee,
         });
-
-        if (this.props.navigation.state.params.uri) {
-          if (BitcoinBIP70TransactionDecode.matchesPaymentURL(this.props.navigation.state.params.uri)) {
-            this.processBIP70Invoice(this.props.navigation.state.params.uri);
-          } else {
-            try {
-              const { address, amount, memo } = this.decodeBitcoinUri(this.props.navigation.getParam('uri'));
-              this.setState({ address, amount, memo, isLoading: false });
-            } catch (error) {
-              console.log(error);
-              this.setState({ isLoading: false });
-              alert('Error: Unable to decode Bitcoin address');
-            }
-          }
-        }
       } else {
         this.setState({ isLoading: false });
       }
     } catch (_e) {}
   }
 
-  processBIP70Invoice = async text => {
+  processBIP70Invoice = async (text: string) => {
     try {
       if (BitcoinBIP70TransactionDecode.matchesPaymentURL(text)) {
         return BitcoinBIP70TransactionDecode.decode(text)
@@ -177,45 +139,7 @@ export class SendCoinsScreen extends Component<Props, State> {
             };
           })
           .catch(error => {
-            alert(error.errorMessage);
-            throw error;
-          });
-      }
-    } catch (error) {
-      return false;
-    }
-    throw new Error('BIP70: Unable to process.');
-  };
-
-  updateAmount = (amount: number) => {
-    const bip21encoded = bip21.encode(this.state.address, {
-      amount,
-    });
-    this.setState({
-      amount,
-      bip21encoded,
-    });
-  };
-
-  processBIP70Invoice = async text => {
-    try {
-      if (BitcoinBIP70TransactionDecode.matchesPaymentURL(text)) {
-        return BitcoinBIP70TransactionDecode.decode(text)
-          .then(response => {
-            const recipient = new BitcoinTransaction(
-              response.address,
-              i18n.formatBalanceWithoutSuffix(response.amount, BitcoinUnit.BTC, false),
-            );
-            return {
-              recipient,
-              memo: response.memo,
-              fee: response.fee,
-              feeSliderValue: response.fee,
-              bip70TransactionExpiration: response.expires,
-            };
-          })
-          .catch(error => {
-            alert(error.errorMessage);
+            Alert.alert(error.errorMessage);
             throw error;
           });
       }
@@ -245,7 +169,7 @@ export class SendCoinsScreen extends Component<Props, State> {
             text: i18n._.ok,
             onPress: async () => {
               const firstTransaction =
-                this.state.addresses.find(element => {
+                this.state.addresses.find((element: any) => {
                   const feeSatoshi = new BigNumber(element.amount).multipliedBy(100000000);
                   return element.address.length > 0 && feeSatoshi > 0;
                 }) || this.state.addresses[0];
@@ -257,7 +181,10 @@ export class SendCoinsScreen extends Component<Props, State> {
         ],
         { cancelable: false },
       );
-    } else if (this.state.addresses.some(element => element.amount === BitcoinUnit.MAX) && !wallet.allowSendMax()) {
+    } else if (
+      this.state.addresses.some((element: any) => element.amount === BitcoinUnit.MAX) &&
+      !wallet.allowSendMax()
+    ) {
       Alert.alert(
         'Wallet Selection',
         `The selected wallet does not support automatic maximum balance calculation. Are you sure to want to select this wallet?`,
@@ -266,7 +193,7 @@ export class SendCoinsScreen extends Component<Props, State> {
             text: i18n._.ok,
             onPress: async () => {
               const firstTransaction =
-                this.state.addresses.find(element => {
+                this.state.addresses.find((element: any) => {
                   return element.amount === BitcoinUnit.MAX;
                 }) || this.state.addresses[0];
               firstTransaction.amount = 0;
@@ -274,7 +201,7 @@ export class SendCoinsScreen extends Component<Props, State> {
             },
             style: 'default',
           },
-          { text: i18n.send.details.cancel, onPress: () => {}, style: 'cancel' },
+          { text: i18n.send.details.cancel, style: 'cancel' },
         ],
         { cancelable: false },
       );
@@ -285,7 +212,7 @@ export class SendCoinsScreen extends Component<Props, State> {
 
   showModal = () => {
     const { wallets, fromWallet } = this.state;
-    const selectedIndex = wallets.findIndex(wallet => wallet.label === fromWallet.label);
+    const selectedIndex = wallets.findIndex((wallet: any) => wallet.label === fromWallet.label);
     this.props.navigation.navigate(Route.ActionSheet, {
       wallets,
       selectedIndex,
@@ -293,7 +220,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     });
   };
 
-  saveTransactionFee = fee => {
+  saveTransactionFee = (fee: number) => {
     this.setState({ fee });
   };
 
@@ -375,7 +302,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     );
   };
 
-  recalculateAvailableBalance(balance, amount, fee) {
+  recalculateAvailableBalance(balance: number, amount: number, fee: number) {
     if (!amount) amount = 0;
     if (!fee) fee = 0;
     let availableBalance;
@@ -392,9 +319,35 @@ export class SendCoinsScreen extends Component<Props, State> {
     return (availableBalance === 'NaN' && balance) || availableBalance;
   }
 
+  calculateFee(utxos: any, txhex: any, utxoIsInSatoshis: any) {
+    const index = {};
+    let c = 1;
+    index[0] = 0;
+    for (const utxo of utxos) {
+      if (!utxoIsInSatoshis) {
+        utxo.value = new BigNumber(utxo.value).multipliedBy(100000000).toNumber();
+      }
+      index[c] = utxo.value + index[c - 1];
+      c++;
+    }
+
+    const tx = bitcoin.Transaction.fromHex(txhex);
+    const totalInput = index[tx.ins.length];
+    // ^^^ dumb way to calculate total input. we assume that signer uses utxos sequentially
+    // so total input == sum of yongest used inputs (and num of used inputs is `tx.ins.length`)
+    // TODO: good candidate to refactor and move to appropriate class. some day
+
+    let totalOutput = 0;
+    for (const o of tx.outs) {
+      totalOutput += o.value * 1;
+    }
+
+    return new BigNumber(totalInput - totalOutput).dividedBy(100000000).toNumber();
+  }
+
   confirmTransaction = async () => {
     this.setState({ isLoading: true });
-    let error = false;
+    let error: boolean | string = false;
     const requestedSatPerByte = this.state.fee.toString().replace(/\D/g, '');
     for (const [index, transaction] of this.state.addresses.entries()) {
       if (!transaction.amount || transaction.amount < 0 || parseFloat(transaction.amount) === 0) {
@@ -433,7 +386,7 @@ export class SendCoinsScreen extends Component<Props, State> {
       }
       if (error) {
         this.setState({ isLoading: false, recipientsScrollIndex: index });
-        alert(error);
+        Alert.alert(error.toString());
 
         break;
       }
@@ -453,7 +406,7 @@ export class SendCoinsScreen extends Component<Props, State> {
         await this.createHDBech32Transaction();
       } catch (Err) {
         this.setState({ isLoading: false }, () => {
-          alert(Err.message);
+          Alert.alert(Err.message);
           // ReactNativeHapticFeedback.trigger('notificationError', {
           //   ignoreAndroidSystemSettings: false,
           // });
@@ -465,9 +418,9 @@ export class SendCoinsScreen extends Component<Props, State> {
     // legacy send below
 
     this.setState({ isLoading: true }, async () => {
-      let utxo;
-      let actualSatoshiPerByte;
-      let tx, txid;
+      let utxo: any;
+      let actualSatoshiPerByte: any;
+      let tx: any, txid: any;
       let tries = 1;
       let fee = 0.000001; // initial fee guess
       const firstTransaction = this.state.addresses[0];
@@ -547,7 +500,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     });
   };
 
-  decodeBitcoinUri = uri => {
+  decodeBitcoinUri = (uri: string) => {
     let amount = '';
     let parsedBitcoinUri = null;
     let address = uri || '';
@@ -631,7 +584,7 @@ export class SendCoinsScreen extends Component<Props, State> {
   };
 
   render() {
-    const { fromWallet, fee, amount, address, fromSecret, addresses, isLoading } = this.state;
+    const { fromWallet, fee, isLoading } = this.state;
     for (const [index, item] of this.state.addresses.entries()) {
       console.log('item', item);
     }

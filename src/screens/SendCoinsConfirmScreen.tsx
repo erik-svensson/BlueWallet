@@ -1,43 +1,49 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
-import { icons, images } from 'app/assets';
-import { Header, ScreenTemplate, Button, InputItem, StyledText, Image, Text } from 'app/components';
+import { images } from 'app/assets';
+import { Header, ScreenTemplate, Button, StyledText, Image, Text } from 'app/components';
 import { Transaction, Route } from 'app/consts';
 import i18n from 'app/locale';
 import { palette, typography } from 'app/styles';
 
-import BlueApp from '../../BlueApp';
-import BitcoinBIP70TransactionDecode from '../../bip70/bip70';
 import { HDSegwitBech32Wallet } from '../../class';
-import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
-import { BitcoinUnit, Chain } from '../../models/bitcoinUnits';
-import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
+import { BitcoinUnit } from '../../models/bitcoinUnits';
 
 const Bignumber = require('bignumber.js');
-const bip21 = require('bip21');
-const bitcoin = require('bitcoinjs-lib');
 
 const BlueElectrum = require('../../BlueElectrum');
 const currency = require('../../currency');
 const EV = require('../../events');
 
-const ScreenFooter = onPress => (
+const ScreenFooter = (onPress: () => void) => (
   <View style={styles.footer}>
     <Button title={i18n.send.confirm.sendNow} containerStyle={styles.buttonContainer} onPress={onPress} />
     <StyledText title={i18n.transactions.details.transactionDetails} />
   </View>
 );
 
-export class SendCoinsConfirmScreen extends Component {
+type Props = NavigationInjectedProps<{
+  isLoading: boolean;
+  fee: number;
+  feeSatoshi: number;
+  memo: string;
+  recipients: any;
+  size: number;
+  tx: any;
+  satoshiPerByte: any;
+  fromWallet: any;
+}>;
+
+export class SendCoinsConfirmScreen extends Component<Props> {
   static navigationOptions = (props: NavigationScreenProps<{ transaction: Transaction }>) => {
     return {
       header: <Header navigation={props.navigation} isBackArrow title={i18n.send.header} />,
     };
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -70,7 +76,7 @@ export class SendCoinsConfirmScreen extends Component {
           let amount = 0;
           const recipients = this.state.recipients;
           if (recipients[0].amount === BitcoinUnit.MAX) {
-            amount = this.state.fromWallet.getBalance() - this.state.feeSatoshi;
+            amount = this.state.fromWallets.getBalance() - this.state.feeSatoshi;
           } else {
             for (const recipient of recipients) {
               amount += recipient.amount ? +recipient.amount : recipient.value;
@@ -86,7 +92,7 @@ export class SendCoinsConfirmScreen extends Component {
         }
       } catch (error) {
         this.setState({ isLoading: false });
-        alert(error.message);
+        Alert.alert(error.message);
       }
     });
   };
