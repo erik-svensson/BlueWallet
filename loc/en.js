@@ -113,6 +113,7 @@ module.exports = {
       to: 'To',
       bytes: 'bytes',
       copy: 'Copy',
+      noLabel: 'No label',
       details: 'Details',
       transactionId: 'Transaction ID',
       confirmations: 'confirmations',
