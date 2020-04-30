@@ -24,3 +24,4 @@ export { TransactionSuccessScreen } from './TransactionSuccessScreen';
 export { SendTransactionDetailsScreen } from './SendTransactionDetailsScreen';
 export { default as ScanQrCodeScreen } from './ScanQrCodeScreen';
 export { default as ImportWalletQRCodeScreen } from './ImportWalletQRCodeScreen';
+export { ScanQrAddressScreen } from './ScanQrAddressScreen';
