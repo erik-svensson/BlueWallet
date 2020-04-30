@@ -93,6 +93,7 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
           <InputItem
             focused={!!address}
             value={address}
+            multiline
             setValue={this.setAddress}
             label={i18n.contactCreate.addressLabel}
           />
