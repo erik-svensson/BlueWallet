@@ -97,9 +97,9 @@ export class SendCoinsScreen extends Component<Props, State> {
     });
 
     try {
-      const cachedNetworkTransactionFees = JSON.parse(
-        (await AsyncStorage.getItem(NetworkTransactionFee.StorageKey)) as string,
-      );
+      const cachedNetworkTransactionFees = JSON.parse((await AsyncStorage.getItem(
+        NetworkTransactionFee.StorageKey,
+      )) as string);
 
       if (cachedNetworkTransactionFees && cachedNetworkTransactionFees.hasOwnProperty('halfHourFee')) {
         this.setState({
@@ -638,8 +638,8 @@ export class SendCoinsScreen extends Component<Props, State> {
             <TouchableOpacity
               style={styles.qrCodeIcon}
               onPress={() =>
-                this.props.navigation.navigate(Route.ScanQrAddress, {
-                  onAddressRead: this.processAddressData,
+                this.props.navigation.navigate(Route.ScanQrCode, {
+                  onBarCodeScan: this.processAddressData,
                 })
               }
             >
