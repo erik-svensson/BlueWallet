@@ -1,50 +1,58 @@
-import { Transaction } from 'app/consts';
+import { Authenticator } from 'app/consts';
 
-import { TransactionsAction, TransactionsActionType } from './actions';
+import { AuthenticatorsAction, AuthenticatorsActionType } from './actions';
 
-export interface TransactionsState {
-  transactions: Record<string, Transaction[]>;
-  transactionNotes: Record<string, string>;
+export interface AuthenticatorsState {
+  authenticators: Authenticator[];
+  isLoading: boolean;
+  error: string;
 }
 
-const initialState: TransactionsState = {
-  transactions: {},
-  transactionNotes: {},
+const initialState: AuthenticatorsState = {
+  authenticators: [],
+  isLoading: false,
+  error: '',
 };
 
-export const transactionsReducer = (state = initialState, action: TransactionsActionType): TransactionsState => {
+export const authenticatorsReducer = (state = initialState, action: AuthenticatorsActionType): AuthenticatorsState => {
   switch (action.type) {
-    case TransactionsAction.LoadTransactionsSuccess:
+    case AuthenticatorsAction.CreateAuthenticatorRequest:
+    case AuthenticatorsAction.LoadAuthenticatorsRequest:
+    case AuthenticatorsAction.DeleteAuthenticatorRequest:
       return {
         ...state,
-        transactions: {
-          ...state.transactions,
-          [action.walletAddress]: action.transactions,
-        },
+        isLoading: true,
       };
-    case TransactionsAction.CreateTransactionNote:
+    case AuthenticatorsAction.CreateAuthenticatorSuccess:
       return {
         ...state,
-        transactionNotes: {
-          ...state.transactionNotes,
-          [action.transactionID]: action.note,
-        },
+        authenticators: [...state.authenticators, action.authenticator],
+        isLoading: false,
+        error: '',
       };
-    case TransactionsAction.UpdateTransactionNote:
+    case AuthenticatorsAction.LoadAuthenticatorsSuccess:
       return {
         ...state,
-        transactionNotes: {
-          ...state.transactionNotes,
-          [action.transactionID]: action.note,
-        },
+        authenticators: action.authenticators,
+        isLoading: false,
+        error: '',
       };
-    case TransactionsAction.DeleteTransactionNote:
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { [action.transactionID]: deleted, ...transactionNotes } = state.transactionNotes;
+    case AuthenticatorsAction.DeleteAuthenticatorSuccess:
       return {
         ...state,
-        transactionNotes,
+        authenticators: state.authenticators.filter(a => a.id !== action.authenticator.id),
+        isLoading: false,
+        error: '',
       };
+    case AuthenticatorsAction.LoadAuthenticatorsFailure:
+    case AuthenticatorsAction.CreateAuthenticatorFailure:
+    case AuthenticatorsAction.DeleteAuthenticatorFailure:
+      return {
+        ...state,
+        isLoading: false,
+        error: action.error,
+      };
+
     default:
       return state;
   }

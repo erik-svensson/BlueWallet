@@ -1,113 +1,174 @@
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { Transaction } from 'app/consts';
-import { sleep } from 'app/helpers/helpers';
+import { Authenticator as IAuthenticator } from 'app/consts';
+import { BlueApp, Authenticator } from 'app/legacy';
 
-export enum TransactionsAction {
-  LoadTransactions = 'LoadTransactions',
-  LoadTransactionsRequest = 'LoadTransactionsRequest',
-  LoadTransactionsSuccess = 'LoadTransactionsSuccess',
-  LoadTransactionsFailure = 'LoadTransactionsFailure',
-  CreateTransactionNote = 'CreateTransactionNote',
-  UpdateTransactionNote = 'UpdateTransactionNote',
-  DeleteTransactionNote = 'DeleteTransactionNote',
+export enum AuthenticatorsAction {
+  CreateAuthenticatorRequest = 'CreateAuthenticatorRequest',
+  CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
+  CreateAuthenticatorFailure = 'CreateAuthenticatorFailure',
+  LoadAuthenticatorsRequest = 'LoadAuthenticatorsRequest',
+  LoadAuthenticatorsSuccess = 'LoadAuthenticatorsSuccess',
+  LoadAuthenticatorsFailure = 'LoadAuthenticatorsFailure',
+  DeleteAuthenticatorRequest = 'DeleteAuthenticatorRequest',
+  DeleteAuthenticatorSuccess = 'DeleteAuthenticatorSuccess',
+  DeleteAuthenticatorFailure = 'DeleteAuthenticatorFailure',
 }
 
-export interface LoadTransactionsAction {
-  type: TransactionsAction.LoadTransactions;
-  walletAddress: string;
+export interface CreateAuthenticatorRequestAction {
+  type: AuthenticatorsAction.CreateAuthenticatorRequest;
 }
 
-export interface LoadTransactionsRequestAction {
-  type: TransactionsAction.LoadTransactionsRequest;
-  walletAddress: string;
+export interface CreateAuthenticatorSuccessAction {
+  type: AuthenticatorsAction.CreateAuthenticatorSuccess;
+  authenticator: IAuthenticator;
+}
+export interface CreateAuthenticatorFailureAction {
+  type: AuthenticatorsAction.CreateAuthenticatorFailure;
+  error: string;
+}
+export interface LoadAuthenticatorsRequestAction {
+  type: AuthenticatorsAction.LoadAuthenticatorsRequest;
 }
 
-export interface LoadTransactionsSuccessAction {
-  type: TransactionsAction.LoadTransactionsSuccess;
-  transactions: Transaction[];
-  walletAddress: string;
+export interface LoadAuthenticatorsSuccessAction {
+  type: AuthenticatorsAction.LoadAuthenticatorsSuccess;
+  authenticators: IAuthenticator[];
+}
+export interface LoadAuthenticatorsFailureAction {
+  type: AuthenticatorsAction.LoadAuthenticatorsFailure;
+  error: string;
 }
 
-export interface LoadTransactionsFailureAction {
-  type: TransactionsAction.LoadTransactionsFailure;
-  error: Error;
-  walletAddress: string;
+export interface DeleteAuthenticatorRequestAction {
+  type: AuthenticatorsAction.DeleteAuthenticatorRequest;
 }
 
-export interface CreateTransactionNoteAction {
-  type: TransactionsAction.CreateTransactionNote;
-  transactionID: string;
-  note: string;
+export interface DeleteAuthenticatorSuccessAction {
+  type: AuthenticatorsAction.DeleteAuthenticatorSuccess;
+  authenticator: IAuthenticator;
+}
+export interface DeleteAuthenticatorFailureAction {
+  type: AuthenticatorsAction.DeleteAuthenticatorFailure;
+  error: string;
 }
 
-export interface UpdateTransactionNoteAction {
-  type: TransactionsAction.UpdateTransactionNote;
-  transactionID: string;
-  note: string;
+export type AuthenticatorsActionType =
+  | CreateAuthenticatorRequestAction
+  | CreateAuthenticatorSuccessAction
+  | CreateAuthenticatorFailureAction
+  | LoadAuthenticatorsRequestAction
+  | LoadAuthenticatorsSuccessAction
+  | LoadAuthenticatorsFailureAction
+  | DeleteAuthenticatorRequestAction
+  | DeleteAuthenticatorSuccessAction
+  | DeleteAuthenticatorFailureAction;
+
+const createAuthenticatorRequest = (): CreateAuthenticatorRequestAction => ({
+  type: AuthenticatorsAction.CreateAuthenticatorRequest,
+});
+
+const createAuthenticatorSuccess = (authenticator: IAuthenticator): CreateAuthenticatorSuccessAction => ({
+  type: AuthenticatorsAction.CreateAuthenticatorSuccess,
+  authenticator,
+});
+
+const createAuthenticatorFailure = (error: string): CreateAuthenticatorFailureAction => ({
+  type: AuthenticatorsAction.CreateAuthenticatorFailure,
+  error,
+});
+
+const loadAuthenticatorsRequest = (): LoadAuthenticatorsRequestAction => ({
+  type: AuthenticatorsAction.LoadAuthenticatorsRequest,
+});
+
+const loadAuthenticatorsSuccess = (authenticators: IAuthenticator[]): LoadAuthenticatorsSuccessAction => ({
+  type: AuthenticatorsAction.LoadAuthenticatorsSuccess,
+  authenticators,
+});
+
+const loadAuthenticatorsFailure = (error: string): LoadAuthenticatorsFailureAction => ({
+  type: AuthenticatorsAction.LoadAuthenticatorsFailure,
+  error,
+});
+
+const deleteAuthenticatorRequest = (): DeleteAuthenticatorRequestAction => ({
+  type: AuthenticatorsAction.DeleteAuthenticatorRequest,
+});
+
+const deleteAuthenticatorSuccess = (authenticator: IAuthenticator): DeleteAuthenticatorSuccessAction => ({
+  type: AuthenticatorsAction.DeleteAuthenticatorSuccess,
+  authenticator,
+});
+
+const deleteAuthenticatorFailure = (error: string): DeleteAuthenticatorFailureAction => ({
+  type: AuthenticatorsAction.DeleteAuthenticatorFailure,
+  error,
+});
+
+interface CreateAuthenticator {
+  name: string;
+  entropy?: string;
+  mnemonic?: string;
+}
+interface Meta {
+  onSuccess?: Function;
+  onFailure?: Function;
 }
 
-export interface DeleteTransactionNoteAction {
-  type: TransactionsAction.DeleteTransactionNote;
-  transactionID: string;
-}
-
-export type TransactionsActionType =
-  | LoadTransactionsAction
-  | LoadTransactionsRequestAction
-  | LoadTransactionsSuccessAction
-  | LoadTransactionsFailureAction
-  | CreateTransactionNoteAction
-  | UpdateTransactionNoteAction
-  | DeleteTransactionNoteAction;
-
-export const loadTransactions = (walletAddress: string) => async (
+export const createAuthenticator = ({ name, entropy, mnemonic }: CreateAuthenticator, meta?: Meta) => async (
   dispatch: ThunkDispatch<any, any, AnyAction>,
-): Promise<TransactionsActionType> => {
-  dispatch(loadTransactionsRequest(walletAddress));
+): Promise<AuthenticatorsActionType> => {
   try {
-    // TODO implement fetching transactions for single wallet
-    await sleep(1000);
-    return dispatch(loadTransactionsSuccess(walletAddress, []));
+    dispatch(createAuthenticatorRequest());
+    const authenticator = new Authenticator(name);
+    await authenticator.init({ entropy, mnemonic });
+    BlueApp.addAuthenticator(authenticator);
+    await BlueApp.saveToDisk();
+    const createAuthenticatorSuccessDispatch = dispatch(createAuthenticatorSuccess(authenticator));
+    if (meta?.onSuccess) {
+      meta.onSuccess(authenticator);
+    }
+    return createAuthenticatorSuccessDispatch;
   } catch (e) {
-    return dispatch(loadTransactionsFailure(walletAddress, e));
+    const createAuthenticatorFailureDispatch = dispatch(createAuthenticatorFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+    return createAuthenticatorFailureDispatch;
   }
 };
 
-const loadTransactionsRequest = (walletAddress: string): LoadTransactionsRequestAction => ({
-  type: TransactionsAction.LoadTransactionsRequest,
-  walletAddress,
-});
+export const loadAuthenticators = () => async (
+  dispatch: ThunkDispatch<any, any, AnyAction>,
+): Promise<AuthenticatorsActionType> => {
+  try {
+    dispatch(loadAuthenticatorsRequest());
+    const authenticators = BlueApp.getAuthenticators();
+    return dispatch(loadAuthenticatorsSuccess(authenticators));
+  } catch (e) {
+    return dispatch(loadAuthenticatorsFailure(e.message));
+  }
+};
 
-export const loadTransactionsSuccess = (
-  walletAddress: string,
-  transactions: Transaction[],
-): LoadTransactionsSuccessAction => ({
-  type: TransactionsAction.LoadTransactionsSuccess,
-  transactions,
-  walletAddress,
-});
-
-const loadTransactionsFailure = (walletAddress: string, error: Error): LoadTransactionsFailureAction => ({
-  type: TransactionsAction.LoadTransactionsFailure,
-  error,
-  walletAddress,
-});
-
-export const createTransactionNote = (transactionID: string, note: string): CreateTransactionNoteAction => ({
-  type: TransactionsAction.CreateTransactionNote,
-  transactionID,
-  note,
-});
-
-export const updateTransactionNote = (transactionID: string, note: string): UpdateTransactionNoteAction => ({
-  type: TransactionsAction.UpdateTransactionNote,
-  transactionID,
-  note,
-});
-
-export const deleteTransactionNote = (transactionID: string): DeleteTransactionNoteAction => ({
-  type: TransactionsAction.DeleteTransactionNote,
-  transactionID,
-});
+export const deleteAuthenticator = (id: string, meta: Meta) => async (
+  dispatch: ThunkDispatch<any, any, AnyAction>,
+): Promise<AuthenticatorsActionType> => {
+  try {
+    dispatch(deleteAuthenticatorRequest());
+    const authenticator = BlueApp.removeAuthenticatorById(id);
+    await BlueApp.saveToDisk();
+    const deleteAuthenticatorSuccessDispatch = dispatch(deleteAuthenticatorSuccess(authenticator));
+    if (meta?.onSuccess) {
+      meta.onSuccess(authenticator);
+    }
+    return deleteAuthenticatorSuccessDispatch;
+  } catch (e) {
+    const deleteAuthenticatorFailureDispatch = dispatch(deleteAuthenticatorFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+    return deleteAuthenticatorFailureDispatch;
+  }
+};

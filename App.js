@@ -9,6 +9,7 @@ import url from 'url';
 
 import { RootNavigator } from 'app/navigators';
 import { NavigationService } from 'app/services';
+import EventDispatcher from 'app/state/EventDispatcher';
 import { persistor, store } from 'app/state/store';
 
 import OnAppLaunch from './class/onAppLaunch';
@@ -189,6 +190,7 @@ export default class App extends React.Component {
                 NavigationService.setTopLevelNavigator(nav);
               }}
             />
+            <EventDispatcher />
           </View>
         </PersistGate>
       </Provider>
