@@ -1,5 +1,3 @@
-// import { AppSettings } from 'app/consts';
-
 import { AppSettingsAction, AppSettingsActionType } from './actions';
 
 export interface AppSettingsState {
@@ -14,11 +12,6 @@ const initialState: AppSettingsState = {
 
 export const appSettingsReducer = (state = initialState, action: AppSettingsActionType): AppSettingsState => {
   switch (action.type) {
-    case AppSettingsAction.CreateAppPin:
-      return {
-        ...state,
-        isPinSet: true,
-      };
     case AppSettingsAction.UpdateBiometricSetting:
       return {
         ...state,

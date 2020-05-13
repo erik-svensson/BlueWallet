@@ -15,14 +15,9 @@ if (!Error.captureStackTrace) {
 }
 
 class BlueAppComponent extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isMigratingData: true,
-      isPinSet: false,
-    };
-  }
+  state = {
+    isMigratingData: true,
+  };
 
   componentDidMount() {
     const walletMigrate = new WalletMigrate(this.setIsMigratingData);

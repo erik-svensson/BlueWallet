@@ -1,16 +1,20 @@
 import React, { PureComponent } from 'react';
-import { Text, StyleSheet, KeyboardAvoidingView, Alert } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView, Alert } from 'react-native';
 import RNSecureKeyStore from 'react-native-secure-key-store';
 import { NavigationScreenProps } from 'react-navigation';
 
 import { images } from 'app/assets';
 import { Header, PinInput, Image } from 'app/components';
 import { BiometricService } from 'app/services';
-import { typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
-export class UnlockScreen extends PureComponent {
+interface Props {
+  onSuccessfullyAuthenticated: () => void;
+  isBiometricEnabledByUser: boolean;
+}
+
+export class UnlockScreen extends PureComponent<Props> {
   static navigationOptions = (props: NavigationScreenProps) => ({
     header: <Header navigation={props.navigation} title={i18n.unlock.title} />,
   });
@@ -45,7 +49,7 @@ export class UnlockScreen extends PureComponent {
     }
   };
 
-  updatePin = pin => {
+  updatePin = (pin: string) => {
     this.setState({ pin }, async () => {
       if (this.state.pin.length === 4) {
         const setPin = await RNSecureKeyStore.get('pin');
@@ -62,7 +66,6 @@ export class UnlockScreen extends PureComponent {
   };
 
   render() {
-    console.log('UnlockScreen render');
     return (
       <KeyboardAvoidingView style={styles.container} behavior="height">
         <Image source={images.portraitLogo} style={styles.logo} resizeMode="contain" />

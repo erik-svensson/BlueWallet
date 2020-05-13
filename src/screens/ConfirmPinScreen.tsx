@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
-import { NavigationScreenProps } from 'react-navigation';
+import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
 import { Header, PinInput } from 'app/components';
 import { Route } from 'app/consts';
@@ -10,7 +10,9 @@ import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
-export class ConfirmPinScreen extends PureComponent {
+type Props = NavigationInjectedProps;
+
+export class ConfirmPinScreen extends PureComponent<Props> {
   static navigationOptions = (props: NavigationScreenProps) => ({
     header: <Header navigation={props.navigation} isBackArrow title={i18n.onboarding.pin} />,
   });
@@ -20,10 +22,10 @@ export class ConfirmPinScreen extends PureComponent {
     error: '',
   };
 
-  updatePin = pin => {
+  updatePin = (pin: string) => {
     this.setState({ pin }, async () => {
       if (this.state.pin.length === 4) {
-        setPin = this.props.navigation.getParam('pin');
+        const setPin = this.props.navigation.getParam('pin');
         if (setPin === this.state.pin) {
           await RNSecureKeyStore.set('pin', this.state.pin, {
             accessible: ACCESSIBLE.WHEN_UNLOCKED,

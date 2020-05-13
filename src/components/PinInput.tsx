@@ -4,7 +4,11 @@ import ReactNativeSmoothPincodeInput from 'react-native-smooth-pincode-input';
 
 import { palette, typography } from 'app/styles';
 
-export class PinInput extends PureComponent {
+interface Props {
+  value: string;
+  onTextChange: (pin: string) => void;
+}
+export class PinInput extends PureComponent<Props> {
   pinCodeRef = React.createRef();
 
   render() {

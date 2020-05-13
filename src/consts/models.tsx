@@ -48,6 +48,10 @@ export interface Wallet {
   secret: string;
   type: string;
   typeReadable: string;
+  getID: () => string;
+  chain: string;
+  weOwnAddress: (clipboard: string) => void;
+  isInvoiceGeneratedByWallet: (clipboard: string) => void;
 }
 
 export interface Contact {

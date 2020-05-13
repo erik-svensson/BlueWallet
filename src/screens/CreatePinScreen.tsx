@@ -1,16 +1,27 @@
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
-import { NavigationScreenProps, NavigationEvents } from 'react-navigation';
+import { NavigationScreenProps, NavigationEvents, NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { Header, PinInput } from 'app/components';
-import { Route } from 'app/consts';
+import { Route, AppSettings } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
-class CreatePinScreen extends PureComponent {
+interface Props extends NavigationInjectedProps {
+  appSettings: {
+    isPinSet: boolean;
+  };
+}
+
+interface State {
+  pin: string;
+  focused: boolean;
+}
+
+class CreatePinScreen extends PureComponent<Props, State> {
   static navigationOptions = (props: NavigationScreenProps) => ({
     header: <Header navigation={props.navigation} title={i18n.onboarding.pin} />,
   });
@@ -18,8 +29,8 @@ class CreatePinScreen extends PureComponent {
     pin: '',
     focused: false,
   };
-  pinInputRef = null;
-  updatePin = pin => {
+  pinInputRef: any = null;
+  updatePin = (pin: string) => {
     this.setState({ pin }, async () => {
       if (this.state.pin.length === 4) {
         if (!this.props.appSettings.isPinSet) {

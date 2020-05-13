@@ -94,8 +94,8 @@ export class SendCoinsConfirmScreen extends Component<Props> {
             description: i18n.send.success.description,
             type: MessageType.success,
             buttonProps: {
-              title: i18n.send.success.return,
-              onPress: () => NavigationService.navigateWithReset(Route.Dashboard),
+              title: i18n.message.returnToDashboard,
+              onPress: () => NavigationService.navigateWithReset(Route.MainCardStackNavigator),
             },
           });
           this.setState({ isLoading: false });

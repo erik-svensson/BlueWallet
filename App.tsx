@@ -3,12 +3,11 @@ import React from 'react';
 import { Linking, DeviceEventEmitter, AppState, Clipboard, View } from 'react-native';
 import QuickActions from 'react-native-quick-actions';
 import RNSecureKeyStore from 'react-native-secure-key-store';
-import { createAppContainer, NavigationActions } from 'react-navigation';
+import { createAppContainer, NavigationActions, NavigationContainerComponent } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import url from 'url';
 
-import { Route } from 'app/consts';
+import { Wallet } from 'app/consts';
 import { RootNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
 import { NavigationService } from 'app/services';
@@ -30,8 +29,17 @@ const BlueApp = require('./BlueApp');
 
 const AppContainer = createAppContainer(RootNavigator);
 
-export default class App extends React.Component {
-  navigator = null;
+interface State {
+  appState: string;
+  isClipboardContentModalVisible: boolean;
+  clipboardContentModalAddressType: string;
+  clipboardContent: string;
+  isPinSet: boolean;
+  successfullyAuthenticated: boolean;
+}
+
+export default class App extends React.Component<State> {
+  navigator: any = null;
 
   state = {
     appState: AppState.currentState,
@@ -54,11 +62,13 @@ export default class App extends React.Component {
     DeviceEventEmitter.addListener('quickActionShortcut', this.walletQuickActions);
   }
 
-  popInitialAction = async data => {
+  popInitialAction = async (data: any) => {
     if (data) {
       // eslint-disable-next-line no-unused-expressions
       this.navigator.dismiss;
-      const wallet = BlueApp.getWallets().find(wallet => wallet.getID() === data.userInfo.url.split('wallet/')[1]);
+      const wallet = BlueApp.getWallets().find(
+        (wallet: Wallet) => wallet.getID() === data.userInfo.url.split('wallet/')[1],
+      );
       this.navigator.dispatch(
         NavigationActions.navigate({
           key: `WalletTransactions-${wallet.getID()}`,
@@ -79,8 +89,10 @@ export default class App extends React.Component {
         if (!isViewAllWalletsEnabled) {
           // eslint-disable-next-line no-unused-expressions
           this.navigator.dismiss;
-          const selectedDefaultWallet = await OnAppLaunch.getSelectedDefaultWallet();
-          const wallet = BlueApp.getWallets().find(wallet => wallet.getID() === selectedDefaultWallet.getID());
+          const selectedDefaultWallet = (await OnAppLaunch.getSelectedDefaultWallet()) as any;
+          const wallet = BlueApp.getWallets().find(
+            (wallet: Wallet) => wallet.getID() === selectedDefaultWallet.getID(),
+          );
           if (wallet) {
             this.navigator.dispatch(
               NavigationActions.navigate({
@@ -97,8 +109,10 @@ export default class App extends React.Component {
     }
   };
 
-  walletQuickActions = data => {
-    const wallet = BlueApp.getWallets().find(wallet => wallet.getID() === data.userInfo.url.split('wallet/')[1]);
+  walletQuickActions = (data: any) => {
+    const wallet = BlueApp.getWallets().find(
+      (wallet: Wallet) => wallet.getID() === data.userInfo.url.split('wallet/')[1],
+    );
     // eslint-disable-next-line no-unused-expressions
     this.navigator.dismiss;
     this.navigator.dispatch(
@@ -117,14 +131,14 @@ export default class App extends React.Component {
     AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  _handleAppStateChange = async nextAppState => {
+  _handleAppStateChange = async (nextAppState: string) => {
     if (this.state.appState !== 'active' && nextAppState === 'active') {
       this.setState({
         successfullyAuthenticated: false,
       });
       // NavigationService.navigate(Route.CreatePin);
       const clipboard = await Clipboard.getString();
-      const isAddressFromStoredWallet = BlueApp.getWallets().some(wallet =>
+      const isAddressFromStoredWallet = BlueApp.getWallets().some((wallet: Wallet) =>
         wallet.chain === Chain.ONCHAIN ? wallet.weOwnAddress(clipboard) : wallet.isInvoiceGeneratedByWallet(clipboard),
       );
       if (!isAddressFromStoredWallet && this.state.clipboardContent !== clipboard && this.isBitcoinAddress(clipboard)) {
@@ -135,7 +149,7 @@ export default class App extends React.Component {
     this.setState({ appState: nextAppState });
   };
 
-  hasSchema(schemaString) {
+  hasSchema(schemaString: string) {
     if (typeof schemaString !== 'string' || schemaString.length <= 0) return false;
     const lowercaseString = schemaString.trim().toLowerCase();
     return (
@@ -146,7 +160,7 @@ export default class App extends React.Component {
     );
   }
 
-  isBitcoinAddress(address) {
+  isBitcoinAddress(address: any) {
     let isValidBitcoinAddress = false;
     try {
       bitcoin.address.toOutputScript(address);
@@ -164,7 +178,7 @@ export default class App extends React.Component {
     return isValidBitcoinAddress;
   }
 
-  handleOpenURL = event => {
+  handleOpenURL = (event: any) => {
     if (event.url === null) {
       return;
     }
@@ -173,7 +187,7 @@ export default class App extends React.Component {
     }
     if (this.isBitcoinAddress(event.url)) {
       this.navigator &&
-        this.navigator.dispatch(
+        this.navigator!.dispatch(
           NavigationActions.navigate({
             routeName: 'SendDetails',
             params: {
@@ -205,8 +219,8 @@ export default class App extends React.Component {
             ) : (
               <AppContainer
                 ref={nav => {
-                  this.navigator = nav;
-                  NavigationService.setTopLevelNavigator(nav);
+                  this.navigator = nav as any;
+                  NavigationService.setTopLevelNavigator(nav!);
                 }}
               />
             )}

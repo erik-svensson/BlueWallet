@@ -33,12 +33,12 @@ export const ListItem = ({
 
   const onSwitchPress = () => {
     setSwitchValueState(!switchValueState);
-    onSwitchValueChange(!switchValueState);
+    onSwitchValueChange && onSwitchValueChange(!switchValueState);
   };
 
   useEffect(() => {
     if (isSwitch()) {
-      setSwitchValueState(switchValue);
+      setSwitchValueState(switchValue!);
     }
   }, []);
 

@@ -27,15 +27,6 @@ export default class BiometricService {
     }
   };
 
-  // static async isDeviceBiometricCapable() {
-  //   const isDeviceBiometricCapable = await Biometrics.isSensorAvailable();
-  //   if (isDeviceBiometricCapable.available) {
-  //     return true;
-  //   }
-  //   Biometric.setBiometricUseEnabled(false);
-  //   return false;
-  // }
-
   unlockWithBiometrics = async () => {
     try {
       const checkResult = await ReactNativeBiometrics.simplePrompt({
