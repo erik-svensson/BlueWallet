@@ -2,7 +2,7 @@ import { Easing, Animated } from 'react-native';
 import { createStackNavigator, NavigationSceneRendererProps } from 'react-navigation';
 
 import { Route } from 'app/consts';
-import { ActionSheet, ImportWalletQRCodeScreen, TransactionSuccessScreen } from 'app/screens';
+import { ActionSheet, ImportWalletQRCodeScreen } from 'app/screens';
 
 import { EditTextNavigator } from './EditTextNavigator';
 import { MainCardStackNavigator } from './MainCardStackNavigator';
@@ -17,7 +17,6 @@ export const RootNavigator = createStackNavigator(
     PinNavigator,
     EditTextNavigator,
     MessageNavigator,
-    [Route.Success]: TransactionSuccessScreen,
   },
   {
     headerMode: 'none',

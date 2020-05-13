@@ -5,6 +5,7 @@ import { NavigationScreenProps } from 'react-navigation';
 
 import { Header, PinInput } from 'app/components';
 import { Route } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -27,9 +28,14 @@ export class ConfirmPinScreen extends PureComponent {
           await RNSecureKeyStore.set('pin', this.state.pin, {
             accessible: ACCESSIBLE.WHEN_UNLOCKED,
           });
-          this.props.navigation.navigate(Route.Success, {
+          CreateMessage({
+            title: i18n.contactCreate.successTitle,
             description: i18n.onboarding.successDescription,
-            buttonTitle: i18n.onboarding.successButton,
+            type: MessageType.success,
+            buttonProps: {
+              title: i18n.onboarding.successButton,
+              onPress: () => this.props.navigation.navigate(Route.Dashboard),
+            },
           });
         } else {
           this.setState({
