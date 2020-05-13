@@ -1,11 +1,12 @@
 import React from 'react';
-import { Switch } from 'react-native';
+import { Switch, AccessibilityState } from 'react-native';
 
 import { palette } from 'app/styles';
 
 interface Props {
   onValueChange?: (value: boolean) => void;
   value?: boolean;
+  disabled?: boolean;
 }
 
 const trackColor = {
@@ -13,12 +14,13 @@ const trackColor = {
   true: palette.secondary,
 };
 
-export const StyledSwitch = ({ onValueChange, value }: Props) => (
+export const StyledSwitch = ({ onValueChange, value, disabled }: Props) => (
   <Switch
     thumbColor={palette.background}
     ios_backgroundColor={palette.secondary}
     trackColor={trackColor}
     value={value}
     onValueChange={onValueChange}
+    disabled={disabled}
   />
 );

@@ -7,8 +7,6 @@ import { AppRegistry, StatusBar } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 
 import App from './App';
-import UnlockWith from './UnlockWith.js';
-import { name as appName } from './app.json';
 import WalletMigrate from './walletMigrate';
 
 if (!Error.captureStackTrace) {
@@ -21,7 +19,7 @@ class BlueAppComponent extends React.Component {
     super(props);
     this.state = {
       isMigratingData: true,
-      successfullyAuthenticated: false,
+      isPinSet: false,
     };
   }
 
@@ -47,16 +45,14 @@ class BlueAppComponent extends React.Component {
     if (this.state.isMigratingData) {
       return null;
     } else {
-      return this.state.successfullyAuthenticated ? (
+      return (
         <>
           <StatusBar backgroundColor="rgba(0,0,0,0)" translucent />
           <App />
         </>
-      ) : (
-        <UnlockWith onSuccessfullyAuthenticated={this.onSuccessfullyAuthenticated} />
       );
     }
   }
 }
 
-AppRegistry.registerComponent(appName, () => BlueAppComponent);
+AppRegistry.registerComponent('GoldWallet', () => BlueAppComponent);

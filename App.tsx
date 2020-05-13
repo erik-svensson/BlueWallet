@@ -2,12 +2,15 @@ import * as Sentry from '@sentry/react-native';
 import React from 'react';
 import { Linking, DeviceEventEmitter, AppState, Clipboard, View } from 'react-native';
 import QuickActions from 'react-native-quick-actions';
+import RNSecureKeyStore from 'react-native-secure-key-store';
 import { createAppContainer, NavigationActions } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import url from 'url';
 
+import { Route } from 'app/consts';
 import { RootNavigator } from 'app/navigators';
+import { UnlockScreen } from 'app/screens';
 import { NavigationService } from 'app/services';
 import { persistor, store } from 'app/state/store';
 
@@ -35,9 +38,16 @@ export default class App extends React.Component {
     isClipboardContentModalVisible: false,
     clipboardContentModalAddressType: bitcoinModalString,
     clipboardContent: '',
+    isPinSet: false,
+    successfullyAuthenticated: false,
   };
 
   async componentDidMount() {
+    const isPinSet = await RNSecureKeyStore.get('pin');
+    if (isPinSet) {
+      this.setState({ isPinSet });
+    }
+
     Linking.addEventListener('url', this.handleOpenURL);
     AppState.addEventListener('change', this._handleAppStateChange);
     QuickActions.popInitialAction().then(this.popInitialAction);
@@ -108,25 +118,21 @@ export default class App extends React.Component {
   }
 
   _handleAppStateChange = async nextAppState => {
-    if (BlueApp.getWallets().length > 0) {
-      if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-        const clipboard = await Clipboard.getString();
-        const isAddressFromStoredWallet = BlueApp.getWallets().some(wallet =>
-          wallet.chain === Chain.ONCHAIN
-            ? wallet.weOwnAddress(clipboard)
-            : wallet.isInvoiceGeneratedByWallet(clipboard),
-        );
-        if (
-          !isAddressFromStoredWallet &&
-          this.state.clipboardContent !== clipboard &&
-          this.isBitcoinAddress(clipboard)
-        ) {
-          this.setState({ isClipboardContentModalVisible: true });
-        }
-        this.setState({ clipboardContent: clipboard });
+    if (this.state.appState !== 'active' && nextAppState === 'active') {
+      this.setState({
+        successfullyAuthenticated: false,
+      });
+      // NavigationService.navigate(Route.CreatePin);
+      const clipboard = await Clipboard.getString();
+      const isAddressFromStoredWallet = BlueApp.getWallets().some(wallet =>
+        wallet.chain === Chain.ONCHAIN ? wallet.weOwnAddress(clipboard) : wallet.isInvoiceGeneratedByWallet(clipboard),
+      );
+      if (!isAddressFromStoredWallet && this.state.clipboardContent !== clipboard && this.isBitcoinAddress(clipboard)) {
+        this.setState({ isClipboardContentModalVisible: true });
       }
-      this.setState({ appState: nextAppState });
+      this.setState({ clipboardContent: clipboard });
     }
+    this.setState({ appState: nextAppState });
   };
 
   hasSchema(schemaString) {
@@ -178,17 +184,32 @@ export default class App extends React.Component {
     }
   };
 
+  onSuccessfullyAuthenticated = () => {
+    this.setState({
+      successfullyAuthenticated: true,
+    });
+  };
+
   render() {
+    const { successfullyAuthenticated, isPinSet } = this.state;
+    const isBiometricEnabledByUser = store.getState().appSettings.isBiometricsEnabled;
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <View style={{ flex: 1 }}>
-            <AppContainer
-              ref={nav => {
-                this.navigator = nav;
-                NavigationService.setTopLevelNavigator(nav);
-              }}
-            />
+            {isPinSet && !successfullyAuthenticated ? (
+              <UnlockScreen
+                onSuccessfullyAuthenticated={this.onSuccessfullyAuthenticated}
+                isBiometricEnabledByUser={isBiometricEnabledByUser}
+              />
+            ) : (
+              <AppContainer
+                ref={nav => {
+                  this.navigator = nav;
+                  NavigationService.setTopLevelNavigator(nav);
+                }}
+              />
+            )}
           </View>
         </PersistGate>
       </Provider>

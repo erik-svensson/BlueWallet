@@ -28,6 +28,9 @@ export enum Route {
   ScanQrCode = 'ScanQrCode',
   ChooseContactList = 'ChooseContactList',
   MainCardStackNavigator = 'MainCardStackNavigator',
+  Success = 'TransactionSuccessScreen',
+  CreatePin = 'CreatePin',
+  ConfirmPin = 'ConfirmPin',
 }
 
 export interface Wallet {
@@ -64,4 +67,8 @@ export interface Transaction {
   inputs: any[];
   outputs: any[];
   note?: string;
+}
+
+export interface AppSettings {
+  isPinSetup: boolean;
 }

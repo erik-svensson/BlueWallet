@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, InteractionManager, RefreshControl } from 'react-native';
+import RNSecureKeyStore from 'react-native-secure-key-store';
 import { NavigationEvents, NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 
 import { images } from 'app/assets';
@@ -60,6 +61,12 @@ export class DashboardScreen extends Component<Props, State> {
   walletCarouselRef = React.createRef();
 
   componentDidMount() {
+    RNSecureKeyStore.get('pin')
+      .then(pin => {})
+      .catch(error => {
+        this.props.navigation.navigate(Route.CreatePin);
+      });
+
     this.redrawScreen();
     // the idea is that upon wallet launch we will refresh
     // all balances and all transactions here:
