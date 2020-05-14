@@ -30,6 +30,7 @@ export enum Route {
   MainCardStackNavigator = 'MainCardStackNavigator',
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
+  UnlockScreen = 'UnlockScreen',
 }
 
 export interface Wallet {

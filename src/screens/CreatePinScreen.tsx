@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { NavigationScreenProps, NavigationEvents, NavigationInjectedProps } from 'react-navigation';
-import { connect } from 'react-redux';
 
 import { Header, PinInput } from 'app/components';
-import { Route, AppSettings } from 'app/consts';
-import { ApplicationState } from 'app/state';
+import { Route } from 'app/consts';
 import { typography } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -21,7 +19,7 @@ interface State {
   focused: boolean;
 }
 
-class CreatePinScreen extends PureComponent<Props, State> {
+export class CreatePinScreen extends PureComponent<Props, State> {
   static navigationOptions = (props: NavigationScreenProps) => ({
     header: <Header navigation={props.navigation} title={i18n.onboarding.pin} />,
   });
@@ -33,14 +31,12 @@ class CreatePinScreen extends PureComponent<Props, State> {
   updatePin = (pin: string) => {
     this.setState({ pin }, async () => {
       if (this.state.pin.length === 4) {
-        if (!this.props.appSettings.isPinSet) {
-          this.props.navigation.navigate(Route.ConfirmPin, {
-            pin: this.state.pin,
-          });
-          this.setState({
-            pin: '',
-          });
-        }
+        this.props.navigation.navigate(Route.ConfirmPin, {
+          pin: this.state.pin,
+        });
+        this.setState({
+          pin: '',
+        });
       }
     });
   };
@@ -73,9 +69,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-const mapStateToProps = (state: ApplicationState) => ({
-  appSettings: state.appSettings,
-});
-
-export default connect(mapStateToProps)(CreatePinScreen);
