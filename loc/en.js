@@ -21,10 +21,16 @@ module.exports = {
   onboarding: {
     pin: 'PIN',
     createPin: 'Create PIN',
+    createNewPin: 'New PIN',
     confirmPin: 'Confirm PIN',
+    confirmNewPin: 'Confirm new PIN',
+    changePin: 'Change PIN',
+    currentPin: 'Current PIN',
     pinDoesNotMatch: 'PIN does not match. Please enter a valid PIN.',
     successDescription: 'Hooray! \n You have successfully created your PIN.',
+    successDescriptionChangedPin: 'Hooray! \n You have successfully changed your PIN.',
     successButton: 'Go to Dashboard',
+    successButtonChangedPin: 'Go back to Settings',
   },
   unlock: {
     title: 'Unlock',

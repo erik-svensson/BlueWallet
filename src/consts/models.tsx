@@ -28,6 +28,7 @@ export enum Route {
   ScanQrCode = 'ScanQrCode',
   ChooseContactList = 'ChooseContactList',
   MainCardStackNavigator = 'MainCardStackNavigator',
+  CurrentPin = 'CurrentPin',
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
   UnlockScreen = 'UnlockScreen',

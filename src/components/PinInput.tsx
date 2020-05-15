@@ -25,6 +25,7 @@ export class PinInput extends PureComponent<Props> {
         cellStyleFocused={styles.cellFocused}
         cellStyleFilled={styles.cell}
         textStyle={styles.text}
+        animationFocused={''}
         textStyleFocused={styles.textFocused}
         mask={<View style={styles.cellMask} />}
         {...this.props}

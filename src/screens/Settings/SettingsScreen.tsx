@@ -67,16 +67,22 @@ export const SettingsScreen = (props: NavigationScreenProps) => {
     </>
   );
 
+  const goToChangePin = () => {
+    navigation.navigate(Route.CurrentPin);
+  };
+
   const renderSecuritySettings = () => {
     const biometryTypeAvailable = BiometricService.biometryType;
     const isDisabled = biometryTypeAvailable !== 'TouchID' && biometryTypeAvailable !== 'Biometrics';
     return (
       <>
-        {/**
-         * Commented as it's not yet implemented.
-         * It will be implemented in next scope.
-         *  <ListItem title={i18n.settings.changePin} source={icons.lockIcon} iconWidth={15} iconHeight={20} />
-         */}
+        <ListItem
+          title={i18n.settings.changePin}
+          source={icons.lockIcon}
+          iconWidth={15}
+          iconHeight={20}
+          onPress={goToChangePin}
+        />
         <ListItem
           disabled={isDisabled}
           title={isDisabled ? i18n.settings.notSupportedFingerPrint : i18n.settings.TouchID}

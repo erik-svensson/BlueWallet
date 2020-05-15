@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
-import { Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { Text, StyleSheet, KeyboardAvoidingView, BackHandler } from 'react-native';
 import { NavigationScreenProps, NavigationEvents, NavigationInjectedProps } from 'react-navigation';
 
 import { Header, PinInput } from 'app/components';
 import { Route } from 'app/consts';
 import { typography } from 'app/styles';
 
-const i18n = require('../../loc');
+const i18n = require('../../../loc');
 
 interface Props extends NavigationInjectedProps {
   appSettings: {
@@ -17,21 +17,48 @@ interface Props extends NavigationInjectedProps {
 interface State {
   pin: string;
   focused: boolean;
+  flowType: string;
 }
 
 export class CreatePinScreen extends PureComponent<Props, State> {
   static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} title={i18n.onboarding.pin} />,
+    header: (
+      <Header
+        navigation={props.navigation}
+        title={props.navigation.getParam('flowType') === 'newPin' ? i18n.onboarding.changePin : i18n.onboarding.pin}
+      />
+    ),
   });
+
   state = {
     pin: '',
     focused: false,
+    flowType: '',
   };
+
   pinInputRef: any = null;
+  backHandler: any;
+
+  componentDidMount() {
+    this.setState({
+      flowType: this.props.navigation.getParam('flowType'),
+    });
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.backAction);
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove();
+  }
+
+  backAction = () => {
+    return this.state.flowType === 'newPin' && this.props.navigation.navigate(Route.Settings);
+  };
+
   updatePin = (pin: string) => {
     this.setState({ pin }, async () => {
       if (this.state.pin.length === 4) {
         this.props.navigation.navigate(Route.ConfirmPin, {
+          flowType: this.state.flowType,
           pin: this.state.pin,
         });
         this.setState({
@@ -51,7 +78,9 @@ export class CreatePinScreen extends PureComponent<Props, State> {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="height">
         <NavigationEvents onDidFocus={this.openKeyboard} />
-        <Text style={typography.headline4}>{i18n.onboarding.createPin}</Text>
+        <Text style={typography.headline4}>
+          {this.state.flowType === 'newPin' ? i18n.onboarding.createNewPin : i18n.onboarding.createPin}
+        </Text>
         <PinInput
           value={this.state.pin}
           onTextChange={pin => this.updatePin(pin)}

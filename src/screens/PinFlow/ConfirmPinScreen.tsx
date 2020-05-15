@@ -8,19 +8,38 @@ import { Route } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { palette, typography } from 'app/styles';
 
-const i18n = require('../../loc');
+const i18n = require('../../../loc');
 
 type Props = NavigationInjectedProps;
 
-export class ConfirmPinScreen extends PureComponent<Props> {
+type State = {
+  pin: string;
+  error: string;
+  flowType: string;
+};
+
+export class ConfirmPinScreen extends PureComponent<Props, State> {
   static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={i18n.onboarding.pin} />,
+    header: (
+      <Header
+        navigation={props.navigation}
+        isBackArrow
+        title={props.navigation.getParam('flowType') === 'newPin' ? i18n.onboarding.changePin : i18n.onboarding.pin}
+      />
+    ),
   });
 
   state = {
     pin: '',
     error: '',
+    flowType: '',
   };
+
+  componentDidMount() {
+    this.setState({
+      flowType: this.props.navigation.getParam('flowType'),
+    });
+  }
 
   updatePin = (pin: string) => {
     this.setState({ pin }, async () => {
@@ -32,11 +51,21 @@ export class ConfirmPinScreen extends PureComponent<Props> {
           });
           CreateMessage({
             title: i18n.contactCreate.successTitle,
-            description: i18n.onboarding.successDescription,
+            description:
+              this.state.flowType === 'newPin'
+                ? i18n.onboarding.successDescriptionChangedPin
+                : i18n.onboarding.successDescription,
             type: MessageType.success,
             buttonProps: {
-              title: i18n.onboarding.successButton,
-              onPress: () => this.props.navigation.navigate(Route.Dashboard),
+              title:
+                this.state.flowType === 'newPin'
+                  ? i18n.onboarding.successButtonChangedPin
+                  : i18n.onboarding.successButton,
+              onPress: () => {
+                this.state.flowType === 'newPin'
+                  ? this.props.navigation.navigate(Route.Settings)
+                  : this.props.navigation.navigate(Route.Dashboard);
+              },
             },
           });
         } else {
@@ -53,7 +82,9 @@ export class ConfirmPinScreen extends PureComponent<Props> {
     const { error } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="height">
-        <Text style={typography.headline4}>{i18n.onboarding.confirmPin}</Text>
+        <Text style={typography.headline4}>
+          {this.state.flowType === 'newPin' ? i18n.onboarding.confirmNewPin : i18n.onboarding.confirmPin}
+        </Text>
         <View style={styles.input}>
           <PinInput value={this.state.pin} onTextChange={pin => this.updatePin(pin)} />
 
