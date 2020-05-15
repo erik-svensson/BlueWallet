@@ -10,6 +10,7 @@ import { BiometricService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { palette } from 'app/styles';
 
+const BlueApp = require('../../BlueApp');
 const i18n = require('../../loc');
 
 interface Props extends NavigationInjectedProps<{ onSuccess: () => void }> {
@@ -27,6 +28,8 @@ class UnlockScreen extends PureComponent<Props> {
   };
 
   async componentDidMount() {
+    await BlueApp.startAndDecrypt();
+
     if (this.props.isBiometricEnabledByUser || this.props.appSettings.isBiometricsEnabled) {
       await this.unlockWithBiometrics();
     }
