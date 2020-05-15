@@ -79,7 +79,7 @@ export const SettingsScreen = (props: NavigationScreenProps) => {
          */}
         <ListItem
           disabled={isDisabled}
-          title={i18n.settings.TouchID}
+          title={isDisabled ? i18n.settings.notSupportedFingerPrint : i18n.settings.TouchID}
           source={icons.fingerprintIcon}
           switchValue={isBiometricsEnabled}
           onSwitchValueChange={onFingerprintLoginChange}

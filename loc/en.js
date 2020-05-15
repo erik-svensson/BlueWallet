@@ -223,6 +223,7 @@ module.exports = {
     fingerprintLogin: 'Fingerprint login',
     aboutUs: 'About us',
     header: 'Settings',
+    notSupportedFingerPrint: 'Your device does not support fingerprint',
     TouchID: 'Allow fingerprint',
     FaceID: 'Allow FaceID',
   },
