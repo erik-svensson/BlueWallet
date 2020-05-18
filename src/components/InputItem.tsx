@@ -21,6 +21,8 @@ interface State {
 }
 
 export class InputItem extends PureComponent<Props, State> {
+  inputItemRef = React.createRef();
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -92,6 +94,7 @@ export class InputItem extends PureComponent<Props, State> {
         <Animated.Text style={[styles.label, { top, fontSize }]}>{label}</Animated.Text>
         {!!suffix && <Text style={styles.suffix}>{suffix}</Text>}
         <BaseTextInput
+          ref={this.inputItemRef}
           {...this.props}
           style={[
             styles.input,

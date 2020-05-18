@@ -47,25 +47,29 @@ export class ConfirmPinScreen extends PureComponent<Props, State> {
         const setPin = this.props.navigation.getParam('pin');
         if (setPin === this.state.pin) {
           await SecureStorageService.setSecuredValue('pin', this.state.pin);
-          CreateMessage({
-            title: i18n.contactCreate.successTitle,
-            description:
-              this.state.flowType === 'newPin'
-                ? i18n.onboarding.successDescriptionChangedPin
-                : i18n.onboarding.successDescription,
-            type: MessageType.success,
-            buttonProps: {
-              title:
+          if (this.state.flowType === 'newPin') {
+            CreateMessage({
+              title: i18n.contactCreate.successTitle,
+              description:
                 this.state.flowType === 'newPin'
-                  ? i18n.onboarding.successButtonChangedPin
-                  : i18n.onboarding.successButton,
-              onPress: () => {
-                this.state.flowType === 'newPin'
-                  ? this.props.navigation.navigate(Route.Settings)
-                  : this.props.navigation.navigate(Route.Dashboard);
+                  ? i18n.onboarding.successDescriptionChangedPin
+                  : i18n.onboarding.successDescription,
+              type: MessageType.success,
+              buttonProps: {
+                title:
+                  this.state.flowType === 'newPin'
+                    ? i18n.onboarding.successButtonChangedPin
+                    : i18n.onboarding.successButton,
+                onPress: () => {
+                  this.state.flowType === 'newPin'
+                    ? this.props.navigation.navigate(Route.Settings)
+                    : this.props.navigation.navigate(Route.Dashboard);
+                },
               },
-            },
-          });
+            });
+          } else {
+            this.props.navigation.navigate(Route.CreateTransactionPassword);
+          }
         } else {
           this.setState({
             error: i18n.onboarding.pinDoesNotMatch,

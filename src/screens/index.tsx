@@ -26,4 +26,5 @@ export { default as ImportWalletQRCodeScreen } from './ImportWalletQRCodeScreen'
 export { CreatePinScreen } from './PinFlow/CreatePinScreen';
 export { ConfirmPinScreen } from './PinFlow/ConfirmPinScreen';
 export { CurrentPinScreen } from './PinFlow/CurrentPinScreen';
+export { CreateTransactionPassword } from './PinFlow/CreateTransactionPassword';
 export { default as UnlockScreen } from './UnlockScreen';
