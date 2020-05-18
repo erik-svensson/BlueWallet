@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, AccessibilityState } from 'react-native';
+import { Switch } from 'react-native';
 
 import { palette } from 'app/styles';
 

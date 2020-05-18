@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import ReactNativeSmoothPincodeInput from 'react-native-smooth-pincode-input';
 
+import { CONST } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 interface Props {
@@ -19,7 +20,7 @@ export class PinInput extends PureComponent<Props> {
         restrictToNumbers
         cellSpacing={10}
         cellSize={40}
-        codeLength={4}
+        codeLength={CONST.pinCodeLength}
         autoFocus={true}
         cellStyle={styles.cell}
         cellStyleFocused={styles.cellFocused}

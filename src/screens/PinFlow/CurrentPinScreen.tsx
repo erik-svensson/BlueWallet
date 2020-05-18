@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, KeyboardAvoidingView, Alert } from 'react-native';
-import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
 import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
 import { Header, PinInput } from 'app/components';
-import { Route } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { Route, CONST } from 'app/consts';
+import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -33,15 +32,15 @@ export class CurrentPinScreen extends PureComponent<Props, State> {
 
   updatePin = (pin: string) => {
     this.setState({ pin }, async () => {
-      if (this.state.pin.length === 4) {
-        const setPin = await RNSecureKeyStore.get('pin');
+      if (this.state.pin.length === CONST.pinCodeLength) {
+        const setPin = await SecureStorageService.getSecuredValue('pin');
         if (setPin === this.state.pin) {
           this.props.navigation.navigate(Route.CreatePin, {
             flowType: 'newPin',
           });
         } else {
-          Alert.alert('wrong pin');
           this.setState({
+            error: i18n.onboarding.pinDoesNotMatch,
             pin: '',
           });
         }

@@ -72,6 +72,7 @@ export const SettingsScreen = (props: NavigationScreenProps) => {
   };
 
   const renderSecuritySettings = () => {
+    console.log('BiometricService.biometryType', BiometricService.biometryType);
     const biometryTypeAvailable = BiometricService.biometryType;
     const isDisabled = biometryTypeAvailable !== 'TouchID' && biometryTypeAvailable !== 'Biometrics';
     return (

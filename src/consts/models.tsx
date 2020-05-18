@@ -1,3 +1,7 @@
+export const CONST = {
+  pinCodeLength: 4,
+};
+
 export enum Route {
   Dashboard = 'Dashboard',
   WalletDetails = 'WalletDetails',

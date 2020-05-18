@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, InteractionManager, RefreshControl } from 'react-native';
-import RNSecureKeyStore from 'react-native-secure-key-store';
 import { NavigationEvents, NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 
 import { images } from 'app/assets';
 import { ListEmptyState, Image, WalletCard, ScreenTemplate, Header } from 'app/components';
 import { Wallet, Route } from 'app/consts';
+import { SecureStorageService } from 'app/services';
 import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../../BlueApp';
@@ -61,7 +61,7 @@ export class DashboardScreen extends Component<Props, State> {
   walletCarouselRef = React.createRef();
 
   componentDidMount() {
-    RNSecureKeyStore.get('pin')
+    SecureStorageService.getSecuredValue('pin')
       .then(pin => {})
       .catch(error => {
         this.props.navigation.navigate(Route.CreatePin);

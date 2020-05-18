@@ -3,7 +3,7 @@ import { Text, StyleSheet, KeyboardAvoidingView, BackHandler } from 'react-nativ
 import { NavigationScreenProps, NavigationEvents, NavigationInjectedProps } from 'react-navigation';
 
 import { Header, PinInput } from 'app/components';
-import { Route } from 'app/consts';
+import { Route, CONST } from 'app/consts';
 import { typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -36,7 +36,7 @@ export class CreatePinScreen extends PureComponent<Props, State> {
     flowType: '',
   };
 
-  pinInputRef: any = null;
+  pinInputRef: any = React.createRef();
   backHandler: any;
 
   componentDidMount() {
@@ -56,7 +56,7 @@ export class CreatePinScreen extends PureComponent<Props, State> {
 
   updatePin = (pin: string) => {
     this.setState({ pin }, async () => {
-      if (this.state.pin.length === 4) {
+      if (this.state.pin.length === CONST.pinCodeLength) {
         this.props.navigation.navigate(Route.ConfirmPin, {
           flowType: this.state.flowType,
           pin: this.state.pin,
@@ -81,11 +81,7 @@ export class CreatePinScreen extends PureComponent<Props, State> {
         <Text style={typography.headline4}>
           {this.state.flowType === 'newPin' ? i18n.onboarding.createNewPin : i18n.onboarding.createPin}
         </Text>
-        <PinInput
-          value={this.state.pin}
-          onTextChange={pin => this.updatePin(pin)}
-          ref={ref => (this.pinInputRef = ref)}
-        />
+        <PinInput value={this.state.pin} onTextChange={this.updatePin} ref={this.pinInputRef} />
       </KeyboardAvoidingView>
     );
   }

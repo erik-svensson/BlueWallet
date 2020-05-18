@@ -2,15 +2,14 @@ import * as Sentry from '@sentry/react-native';
 import React from 'react';
 import { Linking, DeviceEventEmitter, AppState, Clipboard, View } from 'react-native';
 import QuickActions from 'react-native-quick-actions';
-import RNSecureKeyStore from 'react-native-secure-key-store';
-import { createAppContainer, NavigationActions, NavigationContainerComponent } from 'react-navigation';
+import { createAppContainer, NavigationActions } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import { Wallet } from 'app/consts';
 import { RootNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
-import { NavigationService } from 'app/services';
+import { NavigationService, SecureStorageService } from 'app/services';
 import { persistor, store } from 'app/state/store';
 
 import OnAppLaunch from './class/onAppLaunch';
@@ -51,7 +50,7 @@ export default class App extends React.Component<State> {
   };
 
   async componentDidMount() {
-    const isPinSet = await RNSecureKeyStore.get('pin');
+    const isPinSet = await SecureStorageService.getSecuredValue('pin');
     if (isPinSet) {
       this.setState({ isPinSet });
     }

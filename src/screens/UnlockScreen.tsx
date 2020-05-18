@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, KeyboardAvoidingView, Alert } from 'react-native';
-import RNSecureKeyStore from 'react-native-secure-key-store';
 import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, PinInput, Image } from 'app/components';
-import { BiometricService } from 'app/services';
+import { CONST } from 'app/consts';
+import { BiometricService, SecureStorageService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { palette } from 'app/styles';
 
@@ -60,8 +60,8 @@ class UnlockScreen extends PureComponent<Props> {
     const onSuccessFn = this.props.onSuccessfullyAuthenticated || this.props.navigation.getParam('onSuccess');
 
     this.setState({ pin }, async () => {
-      if (this.state.pin.length === 4) {
-        const setPin = await RNSecureKeyStore.get('pin');
+      if (this.state.pin.length === CONST.pinCodeLength) {
+        const setPin = await SecureStorageService.getSecuredValue('pin');
         if (setPin === this.state.pin) {
           onSuccessFn();
         } else {

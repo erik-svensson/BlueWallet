@@ -12,12 +12,12 @@ export default class BiometricService {
   static Biometrics = ReactNativeBiometrics.Biometrics;
 
   constructor() {
-    this.getBiometricsAvailability();
+    this.setBiometricsAvailability();
   }
 
   biometryType: BiometryType;
 
-  getBiometricsAvailability = async () => {
+  setBiometricsAvailability = async () => {
     const biometricsResult = await ReactNativeBiometrics.isSensorAvailable();
     const { available, biometryType } = biometricsResult;
     if (!available) {
