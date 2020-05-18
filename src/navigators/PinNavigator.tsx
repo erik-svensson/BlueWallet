@@ -1,7 +1,13 @@
 import { createStackNavigator } from 'react-navigation';
 
 import { Route } from 'app/consts';
-import { CreatePinScreen, ConfirmPinScreen, CurrentPinScreen, CreateTransactionPassword } from 'app/screens';
+import {
+  CreatePinScreen,
+  ConfirmPinScreen,
+  CurrentPinScreen,
+  CreateTransactionPassword,
+  ConfirmTransactionPassword,
+} from 'app/screens';
 
 export const PinNavigator = createStackNavigator(
   {
@@ -9,6 +15,7 @@ export const PinNavigator = createStackNavigator(
     [Route.CreatePin]: CreatePinScreen,
     [Route.ConfirmPin]: ConfirmPinScreen,
     [Route.CreateTransactionPassword]: CreateTransactionPassword,
+    [Route.ConfirmTransactionPassword]: ConfirmTransactionPassword,
   },
   {
     headerMode: 'screen',

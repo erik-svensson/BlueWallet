@@ -61,7 +61,6 @@ export class DashboardScreen extends Component<Props, State> {
   walletCarouselRef = React.createRef();
 
   componentDidMount() {
-    return this.props.navigation.navigate(Route.CreatePin);
     SecureStorageService.getSecuredValue('pin')
       .then(pin => {})
       .catch(error => {

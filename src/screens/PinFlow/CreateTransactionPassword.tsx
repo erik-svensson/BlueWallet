@@ -15,62 +15,38 @@ interface Props extends NavigationInjectedProps {
 }
 
 interface State {
-  pin: string;
+  password: string;
   focused: boolean;
   flowType: string;
 }
 
 export class CreateTransactionPassword extends PureComponent<Props, State> {
   static navigationOptions = (props: NavigationScreenProps) => ({
-    header: (
-      <Header
-        navigation={props.navigation}
-        title={props.navigation.getParam('flowType') === 'newPin' ? i18n.onboarding.changePin : i18n.onboarding.pin}
-      />
-    ),
+    header: <Header navigation={props.navigation} title="Create transaction password" />,
   });
 
   state = {
-    pin: '',
+    password: '',
     focused: false,
     flowType: '',
   };
 
-  pinInputRef: any = React.createRef();
+  inputRef: any = React.createRef();
   backHandler: any;
 
-  componentDidMount() {
-    this.setState({
-      flowType: this.props.navigation.getParam('flowType'),
-    });
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.backAction);
-  }
-
-  componentWillUnmount() {
-    this.backHandler.remove();
-  }
-
-  backAction = () => {
-    return this.state.flowType === 'newPin' && this.props.navigation.navigate(Route.Settings);
-  };
-
-  updatePin = (pin: string) => {
-    this.setState({ pin }, async () => {
-      if (this.state.pin.length === CONST.pinCodeLength) {
-        this.props.navigation.navigate(Route.ConfirmPin, {
-          flowType: this.state.flowType,
-          pin: this.state.pin,
-        });
-        this.setState({
-          pin: '',
+  updatePassword = (password: string) => {
+    this.setState({ password }, () => {
+      if (this.state.password.length === CONST.transactionPasswordLength) {
+        this.props.navigation.navigate(Route.ConfirmTransactionPassword, {
+          password: this.state.password,
         });
       }
     });
   };
 
   openKeyboard = () => {
-    if (this.pinInputRef.pinCodeRef) {
-      this.pinInputRef.pinCodeRef.current.inputRef.current.focus();
+    if (this.inputRef.current) {
+      this.inputRef.current.inputItemRef.current.focus();
     }
   };
 
@@ -79,8 +55,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
       <KeyboardAvoidingView style={styles.container} behavior="height">
         <NavigationEvents onDidFocus={this.openKeyboard} />
         <Text style={typography.headline4}>Create transaction password</Text>
-        <InputItem label="password" value={this.state.pin} setValue={this.updatePin} ref={this.pinInputRef} />
-        {/* <PinInput value={this.state.pin} onTextChange={this.updatePin} ref={this.pinInputRef} /> */}
+        <InputItem label="password" value={this.state.password} setValue={this.updatePassword} ref={this.inputRef} />
       </KeyboardAvoidingView>
     );
   }

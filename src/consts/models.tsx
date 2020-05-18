@@ -38,6 +38,7 @@ export enum Route {
   ConfirmPin = 'ConfirmPin',
   UnlockScreen = 'UnlockScreen',
   CreateTransactionPassword = 'CreateTransactionPassword',
+  ConfirmTransactionPassword = 'ConfirmTransactionPassword',
 }
 
 export interface Wallet {
