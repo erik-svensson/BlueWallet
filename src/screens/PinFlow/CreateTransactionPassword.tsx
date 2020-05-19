@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text, StyleSheet, KeyboardAvoidingView, BackHandler } from 'react-native';
+import { Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { NavigationScreenProps, NavigationEvents, NavigationInjectedProps } from 'react-navigation';
 
 import { Header, InputItem } from 'app/components';
@@ -17,22 +17,19 @@ interface Props extends NavigationInjectedProps {
 interface State {
   password: string;
   focused: boolean;
-  flowType: string;
 }
 
 export class CreateTransactionPassword extends PureComponent<Props, State> {
   static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} title="Create transaction password" />,
+    header: <Header navigation={props.navigation} title={i18n.onboarding.createPassword} />,
   });
 
   state = {
     password: '',
     focused: false,
-    flowType: '',
   };
 
   inputRef: any = React.createRef();
-  backHandler: any;
 
   updatePassword = (password: string) => {
     this.setState({ password }, () => {
@@ -40,6 +37,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
         this.props.navigation.navigate(Route.ConfirmTransactionPassword, {
           password: this.state.password,
         });
+        this.setState({ password: '' });
       }
     });
   };
@@ -54,7 +52,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="height">
         <NavigationEvents onDidFocus={this.openKeyboard} />
-        <Text style={typography.headline4}>Create transaction password</Text>
+        <Text style={typography.headline4}>{i18n.onboarding.createPassword}</Text>
         <InputItem label="password" value={this.state.password} setValue={this.updatePassword} ref={this.inputRef} />
       </KeyboardAvoidingView>
     );

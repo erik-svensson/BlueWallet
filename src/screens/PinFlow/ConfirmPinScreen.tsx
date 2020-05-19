@@ -50,20 +50,12 @@ export class ConfirmPinScreen extends PureComponent<Props, State> {
           if (this.state.flowType === 'newPin') {
             CreateMessage({
               title: i18n.contactCreate.successTitle,
-              description:
-                this.state.flowType === 'newPin'
-                  ? i18n.onboarding.successDescriptionChangedPin
-                  : i18n.onboarding.successDescription,
+              description: i18n.onboarding.successDescriptionChangedPin,
               type: MessageType.success,
               buttonProps: {
-                title:
-                  this.state.flowType === 'newPin'
-                    ? i18n.onboarding.successButtonChangedPin
-                    : i18n.onboarding.successButton,
+                title: i18n.onboarding.successButtonChangedPin,
                 onPress: () => {
-                  this.state.flowType === 'newPin'
-                    ? this.props.navigation.navigate(Route.Settings)
-                    : this.props.navigation.navigate(Route.Dashboard);
+                  this.props.navigation.navigate(Route.Settings);
                 },
               },
             });

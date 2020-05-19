@@ -6,7 +6,7 @@ import { Header, InputItem } from 'app/components';
 import { Route, CONST } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { SecureStorageService } from 'app/services';
-import { palette, typography } from 'app/styles';
+import { typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
@@ -15,12 +15,11 @@ type Props = NavigationInjectedProps;
 type State = {
   password: string;
   error: string;
-  flowType: string;
 };
 
 export class ConfirmTransactionPassword extends PureComponent<Props, State> {
   static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} isBackArrow title="Confirm transaction password" />,
+    header: <Header navigation={props.navigation} isBackArrow title={i18n.onboarding.confirmPassword} />,
   });
 
   state = {
@@ -71,7 +70,7 @@ export class ConfirmTransactionPassword extends PureComponent<Props, State> {
     const { error } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="height">
-        <Text style={typography.headline4}>Confirm transaction password</Text>
+        <Text style={typography.headline4}>{i18n.onboarding.confirmPassword}</Text>
         <InputItem
           label="password"
           value={this.state.password}
@@ -89,13 +88,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-  },
-  input: {
-    alignItems: 'center',
-  },
-  errorText: {
-    marginVertical: 30,
-    color: palette.textRed,
-    ...typography.headline6,
   },
 });
