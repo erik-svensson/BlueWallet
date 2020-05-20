@@ -4,7 +4,7 @@ import { StyleSheet, TextInput as BaseTextInput, View, Text, Animated, TextInput
 import { palette, typography, fonts } from 'app/styles';
 
 interface Props extends TextInputProps {
-  label: string;
+  label?: string;
   suffix?: string;
   error?: string;
   value?: string;

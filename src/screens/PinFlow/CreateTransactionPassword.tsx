@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
-import { Text, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { Text, StyleSheet, KeyboardAvoidingView, View, TouchableOpacity } from 'react-native';
 import { NavigationScreenProps, NavigationEvents, NavigationInjectedProps } from 'react-navigation';
 
-import { Header, InputItem } from 'app/components';
+import { icons } from 'app/assets';
+import { Header, InputItem, Image } from 'app/components';
 import { Route, CONST } from 'app/consts';
-import { typography } from 'app/styles';
+import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
@@ -17,16 +18,18 @@ interface Props extends NavigationInjectedProps {
 interface State {
   password: string;
   focused: boolean;
+  isVisible: boolean;
 }
 
 export class CreateTransactionPassword extends PureComponent<Props, State> {
   static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} title={i18n.onboarding.createPassword} />,
+    header: <Header navigation={props.navigation} title={i18n.onboarding.onboarding} />,
   });
 
   state = {
     password: '',
     focused: false,
+    isVisible: false,
   };
 
   inputRef: any = React.createRef();
@@ -48,12 +51,27 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
     }
   };
 
+  changeVisability = () => {
+    this.setState({
+      isVisible: !this.state.isVisible,
+    });
+  };
+
   render() {
+    const { isVisible, password } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="height">
         <NavigationEvents onDidFocus={this.openKeyboard} />
-        <Text style={typography.headline4}>{i18n.onboarding.createPassword}</Text>
-        <InputItem label="password" value={this.state.password} setValue={this.updatePassword} ref={this.inputRef} />
+        <View style={styles.infoContainer}>
+          <Text style={typography.headline4}>{i18n.onboarding.createPassword}</Text>
+          <Text style={styles.pinDescription}>{i18n.onboarding.createPasswordDescription}</Text>
+        </View>
+        <View style={styles.inputContainer}>
+          <InputItem value={password} setValue={this.updatePassword} ref={this.inputRef} secureTextEntry={!isVisible} />
+          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisability}>
+            <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     );
   }
@@ -64,5 +82,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-evenly',
     alignItems: 'center',
+  },
+  infoContainer: {
+    alignItems: 'center',
+  },
+  pinDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    margin: 20,
+    textAlign: 'center',
+  },
+  inputContainer: { width: '90%' },
+
+  visibilityIcon: { position: 'absolute', right: 0, bottom: 36 },
+  icon: {
+    width: 24,
+    height: 24,
+    padding: 8,
   },
 });

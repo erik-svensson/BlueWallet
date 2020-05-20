@@ -24,7 +24,9 @@ export class ConfirmPinScreen extends PureComponent<Props, State> {
       <Header
         navigation={props.navigation}
         isBackArrow
-        title={props.navigation.getParam('flowType') === 'newPin' ? i18n.onboarding.changePin : i18n.onboarding.pin}
+        title={
+          props.navigation.getParam('flowType') === 'newPin' ? i18n.onboarding.changePin : i18n.onboarding.onboarding
+        }
       />
     ),
   });
@@ -76,9 +78,12 @@ export class ConfirmPinScreen extends PureComponent<Props, State> {
     const { error } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="height">
-        <Text style={typography.headline4}>
-          {this.state.flowType === 'newPin' ? i18n.onboarding.confirmNewPin : i18n.onboarding.confirmPin}
-        </Text>
+        <View style={styles.infoContainer}>
+          <Text style={typography.headline4}>
+            {this.state.flowType === 'newPin' ? i18n.onboarding.createNewPin : i18n.onboarding.confirmPin}
+          </Text>
+          <Text style={styles.pinDescription}>{i18n.onboarding.createPinDescription}</Text>
+        </View>
         <View style={styles.input}>
           <PinInput value={this.state.pin} onTextChange={pin => this.updatePin(pin)} />
 
@@ -102,5 +107,14 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     color: palette.textRed,
     ...typography.headline6,
+  },
+  infoContainer: {
+    alignItems: 'center',
+  },
+  pinDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    margin: 20,
+    textAlign: 'center',
   },
 });
