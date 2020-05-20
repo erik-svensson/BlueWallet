@@ -25,6 +25,8 @@ export class CreatePinScreen extends PureComponent<Props, State> {
     header: (
       <Header
         navigation={props.navigation}
+        isBackArrow={props.navigation.getParam('flowType') === 'newPin'}
+        onBackArrow={() => props.navigation.navigate(Route.Settings)}
         title={
           props.navigation.getParam('flowType') === 'newPin' ? i18n.onboarding.changePin : i18n.onboarding.onboarding
         }
