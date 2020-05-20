@@ -62,10 +62,11 @@ class UnlockScreen extends PureComponent<Props> {
   };
 
   updatePassword = (password: string) => {
+    const onSuccessFn = this.props.navigation.getParam('onSuccess');
     this.setState({ pin: password }, async () => {
       if (this.state.pin.length === CONST.transactionPasswordLength) {
         if (SecureStorageService.checkSecuredPassword('transactionPassword', this.state.pin)) {
-          this.props.navigation.getParam('onSuccess');
+          onSuccessFn();
         } else {
           Alert.alert('wrong password');
           this.setState({
