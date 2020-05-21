@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, KeyboardAvoidingView, TouchableOpacity, View } from 'react-native';
-import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
+import { NavigationScreenProps, NavigationInjectedProps, NavigationEvents } from 'react-navigation';
 
 import { icons } from 'app/assets';
 import { Header, InputItem, Image } from 'app/components';
@@ -79,6 +79,7 @@ export class ConfirmTransactionPassword extends PureComponent<Props, State> {
     const { password, error, isVisible } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="height">
+        <NavigationEvents onDidFocus={this.openKeyboard} />
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.onboarding.confirmPassword}</Text>
           <Text style={styles.pinDescription}>{i18n.onboarding.createPasswordDescription}</Text>

@@ -239,6 +239,7 @@ module.exports = {
     notSupportedFingerPrint: 'Your device does not support fingerprint',
     TouchID: 'Allow fingerprint',
     FaceID: 'Allow FaceID',
+    Biometrics: 'Allow biometrics',
   },
   aboutUs: {
     header: 'About us',

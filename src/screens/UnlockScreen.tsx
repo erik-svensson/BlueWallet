@@ -41,7 +41,6 @@ class UnlockScreen extends PureComponent<Props> {
   }
 
   unlockWithBiometrics = async () => {
-    const onSuccessFn = this.props.onSuccessfullyAuthenticated || this.props.navigation.getParam('onSuccess');
     if (!!BiometricService.biometryType) {
       this.setState(
         {
@@ -50,7 +49,7 @@ class UnlockScreen extends PureComponent<Props> {
         async () => {
           const result = await BiometricService.unlockWithBiometrics();
           if (result) {
-            onSuccessFn();
+            this.props.onSuccessfullyAuthenticated && this.props.onSuccessfullyAuthenticated();
           } else {
             this.setState({
               showInput: true,
@@ -65,7 +64,7 @@ class UnlockScreen extends PureComponent<Props> {
     const onSuccessFn = this.props.navigation.getParam('onSuccess');
     this.setState({ pin: password }, async () => {
       if (this.state.pin.length === CONST.transactionPasswordLength) {
-        if (SecureStorageService.checkSecuredPassword('transactionPassword', this.state.pin)) {
+        if (await SecureStorageService.checkSecuredPassword('transactionPassword', this.state.pin)) {
           onSuccessFn();
         } else {
           Alert.alert('wrong password');
