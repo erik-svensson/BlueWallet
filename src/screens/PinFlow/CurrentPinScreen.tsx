@@ -55,7 +55,7 @@ export class CurrentPinScreen extends PureComponent<Props, State> {
         contentContainer={styles.container}
         footer={
           <View style={styles.pinContainer}>
-            <PinInput value={this.state.pin} onTextChange={pin => this.updatePin(pin)} />
+            <PinInput value={this.state.pin} onTextChange={this.updatePin} />
 
             <Text style={styles.errorText}>{error}</Text>
           </View>

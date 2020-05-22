@@ -121,7 +121,7 @@ class UnlockScreen extends PureComponent<Props, State> {
         contentContainer={styles.container}
         footer={
           isPassword ? (
-            <Button title="Save" onPress={this.onSave} disabled={pin.length < CONST.transactionPasswordLength} />
+            <Button title="Save" onPress={this.onSave} disabled={pin.length < CONST.transactionMinPasswordLength} />
           ) : (
             showInput && (
               <View style={styles.pinContainer}>

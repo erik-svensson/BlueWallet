@@ -58,7 +58,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
     return (
       <ScreenTemplate
         footer={
-          <Button title="Save" onPress={this.onSave} disabled={password.length < CONST.transactionPasswordLength} />
+          <Button title="Save" onPress={this.onSave} disabled={password.length < CONST.transactionMinPasswordLength} />
         }
       >
         <NavigationEvents onDidFocus={this.openKeyboard} />
