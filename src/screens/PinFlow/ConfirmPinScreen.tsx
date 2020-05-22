@@ -82,7 +82,7 @@ export class ConfirmPinScreen extends PureComponent<Props, State> {
       <KeyboardAvoidingView style={styles.container} behavior="height">
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>
-            {this.state.flowType === FlowType.newPin ? i18n.onboarding.createNewPin : i18n.onboarding.confirmPin}
+            {this.state.flowType === FlowType.newPin ? i18n.onboarding.confirmNewPin : i18n.onboarding.confirmPin}
           </Text>
           <Text style={styles.pinDescription}>{i18n.onboarding.createPinDescription}</Text>
         </View>
