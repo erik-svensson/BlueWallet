@@ -3,6 +3,11 @@ export const CONST = {
   transactionPasswordLength: 8,
 };
 
+export const FlowType = {
+  password: 'password',
+  newPin: 'newPin',
+};
+
 export enum Route {
   Dashboard = 'Dashboard',
   WalletDetails = 'WalletDetails',

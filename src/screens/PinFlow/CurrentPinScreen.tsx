@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, KeyboardAvoidingView, Alert } from 'react-nativ
 import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
 import { Header, PinInput } from 'app/components';
-import { Route, CONST } from 'app/consts';
+import { Route, CONST, FlowType } from 'app/consts';
 import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
@@ -36,7 +36,7 @@ export class CurrentPinScreen extends PureComponent<Props, State> {
         const setPin = await SecureStorageService.getSecuredValue('pin');
         if (setPin === this.state.pin) {
           this.props.navigation.navigate(Route.CreatePin, {
-            flowType: 'newPin',
+            flowType: FlowType.newPin,
           });
         } else {
           this.setState({
