@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, KeyboardAvoidingView, Alert, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
@@ -8,7 +8,7 @@ import { Header, PinInput, Image, InputItem, ScreenTemplate, Button } from 'app/
 import { CONST, FlowType } from 'app/consts';
 import { BiometricService, SecureStorageService } from 'app/services';
 import { ApplicationState } from 'app/state';
-import { palette } from 'app/styles';
+import { palette, typography } from 'app/styles';
 
 const BlueApp = require('../../BlueApp');
 const i18n = require('../../loc');
@@ -114,21 +114,19 @@ class UnlockScreen extends PureComponent<Props, State> {
   };
 
   render() {
+    const { error, pin, showInput } = this.state;
     const isPassword = this.props.navigation && !!this.props.navigation.getParam('flowType');
     return (
       <ScreenTemplate
         contentContainer={styles.container}
         footer={
           isPassword ? (
-            <Button
-              title="Save"
-              onPress={this.onSave}
-              disabled={this.state.pin.length < CONST.transactionPasswordLength}
-            />
+            <Button title="Save" onPress={this.onSave} disabled={pin.length < CONST.transactionPasswordLength} />
           ) : (
-            this.state.showInput && (
+            showInput && (
               <View style={styles.pinContainer}>
-                <PinInput value={this.state.pin} onTextChange={pin => this.updatePin(pin)} />
+                <PinInput value={pin} onTextChange={pin => this.updatePin(pin)} />
+                <Text style={styles.errorText}>{error}</Text>
               </View>
             )
           )
@@ -137,13 +135,7 @@ class UnlockScreen extends PureComponent<Props, State> {
         <Image source={images.portraitLogo} style={styles.logo} resizeMode="contain" />
         {isPassword && (
           <View style={styles.inputItemContainer}>
-            <InputItem
-              label="password"
-              value={this.state.pin}
-              setValue={this.updatePassword}
-              ref={this.inputRef}
-              error={this.state.error}
-            />
+            <InputItem label="password" value={pin} setValue={this.updatePassword} ref={this.inputRef} error={error} />
           </View>
         )}
       </ScreenTemplate>
@@ -168,10 +160,14 @@ const styles = StyleSheet.create({
   },
   pinContainer: {
     alignItems: 'center',
-    marginBottom: 30,
   },
   logo: {
     width: 150,
     height: 235,
+  },
+  errorText: {
+    marginTop: 10,
+    color: palette.textRed,
+    ...typography.headline6,
   },
 });

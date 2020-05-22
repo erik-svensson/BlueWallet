@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
-import { Header, PinInput } from 'app/components';
+import { Header, PinInput, ScreenTemplate } from 'app/components';
 import { Route, CONST, FlowType } from 'app/consts';
 import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
@@ -51,14 +51,18 @@ export class CurrentPinScreen extends PureComponent<Props, State> {
   render() {
     const { error } = this.state;
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="height">
-        <Text style={typography.headline4}>{i18n.onboarding.currentPin}</Text>
-        <View style={styles.input}>
-          <PinInput value={this.state.pin} onTextChange={pin => this.updatePin(pin)} />
+      <ScreenTemplate
+        contentContainer={styles.container}
+        footer={
+          <View style={styles.pinContainer}>
+            <PinInput value={this.state.pin} onTextChange={pin => this.updatePin(pin)} />
 
-          <Text style={styles.errorText}>{error}</Text>
-        </View>
-      </KeyboardAvoidingView>
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        }
+      >
+        <Text style={typography.headline4}>{i18n.onboarding.currentPin}</Text>
+      </ScreenTemplate>
     );
   }
 }
@@ -69,11 +73,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
-  input: {
+  pinContainer: {
     alignItems: 'center',
+    marginBottom: 20,
   },
   errorText: {
-    marginVertical: 30,
+    marginVertical: 10,
     color: palette.textRed,
     ...typography.headline6,
   },
