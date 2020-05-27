@@ -20,8 +20,7 @@ type Props = NavigationInjectedProps<{ secret: string }>;
 
 interface State {
   secret: string;
-  addressText: string;
-  bip21encoded: any;
+  bip21encoded: string;
   amount: number;
   address: string;
   wallet: any;
@@ -36,20 +35,18 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const secret = props.navigation.getParam('secret') || '';
-
     this.state = {
       secret: secret,
-      addressText: '',
-      bip21encoded: undefined,
+      bip21encoded: '',
       amount: 0,
       address: '',
       wallet: {},
     };
   }
-  qrCodeSVG: any = null;
-  async componentDidMount() {
-    console.log('receive/details - componentDidMount');
 
+  qrCodeSVG: any = null;
+
+  async componentDidMount() {
     await this.updateData();
   }
 
@@ -77,7 +74,6 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
           }
           this.setState({
             address: address,
-            addressText: address,
           });
         } else if (wallet.chain === Chain.OFFCHAIN) {
           try {
@@ -94,13 +90,11 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
         }
         this.setState({
           address: address,
-          addressText: address,
           wallet,
         });
       } else if (wallet.getAddress) {
         this.setState({
           address: wallet.getAddress(),
-          addressText: wallet.getAddress(),
           wallet,
         });
       }
@@ -128,20 +122,26 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
       label: i18n.receive.details.amount,
       onSave: this.updateAmount,
       keyboardType: 'numeric',
-      value: this.state.amount ? this.state.amount.toString() : '',
+      value: this.state.amount && !!this.state.amount ? this.state.amount.toString() : '',
     });
   };
 
+  get message(): string {
+    const { address, amount } = this.state;
+    return amount ? `${address}?amount=${amount}` : address;
+  }
+
   share = async () => {
+    const message = this.message;
     if (this.qrCodeSVG === undefined) {
       Share.open({
-        message: this.state.address,
+        message,
       }).catch(error => console.log(error));
     } else {
       InteractionManager.runAfterInteractions(async () => {
         this.qrCodeSVG.toDataURL((data: any) => {
           const shareImageBase64 = {
-            message: this.state.address,
+            message,
             url: `data:image/png;base64,${data}`,
           };
           Share.open(shareImageBase64).catch(error => console.log(error));
@@ -168,7 +168,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
   };
 
   render() {
-    const { amount, addressText, bip21encoded, wallet } = this.state;
+    const { amount, bip21encoded, wallet } = this.state;
     return (
       <ScreenTemplate
         footer={
@@ -194,8 +194,8 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
             />
           )}
         </View>
-        <Text style={styles.address}>{addressText}</Text>
-        <CopyButton textToCopy={addressText} />
+        <Text style={styles.address}>{this.message}</Text>
+        <CopyButton textToCopy={this.message} />
         <Text style={styles.inputTitle}>{i18n.receive.details.receiveWithAmount}</Text>
         <View style={styles.amountInput}>
           <Text style={styles.amount} onPress={this.editAmount}>
