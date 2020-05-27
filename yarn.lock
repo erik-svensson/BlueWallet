@@ -1644,9 +1644,9 @@
   integrity sha512-XDwyIlt/47l2kWLTzw/mtrpLdB+GPSskR2n/PIcPn+VYhVO77rGhRncIR5GPU0KRzXuqkDO+J5qqrG0Y8P6jzQ==
 
 "@types/xdate@*":
-  version "0.8.29"
-  resolved "https://registry.yarnpkg.com/@types/xdate/-/xdate-0.8.29.tgz#0aeacee64c7f54792dc1e3e93af320839a0367dc"
-  integrity sha512-vhjumeX678c1aA5TDdxeLdWjqazQ4qDvgK57pRr5l3Y0H5+ZZYckNtLkJiW4tJ3YVZq43ZFZFVResfAM4UMvTw==
+  version "0.8.30"
+  resolved "https://registry.yarnpkg.com/@types/xdate/-/xdate-0.8.30.tgz#50ac1ce7d6e4c0d21a61e45d23653f494f2186bf"
+  integrity sha512-dEPW/RQBM7lyhcR0/3yG23aXkSfE26tR0AIB+DU/NmShnW5nv5rRffdJ2U+4FTTQyajz8wD9MQbPu4A/oKl/ig==
 
 "@types/yargs-parser@*":
   version "15.0.0"
@@ -3310,6 +3310,11 @@ dayjs@1.8.27, dayjs@^1.8.15:
   version "1.8.27"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.27.tgz#a8ae63ee990af28c05c430f0e160ae835a0fbbf8"
   integrity sha512-Jpa2acjWIeOkg8KURUHICk0EqnEFSSF5eMEscsOgyJ92ZukXwmpmRkPSUka7KHSfbj5eKH30ieosYip+ky9emQ==
+
+debounce@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.2.0.tgz#44a540abc0ea9943018dc0eaa95cce87f65cd131"
+  integrity sha512-mYtLl1xfZLi1m4RtQYlZgJUNQjl4ZxVnHzIR8nLLgi4q1YT8o/WM+MK/f8yfcc9s5Ir5zRaPZyZU6xs1Syoocg==
 
 debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.9:
   version "2.6.9"
