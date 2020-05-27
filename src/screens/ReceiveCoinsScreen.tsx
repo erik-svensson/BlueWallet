@@ -36,7 +36,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     super(props);
     const secret = props.navigation.getParam('secret') || '';
     this.state = {
-      secret: secret,
+      secret,
       bip21encoded: '',
       amount: 0,
       address: '',
@@ -72,9 +72,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
           } else {
             BlueApp.saveToDisk(); // caching whatever getAddressAsync() generated internally
           }
-          this.setState({
-            address: address,
-          });
+          this.setState({ address });
         } else if (wallet.chain === Chain.OFFCHAIN) {
           try {
             await Promise.race([wallet.getAddressForTransaction(), BlueApp.sleep(1000)]);
@@ -88,10 +86,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
             BlueApp.saveToDisk(); // caching whatever getAddressAsync() generated internally
           }
         }
-        this.setState({
-          address: address,
-          wallet,
-        });
+        this.setState({ address, wallet });
       } else if (wallet.getAddress) {
         this.setState({
           address: wallet.getAddress(),
@@ -161,7 +156,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     const wallets = BlueApp.getWallets();
     const selectedIndex = wallets.findIndex(wallet => wallet.label === this.state.wallet.label);
     this.props.navigation.navigate('ActionSheet', {
-      wallets: wallets,
+      wallets,
       selectedIndex,
       onPress: this.chooseItemFromModal,
     });
