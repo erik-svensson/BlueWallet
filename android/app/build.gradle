@@ -118,7 +118,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.stxnext.goldwallet"
+        applicationId "io.goldwallet.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 4
