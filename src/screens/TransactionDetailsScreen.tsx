@@ -59,7 +59,7 @@ export class TransactionDetailsScreen extends Component<Props, State> {
     const { txid, hash } = props.navigation.getParam('transaction');
     let note = '';
     props.transactions.filter(transaction => {
-      if (transaction.txid == txid) {
+      if (transaction.txid === txid) {
         note = transaction.note;
       }
     });
