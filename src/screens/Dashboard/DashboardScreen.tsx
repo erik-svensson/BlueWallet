@@ -49,7 +49,7 @@ class DashboardScreen extends Component<Props, State> {
 
   walletCarouselRef = React.createRef<WalletsCarousel>();
   screenTemplateRef = React.createRef<ScreenTemplate>();
-  componentDidMount() {
+  async componentDidMount() {
     SecureStorageService.getSecuredValue('pin')
       .then(() => {
         SecureStorageService.getSecuredValue('transactionPassword').catch(() => {
@@ -59,18 +59,13 @@ class DashboardScreen extends Component<Props, State> {
       .catch(() => {
         this.props.navigation.navigate(Route.CreatePin);
       });
-    this.props.loadWallets();
+    await this.props.loadWallets();
   }
 
   refreshTransactions = async () => {
     this.setState({ isFetching: true });
-    const { lastSnappedTo } = this.state;
-    const { wallets } = this.props;
-    if (isAllWallets(wallets[lastSnappedTo])) {
-      await this.props.loadWallets();
-    } else {
-      await this.props.loadTransactions(wallets[lastSnappedTo].secret);
-    }
+    await this.props.loadWallets();
+
     this.setState({ isFetching: false });
   };
 
@@ -78,14 +73,13 @@ class DashboardScreen extends Component<Props, State> {
     this.setState({ lastSnappedTo: index });
   };
 
-  onSnapToItem = async (index: number) => {
-    this.refreshWallet(index);
+  onSnapToItem = async () => {
+    await this.refreshWallet();
   };
 
-  refreshWallet = (index: number) => {
+  refreshWallet = async () => {
     // TODO do not get all data eagerly
-    console.log('fetch data for wallet:', index);
-    this.props.loadWallets();
+    await this.props.loadWallets();
   };
 
   _keyExtractor = (item: Wallet, index: number) => index.toString();
@@ -136,7 +130,6 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   resetFilters = () => {
-    console.log('resetFilters');
     this.setState({
       filters: {
         isFilteringOn: false,
@@ -201,8 +194,8 @@ class DashboardScreen extends Component<Props, State> {
                   ref={this.walletCarouselRef}
                   data={wallets.filter(wallet => wallet.label !== CONST.allWallets)}
                   keyExtractor={this._keyExtractor as any}
-                  onSnapToItem={(index: number) => {
-                    this.onSnapToItem(index);
+                  onSnapToItem={() => {
+                    this.onSnapToItem();
                   }}
                 />
               ) : (
