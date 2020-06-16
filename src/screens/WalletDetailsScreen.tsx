@@ -43,6 +43,14 @@ export class WalletDetailsScreen extends React.PureComponent<Props, State> {
     };
   }
 
+  validationError = (value: string): string | undefined => {
+    const walletLabels = BlueApp.getWallets().map((wallet: Wallet) => wallet.label) || [];
+    const allOtherWalletLabels = walletLabels.filter((label: string) => label !== this.state.label);
+    if (allOtherWalletLabels.includes(value)) {
+      return i18n.wallets.importWallet.walletInUseValidationError;
+    }
+  };
+
   navigateToWalletExport = () => this.navigateWithWallet(Route.ExportWallet);
 
   navigateToWalletXpub = () => this.navigateWithWallet(Route.ExportWalletXpub);
@@ -95,6 +103,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props, State> {
             label={i18n.wallets.details.nameLabel}
             value={label}
             onSave={this.setLabel}
+            validate={this.validationError}
           />
         </View>
         <View style={styles.typeContainer}>
