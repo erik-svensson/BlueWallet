@@ -49,7 +49,7 @@ class DashboardScreen extends Component<Props, State> {
 
   walletCarouselRef = React.createRef<WalletsCarousel>();
   screenTemplateRef = React.createRef<ScreenTemplate>();
-  async componentDidMount() {
+  componentDidMount() {
     SecureStorageService.getSecuredValue('pin')
       .then(() => {
         SecureStorageService.getSecuredValue('transactionPassword').catch(() => {
@@ -59,7 +59,7 @@ class DashboardScreen extends Component<Props, State> {
       .catch(() => {
         this.props.navigation.navigate(Route.CreatePin);
       });
-    await this.props.loadWallets();
+    this.props.loadWallets();
   }
 
   refreshTransactions = async () => {
@@ -71,15 +71,6 @@ class DashboardScreen extends Component<Props, State> {
 
   chooseItemFromModal = (index: number) => {
     this.setState({ lastSnappedTo: index });
-  };
-
-  onSnapToItem = async () => {
-    await this.refreshWallet();
-  };
-
-  refreshWallet = async () => {
-    // TODO do not get all data eagerly
-    await this.props.loadWallets();
   };
 
   _keyExtractor = (item: Wallet, index: number) => index.toString();
@@ -195,7 +186,7 @@ class DashboardScreen extends Component<Props, State> {
                   data={wallets.filter(wallet => wallet.label !== CONST.allWallets)}
                   keyExtractor={this._keyExtractor as any}
                   onSnapToItem={() => {
-                    this.onSnapToItem();
+                    this.props.loadWallets();
                   }}
                 />
               ) : (
