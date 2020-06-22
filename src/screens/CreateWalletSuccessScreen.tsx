@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { Button, Header, ScreenTemplate, Text, Chip } from 'app/components';
+import { Button, Header, ScreenTemplate, Text, Mnemonic } from 'app/components';
 import { MainCardStackNavigatorParams, Route, MainTabNavigatorParams } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
@@ -23,6 +23,8 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
   };
 
   render() {
+    const { getParam } = this.props.navigation;
+    const secret = getParam('secret');
     return (
       <ScreenTemplate
         footer={<Button onPress={this.navigateBack} title={i18n.wallets.addSuccess.okButton} />}
@@ -31,9 +33,7 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
         <Text style={styles.subtitle}>{i18n.wallets.addSuccess.subtitle}</Text>
         <Text style={styles.description}>{i18n.wallets.addSuccess.description}</Text>
         <View style={styles.mnemonicPhraseContainer}>
-          {this.props.secret.map((secret, index) => (
-            <Chip key={index.toString()} label={`${index + 1}. ${secret}`} />
-          ))}
+          <Mnemonic mnemonic={secret} />
         </View>
       </ScreenTemplate>
     );
