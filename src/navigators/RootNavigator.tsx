@@ -9,6 +9,7 @@ import { MainCardStackNavigator } from './MainCardStackNavigator';
 import { MessageNavigator } from './MessageNavigator';
 import { PasswordNavigator } from './PasswordNavigator';
 import { UnlockTransactionNavaigator } from './UnlockTransactionNavaigator';
+import { WebViewNavigator } from './WebViewNavigator';
 
 export const RootNavigator = createStackNavigator(
   {
@@ -19,6 +20,7 @@ export const RootNavigator = createStackNavigator(
     PasswordNavigator,
     EditTextNavigator,
     MessageNavigator,
+    WebViewNavigator,
   },
   {
     headerMode: 'none',

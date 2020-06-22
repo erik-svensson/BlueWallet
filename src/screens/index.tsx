@@ -32,3 +32,5 @@ export { ConfirmTransactionPassword } from './PinFlow/ConfirmTransactionPassword
 export { UnlockTransaction } from './UnlockTransaction';
 export { UnlockScreen } from './UnlockScreen';
 export { FilterTransactionsScreen } from './FilterTransactionsScreen';
+export { EnterPublicKey } from './EnterPublicKey';
+export { WebViewScreen } from './WebViewScreen';

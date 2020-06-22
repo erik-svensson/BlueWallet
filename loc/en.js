@@ -105,7 +105,6 @@ module.exports = {
       none: 'None',
       latest: 'Latest transaction',
     },
-
     add: {
       title: 'Add new wallet',
       subtitle: 'Name your wallet',
@@ -117,6 +116,12 @@ module.exports = {
       multipleAddresses: 'It contains a tree of P2SH addresses generated from a single 24-word seed',
       singleAddress: 'It contains a single P2SH address',
       segwidAddress: 'It contains a tree of native segwit addresses, generated from a single 24-word seed',
+    },
+    publicKey: {
+      title: 'Enter Public Key',
+      description: 'Please enter Public Key of your wallet from the generated PDF.',
+      publicKey: 'Public Key',
+      generatePDF: 'Generate new PDF',
     },
     addSuccess: {
       title: 'Add new wallet',
