@@ -1,3 +1,4 @@
+import { Dayjs } from 'dayjs';
 import React from 'react';
 import { KeyboardType, StyleProp, ViewStyle } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
@@ -10,6 +11,8 @@ export const CONST = {
   allWallets: 'All wallets',
   receive: 'receive',
   send: 'send',
+  webGeneratorUrl: 'www.keygenerator.bitcoinvault.global',
+  mnemonicWordsAmount: 12,
 };
 
 export enum FlowType {
@@ -20,6 +23,14 @@ export enum FlowType {
 export enum Route {
   PasswordNavigator = 'PasswordNavigator',
   Dashboard = 'Dashboard',
+  AuthenticatorList = 'AuthenticatorList',
+  EnterPIN = 'EnterPIN',
+  ExportAuthenticator = 'ExportAuthenticator',
+  ImportAuthenticator = 'ImportAuthenticator',
+  CreateWalletSuccess = 'CreateWalletSuccess',
+  DeleteEntity = 'DeleteEntity',
+  CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
+  CreateAuthenticator = 'CreateAuthenticator',
   WalletDetails = 'WalletDetails',
   ContactList = 'ContactList',
   ContactDetails = 'ContactDetails',
@@ -57,6 +68,7 @@ export enum Route {
   AdvancedOptions = 'AdvancedOptions',
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
+  IntagrateKey = 'IntagrateKey',
 }
 
 export interface Wallet {
@@ -218,3 +230,16 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.FilterTransactions]: { onFilterPress: ({}) => void };
 };
+export type DateType = Date | Dayjs;
+export interface Authenticator {
+  privateKey: Buffer | null;
+  publicKey: string;
+  entropy: string;
+  name: string;
+  id: string;
+  QRCode: string;
+  init: ({ entropy, mnemonic }: { entropy?: string; mnemonic?: string }) => void;
+  pin: string;
+  secret: string;
+  createdAt: Dayjs;
+}

@@ -333,9 +333,11 @@ PODS:
     - React
   - RemobileReactNativeQrcodeLocalImage (1.0.4):
     - React
+  - rn-fetch-blob (0.12.0):
+    - React-Core
   - RNCAsyncStorage (1.9.0):
     - React
-  - RNCClipboard (1.2.2):
+  - RNCClipboard (1.2.3):
     - React
   - RNCMaskedView (0.1.10):
     - React
@@ -359,7 +361,7 @@ PODS:
     - Fabric (~> 1.10.2)
     - React
     - RNFBApp
-  - RNFS (2.13.3):
+  - RNFS (2.16.6):
     - React
   - RNGestureHandler (1.6.1):
     - React
@@ -445,6 +447,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativePrivacySnapshot (from `../node_modules/react-native-privacy-snapshot`)
   - "RemobileReactNativeQrcodeLocalImage (from `../node_modules/@remobile/react-native-qrcode-local-image`)"
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
@@ -572,6 +575,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-privacy-snapshot"
   RemobileReactNativeQrcodeLocalImage:
     :path: "../node_modules/@remobile/react-native-qrcode-local-image"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCClipboard:
@@ -681,6 +686,7 @@ SPEC CHECKSUMS:
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   ReactNativePrivacySnapshot: cc295e45dc22810e9ff2c93380d643de20a77015
   RemobileReactNativeQrcodeLocalImage: 57aadc12896b148fb5e04bc7c6805f3565f5c3fa
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: 453cd7c335ec9ba3b877e27d02238956b76f3268
   RNCClipboard: 8148e21ac347c51fd6cd4b683389094c216bb543
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
@@ -713,4 +719,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 10567d1e173aae9ab5e898db3c41267100a01a22
 
-COCOAPODS: 1.9.2
+COCOAPODS: 1.9.3
