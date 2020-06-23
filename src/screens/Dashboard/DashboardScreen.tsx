@@ -181,6 +181,7 @@ class DashboardScreen extends Component<Props, State> {
                 balance={activeWallet.balance}
                 label={activeWallet.label === CONST.allWallets ? i18n.wallets.dashboard.allWallets : activeWallet.label}
                 unit={activeWallet.preferredBalanceUnit}
+                type={activeWallet.type}
                 onReceivePress={this.receiveCoins}
                 onSendPress={this.sendCoins}
               />

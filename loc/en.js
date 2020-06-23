@@ -68,8 +68,9 @@ module.exports = {
       noWallets: 'No wallets',
       noWalletsDesc1: 'No wallets to show.',
       noWalletsDesc2: 'to add your first wallet.',
-      send: 'Send coins',
-      receive: 'Receive coins',
+      send: 'Send',
+      receive: 'Receive',
+      recover: 'Recover',
       noTransactions: 'No transactions to show.',
     },
     walletModal: {
