@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import bip39 from 'bip39';
+import * as bip39 from 'bip39';
 import b58 from 'bs58check';
 import Frisbee from 'frisbee';
 import { NativeModules } from 'react-native';
@@ -89,13 +89,10 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
    * @returns {*}
    * @private
    */
-  _getWIFByIndex(index) {
-    const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = bitcoin.bip32.fromSeed(seed);
+  async _getWIFByIndex(index) {
+    const root = bitcoin.bip32.fromSeed(this.seed);
     const path = `m/49'/440'/0'/0/${index}`;
     const child = root.derivePath(path);
-
     return bitcoin.ECPair.fromPrivateKey(child.privateKey).toWIF();
   }
 
@@ -105,15 +102,14 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
    *
    * @return {String} ypub
    */
-  getXpub() {
+  async getXpub() {
     if (this._xpub) {
       return this._xpub; // cache hit
     }
     // first, getting xpub
     const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = HDNode.fromSeed(seed);
-
+    this.seed = await bip39.mnemonicToSeed(mnemonic);
+    const root = HDNode.fromSeed(this.seed);
     const path = "m/49'/440'/0'";
     const child = root.derivePath(path).neutered();
     const xpub = child.toBase58();
@@ -127,16 +123,16 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
     return this._xpub;
   }
 
-  generateAddresses() {
+  async generateAddresses() {
     if (!this._node0) {
-      const xpub = ypubToXpub(this.getXpub());
+      const xpub = ypubToXpub(await this.getXpub());
       const hdNode = HDNode.fromBase58(xpub);
       this._node0 = hdNode.derive(0);
     }
     for (let index = 0; index < this.num_addresses; index++) {
       const address = nodeToP2shSegwitAddress(this._node0.derive(index));
       this._address.push(address);
-      this._address_to_wif_cache[address] = this._getWIFByIndex(index);
+      this._address_to_wif_cache[address] = await this._getWIFByIndex(index);
       this._addr_balances[address] = {
         total: 0,
         c: 0,

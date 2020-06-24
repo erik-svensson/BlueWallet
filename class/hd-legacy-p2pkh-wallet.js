@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import bip39 from 'bip39';
+import * as bip39 from 'bip39';
 
 import signer from '../models/signer';
 import { AbstractHDWallet } from './abstract-hd-wallet';
