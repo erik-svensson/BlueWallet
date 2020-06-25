@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import * as bip39 from 'bip39';
 import b58 from 'bs58check';
 import { NativeModules } from 'react-native';

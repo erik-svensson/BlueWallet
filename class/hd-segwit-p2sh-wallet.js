@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import * as bip39 from 'bip39';
 import b58 from 'bs58check';
-import Frisbee from 'frisbee';
 import { NativeModules } from 'react-native';
 
 import { BitcoinUnit } from '../models/bitcoinUnits';
@@ -10,8 +9,6 @@ import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
 const bitcoin = require('bitcoinjs-lib');
-
-const BlueElectrum = require('../BlueElectrum');
 
 const { RNRandomBytes } = NativeModules;
 
@@ -46,9 +43,12 @@ function nodeToP2shSegwitAddress(hdNode) {
  * In particular, BIP49 (P2SH Segwit)
  * @see https://github.com/bitcoin/bips/blob/master/bip-0049.mediawiki
  */
+
 export class HDSegwitP2SHWallet extends AbstractHDWallet {
   static type = 'HDsegwitP2SH';
   static typeReadable = 'HD P2SH';
+  static randomBytesSize = 32;
+  static basePath = "m/49'/440'/0'";
 
   allowSend() {
     return true;
@@ -59,27 +59,30 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
   }
 
   async generate() {
-    const that = this;
-    return new Promise(function(resolve) {
+    return new Promise(resolve => {
       if (typeof RNRandomBytes === 'undefined') {
         // CLI/CI environment
         // crypto should be provided globally by test launcher
-        return crypto.randomBytes(32, (err, buf) => {
+        return crypto.randomBytes(HDSegwitP2SHWallet.randomBytesSize, (err, buf) => {
           // eslint-disable-line
           if (err) throw err;
-          that.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
+          this.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
           resolve();
         });
       }
 
       // RN environment
-      RNRandomBytes.randomBytes(32, (err, bytes) => {
+      RNRandomBytes.randomBytes(HDSegwitP2SHWallet.randomBytesSize, (err, bytes) => {
         if (err) throw new Error(err);
         const b = Buffer.from(bytes, 'base64').toString('hex');
-        that.setSecret(bip39.entropyToMnemonic(b));
+        this.setSecret(bip39.entropyToMnemonic(b));
         resolve();
       });
     });
+  }
+
+  _getPath(path = '') {
+    return `${HDSegwitP2SHWallet.basePath}${path}`;
   }
 
   /**
@@ -89,9 +92,9 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
    * @returns {*}
    * @private
    */
-  async _getWIFByIndex(index) {
+  _getWIFByIndex(index) {
     const root = bitcoin.bip32.fromSeed(this.seed);
-    const path = `m/49'/440'/0'/0/${index}`;
+    const path = this._getPath(`/0/${index}`);
     const child = root.derivePath(path);
     return bitcoin.ECPair.fromPrivateKey(child.privateKey).toWIF();
   }
@@ -110,7 +113,7 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
     const mnemonic = this.secret;
     this.seed = await bip39.mnemonicToSeed(mnemonic);
     const root = HDNode.fromSeed(this.seed);
-    const path = "m/49'/440'/0'";
+    const path = this._getPath();
     const child = root.derivePath(path).neutered();
     const xpub = child.toBase58();
 
@@ -132,7 +135,7 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
     for (let index = 0; index < this.num_addresses; index++) {
       const address = nodeToP2shSegwitAddress(this._node0.derive(index));
       this._address.push(address);
-      this._address_to_wif_cache[address] = await this._getWIFByIndex(index);
+      this._address_to_wif_cache[address] = this._getWIFByIndex(index);
       this._addr_balances[address] = {
         total: 0,
         c: 0,
