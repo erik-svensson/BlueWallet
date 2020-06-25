@@ -22,6 +22,8 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   static type = 'HDsegwitBech32';
   static typeReadable = 'HD SegWit';
   static defaultRBFSequence = 2147483648; // 1 << 31, minimum for replaceable transactions as per BIP68
+  static randomBytesSize = 32;
+  static basePath = "m/84'/440'/0'";
 
   constructor() {
     super();
@@ -52,27 +54,30 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   }
 
   async generate() {
-    const that = this;
-    return new Promise(function(resolve) {
+    return new Promise(resolve => {
       if (typeof RNRandomBytes === 'undefined') {
         // CLI/CI environment
         // crypto should be provided globally by test launcher
-        return crypto.randomBytes(32, (err, buf) => {
+        return crypto.randomBytes(HDSegwitBech32Wallet.randomBytesSize, (err, buf) => {
           // eslint-disable-line
           if (err) throw err;
-          that.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
+          this.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
           resolve();
         });
       }
 
       // RN environment
-      RNRandomBytes.randomBytes(32, (err, bytes) => {
+      RNRandomBytes.randomBytes(HDSegwitBech32Wallet.randomBytesSize, (err, bytes) => {
         if (err) throw new Error(err);
         const b = Buffer.from(bytes, 'base64').toString('hex');
-        that.setSecret(bip39.entropyToMnemonic(b));
+        this.setSecret(bip39.entropyToMnemonic(b));
         resolve();
       });
     });
+  }
+
+  _getPath(path = '') {
+    return `${HDSegwitBech32Wallet.basePath}${path}`;
   }
 
   /**
@@ -83,13 +88,9 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
    * @private
    */
   _getWIFByIndex(index) {
-    if (!this.secret) return false;
-    const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = HDNode.fromSeed(seed);
-    const path = `m/84'/440'/0'/0/${index}`;
+    const root = HDNode.fromSeed(this.seed);
+    const path = this._getPath(`/0/${index}`);
     const child = root.derivePath(path);
-
     return child.toWIF();
   }
 
@@ -98,9 +99,9 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     return this._address[index];
   }
 
-  generateAddresses() {
+  async generateAddresses() {
     if (!this._node0) {
-      const xpub = this.constructor._zpubToXpub(this.getXpub());
+      const xpub = this.constructor._zpubToXpub(await this.getXpub());
       const hdNode = HDNode.fromBase58(xpub);
       this._node0 = hdNode.derive(0);
     }
@@ -136,16 +137,16 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
    *
    * @return {String} zpub
    */
-  getXpub() {
+  async getXpub() {
     if (this._xpub) {
       return this._xpub; // cache hit
     }
     // first, getting xpub
     const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = HDNode.fromSeed(seed);
+    this.seed = await bip39.mnemonicToSeed(mnemonic);
+    const root = HDNode.fromSeed(this.seed);
 
-    const path = "m/84'/440'/0'";
+    const path = this._getPath();
     const child = root.derivePath(path).neutered();
     const xpub = child.toBase58();
 
@@ -159,7 +160,8 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   }
 
   _getDerivationPathByAddress(address) {
-    const path = "m/84'/440'/0'/0/";
+    const path = this._getPath('/0/');
+
     const index = this._address.indexOf(address);
     if (index === -1) return false;
     return path + index;
