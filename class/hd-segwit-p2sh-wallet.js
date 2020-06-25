@@ -63,19 +63,19 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
       if (typeof RNRandomBytes === 'undefined') {
         // CLI/CI environment
         // crypto should be provided globally by test launcher
-        return crypto.randomBytes(HDSegwitP2SHWallet.randomBytesSize, (err, buf) => {
+        return crypto.randomBytes(HDSegwitP2SHWallet.randomBytesSize, async (err, buf) => {
           // eslint-disable-line
           if (err) throw err;
-          this.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
+          await this.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
           resolve();
         });
       }
 
       // RN environment
-      RNRandomBytes.randomBytes(HDSegwitP2SHWallet.randomBytesSize, (err, bytes) => {
+      RNRandomBytes.randomBytes(HDSegwitP2SHWallet.randomBytesSize, async (err, bytes) => {
         if (err) throw new Error(err);
         const b = Buffer.from(bytes, 'base64').toString('hex');
-        this.setSecret(bip39.entropyToMnemonic(b));
+        await this.setSecret(bip39.entropyToMnemonic(b));
         resolve();
       });
     });
@@ -92,7 +92,10 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
    * @returns {*}
    * @private
    */
-  _getWIFByIndex(index) {
+  async _getWIFByIndex(index) {
+    if (!this.seed) {
+      this.seed = await bip39.mnemonicToSeed(this.secret);
+    }
     const root = bitcoin.bip32.fromSeed(this.seed);
     const path = this._getPath(`/0/${index}`);
     const child = root.derivePath(path);
@@ -135,7 +138,7 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
     for (let index = 0; index < this.num_addresses; index++) {
       const address = nodeToP2shSegwitAddress(this._node0.derive(index));
       this._address.push(address);
-      this._address_to_wif_cache[address] = this._getWIFByIndex(index);
+      this._address_to_wif_cache[address] = await this._getWIFByIndex(index);
       this._addr_balances[address] = {
         total: 0,
         c: 0,

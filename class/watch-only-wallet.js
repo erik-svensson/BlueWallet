@@ -59,7 +59,7 @@ export class WatchOnlyWallet extends LegacyWallet {
    * as a property of `this`, and in case such property exists - it recreates it and copies data from old one.
    * this is needed after serialization/save/load/deserialization procedure.
    */
-  init() {
+  async init() {
     let hdWalletInstance;
     if (this.secret.startsWith('xpub')) hdWalletInstance = new HDLegacyP2PKHWallet();
     else if (this.secret.startsWith('ypub')) hdWalletInstance = new HDSegwitP2SHWallet();
@@ -75,7 +75,7 @@ export class WatchOnlyWallet extends LegacyWallet {
       delete hdWalletInstance._node1;
       delete hdWalletInstance._node0;
     }
-    hdWalletInstance.generateAddresses();
+    await hdWalletInstance.generateAddresses();
     this._hdWalletInstance = hdWalletInstance;
   }
 
@@ -144,9 +144,9 @@ export class WatchOnlyWallet extends LegacyWallet {
    * unsinged PSBT to be used with HW wallet (or other external signer)
    * @see HDSegwitBech32Wallet.createTransaction
    */
-  createTransaction(utxos, targets, feeRate, changeAddress, sequence) {
+  async createTransaction(utxos, targets, feeRate, changeAddress, sequence) {
     if (this._hdWalletInstance instanceof HDSegwitBech32Wallet) {
-      return this._hdWalletInstance.createTransaction(utxos, targets, feeRate, changeAddress, sequence, true);
+      return await this._hdWalletInstance.createTransaction(utxos, targets, feeRate, changeAddress, sequence, true);
     } else {
       throw new Error('Not a zpub watch-only wallet, cant create PSBT (or just not initialized)');
     }

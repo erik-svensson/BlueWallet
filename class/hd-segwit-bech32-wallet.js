@@ -58,19 +58,19 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       if (typeof RNRandomBytes === 'undefined') {
         // CLI/CI environment
         // crypto should be provided globally by test launcher
-        return crypto.randomBytes(HDSegwitBech32Wallet.randomBytesSize, (err, buf) => {
+        return crypto.randomBytes(HDSegwitBech32Wallet.randomBytesSize, async (err, buf) => {
           // eslint-disable-line
           if (err) throw err;
-          this.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
+          await this.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
           resolve();
         });
       }
 
       // RN environment
-      RNRandomBytes.randomBytes(HDSegwitBech32Wallet.randomBytesSize, (err, bytes) => {
+      RNRandomBytes.randomBytes(HDSegwitBech32Wallet.randomBytesSize, async (err, bytes) => {
         if (err) throw new Error(err);
         const b = Buffer.from(bytes, 'base64').toString('hex');
-        this.setSecret(bip39.entropyToMnemonic(b));
+        await this.setSecret(bip39.entropyToMnemonic(b));
         resolve();
       });
     });
@@ -87,7 +87,11 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
    * @returns {string|false} Either string WIF or FALSE if error happened
    * @private
    */
-  _getWIFByIndex(index) {
+  async _getWIFByIndex(index) {
+    if (!this.seed) {
+      this.seed = await bip39.mnemonicToSeed(this.secret);
+    }
+
     const root = HDNode.fromSeed(this.seed);
     const path = this._getPath(`/0/${index}`);
     const child = root.derivePath(path);
@@ -108,21 +112,21 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     for (let index = 0; index < this.num_addresses; index++) {
       const address = this.constructor._nodeToBech32SegwitAddress(this._node0.derive(index));
       this._address.push(address);
-      this._address_to_wif_cache[address] = this._getWIFByIndex(index);
+      this._address_to_wif_cache[address] = await this._getWIFByIndex(index);
       this._addr_balances[address] = {
         total: 0,
         c: 0,
         u: 0,
       };
-      console.warn(this._addr_balances);
+      // console.warn(this._addr_balances);
     }
   }
 
-  _getNodePubkeyByIndex(index) {
+  async _getNodePubkeyByIndex(index) {
     index = index * 1; // cast to int
 
     if (!this._node0) {
-      const xpub = this.constructor._zpubToXpub(this.getXpub());
+      const xpub = this.constructor._zpubToXpub(await this.getXpub());
       const hdNode = HDNode.fromBase58(xpub);
       this._node0 = hdNode.derive(0);
     }
@@ -190,7 +194,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
    * @param skipSigning {boolean} Whether we should skip signing, use returned `psbt` in that case
    * @returns {{outputs: Array, tx: Transaction, inputs: Array, fee: Number, psbt: Psbt}}
    */
-  createTransaction(utxos, targets, feeRate, changeAddress, sequence, skipSigning = false) {
+  async createTransaction(utxos, targets, feeRate, changeAddress, sequence, skipSigning = false) {
     if (!changeAddress) throw new Error('No change address provided');
     sequence = sequence || HDSegwitBech32Wallet.defaultRBFSequence;
     let algo = coinSelectAccumulative;
@@ -211,7 +215,8 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     const keypairs = {};
     const values = {};
 
-    inputs.forEach(input => {
+    for (let i = 0; i < inputs.length; i++) {
+      const input = inputs[i];
       let keyPair;
       if (!skipSigning) {
         // skiping signing related stuff
@@ -225,7 +230,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
         if (!input.address || !this._getWifForAddress(input.address))
           throw new Error('Internal error: no address or WIF to sign input');
       }
-      const pubkey = this._getPubkeyByAddress(input.address);
+      const pubkey = await this._getPubkeyByAddress(input.address);
       const masterFingerprint = Buffer.from([0x00, 0x00, 0x00, 0x00]);
       // this is not correct fingerprint, as we dont know real fingerprint - we got zpub with 84/0, but fingerpting
       // should be from root. basically, fingerprint should be provided from outside  by user when importing zpub
@@ -247,9 +252,10 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
           value: input.value,
         },
       });
-    });
+    }
 
-    outputs.forEach(output => {
+    for (let k = 0; k < outputs.length; k++) {
+      const output = outputs[k];
       // if output has no address - this is change output
       let change = false;
       if (!output.address) {
@@ -258,7 +264,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       }
 
       const path = this._getDerivationPathByAddress(output.address);
-      const pubkey = this._getPubkeyByAddress(output.address);
+      const pubkey = await this._getPubkeyByAddress(output.address);
       const masterFingerprint = Buffer.from([0x00, 0x00, 0x00, 0x00]);
       // this is not correct fingerprint, as we dont know realfingerprint - we got zpub with 84/0, but fingerpting
       // should be from root. basically, fingerprint should be provided from outside  by user when importing zpub
@@ -279,7 +285,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       }
 
       psbt.addOutput(outputData);
-    });
+    }
 
     if (!skipSigning) {
       // skiping signing related stuff
