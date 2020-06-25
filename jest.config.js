@@ -8,5 +8,4 @@ module.exports = {
   },
   transformIgnorePatterns: ['node_modules/(?!(jest-)?react-native|react-navigation|@react-native-community)'],
   coveragePathIgnorePatterns: ['/node_modules/'],
-  testTimeout: 30000,
 };

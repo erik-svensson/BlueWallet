@@ -50,7 +50,6 @@
     "install_local": "cd src && yarn install",
     "lint": "eslint '**/*.{js,ts,tsx}'",
     "lint:fix": "yarn lint --fix",
-    "jest2": "jest",
     "unit": "./node_modules/.bin/mocha tests/unit/*",
     "typescript:check": "tsc --noEmit",
     "prettier:fix": "prettier --write '**/*.{js,ts,tsx}'",
