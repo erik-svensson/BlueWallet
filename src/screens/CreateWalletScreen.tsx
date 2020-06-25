@@ -91,14 +91,11 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       wallet.setLabel(this.state.label || i18n.wallets.details.title);
     }
     if (this.state.activeBitcoin) {
-      const t0 = new Date().getTime();
       await wallet.generate();
       BlueApp.wallets.push(wallet);
       await BlueApp.saveToDisk();
       this.props.loadWallets();
       this.setState({ isSuccess: true, secret: wallet.getSecret().split(' ') });
-      const t1 = new Date().getTime();
-      console.log('Call to doSomething took ' + (t1 - t0) + ' milliseconds.');
     }
     this.setState({ isLoading: false });
   };

@@ -27,6 +27,7 @@ interface Props {
 export class WalletCard extends React.Component<Props> {
   render() {
     const { showEditButton, wallet, containerStyle } = this.props;
+    console.log('wallet', wallet);
     return (
       <GradientView style={[styles.itemContainer, containerStyle]} variant={GradientView.Variant.Primary}>
         <>

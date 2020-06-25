@@ -144,9 +144,9 @@ export class WatchOnlyWallet extends LegacyWallet {
    * unsinged PSBT to be used with HW wallet (or other external signer)
    * @see HDSegwitBech32Wallet.createTransaction
    */
-  async createTransaction(utxos, targets, feeRate, changeAddress, sequence) {
+  createTransaction(utxos, targets, feeRate, changeAddress, sequence) {
     if (this._hdWalletInstance instanceof HDSegwitBech32Wallet) {
-      return await this._hdWalletInstance.createTransaction(utxos, targets, feeRate, changeAddress, sequence, true);
+      return this._hdWalletInstance.createTransaction(utxos, targets, feeRate, changeAddress, sequence, true);
     } else {
       throw new Error('Not a zpub watch-only wallet, cant create PSBT (or just not initialized)');
     }
