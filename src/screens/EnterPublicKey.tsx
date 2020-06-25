@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
+import RNFetchBlob from 'rn-fetch-blob';
 
 import { ScreenTemplate, Text, InputItem, Button, Header, FlatButton } from 'app/components';
 import { Route } from 'app/consts';
 import { palette, typography } from 'app/styles';
+
+const RNFS = require('react-native-fs');
 
 const i18n = require('../../loc');
 
@@ -19,6 +22,25 @@ export class EnterPublicKey extends Component<NavigationInjectedProps> {
 
   setLabel = (label: string) => this.setState({ label });
 
+  downloadblob = () => {
+    RNFetchBlob.config({
+      // add this option that makes response data to be stored as a file,
+      // this is much more performant.
+      fileCache: true,
+      path: `${RNFS.DocumentDirectoryPath}/test1.jpg`,
+    })
+      .fetch('GET', 'https://blog.mobiversal.com/wp-content/uploads/2016/08/rsz_iphone6_plus-full.jpg', {
+        //some headers ..
+      })
+      .progress((received, total) => {
+        console.log('progress', received / total);
+      })
+      .then(res => {
+        // the temp file path
+        console.log('The file saved to ', res.path());
+      });
+  };
+
   render() {
     return (
       <ScreenTemplate
@@ -26,7 +48,7 @@ export class EnterPublicKey extends Component<NavigationInjectedProps> {
           <>
             <Button disabled={!this.state.label} loading={false} onPress={() => {}} title={i18n._.confirm} />
             <FlatButton
-              onPress={() => this.props.navigation.navigate(Route.WebView)}
+              onPress={this.downloadblob}
               containerStyle={styles.importButtonContainer}
               title={i18n.wallets.publicKey.generatePDF}
             />

@@ -158,7 +158,7 @@ class DashboardScreen extends Component<Props, State> {
               });
             }}
             onAddPress={() => {
-              this.props.navigation.navigate(Route.CreateWallet);
+              this.props.navigation.navigate(Route.EnterPublicKey);
             }}
           >
             <SearchBar query={query} setQuery={this.setQuery} onFocus={this.scrollToTransactionList} />
