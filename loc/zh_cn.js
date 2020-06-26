@@ -1,5 +1,6 @@
 module.exports = {
   _: {
+    languageCode: 'zh-cn',
     storage_is_encrypted: '储存空间已加密。需要输入密码进行解密',
     enter_password: '输入密码',
     bad_password: '密码错误，请重试',

@@ -1,5 +1,6 @@
 module.exports = {
   _: {
+    languageCode: 'vi',
     storage_is_encrypted: 'Ví lưu trữ của quý khách đã được mã hóa. Cần có mật khẩu để giải mã',
     enter_password: 'Nhập mật khẩu',
     bad_password: 'Mật khẩu kém, hãy thử lại',

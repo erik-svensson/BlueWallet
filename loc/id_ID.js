@@ -1,5 +1,6 @@
 module.exports = {
   _: {
+    languageCode: 'id',
     storage_is_encrypted: 'Penyimpanan Anda dienkripsi. Perlu kata sandi untuk mendekripsinya',
     enter_password: 'Masukkan kata sandi',
     bad_password: 'Kata sandi buruk, coba lagi',

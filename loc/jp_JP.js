@@ -1,5 +1,6 @@
 module.exports = {
   _: {
+    languageCode: 'ja',
     storage_is_encrypted: 'ストレージは暗号化されています。それを復号化するためにはパスワードが必要です。',
     enter_password: 'パスワードの入力',
     bad_password: 'パスワードが間違っています。再度お試しください',

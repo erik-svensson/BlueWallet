@@ -1,5 +1,6 @@
 module.exports = {
   _: {
+    languageCode: 'tr',
     storage_is_encrypted: 'Kasanız şifrelidir. Açmak için parola gereklidir.',
     enter_password: 'Parolayı girin',
     bad_password: 'Yanlış parola, tekrar deneyin',

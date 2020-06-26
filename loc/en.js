@@ -1,5 +1,6 @@
 module.exports = {
   _: {
+    languageCode: 'en',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
     enter_password: 'Enter password',
     bad_password: 'Bad password, try again',

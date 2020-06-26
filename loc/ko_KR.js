@@ -1,5 +1,6 @@
 module.exports = {
   _: {
+    languageCode: 'ko',
     storage_is_encrypted: '저장 공간이 암호화되었습니다. 암호를 해독하려면 비밀번호가 필요합니다',
     enter_password: '비밀번호를 입력하십시오',
     bad_password: '잘못된 비밀번호입니다. 다시 시도하십시오',
