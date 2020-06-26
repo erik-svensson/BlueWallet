@@ -64,7 +64,6 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
         // CLI/CI environment
         // crypto should be provided globally by test launcher
         return crypto.randomBytes(HDSegwitP2SHWallet.randomBytesSize, async (err, buf) => {
-          // eslint-disable-line
           if (err) throw err;
           await this.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
           resolve();

@@ -59,7 +59,6 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
         // CLI/CI environment
         // crypto should be provided globally by test launcher
         return crypto.randomBytes(HDSegwitBech32Wallet.randomBytesSize, async (err, buf) => {
-          // eslint-disable-line
           if (err) throw err;
           await this.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
           resolve();
@@ -118,7 +117,6 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
         c: 0,
         u: 0,
       };
-      // console.warn(this._addr_balances);
     }
   }
 
