@@ -248,7 +248,12 @@ export class SendCoinsScreen extends Component<Props, State> {
       targets = [{ address: firstTransaction.address, amount: BitcoinUnit.MAX }];
     }
 
-    const { tx, fee, psbt } = wallet.createTransaction(wallet.getUtxo(), targets, requestedSatPerByte, changeAddress);
+    const { tx, fee, psbt } = await wallet.createTransaction(
+      wallet.getUtxo(),
+      targets,
+      requestedSatPerByte,
+      changeAddress,
+    );
 
     if (wallet.type === WatchOnlyWallet.type) {
       // watch-only wallets with enabled HW wallet support have different flow. we have to show PSBT to user as QR code
