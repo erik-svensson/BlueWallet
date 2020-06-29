@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { NavigationScreenProps } from 'react-navigation';
+// import { NavigationScreenProps } from 'react-navigation';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { images, icons } from 'app/assets';
@@ -14,7 +14,7 @@ import { LabeledSettingsRow } from './LabeledSettingsRow';
 
 const i18n = require('../../../loc');
 
-export const SettingsScreen = (props: NavigationScreenProps) => {
+export const SettingsScreen = props => {
   const { navigation } = props;
   const { isBiometricsEnabled } = useSelector((state: ApplicationState) => ({
     isBiometricsEnabled: state.appSettings.isBiometricsEnabled,
@@ -77,7 +77,7 @@ export const SettingsScreen = (props: NavigationScreenProps) => {
 
   return (
     <>
-      <Header navigation={props.navigation} title={i18n.settings.header} />
+      {/* <Header navigation={props.navigation} title={i18n.settings.header} /> */}
       <ScreenTemplate>
         <Image source={images.goldWalletLogoBlack} style={styles.logo} resizeMode="contain" />
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
@@ -88,10 +88,10 @@ export const SettingsScreen = (props: NavigationScreenProps) => {
   );
 };
 
-SettingsScreen.navigationOptions = () => ({
-  // must be dynamic, as function as language switch stops to work
-  tabBarLabel: i18n.tabNavigator.settings,
-});
+// SettingsScreen.navigationOptions = () => ({
+//   // must be dynamic, as function as language switch stops to work
+//   tabBarLabel: i18n.tabNavigator.settings,
+// });
 
 const styles = StyleSheet.create({
   logo: {

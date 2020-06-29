@@ -9,7 +9,7 @@ import {
   ViewStyle,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { getStatusBarHeight, palette } from 'app/styles';
 
@@ -49,7 +49,7 @@ export class ScreenTemplate extends React.PureComponent<Props> {
     } = this.props;
     const Container = noScroll ? View : ScrollView;
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaProvider style={styles.container}>
         <StatusBar barStyle={statusBarStyle} />
         <Container
           ref={this.scrollRef}
@@ -69,7 +69,7 @@ export class ScreenTemplate extends React.PureComponent<Props> {
             {footer}
           </KeyboardAvoidingView>
         )}
-      </SafeAreaView>
+      </SafeAreaProvider>
     );
   }
 }

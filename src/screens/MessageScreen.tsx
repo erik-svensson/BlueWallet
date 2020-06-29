@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, StyleProp, ViewStyle, BackHandler, StatusBar } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
-import { useNavigationParam } from 'react-navigation-hooks';
 
 import { Button, Image, FastImageSource } from 'app/components';
 import { typography, palette, ifIphoneX } from 'app/styles';
@@ -15,38 +14,39 @@ export interface MessageProps {
   asyncTask?: () => void;
 }
 
-export const MessageScreen = () => {
-  const title: string = useNavigationParam('title');
-  const source: FastImageSource = useNavigationParam('source');
-  const description: string = useNavigationParam('description');
-  const buttonProps: ButtonProps = useNavigationParam('buttonProps');
-  const imageStyle: StyleProp<ViewStyle> = useNavigationParam('imageStyle');
-  const asyncTask = useNavigationParam('asyncTask');
+export const MessageScreen = ({ navigation }) => {
+  console.log('navigation', navigation);
+  // const title: string = useNavigationParam('title');
+  // const source: FastImageSource = useNavigationParam('source');
+  // const description: string = useNavigationParam('description');
+  // const buttonProps: ButtonProps = useNavigationParam('buttonProps');
+  // const imageStyle: StyleProp<ViewStyle> = useNavigationParam('imageStyle');
+  // const asyncTask = useNavigationParam('asyncTask');
 
-  useEffect(() => {
-    const onBackPress = () => true;
-    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  // useEffect(() => {
+  //   const onBackPress = () => true;
+  //   BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-    if (asyncTask) {
-      const asynchrousTask = async () => {
-        await asyncTask();
-      };
+  //   if (asyncTask) {
+  //     const asynchrousTask = async () => {
+  //       await asyncTask();
+  //     };
 
-      asynchrousTask();
-    }
+  //     asynchrousTask();
+  //   }
 
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    };
-  }, [asyncTask]);
+  //   return () => {
+  //     BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  //   };
+  // }, [asyncTask]);
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      {/* <StatusBar barStyle="dark-content" />
       <Text style={styles.title}>{title}</Text>
       <Image source={source} style={[styles.image, imageStyle]} resizeMode="contain" />
       <Text style={styles.description}>{description}</Text>
-      {buttonProps && <Button {...buttonProps} />}
+      {buttonProps && <Button {...buttonProps} />} */}
     </View>
   );
 };

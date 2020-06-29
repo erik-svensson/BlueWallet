@@ -1,3 +1,3 @@
-export { MainTabNavigator } from './MainTabNavigator';
+// export { MainTabNavigator } from './MainTabNavigator';
 export { RootNavigator } from './RootNavigator';
-export { UnlockTransactionNavaigator } from './UnlockTransactionNavaigator';
+// export { UnlockTransactionNavaigator } from './UnlockTransactionNavaigator';

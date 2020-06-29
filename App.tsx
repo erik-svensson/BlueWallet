@@ -1,8 +1,9 @@
+import { createStackNavigator } from '@react-navigation/stack';
 import * as Sentry from '@sentry/react-native';
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { View, YellowBox, StyleSheet } from 'react-native';
-import { createAppContainer } from 'react-navigation';
+// import { createAppContainer } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -13,6 +14,9 @@ import { UnlockScreen } from 'app/screens';
 import { NavigationService, SecureStorageService, AppStateManager } from 'app/services';
 import { persistor, store } from 'app/state/store';
 
+import { MainCardStackNavigator } from './src/navigators/MainCardStackNavigator';
+import { MainTabNavigator } from './src/navigators/MainTabNavigator';
+
 YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside', `\`-[RCTRootView cancelTouches]\``]);
 
 if (process.env.NODE_ENV !== 'development') {
@@ -21,7 +25,7 @@ if (process.env.NODE_ENV !== 'development') {
   });
 }
 
-const AppContainer = createAppContainer(RootNavigator);
+const Stack = createStackNavigator();
 
 interface State {
   isPinSet: boolean;
@@ -64,20 +68,21 @@ export default class App extends React.PureComponent<State> {
   }
 
   render() {
-    const isBiometricEnabledByUser = store.getState().appSettings.isBiometricsEnabled;
+    // const isBiometricEnabledByUser = store.getState().appSettings.isBiometricsEnabled;
     return (
       <I18nextProvider i18n={i18n}>
         <Provider store={store}>
           <AppStateManager handleAppComesToForeground={this.handleAppComesToForeground} />
           <PersistGate loading={null} persistor={persistor}>
             <View style={styles.wrapper}>
-              <AppContainer ref={NavigationService.setTopLevelNavigator} />
-              {this.showUnlockScreen && (
-                <UnlockScreen
-                  onSuccessfullyAuthenticated={this.onSuccessfullyAuthenticated}
-                  isBiometricEnabledByUser={isBiometricEnabledByUser}
-                />
-              )}
+              <RootNavigator />
+              {/* <AppContainer ref={NavigationService.setTopLevelNavigator} />
+                {this.showUnlockScreen && (
+                  <UnlockScreen
+                    onSuccessfullyAuthenticated={this.onSuccessfullyAuthenticated}
+                    isBiometricEnabledByUser={isBiometricEnabledByUser}
+                  />
+                )} */}
             </View>
           </PersistGate>
         </Provider>
