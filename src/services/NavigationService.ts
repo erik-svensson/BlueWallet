@@ -16,33 +16,43 @@
 //   | ScanQrCodeProps
 //   | TransactionDetailsScreenProps;
 
+import React from 'react';
+
+export const navigationRef = React.createRef();
+import { CommonActions } from '@react-navigation/native';
+
 export default class NavigationService {
-  // navigator?: NavigationContainerComponent;
+  // navigator;
 
-  setTopLevelNavigator = (navigatorRef: NavigationContainerComponent) => {
-    // this.navigator = navigatorRef;
-  };
+  // constructor() {
+  //   this.navigator = navigationRef;
+  // }
 
-  navigate = (routeName: string, params?: ScreenProps) => {
-    // this.navigator!.dispatch(
-    //   NavigationActions.navigate({
-    //     routeName,
-    //     params,
-    //   }),
-    // );
-  };
+  navigate = (name, params) => navigationRef.current?.navigate(name, params);
+
+  // navigate = (routeName: string, params?: ScreenProps) => {
+  // this.navigator!.dispatch(
+  //   NavigationActions.navigate({
+  //     routeName,
+  //     params,
+  //   }),
+  // );
+  // };
+
+  pop = () => navigationRef.current?.goBack();
+
+  popToTop = () => navigationRef.current?.popToTop();
 
   navigateWithReset = (routeName: string, params?: ScreenProps) => {
-    // const navigateAction = StackActions.reset({
-    //   index: 0,
-    //   key: null,
-    //   actions: [
-    //     NavigationActions.navigate({
-    //       routeName,
-    //       params,
-    //     }),
-    //   ],
-    // });
-    // this.navigator!.dispatch(navigateAction);
+    const navigateAction = CommonActions.reset({
+      index: 0,
+      routes: [
+        {
+          name: routeName,
+          params,
+        },
+      ],
+    });
+    navigationRef.current?.dispatch(navigateAction);
   };
 }

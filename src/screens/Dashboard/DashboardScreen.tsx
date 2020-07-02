@@ -53,18 +53,18 @@ class DashboardScreen extends Component<Props, State> {
 
   walletCarouselRef = React.createRef<WalletsCarousel>();
   screenTemplateRef = React.createRef<ScreenTemplate>();
-  // componentDidMount() {
-  //   SecureStorageService.getSecuredValue('pin')
-  //     .then(() => {
-  //       SecureStorageService.getSecuredValue('transactionPassword').catch(() => {
-  //         this.props.navigation.navigate(Route.CreateTransactionPassword);
-  //       });
-  //     })
-  //     .catch(() => {
-  //       this.props.navigation.navigate(Route.CreatePin);
-  //     });
-  //   this.props.loadWallets();
-  // }
+  componentDidMount() {
+    SecureStorageService.getSecuredValue('pin')
+      .then(() => {
+        SecureStorageService.getSecuredValue('transactionPassword').catch(() => {
+          this.props.navigation.navigate('PasswordNavigator');
+        });
+      })
+      .catch(() => {
+        this.props.navigation.navigate(Route.CreatePin);
+      });
+    this.props.loadWallets();
+  }
 
   refreshTransactions = async () => {
     this.setState({ isFetching: true });
@@ -102,7 +102,7 @@ class DashboardScreen extends Component<Props, State> {
   showModal = () => {
     const { lastSnappedTo } = this.state;
     const { wallets } = this.props;
-    this.props.navigation.navigate('ActionSheet', {
+    this.props.navigation.navigate(Route.ActionSheet, {
       wallets,
       selectedIndex: lastSnappedTo,
       onPress: this.chooseItemFromModal,
@@ -151,22 +151,24 @@ class DashboardScreen extends Component<Props, State> {
     if (wallets.length) {
       return (
         <>
-          <DashboardHeader
-            onFilterPress={() => {
-              this.props.navigation.navigate(Route.FilterTransactions, {
-                onFilterPress: this.onFilterPress,
-              });
-            }}
-            onAddPress={() => {
-              this.props.navigation.navigate(Route.CreateWallet);
-            }}
-          >
-            <SearchBar query={query} setQuery={this.setQuery} onFocus={this.scrollToTransactionList} />
-          </DashboardHeader>
           <ScreenTemplate
             ref={this.screenTemplateRef}
             contentContainer={styles.contentContainer}
             refreshControl={<RefreshControl onRefresh={this.refreshTransactions} refreshing={this.state.isFetching} />}
+            header={
+              <DashboardHeader
+                onFilterPress={() => {
+                  this.props.navigation.navigate(Route.FilterTransactions, {
+                    onFilterPress: this.onFilterPress,
+                  });
+                }}
+                onAddPress={() => {
+                  this.props.navigation.navigate(Route.CreateWallet);
+                }}
+              >
+                <SearchBar query={query} setQuery={this.setQuery} onFocus={this.scrollToTransactionList} />
+              </DashboardHeader>
+            }
           >
             <View
               onLayout={event => {

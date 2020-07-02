@@ -26,15 +26,9 @@ interface State {
   wallet: any;
 }
 export class ReceiveCoinsScreen extends Component<Props, State> {
-  static navigationOptions = (props: NavigationScreenProps<{ transaction: Transaction }>) => {
-    return {
-      header: <Header navigation={props.navigation} isBackArrow title={i18n.receive.header} />,
-    };
-  };
-
   constructor(props: Props) {
     super(props);
-    const secret = props.navigation.getParam('secret') || '';
+    const secret = props.route.params?.secret || '';
     this.state = {
       secret,
       bip21encoded: '',
@@ -115,13 +109,16 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     !Number(value.replace(',', '.')) && i18n.send.details.amount_field_is_not_valid;
 
   editAmount = () => {
-    this.props.navigation.navigate(Route.EditText, {
-      title: i18n.receive.header,
-      label: i18n.receive.details.amount,
-      onSave: this.updateAmount,
-      keyboardType: 'numeric',
-      validate: this.validate,
-      value: this.state.amount && !!this.state.amount ? this.state.amount.toString() : '',
+    this.props.navigation.navigate('EditTextNavigator', {
+      screen: Route.EditText,
+      params: {
+        title: i18n.receive.header,
+        label: i18n.receive.details.amount,
+        onSave: this.updateAmount,
+        keyboardType: 'numeric',
+        validate: this.validate,
+        value: this.state.amount && !!this.state.amount ? this.state.amount.toString() : '',
+      },
     });
   };
 
@@ -159,7 +156,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
   showModal = () => {
     const wallets = BlueApp.getWallets();
     const selectedIndex = wallets.findIndex(wallet => wallet.label === this.state.wallet.label);
-    this.props.navigation.navigate('ActionSheet', {
+    this.props.navigation.navigate(Route.ActionSheet, {
       wallets,
       selectedIndex,
       onPress: this.chooseItemFromModal,
@@ -173,6 +170,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
         footer={
           <Button title={i18n.receive.details.share} onPress={this.share} containerStyle={styles.buttonContainer} />
         }
+        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.receive.header} />}
       >
         <DashboarContentdHeader
           onSelectPress={this.showModal}

@@ -39,25 +39,19 @@ type Props = NavigationInjectedProps<{
 }>;
 
 export class SendCoinsConfirmScreen extends Component<Props> {
-  static navigationOptions = (props: NavigationScreenProps<{ transaction: Transaction }>) => {
-    return {
-      header: <Header navigation={props.navigation} isBackArrow title={i18n.send.header} />,
-    };
-  };
-
   constructor(props: Props) {
     super(props);
-
+    const { fee, memo, recipients, tx, satoshiPerByte, fromWallet } = props.route.params;
     this.state = {
       isLoading: false,
-      fee: props.navigation.getParam('fee'),
-      feeSatoshi: new Bignumber(props.navigation.getParam('fee')).multipliedBy(100000000).toNumber(),
-      memo: props.navigation.getParam('memo'),
-      recipients: props.navigation.getParam('recipients'),
-      size: Math.round(props.navigation.getParam('tx').length / 2),
-      tx: props.navigation.getParam('tx'),
-      satoshiPerByte: props.navigation.getParam('satoshiPerByte'),
-      fromWallet: props.navigation.getParam('fromWallet'),
+      fee,
+      feeSatoshi: new Bignumber(fee).multipliedBy(100000000).toNumber(),
+      memo,
+      recipients,
+      size: Math.round(tx.length / 2),
+      tx,
+      satoshiPerByte,
+      fromWallet,
     };
   }
 
@@ -95,14 +89,13 @@ export class SendCoinsConfirmScreen extends Component<Props> {
             type: MessageType.success,
             buttonProps: {
               title: i18n.message.returnToDashboard,
-              onPress: () => NavigationService.navigateWithReset(Route.MainCardStackNavigator),
+              onPress: this.props.navigation.popToTop,
             },
           });
           this.setState({ isLoading: false });
         }
       } catch (error) {
         this.setState({ isLoading: false });
-        console.log('erorororor', error);
         Alert.alert('ERROR', error.message, [
           {
             text: 'OK',
@@ -114,32 +107,42 @@ export class SendCoinsConfirmScreen extends Component<Props> {
   };
 
   goToDetails = () => {
-    const { navigation } = this.props;
+    const { fee, recipients, tx, satoshiPerByte } = this.props.route.params;
+
     this.props.navigation.navigate(Route.SendTransactionDetails, {
-      fee: navigation.getParam('fee'),
-      recipients: navigation.getParam('recipients'),
-      size: Math.round(navigation.getParam('tx').length / 2),
-      tx: navigation.getParam('tx'),
-      satoshiPerByte: navigation.getParam('satoshiPerByte'),
+      fee,
+      recipients,
+      size: Math.round(tx.length / 2),
+      tx,
+      satoshiPerByte,
       wallet: this.state.fromWallet,
       feeSatoshi: this.state.feeSatoshi,
     });
   };
 
   goToUnlockScreen = () => {
-    this.props.navigation.navigate(Route.UnlockTransaction, {
-      onSuccess: this.broadcast,
+    this.props.navigation.navigate('UnlockTransactionNavaigator', {
+      screen: Route.UnlockTransaction,
+      params: {
+        onSuccess: this.broadcast,
+      },
     });
   };
 
   render() {
-    const { navigation } = this.props;
-    const fromWallet = navigation.getParam('fromWallet');
-    const recipients = navigation.getParam('recipients');
+    const {
+      navigation,
+      route: { params },
+    } = this.props;
+    const { fromWallet, recipients, fee } = params;
+
     const item = recipients[0];
-    const fee = navigation.getParam('fee');
+
     return (
-      <ScreenTemplate footer={ScreenFooter(this.goToUnlockScreen, this.goToDetails)}>
+      <ScreenTemplate
+        footer={ScreenFooter(this.goToUnlockScreen, this.goToDetails)}
+        header={<Header navigation={navigation} isBackArrow title={i18n.send.header} />}
+      >
         <View style={styles.container}>
           <View>
             <View style={styles.chooseWalletButton}>

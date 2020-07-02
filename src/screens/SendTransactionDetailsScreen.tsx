@@ -20,24 +20,25 @@ type Props = NavigationInjectedProps<{
 }>;
 
 export class SendTransactionDetailsScreen extends PureComponent<Props> {
-  static navigationOptions = (props: Props) => ({
-    header: <Header title={i18n.transactions.details.details} isCancelButton={true} navigation={props.navigation} />,
-  });
   render() {
-    const { navigation } = this.props;
-    const fee = navigation.getParam('fee');
-    const recipient = navigation.getParam('recipients')[0];
-    const txSize = Math.round(navigation.getParam('tx').length / 2);
-    const tx = navigation.getParam('tx');
-    const satoshiPerByte = navigation.getParam('satoshiPerByte');
-    const wallet = navigation.getParam('wallet');
+    const {
+      navigation,
+      route: { params },
+    } = this.props;
+    const { fee, tx, satoshiPerByte, wallet } = params;
+    const recipient = params.recipients[0];
+    const txSize = Math.round(params.tx.length / 2);
     const amount =
       recipient.amount === BitcoinUnit.MAX
         ? currency.satoshiToBTC(wallet.getBalance()) - fee
         : recipient.amount || currency.satoshiToBTC(recipient.value);
 
     return (
-      <ScreenTemplate>
+      <ScreenTemplate
+        header={
+          <Header title={i18n.transactions.details.details} isCancelButton={true} navigation={this.props.navigation} />
+        }
+      >
         <View style={styles.upperContainer}>
           <Text style={styles.title}>{i18n.transactions.details.transactionHex}</Text>
           <Text style={styles.description}>{i18n.transactions.details.transactionHexDescription}</Text>

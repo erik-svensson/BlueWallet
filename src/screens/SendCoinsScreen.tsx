@@ -44,24 +44,15 @@ interface State {
 }
 
 export class SendCoinsScreen extends Component<Props, State> {
-  static navigationOptions = (props: NavigationScreenProps<{ transaction: Transaction }>) => {
-    return {
-      header: <Header navigation={props.navigation} isBackArrow title={i18n.send.header} />,
-    };
-  };
-
   constructor(props: Props) {
     super(props);
 
-    const { navigation } = props;
-    let fromAddress = navigation.getParam('fromAddress');
-    let fromSecret = navigation.getParam('fromSecret');
-    let fromWallet = navigation.getParam('fromWallet');
-    const toAddress = navigation.getParam('toAddress');
+    const { navigation, route } = props;
+    let { fromAddress, fromSecret, fromWallet } = route.params;
+    const { toAddress } = route.params;
     const wallets = BlueApp.getWallets();
 
     const addresses = toAddress ? [{ address: toAddress }] : [];
-
     if (wallets.length === 0) {
       Alert.alert('Before creating a transaction, you must first add a Bitcoin wallet.');
       props.navigation.goBack(null);
@@ -94,7 +85,7 @@ export class SendCoinsScreen extends Component<Props, State> {
   }
 
   async componentDidMount() {
-    const toAddress = this.props.navigation.getParam('toAddress');
+    const { toAddress } = this.props.route.params;
     const addresses = toAddress ? [{ address: toAddress }] : [new BitcoinTransaction()];
     this.setState({
       addresses,
@@ -213,12 +204,15 @@ export class SendCoinsScreen extends Component<Props, State> {
   );
 
   setTransactionFee = () => {
-    this.props.navigation.navigate(Route.EditText, {
-      title: i18n.send.create.fee,
-      label: i18n.send.create.amount,
-      onSave: this.saveTransactionFee,
-      value: this.state.amount,
-      header: this.renderSetTransactionFeeHeader(),
+    this.props.navigation.navigate('EditTextNavigator', {
+      screen: Route.EditText,
+      params: {
+        title: i18n.send.create.fee,
+        label: i18n.send.create.amount,
+        onSave: this.saveTransactionFee,
+        value: this.state.amount,
+        header: this.renderSetTransactionFeeHeader(),
+      },
     });
   };
 
@@ -525,6 +519,7 @@ export class SendCoinsScreen extends Component<Props, State> {
    * @param data {String} Can be address or `bitcoin:xxxxxxx` uri scheme, or invalid garbage
    */
   processAddressData = (data: string) => {
+    console.log('data', data);
     const newAddresses = processAddressData(data, this.state.addresses[0].amount);
     this.setState({
       addresses: [newAddresses],
@@ -544,6 +539,7 @@ export class SendCoinsScreen extends Component<Props, State> {
             disabled={isLoading}
           />
         }
+        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.send.header} />}
       >
         <DashboarContentdHeader
           onSelectPress={this.showModal}

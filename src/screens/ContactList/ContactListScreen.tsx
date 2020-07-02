@@ -36,10 +36,8 @@ export class ContactListScreen extends PureComponent<Props, State> {
 
   navigateToContactDetails = (contact: Contact) => {
     const { navigation, route } = this.props;
-    const { onContactPress } = route;
-    // const onContactPress = navigation.getParam('onContactPress');
-    if (onContactPress) {
-      onContactPress(contact.address);
+    if (route?.onContactPress) {
+      route.onContactPress(contact.address);
       return navigation.goBack();
     }
     navigation.navigate(Route.ContactDetails, { contact });
@@ -57,18 +55,13 @@ export class ContactListScreen extends PureComponent<Props, State> {
 
   render() {
     const { navigation, contacts, route } = this.props;
-    const { onContactPress, title } = route;
-
-    // const onContactPress = navigation.getParam('onContactPress');
-    // const title = navigation.getParam('title');
-
     return (
       <>
         <StatusBar barStyle="light-content" />
         <ContactListHeader
-          onAddButtonPress={!onContactPress ? this.navigateToAddContact : undefined}
-          onBackArrowPress={onContactPress && this.goBack}
-          title={title}
+          onAddButtonPress={!route?.onContactPress ? this.navigateToAddContact : undefined}
+          onBackArrowPress={route?.onContactPress && this.goBack}
+          title={route?.title}
         >
           <SearchBar query={this.state.query} setQuery={this.setQuery} />
         </ContactListHeader>

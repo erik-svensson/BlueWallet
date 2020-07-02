@@ -77,7 +77,7 @@ export const SettingsScreen = props => {
 
   return (
     <>
-      {/* <Header navigation={props.navigation} title={i18n.settings.header} /> */}
+      <Header navigation={props.navigation} title={i18n.settings.header} />
       <ScreenTemplate>
         <Image source={images.goldWalletLogoBlack} style={styles.logo} resizeMode="contain" />
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
@@ -87,11 +87,6 @@ export const SettingsScreen = props => {
     </>
   );
 };
-
-// SettingsScreen.navigationOptions = () => ({
-//   // must be dynamic, as function as language switch stops to work
-//   tabBarLabel: i18n.tabNavigator.settings,
-// });
 
 const styles = StyleSheet.create({
   logo: {

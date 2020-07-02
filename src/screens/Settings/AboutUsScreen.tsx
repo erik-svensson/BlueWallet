@@ -53,7 +53,7 @@ export const AboutUsScreen = (props: NavigationScreenProps) => {
   };
 
   return (
-    <ScreenTemplate>
+    <ScreenTemplate header={<Header isBackArrow={true} navigation={props.navigation} title={i18n.aboutUs.header} />}>
       <Text style={styles.title}>{i18n.aboutUs.title}</Text>
       <Text style={styles.description}>{i18n.aboutUs.alwaysBackupYourKeys}</Text>
       <Button
@@ -80,10 +80,6 @@ export const AboutUsScreen = (props: NavigationScreenProps) => {
     </ScreenTemplate>
   );
 };
-
-AboutUsScreen.navigationOptions = (props: NavigationScreenProps) => ({
-  header: <Header isBackArrow={true} navigation={props.navigation} title={i18n.aboutUs.header} />,
-});
 
 const styles = StyleSheet.create({
   buttonContainer: {

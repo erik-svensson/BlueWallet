@@ -8,11 +8,11 @@ import { rootReducer, ApplicationState } from '.';
 const middlewares: Middleware[] = [thunk];
 
 function bindMiddleware(middleware: Middleware[]) {
-  if (__DEV__) {
-    const composeEnhancers = (global as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  // if (__DEV__) {
+  //   const composeEnhancers = (global as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-    return composeEnhancers(applyMiddleware(...middleware));
-  }
+  //   return composeEnhancers(applyMiddleware(...middleware));
+  // }
 
   return applyMiddleware(...middlewares);
 }

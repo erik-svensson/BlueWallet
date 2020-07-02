@@ -3,22 +3,48 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { images } from 'app/assets';
-// import { BottomTabBarIcon, BottomTabBarComponent } from 'app/components';
+import { BottomTabBarIcon, BottomTabBarComponent } from 'app/components';
 import { Route } from 'app/consts';
 import { ContactListScreen, DashboardScreen, SettingsScreen } from 'app/screens';
 import { palette } from 'app/styles';
 
-const HomeScreen = () => <View style={{ width: 100, height: 100, backgroundColor: 'red' }} />;
-// const DetailsScreen = () => <View style={{ width: 100, height: 100, backgroundColor: 'green' }} />;
+const i18n = require('../../loc');
 
 const Tab = createBottomTabNavigator();
 
 export const MainTabNavigator = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={DashboardScreen} />
-      <Tab.Screen name={Route.ContactList} component={ContactListScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+    <Tab.Navigator
+      // headerMode="none"
+      tabBar={props => <BottomTabBarComponent {...props} />}
+      tabBarOptions={{
+        // @ts-ignore
+        keyboardHidesTabBar: true,
+        activeTintColor: palette.secondary,
+        inactiveTintColor: palette.textWhiteMuted,
+      }}
+    >
+      <Tab.Screen
+        name={Route.Dashboard}
+        component={DashboardScreen}
+        options={() => ({
+          tabBarLabel: i18n.tabNavigator.dashboard,
+        })}
+      />
+      <Tab.Screen
+        name={Route.ContactList}
+        component={ContactListScreen}
+        options={() => ({
+          tabBarLabel: i18n.tabNavigator.addressBook,
+        })}
+      />
+      <Tab.Screen
+        name={Route.Settings}
+        component={SettingsScreen}
+        options={() => ({
+          tabBarLabel: i18n.tabNavigator.settings,
+        })}
+      />
     </Tab.Navigator>
   );
 };

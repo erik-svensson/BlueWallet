@@ -31,13 +31,9 @@ interface State {
 }
 
 export class WalletDetailsScreen extends React.PureComponent<Props, State> {
-  static navigationOptions = (props: NavigationScreenProps<{ wallet: Wallet }>) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={props.navigation.getParam('wallet').label} />,
-  });
-
   constructor(props: Props) {
     super(props);
-    const wallet = props.navigation.getParam('wallet');
+    const { wallet } = props.route.params;
     this.state = {
       label: wallet.getLabel(),
     };
@@ -59,11 +55,11 @@ export class WalletDetailsScreen extends React.PureComponent<Props, State> {
 
   navigateWithWallet = (route: Route) =>
     this.props.navigation.navigate(route, {
-      wallet: this.props.navigation.getParam('wallet'),
+      wallet: this.props.route.params.wallet,
     });
 
   setLabel = (label: string) => {
-    const wallet = this.props.navigation.getParam('wallet');
+    const { wallet } = this.props.route.params;
     this.props.navigation.setParams({ wallet });
     this.setState({ label });
     wallet.setLabel(label);
@@ -72,7 +68,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const wallet = this.props.navigation.getParam('wallet');
+    const { wallet } = this.props.route.params;
     const isWatchOnly = wallet.type === WatchOnlyWallet.type;
     const { label } = this.state;
     return (
@@ -93,6 +89,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props, State> {
             />
           </>
         }
+        header={<Header navigation={this.props.navigation} isBackArrow title={wallet.label} />}
       >
         <View style={styles.walletContainer}>
           <WalletCard wallet={wallet} containerStyle={styles.walletContainerInner} />

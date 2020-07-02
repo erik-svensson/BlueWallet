@@ -28,13 +28,9 @@ interface State {
 }
 
 export class ContactDetailsScreen extends React.PureComponent<Props, State> {
-  static navigationOptions = (props: NavigationScreenProps<{ contact: Contact }>) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={props.navigation.getParam('contact').name} />,
-  });
-
   constructor(props: Props) {
     super(props);
-    const contact = props.navigation.getParam('contact');
+    const { contact } = props.route.params;
     this.state = {
       name: contact.name,
       address: contact.address,
@@ -52,7 +48,7 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
   };
 
   saveChanges = (changes: Partial<Contact>) => {
-    const contact = this.props.navigation.getParam('contact');
+    const { contact } = this.props.route.params;
     const updatedContact = { ...contact, ...changes };
     this.props.navigation.setParams({ contact: updatedContact });
     this.props.updateContact(updatedContact);
@@ -65,17 +61,19 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
   };
 
   navigateToContactQRCode = () => {
-    const contact = this.props.navigation.getParam('contact');
+    const { contact } = this.props.route.params;
     this.props.navigation.navigate(Route.ContactQRCode, { contact });
   };
 
   deleteContact = () => {
-    const contact = this.props.navigation.getParam('contact');
+    const { contact } = this.props.route.params;
     this.props.navigation.navigate(Route.DeleteContact, { contact });
   };
 
   render() {
     const { name, address } = this.state;
+    const { contact } = this.props.route.params;
+
     return (
       <ScreenTemplate
         footer={
@@ -94,6 +92,7 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
             />
           </>
         }
+        header={<Header isBackArrow navigation={this.props.navigation} title={contact.name} />}
       >
         <ContactAvatar name={name} />
         <View style={styles.nameInputContainer}>

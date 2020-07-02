@@ -12,6 +12,7 @@ import {
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { getStatusBarHeight, palette } from 'app/styles';
+import { ifIphoneX } from 'app/styles/helpers';
 
 enum StatusBarColor {
   Light = 'light-content',
@@ -20,6 +21,7 @@ enum StatusBarColor {
 
 interface Props {
   children: React.ReactNode;
+  header?: React.ReactNode;
   footer?: React.ReactNode;
   statusBarStyle: StatusBarColor;
   contentContainer?: StyleProp<ViewStyle>;
@@ -40,6 +42,7 @@ export class ScreenTemplate extends React.PureComponent<Props> {
   render() {
     const {
       children,
+      header,
       footer,
       statusBarStyle,
       contentContainer,
@@ -51,6 +54,7 @@ export class ScreenTemplate extends React.PureComponent<Props> {
     return (
       <SafeAreaProvider style={styles.container}>
         <StatusBar barStyle={statusBarStyle} />
+        {header}
         <Container
           ref={this.scrollRef}
           style={[noScroll && styles.contentContainer, noScroll && contentContainer]}
@@ -62,7 +66,7 @@ export class ScreenTemplate extends React.PureComponent<Props> {
         </Container>
         {!!footer && (
           <KeyboardAvoidingView
-            keyboardVerticalOffset={getStatusBarHeight() + 52}
+            // keyboardVerticalOffset={getStatusBarHeight() + 52}
             behavior={Platform.OS == 'ios' ? 'padding' : undefined}
             style={styles.footer}
           >
@@ -77,6 +81,8 @@ export class ScreenTemplate extends React.PureComponent<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: palette.white,
+    paddingBottom: ifIphoneX(20, 0),
   },
   contentContainer: {
     flexGrow: 1,

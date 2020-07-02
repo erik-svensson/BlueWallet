@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
+// import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
 import { Route, CONST, FlowType } from 'app/consts';
@@ -10,29 +10,13 @@ import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
-type Props = NavigationInjectedProps;
-
 type State = {
   pin: string;
   error: string;
   flowType: string;
 };
 
-export class ConfirmPinScreen extends PureComponent<Props, State> {
-  static navigationOptions = (props: NavigationScreenProps) => ({
-    header: (
-      <Header
-        navigation={props.navigation}
-        isBackArrow
-        title={
-          props.navigation.getParam('flowType') === FlowType.newPin
-            ? i18n.onboarding.changePin
-            : i18n.onboarding.onboarding
-        }
-      />
-    ),
-  });
-
+export class ConfirmPinScreen extends PureComponent<State> {
   state = {
     pin: '',
     error: '',
@@ -41,14 +25,14 @@ export class ConfirmPinScreen extends PureComponent<Props, State> {
 
   componentDidMount() {
     this.setState({
-      flowType: this.props.navigation.getParam('flowType'),
+      flowType: this.props.route.params?.flowType,
     });
   }
 
   updatePin = (pin: string) => {
     this.setState({ pin }, async () => {
       if (this.state.pin.length === CONST.pinCodeLength) {
-        const setPin = this.props.navigation.getParam('pin');
+        const setPin = this.props.route.params.pin;
         if (setPin === this.state.pin) {
           await SecureStorageService.setSecuredValue('pin', this.state.pin);
           if (this.state.flowType === FlowType.newPin) {
@@ -59,12 +43,14 @@ export class ConfirmPinScreen extends PureComponent<Props, State> {
               buttonProps: {
                 title: i18n.onboarding.successButtonChangedPin,
                 onPress: () => {
-                  this.props.navigation.navigate(Route.Settings);
+                  this.props.navigation.popToTop();
+                  this.props.navigation.popToTop();
+                  // this.props.navigation.navigate(Route.Settings);
                 },
               },
             });
           } else {
-            this.props.navigation.navigate(Route.CreateTransactionPassword);
+            this.props.navigation.navigate('PasswordNavigator');
           }
         } else {
           this.setState({
@@ -78,8 +64,22 @@ export class ConfirmPinScreen extends PureComponent<Props, State> {
 
   render() {
     const { error } = this.state;
+    // console.log('flowTYpe', this.state.flowType);
     return (
-      <ScreenTemplate noScroll>
+      <ScreenTemplate
+        noScroll
+        header={
+          <Header
+            navigation={this.props.navigation}
+            isBackArrow
+            title={
+              this.props.route.params?.flowType === FlowType.newPin
+                ? i18n.onboarding.changePin
+                : i18n.onboarding.onboarding
+            }
+          />
+        }
+      >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>
             {this.state.flowType === FlowType.newPin ? i18n.onboarding.confirmNewPin : i18n.onboarding.confirmPin}

@@ -16,14 +16,10 @@ interface Props extends NavigationInjectedProps<{ contact: Contact }> {
 }
 
 export class DeleteContactScreen extends React.PureComponent<Props> {
-  static navigationOptions = () => ({
-    header: <Header title={i18n.contactDelete.header} />,
-  });
-
   navigateBack = () => this.props.navigation.goBack();
 
   deleteContact = () => {
-    const contact = this.props.navigation.getParam('contact');
+    const { contact } = this.props.route.params;
     this.props.deleteContact(contact);
     CreateMessage({
       title: i18n.contactDelete.success,
@@ -37,7 +33,7 @@ export class DeleteContactScreen extends React.PureComponent<Props> {
   };
 
   render() {
-    const contact = this.props.navigation.getParam('contact');
+    const { contact } = this.props.route.params;
     return (
       <ScreenTemplate
         footer={
@@ -51,6 +47,7 @@ export class DeleteContactScreen extends React.PureComponent<Props> {
             <Button title={i18n.contactDelete.yes} onPress={this.deleteContact} containerStyle={styles.yesButton} />
           </View>
         }
+        header={<Header navigation={this.props.navigation} title={i18n.contactDelete.header} />}
       >
         <Text style={styles.title}>{i18n.contactDelete.title}</Text>
         <Text style={styles.description}>

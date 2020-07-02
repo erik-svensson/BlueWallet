@@ -45,7 +45,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   };
 
   static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={i18n.wallets.add.title} />,
+    headerShown: false,
+
+    // header: <Header navigation={props.navigation} isBackArrow title={i18n.wallets.add.title} />,
   });
 
   async componentDidMount() {
@@ -168,6 +170,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
             />
           </>
         }
+        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.wallets.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.wallets.add.subtitle}</Text>
         <Text style={styles.description}>{i18n.wallets.add.description}</Text>

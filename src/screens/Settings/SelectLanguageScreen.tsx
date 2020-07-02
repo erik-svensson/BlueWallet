@@ -6,6 +6,7 @@ import { NavigationScreenProps } from 'react-navigation';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Header, Image } from 'app/components';
+import { NavigationService } from 'app/services';
 import { typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -85,7 +86,9 @@ export const SelectLanguageScreen = () => {
   }
 
   return (
-    <ScreenTemplate>
+    <ScreenTemplate
+      header={<Header isBackArrow={true} navigation={NavigationService} title={i18n.selectLanguage.header} />}
+    >
       {availableLanguages.map(language => (
         <LanguageItem
           language={language}
@@ -97,10 +100,6 @@ export const SelectLanguageScreen = () => {
     </ScreenTemplate>
   );
 };
-
-SelectLanguageScreen.navigationOptions = (props: NavigationScreenProps) => ({
-  header: <Header isBackArrow={true} navigation={props.navigation} title={i18n.selectLanguage.header} />,
-});
 
 const styles = StyleSheet.create({
   languageItem: {

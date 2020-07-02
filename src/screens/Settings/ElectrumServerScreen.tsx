@@ -5,6 +5,7 @@ import { NavigationScreenProps } from 'react-navigation';
 
 import { ScreenTemplate, Button, FlatButton, InputItem, Header } from 'app/components';
 import { AppStorage, defaultPeer } from 'app/legacy';
+import { NavigationService } from 'app/services';
 import { typography, palette } from 'app/styles';
 
 const BlueElectrum = require('../../../BlueElectrum');
@@ -59,6 +60,7 @@ export const ElectrumServerScreen = () => {
           <FlatButton title={i18n.electrumServer.useDefault} onPress={onUseDefaultPress} />
         </>
       }
+      header={<Header isBackArrow={true} navigation={NavigationService} title={i18n.electrumServer.header} />}
     >
       <Text style={styles.title}>{i18n.electrumServer.title}</Text>
       <Text style={styles.description}>{i18n.electrumServer.description}</Text>
@@ -79,10 +81,6 @@ export const ElectrumServerScreen = () => {
     </ScreenTemplate>
   );
 };
-
-ElectrumServerScreen.navigationOptions = (props: NavigationScreenProps) => ({
-  header: <Header isBackArrow={true} navigation={props.navigation} title={i18n.electrumServer.header} />,
-});
 
 const styles = StyleSheet.create({
   saveButton: { paddingBottom: 10 },

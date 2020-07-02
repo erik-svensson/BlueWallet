@@ -1,8 +1,17 @@
-// import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
 
-// import { EditTextScreen } from 'app/screens/EditTextScreen';
+import { Route } from 'app/consts';
+import { EditTextScreen } from 'app/screens/EditTextScreen';
 
-// export const EditTextNavigator = createStackNavigator(
+const Stack = createStackNavigator();
+
+export const EditTextNavigator = () => (
+  <Stack.Navigator headerMode="none">
+    <Stack.Screen name={Route.EditText} component={EditTextScreen} />
+  </Stack.Navigator>
+);
+
 //   {
 //     EditText: EditTextScreen,
 //   },

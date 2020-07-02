@@ -70,7 +70,7 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       type: MessageType.error,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => NavigationService.navigateWithReset(Route.MainCardStackNavigator),
+        onPress: () => NavigationService.navigate(Route.Dashboard),
       },
     });
   };
@@ -82,7 +82,7 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => NavigationService.navigateWithReset(Route.MainCardStackNavigator),
+        onPress: () => NavigationService.navigate(Route.Dashboard),
       },
     });
 
@@ -97,13 +97,19 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
 
   saveWallet = async (w: any) => {
     if (BlueApp.getWallets().some((wallet: Wallet) => wallet.getSecret() === w.secret)) {
-      Alert.alert(i18n.wallets.importWallet.walletInUseValidationError);
+      // Alert.alert(i18n.wallets.importWallet.walletInUseValidationError)
+      Alert.alert(
+        'Error',
+        i18n.wallets.importWallet.walletInUseValidationError,
+        [{ text: 'OK', onPress: () => NavigationService.navigate(Route.Dashboard) }],
+        { cancelable: false },
+      );
     } else {
       w.setLabel(i18n.wallets.import.imported + ' ' + w.typeReadable);
       BlueApp.wallets.push(w);
       await BlueApp.saveToDisk();
       this.props.loadWallets();
-      this.props.navigation.popToTop();
+      this.props.navigation.goBack();
 
       this.showSuccessImportMessageScreen();
       // this.props.navigation.dismiss();

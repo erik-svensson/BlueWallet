@@ -52,16 +52,12 @@ interface State {
 }
 
 class TransactionDetailsScreen extends Component<Props, State> {
-  static navigationOptions = (props: NavigationScreenProps<{ transaction: Transaction }>) => {
-    const transaction = props.navigation.getParam('transaction');
-    return {
-      header: <Header navigation={props.navigation} isBackArrow title={moment.unix(transaction.time).format('lll')} />,
-    };
-  };
-
   constructor(props: Props) {
     super(props);
-    const { txid, hash } = props.navigation.getParam('transaction');
+    const {
+      transaction: { txid, hash },
+    } = props.route.params;
+
     const note = props.transactionNotes[txid] || '';
 
     let foundTx = {};
@@ -117,7 +113,9 @@ class TransactionDetailsScreen extends Component<Props, State> {
   };
 
   updateNote = (note: string) => {
-    const { txid } = this.props.navigation.getParam('transaction');
+    const {
+      transaction: { txid },
+    } = this.props.route.params;
     if (!this.state.note) {
       this.props.createTransactionNote(txid, note);
     } else {
@@ -130,7 +128,7 @@ class TransactionDetailsScreen extends Component<Props, State> {
   };
 
   renderHeader = () => {
-    const transaction: Transaction = this.props.navigation.getParam('transaction');
+    const { transaction } = this.props.route.params;
     const valuePreffix = transaction.value < 0 ? '' : '+';
     return (
       <View style={styles.headerContainer}>
@@ -153,22 +151,29 @@ class TransactionDetailsScreen extends Component<Props, State> {
   };
 
   editNote = () => {
-    const transaction: Transaction = this.props.navigation.getParam('transaction');
-    this.props.navigation.navigate(Route.EditText, {
-      title: moment.unix(transaction.time).format('lll'),
-      label: i18n.transactions.details.note,
-      onSave: this.updateNote,
-      value: this.state.note,
-      header: this.renderHeader(),
+    const { transaction } = this.props.route.params;
+    this.props.navigation.navigate('EditTextNavigator', {
+      screen: Route.EditText,
+      params: {
+        title: moment.unix(transaction.time).format('lll'),
+        label: i18n.transactions.details.note,
+        onSave: this.updateNote,
+        value: this.state.note,
+        header: this.renderHeader(),
+      },
     });
   };
 
   render() {
-    const transaction: Transaction = this.props.navigation.getParam('transaction');
+    const { transaction } = this.props.route.params;
     const fromValue = this.state.from.filter(onlyUnique).join(', ');
     const toValue = arrDiff(this.state.from, this.state.to.filter(onlyUnique)).join(', ');
     return (
-      <ScreenTemplate>
+      <ScreenTemplate
+        header={
+          <Header navigation={this.props.navigation} isBackArrow title={moment.unix(transaction.time).format('lll')} />
+        }
+      >
         {this.renderHeader()}
 
         {this.state.note ? (

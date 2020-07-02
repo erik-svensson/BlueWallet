@@ -15,12 +15,8 @@ type Props = NavigationInjectedProps<{ contact: Contact }>;
 export class ContactQRCodeScreen extends React.PureComponent<Props> {
   qrCodeSVG: any;
 
-  static navigationOptions = (props: NavigationScreenProps<{ contact: Contact }>) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={props.navigation.getParam('contact').name} />,
-  });
-
   openShareDialog = () => {
-    const contact = this.props.navigation.getParam('contact');
+    const { contact } = this.props.route.params;
     this.qrCodeSVG.toDataURL((data: string) => {
       const shareImageBase64 = {
         message: contact.address,
@@ -31,9 +27,12 @@ export class ContactQRCodeScreen extends React.PureComponent<Props> {
   };
 
   render() {
-    const contact = this.props.navigation.getParam('contact');
+    const { contact } = this.props.route.params;
     return (
-      <ScreenTemplate footer={<Button onPress={this.openShareDialog} title={i18n.contactDetails.share} />}>
+      <ScreenTemplate
+        footer={<Button onPress={this.openShareDialog} title={i18n.contactDetails.share} />}
+        header={<Header navigation={this.props.navigation} isBackArrow title={contact.name} />}
+      >
         <ContactAvatar name={contact.name} />
         <View style={styles.qrCodeContainer}>
           <QRCode quietZone={10} value={contact.address} size={140} ecl={'H'} getRef={ref => (this.qrCodeSVG = ref)} />

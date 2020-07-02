@@ -40,7 +40,7 @@ export const ImportWalletScreen: React.FunctionComponent<Props> = (props: Props)
       type: MessageType.error,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => NavigationService.navigateWithReset(Route.MainCardStackNavigator),
+        onPress: () => props.navigation.navigate(Route.Dashboard),
       },
     });
 
@@ -51,7 +51,7 @@ export const ImportWalletScreen: React.FunctionComponent<Props> = (props: Props)
       type: MessageType.success,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => NavigationService.navigateWithReset(Route.MainCardStackNavigator),
+        onPress: () => props.navigation.navigate(Route.Dashboard),
       },
     });
 
@@ -224,6 +224,7 @@ export const ImportWalletScreen: React.FunctionComponent<Props> = (props: Props)
           />
         </>
       }
+      header={<Header navigation={NavigationService} isBackArrow={true} title={i18n.wallets.importWallet.header} />}
     >
       <View style={styles.inputItemContainer}>
         <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>
@@ -238,11 +239,6 @@ export const ImportWalletScreen: React.FunctionComponent<Props> = (props: Props)
     </ScreenTemplate>
   );
 };
-
-// @ts-ignore
-ImportWalletScreen.navigationOptions = (props: Props) => ({
-  header: <Header navigation={props.navigation} isBackArrow={true} title={i18n.wallets.importWallet.header} />,
-});
 
 const mapDispatchToProps = {
   loadWallets,

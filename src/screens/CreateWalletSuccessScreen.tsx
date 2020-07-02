@@ -12,20 +12,15 @@ interface Props extends NavigationInjectedProps {
 }
 
 export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
-  static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} title={i18n.wallets.add.title} />,
-  });
-
-  navigateBack = () => this.props.navigation.goBack();
+  navigateBack = () => {
+    this.props.navigation.popToTop();
+  };
 
   render() {
     return (
       <ScreenTemplate
-        footer={
-          <>
-            <Button onPress={this.navigateBack} title={i18n.wallets.addSuccess.okButton} />
-          </>
-        }
+        footer={<Button onPress={this.navigateBack} title={i18n.wallets.addSuccess.okButton} />}
+        header={<Header isBackArrow navigation={this.props.navigation} title={i18n.wallets.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.wallets.addSuccess.subtitle}</Text>
         <Text style={styles.description}>{i18n.wallets.addSuccess.description}</Text>

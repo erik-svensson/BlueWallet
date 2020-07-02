@@ -1,11 +1,19 @@
-// import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
 
-// import { Route } from 'app/consts';
-// import { MessageScreen } from 'app/screens';
+import { Route } from 'app/consts';
+import { MessageScreen } from 'app/screens';
 
-// export const MessageNavigator = createStackNavigator(
+const Stack = createStackNavigator();
+
+export const MessageNavigator = () => (
+  <Stack.Navigator headerMode="none">
+    <Stack.Screen name={Route.Message} component={MessageScreen} />
+  </Stack.Navigator>
+);
+
 //   {
-//     [Route.Message]: MessageScreen,
+//     []: ,
 //   },
 //   {
 //     headerMode: 'none',
