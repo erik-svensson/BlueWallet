@@ -11,12 +11,3 @@ export const EditTextNavigator = () => (
     <Stack.Screen name={Route.EditText} component={EditTextScreen} />
   </Stack.Navigator>
 );
-
-//   {
-//     EditText: EditTextScreen,
-//   },
-//   {
-//     headerMode: 'screen',
-//     mode: 'modal',
-//   },
-// );

@@ -152,7 +152,7 @@ class TransactionDetailsScreen extends Component<Props, State> {
 
   editNote = () => {
     const { transaction } = this.props.route.params;
-    this.props.navigation.navigate('EditTextNavigator', {
+    this.props.navigation.navigate(Route.EditTextNavigator, {
       screen: Route.EditText,
       params: {
         title: moment.unix(transaction.time).format('lll'),

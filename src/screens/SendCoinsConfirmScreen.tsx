@@ -89,7 +89,7 @@ export class SendCoinsConfirmScreen extends Component<Props> {
             type: MessageType.success,
             buttonProps: {
               title: i18n.message.returnToDashboard,
-              onPress: this.props.navigation.popToTop,
+              onPress: this.props.navigation.navigate(Route.MainCardStackNavigator),
             },
           });
           this.setState({ isLoading: false });
@@ -121,7 +121,7 @@ export class SendCoinsConfirmScreen extends Component<Props> {
   };
 
   goToUnlockScreen = () => {
-    this.props.navigation.navigate('UnlockTransactionNavaigator', {
+    this.props.navigation.navigate(Route.UnlockTransactionNavaigator, {
       screen: Route.UnlockTransaction,
       params: {
         onSuccess: this.broadcast,

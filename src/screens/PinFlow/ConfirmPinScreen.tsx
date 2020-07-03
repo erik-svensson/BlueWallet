@@ -43,14 +43,12 @@ export class ConfirmPinScreen extends PureComponent<State> {
               buttonProps: {
                 title: i18n.onboarding.successButtonChangedPin,
                 onPress: () => {
-                  this.props.navigation.popToTop();
-                  this.props.navigation.popToTop();
-                  // this.props.navigation.navigate(Route.Settings);
+                  this.props.navigation.navigate(Route.MainCardStackNavigator);
                 },
               },
             });
           } else {
-            this.props.navigation.navigate('PasswordNavigator');
+            this.props.navigation.navigate(Route.PasswordNavigator);
           }
         } else {
           this.setState({
@@ -64,7 +62,6 @@ export class ConfirmPinScreen extends PureComponent<State> {
 
   render() {
     const { error } = this.state;
-    // console.log('flowTYpe', this.state.flowType);
     return (
       <ScreenTemplate
         noScroll

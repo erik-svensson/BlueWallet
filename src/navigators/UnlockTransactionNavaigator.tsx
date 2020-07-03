@@ -11,13 +11,3 @@ export const UnlockTransactionNavaigator = () => (
     <Stack.Screen name={Route.UnlockTransaction} component={UnlockTransaction} />
   </Stack.Navigator>
 );
-
-// export const PasswordNavigator = () => (
-//   {
-//     [Route.CreateTransactionPassword]: CreateTransactionPassword,
-//     [Route.ConfirmTransactionPassword]: ConfirmTransactionPassword,
-//   },
-//   {
-//     headerMode: 'screen',
-//   },
-// );

@@ -109,7 +109,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     !Number(value.replace(',', '.')) && i18n.send.details.amount_field_is_not_valid;
 
   editAmount = () => {
-    this.props.navigation.navigate('EditTextNavigator', {
+    this.props.navigation.navigate(Route.EditTextNavigator, {
       screen: Route.EditText,
       params: {
         title: i18n.receive.header,

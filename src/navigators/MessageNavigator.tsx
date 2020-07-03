@@ -11,12 +11,3 @@ export const MessageNavigator = () => (
     <Stack.Screen name={Route.Message} component={MessageScreen} />
   </Stack.Navigator>
 );
-
-//   {
-//     []: ,
-//   },
-//   {
-//     headerMode: 'none',
-//     mode: 'modal',
-//   },
-// );

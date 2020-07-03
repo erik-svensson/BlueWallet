@@ -12,13 +12,3 @@ export const PasswordNavigator = () => (
     <Stack.Screen name={Route.ConfirmTransactionPassword} component={ConfirmTransactionPassword} />
   </Stack.Navigator>
 );
-
-// export const PasswordNavigator = () => (
-//   {
-//     []: ,
-//     [Route.]: ,
-//   },
-//   {
-//     headerMode: 'screen',
-//   },
-// );

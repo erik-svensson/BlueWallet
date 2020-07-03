@@ -12,6 +12,9 @@ export enum FlowType {
 }
 
 export enum Route {
+  EditTextNavigator = 'EditTextNavigator',
+  UnlockTransactionNavaigator = 'UnlockTransactionNavaigator',
+  PasswordNavigator = 'PasswordNavigator',
   Dashboard = 'Dashboard',
   WalletDetails = 'WalletDetails',
   ContactList = 'ContactList',

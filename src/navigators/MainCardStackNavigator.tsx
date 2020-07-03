@@ -1,25 +1,19 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
-import { Header } from 'app/components';
 import { Route } from 'app/consts';
 import { MainTabNavigator } from 'app/navigators/MainTabNavigator';
 import {
   CreateWalletScreen,
   WalletDetailsScreen,
   ImportWalletScreen,
-  ExportWalletScreen,
-  DeleteWalletScreen,
-  ExportWalletXpubScreen,
   CreateContactScreen,
   ContactDetailsScreen,
   TransactionDetailsScreen,
   ContactQRCodeScreen,
-  DeleteContactScreen,
   ReceiveCoinsScreen,
   SendCoinsScreen,
   SendCoinsConfirmScreen,
-  SendTransactionDetailsScreen,
   ScanQrCodeScreen,
   ContactListScreen,
   SettingsScreen,
@@ -39,23 +33,18 @@ export const MainCardStackNavigator = () => {
   return (
     <>
       <Stack.Navigator headerMode="none">
-        <Stack.Screen name="MainCardStackNavigator" component={MainTabNavigator} />
+        <Stack.Screen name={Route.MainCardStackNavigator} component={MainTabNavigator} />
         <Stack.Screen name={Route.CreateWallet} component={CreateWalletScreen} />
         <Stack.Screen name={Route.ImportWallet} component={ImportWalletScreen} />
-        {/* <Stack.Screen name={Route.DeleteWallet} component={DeleteWalletScreen} /> */}
         <Stack.Screen name={Route.WalletDetails} component={WalletDetailsScreen} />
-        {/* <Stack.Screen name={Route.ExportWallet} component={ExportWalletScreen} />
-        <Stack.Screen name={Route.ExportWalletXpub} component={ExportWalletXpubScreen} /> */}
         <Stack.Screen name={Route.CreateContact} component={CreateContactScreen} />
         <Stack.Screen name={Route.ContactDetails} component={ContactDetailsScreen} />
         <Stack.Screen name={Route.ContactQRCode} component={ContactQRCodeScreen} />
-        {/* <Stack.Screen name={Route.DeleteContact} component={DeleteContactScreen} /> */}
         <Stack.Screen name={Route.TransactionDetails} component={TransactionDetailsScreen} />
         <Stack.Screen name={Route.ReceiveCoins} component={ReceiveCoinsScreen} />
         <Stack.Screen name={Route.SendCoins} component={SendCoinsScreen} />
         <Stack.Screen name={Route.SendCoinsConfirm} component={SendCoinsConfirmScreen} />
-        {/* <Stack.Screen name={Route.SendTransactionDetails} component={SendTransactionDetailsScreen} /> */}
-        {/* <Stack.Screen name={Route.ScanQrCode} component={ScanQrCodeScreen} /> */}
+        <Stack.Screen name={Route.ScanQrCode} component={ScanQrCodeScreen} />
         <Stack.Screen name={Route.ChooseContactList} component={ContactListScreen} />
         <Stack.Screen name={Route.Settings} component={SettingsScreen} />
         <Stack.Screen name={Route.SelectLanguage} component={SelectLanguageScreen} />
@@ -70,43 +59,3 @@ export const MainCardStackNavigator = () => {
     </>
   );
 };
-
-// export const MainCardStackNavigator = createStackNavigator(
-//   {
-//     MainTabNavigator: {
-//       screen: MainTabNavigator,
-//       navigationOptions: {
-//         header: null,
-//       },
-//     },
-
-//     [Route.ImportWallet]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//     [Route.]: ,
-//   },
-//   {
-//     mode: 'card',
-//   },
-// );

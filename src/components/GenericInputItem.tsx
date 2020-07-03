@@ -22,7 +22,7 @@ export const GenericInputItem = (props: Props) => {
     value && props.onSave && props.onSave(newValue);
   };
   const onFocus = () => {
-    NavigationService.navigate('EditTextNavigator', {
+    NavigationService.navigate(Route.EditTextNavigator, {
       screen: Route.EditText,
       params: {
         title,

@@ -204,7 +204,7 @@ export class SendCoinsScreen extends Component<Props, State> {
   );
 
   setTransactionFee = () => {
-    this.props.navigation.navigate('EditTextNavigator', {
+    this.props.navigation.navigate(Route.EditTextNavigator, {
       screen: Route.EditText,
       params: {
         title: i18n.send.create.fee,

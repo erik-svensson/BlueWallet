@@ -57,7 +57,7 @@ class DashboardScreen extends Component<Props, State> {
     SecureStorageService.getSecuredValue('pin')
       .then(() => {
         SecureStorageService.getSecuredValue('transactionPassword').catch(() => {
-          this.props.navigation.navigate('PasswordNavigator');
+          this.props.navigation.navigate(Route.PasswordNavigator);
         });
       })
       .catch(() => {

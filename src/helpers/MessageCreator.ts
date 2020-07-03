@@ -30,15 +30,12 @@ export const CreateMessage = (message: Message) => {
     width: 161,
     marginVertical: 36,
   };
-  return NavigationService.navigate('MessageNavigator', {
-    screen: Route.Message,
-    params: {
-      title: message.title,
-      description: message.description,
-      source: images[message.type],
-      imageStyle: message.type === MessageType.processingState ? processingImageStyle : null,
-      buttonProps: message.buttonProps,
-      asyncTask: message.asyncTask,
-    },
+  return NavigationService.navigate(Route.Message, {
+    title: message.title,
+    description: message.description,
+    source: images[message.type],
+    imageStyle: message.type === MessageType.processingState ? processingImageStyle : null,
+    buttonProps: message.buttonProps,
+    asyncTask: message.asyncTask,
   });
 };
