@@ -1,11 +1,12 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioGroup, RadioButton } from 'app/components';
-import { Route, Wallet } from 'app/consts';
+import { Route, Wallet, MainCardStackNavigatorParamList } from 'app/consts';
 import { AppStorage, HDSegwitBech32Wallet, HDSegwitP2SHWallet, SegwitP2SHWallet, BlueApp } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
@@ -16,7 +17,9 @@ import CreateWalletSuccessScreen from './CreateWalletSuccessScreen';
 
 const i18n = require('../../loc');
 
-interface Props extends NavigationInjectedProps {
+interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.CreateWallet>;
+  route: RouteProp<MainCardStackNavigatorParamList, Route.CreateWallet>;
   appSettings: AppSettingsState;
   loadWallets: () => Promise<WalletsActionType>;
 }
@@ -43,12 +46,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     selectedIndex: 1,
     secret: [],
   };
-
-  static navigationOptions = (props: NavigationScreenProps) => ({
-    headerShown: false,
-
-    // header: <Header navigation={props.navigation} isBackArrow title={i18n.wallets.add.title} />,
-  });
 
   async componentDidMount() {
     let walletBaseURI = await AsyncStorage.getItem(AppStorage.LNDHUB);

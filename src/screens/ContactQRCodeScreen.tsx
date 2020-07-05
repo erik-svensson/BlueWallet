@@ -1,16 +1,20 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import Share from 'react-native-share';
-import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 
 import { Button, ContactAvatar, Header, ScreenTemplate } from 'app/components';
-import { Contact } from 'app/consts';
+import { Route, MainCardStackNavigatorParamList } from 'app/consts';
 import { typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
-type Props = NavigationInjectedProps<{ contact: Contact }>;
+type Props = {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ContactQRCode>;
+  route: RouteProp<MainCardStackNavigatorParamList, Route.ContactQRCode>;
+};
 
 export class ContactQRCodeScreen extends React.PureComponent<Props> {
   qrCodeSVG: any;

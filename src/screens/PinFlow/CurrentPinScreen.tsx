@@ -1,15 +1,16 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-// import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
-import { Route, CONST, FlowType } from 'app/consts';
+import { Route, CONST, FlowType, MainCardStackNavigatorParamList } from 'app/consts';
 import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.CurrentPin>;
   appSettings: {
     isPinSet: boolean;
   };

@@ -78,7 +78,7 @@
     "@react-native-firebase/app": "^7.1.0",
     "@react-native-firebase/crashlytics": "^7.1.0",
     "@react-navigation/bottom-tabs": "^5.6.0",
-    "@react-navigation/native": "^5.6.0",
+    "@react-navigation/native": "^5.6.1",
     "@react-navigation/stack": "^5.6.1",
     "@remobile/react-native-qrcode-local-image": "git+https://github.com/BlueWallet/react-native-qrcode-local-image.git",
     "@sentry/react-native": "1.0.9",

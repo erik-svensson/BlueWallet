@@ -1,6 +1,6 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, StyleSheet, RefreshControl, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
@@ -18,7 +18,8 @@ import { WalletsCarousel } from './WalletsCarousel';
 
 const i18n = require('../../../loc');
 
-interface Props extends NavigationInjectedProps {
+interface Props {
+  navigation: StackNavigationProp<any, Route.Dashboard>;
   wallets: Wallet[];
   transactions: Record<string, Transaction[]>;
   allTransactions: Transaction[];

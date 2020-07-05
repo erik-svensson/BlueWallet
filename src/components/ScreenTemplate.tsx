@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { getStatusBarHeight, palette } from 'app/styles';
+import { palette } from 'app/styles';
 import { ifIphoneX } from 'app/styles/helpers';
 
 enum StatusBarColor {
@@ -65,11 +65,7 @@ export class ScreenTemplate extends React.PureComponent<Props> {
           {children}
         </Container>
         {!!footer && (
-          <KeyboardAvoidingView
-            // keyboardVerticalOffset={getStatusBarHeight() + 52}
-            behavior={Platform.OS == 'ios' ? 'padding' : undefined}
-            style={styles.footer}
-          >
+          <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : undefined} style={styles.footer}>
             {footer}
           </KeyboardAvoidingView>
         )}

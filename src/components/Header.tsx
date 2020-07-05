@@ -1,6 +1,6 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { NavigationScreenProps } from 'react-navigation';
 
 import { images, icons } from 'app/assets';
 import { getStatusBarHeight, palette, typography } from 'app/styles';
@@ -16,7 +16,8 @@ export const HEADER_HEIGHT = Platform.select({
   android: 38,
 }) as number;
 
-interface Props extends Partial<NavigationScreenProps> {
+interface Props {
+  navigation?: StackNavigationProp<any, any> | any;
   title: string;
   isBackArrow?: boolean;
   onBackArrow?: () => void;

@@ -1,13 +1,15 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 
 import { Button, Header, ScreenTemplate, Text, Chip } from 'app/components';
+import { MainCardStackNavigatorParamList, Route } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
-interface Props extends NavigationInjectedProps {
+interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.CreateWallet>;
   secret: string[];
 }
 

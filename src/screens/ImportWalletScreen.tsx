@@ -1,14 +1,14 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { Header, TextAreaItem, FlatButton, ScreenTemplate } from 'app/components';
 import { Button } from 'app/components/Button';
-import { Route, Wallet } from 'app/consts';
+import { Route, Wallet, MainCardStackNavigatorParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { NavigationService } from 'app/services';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
 
@@ -24,11 +24,12 @@ import {
 
 const i18n = require('../../loc');
 
-interface Props extends NavigationInjectedProps {
+interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ImportWallet>;
   loadWallets: () => Promise<WalletsActionType>;
 }
 
-export const ImportWalletScreen: React.FunctionComponent<Props> = (props: Props) => {
+export const ImportWalletScreen = (props: Props) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [text, setText] = useState('');
   const [validationError, setValidationError] = useState('');
@@ -73,12 +74,12 @@ export const ImportWalletScreen: React.FunctionComponent<Props> = (props: Props)
   };
 
   const onScanQrCodeButtonPress = () => {
-    NavigationService.navigate(Route.ImportWalletQRCode);
+    props.navigation.navigate(Route.ImportWalletQRCode);
   };
 
   const saveWallet = async (newWallet: any) => {
     if (BlueApp.getWallets().some((wallet: Wallet) => wallet.getSecret() === newWallet.secret)) {
-      NavigationService.navigate(Route.ImportWallet);
+      props.navigation.navigate(Route.ImportWallet);
       setValidationError(i18n.wallets.importWallet.walletInUseValidationError);
     } else {
       ReactNativeHapticFeedback.trigger('notificationSuccess', {
@@ -89,7 +90,6 @@ export const ImportWalletScreen: React.FunctionComponent<Props> = (props: Props)
       await BlueApp.saveToDisk();
       props.loadWallets();
       showSuccessImportMessageScreen();
-      // this.props.navigation.dismiss();
     }
   };
 
@@ -224,7 +224,7 @@ export const ImportWalletScreen: React.FunctionComponent<Props> = (props: Props)
           />
         </>
       }
-      header={<Header navigation={NavigationService} isBackArrow={true} title={i18n.wallets.importWallet.header} />}
+      header={<Header navigation={props.navigation} isBackArrow={true} title={i18n.wallets.importWallet.header} />}
     >
       <View style={styles.inputItemContainer}>
         <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>

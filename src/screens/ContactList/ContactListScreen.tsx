@@ -1,10 +1,11 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { StatusBar } from 'react-native';
-import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { ListEmptyState, SearchBar } from 'app/components';
-import { Route, Contact } from 'app/consts';
+import { Route, Contact, MainCardStackNavigatorParamList } from 'app/consts';
 import { ApplicationState } from 'app/state';
 
 import { ContactList } from './ContactList';
@@ -12,7 +13,9 @@ import { ContactListHeader } from './ContactListHeader';
 
 const i18n = require('../../../loc');
 
-interface Props extends NavigationInjectedProps {
+interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ChooseContactList>;
+  route: RouteProp<MainCardStackNavigatorParamList, Route.ChooseContactList>;
   contacts: Contact[];
 }
 
@@ -36,8 +39,8 @@ export class ContactListScreen extends PureComponent<Props, State> {
 
   navigateToContactDetails = (contact: Contact) => {
     const { navigation, route } = this.props;
-    if (route?.onContactPress) {
-      route.onContactPress(contact.address);
+    if (route.params?.onContactPress) {
+      route.params?.onContactPress(contact.address);
       return navigation.goBack();
     }
     navigation.navigate(Route.ContactDetails, { contact });
@@ -54,14 +57,17 @@ export class ContactListScreen extends PureComponent<Props, State> {
   };
 
   render() {
-    const { navigation, contacts, route } = this.props;
+    const {
+      contacts,
+      route: { params },
+    } = this.props;
     return (
       <>
         <StatusBar barStyle="light-content" />
         <ContactListHeader
-          onAddButtonPress={!route?.onContactPress ? this.navigateToAddContact : undefined}
-          onBackArrowPress={route?.onContactPress && this.goBack}
-          title={route?.title}
+          onAddButtonPress={!params?.onContactPress ? this.navigateToAddContact : undefined}
+          onBackArrowPress={params?.onContactPress && this.goBack}
+          title={params?.title}
         >
           <SearchBar query={this.state.query} setQuery={this.setQuery} />
         </ContactListHeader>

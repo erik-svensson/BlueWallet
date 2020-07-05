@@ -1,17 +1,20 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
-import { Contact, Route } from 'app/consts';
+import { Contact, Route, RootStackParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { deleteContact, DeleteContactAction } from 'app/state/contacts/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../loc');
 
-interface Props extends NavigationInjectedProps<{ contact: Contact }> {
+interface Props {
+  navigation: StackNavigationProp<RootStackParamList, Route.DeleteContact>;
+  route: RouteProp<RootStackParamList, Route.DeleteContact>;
   deleteContact: (contact: Contact) => DeleteContactAction;
 }
 

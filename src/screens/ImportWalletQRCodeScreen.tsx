@@ -1,3 +1,4 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -10,14 +11,12 @@ import {
   Alert,
 } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Wallet, Route } from 'app/consts';
+import { Wallet, Route, RootStackParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { sleep } from 'app/helpers/helpers';
-import { NavigationService } from 'app/services';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { getStatusBarHeight } from 'app/styles';
 
@@ -41,7 +40,8 @@ interface BarCodeScanEvent {
   type: string;
 }
 
-interface Props extends NavigationInjectedProps {
+interface Props {
+  navigation: StackNavigationProp<RootStackParamList, Route.ImportWalletQRCode>;
   loadWallets: () => Promise<WalletsActionType>;
 }
 
@@ -70,7 +70,7 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       type: MessageType.error,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => NavigationService.navigate(Route.Dashboard),
+        onPress: () => this.props.navigation.popToTop(),
       },
     });
   };
@@ -82,7 +82,7 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => NavigationService.navigate(Route.Dashboard),
+        onPress: () => this.props.navigation.popToTop(),
       },
     });
 
@@ -97,13 +97,7 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
 
   saveWallet = async (w: any) => {
     if (BlueApp.getWallets().some((wallet: Wallet) => wallet.getSecret() === w.secret)) {
-      // Alert.alert(i18n.wallets.importWallet.walletInUseValidationError)
-      Alert.alert(
-        'Error',
-        i18n.wallets.importWallet.walletInUseValidationError,
-        [{ text: 'OK', onPress: () => NavigationService.navigate(Route.Dashboard) }],
-        { cancelable: false },
-      );
+      Alert.alert(i18n.wallets.importWallet.walletInUseValidationError);
     } else {
       w.setLabel(i18n.wallets.import.imported + ' ' + w.typeReadable);
       BlueApp.wallets.push(w);

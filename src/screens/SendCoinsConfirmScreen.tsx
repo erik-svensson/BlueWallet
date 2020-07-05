@@ -1,12 +1,12 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, StyledText, Image, Text } from 'app/components';
-import { Transaction, Route, FlowType } from 'app/consts';
+import { Route, MainCardStackNavigatorParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { NavigationService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
 import { HDSegwitBech32Wallet } from '../../class';
@@ -26,17 +26,10 @@ const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void) => (
   </View>
 );
 
-type Props = NavigationInjectedProps<{
-  isLoading: boolean;
-  fee: number;
-  feeSatoshi: number;
-  memo: string;
-  recipients: any;
-  size: number;
-  tx: any;
-  satoshiPerByte: any;
-  fromWallet: any;
-}>;
+interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.SendCoinsConfirm>;
+  route: RouteProp<MainCardStackNavigatorParamList, Route.SendCoinsConfirm>;
+}
 
 export class SendCoinsConfirmScreen extends Component<Props> {
   constructor(props: Props) {

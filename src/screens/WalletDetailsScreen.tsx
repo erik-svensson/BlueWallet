@@ -1,6 +1,7 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import {
@@ -13,7 +14,7 @@ import {
   ButtonType,
   Text,
 } from 'app/components';
-import { Wallet, Route } from 'app/consts';
+import { Wallet, Route, MainCardStackNavigatorParamList } from 'app/consts';
 import { BlueApp } from 'app/legacy';
 import { updateWallet, UpdateWalletAction } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
@@ -22,8 +23,10 @@ import { WatchOnlyWallet } from '../../class';
 
 const i18n = require('../../loc');
 
-interface Props extends NavigationInjectedProps<{ wallet: Wallet }> {
+interface Props {
   updateWallet: (wallet: Wallet) => UpdateWalletAction;
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.WalletDetails>;
+  route: RouteProp<MainCardStackNavigatorParamList, Route.WalletDetails>;
 }
 
 interface State {

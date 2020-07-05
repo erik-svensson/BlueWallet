@@ -1,11 +1,17 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardType } from 'react-native';
-// import { NavigationScreenProps } from 'react-navigation';
-// import { useNavigationParam } from 'react-navigation-hooks';
 
 import { Header, InputItem, Button, ScreenTemplate } from 'app/components';
+import { EditTextNavigatorParamList, Route } from 'app/consts';
 
 const i18n = require('../../loc');
+
+interface Props {
+  navigation: StackNavigationProp<EditTextNavigatorParamList, Route.EditText>;
+  route: RouteProp<EditTextNavigatorParamList, Route.EditText>;
+}
 
 export interface EditTextProps {
   title: string;
@@ -16,13 +22,13 @@ export interface EditTextProps {
   keyboardType?: KeyboardType;
 }
 
-export const EditTextScreen = props => {
+export const EditTextScreen = (props: Props) => {
   const { params } = props.route;
-  const label: string = params.label;
-  const keyboardType: string = params.keyboardType || 'default';
-  const header: React.ReactNode = params.header;
-  const onSave: (value: string) => void = params.onSave;
-  const validate: (value: string) => string | undefined = params.validate || null;
+  const label = params.label;
+  const keyboardType = params.keyboardType || 'default';
+  const header = params.header;
+  const onSave = params.onSave;
+  const validate = params.validate || null;
   const [value, setValue] = useState(params.value || '');
 
   const handlePressOnSaveButton = () => {

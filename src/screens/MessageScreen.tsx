@@ -1,21 +1,17 @@
+import { RouteProp } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, StyleProp, ViewStyle, BackHandler, StatusBar } from 'react-native';
-import { ButtonProps } from 'react-native-elements';
+import { Text, View, StyleSheet, BackHandler, StatusBar } from 'react-native';
 
-import { Button, Image, FastImageSource } from 'app/components';
+import { Button, Image } from 'app/components';
+import { Route, RootStackParamList } from 'app/consts';
 import { typography, palette, ifIphoneX } from 'app/styles';
 
-export interface MessageProps {
-  title: string;
-  source: FastImageSource;
-  description: string;
-  buttonProps?: ButtonProps;
-  imageStyle?: StyleProp<ViewStyle>;
-  asyncTask?: () => void;
+interface Props {
+  route: RouteProp<RootStackParamList, Route.Message>;
 }
 
-export const MessageScreen = ({ navigation, route }) => {
-  const { title, source, description, buttonProps, imageStyle, asyncTask } = route.params;
+export const MessageScreen = (props: Props) => {
+  const { title, source, description, buttonProps, imageStyle, asyncTask } = props.route.params;
 
   useEffect(() => {
     const onBackPress = () => true;

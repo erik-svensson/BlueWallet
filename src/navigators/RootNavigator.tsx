@@ -1,7 +1,7 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import React from 'react';
 
-import { Route } from 'app/consts';
+import { Route, RootStackParamList } from 'app/consts';
 import {
   ActionSheet,
   ImportWalletQRCodeScreen,
@@ -18,7 +18,7 @@ import { MainCardStackNavigator } from './MainCardStackNavigator';
 import { PasswordNavigator } from './PasswordNavigator';
 import { UnlockTransactionNavaigator } from './UnlockTransactionNavaigator';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export const RootNavigator = () => (
   <Stack.Navigator initialRouteName={Route.MainCardStackNavigator} headerMode="none" mode="modal">
@@ -50,4 +50,4 @@ const modalOptions = {
       }),
     },
   }),
-};
+} as StackNavigationOptions;

@@ -1,13 +1,14 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import moment from 'moment';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Linking, TouchableOpacity } from 'react-native';
-import { NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Image, Header, StyledText, Chip, ScreenTemplate } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Transaction, Route } from 'app/consts';
+import { Route, MainCardStackNavigatorParamList } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import {
   createTransactionNote,
@@ -21,11 +22,11 @@ import BlueApp from '../../BlueApp';
 
 const i18n = require('../../loc');
 
-function onlyUnique(value, index, self) {
+function onlyUnique(value: number, index: number, self: any[]) {
   return self.indexOf(value) === index;
 }
 
-function arrDiff(a1, a2) {
+function arrDiff(a1: any[], a2: any[]) {
   const ret = [];
   for (const v of a2) {
     if (a1.indexOf(v) === -1) {
@@ -35,10 +36,12 @@ function arrDiff(a1, a2) {
   return ret;
 }
 
-interface Props extends NavigationScreenProps<{ transaction: Transaction }> {
+interface Props {
   transactionNotes: Record<string, string>;
   createTransactionNote: (transactionID: string, note: string) => CreateTransactionNoteAction;
   updateTransactionNote: (transactionID: string, note: string) => UpdateTransactionNoteAction;
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.TransactionDetails>;
+  route: RouteProp<MainCardStackNavigatorParamList, Route.TransactionDetails>;
 }
 
 interface State {

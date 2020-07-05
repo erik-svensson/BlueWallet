@@ -1,17 +1,21 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, StyleSheet, View, Linking, Dimensions } from 'react-native';
 import { getApplicationName, getVersion, getBundleId, getBuildNumber } from 'react-native-device-info';
 import Rate, { AndroidMarket } from 'react-native-rate';
-import { NavigationScreenProps } from 'react-navigation';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
-import { Route } from 'app/consts';
+import { Route, MainCardStackNavigatorParamList } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
-export const AboutUsScreen = (props: NavigationScreenProps) => {
+interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.AboutUs>;
+}
+
+export const AboutUsScreen = (props: Props) => {
   const libraries = [
     'React Native',
     'React Native Elements',

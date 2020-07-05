@@ -1,18 +1,21 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, BackHandler, View, NativeEventSubscription } from 'react-native';
-// import { NavigationScreenProps, NavigationEvents, NavigationInjectedProps } from 'react-navigation';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
-import { Route, CONST, FlowType } from 'app/consts';
+import { Route, CONST, FlowType, MainCardStackNavigatorParamList } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
-// interface Props extends  {
-//   appSettings: {
-//     isPinSet: boolean
-//   };
-// }
+interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.CreatePin>;
+  route: RouteProp<MainCardStackNavigatorParamList, Route.CreatePin>;
+  appSettings: {
+    isPinSet: boolean;
+  };
+}
 
 interface State {
   pin: string;
@@ -20,11 +23,7 @@ interface State {
   flowType: string;
 }
 
-export class CreatePinScreen extends PureComponent<State> {
-  static navigationOptions = props => ({
-    gesturesEnabled: false,
-  });
-
+export class CreatePinScreen extends PureComponent<Props, State> {
   state = {
     pin: '',
     focused: false,
@@ -33,8 +32,12 @@ export class CreatePinScreen extends PureComponent<State> {
 
   pinInputRef = React.createRef<PinInput>();
   backHandler?: NativeEventSubscription;
+  focusListener: any;
 
   componentDidMount() {
+    this.props.navigation.setOptions({
+      gestureEnabled: false,
+    });
     this.setState({
       flowType: this.props.route.params?.flowType || '',
     });

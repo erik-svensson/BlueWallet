@@ -1,12 +1,12 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import RNRestart from 'react-native-restart';
-import { NavigationScreenProps } from 'react-navigation';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Header, Image } from 'app/components';
-import { NavigationService } from 'app/services';
+import { Route, MainCardStackNavigatorParamList } from 'app/consts';
 import { typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -20,6 +20,10 @@ interface LanguageItemProps {
   language: Language;
   selectedLanguageValue: string;
   onLanguageSelect: (value: string) => void;
+}
+
+interface SelectLanguageScreenProps {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.SelectLanguage>;
 }
 
 const LanguageItem = ({ language, selectedLanguageValue, onLanguageSelect }: LanguageItemProps) => {
@@ -36,7 +40,7 @@ const LanguageItem = ({ language, selectedLanguageValue, onLanguageSelect }: Lan
   );
 };
 
-export const SelectLanguageScreen = () => {
+export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedLanguageValue, setselectedLanguageValue] = useState('en');
   const availableLanguages: Language[] = [
@@ -87,7 +91,7 @@ export const SelectLanguageScreen = () => {
 
   return (
     <ScreenTemplate
-      header={<Header isBackArrow={true} navigation={NavigationService} title={i18n.selectLanguage.header} />}
+      header={<Header isBackArrow={true} navigation={props.navigation} title={i18n.selectLanguage.header} />}
     >
       {availableLanguages.map(language => (
         <LanguageItem

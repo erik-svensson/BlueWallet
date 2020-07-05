@@ -1,10 +1,10 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
-import { Route } from 'app/consts';
+import { Route, UnlockTransactionNavigatorParamList } from 'app/consts';
 import { UnlockTransaction } from 'app/screens';
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<UnlockTransactionNavigatorParamList>();
 
 export const UnlockTransactionNavaigator = () => (
   <Stack.Navigator headerMode="none">

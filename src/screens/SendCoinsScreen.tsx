@@ -1,10 +1,12 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
 import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, StyledText, Image } from 'app/components';
-import { Transaction, Route } from 'app/consts';
+import { MainCardStackNavigatorParamList, Route } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { typography, palette } from 'app/styles';
 
@@ -21,7 +23,10 @@ const bitcoin = require('bitcoinjs-lib');
 
 const i18n = require('../../loc');
 
-type Props = NavigationInjectedProps<{ fromSecret: string; fromAddress: string; fromWallet: any; toAddress?: string }>;
+interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.SendCoins>;
+  route: RouteProp<MainCardStackNavigatorParamList, Route.SendCoins>;
+}
 
 interface State {
   isLoading: boolean;
@@ -564,7 +569,7 @@ export class SendCoinsScreen extends Component<Props, State> {
                 })
               }
             >
-              <Image style={styles.icon} source={images.addressBook} />
+              <Image style={styles.icon} source={images.ContactList} />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.qrCodeIcon}

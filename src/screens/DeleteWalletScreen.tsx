@@ -1,24 +1,25 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-// import { NavigationInjectedProps } from 'react-navigation';
-// import { useNavigationParam } from 'react-navigation-hooks';
 import { connect } from 'react-redux';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
-import { Wallet, Route } from 'app/consts';
+import { Route, RootStackParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { BlueApp } from 'app/legacy';
-import { NavigationService } from 'app/services';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../loc');
 
-// interface Props extends NavigationInjectedProps {
-//   loadWallets: () => Promise<WalletsActionType>;
-// }
+interface Props {
+  navigation: StackNavigationProp<RootStackParamList, Route.DeleteWallet>;
+  route: RouteProp<RootStackParamList, Route.DeleteWallet>;
+  loadWallets: () => Promise<WalletsActionType>;
+}
 
-export const DeleteWalletScreen: React.FunctionComponent = props => {
+export const DeleteWalletScreen = (props: Props) => {
   const { wallet } = props.route.params;
 
   const onNoButtonPress = () => props.navigation.goBack();

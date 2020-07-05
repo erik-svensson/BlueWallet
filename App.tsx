@@ -1,10 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import * as Sentry from '@sentry/react-native';
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { View, YellowBox, StyleSheet } from 'react-native';
-// import { createAppContainer } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -12,7 +10,7 @@ import { BlueApp } from 'app/legacy';
 import { i18n } from 'app/locale';
 import { RootNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
-import { NavigationService, SecureStorageService, AppStateManager, navigationRef } from 'app/services';
+import { SecureStorageService, AppStateManager, navigationRef } from 'app/services';
 import { persistor, store } from 'app/state/store';
 
 YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside', `\`-[RCTRootView cancelTouches]\``]);
@@ -71,7 +69,7 @@ export default class App extends React.PureComponent<State> {
           <AppStateManager handleAppComesToForeground={this.handleAppComesToForeground} />
           <PersistGate loading={null} persistor={persistor}>
             <View style={styles.wrapper}>
-              <NavigationContainer ref={navigationRef}>
+              <NavigationContainer ref={navigationRef as any}>
                 <RootNavigator />
                 {this.showUnlockScreen && (
                   <UnlockScreen
@@ -80,7 +78,6 @@ export default class App extends React.PureComponent<State> {
                   />
                 )}
               </NavigationContainer>
-              {/* <AppContainer ref={NavigationService.setTopLevelNavigator} /> */}
             </View>
           </PersistGate>
         </Provider>

@@ -1,3 +1,4 @@
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 
@@ -8,7 +9,7 @@ import { ifIphoneX } from 'app/styles/helpers';
 import { BottomTabBarIcon } from './BottomTabBarIcon';
 import { GradientView } from './GradientView';
 
-export const BottomTabBarComponent = ({ state, descriptors, navigation }) => (
+export const BottomTabBarComponent = ({ state, descriptors, navigation }: BottomTabBarProps) => (
   <GradientView variant={GradientView.Variant.Primary}>
     <View style={styles.buttonsContainer}>
       {state.routes.map((route, index) => {

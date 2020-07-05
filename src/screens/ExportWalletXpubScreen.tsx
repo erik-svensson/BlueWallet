@@ -1,19 +1,24 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-// import { NavigationScreenProps } from 'react-navigation';
-// import { useNavigationParam } from 'react-navigation-hooks';
 
 import { Header, ScreenTemplate } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Wallet } from 'app/consts';
+import { RootStackParamList, Route } from 'app/consts';
 import { typography } from 'app/styles';
 
 import { WatchOnlyWallet } from '../../class';
 
 const i18n = require('../../loc');
 
-export const ExportWalletXpubScreen = ({ navigation, route }) => {
+interface Props {
+  navigation: StackNavigationProp<RootStackParamList, Route.ExportWalletXpub>;
+  route: RouteProp<RootStackParamList, Route.ExportWalletXpub>;
+}
+
+export const ExportWalletXpubScreen = ({ navigation, route }: Props) => {
   const { wallet } = route.params;
   const isWatchOnlyWallet = wallet.type === WatchOnlyWallet.type;
   const xpub = isWatchOnlyWallet ? wallet.secret : wallet.getXpub();

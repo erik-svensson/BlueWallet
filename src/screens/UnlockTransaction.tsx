@@ -1,16 +1,20 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
-// import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
 import { icons } from 'app/assets';
 import { Header, InputItem, ScreenTemplate, Button } from 'app/components';
-import { CONST } from 'app/consts';
+import { CONST, UnlockTransactionParamList, Route } from 'app/consts';
 import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
-// type Props = NavigationInjectedProps<{ onSuccess: () => void }>;
+type Props = {
+  navigation: StackNavigationProp<UnlockTransactionParamList, Route.UnlockTransaction>;
+  route: RouteProp<UnlockTransactionParamList, Route.UnlockTransaction>;
+};
 
 interface State {
   password: string;
@@ -18,9 +22,7 @@ interface State {
   isVisible: boolean;
 }
 
-export class UnlockTransaction extends PureComponent<State> {
-  static navigationOptions = props => ({});
-
+export class UnlockTransaction extends PureComponent<Props, State> {
   state = {
     password: '',
     error: '',

@@ -1,9 +1,10 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, View, StyleSheet, Linking, Clipboard } from 'react-native';
-import { NavigationInjectedProps } from 'react-navigation';
 
 import { Header, Chip, ScreenTemplate, Button } from 'app/components';
-import { Wallet } from 'app/consts';
+import { RootStackParamList, Route } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 import { BitcoinUnit } from '../../models/bitcoinUnits';
@@ -11,13 +12,10 @@ import { BitcoinUnit } from '../../models/bitcoinUnits';
 const currency = require('../../currency');
 const i18n = require('../../loc');
 
-type Props = NavigationInjectedProps<{
-  fee: number;
-  recipients: any;
-  tx: any;
-  satoshiPerByte: any;
-  wallet: Wallet;
-}>;
+interface Props {
+  navigation: StackNavigationProp<RootStackParamList, Route.SendTransactionDetails>;
+  route: RouteProp<RootStackParamList, Route.SendTransactionDetails>;
+}
 
 export class SendTransactionDetailsScreen extends PureComponent<Props> {
   render() {
@@ -35,9 +33,7 @@ export class SendTransactionDetailsScreen extends PureComponent<Props> {
 
     return (
       <ScreenTemplate
-        header={
-          <Header title={i18n.transactions.details.details} isCancelButton={true} navigation={this.props.navigation} />
-        }
+        header={<Header title={i18n.transactions.details.details} isCancelButton={true} navigation={navigation} />}
       >
         <View style={styles.upperContainer}>
           <Text style={styles.title}>{i18n.transactions.details.transactionHex}</Text>

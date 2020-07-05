@@ -1,15 +1,17 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, BackHandler, NativeEventSubscription } from 'react-native';
-// import { NavigationScreenProps, NavigationInjectedProps, NavigationEvents } from 'react-navigation';
 
 import { icons } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
-import { Route, CONST } from 'app/consts';
+import { Route, CONST, PasswordNavigatorParamList } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
+  navigation: StackNavigationProp<PasswordNavigatorParamList, Route.CreateTransactionPassword>;
+
   appSettings: {
     isPinSet: boolean;
   };
@@ -27,6 +29,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
   };
   backHandler?: NativeEventSubscription;
   inputRef = React.createRef<InputItem>();
+  focusListener: any;
 
   updatePassword = (password: string) => {
     this.setState({ password });

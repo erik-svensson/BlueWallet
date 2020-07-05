@@ -1,22 +1,20 @@
-import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-// import { NavigationScreenProps } from 'react-navigation';
-
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
 import { icons } from 'app/assets';
 import { Button, Header, InputItem, ScreenTemplate, Text, Image } from 'app/components';
-import { Contact, Route } from 'app/consts';
+import { Contact, Route, MainCardStackNavigatorParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { NavigationService, navigate } from 'app/services';
 import { createContact, CreateContactAction } from 'app/state/contacts/actions';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
-interface Props extends NavigationScreenProps {
+interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.CreateContact>;
   createContact: (contact: Contact) => CreateContactAction;
 }
 
@@ -57,7 +55,7 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   };
 
   onScanQrCodePress = () => {
-    navigate(Route.ScanQrCode, {
+    this.props.navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: this.onBarCodeScan,
     });
   };

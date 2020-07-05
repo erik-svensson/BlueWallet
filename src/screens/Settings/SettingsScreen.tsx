@@ -1,11 +1,11 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-// import { NavigationScreenProps } from 'react-navigation';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { images, icons } from 'app/assets';
 import { Image, ScreenTemplate, Header, ListItem } from 'app/components';
-import { Route } from 'app/consts';
+import { Route, MainCardStackNavigatorParamList } from 'app/consts';
 import { BiometricService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { updateBiometricSetting } from 'app/state/appSettings/actions';
@@ -14,7 +14,11 @@ import { LabeledSettingsRow } from './LabeledSettingsRow';
 
 const i18n = require('../../../loc');
 
-export const SettingsScreen = props => {
+interface Props {
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.Settings>;
+}
+
+export const SettingsScreen = (props: Props) => {
   const { navigation } = props;
   const { isBiometricsEnabled } = useSelector((state: ApplicationState) => ({
     isBiometricsEnabled: state.appSettings.isBiometricsEnabled,

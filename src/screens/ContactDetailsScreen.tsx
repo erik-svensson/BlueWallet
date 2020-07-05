@@ -1,6 +1,7 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import {
@@ -13,13 +14,15 @@ import {
   ContactAvatar,
 } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Contact, Route } from 'app/consts';
+import { Contact, Route, MainCardStackNavigatorParamList } from 'app/consts';
 import { UpdateContactAction, updateContact } from 'app/state/contacts/actions';
 
 const i18n = require('../../loc');
 
-interface Props extends NavigationScreenProps<{ contact: Contact }> {
+interface Props {
   updateContact: (contact: Contact) => UpdateContactAction;
+  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ContactDetails>;
+  route: RouteProp<MainCardStackNavigatorParamList, Route.ContactDetails>;
 }
 
 interface State {
