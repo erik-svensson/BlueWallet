@@ -85,7 +85,7 @@
     "bip21": "2.0.2",
     "bip32": "2.0.3",
     "bip39": "^3.0.2",
-    "bitcoinjs-lib": "git+https://github.com/bitcoinvault/bitcoinjs-lib.git",
+    "bitcoinjs-lib": "git+https://github.com/bitcoinvault/bitcoinjs-lib.git#feature/btcv-integration",
     "buffer": "5.2.1",
     "buffer-reverse": "1.0.1",
     "coinselect": "3.1.11",

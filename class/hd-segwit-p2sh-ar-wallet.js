@@ -1,7 +1,8 @@
 import { AbstractHDSegwitP2SHWallet } from './abstract-hd-segwit-p2sh-wallet';
 
-const { payments, ECPair } = require('bitcoinjs-lib');
+const { payments, ECPair, alt_networks } = require('bitcoinjs-lib');
 
+const network = alt_networks.bitcoinvault;
 export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
   static type = 'HDsegwitP2SHar';
   static typeReadable = 'AR';
@@ -12,19 +13,17 @@ export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
   }
 
   nodeToAddress(hdNode) {
-    // Uncomment and remove below method when bitcoinjs-lib will be ready
-
-    // const { address } = payments.p2sh({
-    //   redeem: payments.p2wsh({
-    //     redeem: payments.p2ar({
-    //       alertPubKey: hdNode.publicKey,
-    //       recoveryPubKey: this.recoveryPubKey,
-    //     }),
-    //   }),
-    // });
     const { address } = payments.p2sh({
-      redeem: payments.p2wpkh({ pubkey: hdNode.publicKey }),
+      redeem: payments.p2wsh({
+        redeem: payments.p2ar({
+          pubkeys: [hdNode.publicKey, this.recoveryPubKey],
+          network,
+        }),
+        network,
+      }),
+      network,
     });
+
     return address;
   }
 }

@@ -2370,9 +2370,9 @@ bitcoin-ops@^1.3.0, bitcoin-ops@^1.4.0:
   resolved "https://registry.yarnpkg.com/bitcoin-ops/-/bitcoin-ops-1.4.1.tgz#e45de620398e22fd4ca6023de43974ff42240278"
   integrity sha512-pef6gxZFztEhaE9RY9HmWVmiIHqCb2OyS4HPKkpc6CIiiOa3Qmuoylxc5P2EkU3w+5eTSifI9SEZC88idAIGow==
 
-"bitcoinjs-lib@git+https://github.com/bitcoinvault/bitcoinjs-lib.git":
+"bitcoinjs-lib@git+https://github.com/bitcoinvault/bitcoinjs-lib.git#feature/btcv-integration":
   version "5.1.6"
-  resolved "git+https://github.com/bitcoinvault/bitcoinjs-lib.git#7a9c03e750bf3bb875f7eb9e6109223697a4cf65"
+  resolved "git+https://github.com/bitcoinvault/bitcoinjs-lib.git#fd4af0faa129209e5dd43744c099e7e0f259dad6"
   dependencies:
     "@types/node" "12.7.5"
     bech32 "^1.1.2"
