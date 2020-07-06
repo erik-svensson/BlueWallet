@@ -147,7 +147,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               <RadioButton style={styles.radioButton} value={SegwitP2SHWallet.type}>
                 {/* -> AR */}
                 <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{`${SegwitP2SHWallet.typeReadable} -> AR`}</Text>
+                  <Text style={styles.radioButtonTitle}>{`${HDSegwitP2SHArWallet.typeReadable}`}</Text>
                   <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.ar}</Text>
                 </View>
               </RadioButton>
