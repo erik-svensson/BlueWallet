@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment/min/moment-with-locales';
 import React, { Component } from 'react';
 import { SectionList, SectionListData, StyleSheet, Text, View } from 'react-native';
 
@@ -36,6 +36,7 @@ export class TransactionList extends Component<Props, State> {
   };
 
   static getDerivedStateFromProps(props: Props) {
+    moment.locale(i18n._.languageCode);
     const groupedTransactions = [] as any;
     const fileteredTransactions = props.filters.isFilteringOn
       ? filterTransaction(props.transactions, props.filters)

@@ -33,7 +33,7 @@ dayjs.extend(localeData);
         lang = 'pt';
         require('dayjs/locale/pt');
         break;
-      case 'jp_jp':
+      case 'ja':
         lang = 'ja';
         require('dayjs/locale/ja');
         break;
@@ -64,7 +64,7 @@ strings = new Localization({
   en: require('./en.js'),
   pt_pt: require('./pt_PT.js'),
   es: require('./es.js'),
-  jp_jp: require('./jp_JP.js'),
+  ja: require('./jp_JP.js'),
   id_id: require('./id_ID.js'),
   zh_cn: require('./zh_cn.js'),
   tr_tr: require('./tr_TR.js'),

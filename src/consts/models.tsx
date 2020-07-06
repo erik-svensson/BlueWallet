@@ -68,7 +68,7 @@ export interface Wallet {
   setLabel: (label: string) => void;
   getAddress: () => string;
   getSecret: () => string;
-  getXpub: () => string;
+  getXpub: () => Promise<string>;
   address: string;
   secret: string;
   type: string;
