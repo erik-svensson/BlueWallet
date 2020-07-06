@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 
-import { ListEmptyState, SearchBar } from 'app/components';
+import { ListEmptyState, SearchBar, ScreenTemplate } from 'app/components';
 import { Route, Contact, MainCardStackNavigatorParamList } from 'app/consts';
 import { ApplicationState } from 'app/state';
 
@@ -62,15 +62,18 @@ export class ContactListScreen extends PureComponent<Props, State> {
       route: { params },
     } = this.props;
     return (
-      <>
+      <ScreenTemplate
+        header={
+          <ContactListHeader
+            onAddButtonPress={!params?.onContactPress ? this.navigateToAddContact : undefined}
+            onBackArrowPress={params?.onContactPress && this.goBack}
+            title={params?.title}
+          >
+            <SearchBar query={this.state.query} setQuery={this.setQuery} />
+          </ContactListHeader>
+        }
+      >
         <StatusBar barStyle="light-content" />
-        <ContactListHeader
-          onAddButtonPress={!params?.onContactPress ? this.navigateToAddContact : undefined}
-          onBackArrowPress={params?.onContactPress && this.goBack}
-          title={params?.title}
-        >
-          <SearchBar query={this.state.query} setQuery={this.setQuery} />
-        </ContactListHeader>
         {contacts && contacts.length ? (
           <ContactList
             query={this.state.query}
@@ -80,7 +83,7 @@ export class ContactListScreen extends PureComponent<Props, State> {
         ) : (
           <ListEmptyState variant={ListEmptyState.Variant.ContactList} onPress={this.navigateToAddContact} />
         )}
-      </>
+      </ScreenTemplate>
     );
   }
 }

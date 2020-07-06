@@ -128,13 +128,27 @@ export interface Filters {
   transactionType?: string;
 }
 
+export type MainTabNavigatorParamList = {
+  [Route.Dashboard]: undefined;
+  [Route.ContactList]: undefined;
+  [Route.Settings]: undefined;
+};
+
 export type RootStackParamList = {
   [Route.MainCardStackNavigator]: undefined;
   [Route.ImportWalletQRCode]: undefined;
-  [Route.ActionSheet]: undefined;
+  [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
   [Route.UnlockTransactionNavaigator]: undefined;
   [Route.PasswordNavigator]: undefined;
-  [Route.EditTextNavigator]: undefined;
+  [Route.EditTextNavigator]: {
+    title: string;
+    onSave: (value: string) => void;
+    label: string;
+    header?: React.ReactNode;
+    value?: string;
+    validate?: (value: string) => string | undefined;
+    keyboardType?: KeyboardType;
+  };
   [Route.Message]: {
     title: string;
     source: FastImageSource;
@@ -160,16 +174,18 @@ export type RootStackParamList = {
 export type UnlockTransactionNavigatorParamList = {
   [Route.UnlockTransaction]: { onSuccess: () => void };
 };
+
 export type PasswordNavigatorParamList = {
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
 };
+
 export type EditTextNavigatorParamList = {
   [Route.EditText]: {
     title: string;
     onSave: (value: string) => void;
     label: string;
-    header: React.ReactNode;
+    header?: React.ReactNode;
     value?: string;
     validate?: (value: string) => string | undefined;
     keyboardType?: KeyboardType;
@@ -188,12 +204,11 @@ export type MainCardStackNavigatorParamList = {
   [Route.ReceiveCoins]: { secret?: string };
   [Route.SendCoins]: { fromSecret: string; fromAddress: string; fromWallet: any; toAddress?: string };
   [Route.SendCoinsConfirm]: {
-    isLoading: boolean;
     fee: number;
-    feeSatoshi: number;
+    feeSatoshi?: number;
     memo: string;
     recipients: any;
-    size: number;
+    size?: number;
     tx: any;
     satoshiPerByte: any;
     fromWallet: any;

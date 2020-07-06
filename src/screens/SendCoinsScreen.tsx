@@ -2,7 +2,6 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
-import { NavigationScreenProps, NavigationInjectedProps } from 'react-navigation';
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, StyledText, Image } from 'app/components';
@@ -52,7 +51,7 @@ export class SendCoinsScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const { navigation, route } = props;
+    const { route } = props;
     let { fromAddress, fromSecret, fromWallet } = route.params;
     const { toAddress } = route.params;
     const wallets = BlueApp.getWallets();
@@ -60,7 +59,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     const addresses = toAddress ? [{ address: toAddress }] : [];
     if (wallets.length === 0) {
       Alert.alert('Before creating a transaction, you must first add a Bitcoin wallet.');
-      props.navigation.goBack(null);
+      props.navigation.goBack();
     } else {
       if (!fromWallet && wallets.length > 0) {
         fromWallet = wallets[0];

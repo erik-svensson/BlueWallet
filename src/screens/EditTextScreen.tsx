@@ -13,21 +13,10 @@ interface Props {
   route: RouteProp<EditTextNavigatorParamList, Route.EditText>;
 }
 
-export interface EditTextProps {
-  title: string;
-  onSave: (value: string) => void;
-  label: string;
-  value?: string;
-  validate?: (value: string) => string | undefined;
-  keyboardType?: KeyboardType;
-}
-
 export const EditTextScreen = (props: Props) => {
   const { params } = props.route;
-  const label = params.label;
+  const { label, header, onSave, title } = params;
   const keyboardType = params.keyboardType || 'default';
-  const header = params.header;
-  const onSave = params.onSave;
   const validate = params.validate || null;
   const [value, setValue] = useState(params.value || '');
 
@@ -45,7 +34,7 @@ export const EditTextScreen = (props: Props) => {
           disabled={!value || (!!validate && !!validate(value))}
         />
       }
-      header={<Header navigation={props.navigation} isBackArrow={true} title={props.route.params.title} />}
+      header={<Header navigation={props.navigation} isBackArrow={true} title={title} />}
     >
       {header}
       <View style={styles.inputItemContainer}>
