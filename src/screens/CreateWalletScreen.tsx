@@ -6,7 +6,14 @@ import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioGroup, RadioButton } from 'app/components';
 import { Route, Wallet } from 'app/consts';
-import { AppStorage, HDSegwitBech32Wallet, HDSegwitP2SHWallet, SegwitP2SHWallet, BlueApp } from 'app/legacy';
+import {
+  AppStorage,
+  HDSegwitBech32Wallet,
+  HDSegwitP2SHWallet,
+  SegwitP2SHWallet,
+  HDSegwitP2SHArWallet,
+  BlueApp,
+} from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
@@ -30,6 +37,7 @@ interface State {
   walletBaseURI: string;
   selectedIndex: number;
   secret: string[];
+  publicKey: string;
 }
 
 export class CreateWalletScreen extends React.PureComponent<Props, State> {
@@ -40,8 +48,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     activeBitcoin: false,
     isAdvancedOptionsEnabled: false,
     walletBaseURI: '',
-    selectedIndex: 1,
+    selectedIndex: 0,
     secret: [],
+    publicKey: '',
   };
 
   static navigationOptions = (props: NavigationScreenProps) => ({
@@ -76,20 +85,34 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       case 2:
         return HDSegwitBech32Wallet;
       case 0:
-        return SegwitP2SHWallet;
+        return HDSegwitP2SHArWallet;
       case 1:
+        return SegwitP2SHWallet;
       default:
         return HDSegwitP2SHWallet;
     }
   };
 
+  setupWallet = () => {
+    const { selectedIndex } = this.state;
+
+    if (selectedIndex === 0) {
+      return this.props.navigation.navigate(Route.ScanQrCode, {
+        onBarCodeScan: (newPublicKey: string) => {
+          this.setState({ publicKey: newPublicKey }, () => this.createWallet());
+        },
+      });
+    }
+    this.createWallet();
+  };
+
   createWallet = async () => {
-    const { selectedIndex, label } = this.state;
+    const { selectedIndex, label, publicKey } = this.state;
     this.setState({ isLoading: true });
 
     const WalletClass = this.getWalletClassByIndex(selectedIndex);
 
-    const wallet = new WalletClass();
+    const wallet = publicKey ? new WalletClass(publicKey) : new WalletClass();
 
     wallet.setLabel(label || i18n.wallets.details.title);
 
@@ -205,7 +228,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
             <Button
               disabled={!this.canCreateWallet}
               loading={this.state.isLoading}
-              onPress={this.createWallet}
+              onPress={this.setupWallet}
               title={i18n.wallets.add.addWalletButton}
             />
             <FlatButton

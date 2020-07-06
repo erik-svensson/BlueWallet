@@ -50,8 +50,6 @@ export enum Route {
   AdvancedOptions = 'AdvancedOptions',
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
-  EnterPublicKey = 'EnterPublicKey',
-  WebView = 'WebView',
 }
 
 export interface Wallet {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, RefreshControl, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, RefreshControl, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
@@ -158,7 +158,7 @@ class DashboardScreen extends Component<Props, State> {
               });
             }}
             onAddPress={() => {
-              this.props.navigation.navigate(Route.EnterPublicKey);
+              this.props.navigation.navigate(Route.CreateWallet);
             }}
           >
             <SearchBar query={query} setQuery={this.setQuery} onFocus={this.scrollToTransactionList} />
@@ -184,6 +184,7 @@ class DashboardScreen extends Component<Props, State> {
                 type={activeWallet.type}
                 onReceivePress={this.receiveCoins}
                 onSendPress={this.sendCoins}
+                onReceveryPress={() => Alert.alert("I Haven't Programmed That Path Yet")}
               />
               {isAllWallets(activeWallet) ? (
                 <WalletsCarousel

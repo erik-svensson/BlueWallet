@@ -15,6 +15,7 @@ interface Props {
   onSendPress?: () => void;
   onReceivePress?: () => void;
   onSelectPress: () => void;
+  onReceveryPress: () => void;
 }
 
 export const DashboarContentdHeader = ({
@@ -25,6 +26,7 @@ export const DashboarContentdHeader = ({
   onSendPress,
   onReceivePress,
   onSelectPress,
+  onReceveryPress,
 }: Props) => {
   return (
     <View style={styles.header}>
@@ -46,8 +48,8 @@ export const DashboarContentdHeader = ({
             <Image source={images.yellowPlus} style={styles.circleButtonImage} />
             <Text style={styles.circleButtonText}>{i18n.wallets.dashboard.receive}</Text>
           </TouchableOpacity>
-          {type === 'HDsegwitP2SH' && (
-            <TouchableOpacity style={styles.circleButton} onPress={onReceivePress}>
+          {type === 'HDsegwitP2SHar' && (
+            <TouchableOpacity style={styles.circleButton} onPress={onReceveryPress}>
               <Image source={images.recover} style={styles.circleButtonImage} />
               <Text style={styles.circleButtonText}>{i18n.wallets.dashboard.recover}</Text>
             </TouchableOpacity>

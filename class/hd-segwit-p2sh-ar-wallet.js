@@ -8,7 +8,7 @@ export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
 
   constructor(recoveryPubKey) {
     super();
-    this.recoveryPubKey = ECPair.fromPublicKey(recoveryPubKey).publicKey;
+    this.recoveryPubKey = ECPair.fromPublicKey(Buffer.from(recoveryPubKey, 'hex')).publicKey;
   }
 
   nodeToAddress(hdNode) {
