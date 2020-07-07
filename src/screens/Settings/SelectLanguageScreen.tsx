@@ -6,7 +6,7 @@ import RNRestart from 'react-native-restart';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Header, Image } from 'app/components';
-import { Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -23,7 +23,7 @@ interface LanguageItemProps {
 }
 
 interface SelectLanguageScreenProps {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.SelectLanguage>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.SelectLanguage>;
 }
 
 const LanguageItem = ({ language, selectedLanguageValue, onLanguageSelect }: LanguageItemProps) => {

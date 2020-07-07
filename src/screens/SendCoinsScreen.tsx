@@ -5,7 +5,7 @@ import { View, StyleSheet, Text, TouchableOpacity, Alert, AsyncStorage } from 'r
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, StyledText, Image } from 'app/components';
-import { MainCardStackNavigatorParamList, Route, RootStackParamList } from 'app/consts';
+import { MainCardStackNavigatorParams, Route, RootStackParams } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { typography, palette } from 'app/styles';
 
@@ -24,11 +24,11 @@ const i18n = require('../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParamList, Route.SendCoins>
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.SendCoins>
   >;
 
-  route: RouteProp<MainCardStackNavigatorParamList, Route.SendCoins>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.SendCoins>;
 }
 
 interface State {

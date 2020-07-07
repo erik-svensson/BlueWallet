@@ -4,15 +4,15 @@ import React from 'react';
 import { Text, StyleSheet, View, ScrollView, Dimensions } from 'react-native';
 
 import { WalletItem, GradientView } from 'app/components';
-import { Wallet, RootStackParamList, Route } from 'app/consts';
+import { Wallet, RootStackParams, Route } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList, Route.ActionSheet>;
-  route: RouteProp<RootStackParamList, Route.ActionSheet>;
+  navigation: StackNavigationProp<RootStackParams, Route.ActionSheet>;
+  route: RouteProp<RootStackParams, Route.ActionSheet>;
 }
 
 export const ActionSheet = (props: Props) => {

@@ -4,15 +4,15 @@ import React, { PureComponent } from 'react';
 import { Text, StyleSheet, BackHandler, View, NativeEventSubscription } from 'react-native';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
-import { Route, CONST, FlowType, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, CONST, FlowType, MainCardStackNavigatorParams } from 'app/consts';
 import { noop } from 'app/helpers/helpers';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.CreatePin>;
-  route: RouteProp<MainCardStackNavigatorParamList, Route.CreatePin>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CreatePin>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.CreatePin>;
   appSettings: {
     isPinSet: boolean;
   };

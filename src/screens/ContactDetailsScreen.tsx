@@ -14,7 +14,7 @@ import {
   ContactAvatar,
 } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Contact, Route, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
+import { Contact, Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { UpdateContactAction, updateContact } from 'app/state/contacts/actions';
 
 const i18n = require('../../loc');
@@ -22,10 +22,10 @@ const i18n = require('../../loc');
 interface Props {
   updateContact: (contact: Contact) => UpdateContactAction;
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParamList, Route.ContactDetails>
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.ContactDetails>
   >;
-  route: RouteProp<MainCardStackNavigatorParamList, Route.ContactDetails>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.ContactDetails>;
 }
 
 interface State {

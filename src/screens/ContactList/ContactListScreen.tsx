@@ -5,7 +5,7 @@ import { StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ListEmptyState, SearchBar, ScreenTemplate } from 'app/components';
-import { Route, Contact, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, Contact, MainCardStackNavigatorParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 
 import { ContactList } from './ContactList';
@@ -14,8 +14,8 @@ import { ContactListHeader } from './ContactListHeader';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ChooseContactList>;
-  route: RouteProp<MainCardStackNavigatorParamList, Route.ChooseContactList>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseContactList>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.ChooseContactList>;
   contacts: Contact[];
 }
 

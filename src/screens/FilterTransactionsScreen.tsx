@@ -10,7 +10,7 @@ import { Button } from 'app/components/Button';
 import { Calendar } from 'app/components/Calendar';
 import { CardGroup } from 'app/components/CardGroup';
 import { RowTemplate } from 'app/components/RowTemplate';
-import { CONST, Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { CONST, Route, MainCardStackNavigatorParams } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { AppStateManager } from 'app/services';
 
@@ -22,8 +22,8 @@ enum Index {
 }
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.FilterTransactions>;
-  route: RouteProp<MainCardStackNavigatorParamList, Route.FilterTransactions>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.FilterTransactions>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.FilterTransactions>;
 }
 
 export const FilterTransactionsScreen = (props: Props) => {

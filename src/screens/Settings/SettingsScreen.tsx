@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { images, icons } from 'app/assets';
 import { Image, ScreenTemplate, Header, ListItem } from 'app/components';
-import { Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { BiometricService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { updateBiometricSetting } from 'app/state/appSettings/actions';
@@ -15,7 +15,7 @@ import { LabeledSettingsRow } from './LabeledSettingsRow';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.Settings>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.Settings>;
 }
 
 export const SettingsScreen = (props: Props) => {

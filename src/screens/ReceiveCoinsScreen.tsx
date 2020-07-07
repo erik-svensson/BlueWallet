@@ -8,7 +8,7 @@ import Share from 'react-native-share';
 
 import { Header, ScreenTemplate, Button } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Route, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../BlueApp';
@@ -19,10 +19,10 @@ const i18n = require('../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParamList, Route.ReceiveCoins>
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.ReceiveCoins>
   >;
-  route: RouteProp<MainCardStackNavigatorParamList, Route.ReceiveCoins>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.ReceiveCoins>;
 }
 interface State {
   secret: string;

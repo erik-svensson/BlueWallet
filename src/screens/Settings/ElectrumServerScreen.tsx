@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Alert, Text } from 'react-native';
 
 import { ScreenTemplate, Button, FlatButton, InputItem, Header } from 'app/components';
-import { MainCardStackNavigatorParamList, Route } from 'app/consts';
+import { MainCardStackNavigatorParams, Route } from 'app/consts';
 import { AppStorage, defaultPeer } from 'app/legacy';
 import { typography, palette } from 'app/styles';
 
@@ -12,7 +12,7 @@ const BlueElectrum = require('../../../BlueElectrum');
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ElectrumServer>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ElectrumServer>;
 }
 
 export const ElectrumServerScreen = (props: Props) => {

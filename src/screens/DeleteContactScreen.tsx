@@ -5,7 +5,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
-import { Contact, Route, RootStackParamList, MainTabNavigatorParamList } from 'app/consts';
+import { Contact, Route, RootStackParams, MainTabNavigatorParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { deleteContact, DeleteContactAction } from 'app/state/contacts/actions';
 import { typography, palette } from 'app/styles';
@@ -14,10 +14,10 @@ const i18n = require('../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParamList, Route.ContactList>,
-    StackNavigationProp<RootStackParamList, Route.DeleteContact>
+    StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
+    StackNavigationProp<RootStackParams, Route.DeleteContact>
   >;
-  route: RouteProp<RootStackParamList, Route.DeleteContact>;
+  route: RouteProp<RootStackParams, Route.DeleteContact>;
   deleteContact: (contact: Contact) => DeleteContactAction;
 }
 

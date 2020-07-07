@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ListItem, ScreenTemplate } from 'app/components';
-import { MainCardStackNavigatorParamList, Route } from 'app/consts';
+import { MainCardStackNavigatorParams, Route } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { updateAdvancedOptions, UpdateAdvancedOptionsAction } from 'app/state/appSettings/actions';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
@@ -13,7 +13,7 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.AdvancedOptions>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.AdvancedOptions>;
   appSettings: AppSettingsState;
   updateAdvancedOptions: (value: boolean) => UpdateAdvancedOptionsAction;
 }
@@ -26,7 +26,7 @@ class AdvancedOptionsScreen extends PureComponent<Props> {
   render() {
     return (
       <ScreenTemplate
-        header={<Header isBackArrow={true} navigation={props.navigation} title={i18n.settings.advancedOptions} />}
+        header={<Header isBackArrow={true} navigation={this.props.navigation} title={i18n.settings.advancedOptions} />}
       >
         <Text style={styles.title}>{i18n.advancedOptions.title}</Text>
         <Text style={styles.description}>{i18n.advancedOptions.description}</Text>

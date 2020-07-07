@@ -3,11 +3,11 @@ import React, { useEffect } from 'react';
 import { Text, View, StyleSheet, BackHandler, StatusBar } from 'react-native';
 
 import { Button, Image } from 'app/components';
-import { Route, RootStackParamList } from 'app/consts';
+import { Route, RootStackParams } from 'app/consts';
 import { typography, palette, ifIphoneX } from 'app/styles';
 
 interface Props {
-  route: RouteProp<RootStackParamList, Route.Message>;
+  route: RouteProp<RootStackParams, Route.Message>;
 }
 
 export const MessageScreen = (props: Props) => {

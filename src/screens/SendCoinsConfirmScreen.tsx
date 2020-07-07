@@ -5,7 +5,7 @@ import { View, StyleSheet, Alert } from 'react-native';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, StyledText, Image, Text } from 'app/components';
-import { Route, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { palette, typography } from 'app/styles';
 
@@ -28,11 +28,11 @@ const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void) => (
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParamList, Route.SendCoinsConfirm>
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.SendCoinsConfirm>
   >;
 
-  route: RouteProp<MainCardStackNavigatorParamList, Route.SendCoinsConfirm>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.SendCoinsConfirm>;
 }
 
 export class SendCoinsConfirmScreen extends Component<Props> {

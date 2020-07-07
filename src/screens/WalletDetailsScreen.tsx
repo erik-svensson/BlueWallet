@@ -14,7 +14,7 @@ import {
   ButtonType,
   Text,
 } from 'app/components';
-import { Wallet, Route, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
+import { Wallet, Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { BlueApp } from 'app/legacy';
 import { updateWallet, UpdateWalletAction } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
@@ -26,11 +26,11 @@ const i18n = require('../../loc');
 interface Props {
   updateWallet: (wallet: Wallet) => UpdateWalletAction;
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParamList, Route.WalletDetails>
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.WalletDetails>
   >;
 
-  route: RouteProp<MainCardStackNavigatorParamList, Route.WalletDetails>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.WalletDetails>;
 }
 
 interface State {

@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardType } from 'react-native';
 
 import { Header, InputItem, Button, ScreenTemplate } from 'app/components';
-import { RootStackParamList, Route } from 'app/consts';
+import { RootStackParams, Route } from 'app/consts';
 
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList, Route.EditText>;
-  route: RouteProp<RootStackParamList, Route.EditText>;
+  navigation: StackNavigationProp<RootStackParams, Route.EditText>;
+  route: RouteProp<RootStackParams, Route.EditText>;
 }
 
 export const EditTextScreen = (props: Props) => {

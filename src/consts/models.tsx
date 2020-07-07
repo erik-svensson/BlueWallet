@@ -18,7 +18,6 @@ export enum FlowType {
 }
 
 export enum Route {
-  UnlockTransactionNavaigator = 'UnlockTransactionNavaigator',
   PasswordNavigator = 'PasswordNavigator',
   Dashboard = 'Dashboard',
   WalletDetails = 'WalletDetails',
@@ -128,13 +127,13 @@ export interface Filters {
 // @ts-ignore
 export type NavigationProp<T, R> = StackNavigationProp<T, R>;
 
-export type MainTabNavigatorParamList = {
+export type MainTabNavigatorParams = {
   [Route.Dashboard]: undefined;
   [Route.ContactList]: undefined;
   [Route.Settings]: undefined;
 };
 
-export type RootStackParamList = {
+export type RootStackParams = {
   [Route.MainCardStackNavigator]: undefined;
   [Route.ImportWalletQRCode]: undefined;
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
@@ -171,12 +170,12 @@ export type RootStackParamList = {
   };
 };
 
-export type PasswordNavigatorParamList = {
+export type PasswordNavigatorParams = {
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
 };
 
-export type MainCardStackNavigatorParamList = {
+export type MainCardStackNavigatorParams = {
   [Route.MainCardStackNavigator]: undefined;
   [Route.CreateWallet]: undefined;
   [Route.ImportWallet]: undefined;

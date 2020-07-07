@@ -6,13 +6,13 @@ import Rate, { AndroidMarket } from 'react-native-rate';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
-import { Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.AboutUs>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.AboutUs>;
 }
 
 export const AboutUsScreen = (props: Props) => {

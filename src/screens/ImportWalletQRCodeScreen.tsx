@@ -14,7 +14,7 @@ import { RNCamera } from 'react-native-camera';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Wallet, Route, RootStackParamList } from 'app/consts';
+import { Wallet, Route, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { sleep } from 'app/helpers/helpers';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
@@ -41,7 +41,7 @@ interface BarCodeScanEvent {
 }
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList, Route.ImportWalletQRCode>;
+  navigation: StackNavigationProp<RootStackParams, Route.ImportWalletQRCode>;
   loadWallets: () => Promise<WalletsActionType>;
 }
 

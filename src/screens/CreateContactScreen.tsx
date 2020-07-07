@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { icons } from 'app/assets';
 import { Button, Header, InputItem, ScreenTemplate, Text, Image } from 'app/components';
-import { Contact, Route, MainTabNavigatorParamList, MainCardStackNavigatorParamList } from 'app/consts';
+import { Contact, Route, MainTabNavigatorParams, MainCardStackNavigatorParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { createContact, CreateContactAction } from 'app/state/contacts/actions';
 import { palette, typography } from 'app/styles';
@@ -16,8 +16,8 @@ const i18n = require('../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParamList, Route.ContactList>,
-    StackNavigationProp<MainCardStackNavigatorParamList, Route.CreateContact>
+    StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateContact>
   >;
   createContact: (contact: Contact) => CreateContactAction;
 }

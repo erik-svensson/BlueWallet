@@ -4,14 +4,14 @@ import { Text, StyleSheet, View, TouchableOpacity, BackHandler, NativeEventSubsc
 
 import { icons } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
-import { Route, CONST, PasswordNavigatorParamList } from 'app/consts';
+import { Route, CONST, PasswordNavigatorParams } from 'app/consts';
 import { noop } from 'app/helpers/helpers';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<PasswordNavigatorParamList, Route.CreateTransactionPassword>;
+  navigation: StackNavigationProp<PasswordNavigatorParams, Route.CreateTransactionPassword>;
 
   appSettings: {
     isPinSet: boolean;

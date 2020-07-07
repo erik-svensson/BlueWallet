@@ -3,13 +3,13 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Button, Header, ScreenTemplate, Text, Chip } from 'app/components';
-import { MainCardStackNavigatorParamList, Route } from 'app/consts';
+import { MainCardStackNavigatorParams, Route } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.CreateWallet>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CreateWallet>;
   secret: string[];
 }
 

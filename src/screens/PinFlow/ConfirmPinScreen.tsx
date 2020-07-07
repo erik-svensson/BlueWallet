@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
-import { Route, CONST, FlowType, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
+import { Route, CONST, FlowType, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
@@ -19,11 +19,11 @@ type State = {
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParamList, Route.ConfirmPin>
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.ConfirmPin>
   >;
 
-  route: RouteProp<MainCardStackNavigatorParamList, Route.ConfirmPin>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.ConfirmPin>;
 }
 
 export class ConfirmPinScreen extends PureComponent<Props, State> {

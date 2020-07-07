@@ -2,12 +2,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 
 import { BottomTabBarComponent } from 'app/components';
-import { Route, MainTabNavigatorParamList } from 'app/consts';
+import { Route, MainTabNavigatorParams } from 'app/consts';
 import { ContactListScreen, DashboardScreen, SettingsScreen } from 'app/screens';
 
 const i18n = require('../../loc');
 
-const Tab = createBottomTabNavigator<MainTabNavigatorParamList>();
+const Tab = createBottomTabNavigator<MainTabNavigatorParams>();
 
 export const MainTabNavigator = () => {
   return (

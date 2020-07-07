@@ -6,7 +6,7 @@ import QRCode from 'react-native-qrcode-svg';
 
 import { Header, ScreenTemplate } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { RootStackParamList, Route } from 'app/consts';
+import { RootStackParams, Route } from 'app/consts';
 import { typography } from 'app/styles';
 
 import { WatchOnlyWallet } from '../../class';
@@ -14,8 +14,8 @@ import { WatchOnlyWallet } from '../../class';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList, Route.ExportWalletXpub>;
-  route: RouteProp<RootStackParamList, Route.ExportWalletXpub>;
+  navigation: StackNavigationProp<RootStackParams, Route.ExportWalletXpub>;
+  route: RouteProp<RootStackParams, Route.ExportWalletXpub>;
 }
 
 export const ExportWalletXpubScreen = ({ navigation, route }: Props) => {

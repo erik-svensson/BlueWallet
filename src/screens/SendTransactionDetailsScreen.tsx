@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { Text, View, StyleSheet, Linking, Clipboard } from 'react-native';
 
 import { Header, Chip, ScreenTemplate, Button } from 'app/components';
-import { RootStackParamList, Route } from 'app/consts';
+import { RootStackParams, Route } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 import { BitcoinUnit } from '../../models/bitcoinUnits';
@@ -13,8 +13,8 @@ const currency = require('../../currency');
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList, Route.SendTransactionDetails>;
-  route: RouteProp<RootStackParamList, Route.SendTransactionDetails>;
+  navigation: StackNavigationProp<RootStackParams, Route.SendTransactionDetails>;
+  route: RouteProp<RootStackParams, Route.SendTransactionDetails>;
 }
 
 export class SendTransactionDetailsScreen extends PureComponent<Props> {

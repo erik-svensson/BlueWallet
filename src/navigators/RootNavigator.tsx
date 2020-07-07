@@ -1,7 +1,7 @@
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import React from 'react';
 
-import { Route, RootStackParamList } from 'app/consts';
+import { Route, RootStackParams } from 'app/consts';
 import {
   ActionSheet,
   ImportWalletQRCodeScreen,
@@ -18,7 +18,7 @@ import {
 import { MainCardStackNavigator } from './MainCardStackNavigator';
 import { PasswordNavigator } from './PasswordNavigator';
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<RootStackParams>();
 
 export const RootNavigator = () => (
   <Stack.Navigator initialRouteName={Route.MainCardStackNavigator} headerMode="none" mode="modal">

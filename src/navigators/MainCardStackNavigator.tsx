@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
-import { Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { MainTabNavigator } from 'app/navigators/MainTabNavigator';
 import {
   CreateWalletScreen,
@@ -27,7 +27,7 @@ import {
   FilterTransactionsScreen,
 } from 'app/screens';
 
-const Stack = createStackNavigator<MainCardStackNavigatorParamList>();
+const Stack = createStackNavigator<MainCardStackNavigatorParams>();
 
 export const MainCardStackNavigator = () => (
   <Stack.Navigator headerMode="none">

@@ -6,14 +6,14 @@ import QRCode from 'react-native-qrcode-svg';
 import Share from 'react-native-share';
 
 import { Button, ContactAvatar, Header, ScreenTemplate } from 'app/components';
-import { Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 type Props = {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ContactQRCode>;
-  route: RouteProp<MainCardStackNavigatorParamList, Route.ContactQRCode>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ContactQRCode>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.ContactQRCode>;
 };
 
 export class ContactQRCodeScreen extends React.PureComponent<Props> {

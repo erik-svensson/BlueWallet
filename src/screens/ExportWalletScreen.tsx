@@ -5,14 +5,14 @@ import { Text, View, StyleSheet } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
 import { Header, Chip, ScreenTemplate } from 'app/components';
-import { RootStackParamList, Route } from 'app/consts';
+import { RootStackParams, Route } from 'app/consts';
 import { typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList, Route.ExportWallet>;
-  route: RouteProp<RootStackParamList, Route.ExportWallet>;
+  navigation: StackNavigationProp<RootStackParams, Route.ExportWallet>;
+  route: RouteProp<RootStackParams, Route.ExportWallet>;
 }
 
 export const ExportWalletScreen = ({ route, navigation }: Props) => {
