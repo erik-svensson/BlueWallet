@@ -15,7 +15,7 @@ import { RNCamera } from 'react-native-camera';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Wallet, Route, RootStackParams, MainTabNavigatorParams, MainCardStackNavigatorParams } from 'app/consts';
+import { Wallet, Route, RootStackParams, MainTabNavigatorParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { sleep } from 'app/helpers/helpers';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
