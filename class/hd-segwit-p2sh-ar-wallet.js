@@ -1,15 +1,18 @@
+import config from '../config';
 import { AbstractHDSegwitP2SHWallet } from './abstract-hd-segwit-p2sh-wallet';
 
-const { payments, ECPair, alt_networks } = require('bitcoinjs-lib');
+const { payments, ECPair } = require('bitcoinjs-lib');
 
-const network = alt_networks.bitcoinvault;
+const network = config.network;
 export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
   static type = 'HDsegwitP2SHar';
   static typeReadable = 'AR';
 
   constructor(recoveryPubKey) {
     super();
-    this.recoveryPubKey = ECPair.fromPublicKey(Buffer.from(recoveryPubKey, 'hex')).publicKey;
+    this.recoveryPubKey = ECPair.fromPublicKey(Buffer.from(recoveryPubKey, 'hex'), {
+      network: config.network,
+    }).publicKey;
   }
 
   nodeToAddress(hdNode) {

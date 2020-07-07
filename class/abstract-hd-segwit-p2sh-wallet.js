@@ -2,6 +2,7 @@ import * as bip39 from 'bip39';
 import b58 from 'bs58check';
 import { NativeModules } from 'react-native';
 
+import config from '../config';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
@@ -81,10 +82,10 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
     if (!this.seed) {
       this.seed = await bip39.mnemonicToSeed(this.secret);
     }
-    const root = bitcoin.bip32.fromSeed(this.seed);
+    const root = bitcoin.bip32.fromSeed(this.seed, config.network);
     const path = this._getPath(`/0/${index}`);
     const child = root.derivePath(path);
-    return bitcoin.ECPair.fromPrivateKey(child.privateKey).toWIF();
+    return bitcoin.ECPair.fromPrivateKey(child.privateKey, { network: config.network }).toWIF();
   }
 
   /**

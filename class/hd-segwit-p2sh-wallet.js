@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 
+import config from '../config';
 import { BitcoinUnit } from '../models/bitcoinUnits';
 import signer from '../models/signer';
 import { AbstractHDSegwitP2SHWallet } from './abstract-hd-segwit-p2sh-wallet';
@@ -12,7 +13,8 @@ export class HDSegwitP2SHWallet extends AbstractHDSegwitP2SHWallet {
 
   nodeToAddress(hdNode) {
     const { address } = bitcoin.payments.p2sh({
-      redeem: bitcoin.payments.p2wpkh({ pubkey: hdNode.publicKey }),
+      redeem: bitcoin.payments.p2wpkh({ pubkey: hdNode.publicKey, network: config.network }),
+      network: config.network,
     });
     return address;
   }

@@ -11,6 +11,7 @@ import { typography, palette } from 'app/styles';
 import BlueApp from '../../BlueApp';
 import BitcoinBIP70TransactionDecode from '../../bip70/bip70';
 import { HDLegacyP2PKHWallet, HDSegwitBech32Wallet, HDSegwitP2SHWallet, WatchOnlyWallet } from '../../class';
+import config from '../../config';
 import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
 import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
@@ -363,7 +364,7 @@ export class SendCoinsScreen extends Component<Props, State> {
 
       if (!error) {
         try {
-          bitcoin.address.toOutputScript(transaction.address);
+          bitcoin.address.toOutputScript(transaction.address, config.network);
         } catch (err) {
           console.log('validation error');
           console.log(err);
