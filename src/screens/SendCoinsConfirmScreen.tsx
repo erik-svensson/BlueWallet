@@ -1,11 +1,11 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, StyledText, Image, Text } from 'app/components';
-import { Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { palette, typography } from 'app/styles';
 
@@ -27,7 +27,11 @@ const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void) => (
 );
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.SendCoinsConfirm>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParamList, Route.SendCoinsConfirm>
+  >;
+
   route: RouteProp<MainCardStackNavigatorParamList, Route.SendCoinsConfirm>;
 }
 

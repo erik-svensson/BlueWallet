@@ -3,8 +3,6 @@ import { KeyboardType, StyleProp, ViewStyle } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 
 import { FastImageSource } from 'app/components';
-import { AppSettingsState } from 'app/state/appSettings/reducer';
-import { WalletsActionType } from 'app/state/wallets/actions';
 
 export const CONST = {
   pinCodeLength: 4,
@@ -162,7 +160,7 @@ export type RootStackParamList = {
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
   [Route.DeleteWallet]: { wallet: Wallet };
-  [Route.DeleteContact]: { contact: Contact };
+  [Route.DeleteContact]: { contact?: Contact };
   [Route.MainCardStackNavigator]: undefined;
   [Route.SendTransactionDetails]: {
     fee: number;
@@ -181,10 +179,7 @@ export type PasswordNavigatorParamList = {
 export type MainCardStackNavigatorParamList = {
   [Route.MainCardStackNavigator]: undefined;
   [Route.CreateWallet]: undefined;
-  [Route.ImportWallet]: {
-    appSettings: AppSettingsState;
-    loadWallets: () => Promise<WalletsActionType>;
-  };
+  [Route.ImportWallet]: undefined;
   [Route.WalletDetails]: { wallet: Wallet };
   [Route.CreateContact]: undefined;
   [Route.ContactDetails]: { contact: Contact };
@@ -192,9 +187,9 @@ export type MainCardStackNavigatorParamList = {
   [Route.TransactionDetails]: { transaction: Transaction };
   [Route.ReceiveCoins]: { secret?: string };
   [Route.SendCoins]: {
-    fromSecret: string;
-    fromAddress: string;
-    fromWallet: Wallet;
+    fromSecret?: string;
+    fromAddress?: string;
+    fromWallet?: Wallet;
     toAddress?: string;
   };
   [Route.SendCoinsConfirm]: {

@@ -1,11 +1,11 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
-import { Contact, Route, RootStackParamList } from 'app/consts';
+import { Contact, Route, RootStackParamList, MainTabNavigatorParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { deleteContact, DeleteContactAction } from 'app/state/contacts/actions';
 import { typography, palette } from 'app/styles';
@@ -13,7 +13,10 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList, Route.DeleteContact>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParamList, Route.ContactList>,
+    StackNavigationProp<RootStackParamList, Route.DeleteContact>
+  >;
   route: RouteProp<RootStackParamList, Route.DeleteContact>;
   deleteContact: (contact: Contact) => DeleteContactAction;
 }
@@ -23,7 +26,7 @@ export class DeleteContactScreen extends React.PureComponent<Props> {
 
   deleteContact = () => {
     const { contact } = this.props.route.params;
-    this.props.deleteContact(contact);
+    this.props.deleteContact(contact as Contact);
     CreateMessage({
       title: i18n.contactDelete.success,
       description: i18n.contactDelete.successDescription,
@@ -54,7 +57,7 @@ export class DeleteContactScreen extends React.PureComponent<Props> {
       >
         <Text style={styles.title}>{i18n.contactDelete.title}</Text>
         <Text style={styles.description}>
-          {i18n.contactDelete.description1} {contact.name}
+          {i18n.contactDelete.description1} {contact?.name}
           {i18n.contactDelete.description2}
         </Text>
       </ScreenTemplate>

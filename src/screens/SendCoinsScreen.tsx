@@ -1,11 +1,11 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, StyledText, Image } from 'app/components';
-import { MainCardStackNavigatorParamList, Route } from 'app/consts';
+import { MainCardStackNavigatorParamList, Route, RootStackParamList } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { typography, palette } from 'app/styles';
 
@@ -23,7 +23,11 @@ const bitcoin = require('bitcoinjs-lib');
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.SendCoins>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParamList, Route.SendCoins>
+  >;
+
   route: RouteProp<MainCardStackNavigatorParamList, Route.SendCoins>;
 }
 

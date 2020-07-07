@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import moment from 'moment';
 import React, { Component } from 'react';
@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { images } from 'app/assets';
 import { Image, Header, StyledText, Chip, ScreenTemplate } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import {
   createTransactionNote,
@@ -40,7 +40,11 @@ interface Props {
   transactionNotes: Record<string, string>;
   createTransactionNote: (transactionID: string, note: string) => CreateTransactionNoteAction;
   updateTransactionNote: (transactionID: string, note: string) => UpdateTransactionNoteAction;
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.TransactionDetails>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParamList, Route.TransactionDetails>
+  >;
+
   route: RouteProp<MainCardStackNavigatorParamList, Route.TransactionDetails>;
 }
 

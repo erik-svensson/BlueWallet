@@ -1,10 +1,10 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
-import { Route, CONST, FlowType, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, CONST, FlowType, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
@@ -18,7 +18,11 @@ type State = {
 };
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ConfirmPin>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParamList, Route.ConfirmPin>
+  >;
+
   route: RouteProp<MainCardStackNavigatorParamList, Route.ConfirmPin>;
 }
 

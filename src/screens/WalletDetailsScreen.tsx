@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -14,7 +14,7 @@ import {
   ButtonType,
   Text,
 } from 'app/components';
-import { Wallet, Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Wallet, Route, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
 import { BlueApp } from 'app/legacy';
 import { updateWallet, UpdateWalletAction } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
@@ -25,7 +25,11 @@ const i18n = require('../../loc');
 
 interface Props {
   updateWallet: (wallet: Wallet) => UpdateWalletAction;
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.WalletDetails>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParamList, Route.WalletDetails>
+  >;
+
   route: RouteProp<MainCardStackNavigatorParamList, Route.WalletDetails>;
 }
 
@@ -57,7 +61,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props, State> {
   navigateToDeleteWallet = () => this.navigateWithWallet(Route.DeleteWallet);
 
   navigateWithWallet = (route: Route) =>
-    this.props.navigation.navigate(route, {
+    this.props.navigation.navigate(route as any, {
       wallet: this.props.route.params.wallet,
     });
 

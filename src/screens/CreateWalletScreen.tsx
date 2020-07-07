@@ -6,7 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioGroup, RadioButton } from 'app/components';
-import { Route, Wallet, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, Wallet, MainCardStackNavigatorParamList, NavigationProp } from 'app/consts';
 import { AppStorage, HDSegwitBech32Wallet, HDSegwitP2SHWallet, SegwitP2SHWallet, BlueApp } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
@@ -145,7 +145,12 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   render() {
     if (this.state.isSuccess) {
-      return <CreateWalletSuccessScreen secret={this.state.secret} navigation={this.props.navigation} />;
+      return (
+        <CreateWalletSuccessScreen
+          secret={this.state.secret}
+          navigation={this.props.navigation as NavigationProp<MainCardStackNavigatorParamList, Route.CreateWallet>}
+        />
+      );
     }
     return (
       <ScreenTemplate

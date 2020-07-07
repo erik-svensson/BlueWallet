@@ -50,8 +50,6 @@ export const AboutUsScreen = (props: Props) => {
     });
   };
 
-  const navigateToReleaseNotes = () => props.navigation.navigate(Route.ReleaseNotes);
-
   const goToGithub = () => {
     Linking.openURL('https://github.com/bitcoinvault/GoldWallet');
   };

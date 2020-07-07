@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import bip21 from 'bip21';
 import React, { Component } from 'react';
@@ -8,7 +8,7 @@ import Share from 'react-native-share';
 
 import { Header, ScreenTemplate, Button } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Route, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../BlueApp';
@@ -18,7 +18,10 @@ import { DashboarContentdHeader } from './Dashboard/DashboarContentdHeader';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ReceiveCoins>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParamList, Route.ReceiveCoins>
+  >;
   route: RouteProp<MainCardStackNavigatorParamList, Route.ReceiveCoins>;
 }
 interface State {

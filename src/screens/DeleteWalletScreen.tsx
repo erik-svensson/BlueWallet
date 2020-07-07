@@ -1,11 +1,11 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
-import { Route, RootStackParamList } from 'app/consts';
+import { Route, RootStackParamList, MainTabNavigatorParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { BlueApp } from 'app/legacy';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
@@ -14,7 +14,10 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParamList, Route.DeleteWallet>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParamList, Route.ContactList>,
+    StackNavigationProp<RootStackParamList, Route.DeleteWallet>
+  >;
   route: RouteProp<RootStackParamList, Route.DeleteWallet>;
   loadWallets: () => Promise<WalletsActionType>;
 }

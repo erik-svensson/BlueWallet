@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -14,14 +14,17 @@ import {
   ContactAvatar,
 } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Contact, Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Contact, Route, MainCardStackNavigatorParamList, RootStackParamList } from 'app/consts';
 import { UpdateContactAction, updateContact } from 'app/state/contacts/actions';
 
 const i18n = require('../../loc');
 
 interface Props {
   updateContact: (contact: Contact) => UpdateContactAction;
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ContactDetails>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParamList, Route.ContactDetails>
+  >;
   route: RouteProp<MainCardStackNavigatorParamList, Route.ContactDetails>;
 }
 

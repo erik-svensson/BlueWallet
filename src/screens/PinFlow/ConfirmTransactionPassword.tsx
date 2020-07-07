@@ -1,11 +1,11 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { icons } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
-import { Route, CONST, PasswordNavigatorParamList } from 'app/consts';
+import { Route, CONST, PasswordNavigatorParamList, MainTabNavigatorParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { SecureStorageService } from 'app/services';
 import { typography, palette } from 'app/styles';
@@ -13,7 +13,11 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<PasswordNavigatorParamList, Route.ConfirmTransactionPassword>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParamList, Route.ContactList>,
+    StackNavigationProp<PasswordNavigatorParamList, Route.ConfirmTransactionPassword>
+  >;
+
   route: RouteProp<PasswordNavigatorParamList, Route.ConfirmTransactionPassword>;
 }
 

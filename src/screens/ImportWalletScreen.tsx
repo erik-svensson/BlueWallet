@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
@@ -7,7 +7,13 @@ import { connect } from 'react-redux';
 
 import { Header, TextAreaItem, FlatButton, ScreenTemplate } from 'app/components';
 import { Button } from 'app/components/Button';
-import { Route, Wallet, MainCardStackNavigatorParamList } from 'app/consts';
+import {
+  Route,
+  Wallet,
+  MainCardStackNavigatorParamList,
+  MainTabNavigatorParamList,
+  RootStackParamList,
+} from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
@@ -25,7 +31,13 @@ import {
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.ImportWallet>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParamList, Route.ContactList>,
+    CompositeNavigationProp<
+      StackNavigationProp<RootStackParamList, Route.DeleteContact>,
+      StackNavigationProp<MainCardStackNavigatorParamList, Route.ImportWallet>
+    >
+  >;
   loadWallets: () => Promise<WalletsActionType>;
 }
 

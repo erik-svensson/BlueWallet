@@ -1,3 +1,4 @@
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -6,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { icons } from 'app/assets';
 import { Button, Header, InputItem, ScreenTemplate, Text, Image } from 'app/components';
-import { Contact, Route, MainCardStackNavigatorParamList } from 'app/consts';
+import { Contact, Route, MainTabNavigatorParamList, MainCardStackNavigatorParamList } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { createContact, CreateContactAction } from 'app/state/contacts/actions';
 import { palette, typography } from 'app/styles';
@@ -14,7 +15,10 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParamList, Route.CreateContact>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParamList, Route.ContactList>,
+    StackNavigationProp<MainCardStackNavigatorParamList, Route.CreateContact>
+  >;
   createContact: (contact: Contact) => CreateContactAction;
 }
 
@@ -68,7 +72,7 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
       buttonProps: {
         title: i18n.contactCreate.successButton,
         onPress: () => {
-          this.props.navigation.navigate(Route.Dashboard); //add stack reset
+          this.props.navigation.navigate(Route.ContactList);
         },
       },
     });
