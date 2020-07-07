@@ -11,12 +11,12 @@ import {
   DeleteContactScreen,
   SendTransactionDetailsScreen,
   MessageScreen,
+  EditTextScreen,
+  UnlockTransaction,
 } from 'app/screens';
 
-import { EditTextNavigator } from './EditTextNavigator';
 import { MainCardStackNavigator } from './MainCardStackNavigator';
 import { PasswordNavigator } from './PasswordNavigator';
-import { UnlockTransactionNavaigator } from './UnlockTransactionNavaigator';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -25,9 +25,9 @@ export const RootNavigator = () => (
     <Stack.Screen name={Route.MainCardStackNavigator} component={MainCardStackNavigator} />
     <Stack.Screen name={Route.ImportWalletQRCode} component={ImportWalletQRCodeScreen} />
     <Stack.Screen name={Route.ActionSheet} component={ActionSheet} options={modalOptions} />
-    <Stack.Screen name={Route.UnlockTransactionNavaigator} component={UnlockTransactionNavaigator} />
+    <Stack.Screen name={Route.UnlockTransaction} component={UnlockTransaction} />
     <Stack.Screen name={Route.PasswordNavigator} component={PasswordNavigator} />
-    <Stack.Screen name={Route.EditTextNavigator} component={EditTextNavigator} />
+    <Stack.Screen name={Route.EditText} component={EditTextScreen} />
     <Stack.Screen name={Route.Message} component={MessageScreen} />
     <Stack.Screen name={Route.ExportWallet} component={ExportWalletScreen} />
     <Stack.Screen name={Route.ExportWalletXpub} component={ExportWalletXpubScreen} />

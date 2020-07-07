@@ -23,9 +23,14 @@ export class SendTransactionDetailsScreen extends PureComponent<Props> {
       navigation,
       route: { params },
     } = this.props;
-    const { fee, tx, satoshiPerByte, wallet } = params;
-    const recipient = params.recipients[0];
-    const txSize = Math.round(params.tx.length / 2);
+    const {
+      fee,
+      tx,
+      satoshiPerByte,
+      wallet,
+      recipients: [recipient],
+    } = params;
+    const txSize = Math.round(tx.length / 2);
     const amount =
       recipient.amount === BitcoinUnit.MAX
         ? currency.satoshiToBTC(wallet.getBalance()) - fee

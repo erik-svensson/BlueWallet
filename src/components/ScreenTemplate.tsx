@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: palette.white,
-    paddingBottom: ifIphoneX(20, 0),
+    paddingBottom: ifIphoneX(34, 0),
   },
   contentContainer: {
     flexGrow: 1,

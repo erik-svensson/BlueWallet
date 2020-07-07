@@ -20,7 +20,6 @@ export enum FlowType {
 }
 
 export enum Route {
-  EditTextNavigator = 'EditTextNavigator',
   UnlockTransactionNavaigator = 'UnlockTransactionNavaigator',
   PasswordNavigator = 'PasswordNavigator',
   Dashboard = 'Dashboard',
@@ -128,6 +127,9 @@ export interface Filters {
   transactionType?: string;
 }
 
+// @ts-ignore
+export type NavigationProp<T, R> = StackNavigationProp<T, R>;
+
 export type MainTabNavigatorParamList = {
   [Route.Dashboard]: undefined;
   [Route.ContactList]: undefined;
@@ -138,9 +140,9 @@ export type RootStackParamList = {
   [Route.MainCardStackNavigator]: undefined;
   [Route.ImportWalletQRCode]: undefined;
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
-  [Route.UnlockTransactionNavaigator]: undefined;
+  [Route.UnlockTransaction]: { onSuccess: () => void };
   [Route.PasswordNavigator]: undefined;
-  [Route.EditTextNavigator]: {
+  [Route.EditText]: {
     title: string;
     onSave: (value: string) => void;
     label: string;
@@ -171,38 +173,30 @@ export type RootStackParamList = {
   };
 };
 
-export type UnlockTransactionNavigatorParamList = {
-  [Route.UnlockTransaction]: { onSuccess: () => void };
-};
-
 export type PasswordNavigatorParamList = {
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
 };
 
-export type EditTextNavigatorParamList = {
-  [Route.EditText]: {
-    title: string;
-    onSave: (value: string) => void;
-    label: string;
-    header?: React.ReactNode;
-    value?: string;
-    validate?: (value: string) => string | undefined;
-    keyboardType?: KeyboardType;
-  };
-};
-
 export type MainCardStackNavigatorParamList = {
   [Route.MainCardStackNavigator]: undefined;
   [Route.CreateWallet]: undefined;
-  [Route.ImportWallet]: { appSettings: AppSettingsState; loadWallets: () => Promise<WalletsActionType> };
+  [Route.ImportWallet]: {
+    appSettings: AppSettingsState;
+    loadWallets: () => Promise<WalletsActionType>;
+  };
   [Route.WalletDetails]: { wallet: Wallet };
   [Route.CreateContact]: undefined;
   [Route.ContactDetails]: { contact: Contact };
   [Route.ContactQRCode]: { contact: Contact };
   [Route.TransactionDetails]: { transaction: Transaction };
   [Route.ReceiveCoins]: { secret?: string };
-  [Route.SendCoins]: { fromSecret: string; fromAddress: string; fromWallet: any; toAddress?: string };
+  [Route.SendCoins]: {
+    fromSecret: string;
+    fromAddress: string;
+    fromWallet: Wallet;
+    toAddress?: string;
+  };
   [Route.SendCoinsConfirm]: {
     fee: number;
     feeSatoshi?: number;
@@ -211,7 +205,7 @@ export type MainCardStackNavigatorParamList = {
     size?: number;
     tx: any;
     satoshiPerByte: any;
-    fromWallet: any;
+    fromWallet: Wallet;
   };
   [Route.ScanQrCode]: { onBarCodeScan: (code: string) => void };
   [Route.ChooseContactList]: {

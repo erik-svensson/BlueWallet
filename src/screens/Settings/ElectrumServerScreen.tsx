@@ -6,7 +6,6 @@ import { StyleSheet, Alert, Text } from 'react-native';
 import { ScreenTemplate, Button, FlatButton, InputItem, Header } from 'app/components';
 import { MainCardStackNavigatorParamList, Route } from 'app/consts';
 import { AppStorage, defaultPeer } from 'app/legacy';
-import { NavigationService } from 'app/services';
 import { typography, palette } from 'app/styles';
 
 const BlueElectrum = require('../../../BlueElectrum');

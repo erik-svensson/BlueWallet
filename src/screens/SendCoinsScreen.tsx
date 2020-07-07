@@ -208,15 +208,12 @@ export class SendCoinsScreen extends Component<Props, State> {
   );
 
   setTransactionFee = () => {
-    this.props.navigation.navigate(Route.EditTextNavigator, {
-      screen: Route.EditText,
-      params: {
-        title: i18n.send.create.fee,
-        label: i18n.send.create.amount,
-        onSave: this.saveTransactionFee,
-        value: this.state.amount,
-        header: this.renderSetTransactionFeeHeader(),
-      },
+    this.props.navigation.navigate(Route.EditText, {
+      title: i18n.send.create.fee,
+      label: i18n.send.create.amount,
+      onSave: this.saveTransactionFee,
+      value: this.state.amount,
+      header: this.renderSetTransactionFeeHeader(),
     });
   };
 
@@ -228,7 +225,6 @@ export class SendCoinsScreen extends Component<Props, State> {
     const changeAddress = await wallet.getAddressForTransaction();
     const satoshis = new BigNumber(firstTransaction.amount).multipliedBy(100000000).toNumber();
     const requestedSatPerByte: string | number = +this.state.fee.toString().replace(/\D/g, '');
-    console.log({ satoshis, requestedSatPerByte, utxo: wallet.getUtxo() });
 
     let targets: any[] = [];
     for (const transaction of this.state.addresses) {
@@ -523,7 +519,6 @@ export class SendCoinsScreen extends Component<Props, State> {
    * @param data {String} Can be address or `bitcoin:xxxxxxx` uri scheme, or invalid garbage
    */
   processAddressData = (data: string) => {
-    console.log('data', data);
     const newAddresses = processAddressData(data, this.state.addresses[0].amount);
     this.setState({
       addresses: [newAddresses],

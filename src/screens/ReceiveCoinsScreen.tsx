@@ -112,16 +112,13 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     !Number(value.replace(',', '.')) && i18n.send.details.amount_field_is_not_valid;
 
   editAmount = () => {
-    this.props.navigation.navigate(Route.EditTextNavigator, {
-      screen: Route.EditText,
-      params: {
-        title: i18n.receive.header,
-        label: i18n.receive.details.amount,
-        onSave: this.updateAmount,
-        keyboardType: 'numeric',
-        validate: this.validate,
-        value: this.state.amount && !!this.state.amount ? this.state.amount.toString() : '',
-      },
+    this.props.navigation.navigate(Route.EditText, {
+      title: i18n.receive.header,
+      label: i18n.receive.details.amount,
+      onSave: this.updateAmount,
+      keyboardType: 'numeric',
+      validate: this.validate,
+      value: this.state.amount && !!this.state.amount ? this.state.amount.toString() : '',
     });
   };
 

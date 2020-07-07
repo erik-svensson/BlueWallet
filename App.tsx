@@ -52,11 +52,11 @@ export default class App extends React.PureComponent<State> {
   };
 
   get showUnlockScreen(): boolean {
-    // if (__DEV__) {
-    //   // do not check PIN during development
-    //   BlueApp.startAndDecrypt();
-    //   return false;
-    // }
+    if (__DEV__) {
+      // do not check PIN during development
+      BlueApp.startAndDecrypt();
+      return false;
+    }
     const { successfullyAuthenticated, isPinSet } = this.state;
     return isPinSet && !successfullyAuthenticated;
   }

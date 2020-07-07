@@ -114,11 +114,8 @@ export class SendCoinsConfirmScreen extends Component<Props> {
   };
 
   goToUnlockScreen = () => {
-    this.props.navigation.navigate(Route.UnlockTransactionNavaigator, {
-      screen: Route.UnlockTransaction,
-      params: {
-        onSuccess: this.broadcast,
-      },
+    this.props.navigation.navigate(Route.UnlockTransaction, {
+      onSuccess: this.broadcast,
     });
   };
 

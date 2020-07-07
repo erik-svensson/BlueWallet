@@ -22,15 +22,12 @@ export const GenericInputItem = (props: Props) => {
     value && props.onSave && props.onSave(newValue);
   };
   const onFocus = () => {
-    NavigationService.navigate(Route.EditTextNavigator, {
-      screen: Route.EditText,
-      params: {
-        title,
-        label,
-        value,
-        validate: props.validate,
-        onSave: handleValueSave,
-      },
+    NavigationService.navigate(Route.EditText, {
+      title,
+      label,
+      value,
+      validate: props.validate,
+      onSave: handleValueSave,
     });
   };
   return <InputItem focused value={value} onFocus={onFocus} label={label} />;

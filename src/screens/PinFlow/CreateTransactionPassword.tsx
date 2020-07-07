@@ -5,6 +5,7 @@ import { Text, StyleSheet, View, TouchableOpacity, BackHandler, NativeEventSubsc
 import { icons } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
 import { Route, CONST, PasswordNavigatorParamList } from 'app/consts';
+import { noop } from 'app/helpers/helpers';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -29,7 +30,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
   };
   backHandler?: NativeEventSubscription;
   inputRef = React.createRef<InputItem>();
-  focusListener: any;
+  focusListener: Function = noop;
 
   updatePassword = (password: string) => {
     this.setState({ password });

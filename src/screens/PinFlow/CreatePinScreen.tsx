@@ -5,6 +5,7 @@ import { Text, StyleSheet, BackHandler, View, NativeEventSubscription } from 're
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
 import { Route, CONST, FlowType, MainCardStackNavigatorParamList } from 'app/consts';
+import { noop } from 'app/helpers/helpers';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -32,7 +33,7 @@ export class CreatePinScreen extends PureComponent<Props, State> {
 
   pinInputRef = React.createRef<PinInput>();
   backHandler?: NativeEventSubscription;
-  focusListener: any;
+  focusListener: Function = noop;
 
   componentDidMount() {
     this.props.navigation.setOptions({

@@ -155,15 +155,12 @@ class TransactionDetailsScreen extends Component<Props, State> {
 
   editNote = () => {
     const { transaction } = this.props.route.params;
-    this.props.navigation.navigate(Route.EditTextNavigator, {
-      screen: Route.EditText,
-      params: {
-        title: moment.unix(transaction.time).format('lll'),
-        label: i18n.transactions.details.note,
-        onSave: this.updateNote,
-        value: this.state.note,
-        header: this.renderHeader(),
-      },
+    this.props.navigation.navigate(Route.EditText, {
+      title: moment.unix(transaction.time).format('lll'),
+      label: i18n.transactions.details.note,
+      onSave: this.updateNote,
+      value: this.state.note,
+      header: this.renderHeader(),
     });
   };
 

@@ -1,8 +1,8 @@
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { images, icons } from 'app/assets';
+import { NavigationProp } from 'app/consts';
 import { getStatusBarHeight, palette, typography } from 'app/styles';
 
 import { FlatButton } from './FlatButton';
@@ -17,7 +17,7 @@ export const HEADER_HEIGHT = Platform.select({
 }) as number;
 
 interface Props {
-  navigation?: StackNavigationProp<any, any> | any;
+  navigation?: NavigationProp<any, any>;
   title: string;
   isBackArrow?: boolean;
   onBackArrow?: () => void;
