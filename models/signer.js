@@ -143,7 +143,7 @@ exports.createHDSegwitTransaction = function(utxos, toAddress, amount, fixedFee,
   return tx.toHex();
 };
 
-exports.createHDSegwitAIRTransaction = function({
+exports.createHDSegwitVaultTransaction = function({
   utxos,
   address,
   amount,
@@ -182,7 +182,6 @@ exports.createHDSegwitAIRTransaction = function({
       network: config.network,
     });
 
-    debugger;
     psbt.addInput({
       hash: unspent.txid,
       index: unspent.vout,
@@ -194,8 +193,7 @@ exports.createHDSegwitAIRTransaction = function({
       witnessScript: p2ar.output,
     });
     inputKeyPairs.push(keyPair);
-    console.log('psbt', psbt);
-    debugger;
+
     unspentAmountSatoshi += unspent.value;
     if (unspentAmountSatoshi >= amountToOutputSatoshi + feeInSatoshis) {
       // found enough inputs to satisfy payee and pay fees
@@ -203,12 +201,9 @@ exports.createHDSegwitAIRTransaction = function({
     }
   }
 
-  // if (unspentAmountSatoshi < amountToOutputSatoshi + feeInSatoshis) {
-  //   throw new Error('Not enough balance. Please, try sending a smaller amount.');
-  // }
-
-  debugger;
-  console.log('ADDING OUTPUTS');
+  if (unspentAmountSatoshi < amountToOutputSatoshi + feeInSatoshis) {
+    throw new Error('Not enough balance. Please, try sending a smaller amount.');
+  }
 
   // adding outputs
 
@@ -216,9 +211,6 @@ exports.createHDSegwitAIRTransaction = function({
     address,
     value: amountToOutputSatoshi,
   });
-  console.log('addOutput 1');
-
-  debugger;
 
   if (amountToOutputSatoshi + feeInSatoshis < unspentAmountSatoshi) {
     // sending less than we have, so the rest should go back
@@ -232,18 +224,11 @@ exports.createHDSegwitAIRTransaction = function({
     }
   }
 
-  console.log('SIGNING', inputKeyPairs);
-  debugger;
-
   inputKeyPairs.forEach((keyPair, index) => {
-    console.log('SIGNING index', index);
-    console.log('SIGNING ELEMENT', [keyPair, ...keyPairs]);
     [keyPair, ...keyPairs].forEach(kP => psbt.signInput(index, kP));
   });
-  console.log('SIGNED');
 
   const tx = psbt.finalizeAllInputs(vaultTxType).extractTransaction();
-  debugger;
   return tx.toHex();
 };
 

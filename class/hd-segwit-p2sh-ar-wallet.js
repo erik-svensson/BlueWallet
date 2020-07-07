@@ -21,6 +21,19 @@ export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
     );
   }
 
+  static fromJson(json) {
+    const data = JSON.parse(json);
+    const wallet = new HDSegwitP2SHArWallet(data.pubKeysHex);
+    for (const key of Object.keys(data)) {
+      // don't override values set in constructor
+      if (!wallet[key]) {
+        wallet[key] = data[key];
+      }
+    }
+
+    return wallet;
+  }
+
   nodeToAddress(hdNode) {
     const { address } = payments.p2sh({
       redeem: payments.p2wsh({
@@ -36,15 +49,7 @@ export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
     return address;
   }
 
-  createTx(
-    utxos,
-    amount,
-    fee,
-    address,
-    privateKeys = ['b2a1f7088aaa12e15d887d7f1651e16ef27ebb22911c18c3244cb6a3efce0b70'],
-    vaultTxType = 2,
-  ) {
-    console.log('utxos', utxos);
+  createTx({ utxos, amount, fee, address, privateKeys = [], vaultTxType }) {
     for (const utxo of utxos) {
       utxo.wif = this._getWifForAddress(utxo.address);
     }
@@ -55,10 +60,9 @@ export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
       }),
     );
 
-    debugger;
     const amountPlusFee = this.calculateTotalAmount({ utxos, amount, fee });
 
-    return signer.createHDSegwitAIRTransaction({
+    return signer.createHDSegwitVaultTransaction({
       utxos,
       address,
       amount: amountPlusFee,

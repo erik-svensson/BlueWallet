@@ -110,16 +110,12 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     const { selectedIndex, label, publicKey } = this.state;
     this.setState({ isLoading: true });
 
-    const WalletClass = HDSegwitP2SHArWallet;
+    const WalletClass = this.getWalletClassByIndex(selectedIndex);
 
-    const publicKey2 = [
-      '041ae1af307382d1a14bbba5128b8c317c609680745eee8e065c953b6f10af46ff62a3fdf1dce8d3a99286271add4139b6b78ae0ddc54a66344bb671b6ba698ff4',
-    ];
-    const wallet = publicKey2 ? new WalletClass(publicKey2) : new WalletClass();
+    const wallet = publicKey ? new WalletClass([publicKey]) : new WalletClass();
 
     wallet.setLabel(label || i18n.wallets.details.title);
 
-    console.log('wallet', wallet);
     if (this.state.activeBitcoin) {
       await wallet.generate();
       BlueApp.wallets.push(wallet);

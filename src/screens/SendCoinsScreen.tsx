@@ -415,16 +415,19 @@ export class SendCoinsScreen extends Component<Props, State> {
         utxo = this.state.fromWallet.utxo;
         do {
           console.log('try #', tries, 'fee=', fee);
-          const balance = this.state.fromWallet.getBalance();
-          console.log('balance', balance);
-          if (this.recalculateAvailableBalance(balance, firstTransaction.amount, fee) < 0) {
+          if (this.recalculateAvailableBalance(this.state.fromWallet.getBalance(), firstTransaction.amount, fee) < 0) {
             // we could not add any fee. user is trying to send all he's got. that wont work
             // throw new Error(loc.send.details.total_exceeds_balance);
           }
-          console.log('SENDING', this.state.fromWallet);
 
           const startTime = Date.now();
-          tx = this.state.fromWallet.createTx(utxo, firstTransaction.amount, fee, firstTransaction.address);
+          tx = this.state.fromWallet.createTx(
+            utxo,
+            firstTransaction.amount,
+            fee,
+            firstTransaction.address,
+            this.state.memo,
+          );
           const endTime = Date.now();
           console.log('create tx ', (endTime - startTime) / 1000, 'sec');
 
@@ -449,7 +452,6 @@ export class SendCoinsScreen extends Component<Props, State> {
             break;
           }
         } while (tries++ < 5);
-        return;
 
         BlueApp.tx_metadata = BlueApp.tx_metadata || {};
         BlueApp.tx_metadata[txid] = {

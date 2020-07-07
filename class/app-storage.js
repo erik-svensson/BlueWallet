@@ -179,7 +179,6 @@ export class AppStorage {
   async loadFromDisk(password) {
     try {
       let data = await this.getItem('data');
-      console.log('loadFromDisk', data);
 
       if (password) {
         data = this.decryptData(data, password);
@@ -217,14 +216,7 @@ export class AppStorage {
               unserializedWallet = HDSegwitBech32Wallet.fromJson(key);
               break;
             case HDSegwitP2SHArWallet.type:
-              unserializedWallet = new HDSegwitP2SHArWallet(tempObj.pubKeysHex);
-              const pubKeys = unserializedWallet.pubKeys;
-              const obj2 = JSON.parse(key);
-              for (const key2 of Object.keys(obj2)) {
-                unserializedWallet[key2] = obj2[key2];
-              }
-              unserializedWallet.pubKeys = pubKeys;
-              console.log('unserializedWallet', unserializedWallet);
+              unserializedWallet = HDSegwitP2SHArWallet.fromJson(key);
               break;
             case LegacyWallet.type:
             default:
