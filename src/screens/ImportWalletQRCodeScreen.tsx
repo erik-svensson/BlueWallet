@@ -1,3 +1,4 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -10,14 +11,12 @@ import {
   Alert,
 } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Wallet, Route } from 'app/consts';
+import { Wallet, Route, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { sleep } from 'app/helpers/helpers';
-import { NavigationService } from 'app/services';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { getStatusBarHeight } from 'app/styles';
 
@@ -41,7 +40,8 @@ interface BarCodeScanEvent {
   type: string;
 }
 
-interface Props extends NavigationInjectedProps {
+interface Props {
+  navigation: StackNavigationProp<RootStackParams, Route.ImportWalletQRCode>;
   loadWallets: () => Promise<WalletsActionType>;
 }
 
@@ -70,7 +70,7 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       type: MessageType.error,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => NavigationService.navigateWithReset(Route.MainCardStackNavigator),
+        onPress: () => this.props.navigation.popToTop(),
       },
     });
   };
@@ -82,7 +82,7 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => NavigationService.navigateWithReset(Route.MainCardStackNavigator),
+        onPress: () => this.props.navigation.popToTop(),
       },
     });
 
@@ -103,7 +103,7 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       BlueApp.wallets.push(w);
       await BlueApp.saveToDisk();
       this.props.loadWallets();
-      this.props.navigation.popToTop();
+      this.props.navigation.goBack();
 
       this.showSuccessImportMessageScreen();
       // this.props.navigation.dismiss();
