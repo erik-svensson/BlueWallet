@@ -6,9 +6,9 @@ export class AbstractWallet {
   static type = 'abstract';
   static typeReadable = 'abstract';
 
-  static fromJson(obj) {
+  static fromJson(obj, ...args) {
     const obj2 = JSON.parse(obj);
-    const temp = new this();
+    const temp = new this(...args);
     for (const key2 of Object.keys(obj2)) {
       temp[key2] = obj2[key2];
     }
