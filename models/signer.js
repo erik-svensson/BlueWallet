@@ -6,9 +6,9 @@
  * https://github.com/Overtorment/Cashier-BTC
  *
  **/
-import config from '../config';
-
 const bitcoinjs = require('bitcoinjs-lib');
+
+const config = require('../config');
 
 const _p2wpkh = bitcoinjs.payments.p2wpkh;
 const _p2sh = bitcoinjs.payments.p2sh;
