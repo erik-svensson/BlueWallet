@@ -53,9 +53,9 @@ export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
     return address;
   }
 
-  static async mnemonicToKeyPair(mnemonic) {
+  async mnemonicToKeyPair(mnemonic) {
     const SALT_LENGHT = 4;
-    const WORDS_IN_BITS_LENGHT = 11;
+    const WORD_BIT_LENGHT = 11;
     const WORDS_LENGTH = 12;
 
     const words = mnemonic.split(' ');
@@ -64,12 +64,12 @@ export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
       throw new Error(`Provided ${words.length} words expected ${WORDS_LENGTH}`);
     }
 
-    const bits132 = mnemonic.split(' ').reduce((prevVal, word) => {
+    const bits132 = mnemonic.split(' ').reduce((bits, word) => {
       const index = bip39.wordlists.english.indexOf(word);
       if (index === -1) {
         throw new Error(`Couldn't find index for word: ${word}`);
       }
-      return prevVal + index.toString(2).padStart(WORDS_IN_BITS_LENGHT, '0');
+      return bits + index.toString(2).padStart(WORD_BIT_LENGHT, '0');
     }, '');
 
     const privateKey = await promisify(pbkdf2)(
@@ -85,16 +85,20 @@ export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
     });
   }
 
-  createTx({ utxos, amount, fee, address, privateKeys = [], vaultTxType }) {
+  async createTx({ utxos, amount, fee, address, mnemonics = [], privateKeys = [], vaultTxType }) {
     for (const utxo of utxos) {
       utxo.wif = this._getWifForAddress(utxo.address);
     }
 
-    const keyPairs = privateKeys.map(p =>
+    const keyPairsFromMnemonics = await Promise.all(mnemonics.map(m => this.mnemonicToKeyPair(m)));
+
+    const keyPairsFromPrivateKeys = privateKeys.map(p =>
       ECPair.fromPrivateKey(Buffer.from(p, BUFFER_ENCODING), {
         network: config.network,
       }),
     );
+
+    const keyPairs = [...keyPairsFromMnemonics, ...keyPairsFromPrivateKeys];
 
     const amountPlusFee = this.calculateTotalAmount({ utxos, amount, fee });
 
