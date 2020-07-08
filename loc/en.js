@@ -125,6 +125,7 @@ module.exports = {
       legacyHDP2SH: 'It contains a tree of P2SH addresses generated from a single 24-word seed',
       LegacyP2SH: 'It contains a single P2SH address',
       LegacyHDSegWit: 'It contains a tree of native segwit addresses, generated from a single 24-word seed',
+      publicKeyError: 'Provided public key is invalid',
     },
     publicKey: {
       title: 'Enter Public Key',
