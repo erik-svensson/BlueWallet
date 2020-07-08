@@ -8,6 +8,8 @@ import { AbstractHDSegwitP2SHWallet } from './abstract-hd-segwit-p2sh-wallet';
 
 const { payments, ECPair } = require('bitcoinjs-lib');
 
+const i18n = require('../loc');
+
 const network = config.network;
 const BUFFER_ENCODING = 'hex';
 
@@ -61,14 +63,25 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
 
     const words = mnemonic.split(' ');
 
-    if (words.length !== WORDS_LENGTH) {
-      throw new Error(`Provided ${words.length} words expected ${WORDS_LENGTH}`);
+    const wordsLength = words.length;
+
+    if (wordsLength !== WORDS_LENGTH) {
+      throw new Error(
+        i18n.formatString(i18n.wallets.errors.invalidMnemonicWordsNumber, {
+          receivedWordsNumber: wordsLength,
+          expectedWordsNumber: WORDS_LENGTH,
+        }),
+      );
     }
 
     const bits132 = mnemonic.split(' ').reduce((bits, word) => {
       const index = bip39.wordlists.english.indexOf(word);
       if (index === -1) {
-        throw new Error(`Couldn't find index for word: ${word}`);
+        throw new Error(
+          i18n.formatString(i18n.wallets.errors.noIndexForWord, {
+            noIndexForWord: word,
+          }),
+        );
       }
       return bits + index.toString(2).padStart(WORD_BIT_LENGHT, '0');
     }, '');

@@ -7,7 +7,7 @@ export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHVaultWallet {
   static typeReadable = 'AR';
 
   nodeToAddress(hdNode) {
-    super.nodeToAddress(hdNode, payments.p2ar);
+    return super.nodeToAddress(hdNode, payments.p2ar);
   }
 
   createTx(args) {
