@@ -1,5 +1,5 @@
 const bitcoin = require('bitcoinjs-lib');
 
-export default {
+module.exports = {
   network: bitcoin.alt_networks.bitcoinvault,
 };

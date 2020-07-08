@@ -1,7 +1,4 @@
-import BigNumber from 'bignumber.js';
-
 import config from '../config';
-import { BitcoinUnit } from '../models/bitcoinUnits';
 import signer from '../models/signer';
 import { AbstractHDSegwitP2SHWallet } from './abstract-hd-segwit-p2sh-wallet';
 
@@ -32,15 +29,7 @@ export class HDSegwitP2SHWallet extends AbstractHDSegwitP2SHWallet {
       utxo.wif = this._getWifForAddress(utxo.address);
     }
 
-    let amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
-
-    if (amount === BitcoinUnit.MAX) {
-      amountPlusFee = new BigNumber(0);
-      for (const utxo of utxos) {
-        amountPlusFee = amountPlusFee.plus(utxo.value);
-      }
-      amountPlusFee = amountPlusFee.dividedBy(100000000).toString(10);
-    }
+    const amountPlusFee = this.calculateTotalAmount({ utxos, amount, fee });
 
     return signer.createHDSegwitTransaction(utxos, address, amountPlusFee, fee, this.getAddressForTransaction());
   }

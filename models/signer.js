@@ -6,12 +6,15 @@
  * https://github.com/Overtorment/Cashier-BTC
  *
  **/
-import config from '../config';
-
 const bitcoinjs = require('bitcoinjs-lib');
+
+const config = require('../config');
 
 const _p2wpkh = bitcoinjs.payments.p2wpkh;
 const _p2sh = bitcoinjs.payments.p2sh;
+const _p2wsh = bitcoinjs.payments.p2wsh;
+const _p2ar = bitcoinjs.payments.p2ar;
+
 const toSatoshi = num => parseInt((num * 100000000).toFixed(0));
 
 exports.createHDTransaction = function(utxos, toAddress, amount, fixedFee, changeAddress) {
@@ -137,6 +140,95 @@ exports.createHDSegwitTransaction = function(utxos, toAddress, amount, fixedFee,
   }
 
   const tx = psbt.finalizeAllInputs().extractTransaction();
+  return tx.toHex();
+};
+
+exports.createHDSegwitVaultTransaction = function({
+  utxos,
+  address,
+  amount,
+  fixedFee,
+  changeAddress,
+  pubKeys,
+  vaultTxType,
+  keyPairs,
+}) {
+  const feeInSatoshis = parseInt((fixedFee * 100000000).toFixed(0));
+  const amountToOutputSatoshi = parseInt(((amount - fixedFee) * 100000000).toFixed(0)); // how much payee should get
+  const psbt = new bitcoinjs.Psbt({ network: config.network });
+  psbt.setVersion(1);
+  let unspentAmountSatoshi = 0;
+  const inputKeyPairs = [];
+
+  for (const unspent of utxos) {
+    if (unspent.confirmations < 1) {
+      // using only confirmed outputs
+      continue;
+    }
+    const keyPair = bitcoinjs.ECPair.fromWIF(unspent.wif, config.network);
+
+    const p2ar = _p2ar({
+      pubkeys: [keyPair.publicKey, ...pubKeys],
+      network: config.network,
+    });
+
+    const p2wsh = _p2wsh({
+      redeem: p2ar,
+      network: config.network,
+    });
+
+    const p2sh = _p2sh({
+      redeem: p2wsh,
+      network: config.network,
+    });
+
+    psbt.addInput({
+      hash: unspent.txid,
+      index: unspent.vout,
+      witnessUtxo: {
+        script: p2sh.output,
+        value: unspent.value,
+      },
+      redeemScript: p2wsh.output,
+      witnessScript: p2ar.output,
+    });
+    inputKeyPairs.push(keyPair);
+
+    unspentAmountSatoshi += unspent.value;
+    if (unspentAmountSatoshi >= amountToOutputSatoshi + feeInSatoshis) {
+      // found enough inputs to satisfy payee and pay fees
+      break;
+    }
+  }
+
+  if (unspentAmountSatoshi < amountToOutputSatoshi + feeInSatoshis) {
+    throw new Error('Not enough balance. Please, try sending a smaller amount.');
+  }
+
+  // adding outputs
+
+  psbt.addOutput({
+    address,
+    value: amountToOutputSatoshi,
+  });
+
+  if (amountToOutputSatoshi + feeInSatoshis < unspentAmountSatoshi) {
+    // sending less than we have, so the rest should go back
+    if (unspentAmountSatoshi - amountToOutputSatoshi - feeInSatoshis > 3 * feeInSatoshis) {
+      // to prevent @dust error change transferred amount should be at least 3xfee.
+      // if not - we just dont send change and it wil add to fee
+      psbt.addOutput({
+        address: changeAddress,
+        value: unspentAmountSatoshi - amountToOutputSatoshi - feeInSatoshis,
+      });
+    }
+  }
+
+  inputKeyPairs.forEach((keyPair, index) => {
+    [keyPair, ...keyPairs].forEach(kP => psbt.signInput(index, kP));
+  });
+
+  const tx = psbt.finalizeAllInputs(vaultTxType).extractTransaction();
   return tx.toHex();
 };
 

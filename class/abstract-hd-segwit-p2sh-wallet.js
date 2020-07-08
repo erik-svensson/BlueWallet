@@ -1,8 +1,10 @@
+import BigNumber from 'bignumber.js';
 import * as bip39 from 'bip39';
 import b58 from 'bs58check';
 import { NativeModules } from 'react-native';
 
 import config from '../config';
+import { BitcoinUnit } from '../models/bitcoinUnits';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
@@ -141,5 +143,18 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
 
   nodeToAddress() {
     throw new Error('Not implemented');
+  }
+
+  calculateTotalAmount({ utxos, amount, fee }) {
+    let amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
+
+    if (amount === BitcoinUnit.MAX) {
+      amountPlusFee = new BigNumber(0);
+      for (const utxo of utxos) {
+        amountPlusFee = amountPlusFee.plus(utxo.value);
+      }
+      amountPlusFee = amountPlusFee.dividedBy(100000000).toString(10);
+    }
+    return amountPlusFee;
   }
 }

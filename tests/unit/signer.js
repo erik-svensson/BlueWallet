@@ -1,8 +1,8 @@
-import config from '../../config';
-
 /* global describe, it */
 const assert = require('assert');
 const bitcoinjs = require('bitcoinjs-lib');
+
+const config = require('../../config');
 
 describe('unit - signer', function() {
   describe('createSegwitTransaction()', function() {

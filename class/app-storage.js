@@ -10,6 +10,7 @@ import {
   SegwitP2SHWallet,
   SegwitBech32Wallet,
   HDSegwitBech32Wallet,
+  HDSegwitP2SHArWallet,
 } from './';
 import DeviceQuickActions from './quickActions';
 
@@ -178,6 +179,7 @@ export class AppStorage {
   async loadFromDisk(password) {
     try {
       let data = await this.getItem('data');
+
       if (password) {
         data = this.decryptData(data, password);
         if (data) {
@@ -212,6 +214,9 @@ export class AppStorage {
               break;
             case HDSegwitBech32Wallet.type:
               unserializedWallet = HDSegwitBech32Wallet.fromJson(key);
+              break;
+            case HDSegwitP2SHArWallet.type:
+              unserializedWallet = HDSegwitP2SHArWallet.fromJson(key);
               break;
             case LegacyWallet.type:
             default:

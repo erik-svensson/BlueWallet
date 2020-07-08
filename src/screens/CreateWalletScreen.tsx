@@ -112,7 +112,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
     const WalletClass = this.getWalletClassByIndex(selectedIndex);
 
-    const wallet = publicKey ? new WalletClass(publicKey) : new WalletClass();
+    const wallet = publicKey ? new WalletClass([publicKey]) : new WalletClass();
 
     wallet.setLabel(label || i18n.wallets.details.title);
 
