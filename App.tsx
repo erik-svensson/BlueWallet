@@ -13,6 +13,8 @@ import { UnlockScreen } from 'app/screens';
 import { NavigationService, SecureStorageService, AppStateManager } from 'app/services';
 import { persistor, store } from 'app/state/store';
 
+import { HDSegwitP2SHArWallet } from './class';
+
 YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside', `\`-[RCTRootView cancelTouches]\``]);
 
 if (process.env.NODE_ENV !== 'development') {
@@ -27,6 +29,7 @@ interface State {
   isPinSet: boolean;
   successfullyAuthenticated: boolean;
 }
+const mnemonic = 'desert season travel unique clinic pass eager know elephant dune stick breeze';
 
 export default class App extends React.PureComponent<State> {
   state: State = {
@@ -35,6 +38,11 @@ export default class App extends React.PureComponent<State> {
   };
 
   async componentDidMount() {
+    try {
+      await HDSegwitP2SHArWallet.mnemonicToKeyPair(mnemonic);
+    } catch (e) {
+      console.log('Error', e);
+    }
     const isPinSet = await SecureStorageService.getSecuredValue('pin');
     if (isPinSet) {
       this.setState({ isPinSet });

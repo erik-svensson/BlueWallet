@@ -102,6 +102,7 @@
     "moment": "^2.24.0",
     "node-libs-react-native": "1.0.3",
     "path-browserify": "1.0.0",
+    "pbkdf2": "^3.1.1",
     "process": "0.11.10",
     "prop-types": "15.7.2",
     "react": "16.9.0",

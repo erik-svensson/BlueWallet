@@ -1,3 +1,7 @@
+import * as bip39 from 'bip39';
+import { pbkdf2 } from 'pbkdf2';
+import { promisify } from 'util';
+
 import config from '../config';
 import signer from '../models/signer';
 import { AbstractHDSegwitP2SHWallet } from './abstract-hd-segwit-p2sh-wallet';
@@ -47,6 +51,38 @@ export class HDSegwitP2SHArWallet extends AbstractHDSegwitP2SHWallet {
     });
 
     return address;
+  }
+
+  static async mnemonicToKeyPair(mnemonic) {
+    const SALT_LENGHT = 4;
+    const WORDS_IN_BITS_LENGHT = 11;
+    const WORDS_LENGTH = 12;
+
+    const words = mnemonic.split(' ');
+
+    if (words.length !== WORDS_LENGTH) {
+      throw new Error(`Provided ${words.length} words expected ${WORDS_LENGTH}`);
+    }
+
+    const bits132 = mnemonic.split(' ').reduce((prevVal, word) => {
+      const index = bip39.wordlists.english.indexOf(word);
+      if (index === -1) {
+        throw new Error(`Couldn't find index for word: ${word}`);
+      }
+      return prevVal + index.toString(2).padStart(WORDS_IN_BITS_LENGHT, '0');
+    }, '');
+
+    const privateKey = await promisify(pbkdf2)(
+      bits132.slice(SALT_LENGHT),
+      bits132.slice(0, SALT_LENGHT),
+      1,
+      32,
+      'sha256',
+    );
+
+    return ECPair.fromPrivateKey(privateKey, {
+      network: config.network,
+    });
   }
 
   createTx({ utxos, amount, fee, address, privateKeys = [], vaultTxType }) {
