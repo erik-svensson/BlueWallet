@@ -31,7 +31,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
         ),
       ];
     } catch (_) {
-      throw new Error(i18n.wallets.errors.invalidPrivateKey);
+      throw new Error(i18n.wallets.errors.inavlidPublicKey);
     }
   }
 
@@ -55,7 +55,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
         network: config.network,
       }).publicKey;
     } catch (error) {
-      throw new Error(i18n.wallets.errors.invalidPrivateKey);
+      throw new Error(i18n.wallets.errors.inavlidPublicKey);
     }
     this.pubKeysHex = [...this.pubKeysHex, publicKeyHex];
     this.pubKeys = [...this.pubKeys, publicKey];
@@ -145,7 +145,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
         }),
       );
     } catch (_) {
-      throw new Error(i18n.wallets.errors.inavlidPublicKey);
+      throw new Error(i18n.wallets.errors.invalidPrivateKey);
     }
 
     const amountPlusFee = this.calculateTotalAmount({ utxos, amount, fee });
