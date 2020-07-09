@@ -13,7 +13,6 @@ const config = require('../config');
 const _p2wpkh = bitcoinjs.payments.p2wpkh;
 const _p2sh = bitcoinjs.payments.p2sh;
 const _p2wsh = bitcoinjs.payments.p2wsh;
-const _p2ar = bitcoinjs.payments.p2ar;
 
 const toSatoshi = num => parseInt((num * 100000000).toFixed(0));
 
@@ -152,6 +151,7 @@ exports.createHDSegwitVaultTransaction = function({
   pubKeys,
   vaultTxType,
   keyPairs,
+  paymentMethod,
 }) {
   const feeInSatoshis = parseInt((fixedFee * 100000000).toFixed(0));
   const amountToOutputSatoshi = parseInt(((amount - fixedFee) * 100000000).toFixed(0)); // how much payee should get
@@ -167,13 +167,13 @@ exports.createHDSegwitVaultTransaction = function({
     }
     const keyPair = bitcoinjs.ECPair.fromWIF(unspent.wif, config.network);
 
-    const p2ar = _p2ar({
+    const p2Vault = paymentMethod({
       pubkeys: [keyPair.publicKey, ...pubKeys],
       network: config.network,
     });
 
     const p2wsh = _p2wsh({
-      redeem: p2ar,
+      redeem: p2Vault,
       network: config.network,
     });
 
@@ -190,7 +190,7 @@ exports.createHDSegwitVaultTransaction = function({
         value: unspent.value,
       },
       redeemScript: p2wsh.output,
-      witnessScript: p2ar.output,
+      witnessScript: p2Vault.output,
     });
     inputKeyPairs.push(keyPair);
 

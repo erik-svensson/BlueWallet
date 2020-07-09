@@ -178,6 +178,12 @@ module.exports = {
       imported_legacy: 'Imported Legacy',
       imported_watchonly: 'Imported Watch-only',
     },
+    errors: {
+      invalidMnemonicWordsNumber: 'Provided {receivedWordsNumber} words expected {expectedWordsNumber}',
+      noIndexForWord: `Couldn't find index for word: {word}`,
+      invalidPrivateKey: 'Invalid private key',
+      inavlidPublicKey: 'Invalid public key',
+    },
   },
   transactions: {
     list: {
