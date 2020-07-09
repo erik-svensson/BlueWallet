@@ -47,14 +47,18 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
   }
 
   async generate() {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (typeof RNRandomBytes === 'undefined') {
         // CLI/CI environment
         // crypto should be provided globally by test launcher
         // eslint-disable-next-line no-undef
         return crypto.randomBytes(AbstractHDSegwitP2SHWallet.randomBytesSize, async (err, buf) => {
           if (err) throw err;
-          await this.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
+          try {
+            await this.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
+          } catch (error) {
+            reject(error);
+          }
           resolve();
         });
       }
@@ -63,7 +67,11 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
       RNRandomBytes.randomBytes(AbstractHDSegwitP2SHWallet.randomBytesSize, async (err, bytes) => {
         if (err) throw new Error(err);
         const b = Buffer.from(bytes, 'base64').toString('hex');
-        await this.setSecret(bip39.entropyToMnemonic(b));
+        try {
+          await this.setSecret(bip39.entropyToMnemonic(b));
+        } catch (error) {
+          reject(error);
+        }
         resolve();
       });
     });

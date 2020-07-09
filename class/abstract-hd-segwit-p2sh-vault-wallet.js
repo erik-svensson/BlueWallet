@@ -17,16 +17,19 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
   static type = 'abstract';
   static typeReadable = 'abstract';
 
-  constructor(pubKeysHex) {
+  constructor(pubKeysHex = []) {
     super();
-    this.pubKeysHex = pubKeysHex;
+    this.pubKeysHex = [...(this.pubKeysHex || []), ...pubKeysHex];
     try {
-      this.pubKeys = this.pubKeysHex.map(
-        p =>
-          ECPair.fromPublicKey(Buffer.from(p, BUFFER_ENCODING), {
-            network: config.network,
-          }).publicKey,
-      );
+      this.pubKeys = [
+        ...(this.pubKeys || []),
+        ...pubKeysHex.map(
+          p =>
+            ECPair.fromPublicKey(Buffer.from(p, BUFFER_ENCODING), {
+              network: config.network,
+            }).publicKey,
+        ),
+      ];
     } catch (_) {
       throw new Error(i18n.wallets.errors.invalidPrivateKey);
     }
@@ -43,6 +46,19 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
     }
 
     return wallet;
+  }
+
+  addPublicKey(publicKeyHex) {
+    let publicKey;
+    try {
+      publicKey = ECPair.fromPublicKey(Buffer.from(publicKeyHex, BUFFER_ENCODING), {
+        network: config.network,
+      }).publicKey;
+    } catch (error) {
+      throw new Error(i18n.wallets.errors.invalidPrivateKey);
+    }
+    this.pubKeysHex = [...this.pubKeysHex, publicKeyHex];
+    this.pubKeys = [...this.pubKeys, publicKey];
   }
 
   nodeToAddress(hdNode, paymentMethod) {

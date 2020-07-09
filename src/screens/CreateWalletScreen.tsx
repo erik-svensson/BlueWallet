@@ -12,6 +12,7 @@ import {
   HDSegwitP2SHWallet,
   SegwitP2SHWallet,
   HDSegwitP2SHArWallet,
+  HDSegwitP2SHAirWallet,
   BlueApp,
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
@@ -109,7 +110,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   createWallet = async () => {
     const { selectedIndex, label, publicKey } = this.state;
     this.setState({ isLoading: true });
-
     const WalletClass = this.getWalletClassByIndex(selectedIndex);
 
     const wallet = publicKey ? new WalletClass([publicKey]) : new WalletClass();
