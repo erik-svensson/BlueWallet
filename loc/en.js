@@ -182,7 +182,7 @@ module.exports = {
       invalidMnemonicWordsNumber: 'Provided {receivedWordsNumber} words expected {expectedWordsNumber}',
       noIndexForWord: `Couldn't find index for word: {word}`,
       invalidPrivateKey: 'Invalid private key',
-      inavlidPublicKey: 'Invalid public key',
+      invalidPublicKey: 'Invalid public key',
     },
   },
   transactions: {

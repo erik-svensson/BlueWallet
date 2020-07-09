@@ -110,7 +110,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     const { selectedIndex, label, isLoading } = this.state;
     if (isLoading) return;
     this.setState({ isLoading: true });
-
     const WalletClass = this.getWalletClassByIndex(selectedIndex);
 
     try {

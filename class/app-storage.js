@@ -11,6 +11,7 @@ import {
   SegwitBech32Wallet,
   HDSegwitBech32Wallet,
   HDSegwitP2SHArWallet,
+  HDSegwitP2SHAirWallet,
 } from './';
 import DeviceQuickActions from './quickActions';
 
@@ -218,10 +219,12 @@ export class AppStorage {
             case HDSegwitP2SHArWallet.type:
               unserializedWallet = HDSegwitP2SHArWallet.fromJson(key);
               break;
+            case HDSegwitP2SHAirWallet.type:
+              unserializedWallet = HDSegwitP2SHAirWallet.fromJson(key);
+              break;
             case LegacyWallet.type:
             default:
               unserializedWallet = LegacyWallet.fromJson(key);
-              break;
           }
           // done
           if (!this.wallets.some(wallet => wallet.getSecret() === unserializedWallet.secret)) {

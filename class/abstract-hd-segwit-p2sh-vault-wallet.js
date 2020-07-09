@@ -17,32 +17,47 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
   static type = 'abstract';
   static typeReadable = 'abstract';
 
-  constructor(pubKeysHex) {
+  constructor(pubKeysHex = []) {
     super();
-    this.pubKeysHex = pubKeysHex;
     try {
-      this.pubKeys = this.pubKeysHex.map(
-        p =>
-          ECPair.fromPublicKey(Buffer.from(p, BUFFER_ENCODING), {
-            network: config.network,
-          }).publicKey,
-      );
+      this.pubKeys = [
+        ...(this.pubKeys || []),
+        ...pubKeysHex.map(
+          p =>
+            ECPair.fromPublicKey(Buffer.from(p, BUFFER_ENCODING), {
+              network: config.network,
+            }).publicKey,
+        ),
+      ];
     } catch (_) {
-      throw new Error(i18n.wallets.errors.invalidPrivateKey);
+      throw new Error(i18n.wallets.errors.invalidPublicKey);
     }
   }
 
   static fromJson(json) {
     const data = JSON.parse(json);
-    const wallet = new this(data.pubKeysHex);
+    const { pubKeys } = data;
+    const parsedPubKeysBuffors = pubKeys.map(pk => Buffer.from(pk.data));
+    const wallet = new this();
     for (const key of Object.keys(data)) {
-      // don't override values set in constructor
-      if (!wallet[key]) {
-        wallet[key] = data[key];
-      }
+      wallet[key] = data[key];
     }
 
+    wallet.pubKeys = parsedPubKeysBuffors;
+
     return wallet;
+  }
+
+  addPublicKey(publicKeyHex) {
+    let publicKey;
+    try {
+      publicKey = ECPair.fromPublicKey(Buffer.from(publicKeyHex, BUFFER_ENCODING), {
+        network: config.network,
+      }).publicKey;
+    } catch (error) {
+      throw new Error(i18n.wallets.errors.invalidPublicKey);
+    }
+    this.pubKeys = [...this.pubKeys, publicKey];
   }
 
   nodeToAddress(hdNode, paymentMethod) {
@@ -60,6 +75,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
     return address;
   }
 
+  // convert mnemonic generated in https://keygenerator.cloudbestenv.com/
   async mnemonicToKeyPair(mnemonic) {
     const SALT_LENGHT = 4;
     const WORD_BIT_LENGHT = 11;
@@ -128,7 +144,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
         }),
       );
     } catch (_) {
-      throw new Error(i18n.wallets.errors.inavlidPublicKey);
+      throw new Error(i18n.wallets.errors.invalidPrivateKey);
     }
 
     const amountPlusFee = this.calculateTotalAmount({ utxos, amount, fee });
