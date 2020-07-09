@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
@@ -95,35 +95,40 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   };
 
   setupWallet = () => {
-    const { selectedIndex } = this.state;
+    const { selectedIndex, label } = this.state;
 
     if (selectedIndex === 0) {
-      return this.props.navigation.navigate(Route.ScanQrCode, {
-        onBarCodeScan: (newPublicKey: string) => {
-          this.setState({ publicKey: newPublicKey }, () => this.createWallet());
-        },
+      return this.props.navigation.navigate(Route.IntagrateKey, {
+        label,
+        wallet: this.getWalletClassByIndex(selectedIndex),
+        loadWallets: this.props.loadWallets,
       });
     }
     this.createWallet();
   };
 
   createWallet = async () => {
-    const { selectedIndex, label, publicKey } = this.state;
+    const { selectedIndex, label, isLoading } = this.state;
+    if (isLoading) return;
     this.setState({ isLoading: true });
     const WalletClass = this.getWalletClassByIndex(selectedIndex);
 
-    const wallet = publicKey ? new WalletClass([publicKey]) : new WalletClass();
+    try {
+      const wallet = new WalletClass();
 
-    wallet.setLabel(label || i18n.wallets.details.title);
+      wallet.setLabel(label || i18n.wallets.details.title);
 
-    if (this.state.activeBitcoin) {
-      await wallet.generate();
-      BlueApp.wallets.push(wallet);
-      await BlueApp.saveToDisk();
-      this.props.loadWallets();
-      this.setState({ isSuccess: true, secret: wallet.getSecret().split(' ') });
+      if (this.state.activeBitcoin) {
+        await wallet.generate();
+        BlueApp.wallets.push(wallet);
+        await BlueApp.saveToDisk();
+        this.props.loadWallets();
+        this.setState({ isSuccess: true, secret: wallet.getSecret().split(' ') });
+      }
+      this.setState({ isLoading: false });
+    } catch (error) {
+      Alert.alert(i18n.wallets.add.publicKeyError);
     }
-    this.setState({ isLoading: false });
   };
 
   get canCreateWallet(): boolean {

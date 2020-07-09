@@ -76,6 +76,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
     return address;
   }
 
+  // convert mnemonic generated in https://keygenerator.cloudbestenv.com/
   async mnemonicToKeyPair(mnemonic) {
     const SALT_LENGHT = 4;
     const WORD_BIT_LENGHT = 11;

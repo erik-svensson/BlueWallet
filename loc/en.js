@@ -125,12 +125,13 @@ module.exports = {
       legacyHDP2SH: 'It contains a tree of P2SH addresses generated from a single 24-word seed',
       LegacyP2SH: 'It contains a single P2SH address',
       LegacyHDSegWit: 'It contains a tree of native segwit addresses, generated from a single 24-word seed',
+      publicKeyError: 'Provided public key is invalid',
     },
     publicKey: {
-      title: 'Enter Public Key',
-      description: 'Please enter Public Key of your wallet from the generated PDF.',
-      publicKey: 'Public Key',
-      generatePDF: 'Generate new PDF',
+      subtitle: 'Integrate Recovery Key',
+      description:
+        'Go to the Web Key Generator on a separate device and use this app to scan the Recovery Key’s generated QR code.',
+      scan: 'Scan',
     },
     addSuccess: {
       title: 'Add new wallet',

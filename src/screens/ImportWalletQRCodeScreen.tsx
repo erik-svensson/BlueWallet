@@ -106,7 +106,6 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       this.props.navigation.popToTop();
 
       this.showSuccessImportMessageScreen();
-      // this.props.navigation.dismiss();
     }
     this.setState({ isLoading: true });
   };
