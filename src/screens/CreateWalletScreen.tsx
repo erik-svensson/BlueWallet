@@ -94,32 +94,27 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   };
 
   setupWallet = () => {
-    const { selectedIndex } = this.state;
+    const { selectedIndex, label } = this.state;
 
     if (selectedIndex === 0) {
-      return this.props.navigation.navigate(Route.ScanQrCode, {
-        onBarCodeScan: (newPublicKey: string) => {
-          this.setState(
-            {
-              publicKey: newPublicKey,
-            },
-            () => this.createWallet(),
-          );
-        },
+      return this.props.navigation.navigate(Route.IntagrateKey, {
+        label,
+        wallet: this.getWalletClassByIndex(selectedIndex),
+        loadWallets: this.props.loadWallets,
       });
     }
     this.createWallet();
   };
 
   createWallet = async () => {
-    const { selectedIndex, label, publicKey, isLoading } = this.state;
+    const { selectedIndex, label, isLoading } = this.state;
     if (isLoading) return;
     this.setState({ isLoading: true });
 
     const WalletClass = this.getWalletClassByIndex(selectedIndex);
 
     try {
-      const wallet = publicKey ? new WalletClass([publicKey]) : new WalletClass();
+      const wallet = new WalletClass();
 
       wallet.setLabel(label || i18n.wallets.details.title);
 
@@ -225,7 +220,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   }
 
   render() {
-    console.log('render');
     if (this.state.isSuccess) {
       return <CreateWalletSuccessScreen secret={this.state.secret} navigation={this.props.navigation} />;
     }

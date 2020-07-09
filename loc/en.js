@@ -128,10 +128,10 @@ module.exports = {
       publicKeyError: 'Provided public key is invalid',
     },
     publicKey: {
-      title: 'Enter Public Key',
-      description: 'Please enter Public Key of your wallet from the generated PDF.',
-      publicKey: 'Public Key',
-      generatePDF: 'Generate new PDF',
+      subtitle: 'Integrate Recovery Key',
+      description:
+        'Go to the Web Key Generator on a separate device and use this app to scan the Recovery Key’s generated QR code.',
+      scan: 'Scan',
     },
     addSuccess: {
       title: 'Add new wallet',
