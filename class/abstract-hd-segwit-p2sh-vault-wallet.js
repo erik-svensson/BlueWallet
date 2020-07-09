@@ -19,7 +19,6 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
 
   constructor(pubKeysHex = []) {
     super();
-    this.pubKeysHex = [...(this.pubKeysHex || []), ...pubKeysHex];
     try {
       this.pubKeys = [
         ...(this.pubKeys || []),
@@ -31,19 +30,20 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
         ),
       ];
     } catch (_) {
-      throw new Error(i18n.wallets.errors.inavlidPublicKey);
+      throw new Error(i18n.wallets.errors.invalidPublicKey);
     }
   }
 
   static fromJson(json) {
     const data = JSON.parse(json);
-    const wallet = new this(data.pubKeysHex);
+    const { pubKeys } = data;
+    const parsedPubKeysBuffors = pubKeys.map(pk => Buffer.from(pk.data));
+    const wallet = new this();
     for (const key of Object.keys(data)) {
-      // don't override values set in constructor
-      if (!wallet[key]) {
-        wallet[key] = data[key];
-      }
+      wallet[key] = data[key];
     }
+
+    wallet.pubKeys = parsedPubKeysBuffors;
 
     return wallet;
   }
@@ -55,9 +55,8 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
         network: config.network,
       }).publicKey;
     } catch (error) {
-      throw new Error(i18n.wallets.errors.inavlidPublicKey);
+      throw new Error(i18n.wallets.errors.invalidPublicKey);
     }
-    this.pubKeysHex = [...this.pubKeysHex, publicKeyHex];
     this.pubKeys = [...this.pubKeys, publicKey];
   }
 

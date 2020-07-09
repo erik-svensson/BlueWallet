@@ -12,7 +12,6 @@ import {
   HDSegwitP2SHWallet,
   SegwitP2SHWallet,
   HDSegwitP2SHArWallet,
-  HDSegwitP2SHAirWallet,
   BlueApp,
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
