@@ -20,12 +20,16 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
   constructor(pubKeysHex) {
     super();
     this.pubKeysHex = pubKeysHex;
-    this.pubKeys = this.pubKeysHex.map(
-      p =>
-        ECPair.fromPublicKey(Buffer.from(p, BUFFER_ENCODING), {
-          network: config.network,
-        }).publicKey,
-    );
+    try {
+      this.pubKeys = this.pubKeysHex.map(
+        p =>
+          ECPair.fromPublicKey(Buffer.from(p, BUFFER_ENCODING), {
+            network: config.network,
+          }).publicKey,
+      );
+    } catch (_) {
+      throw new Error(i18n.wallets.errors.invalidPrivateKey);
+    }
   }
 
   static fromJson(json) {
@@ -99,20 +103,33 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
     });
   }
 
-  async createTx({ utxos, amount, fee, address, mnemonics = [], privateKeys = [], vaultTxType, paymentMethod }) {
+  async createTx({
+    utxos,
+    amount,
+    fee,
+    address,
+    mnemonics = [],
+    privateKeys = [],
+    keyPairs = [],
+    vaultTxType,
+    paymentMethod,
+  }) {
     for (const utxo of utxos) {
       utxo.wif = this._getWifForAddress(utxo.address);
     }
 
     const keyPairsFromMnemonics = await Promise.all(mnemonics.map(m => this.mnemonicToKeyPair(m)));
 
-    const keyPairsFromPrivateKeys = privateKeys.map(p =>
-      ECPair.fromPrivateKey(Buffer.from(p, BUFFER_ENCODING), {
-        network: config.network,
-      }),
-    );
-
-    const keyPairs = [...keyPairsFromMnemonics, ...keyPairsFromPrivateKeys];
+    let keyPairsFromPrivateKeys = [];
+    try {
+      keyPairsFromPrivateKeys = privateKeys.map(p =>
+        ECPair.fromPrivateKey(Buffer.from(p, BUFFER_ENCODING), {
+          network: config.network,
+        }),
+      );
+    } catch (_) {
+      throw new Error(i18n.wallets.errors.inavlidPublicKey);
+    }
 
     const amountPlusFee = this.calculateTotalAmount({ utxos, amount, fee });
 
@@ -123,7 +140,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
       fixedFee: fee,
       changeAddress: this.getAddressForTransaction(),
       pubKeys: this.pubKeys,
-      keyPairs,
+      keyPairs: [...keyPairs, ...keyPairsFromMnemonics, ...keyPairsFromPrivateKeys],
       vaultTxType,
       paymentMethod,
     });
