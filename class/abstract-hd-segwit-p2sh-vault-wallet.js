@@ -48,16 +48,27 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
     return wallet;
   }
 
+  setMnemonic(walletMnemonic) {
+    if (!bip39.validateMnemonic(walletMnemonic)) {
+      throw new Error(i18n.wallets.errors.invalidMnemonic);
+    }
+
+    this.secret = walletMnemonic
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9]/g, ' ')
+      .replace(/\s+/g, ' ');
+  }
+
   addPublicKey(publicKeyHex) {
-    let publicKey;
     try {
-      publicKey = ECPair.fromPublicKey(Buffer.from(publicKeyHex, BUFFER_ENCODING), {
+      const publicKey = ECPair.fromPublicKey(Buffer.from(publicKeyHex, BUFFER_ENCODING), {
         network: config.network,
       }).publicKey;
+      this.pubKeys = [...this.pubKeys, publicKey];
     } catch (error) {
       throw new Error(i18n.wallets.errors.invalidPublicKey);
     }
-    this.pubKeys = [...this.pubKeys, publicKey];
   }
 
   nodeToAddress(hdNode, paymentMethod) {

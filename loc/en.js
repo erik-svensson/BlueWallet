@@ -183,6 +183,7 @@ module.exports = {
       noIndexForWord: `Couldn't find index for word: {word}`,
       invalidPrivateKey: 'Invalid private key',
       invalidPublicKey: 'Invalid public key',
+      invalidMnemonic: 'Invalid mnemonic',
     },
   },
   transactions: {
