@@ -4,6 +4,7 @@ import { promisify } from 'util';
 
 import config from '../config';
 import signer from '../models/signer';
+import { bitsToBytes } from '../utils/buffer';
 import { AbstractHDSegwitP2SHWallet } from './abstract-hd-segwit-p2sh-wallet';
 
 const { payments, ECPair } = require('bitcoinjs-lib');
@@ -87,7 +88,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
   }
 
   // convert mnemonic generated in https://keygenerator.cloudbestenv.com/
-  async mnemonicToKeyPair(mnemonic) {
+  static async mnemonicToKeyPair(mnemonic) {
     const SALT_LENGHT = 4;
     const WORD_BIT_LENGHT = 11;
     const WORDS_LENGTH = 12;
@@ -105,25 +106,23 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
       );
     }
 
-    const bits132 = mnemonic.split(' ').reduce((bits, word) => {
-      const index = bip39.wordlists.english.indexOf(word);
-      if (index === -1) {
-        throw new Error(
-          i18n.formatString(i18n.wallets.errors.noIndexForWord, {
-            noIndexForWord: word,
-          }),
-        );
-      }
-      return bits + index.toString(2).padStart(WORD_BIT_LENGHT, '0');
-    }, '');
+    const bits128 = mnemonic
+      .split(' ')
+      .reduce((bits, word) => {
+        const index = bip39.wordlists.english.indexOf(word);
+        if (index === -1) {
+          throw new Error(
+            i18n.formatString(i18n.wallets.errors.noIndexForWord, {
+              noIndexForWord: word,
+            }),
+          );
+        }
+        return bits + index.toString(2).padStart(WORD_BIT_LENGHT, '0');
+      }, '')
+      .slice(SALT_LENGHT);
 
-    const privateKey = await promisify(pbkdf2)(
-      bits132.slice(SALT_LENGHT),
-      bits132.slice(0, SALT_LENGHT),
-      1,
-      32,
-      'sha256',
-    );
+    const generatedBytes = bitsToBytes(bits128);
+    const privateKey = await promisify(pbkdf2)(generatedBytes, generatedBytes, 100000, 32, 'sha256');
 
     return ECPair.fromPrivateKey(privateKey, {
       network: config.network,
@@ -145,7 +144,9 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
       utxo.wif = this._getWifForAddress(utxo.address);
     }
 
-    const keyPairsFromMnemonics = await Promise.all(mnemonics.map(m => this.mnemonicToKeyPair(m)));
+    const keyPairsFromMnemonics = await Promise.all(
+      mnemonics.map(m => AbstractHDSegwitP2SHVaultWallet.mnemonicToKeyPair(m)),
+    );
 
     let keyPairsFromPrivateKeys = [];
     try {
