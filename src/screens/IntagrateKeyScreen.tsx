@@ -29,6 +29,7 @@ export class IntagrateKeyScreen extends React.PureComponent<Props, State> {
   scanKey = () => {
     return this.props.navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (newPublicKey: string) => {
+        this.props.navigation.goBack();
         CreateMessage({
           title: i18n.message.creatingWallet,
           description: i18n.message.creatingWalletDescription,
