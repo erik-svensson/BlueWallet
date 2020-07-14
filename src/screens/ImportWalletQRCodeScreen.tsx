@@ -1,3 +1,4 @@
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import {
@@ -14,7 +15,7 @@ import { RNCamera } from 'react-native-camera';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Wallet, Route, RootStackParams } from 'app/consts';
+import { Wallet, Route, RootStackParams, MainTabNavigatorParams, MainCardStackNavigatorParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { sleep } from 'app/helpers/helpers';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
@@ -41,7 +42,10 @@ interface BarCodeScanEvent {
 }
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.ImportWalletQRCode>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>,
+    StackNavigationProp<RootStackParams, Route.ImportWalletQRCode>
+  >;
   loadWallets: () => Promise<WalletsActionType>;
 }
 
@@ -51,10 +55,6 @@ interface State {
 }
 
 class ImportWalletQRCodeScreen extends React.Component<Props, State> {
-  static navigationOptions = {
-    header: null,
-  };
-
   cameraRef = React.createRef<RNCamera>();
 
   state = {
@@ -70,7 +70,7 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       type: MessageType.error,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => this.props.navigation.popToTop(),
+        onPress: () => this.props.navigation.navigate(Route.Dashboard),
       },
     });
   };
@@ -82,7 +82,7 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => this.props.navigation.popToTop(),
+        onPress: () => this.props.navigation.navigate(Route.Dashboard),
       },
     });
 
@@ -106,7 +106,6 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       this.props.navigation.goBack();
 
       this.showSuccessImportMessageScreen();
-      // this.props.navigation.dismiss();
     }
     this.setState({ isLoading: true });
   };
