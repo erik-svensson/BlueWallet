@@ -26,6 +26,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
 
   onBarCodeScanned = (scannedQr: any) => {
     if (this.state.scanned) return;
+
     const { navigation } = this.props;
     const onBarCodeScan = navigation.getParam('onBarCodeScan');
 

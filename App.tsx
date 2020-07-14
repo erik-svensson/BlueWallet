@@ -6,7 +6,7 @@ import { createAppContainer } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { BlueApp } from 'app/legacy';
+import { BlueApp, Authenticator } from 'app/legacy';
 import { i18n } from 'app/locale';
 import { RootNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
@@ -35,6 +35,17 @@ export default class App extends React.PureComponent<State> {
   };
 
   async componentDidMount() {
+    // try {
+    //   const aut = new Authenticator('BLA');
+    //   await aut.init('8e14a1b168adbd256f00753f4ef4fa2b');
+    //   console.log('aut', aut);
+    //   BlueApp.authenticators.push(aut);
+    //   await BlueApp.saveToDisk();
+    //   console.log('BlueApp.authenticators', BlueApp.authenticators);
+    // } catch (e) {
+    //   console.log('ERROR', e);
+    // }
+
     const isPinSet = await SecureStorageService.getSecuredValue('pin');
     if (isPinSet) {
       this.setState({ isPinSet });
