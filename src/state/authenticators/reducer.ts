@@ -1,16 +1,12 @@
-import { Wallet } from 'app/consts';
-
 import { WalletsAction, WalletsActionType } from './actions';
 
 export interface WalletsState {
-  wallets: Wallet[];
-  isInitialized: boolean;
   isLoading: boolean;
   error: Error | null;
 }
 
-const initialState: WalletsState = {
-  wallets: [],
+const initialState: AuthenticatorsState = {
+  authenticators: [],
   isInitialized: false,
   isLoading: false,
   error: null,

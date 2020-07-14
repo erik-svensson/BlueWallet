@@ -106,7 +106,6 @@
     "lottie-react-native": "3.1.1",
     "mocha": "5.2.0",
     "moment": "^2.24.0",
-    "nanoid": "^3.1.10",
     "node-libs-react-native": "1.0.3",
     "path-browserify": "1.0.0",
     "pbkdf2": "^3.1.1",
@@ -127,7 +126,6 @@
     "react-native-flexi-radio-button": "0.2.2",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "1.5.6",
-    "react-native-get-random-values": "^1.4.0",
     "react-native-handoff": "git+https://github.com/marcosrdz/react-native-handoff.git",
     "react-native-haptic-feedback": "1.7.1",
     "react-native-image-picker": "1.1.0",
@@ -163,6 +161,7 @@
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
     "rn-fetch-blob": "^0.12.0",
     "secure-random": "1.1.2",
     "stream-browserify": "2.0.2",
@@ -170,7 +169,6 @@
     "typescript": "^3.8.3",
     "url": "0.11.0",
     "util": "0.12.1",
-    "uuid": "^3.4.0",
     "wif": "2.0.6"
   },
   "react-native": {

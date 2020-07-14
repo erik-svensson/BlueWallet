@@ -14,6 +14,7 @@ export enum FlowType {
 export enum Route {
   Dashboard = 'Dashboard',
   AuthenticatorList = 'AuthenticatorList',
+  EnterPIN = 'EnterPIN',
   CreateAuthenticator = 'CreateAuthenticator',
   WalletDetails = 'WalletDetails',
   ContactList = 'ContactList',

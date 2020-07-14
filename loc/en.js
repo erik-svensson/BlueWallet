@@ -73,6 +73,9 @@ module.exports = {
     import: {
       title: 'Import authenticator',
     },
+    enterPIN: {
+      subtitle: 'Enter PIN',
+    },
   },
   wallets: {
     dashboard: {

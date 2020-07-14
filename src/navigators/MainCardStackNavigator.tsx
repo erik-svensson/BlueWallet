@@ -31,6 +31,7 @@ import {
   FilterTransactionsScreen,
   IntagrateKeyScreen,
   CreateAuthenticatorScreen,
+  EnterPINScreen,
 } from 'app/screens';
 
 export const MainCardStackNavigator = createStackNavigator(
@@ -43,6 +44,7 @@ export const MainCardStackNavigator = createStackNavigator(
     },
     [Route.CreateAuthenticator]: CreateAuthenticatorScreen,
     [Route.CreateWallet]: CreateWalletScreen,
+    [Route.EnterPIN]: EnterPINScreen,
     [Route.IntagrateKey]: IntagrateKeyScreen,
     [Route.ImportWallet]: ImportWalletScreen,
     [Route.DeleteWallet]: DeleteWalletScreen,

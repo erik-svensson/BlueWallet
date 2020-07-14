@@ -5,6 +5,7 @@ import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation
 import { Header, ScreenTemplate, FlatButton, Button } from 'app/components';
 import { Route } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { Authenticator } from 'app/legacy';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -17,9 +18,10 @@ class CreateAuthenticatorScreen extends Component<Props> {
   });
 
   scanQRCode = () => {
-    return this.props.navigation.navigate(Route.ScanQrCode, {
+    const { navigation } = this.props;
+    navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (data: any) => {
-        this.props.navigation.goBack();
+        navigation.goBack();
         CreateMessage({
           title: i18n.message.creatingWallet,
           description: i18n.message.creatingWalletDescription,
@@ -29,11 +31,20 @@ class CreateAuthenticatorScreen extends Component<Props> {
       },
     });
   };
-
-  createAuthenticator(data: any) {
-    console.log('DATA', data);
-    const mocked = { name: 'wallet_aut', entropy: '8e14a1b168adbd256f00753f4ef4fa2b' };
+  componentWillUnmount() {
+    console.log('UNMOUNTED');
   }
+
+  createAuthenticator = async (data: any) => {
+    const { navigation } = this.props;
+    console.log('DATA', data);
+    const { name, entropy } = { name: 'wallet_aut', entropy: '8e14a1b168adbd256f00753f4ef4fa2b' };
+    const authenticator = new Authenticator(name);
+    await authenticator.init(entropy);
+    console.log('authenticator', authenticator);
+
+    navigation.navigate(Route.EnterPIN, { authenticator });
+  };
 
   render() {
     const { navigation } = this.props;
