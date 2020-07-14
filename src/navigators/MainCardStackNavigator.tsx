@@ -30,6 +30,7 @@ import {
   ConfirmPinScreen,
   FilterTransactionsScreen,
   IntagrateKeyScreen,
+  CreateAuthenticatorScreen,
 } from 'app/screens';
 
 export const MainCardStackNavigator = createStackNavigator(
@@ -40,6 +41,7 @@ export const MainCardStackNavigator = createStackNavigator(
         header: null,
       },
     },
+    [Route.CreateAuthenticator]: CreateAuthenticatorScreen,
     [Route.CreateWallet]: CreateWalletScreen,
     [Route.IntagrateKey]: IntagrateKeyScreen,
     [Route.ImportWallet]: ImportWalletScreen,

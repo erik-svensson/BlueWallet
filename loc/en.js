@@ -17,6 +17,7 @@ module.exports = {
   tabNavigator: {
     dashboard: 'Dashboard',
     settings: 'Settings',
+    authenticators: 'Authenticators',
   },
   message: {
     somethingWentWrong: 'Something went wrong',
@@ -61,6 +62,17 @@ module.exports = {
     headerText: 'Confirm transaction',
     title: 'Confirm Transaction Password',
     description: 'Confirm Transaction Password in order to proceed the transaction.',
+  },
+  authenticators: {
+    add: {
+      title: 'Add new authenticator',
+      subtitle: 'Pair authenticator',
+      description:
+        'Select the option to “create wallet” on Electrum Vault (desktop application). Follow the steps until you see a QR code. Scan it using “Scan” button below to continue',
+    },
+    import: {
+      title: 'Import authenticator',
+    },
   },
   wallets: {
     dashboard: {

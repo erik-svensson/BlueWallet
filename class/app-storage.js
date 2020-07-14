@@ -193,7 +193,7 @@ export class AppStorage {
         data = JSON.parse(data);
         console.log('loadFromDisk', data);
         const { authenticators } = data;
-        this.authenticators = authenticators.map(a => Authenticator.fromJson(a));
+        this.authenticators = authenticators?.map(a => Authenticator.fromJson(a));
 
         console.log('authenticators', authenticators);
         if (!data.wallets) return false;

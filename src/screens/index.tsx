@@ -33,3 +33,5 @@ export { UnlockTransaction } from './UnlockTransaction';
 export { UnlockScreen } from './UnlockScreen';
 export { FilterTransactionsScreen } from './FilterTransactionsScreen';
 export { IntagrateKeyScreen } from './IntagrateKeyScreen';
+export { default as AuthenticatorListScreen } from './AuthenticatorList';
+export { default as CreateAuthenticatorScreen } from './CreateAuthenticator';
