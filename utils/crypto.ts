@@ -34,7 +34,4 @@ export const privateKeyToPublicKey = (privateKey: Buffer) =>
     .getEncoded(false)
     .toString('hex');
 
-export const uniqueId = (prefix = '') =>
-  `${prefix}_${Math.random()
-    .toString(36)
-    .substr(2, 9)}`;
+export const uniqueId = (prefix = '') => `${prefix}_${Math.random().toString(36)}`;

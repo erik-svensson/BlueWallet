@@ -2,7 +2,6 @@ import { createSelector } from 'reselect';
 
 import { ApplicationState } from 'app/state';
 
-// import { NAME } from './constants';
 import { AuthenticatorsState } from './reducer';
 
 const local = (state: ApplicationState): AuthenticatorsState => state.authenticators;

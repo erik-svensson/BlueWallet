@@ -32,6 +32,7 @@ import {
   IntagrateKeyScreen,
   CreateAuthenticatorScreen,
   EnterPINScreen,
+  CreateAuthenticatorSuccessScreen,
 } from 'app/screens';
 
 export const MainCardStackNavigator = createStackNavigator(
@@ -42,6 +43,7 @@ export const MainCardStackNavigator = createStackNavigator(
         header: null,
       },
     },
+    [Route.CreateAuthenticatorSuccess]: CreateAuthenticatorSuccessScreen,
     [Route.CreateAuthenticator]: CreateAuthenticatorScreen,
     [Route.CreateWallet]: CreateWalletScreen,
     [Route.EnterPIN]: EnterPINScreen,

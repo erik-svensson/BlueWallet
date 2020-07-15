@@ -21,7 +21,7 @@ export const MainTabNavigator = createBottomTabNavigator(
       screen: AuthenticatorListScreen,
       navigationOptions: {
         tabBarIcon: ({ focused }: { focused: boolean }) => (
-          <BottomTabBarIcon source={focused ? images.dashboard : images.dashboardInactive} />
+          <BottomTabBarIcon source={focused ? images.authenticators : images.authenticatorsInactive} />
         ),
       },
     },

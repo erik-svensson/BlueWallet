@@ -15,6 +15,7 @@ export enum Route {
   Dashboard = 'Dashboard',
   AuthenticatorList = 'AuthenticatorList',
   EnterPIN = 'EnterPIN',
+  CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticator = 'CreateAuthenticator',
   WalletDetails = 'WalletDetails',
   ContactList = 'ContactList',

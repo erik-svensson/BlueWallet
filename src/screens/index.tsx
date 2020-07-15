@@ -36,3 +36,4 @@ export { IntagrateKeyScreen } from './IntagrateKeyScreen';
 export { default as AuthenticatorListScreen } from './AuthenticatorList';
 export { default as CreateAuthenticatorScreen } from './CreateAuthenticator';
 export { default as EnterPINScreen } from './EnterPIN';
+export { default as CreateAuthenticatorSuccessScreen } from './CreateAuthenticatorSuccess';

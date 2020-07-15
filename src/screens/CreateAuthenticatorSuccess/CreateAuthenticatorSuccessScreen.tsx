@@ -18,35 +18,21 @@ interface MapStateProps {
 
 type Props = NavigationInjectedProps & MapStateProps;
 
-class EnterPINScreen extends Component<Props> {
+class CreateAuthenticatorSuccessScreen extends Component<Props> {
   static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={i18n.authenticators.add.title} />,
+    header: <Header navigation={props.navigation} isBackArrow={false} title={i18n.authenticators.add.title} />,
   });
 
   navigate = () => {
     const { navigation } = this.props;
-    const id = navigation.getParam('id');
-    navigation.navigate(Route.CreateAuthenticatorSuccess, { id });
+    navigation.navigate(Route.AuthenticatorList);
   };
 
-  renderPIN = (pin: string) => (
-    <View style={styles.pinWrapper}>
-      {pin.split('').map((char, index) => (
-        <View style={styles.pinNumber} key={index}>
-          <Text style={styles.pinNumberText}>{char}</Text>
-        </View>
-      ))}
-    </View>
-  );
-
   render() {
-    const { authenticator } = this.props;
-
     return (
-      <ScreenTemplate footer={<Button onPress={this.navigate} title={i18n.send.details.next} />}>
-        <Text style={styles.subtitle}>{i18n.authenticators.enterPIN.subtitle}</Text>
-        <Text style={styles.description}>{i18n.authenticators.enterPIN.description}</Text>
-        {authenticator && this.renderPIN(authenticator.pin)}
+      <ScreenTemplate footer={<Button onPress={this.navigate} title={i18n.wallets.addSuccess.okButton} />}>
+        <Text style={styles.subtitle}>{i18n.wallets.addSuccess.subtitle}</Text>
+        <Text style={styles.description}>{i18n.authenticators.add.successDescription}</Text>
       </ScreenTemplate>
     );
   }
@@ -59,7 +45,7 @@ const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: P
   };
 };
 
-export default connect(mapStateToProps)(EnterPINScreen);
+export default connect(mapStateToProps)(CreateAuthenticatorSuccessScreen);
 
 const styles = StyleSheet.create({
   subtitle: {
@@ -90,5 +76,36 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: fonts.ubuntu.light,
     fontSize: 24,
+  },
+  isLoadingDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    textAlign: 'center',
+    lineHeight: 19,
+    flexGrow: 1,
+    marginVertical: 10,
+  },
+  advancedOptionsLabel: {
+    color: palette.textGrey,
+    marginBottom: 12,
+  },
+  radioButton: {
+    paddingStart: 0,
+    paddingVertical: 8,
+  },
+  radioButtonContent: {
+    paddingStart: 10,
+    top: -3,
+  },
+  radioButtonTitle: {
+    ...typography.caption,
+    marginBottom: 2,
+  },
+  radioButtonSubtitle: {
+    ...typography.overline,
+    color: palette.textGrey,
+  },
+  importButtonContainer: {
+    marginTop: 12,
   },
 });

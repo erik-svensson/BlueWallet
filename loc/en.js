@@ -69,6 +69,8 @@ module.exports = {
     add: {
       title: 'Add new authenticator',
       subtitle: 'Pair authenticator',
+      successDescription:
+        'Your authenticator has been created. Please take a moment to write down this mnemonic phrase on a piece of paper. It’s your backup. You can use it to restore this authenticator on other devices. The authenticator allows you to confirm Instant and Recovery transactions.',
       description:
         'Select the option to “create wallet” on Electrum Vault (desktop application). Follow the steps until you see a QR code. Scan it using “Scan” button below to continue',
     },

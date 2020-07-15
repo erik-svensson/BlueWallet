@@ -64,7 +64,6 @@ class CreateAuthenticatorScreen extends Component<Props> {
     } catch (_) {
       this.onCreateAuthenticatorFailure(i18n.wallets.errors.invalidPrivateKey);
     }
-    // if()
     // const { name, entropy } = { name: 'wallet_aut', entropy: '8e14a1b168adbd256f00753f4ef4fa2b' };
   };
 
