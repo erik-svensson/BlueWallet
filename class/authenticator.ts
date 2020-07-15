@@ -1,6 +1,8 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { Authenticator as IAuthenticator } from 'app/consts';
 
-import { generatePrivateKey, privateKeyToPublicKey, uniqueId } from '../utils/crypto';
+import { generatePrivateKey, privateKeyToPublicKey, bytesToMnemonic } from '../utils/crypto';
 
 const i18n = require('../loc');
 
@@ -10,12 +12,16 @@ const PIN_LENGTH = 4;
 export class Authenticator implements IAuthenticator {
   privateKey: Buffer | null;
   publicKey: string;
+  entropy: string;
+  secret: string;
   readonly id: string;
 
   constructor(readonly name: string) {
-    this.id = uniqueId(name);
+    this.id = uuidv4();
     this.privateKey = null;
+    this.entropy = '';
     this.publicKey = '';
+    this.secret = '';
   }
 
   static fromJson(json: string) {
@@ -39,6 +45,8 @@ export class Authenticator implements IAuthenticator {
         salt: buffer,
         password: buffer,
       });
+      this.entropy = entropy;
+      this.secret = bytesToMnemonic(buffer);
       this.publicKey = privateKeyToPublicKey(this.privateKey);
     } catch (_) {
       throw new Error(i18n.wallets.errors.invalidPrivateKey);
@@ -47,5 +55,9 @@ export class Authenticator implements IAuthenticator {
 
   get pin() {
     return this.publicKey.slice(-PIN_LENGTH);
+  }
+
+  get QRCode() {
+    return JSON.stringify({ entropy: this.entropy, name: this.name });
   }
 }

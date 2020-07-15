@@ -3,12 +3,12 @@ import { Text, StyleSheet, View } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate, Button } from 'app/components';
+import { Header, ScreenTemplate, Button, Chip } from 'app/components';
 import { Route, Authenticator } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
 import { AuthenticatorsState } from 'app/state/authenticators/reducer';
-import { palette, typography, fonts } from 'app/styles';
+import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
@@ -28,11 +28,17 @@ class CreateAuthenticatorSuccessScreen extends Component<Props> {
     navigation.navigate(Route.AuthenticatorList);
   };
 
+  renderMnemonic = (mnemonic: string) =>
+    mnemonic.split(' ').map((word, index) => <Chip key={word} label={`${index + 1}. ${word}`} />);
+
   render() {
+    const { authenticator } = this.props;
+
     return (
       <ScreenTemplate footer={<Button onPress={this.navigate} title={i18n.wallets.addSuccess.okButton} />}>
         <Text style={styles.subtitle}>{i18n.wallets.addSuccess.subtitle}</Text>
         <Text style={styles.description}>{i18n.authenticators.add.successDescription}</Text>
+        <View style={styles.mnemonicPhraseContainer}>{authenticator && this.renderMnemonic(authenticator.secret)}</View>
       </ScreenTemplate>
     );
   }
@@ -55,57 +61,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   description: {
-    marginBottom: 52,
+    marginBottom: 20,
     color: palette.textGrey,
     ...typography.caption,
     textAlign: 'center',
   },
-  pinNumber: {
-    paddingBottom: 6,
-    width: 40,
-    margin: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: palette.border,
-  },
-  pinWrapper: {
-    display: 'flex',
+  mnemonicPhraseContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-  },
-  pinNumberText: {
-    textAlign: 'center',
-    fontFamily: fonts.ubuntu.light,
-    fontSize: 24,
-  },
-  isLoadingDescription: {
-    ...typography.caption,
-    color: palette.textGrey,
-    textAlign: 'center',
-    lineHeight: 19,
-    flexGrow: 1,
-    marginVertical: 10,
-  },
-  advancedOptionsLabel: {
-    color: palette.textGrey,
-    marginBottom: 12,
-  },
-  radioButton: {
-    paddingStart: 0,
-    paddingVertical: 8,
-  },
-  radioButtonContent: {
-    paddingStart: 10,
-    top: -3,
-  },
-  radioButtonTitle: {
-    ...typography.caption,
-    marginBottom: 2,
-  },
-  radioButtonSubtitle: {
-    ...typography.overline,
-    color: palette.textGrey,
-  },
-  importButtonContainer: {
-    marginTop: 12,
+    paddingHorizontal: 12,
   },
 });

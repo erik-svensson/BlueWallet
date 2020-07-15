@@ -1,5 +1,9 @@
+import * as bip39 from 'bip39';
+import { crypto } from 'bitcoinjs-lib';
 import * as ecurve from 'ecurve';
 import { pbkdf2 } from 'pbkdf2';
+
+import { bytesToBits } from './buffer';
 
 const bigi = require('bigi');
 
@@ -34,4 +38,25 @@ export const privateKeyToPublicKey = (privateKey: Buffer) =>
     .getEncoded(false)
     .toString('hex');
 
-export const uniqueId = (prefix = '') => `${prefix}_${Math.random().toString(36)}`;
+const create132BitKeyWithSha256 = (bytes: Buffer, random128bits: string) => {
+  const SALT_LENGHT = 4;
+  const sha256Bits = bytesToBits(crypto.sha256(bytes));
+  return sha256Bits.slice(0, SALT_LENGHT) + random128bits;
+};
+
+const generateWordsFromBytes = (random132bits: string) => {
+  const dividedBits = random132bits.match(/.{1,11}/g);
+  if (dividedBits === null) {
+    throw new Error('Couldn`t parse bits');
+  }
+  return dividedBits.map(bit => {
+    const index = parseInt(bit, 2);
+    return bip39.wordlists.english[index];
+  });
+};
+
+export const bytesToMnemonic = (bytes: Buffer): string => {
+  const random128bits = bytesToBits(bytes);
+  const random132bits = create132BitKeyWithSha256(bytes, random128bits);
+  return generateWordsFromBytes(random132bits).join(' ');
+};

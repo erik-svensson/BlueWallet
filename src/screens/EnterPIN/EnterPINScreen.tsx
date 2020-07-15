@@ -20,7 +20,7 @@ type Props = NavigationInjectedProps & MapStateProps;
 
 class EnterPINScreen extends Component<Props> {
   static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={i18n.authenticators.add.title} />,
+    header: <Header navigation={props.navigation} isBackArrow={false} title={i18n.authenticators.add.title} />,
   });
 
   navigate = () => {

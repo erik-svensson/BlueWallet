@@ -49,14 +49,14 @@ class CreateAuthenticatorScreen extends Component<Props> {
       },
     ]);
   };
+
   createAuthenticator = async (json: string) => {
     const { navigation, createAuthenticator } = this.props;
     try {
-      const data = { name: 'wallet_aut', entropy: '8e14a1b168adbd256f00753f4ef4fa2b' };
-      // const data = JSON.parse(json);
-      // if (!data.entropy || !data.name) {
-      //   throw new Error('Invalid data');
-      // }
+      const data = JSON.parse(json);
+      if (!data.entropy || !data.name) {
+        throw new Error('Invalid data');
+      }
       createAuthenticator(data, {
         onSuccess: (authenticator: IAuthenticator) => navigation.navigate(Route.EnterPIN, { id: authenticator.id }),
         onFailure: (error: string) => this.onCreateAuthenticatorFailure(error),
@@ -64,7 +64,6 @@ class CreateAuthenticatorScreen extends Component<Props> {
     } catch (_) {
       this.onCreateAuthenticatorFailure(i18n.wallets.errors.invalidPrivateKey);
     }
-    // const { name, entropy } = { name: 'wallet_aut', entropy: '8e14a1b168adbd256f00753f4ef4fa2b' };
   };
 
   render() {
@@ -73,23 +72,19 @@ class CreateAuthenticatorScreen extends Component<Props> {
         footer={
           <>
             <Button onPress={this.scanQRCode} title={i18n.wallets.publicKey.scan} />
-            {/* <FlatButton
-              // onPress={this.navigateToImportWallet}
-              containerStyle={styles.importButtonContainer}
-              title={i18n.authenticators.import.title}
-            /> */}
+            <FlatButton containerStyle={styles.importButtonContainer} title={i18n.authenticators.import.title} />
           </>
         }
       >
         <Text style={styles.subtitle}>{i18n.authenticators.add.subtitle}</Text>
         <Text style={styles.description}>{i18n.authenticators.add.description}</Text>
+        <Text style={styles.description}>{i18n._.or}</Text>
+
+        <Text style={styles.description}>{i18n.authenticators.add.subdescription}</Text>
       </ScreenTemplate>
     );
   }
 }
-// const mapStateToProps = (state: ApplicationState) => ({
-//   appSettings: state.appSettings,
-// });
 
 const mapDispatchToProps: ActionProps = {
   createAuthenticator: actions.createAuthenticator,
@@ -105,38 +100,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   description: {
-    marginBottom: 52,
+    marginBottom: 14,
     color: palette.textGrey,
     ...typography.caption,
     textAlign: 'center',
-  },
-  isLoadingDescription: {
-    ...typography.caption,
-    color: palette.textGrey,
-    textAlign: 'center',
-    lineHeight: 19,
-    flexGrow: 1,
-    marginVertical: 10,
-  },
-  advancedOptionsLabel: {
-    color: palette.textGrey,
-    marginBottom: 12,
-  },
-  radioButton: {
-    paddingStart: 0,
-    paddingVertical: 8,
-  },
-  radioButtonContent: {
-    paddingStart: 10,
-    top: -3,
-  },
-  radioButtonTitle: {
-    ...typography.caption,
-    marginBottom: 2,
-  },
-  radioButtonSubtitle: {
-    ...typography.overline,
-    color: palette.textGrey,
   },
   importButtonContainer: {
     marginTop: 12,

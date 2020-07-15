@@ -31,6 +31,7 @@ export class AppStorage {
   constructor() {
     /** {Array.<AbstractWallet>} */
     this.wallets = [];
+    this.authenticators = [];
     this.tx_metadata = {};
     this.cachedPassword = false;
     this.settings = {
@@ -191,11 +192,9 @@ export class AppStorage {
       }
       if (data !== null) {
         data = JSON.parse(data);
-        console.log('loadFromDisk', data);
         const { authenticators } = data;
         this.authenticators = authenticators?.map(a => Authenticator.fromJson(a));
 
-        console.log('authenticators', authenticators);
         if (!data.wallets) return false;
         const wallets = data.wallets;
         for (const key of wallets) {
@@ -302,12 +301,10 @@ export class AppStorage {
       wallets: walletsToSave,
       tx_metadata: this.tx_metadata,
     };
-    console.log('data', data);
 
     if (this.cachedPassword) {
       // should find the correct bucket, encrypt and then save
       let buckets = await this.getItem('data');
-      console.log('buckets', buckets);
       buckets = JSON.parse(buckets);
       const newData = [];
       for (const bucket of buckets) {

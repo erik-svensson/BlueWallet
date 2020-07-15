@@ -125,7 +125,11 @@ export interface Filters {
 export interface Authenticator {
   privateKey: Buffer | null;
   publicKey: string;
+  entropy: string;
+  name: string;
   id: string;
+  QRCode: string;
   init: (entropy: string) => void;
   pin: string;
+  secret: string;
 }

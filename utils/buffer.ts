@@ -15,3 +15,6 @@ export const bitsToBytes = (bits: string): Buffer => {
     'hex',
   );
 };
+
+export const bytesToBits = (bytes: Buffer) =>
+  bytes.reduce((bits, byte) => bits + byte.toString(2).padStart(8, '0'), '');
