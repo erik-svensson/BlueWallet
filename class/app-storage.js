@@ -279,6 +279,10 @@ export class AppStorage {
     this.wallets = tempWallets;
   }
 
+  addAuthenticator(a) {
+    this.authenticators = [...this.authenticators, a];
+  }
+
   /**
    * Serializes and saves to storage object data.
    * If cached password is saved - finds the correct bucket

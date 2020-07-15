@@ -120,3 +120,11 @@ export interface Filters {
   toAmount?: number;
   transactionType?: string;
 }
+
+export interface Authenticator {
+  privateKey: Buffer | null;
+  publicKey: string;
+  id: string;
+  init: (entropy: string) => void;
+  pin: string;
+}

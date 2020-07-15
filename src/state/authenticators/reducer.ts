@@ -1,44 +1,40 @@
-import { WalletsAction, WalletsActionType } from './actions';
+import { Authenticator } from 'app/consts';
 
-export interface WalletsState {
+import { AuthenticatorsAction, AuthenticatorsActionType } from './actions';
+
+export interface AuthenticatorsState {
+  authenticators: Authenticator[];
   isLoading: boolean;
-  error: Error | null;
+  error: string;
 }
 
 const initialState: AuthenticatorsState = {
   authenticators: [],
-  isInitialized: false,
   isLoading: false,
-  error: null,
+  error: '',
 };
 
-export const walletsReducer = (state = initialState, action: WalletsActionType): WalletsState => {
+export const authenticatorsReducer = (state = initialState, action: AuthenticatorsActionType): AuthenticatorsState => {
   switch (action.type) {
-    case WalletsAction.LoadWalletsRequest:
+    case AuthenticatorsAction.CreateAuthenticatorRequest:
       return {
         ...state,
         isLoading: true,
       };
-    case WalletsAction.LoadWalletsSuccess:
+    case AuthenticatorsAction.CreateAuthenticatorSuccess:
       return {
         ...state,
-        wallets: action.wallets,
+        authenticators: [...state.authenticators, action.authenticator],
         isLoading: false,
-        isInitialized: true,
-        error: null,
+        error: '',
       };
-    case WalletsAction.LoadWalletsFailure:
+    case AuthenticatorsAction.CreateAuthenticatorFailure:
       return {
         ...state,
         isLoading: false,
-        isInitialized: true,
         error: action.error,
       };
-    case WalletsAction.UpdateWallet:
-      return {
-        ...state,
-        wallets: state.wallets.map(wallet => (wallet !== action.wallet ? wallet : action.wallet)),
-      };
+
     default:
       return state;
   }

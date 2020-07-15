@@ -33,3 +33,8 @@ export const privateKeyToPublicKey = (privateKey: Buffer) =>
     .G.multiply(bigi.fromBuffer(privateKey))
     .getEncoded(false)
     .toString('hex');
+
+export const uniqueId = (prefix = '') =>
+  `${prefix}_${Math.random()
+    .toString(36)
+    .substr(2, 9)}`;

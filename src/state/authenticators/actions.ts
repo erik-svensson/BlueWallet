@@ -1,48 +1,68 @@
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { Wallet, Transaction } from 'app/consts';
-import { isAllWallets } from 'app/helpers/helpers';
-import { BlueApp } from 'app/legacy';
-
-import { loadTransactionsSuccess } from '../transactions/actions';
-
-const BlueElectrum = require('../../../BlueElectrum');
+import { Authenticator as IAuthenticator } from 'app/consts';
+import { BlueApp, Authenticator } from 'app/legacy';
 
 export enum AuthenticatorsAction {
-  LoadWallets = 'LoadWallets',
-  LoadWalletsRequest = 'LoadWalletsRequest',
-  LoadWalletsSuccess = 'LoadWalletsSuccess',
-  LoadWalletsFailure = 'LoadWalletsFailure',
-  UpdateWallet = 'UpdateWallet',
+  CreateAuthenticatorRequest = 'CreateAuthenticatorRequest',
+  CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
+  CreateAuthenticatorFailure = 'CreateAuthenticatorFailure',
 }
 
-export interface LoadWalletsAction {
-  type: WalletsAction.LoadWallets;
+export interface CreateAuthenticatorRequestAction {
+  type: AuthenticatorsAction.CreateAuthenticatorRequest;
 }
 
-export interface LoadWalletsRequestAction {
-  type: WalletsAction.LoadWalletsRequest;
+export interface CreateAuthenticatorSuccessAction {
+  type: AuthenticatorsAction.CreateAuthenticatorSuccess;
+  authenticator: IAuthenticator;
+}
+export interface CreateAuthenticatorFailureAction {
+  type: AuthenticatorsAction.CreateAuthenticatorFailure;
+  error: string;
 }
 
-export interface LoadWalletsSuccessAction {
-  type: WalletsAction.LoadWalletsSuccess;
-  wallets: Wallet[];
-}
+export type AuthenticatorsActionType =
+  | CreateAuthenticatorRequestAction
+  | CreateAuthenticatorSuccessAction
+  | CreateAuthenticatorFailureAction;
 
-export interface LoadWalletsFailureAction {
-  type: WalletsAction.LoadWalletsFailure;
-  error: Error;
-}
+const createAuthenticatorRequest = (): CreateAuthenticatorRequestAction => ({
+  type: AuthenticatorsAction.CreateAuthenticatorRequest,
+});
 
-export interface UpdateWalletAction {
-  type: WalletsAction.UpdateWallet;
-  wallet: Wallet;
-}
+const createAuthenticatorSuccess = (authenticator: IAuthenticator): CreateAuthenticatorSuccessAction => ({
+  type: AuthenticatorsAction.CreateAuthenticatorSuccess,
+  authenticator,
+});
 
-export type WalletsActionType =
-  | LoadWalletsRequestAction
-  | LoadWalletsSuccessAction
-  | LoadWalletsFailureAction
-  | LoadWalletsAction
-  | UpdateWalletAction;
+const createAuthenticatorFailure = (error: string): CreateAuthenticatorFailureAction => ({
+  type: AuthenticatorsAction.CreateAuthenticatorFailure,
+  error,
+});
+
+interface CreateAuthenticator {
+  payload: {
+    name: string;
+    entropy: string;
+  };
+  meta?: {
+    onSuccess?: Function;
+    onFailure?: Function;
+  };
+}
+export const createAuthenticator = ({ payload: { name, entropy }, meta }: CreateAuthenticator) => async (
+  dispatch: ThunkDispatch<any, any, AnyAction>,
+): Promise<AuthenticatorsActionType> => {
+  try {
+    dispatch(createAuthenticatorRequest());
+    const authenticator = new Authenticator(name);
+    await authenticator.init(entropy);
+    BlueApp.addAuthenticator(authenticator);
+    await BlueApp.saveToDisk();
+    return dispatch(createAuthenticatorSuccess(authenticator));
+  } catch (e) {
+    return dispatch(createAuthenticatorFailure(e.message));
+  }
+};

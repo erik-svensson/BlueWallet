@@ -1,24 +1,18 @@
-// import 'react-native-get-random-values';
-// import { nanoid } from 'nanoid';
-// import { v4 as uuidv4 } from 'uuid';
+import { Authenticator as IAuthenticator } from 'app/consts';
 
-import { generatePrivateKey, privateKeyToPublicKey } from '../utils/crypto';
+import { generatePrivateKey, privateKeyToPublicKey, uniqueId } from '../utils/crypto';
 
 const i18n = require('../loc');
 
 const ENCODING = 'hex';
 const PIN_LENGTH = 4;
-const uniqueId = (prefix = '') =>
-  `${prefix}_${Math.random()
-    .toString(36)
-    .substr(2, 9)}`;
 
-export class Authenticator {
-  private privateKey: Buffer | null;
-  private publicKey: string;
+export class Authenticator implements IAuthenticator {
+  privateKey: Buffer | null;
+  publicKey: string;
   readonly id: string;
 
-  constructor(readonly name?: string) {
+  constructor(readonly name: string) {
     this.id = uniqueId(name);
     this.privateKey = null;
     this.publicKey = '';
@@ -26,9 +20,9 @@ export class Authenticator {
 
   static fromJson(json: string) {
     const data = JSON.parse(json);
-    const { privateKey } = data;
+    const { privateKey, name } = data;
     const parsedPrivateKey = Buffer.from(privateKey.data, ENCODING);
-    const authenticator = new this();
+    const authenticator = new this(name);
     for (const key of Object.keys(data)) {
       authenticator[key] = data[key];
     }
