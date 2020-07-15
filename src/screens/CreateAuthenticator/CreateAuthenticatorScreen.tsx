@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, Alert } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
+import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, FlatButton, Button } from 'app/components';
-import { Route } from 'app/consts';
+import { Route, Authenticator as IAuthenticator } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { Authenticator } from 'app/legacy';
+import { actions } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
-type Props = NavigationInjectedProps;
+interface ActionProps {
+  createAuthenticator: Function;
+}
+
+type Props = NavigationInjectedProps & ActionProps;
 
 class CreateAuthenticatorScreen extends Component<Props> {
   static navigationOptions = (props: NavigationScreenProps) => ({
@@ -20,52 +25,60 @@ class CreateAuthenticatorScreen extends Component<Props> {
   scanQRCode = () => {
     const { navigation } = this.props;
     navigation.navigate(Route.ScanQrCode, {
-      onBarCodeScan: (data: any) => {
+      onBarCodeScan: (data: string) => {
         navigation.goBack();
         CreateMessage({
-          title: i18n.message.creatingWallet,
-          description: i18n.message.creatingWalletDescription,
+          title: i18n.message.creatingAuthenticator,
+          description: i18n.message.creatingAuthenticatorDescription,
           type: MessageType.processingState,
           asyncTask: () => this.createAuthenticator(data),
         });
       },
     });
   };
-  componentWillUnmount() {
-    console.log('UNMOUNTED');
-  }
 
-  createAuthenticator = async (data: any) => {
+  onCreateAuthenticatorFailure = (error: string) => {
     const { navigation } = this.props;
-    console.log('DATA', data);
-    const { name, entropy } = { name: 'wallet_aut', entropy: '8e14a1b168adbd256f00753f4ef4fa2b' };
-    const authenticator = new Authenticator(name);
-    await authenticator.init(entropy);
-    console.log('authenticator', authenticator);
 
-    navigation.navigate(Route.EnterPIN, { authenticator });
+    Alert.alert('Error', error, [
+      {
+        text: 'OK',
+        onPress: () => {
+          navigation.navigate(Route.CreateAuthenticator);
+        },
+      },
+    ]);
+  };
+  createAuthenticator = async (json: string) => {
+    const { navigation, createAuthenticator } = this.props;
+    try {
+      const data = { name: 'wallet_aut', entropy: '8e14a1b168adbd256f00753f4ef4fa2b' };
+      // const data = JSON.parse(json);
+      // if (!data.entropy || !data.name) {
+      //   throw new Error('Invalid data');
+      // }
+      createAuthenticator(data, {
+        onSuccess: (authenticator: IAuthenticator) => navigation.navigate(Route.EnterPIN, { id: authenticator.id }),
+        onFailure: (error: string) => this.onCreateAuthenticatorFailure(error),
+      });
+    } catch (_) {
+      this.onCreateAuthenticatorFailure(i18n.wallets.errors.invalidPrivateKey);
+    }
+    // if()
+    // const { name, entropy } = { name: 'wallet_aut', entropy: '8e14a1b168adbd256f00753f4ef4fa2b' };
   };
 
   render() {
-    const { navigation } = this.props;
     return (
       <ScreenTemplate
         footer={
           <>
-            {/* {this.state.isLoading && ( */}
-            <Text style={styles.isLoadingDescription}>{i18n.message.creatingWalletDescription}</Text>
-            {/* )} */}
-            <Button
-              // disabled={!this.canCreateWallet}
-              // loading={this.state.isLoading}
-              onPress={this.scanQRCode}
-              title={i18n.wallets.publicKey.scan}
-            />
-            <FlatButton
+            <Button onPress={this.scanQRCode} title={i18n.wallets.publicKey.scan} />
+            {/* <FlatButton
               // onPress={this.navigateToImportWallet}
               containerStyle={styles.importButtonContainer}
               title={i18n.authenticators.import.title}
-            />
+            /> */}
           </>
         }
       >
@@ -75,8 +88,15 @@ class CreateAuthenticatorScreen extends Component<Props> {
     );
   }
 }
+// const mapStateToProps = (state: ApplicationState) => ({
+//   appSettings: state.appSettings,
+// });
 
-export default CreateAuthenticatorScreen;
+const mapDispatchToProps: ActionProps = {
+  createAuthenticator: actions.createAuthenticator,
+};
+
+export default connect(null, mapDispatchToProps)(CreateAuthenticatorScreen);
 
 const styles = StyleSheet.create({
   subtitle: {

@@ -29,6 +29,8 @@ module.exports = {
     returnToDashboard: 'Return to Dashboard',
     creatingWallet: 'Creating your wallet',
     creatingWalletDescription: 'Please be patient while we create your wallet. It may take a while.',
+    creatingAuthenticator: 'Creating your authenticator',
+    creatingAuthenticatorDescription: 'Please be patient while we create your authenticator. It may take a while.',
   },
   onboarding: {
     onboarding: 'Onboarding',
@@ -75,6 +77,7 @@ module.exports = {
     },
     enterPIN: {
       subtitle: 'Enter PIN',
+      description: 'Please enter the following PIN into the Electrum Vault (desktop application).',
     },
   },
   wallets: {

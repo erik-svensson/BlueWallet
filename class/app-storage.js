@@ -280,7 +280,7 @@ export class AppStorage {
   }
 
   addAuthenticator(a) {
-    this.authenticators = [...this.authenticators, a];
+    this.authenticators = [...(this.authenticators || []), a];
   }
 
   /**

@@ -43,16 +43,15 @@ const createAuthenticatorFailure = (error: string): CreateAuthenticatorFailureAc
 });
 
 interface CreateAuthenticator {
-  payload: {
-    name: string;
-    entropy: string;
-  };
-  meta?: {
-    onSuccess?: Function;
-    onFailure?: Function;
-  };
+  name: string;
+  entropy: string;
 }
-export const createAuthenticator = ({ payload: { name, entropy }, meta }: CreateAuthenticator) => async (
+interface Meta {
+  onSuccess?: Function;
+  onFailure?: Function;
+}
+
+export const createAuthenticator = ({ name, entropy }: CreateAuthenticator, meta?: Meta) => async (
   dispatch: ThunkDispatch<any, any, AnyAction>,
 ): Promise<AuthenticatorsActionType> => {
   try {
@@ -61,8 +60,16 @@ export const createAuthenticator = ({ payload: { name, entropy }, meta }: Create
     await authenticator.init(entropy);
     BlueApp.addAuthenticator(authenticator);
     await BlueApp.saveToDisk();
-    return dispatch(createAuthenticatorSuccess(authenticator));
+    const createAuthenticatorSuccessDispatch = dispatch(createAuthenticatorSuccess(authenticator));
+    if (meta?.onSuccess) {
+      meta.onSuccess(authenticator);
+    }
+    return createAuthenticatorSuccessDispatch;
   } catch (e) {
-    return dispatch(createAuthenticatorFailure(e.message));
+    const createAuthenticatorFailureDispatch = dispatch(createAuthenticatorFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+    return createAuthenticatorFailureDispatch;
   }
 };
