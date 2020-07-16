@@ -13,10 +13,12 @@ module.exports = {
     confirm: 'Confirm',
     copy: 'Copy',
     copied: 'Copied!',
+    or: 'or',
   },
   tabNavigator: {
     dashboard: 'Dashboard',
     settings: 'Settings',
+    authenticators: 'Authenticators',
   },
   message: {
     somethingWentWrong: 'Something went wrong',
@@ -28,6 +30,8 @@ module.exports = {
     returnToDashboard: 'Return to Dashboard',
     creatingWallet: 'Creating your wallet',
     creatingWalletDescription: 'Please be patient while we create your wallet. It may take a while.',
+    creatingAuthenticator: 'Creating your authenticator',
+    creatingAuthenticatorDescription: 'Please be patient while we create your authenticator. It may take a while.',
   },
   onboarding: {
     onboarding: 'Onboarding',
@@ -61,6 +65,24 @@ module.exports = {
     headerText: 'Confirm transaction',
     title: 'Confirm Transaction Password',
     description: 'Confirm Transaction Password in order to proceed the transaction.',
+  },
+  authenticators: {
+    add: {
+      title: 'Add new authenticator',
+      subtitle: 'Pair authenticator',
+      successDescription:
+        'Your authenticator has been created. Please take a moment to write down this mnemonic phrase on a piece of paper. It’s your backup. You can use it to restore this authenticator on other devices. The authenticator allows you to confirm Instant and Recovery transactions.',
+      description:
+        'Select the option to “create wallet” on Electrum Vault (desktop application). Follow the steps until you see a QR code. Scan it using “Scan” button below to continue',
+      subdescription: 'import you authenticator by clicking on Import authenticator” below.',
+    },
+    import: {
+      title: 'Import authenticator',
+    },
+    enterPIN: {
+      subtitle: 'Enter PIN',
+      description: 'Please enter the following PIN into the Electrum Vault (desktop application).',
+    },
   },
   wallets: {
     dashboard: {

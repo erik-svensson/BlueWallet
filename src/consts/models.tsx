@@ -13,6 +13,10 @@ export enum FlowType {
 
 export enum Route {
   Dashboard = 'Dashboard',
+  AuthenticatorList = 'AuthenticatorList',
+  EnterPIN = 'EnterPIN',
+  CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
+  CreateAuthenticator = 'CreateAuthenticator',
   WalletDetails = 'WalletDetails',
   ContactList = 'ContactList',
   ContactDetails = 'ContactDetails',
@@ -116,4 +120,16 @@ export interface Filters {
   fromAmount?: number;
   toAmount?: number;
   transactionType?: string;
+}
+
+export interface Authenticator {
+  privateKey: Buffer | null;
+  publicKey: string;
+  entropy: string;
+  name: string;
+  id: string;
+  QRCode: string;
+  init: (entropy: string) => void;
+  pin: string;
+  secret: string;
 }

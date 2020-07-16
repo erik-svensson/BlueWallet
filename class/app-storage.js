@@ -12,6 +12,7 @@ import {
   HDSegwitBech32Wallet,
   HDSegwitP2SHArWallet,
   HDSegwitP2SHAirWallet,
+  Authenticator,
 } from './';
 import DeviceQuickActions from './quickActions';
 
@@ -30,6 +31,7 @@ export class AppStorage {
   constructor() {
     /** {Array.<AbstractWallet>} */
     this.wallets = [];
+    this.authenticators = [];
     this.tx_metadata = {};
     this.cachedPassword = false;
     this.settings = {
@@ -190,6 +192,9 @@ export class AppStorage {
       }
       if (data !== null) {
         data = JSON.parse(data);
+        const { authenticators } = data;
+        this.authenticators = authenticators?.map(a => Authenticator.fromJson(a));
+
         if (!data.wallets) return false;
         const wallets = data.wallets;
         for (const key of wallets) {
@@ -271,6 +276,10 @@ export class AppStorage {
       }
     }
     this.wallets = tempWallets;
+  }
+
+  addAuthenticator(a) {
+    this.authenticators = [...(this.authenticators || []), a];
   }
 
   /**
