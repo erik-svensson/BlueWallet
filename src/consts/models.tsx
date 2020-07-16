@@ -125,6 +125,7 @@ export interface Filters {
 }
 
 export type DateType = Date | Dayjs;
+
 export interface Authenticator {
   privateKey: Buffer | null;
   publicKey: string;
