@@ -18,6 +18,7 @@ export const authenticatorsReducer = (state = initialState, action: Authenticato
   switch (action.type) {
     case AuthenticatorsAction.CreateAuthenticatorRequest:
     case AuthenticatorsAction.LoadAuthenticatorsRequest:
+    case AuthenticatorsAction.DeleteAuthenticatorRequest:
       return {
         ...state,
         isLoading: true,
@@ -36,8 +37,16 @@ export const authenticatorsReducer = (state = initialState, action: Authenticato
         isLoading: false,
         error: '',
       };
+    case AuthenticatorsAction.DeleteAuthenticatorSuccess:
+      return {
+        ...state,
+        authenticators: state.authenticators.filter(a => a.id !== action.authenticator.id),
+        isLoading: false,
+        error: '',
+      };
     case AuthenticatorsAction.LoadAuthenticatorsFailure:
     case AuthenticatorsAction.CreateAuthenticatorFailure:
+    case AuthenticatorsAction.DeleteAuthenticatorFailure:
       return {
         ...state,
         isLoading: false,
