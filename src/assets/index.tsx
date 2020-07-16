@@ -9,6 +9,7 @@ export const images = {
   settingsInactive: require('./images/settingsInactive.png'),
   success: require('./images/bvWalletIconSuccess.png'),
   dashboardNoWallet: require('./images/bvWalletIconNoCards.png'),
+  noAuthenticators: require('./images/noAuthenticators.png'),
   addressBookNoContacts: require('./images/addressBookNoContacts.png'),
   addressBookNotFound: require('./images/bvAppIconsSearchx2.png'),
   backArrow: require('./images/navigationBarBackArrow.png'),
@@ -51,4 +52,5 @@ export const icons = {
   visibilityOff: require('./images/visibilityOff.png'),
   delete: require('./images/icon_delete.png'),
   filter: require('./images/filter.png'),
+  scan: require('./images/scan.png'),
 };

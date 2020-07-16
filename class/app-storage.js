@@ -282,6 +282,16 @@ export class AppStorage {
     this.authenticators = [...(this.authenticators || []), a];
   }
 
+  stringifyArray(data) {
+    const arr = [];
+    for (const key of data) {
+      if (typeof key === 'boolean') continue;
+      if (key.prepareForSerialization) key.prepareForSerialization();
+      arr.push(JSON.stringify({ ...key, type: key.type }));
+    }
+    return arr;
+  }
+
   /**
    * Serializes and saves to storage object data.
    * If cached password is saved - finds the correct bucket
@@ -290,15 +300,12 @@ export class AppStorage {
    * @returns {Promise} Result of storage save
    */
   async saveToDisk() {
-    const walletsToSave = [];
-    for (const key of this.wallets) {
-      if (typeof key === 'boolean') continue;
-      if (key.prepareForSerialization) key.prepareForSerialization();
-      walletsToSave.push(JSON.stringify({ ...key, type: key.type }));
-    }
+    const walletsToSave = this.stringifyArray(this.wallets);
+    const authenticatorsToSave = this.stringifyArray(this.authenticators);
 
     let data = {
       wallets: walletsToSave,
+      authenticators: authenticatorsToSave,
       tx_metadata: this.tx_metadata,
     };
 
@@ -392,7 +399,9 @@ export class AppStorage {
       }
     }
   }
-
+  getAuthenticators() {
+    return this.authenticators;
+  }
   /**
    *
    * @returns {Array.<AbstractWallet>}
