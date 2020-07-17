@@ -1,3 +1,4 @@
+import dayjs, { Dayjs } from 'dayjs';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Authenticator as IAuthenticator } from 'app/consts';
@@ -15,6 +16,7 @@ export class Authenticator implements IAuthenticator {
   entropy: string;
   secret: string;
   readonly id: string;
+  createdAt: Dayjs;
 
   constructor(readonly name: string) {
     this.id = uuidv4();
@@ -22,17 +24,19 @@ export class Authenticator implements IAuthenticator {
     this.entropy = '';
     this.publicKey = '';
     this.secret = '';
+    this.createdAt = dayjs();
   }
 
   static fromJson(json: string) {
     const data = JSON.parse(json);
-    const { privateKey, name } = data;
+    const { privateKey, name, createdAt } = data;
     const parsedPrivateKey = Buffer.from(privateKey.data, ENCODING);
     const authenticator = new this(name);
     for (const key of Object.keys(data)) {
       authenticator[key] = data[key];
     }
 
+    authenticator.createdAt = dayjs(createdAt);
     authenticator.privateKey = parsedPrivateKey;
 
     return authenticator;

@@ -8,6 +8,9 @@ export enum AuthenticatorsAction {
   CreateAuthenticatorRequest = 'CreateAuthenticatorRequest',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticatorFailure = 'CreateAuthenticatorFailure',
+  LoadAuthenticatorsRequest = 'LoadAuthenticatorsRequest',
+  LoadAuthenticatorsSuccess = 'LoadAuthenticatorsSuccess',
+  LoadAuthenticatorsFailure = 'LoadAuthenticatorsFailure',
 }
 
 export interface CreateAuthenticatorRequestAction {
@@ -23,10 +26,26 @@ export interface CreateAuthenticatorFailureAction {
   error: string;
 }
 
+export interface LoadAuthenticatorsRequestAction {
+  type: AuthenticatorsAction.LoadAuthenticatorsRequest;
+}
+
+export interface LoadAuthenticatorsSuccessAction {
+  type: AuthenticatorsAction.LoadAuthenticatorsSuccess;
+  authenticators: IAuthenticator[];
+}
+export interface LoadAuthenticatorsFailureAction {
+  type: AuthenticatorsAction.LoadAuthenticatorsFailure;
+  error: string;
+}
+
 export type AuthenticatorsActionType =
   | CreateAuthenticatorRequestAction
   | CreateAuthenticatorSuccessAction
-  | CreateAuthenticatorFailureAction;
+  | CreateAuthenticatorFailureAction
+  | LoadAuthenticatorsRequestAction
+  | LoadAuthenticatorsSuccessAction
+  | LoadAuthenticatorsFailureAction;
 
 const createAuthenticatorRequest = (): CreateAuthenticatorRequestAction => ({
   type: AuthenticatorsAction.CreateAuthenticatorRequest,
@@ -39,6 +58,20 @@ const createAuthenticatorSuccess = (authenticator: IAuthenticator): CreateAuthen
 
 const createAuthenticatorFailure = (error: string): CreateAuthenticatorFailureAction => ({
   type: AuthenticatorsAction.CreateAuthenticatorFailure,
+  error,
+});
+
+const loadAuthenticatorsRequest = (): LoadAuthenticatorsRequestAction => ({
+  type: AuthenticatorsAction.LoadAuthenticatorsRequest,
+});
+
+const loadAuthenticatorsSuccess = (authenticators: IAuthenticator[]): LoadAuthenticatorsSuccessAction => ({
+  type: AuthenticatorsAction.LoadAuthenticatorsSuccess,
+  authenticators,
+});
+
+const loadAuthenticatorsFailure = (error: string): LoadAuthenticatorsFailureAction => ({
+  type: AuthenticatorsAction.LoadAuthenticatorsFailure,
   error,
 });
 
@@ -71,5 +104,17 @@ export const createAuthenticator = ({ name, entropy }: CreateAuthenticator, meta
       meta.onFailure(e.message);
     }
     return createAuthenticatorFailureDispatch;
+  }
+};
+
+export const loadAuthenticators = () => async (
+  dispatch: ThunkDispatch<any, any, AnyAction>,
+): Promise<AuthenticatorsActionType> => {
+  try {
+    dispatch(loadAuthenticatorsRequest());
+    const authenticators = BlueApp.getAuthenticators();
+    return dispatch(loadAuthenticatorsSuccess(authenticators));
+  } catch (e) {
+    return dispatch(loadAuthenticatorsFailure(e.message));
   }
 };

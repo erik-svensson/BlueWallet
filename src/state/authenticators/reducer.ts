@@ -17,6 +17,7 @@ const initialState: AuthenticatorsState = {
 export const authenticatorsReducer = (state = initialState, action: AuthenticatorsActionType): AuthenticatorsState => {
   switch (action.type) {
     case AuthenticatorsAction.CreateAuthenticatorRequest:
+    case AuthenticatorsAction.LoadAuthenticatorsRequest:
       return {
         ...state,
         isLoading: true,
@@ -28,6 +29,14 @@ export const authenticatorsReducer = (state = initialState, action: Authenticato
         isLoading: false,
         error: '',
       };
+    case AuthenticatorsAction.LoadAuthenticatorsSuccess:
+      return {
+        ...state,
+        authenticators: action.authenticators,
+        isLoading: false,
+        error: '',
+      };
+    case AuthenticatorsAction.LoadAuthenticatorsFailure:
     case AuthenticatorsAction.CreateAuthenticatorFailure:
       return {
         ...state,

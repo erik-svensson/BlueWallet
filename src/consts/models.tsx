@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs';
+
 export const CONST = {
   pinCodeLength: 4,
   transactionMinPasswordLength: 8,
@@ -122,6 +124,8 @@ export interface Filters {
   transactionType?: string;
 }
 
+export type DateType = Date | Dayjs;
+
 export interface Authenticator {
   privateKey: Buffer | null;
   publicKey: string;
@@ -132,4 +136,5 @@ export interface Authenticator {
   init: (entropy: string) => void;
   pin: string;
   secret: string;
+  createdAt: Dayjs;
 }

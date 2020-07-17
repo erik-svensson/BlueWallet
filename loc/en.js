@@ -14,6 +14,8 @@ module.exports = {
     copy: 'Copy',
     copied: 'Copied!',
     or: 'or',
+    delete: 'Delete',
+    created: 'Created',
   },
   tabNavigator: {
     dashboard: 'Dashboard',
@@ -67,6 +69,13 @@ module.exports = {
     description: 'Confirm Transaction Password in order to proceed the transaction.',
   },
   authenticators: {
+    list: {
+      noAuthenticatorsDesc1: 'No authenticators to show. \n Tap',
+      noAuthenticatorsDesc2: 'to add your first authenticator.',
+      noAuthenticators: 'No Authenticators',
+      scan: 'Scan',
+      title: 'Bitcoin Vault authenticators',
+    },
     add: {
       title: 'Add new authenticator',
       subtitle: 'Pair authenticator',
