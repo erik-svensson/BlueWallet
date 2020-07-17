@@ -69,6 +69,11 @@ module.exports = {
     description: 'Confirm Transaction Password in order to proceed the transaction.',
   },
   authenticators: {
+    delete: {
+      title: 'Delete authenticator',
+      subtitle: 'Delete your authenticator',
+      success: 'Your authenticator has been successfully deleted. You can now return to Authenticators.',
+    },
     list: {
       noAuthenticatorsDesc1: 'No authenticators to show. \n Tap',
       noAuthenticatorsDesc2: 'to add your first authenticator.',

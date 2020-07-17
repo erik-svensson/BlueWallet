@@ -402,6 +402,21 @@ export class AppStorage {
   getAuthenticators() {
     return this.authenticators;
   }
+
+  removeAuthenticatorById(id) {
+    let authenticator = null;
+    this.authenticators = this.authenticators.filter(a => {
+      if (a.id === id) {
+        authenticator = a;
+        return false;
+      }
+      return true;
+    });
+    if (authenticator === null) {
+      throw new Error(`Couldn't find authenticator with id: ${id}`);
+    }
+    return authenticator;
+  }
   /**
    *
    * @returns {Array.<AbstractWallet>}

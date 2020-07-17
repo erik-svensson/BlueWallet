@@ -11,6 +11,9 @@ export enum AuthenticatorsAction {
   LoadAuthenticatorsRequest = 'LoadAuthenticatorsRequest',
   LoadAuthenticatorsSuccess = 'LoadAuthenticatorsSuccess',
   LoadAuthenticatorsFailure = 'LoadAuthenticatorsFailure',
+  DeleteAuthenticatorRequest = 'DeleteAuthenticatorRequest',
+  DeleteAuthenticatorSuccess = 'DeleteAuthenticatorSuccess',
+  DeleteAuthenticatorFailure = 'DeleteAuthenticatorFailure',
 }
 
 export interface CreateAuthenticatorRequestAction {
@@ -25,7 +28,6 @@ export interface CreateAuthenticatorFailureAction {
   type: AuthenticatorsAction.CreateAuthenticatorFailure;
   error: string;
 }
-
 export interface LoadAuthenticatorsRequestAction {
   type: AuthenticatorsAction.LoadAuthenticatorsRequest;
 }
@@ -39,13 +41,29 @@ export interface LoadAuthenticatorsFailureAction {
   error: string;
 }
 
+export interface DeleteAuthenticatorRequestAction {
+  type: AuthenticatorsAction.DeleteAuthenticatorRequest;
+}
+
+export interface DeleteAuthenticatorSuccessAction {
+  type: AuthenticatorsAction.DeleteAuthenticatorSuccess;
+  authenticator: IAuthenticator;
+}
+export interface DeleteAuthenticatorFailureAction {
+  type: AuthenticatorsAction.DeleteAuthenticatorFailure;
+  error: string;
+}
+
 export type AuthenticatorsActionType =
   | CreateAuthenticatorRequestAction
   | CreateAuthenticatorSuccessAction
   | CreateAuthenticatorFailureAction
   | LoadAuthenticatorsRequestAction
   | LoadAuthenticatorsSuccessAction
-  | LoadAuthenticatorsFailureAction;
+  | LoadAuthenticatorsFailureAction
+  | DeleteAuthenticatorRequestAction
+  | DeleteAuthenticatorSuccessAction
+  | DeleteAuthenticatorFailureAction;
 
 const createAuthenticatorRequest = (): CreateAuthenticatorRequestAction => ({
   type: AuthenticatorsAction.CreateAuthenticatorRequest,
@@ -72,6 +90,20 @@ const loadAuthenticatorsSuccess = (authenticators: IAuthenticator[]): LoadAuthen
 
 const loadAuthenticatorsFailure = (error: string): LoadAuthenticatorsFailureAction => ({
   type: AuthenticatorsAction.LoadAuthenticatorsFailure,
+  error,
+});
+
+const deleteAuthenticatorRequest = (): DeleteAuthenticatorRequestAction => ({
+  type: AuthenticatorsAction.DeleteAuthenticatorRequest,
+});
+
+const deleteAuthenticatorSuccess = (authenticator: IAuthenticator): DeleteAuthenticatorSuccessAction => ({
+  type: AuthenticatorsAction.DeleteAuthenticatorSuccess,
+  authenticator,
+});
+
+const deleteAuthenticatorFailure = (error: string): DeleteAuthenticatorFailureAction => ({
+  type: AuthenticatorsAction.DeleteAuthenticatorFailure,
   error,
 });
 
@@ -116,5 +148,26 @@ export const loadAuthenticators = () => async (
     return dispatch(loadAuthenticatorsSuccess(authenticators));
   } catch (e) {
     return dispatch(loadAuthenticatorsFailure(e.message));
+  }
+};
+
+export const deleteAuthenticator = (id: string, meta: Meta) => async (
+  dispatch: ThunkDispatch<any, any, AnyAction>,
+): Promise<AuthenticatorsActionType> => {
+  try {
+    dispatch(deleteAuthenticatorRequest());
+    const authenticator = BlueApp.removeAuthenticatorById(id);
+    await BlueApp.saveToDisk();
+    const deleteAuthenticatorSuccessDispatch = dispatch(deleteAuthenticatorSuccess(authenticator));
+    if (meta?.onSuccess) {
+      meta.onSuccess(authenticator);
+    }
+    return deleteAuthenticatorSuccessDispatch;
+  } catch (e) {
+    const deleteAuthenticatorFailureDispatch = dispatch(deleteAuthenticatorFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+    return deleteAuthenticatorFailureDispatch;
   }
 };

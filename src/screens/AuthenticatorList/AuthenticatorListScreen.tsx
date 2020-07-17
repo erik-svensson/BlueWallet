@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { icons, images } from 'app/assets';
 import { Header, Image, ListEmptyState } from 'app/components';
 import { Route, Authenticator } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import { selectors, actions } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
@@ -21,6 +22,7 @@ interface MapStateProps {
 
 interface ActionProps {
   loadAuthenticators: Function;
+  deleteAuthenticator: Function;
 }
 
 type Props = NavigationInjectedProps & MapStateProps & ActionProps;
@@ -36,11 +38,37 @@ class AuthenticatorListScreen extends Component<Props> {
     loadAuthenticators();
   }
 
+  onDeletePress = (authenticator: Authenticator) => {
+    const { deleteAuthenticator, navigation } = this.props;
+    navigation.navigate(Route.DeleteEntity, {
+      name: authenticator.name,
+      title: i18n.authenticators.delete.title,
+      subtitle: i18n.authenticators.delete.subtitle,
+      onConfirm: () => {
+        deleteAuthenticator(authenticator.id, {
+          onSuccess: () => {
+            CreateMessage({
+              title: i18n.message.success,
+              description: i18n.authenticators.delete.success,
+              type: MessageType.success,
+              buttonProps: {
+                title: i18n.message.returnToDashboard,
+                onPress: () => navigation.navigate(Route.AuthenticatorList),
+              },
+            });
+          },
+        });
+      },
+    });
+  };
+
   renderItem = ({ item }: { item: Authenticator }) => (
     <View style={styles.authenticatorWrapper}>
       <View style={styles.authenticatorTopWrapper}>
         <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.delete}>{i18n._.delete}</Text>
+        <Text onPress={() => this.onDeletePress(item)} style={styles.delete}>
+          {i18n._.delete}
+        </Text>
       </View>
       <View style={styles.authenticatorBottomWrapper}>
         <Text style={styles.date}>
@@ -115,6 +143,7 @@ const mapStateToProps = (state: ApplicationState): MapStateProps => ({
 
 const mapDispatchToProps: ActionProps = {
   loadAuthenticators: actions.loadAuthenticators,
+  deleteAuthenticator: actions.deleteAuthenticator,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthenticatorListScreen);
