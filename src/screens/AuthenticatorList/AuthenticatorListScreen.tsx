@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
@@ -62,21 +62,30 @@ class AuthenticatorListScreen extends Component<Props> {
     });
   };
 
-  renderItem = ({ item }: { item: Authenticator }) => (
-    <View style={styles.authenticatorWrapper}>
-      <View style={styles.authenticatorTopWrapper}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text onPress={() => this.onDeletePress(item)} style={styles.delete}>
-          {i18n._.delete}
-        </Text>
-      </View>
-      <View style={styles.authenticatorBottomWrapper}>
-        <Text style={styles.date}>
-          {i18n._.created} {formatDate(item.createdAt)}
-        </Text>
-      </View>
-    </View>
-  );
+  renderItem = ({ item }: { item: Authenticator }) => {
+    const { navigation } = this.props;
+
+    return (
+      <TouchableOpacity
+        style={styles.authenticatorWrapper}
+        onPress={() => {
+          navigation.navigate(Route.ExportAuthenticator, { id: item.id });
+        }}
+      >
+        <View style={styles.authenticatorTopWrapper}>
+          <Text style={styles.name}>{item.name}</Text>
+          <TouchableOpacity onPress={() => this.onDeletePress(item)}>
+            <Text style={styles.delete}>{i18n._.delete}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.authenticatorBottomWrapper}>
+          <Text style={styles.date}>
+            {i18n._.created} {formatDate(item.createdAt)}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   renderHeader = () => (
     <View style={styles.headerContainer}>
