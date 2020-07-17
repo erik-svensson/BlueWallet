@@ -69,6 +69,9 @@ module.exports = {
     description: 'Confirm Transaction Password in order to proceed the transaction.',
   },
   authenticators: {
+    export: {
+      title: 'Export authenticator',
+    },
     delete: {
       title: 'Delete authenticator',
       subtitle: 'Delete your authenticator',
