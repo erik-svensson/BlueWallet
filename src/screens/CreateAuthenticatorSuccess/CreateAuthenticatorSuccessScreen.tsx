@@ -3,7 +3,7 @@ import { Text, StyleSheet, View } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate, Button, Chip } from 'app/components';
+import { Header, ScreenTemplate, Button, Mnemonic } from 'app/components';
 import { Route, Authenticator } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
@@ -28,9 +28,6 @@ class CreateAuthenticatorSuccessScreen extends Component<Props> {
     navigation.navigate(Route.AuthenticatorList);
   };
 
-  renderMnemonic = (mnemonic: string) =>
-    mnemonic.split(' ').map((word, index) => <Chip key={word} label={`${index + 1}. ${word}`} />);
-
   render() {
     const { authenticator } = this.props;
 
@@ -38,7 +35,7 @@ class CreateAuthenticatorSuccessScreen extends Component<Props> {
       <ScreenTemplate footer={<Button onPress={this.navigate} title={i18n.wallets.addSuccess.okButton} />}>
         <Text style={styles.subtitle}>{i18n.wallets.addSuccess.subtitle}</Text>
         <Text style={styles.description}>{i18n.authenticators.add.successDescription}</Text>
-        <View style={styles.mnemonicPhraseContainer}>{authenticator && this.renderMnemonic(authenticator.secret)}</View>
+        {authenticator && <Mnemonic mnemonic={authenticator.secret} />}
       </ScreenTemplate>
     );
   }
@@ -65,11 +62,5 @@ const styles = StyleSheet.create({
     color: palette.textGrey,
     ...typography.caption,
     textAlign: 'center',
-  },
-  mnemonicPhraseContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    paddingHorizontal: 12,
   },
 });

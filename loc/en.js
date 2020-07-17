@@ -16,6 +16,7 @@ module.exports = {
     or: 'or',
     delete: 'Delete',
     created: 'Created',
+    invalid: 'Invalid',
   },
   tabNavigator: {
     dashboard: 'Dashboard',
@@ -30,10 +31,13 @@ module.exports = {
     successfullWalletImport: 'Your wallet has been successfully imported. You can now return to Dashboard.',
     successfullWalletDelete: 'Your wallet has been successfully deleted. You can now return to Dashboard.',
     returnToDashboard: 'Return to Dashboard',
+    returnToAuthenticators: 'Return to Authenticators',
     creatingWallet: 'Creating your wallet',
     creatingWalletDescription: 'Please be patient while we create your wallet. It may take a while.',
     creatingAuthenticator: 'Creating your authenticator',
     creatingAuthenticatorDescription: 'Please be patient while we create your authenticator. It may take a while.',
+    importingAuthenticator: 'Importing your authenticator',
+    importingAuthenticatorDescription: 'Please be patient while we import your authenticator. It may take a while.',
   },
   onboarding: {
     onboarding: 'Onboarding',
@@ -69,6 +73,14 @@ module.exports = {
     description: 'Confirm Transaction Password in order to proceed the transaction.',
   },
   authenticators: {
+    import: {
+      title: 'Import authenticator',
+      success: 'Your authenticator has been successfully imported. You can now return to Authenticators.',
+      subtitle: 'Import your authenticator',
+      desc1: 'Please write your mnemonic in order to import your authenticator',
+      desc2: 'scan QR code by clicking on “or scan QR code” below',
+      textAreaPlaceholder: 'Mnemonic',
+    },
     export: {
       title: 'Export authenticator',
     },
@@ -92,9 +104,6 @@ module.exports = {
       description:
         'Select the option to “create wallet” on Electrum Vault (desktop application). Follow the steps until you see a QR code. Scan it using “Scan” button below to continue',
       subdescription: 'import you authenticator by clicking on Import authenticator” below.',
-    },
-    import: {
-      title: 'Import authenticator',
     },
     enterPIN: {
       subtitle: 'Enter PIN',

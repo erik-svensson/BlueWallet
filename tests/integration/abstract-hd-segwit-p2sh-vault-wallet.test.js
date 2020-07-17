@@ -60,7 +60,7 @@ describe('Abstract hd segwit p2sh vault wallet', () => {
       } catch (e) {
         expect(e.message).toBe(
           i18n.formatString(i18n.wallets.errors.noIndexForWord, {
-            noIndexForWord: nonExistingWord,
+            word: nonExistingWord,
           }),
         );
       }

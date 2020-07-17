@@ -4,7 +4,7 @@ import QRCode from 'react-native-qrcode-svg';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate, Chip } from 'app/components';
+import { Header, ScreenTemplate, Mnemonic } from 'app/components';
 import { Authenticator } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
@@ -24,9 +24,6 @@ class ExportAuthenticatorScreen extends Component<Props> {
     header: <Header navigation={props.navigation} isBackArrow title={i18n.authenticators.export.title} />,
   });
 
-  renderMnemonic = (mnemonic: string) =>
-    mnemonic.split(' ').map((word, index) => <Chip key={word} label={`${index + 1}. ${word}`} />);
-
   render() {
     const { authenticator } = this.props;
 
@@ -36,7 +33,7 @@ class ExportAuthenticatorScreen extends Component<Props> {
         <View style={styles.qrCodeContainer}>
           {authenticator && <QRCode quietZone={10} value={authenticator.QRCode} size={140} ecl={'H'} />}
         </View>
-        <View style={styles.mnemonicPhraseContainer}>{authenticator && this.renderMnemonic(authenticator.secret)}</View>
+        {authenticator && <Mnemonic mnemonic={authenticator.secret} />}
       </ScreenTemplate>
     );
   }
@@ -60,11 +57,5 @@ const styles = StyleSheet.create({
   qrCodeContainer: {
     paddingVertical: 24,
     alignItems: 'center',
-  },
-  mnemonicPhraseContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    paddingHorizontal: 12,
   },
 });

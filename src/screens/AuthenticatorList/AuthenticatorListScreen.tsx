@@ -52,7 +52,7 @@ class AuthenticatorListScreen extends Component<Props> {
               description: i18n.authenticators.delete.success,
               type: MessageType.success,
               buttonProps: {
-                title: i18n.message.returnToDashboard,
+                title: i18n.message.returnToAuthenticators,
                 onPress: () => navigation.navigate(Route.AuthenticatorList),
               },
             });
