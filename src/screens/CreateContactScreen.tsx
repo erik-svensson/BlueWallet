@@ -12,6 +12,8 @@ import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { createContact, CreateContactAction } from 'app/state/contacts/actions';
 import { palette, typography } from 'app/styles';
 
+const bitcoin = require('bitcoinjs-lib');
+
 const i18n = require('../../loc');
 
 interface Props {
@@ -25,12 +27,14 @@ interface Props {
 interface State {
   name: string;
   address: string;
+  error: string;
 }
 
 export class CreateContactScreen extends React.PureComponent<Props, State> {
   state: State = {
     name: '',
     address: '',
+    error: '',
   };
 
   get canCreateContact(): boolean {
@@ -46,6 +50,8 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   };
 
   createContact = () => {
+    this.validateAddress();
+    if (this.state.error) return;
     this.props.createContact({
       id: uuidv4(),
       name: this.state.name.trim(),
@@ -58,10 +64,21 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
     });
   };
 
+  validateAddress = () => {
+    try {
+      bitcoin.address.toOutputScript(this.state.address);
+    } catch (err) {
+      this.setState({
+        error: i18n.send.details.address_field_is_not_valid,
+      });
+    }
+  };
+
   onScanQrCodePress = () => {
     this.props.navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: this.onBarCodeScan,
     });
+    this.validateAddress();
   };
 
   showSuccessImportMessageScreen = () =>
@@ -95,6 +112,7 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
         <InputItem setValue={this.setName} label={i18n.contactCreate.nameLabel} />
         <View>
           <InputItem
+            error={this.state.error}
             focused={!!address}
             value={address}
             multiline
