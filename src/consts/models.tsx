@@ -146,6 +146,7 @@ export type RootStackParams = {
     header?: React.ReactNode;
     value?: string;
     validate?: (value: string) => string | undefined;
+    asyncValidate?: (value: string) => Promise<any>;
     keyboardType?: KeyboardType;
   };
   [Route.Message]: {

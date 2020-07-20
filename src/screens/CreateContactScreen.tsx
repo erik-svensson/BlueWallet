@@ -8,11 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { icons } from 'app/assets';
 import { Button, Header, InputItem, ScreenTemplate, Text, Image } from 'app/components';
 import { Contact, Route, MainTabNavigatorParams, MainCardStackNavigatorParams } from 'app/consts';
+import { checkAddress } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { createContact, CreateContactAction } from 'app/state/contacts/actions';
 import { palette, typography } from 'app/styles';
-
-const bitcoin = require('bitcoinjs-lib');
 
 const i18n = require('../../loc');
 
@@ -43,42 +42,44 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
 
   setName = (name: string) => this.setState({ name });
 
-  setAddress = (address: string) => this.setState({ address });
+  setAddress = (address: string) => this.setState({ address, error: '' });
 
   onBarCodeScan = (address: string) => {
     this.setAddress(address.split('?')[0].replace('bitcoin:', ''));
   };
 
   createContact = () => {
-    this.validateAddress();
-    if (this.state.error) return;
-    this.props.createContact({
-      id: uuidv4(),
-      name: this.state.name.trim(),
-      address: this.state.address.trim(),
-    });
-    this.showSuccessImportMessageScreen();
-    this.setState({
-      name: '',
-      address: '',
-    });
+    this.validateAddress()
+      .then(() => {
+        if (this.state.error) return;
+        this.props.createContact({
+          id: uuidv4(),
+          name: this.state.name.trim(),
+          address: this.state.address.trim(),
+        });
+        this.showSuccessImportMessageScreen();
+        this.setState({
+          name: '',
+          address: '',
+        });
+      })
+      .catch(() => {
+        this.setState({
+          error: i18n.send.details.address_field_is_not_valid,
+        });
+      });
   };
 
   validateAddress = () => {
-    try {
-      bitcoin.address.toOutputScript(this.state.address);
-    } catch (err) {
-      this.setState({
-        error: i18n.send.details.address_field_is_not_valid,
-      });
-    }
+    return new Promise(resolve => {
+      resolve(checkAddress(this.state.address));
+    });
   };
 
   onScanQrCodePress = () => {
     this.props.navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: this.onBarCodeScan,
     });
-    this.validateAddress();
   };
 
   showSuccessImportMessageScreen = () =>
