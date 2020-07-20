@@ -27,60 +27,13 @@ export class IntagrateKeyScreen extends React.PureComponent<Props, State> {
   };
 
   scanKey = () => {
-    return this.props.navigation.navigate(Route.ScanQrCode, {
-      onBarCodeScan: (newPublicKey: string) => {
-        this.props.navigation.goBack();
-        CreateMessage({
-          title: i18n.message.creatingWallet,
-          description: i18n.message.creatingWalletDescription,
-          type: MessageType.processingState,
-          asyncTask: () => this.createWallet(newPublicKey),
-        });
-      },
+    const { navigation } = this.props;
+
+    const onBarCodeScan = navigation.getParam('onBarCodeScan');
+
+    return navigation.navigate(Route.ScanQrCode, {
+      onBarCodeScan,
     });
-  };
-
-  createWallet = async (publicKey: string) => {
-    const { isLoading } = this.state;
-    const { getParam } = this.props.navigation;
-    const label = getParam('label');
-    const walletClass = getParam('wallet');
-    const loadWallets = getParam('loadWallets');
-
-    if (isLoading) return;
-    this.setState({ isLoading: true });
-    try {
-      const wallet = new walletClass([publicKey]);
-
-      wallet.setLabel(label || i18n.wallets.details.title);
-
-      await wallet.generate();
-      BlueApp.wallets.push(wallet);
-      await BlueApp.saveToDisk();
-      loadWallets();
-      this.setState({ isLoading: false });
-
-      CreateMessage({
-        title: i18n.message.success,
-        description: i18n.message.successfullWalletImport,
-        type: MessageType.success,
-        buttonProps: {
-          title: i18n.message.returnToDashboard,
-          onPress: () => NavigationService.navigateWithReset(Route.MainCardStackNavigator),
-        },
-      });
-    } catch (error) {
-      this.setState({ isLoading: false });
-
-      Alert.alert('Error', i18n.wallets.add.publicKeyError, [
-        {
-          text: 'OK',
-          onPress: () => {
-            this.props.navigation.navigate(Route.MainCardStackNavigator);
-          },
-        },
-      ]);
-    }
   };
 
   render() {

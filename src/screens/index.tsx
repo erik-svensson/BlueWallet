@@ -40,3 +40,4 @@ export { default as CreateAuthenticatorSuccessScreen } from './CreateAuthenticat
 export { default as DeleteEntityScreen } from './DeleteEntity';
 export { default as ExportAuthenticatorScreen } from './ExportAuthenticator';
 export { default as ImportAuthenticatorScreen } from './ImportAuthenticator';
+export { default as CreateWalletSuccessScreen } from './CreateWalletSuccessScreen';

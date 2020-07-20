@@ -36,6 +36,7 @@ import {
   DeleteEntityScreen,
   ExportAuthenticatorScreen,
   ImportAuthenticatorScreen,
+  CreateWalletSuccessScreen,
 } from 'app/screens';
 
 export const MainCardStackNavigator = createStackNavigator(
@@ -46,6 +47,7 @@ export const MainCardStackNavigator = createStackNavigator(
         header: null,
       },
     },
+    [Route.CreateWalletSuccess]: CreateWalletSuccessScreen,
     [Route.ExportAuthenticator]: ExportAuthenticatorScreen,
     [Route.ImportAuthenticator]: ImportAuthenticatorScreen,
     [Route.DeleteEntity]: DeleteEntityScreen,

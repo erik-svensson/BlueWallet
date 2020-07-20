@@ -19,6 +19,7 @@ export enum Route {
   EnterPIN = 'EnterPIN',
   ExportAuthenticator = 'ExportAuthenticator',
   ImportAuthenticator = 'ImportAuthenticator',
+  CreateWalletSuccess = 'CreateWalletSuccess',
   DeleteEntity = 'DeleteEntity',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticator = 'CreateAuthenticator',
