@@ -10,7 +10,7 @@ interface Props {
   title: string;
   value?: string;
   validate?: (value: string) => string | undefined;
-  asyncValidate?: (value: string) => Promise<any>;
+  asyncValidate?: (value: string) => void;
   onSave?: (value: string) => void;
 }
 

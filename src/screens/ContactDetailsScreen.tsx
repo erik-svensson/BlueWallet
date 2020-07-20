@@ -12,7 +12,6 @@ import {
   Header,
   ScreenTemplate,
   ContactAvatar,
-  Text,
 } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
 import { Contact, Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
@@ -56,9 +55,7 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
   };
 
   validateAddress = (address: string) => {
-    return new Promise(resolve => {
-      resolve(checkAddress(address));
-    });
+    checkAddress(address);
   };
 
   saveChanges = (changes: Partial<Contact>) => {

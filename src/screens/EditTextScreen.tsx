@@ -24,15 +24,14 @@ export const EditTextScreen = (props: Props) => {
 
   const handlePressOnSaveButton = () => {
     if (asyncValidate) {
-      return asyncValidate(value)
-        .then(() => {
-          onSave(value);
-          props.navigation.pop();
-        })
-        .catch(() => {
-          setError(i18n.send.details.address_field_is_not_valid);
-          return;
-        });
+      try {
+        asyncValidate(value);
+        onSave(value);
+        props.navigation.pop();
+      } catch (err) {
+        setError(i18n.send.details.address_field_is_not_valid);
+        return;
+      }
     }
     onSave(value);
     props.navigation.pop();

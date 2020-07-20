@@ -49,31 +49,28 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   };
 
   createContact = () => {
-    this.validateAddress()
-      .then(() => {
-        if (this.state.error) return;
-        this.props.createContact({
-          id: uuidv4(),
-          name: this.state.name.trim(),
-          address: this.state.address.trim(),
-        });
-        this.showSuccessImportMessageScreen();
-        this.setState({
-          name: '',
-          address: '',
-        });
-      })
-      .catch(() => {
-        this.setState({
-          error: i18n.send.details.address_field_is_not_valid,
-        });
+    try {
+      this.validateAddress();
+      if (this.state.error) return;
+      this.props.createContact({
+        id: uuidv4(),
+        name: this.state.name.trim(),
+        address: this.state.address.trim(),
       });
+      this.showSuccessImportMessageScreen();
+      this.setState({
+        name: '',
+        address: '',
+      });
+    } catch (_) {
+      this.setState({
+        error: i18n.send.details.address_field_is_not_valid,
+      });
+    }
   };
 
   validateAddress = () => {
-    return new Promise(resolve => {
-      resolve(checkAddress(this.state.address));
-    });
+    checkAddress(this.state.address);
   };
 
   onScanQrCodePress = () => {
