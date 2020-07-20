@@ -145,61 +145,71 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     });
   };
 
-  createAIRWallet = (label: string) => async (recoveryPublicKey: string) => {
+  showAlert = (onPress: Function) => {
+    Alert.alert('Error', i18n.wallets.add.publicKeyError, [
+      {
+        text: 'OK',
+        onPress: () => onPress(),
+      },
+    ]);
+  };
+
+  createAIRWalletAddInstantPublicKey = (wallet: any) => async (secondPublicKey: string) => {
     const { navigation } = this.props;
+    const onError = () =>
+      this.showAlert(() => {
+        this.navigateToIntegrateInstantPublicKey(wallet);
+      });
     try {
-      const wallet = new HDSegwitP2SHAirWallet();
-
-      wallet.addPublicKey(recoveryPublicKey);
-
-      wallet.setLabel(label);
-
-      navigation.navigate(Route.IntagrateKey, {
-        onBarCodeScan: async (secondPublicKey: string) => {
-          navigation.goBack();
-
-          CreateMessage({
-            title: i18n.message.creatingWallet,
-            description: i18n.message.creatingWalletDescription,
-            type: MessageType.processingState,
-            asyncTask: async () => {
-              try {
-                wallet.addPublicKey(secondPublicKey);
-
-                await wallet.generate();
-                BlueApp.wallets.push(wallet);
-                await BlueApp.saveToDisk();
-                loadWallets();
-                console.log('create wallet', wallet.getSecret().split(' '));
-                this.props.navigation.navigate(Route.CreateWalletSuccess, {
-                  secret: wallet.getSecret(),
-                });
-              } catch (error) {
-                // this.setState({ isLoading: false });
-                // Alert.alert('Error', i18n.wallets.add.publicKeyError, [
-                //   {
-                //     text: 'OK',
-                //     onPress: () => {
-                //       this.props.navigation.navigate(Route.MainCardStackNavigator);
-                //     },
-                //   },
-                // ]);
-              }
-            },
-          });
+      wallet.addPublicKey(secondPublicKey);
+      navigation.goBack();
+      CreateMessage({
+        title: i18n.message.creatingWallet,
+        description: i18n.message.creatingWalletDescription,
+        type: MessageType.processingState,
+        asyncTask: async () => {
+          try {
+            await wallet.generate();
+            BlueApp.wallets.push(wallet);
+            await BlueApp.saveToDisk();
+            loadWallets();
+            navigation.navigate(Route.CreateWalletSuccess, {
+              secret: wallet.getSecret(),
+            });
+          } catch (_) {
+            onError();
+          }
         },
       });
     } catch (error) {
-      this.setState({ isLoading: false });
+      onError();
+    }
+  };
 
-      Alert.alert('Error', i18n.wallets.add.publicKeyError, [
-        {
-          text: 'OK',
-          onPress: () => {
-            this.props.navigation.navigate(Route.MainCardStackNavigator);
-          },
-        },
-      ]);
+  navigateToIntegrateInstantPublicKey = (wallet: any) => {
+    const { navigation } = this.props;
+    navigation.navigate(Route.IntagrateKey, {
+      onBarCodeScan: this.createAIRWalletAddInstantPublicKey(wallet),
+      title: 'INSTANT',
+    });
+  };
+
+  navigateToIntegrateRecoveryPublicKey = (label: string, create: Function) => {
+    const { navigation } = this.props;
+    navigation.navigate(Route.IntagrateKey, {
+      onBarCodeScan: create(label),
+      title: 'RECOVERY',
+    });
+  };
+
+  createAIRWallet = (label: string) => async (recoveryPublicKey: string) => {
+    try {
+      const wallet = new HDSegwitP2SHAirWallet();
+      wallet.addPublicKey(recoveryPublicKey);
+      wallet.setLabel(label);
+      this.navigateToIntegrateInstantPublicKey(wallet);
+    } catch (error) {
+      this.showAlert(() => this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWallet));
     }
   };
 
@@ -212,9 +222,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       });
     }
     if (selectedIndex === 1) {
-      return this.props.navigation.navigate(Route.IntagrateKey, {
-        onBarCodeScan: this.createAIRWallet(label),
-      });
+      return this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWallet);
     }
     this.createWallet();
   };

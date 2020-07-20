@@ -37,11 +37,14 @@ export class IntagrateKeyScreen extends React.PureComponent<Props, State> {
   };
 
   render() {
+    const { navigation } = this.props;
+
+    const title = navigation.getParam('title');
     return (
       <ScreenTemplate
         footer={<Button loading={this.state.isLoading} onPress={this.scanKey} title={i18n.wallets.publicKey.scan} />}
       >
-        <Text style={styles.subtitle}>{i18n.wallets.publicKey.subtitle}</Text>
+        <Text style={styles.subtitle}>{title}</Text>
         <Text style={styles.description}>{i18n.wallets.publicKey.description}</Text>
       </ScreenTemplate>
     );
