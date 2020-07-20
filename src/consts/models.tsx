@@ -6,6 +6,7 @@ export const CONST = {
   allWallets: 'All wallets',
   receive: 'receive',
   send: 'send',
+  webGeneratorUrl: 'www.keygenerator.bitcoinvault.global',
 };
 
 export enum FlowType {

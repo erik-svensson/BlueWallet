@@ -1,30 +1,19 @@
 import React from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 
 import { ScreenTemplate, Text, Header, Button } from 'app/components';
-import { Route } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { BlueApp } from 'app/legacy';
-import { NavigationService } from 'app/services';
+import { Route, CONST } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 type Props = NavigationInjectedProps;
 
-interface State {
-  isLoading: boolean;
-}
-
-export class IntagrateKeyScreen extends React.PureComponent<Props, State> {
+export class IntegrateKeyScreen extends React.PureComponent<Props> {
   static navigationOptions = (props: NavigationScreenProps) => ({
     header: <Header navigation={props.navigation} isBackArrow title={i18n.wallets.add.title} />,
   });
-
-  state: State = {
-    isLoading: false,
-  };
 
   scanKey = () => {
     const { navigation } = this.props;
@@ -40,12 +29,14 @@ export class IntagrateKeyScreen extends React.PureComponent<Props, State> {
     const { navigation } = this.props;
 
     const title = navigation.getParam('title');
+    const description = navigation.getParam('description');
     return (
-      <ScreenTemplate
-        footer={<Button loading={this.state.isLoading} onPress={this.scanKey} title={i18n.wallets.publicKey.scan} />}
-      >
+      <ScreenTemplate footer={<Button onPress={this.scanKey} title={i18n.wallets.publicKey.scan} />}>
         <Text style={styles.subtitle}>{title}</Text>
-        <Text style={styles.description}>{i18n.wallets.publicKey.description}</Text>
+        <Text style={styles.description}>{description}</Text>
+        <View style={styles.webGeneratorUrlWrapper}>
+          <Text style={styles.webGeneratorUrl}>{CONST.webGeneratorUrl}</Text>
+        </View>
       </ScreenTemplate>
     );
   }
@@ -63,5 +54,14 @@ const styles = StyleSheet.create({
     color: palette.textGrey,
     ...typography.caption,
     textAlign: 'center',
+  },
+  webGeneratorUrl: {
+    ...typography.headline5,
+    textAlign: 'center',
+  },
+  webGeneratorUrlWrapper: {
+    paddingBottom: 7,
+    borderBottomWidth: 1,
+    borderBottomColor: palette.border,
   },
 });

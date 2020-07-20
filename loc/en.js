@@ -180,9 +180,11 @@ module.exports = {
       publicKeyError: 'Provided public key is invalid',
     },
     publicKey: {
-      subtitle: 'Integrate Recovery Key',
-      description:
+      recoverySubtitle: 'Integrate Recovery Key',
+      recoveryDescription:
         'Go to the Web Key Generator on a separate device and use this app to scan the Recovery Key’s generated QR code.',
+      instantSubtitle: 'Integrate Instant Key',
+      instantDescription: `Go to the Web Key Generator on a separate device and use this app to scan the Instant Key's generated QR code.`,
       scan: 'Scan',
     },
     addSuccess: {

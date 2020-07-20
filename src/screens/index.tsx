@@ -32,7 +32,7 @@ export { ConfirmTransactionPassword } from './PinFlow/ConfirmTransactionPassword
 export { UnlockTransaction } from './UnlockTransaction';
 export { UnlockScreen } from './UnlockScreen';
 export { FilterTransactionsScreen } from './FilterTransactionsScreen';
-export { IntagrateKeyScreen } from './IntagrateKeyScreen';
+export { IntegrateKeyScreen } from './IntegrateKeyScreen';
 export { default as AuthenticatorListScreen } from './AuthenticatorList';
 export { default as CreateAuthenticatorScreen } from './CreateAuthenticator';
 export { default as EnterPINScreen } from './EnterPIN';
