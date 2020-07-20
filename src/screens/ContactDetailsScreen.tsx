@@ -119,7 +119,7 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
             title={i18n.contactDetails.editAddress}
             label={i18n.contactDetails.addressLabel}
             value={address}
-            asyncValidate={this.validateAddress}
+            validateOnSave={this.validateAddress}
             onSave={this.setAddress}
           />
           <CopyButton textToCopy={address} containerStyle={styles.copyButtonContainer} />

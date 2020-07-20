@@ -18,16 +18,14 @@ export const EditTextScreen = (props: Props) => {
   const { label, header, onSave, title } = params;
   const keyboardType = params.keyboardType || 'default';
   const validate = params.validate || null;
-  const asyncValidate = params.asyncValidate || null;
+  const validateOnSave = params.validateOnSave || null;
   const [value, setValue] = useState(params.value || '');
   const [error, setError] = useState('');
 
   const handlePressOnSaveButton = () => {
-    if (asyncValidate) {
+    if (validateOnSave) {
       try {
-        asyncValidate(value);
-        onSave(value);
-        props.navigation.pop();
+        validateOnSave(value);
       } catch (err) {
         setError(i18n.send.details.address_field_is_not_valid);
         return;
