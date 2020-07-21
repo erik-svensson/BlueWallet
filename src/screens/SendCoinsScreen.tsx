@@ -32,10 +32,11 @@ interface State {
   isFeeSelectionModalVisible: boolean;
   isAdvancedTransactionOptionsVisible: boolean;
   recipientsScrollIndex: number;
-  fromAddress: string;
   fromWallet: any;
-  fromSecret: string;
-  addresses: any;
+  transaction: {
+    amount: number;
+    address: string;
+  };
   memo: string;
   networkTransactionFees: any;
   fee: number;
@@ -55,53 +56,49 @@ export class SendCoinsScreen extends Component<Props, State> {
     super(props);
 
     const { navigation } = props;
-    let fromAddress = navigation.getParam('fromAddress');
-    let fromSecret = navigation.getParam('fromSecret');
     let fromWallet = navigation.getParam('fromWallet');
-    const toAddress = navigation.getParam('toAddress');
     const wallets = BlueApp.getWallets();
+    const toAddress = navigation.getParam('toAddress');
 
-    const addresses = toAddress ? [{ address: toAddress }] : [];
-
-    if (wallets.length === 0) {
-      Alert.alert('Before creating a transaction, you must first add a Bitcoin wallet.');
-      props.navigation.goBack(null);
-    } else {
-      if (!fromWallet && wallets.length > 0) {
-        fromWallet = wallets[0];
-        fromAddress = fromWallet.getAddress();
-        fromSecret = fromWallet.getSecret();
-      }
-      this.state = {
-        isLoading: false,
-        amount: 0,
-        wallets,
-        showSendMax: false,
-        isFeeSelectionModalVisible: false,
-        isAdvancedTransactionOptionsVisible: false,
-        recipientsScrollIndex: 0,
-        fromAddress,
-        fromWallet,
-        fromSecret,
-        addresses,
-        memo: '',
-        networkTransactionFees: new NetworkTransactionFee(1, 1, 1),
-        fee: 1,
-        feeSliderValue: 1,
-        bip70TransactionExpiration: null,
-        renderWalletSelectionButtonHidden: false,
-      };
+    if (!fromWallet && wallets.length > 0) {
+      fromWallet = wallets[0];
     }
+    this.state = {
+      isLoading: false,
+      amount: 0,
+      wallets,
+      showSendMax: false,
+      isFeeSelectionModalVisible: false,
+      isAdvancedTransactionOptionsVisible: false,
+      recipientsScrollIndex: 0,
+      fromWallet,
+      transaction: toAddress ? { address: toAddress, amount: undefined } : new BitcoinTransaction(),
+      memo: '',
+      networkTransactionFees: new NetworkTransactionFee(1, 1, 1),
+      fee: 1,
+      feeSliderValue: 1,
+      bip70TransactionExpiration: null,
+      renderWalletSelectionButtonHidden: false,
+    };
   }
 
   async componentDidMount() {
-    const toAddress = this.props.navigation.getParam('toAddress');
-    const addresses = toAddress ? [{ address: toAddress }] : [new BitcoinTransaction()];
-    this.setState({
-      addresses,
-      isLoading: false,
-    });
+    await this.loadTransactionsFees();
+  }
 
+  loadTransactionsFees = async () => {
+    try {
+      const recommendedFees = await NetworkTransactionFees.recommendedFees();
+      if (recommendedFees && recommendedFees.hasOwnProperty('fastestFee')) {
+        await AsyncStorage.setItem(NetworkTransactionFee.StorageKey, JSON.stringify(recommendedFees));
+        this.setState({
+          fee: recommendedFees.fastestFee,
+          networkTransactionFees: recommendedFees,
+          feeSliderValue: recommendedFees.fastestFee,
+        });
+        return;
+      }
+    } catch (_) {}
     try {
       const cachedNetworkTransactionFees = JSON.parse(
         (await AsyncStorage.getItem(NetworkTransactionFee.StorageKey)) as string,
@@ -115,81 +112,15 @@ export class SendCoinsScreen extends Component<Props, State> {
         });
       }
     } catch (_) {}
+  };
 
-    try {
-      const recommendedFees = await NetworkTransactionFees.recommendedFees();
-      if (recommendedFees && recommendedFees.hasOwnProperty('fastestFee')) {
-        await AsyncStorage.setItem(NetworkTransactionFee.StorageKey, JSON.stringify(recommendedFees));
-        this.setState({
-          fee: recommendedFees.fastestFee,
-          networkTransactionFees: recommendedFees,
-          feeSliderValue: recommendedFees.fastestFee,
-        });
-      } else {
-        this.setState({ isLoading: false });
-      }
-    } catch (_e) {}
-  }
-
-  chooseItemFromModal = async (index: number) => {
+  chooseItemFromModal = (index: number) => {
     const wallets = BlueApp.getWallets();
 
     const wallet = wallets[index];
-    const changeWallet = () => {
-      this.setState({
-        fromAddress: wallet.getAddress(),
-        fromSecret: wallet.getSecret(),
-        fromWallet: wallet,
-      });
-    };
-    if (this.state.addresses.length > 1 && !wallet.allowBatchSend()) {
-      Alert.alert(
-        'Wallet Selection',
-        `The selected wallet does not support sending Bitcoin to multiple recipients. Are you sure to want to select this wallet?`,
-        [
-          {
-            text: i18n._.ok,
-            onPress: async () => {
-              const firstTransaction =
-                this.state.addresses.find((element: any) => {
-                  const feeSatoshi = new BigNumber(element.amount).multipliedBy(100000000);
-                  return element.address.length > 0 && feeSatoshi > 0;
-                }) || this.state.addresses[0];
-              this.setState({ addresses: [firstTransaction], recipientsScrollIndex: 0 }, () => changeWallet());
-            },
-            style: 'default',
-          },
-          { text: i18n.send.details.cancel, onPress: () => {}, style: 'cancel' },
-        ],
-        { cancelable: false },
-      );
-    } else if (
-      this.state.addresses.some((element: any) => element.amount === BitcoinUnit.MAX) &&
-      !wallet.allowSendMax()
-    ) {
-      Alert.alert(
-        'Wallet Selection',
-        `The selected wallet does not support automatic maximum balance calculation. Are you sure to want to select this wallet?`,
-        [
-          {
-            text: i18n._.ok,
-            onPress: async () => {
-              const firstTransaction =
-                this.state.addresses.find((element: any) => {
-                  return element.amount === BitcoinUnit.MAX;
-                }) || this.state.addresses[0];
-              firstTransaction.amount = 0;
-              this.setState({ addresses: [firstTransaction], recipientsScrollIndex: 0 }, () => changeWallet());
-            },
-            style: 'default',
-          },
-          { text: i18n.send.details.cancel, style: 'cancel' },
-        ],
-        { cancelable: false },
-      );
-    } else {
-      changeWallet();
-    }
+    this.setState({
+      fromWallet: wallet,
+    });
   };
 
   showModal = () => {
@@ -331,6 +262,60 @@ export class SendCoinsScreen extends Component<Props, State> {
 
     return new BigNumber(totalInput - totalOutput).dividedBy(100000000).toNumber();
   }
+
+  validateTransaction = () => {
+    let error = '';
+
+    const { fee, transaction } = this.state;
+    const requestedSatPerByte = this.state.fee;
+
+    for (const [index, transaction] of this.state.addresses.entries()) {
+      if (!transaction.amount || transaction.amount < 0 || parseFloat(transaction.amount) === 0) {
+        error = i18n.send.details.amount_field_is_not_valid;
+        console.log('validation error');
+      } else if (!this.state.fee || !requestedSatPerByte || requestedSatPerByte < 1) {
+        error = i18n.send.details.fee_field_is_not_valid;
+        console.log('validation error');
+      } else if (!transaction.address) {
+        error = i18n.send.details.address_field_is_not_valid;
+        console.log('validation error');
+      } else if (this.recalculateAvailableBalance(this.state.fromWallet.getBalance(), transaction.amount, 0) < 0) {
+        // first sanity check is that sending amount is not bigger than available balance
+        error = i18n.send.details.total_exceeds_balance;
+        console.log('validation error');
+      } else if (BitcoinBIP70TransactionDecode.isExpired(this.state.bip70TransactionExpiration)) {
+        error = 'Transaction has expired.';
+        console.log('validation error');
+      } else if (transaction.address) {
+        const address = transaction.address.trim().toLowerCase();
+        if (address.startsWith('lnb') || address.startsWith('lightning:lnb')) {
+          error =
+            'This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.';
+          console.log('validation error');
+        }
+      }
+
+      if (!error) {
+        try {
+          bitcoin.address.toOutputScript(transaction.address, config.network);
+        } catch (err) {
+          console.log('validation error');
+          console.log(err);
+          error = i18n.send.details.address_field_is_not_valid;
+        }
+      }
+      if (error) {
+        this.setState({ isLoading: false, recipientsScrollIndex: index });
+        Alert.alert(error.toString());
+
+        break;
+      }
+    }
+
+    if (error) {
+      return;
+    }
+  };
 
   confirmTransaction = async () => {
     this.setState({ isLoading: true });

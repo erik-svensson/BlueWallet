@@ -25,6 +25,7 @@ async function connectMain() {
   const tcp = await AsyncStorage.getItem(AppStorage.ELECTRUM_TCP_PORT);
   const usingPeer = !!host && !!tcp ? { host, tcp } : await getRandomHardcodedPeer();
 
+  console.log('usingPeer', usingPeer);
   try {
     console.log('begin connection:', JSON.stringify(usingPeer));
     mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, 'tcp');
