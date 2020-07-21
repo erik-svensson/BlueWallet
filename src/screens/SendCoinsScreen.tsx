@@ -156,28 +156,16 @@ export class SendCoinsScreen extends Component<Props, State> {
 
   createHDBech32Transaction = async () => {
     /** @type {HDSegwitBech32Wallet} */
+    const { transaction } = this.state;
     const wallet = this.state.fromWallet;
     await wallet.fetchUtxo();
-    const firstTransaction = this.state.addresses[0];
     const changeAddress = await wallet.getAddressForTransaction();
-    const satoshis = new BigNumber(firstTransaction.amount).multipliedBy(100000000).toNumber();
     const requestedSatPerByte: string | number = +this.state.fee.toString().replace(/\D/g, '');
-    console.log({ satoshis, requestedSatPerByte, utxo: wallet.getUtxo() });
 
-    let targets: any[] = [];
-    for (const transaction of this.state.addresses) {
-      const amount =
-        transaction.amount === BitcoinUnit.MAX
-          ? BitcoinUnit.MAX
-          : new BigNumber(transaction.amount).multipliedBy(100000000).toNumber();
-      if (amount > 0.0 || amount === BitcoinUnit.MAX) {
-        targets.push({ address: transaction.address, value: amount });
-        console.warn('createHDbech: ' + transaction.address, amount);
-      }
-    }
-
-    if (firstTransaction.amount === BitcoinUnit.MAX) {
-      targets = [{ address: firstTransaction.address, amount: BitcoinUnit.MAX }];
+    const targets: any[] = [];
+    const amount = new BigNumber(transaction.amount).multipliedBy(100000000).toNumber();
+    if (amount > 0.0) {
+      targets.push({ address: transaction.address, value: amount });
     }
 
     const { tx, fee, psbt } = await wallet.createTransaction(
@@ -263,108 +251,49 @@ export class SendCoinsScreen extends Component<Props, State> {
     return new BigNumber(totalInput - totalOutput).dividedBy(100000000).toNumber();
   }
 
-  validateTransaction = () => {
-    let error = '';
+  validateTransaction = (): string | null => {
+    const { fee: requestedSatPerByte, transaction } = this.state;
 
-    const { fee, transaction } = this.state;
-    const requestedSatPerByte = this.state.fee;
-
-    for (const [index, transaction] of this.state.addresses.entries()) {
-      if (!transaction.amount || transaction.amount < 0 || parseFloat(transaction.amount) === 0) {
-        error = i18n.send.details.amount_field_is_not_valid;
-        console.log('validation error');
-      } else if (!this.state.fee || !requestedSatPerByte || requestedSatPerByte < 1) {
-        error = i18n.send.details.fee_field_is_not_valid;
-        console.log('validation error');
-      } else if (!transaction.address) {
-        error = i18n.send.details.address_field_is_not_valid;
-        console.log('validation error');
-      } else if (this.recalculateAvailableBalance(this.state.fromWallet.getBalance(), transaction.amount, 0) < 0) {
-        // first sanity check is that sending amount is not bigger than available balance
-        error = i18n.send.details.total_exceeds_balance;
-        console.log('validation error');
-      } else if (BitcoinBIP70TransactionDecode.isExpired(this.state.bip70TransactionExpiration)) {
-        error = 'Transaction has expired.';
-        console.log('validation error');
-      } else if (transaction.address) {
-        const address = transaction.address.trim().toLowerCase();
-        if (address.startsWith('lnb') || address.startsWith('lightning:lnb')) {
-          error =
-            'This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.';
-          console.log('validation error');
-        }
-      }
-
-      if (!error) {
-        try {
-          bitcoin.address.toOutputScript(transaction.address, config.network);
-        } catch (err) {
-          console.log('validation error');
-          console.log(err);
-          error = i18n.send.details.address_field_is_not_valid;
-        }
-      }
-      if (error) {
-        this.setState({ isLoading: false, recipientsScrollIndex: index });
-        Alert.alert(error.toString());
-
-        break;
+    if (!transaction.amount || transaction.amount < 0 || transaction.amount === 0) {
+      return i18n.send.details.amount_field_is_not_valid;
+    }
+    if (!requestedSatPerByte || requestedSatPerByte < 1) {
+      return i18n.send.details.fee_field_is_not_valid;
+    }
+    if (!transaction.address) {
+      return i18n.send.details.address_field_is_not_valid;
+    }
+    if (this.recalculateAvailableBalance(this.state.fromWallet.getBalance(), transaction.amount, 0) < 0) {
+      // first sanity check is that sending amount is not bigger than available balance
+      return i18n.send.details.total_exceeds_balance;
+    }
+    if (BitcoinBIP70TransactionDecode.isExpired(this.state.bip70TransactionExpiration)) {
+      return 'Transaction has expired.';
+    }
+    if (transaction.address) {
+      const address = transaction.address.trim().toLowerCase();
+      if (address.startsWith('lnb') || address.startsWith('lightning:lnb')) {
+        return 'This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.';
       }
     }
 
-    if (error) {
-      return;
+    try {
+      bitcoin.address.toOutputScript(transaction.address, config.network);
+    } catch (_) {
+      return i18n.send.details.address_field_is_not_valid;
     }
+
+    return null;
   };
 
   confirmTransaction = async () => {
     this.setState({ isLoading: true });
-    let error: boolean | string = false;
     const requestedSatPerByte: any = this.state.fee.toString().replace(/\D/g, '');
-    for (const [index, transaction] of this.state.addresses.entries()) {
-      if (!transaction.amount || transaction.amount < 0 || parseFloat(transaction.amount) === 0) {
-        error = i18n.send.details.amount_field_is_not_valid;
-        console.log('validation error');
-      } else if (!this.state.fee || !requestedSatPerByte || parseFloat(requestedSatPerByte) < 1) {
-        error = i18n.send.details.fee_field_is_not_valid;
-        console.log('validation error');
-      } else if (!transaction.address) {
-        error = i18n.send.details.address_field_is_not_valid;
-        console.log('validation error');
-      } else if (this.recalculateAvailableBalance(this.state.fromWallet.getBalance(), transaction.amount, 0) < 0) {
-        // first sanity check is that sending amount is not bigger than available balance
-        error = i18n.send.details.total_exceeds_balance;
-        console.log('validation error');
-      } else if (BitcoinBIP70TransactionDecode.isExpired(this.state.bip70TransactionExpiration)) {
-        error = 'Transaction has expired.';
-        console.log('validation error');
-      } else if (transaction.address) {
-        const address = transaction.address.trim().toLowerCase();
-        if (address.startsWith('lnb') || address.startsWith('lightning:lnb')) {
-          error =
-            'This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.';
-          console.log('validation error');
-        }
-      }
-
-      if (!error) {
-        try {
-          bitcoin.address.toOutputScript(transaction.address, config.network);
-        } catch (err) {
-          console.log('validation error');
-          console.log(err);
-          error = i18n.send.details.address_field_is_not_valid;
-        }
-      }
-      if (error) {
-        this.setState({ isLoading: false, recipientsScrollIndex: index });
-        Alert.alert(error.toString());
-
-        break;
-      }
-    }
+    const error = this.validateTransaction();
 
     if (error) {
+      this.setState({ isLoading: false });
+      Alert.alert(error);
       return;
     }
 
@@ -378,9 +307,6 @@ export class SendCoinsScreen extends Component<Props, State> {
       } catch (Err) {
         this.setState({ isLoading: false }, () => {
           Alert.alert(Err.message);
-          // ReactNativeHapticFeedback.trigger('notificationError', {
-          //   ignoreAndroidSystemSettings: false,
-          // });
         });
       }
       return;
@@ -394,7 +320,7 @@ export class SendCoinsScreen extends Component<Props, State> {
       let tx: any, txid: any;
       let tries = 1;
       let fee = 0.000001; // initial fee guess
-      const firstTransaction = this.state.addresses[0];
+      const firstTransaction = this.state.transaction;
       try {
         await this.state.fromWallet.fetchUtxo();
         utxo = this.state.fromWallet.utxo;
@@ -469,45 +395,34 @@ export class SendCoinsScreen extends Component<Props, State> {
     });
   };
 
-  setAddress = async (item: any, index: number, text: string) => {
-    this.processAddressData(text.trim());
-  };
-
   renderAmountInput = () => {
-    const rows = [];
-    for (const [index, item] of this.state.addresses.entries()) {
-      rows.push(
-        <InputItem
-          label={i18n.transactions.details.amount}
-          suffix="BTCV"
-          keyboardType="numeric"
-          value={item.amount ? item.amount.toString().replace(',', '.') : null}
-          setValue={text => {
-            item.amount = text;
-            const transactions = this.state.addresses;
-            transactions[index] = item;
-            this.setState({ addresses: transactions });
-          }}
-        />,
-      );
-    }
-    return rows;
+    const { transaction } = this.state;
+    return (
+      <InputItem
+        label={i18n.transactions.details.amount}
+        suffix="BTCV"
+        keyboardType="numeric"
+        value={transaction.amount?.toString().replace(',', '.')}
+        setValue={text => {
+          transaction.amount = Number(text);
+          this.setState({ transaction });
+        }}
+      />
+    );
   };
 
   renderAddressInput = () => {
-    const rows = [];
-    for (const [index, item] of this.state.addresses.entries()) {
-      rows.push(
-        <InputItem
-          multiline
-          label={i18n.contactDetails.addressLabel}
-          style={styles.addressInput}
-          value={this.state.addresses[index].address}
-          setValue={text => this.setAddress(item, index, text)}
-        />,
-      );
-    }
-    return rows;
+    const { transaction } = this.state;
+
+    return (
+      <InputItem
+        multiline
+        label={i18n.contactDetails.addressLabel}
+        style={styles.addressInput}
+        value={transaction.address}
+        setValue={text => this.processAddressData(text.trim())}
+      />
+    );
   };
 
   /**
@@ -516,11 +431,13 @@ export class SendCoinsScreen extends Component<Props, State> {
    * @param data {String} Can be address or `bitcoin:xxxxxxx` uri scheme, or invalid garbage
    */
   processAddressData = (data: string) => {
-    const newAddresses = processAddressData(data, this.state.addresses[0].amount);
+    const { transaction } = this.state;
+
+    const newTransaction = processAddressData(data, transaction.amount);
     this.setState({
-      addresses: [newAddresses],
+      transaction: newTransaction,
     });
-    return newAddresses;
+    return newTransaction;
   };
 
   render() {
