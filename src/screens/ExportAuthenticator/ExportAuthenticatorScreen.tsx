@@ -1,11 +1,12 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Mnemonic } from 'app/components';
-import { Authenticator } from 'app/consts';
+import { Authenticator, MainCardStackNavigatorParams, Route } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
 import { AuthenticatorsState } from 'app/state/authenticators/reducer';
@@ -17,18 +18,17 @@ interface MapStateProps {
   authenticator?: Authenticator;
 }
 
-type Props = NavigationInjectedProps & MapStateProps;
+interface Props extends MapStateProps {
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ExportAuthenticator>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.ExportAuthenticator>;
+}
 
 class ExportAuthenticatorScreen extends Component<Props> {
-  static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={i18n.authenticators.export.title} />,
-  });
-
   render() {
-    const { authenticator } = this.props;
+    const { authenticator, navigation } = this.props;
 
     return (
-      <ScreenTemplate>
+      <ScreenTemplate header={<Header navigation={navigation} isBackArrow title={i18n.authenticators.export.title} />}>
         <Text style={styles.subtitle}>{i18n.wallets.exportWallet.title}</Text>
         <View style={styles.qrCodeContainer}>
           {authenticator && <QRCode quietZone={10} value={authenticator.QRCode} size={140} ecl={'H'} />}
@@ -40,7 +40,7 @@ class ExportAuthenticatorScreen extends Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: Props): MapStateProps => {
-  const id = props.navigation.getParam('id');
+  const { id } = props.route.params;
   return {
     authenticator: selectors.getById(state, id),
   };

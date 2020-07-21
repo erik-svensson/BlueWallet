@@ -1,8 +1,6 @@
-import AsyncStorage from '@react-native-community/async-storage';
-import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
+import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioGroup, RadioButton } from 'app/components';
@@ -23,9 +21,7 @@ import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
-interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CreateWallet>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.CreateWallet>;
+interface Props extends NavigationInjectedProps {
   appSettings: AppSettingsState;
   loadWallets: () => Promise<WalletsActionType>;
 }
@@ -43,19 +39,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     selectedIndex: 0,
   };
 
-  async componentDidMount() {
-    let walletBaseURI = await AsyncStorage.getItem(AppStorage.LNDHUB);
-    const { isAdvancedOptionsEnabled } = this.props.appSettings;
-    walletBaseURI = walletBaseURI || '';
-
-    this.setState({
-      isLoading: false,
-      activeBitcoin: true,
-      label: '',
-      isAdvancedOptionsEnabled,
-      walletBaseURI,
-    });
-  }
+  static navigationOptions = (props: NavigationScreenProps) => ({
+    header: <Header navigation={props.navigation} isBackArrow title={i18n.wallets.add.title} />,
+  });
 
   onSelect = (selectedIndex: number) =>
     this.setState({
@@ -148,7 +134,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   navigateToIntegrateInstantPublicKey = (wallet: any, label: string) => {
     const { navigation } = this.props;
-    navigation.navigate(Route.IntagrateKey, {
+    navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: this.createAIRWalletAddInstantPublicKey(wallet, label),
       title: i18n.wallets.publicKey.instantSubtitle,
       description: i18n.wallets.publicKey.instantDescription,
@@ -161,7 +147,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   navigateToIntegrateRecoveryPublicKey = (label: string, create: Function) => {
     const { navigation } = this.props;
-    navigation.navigate(Route.IntagrateKey, {
+    navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: create(label),
       title: i18n.wallets.publicKey.recoverySubtitle,
       description: i18n.wallets.publicKey.recoveryDescription,
@@ -309,7 +295,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
             />
           </>
         }
-        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.wallets.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.wallets.add.subtitle}</Text>
         <Text style={styles.description}>{i18n.wallets.add.description}</Text>

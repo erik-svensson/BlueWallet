@@ -3,7 +3,7 @@ import React from 'react';
 
 import { BottomTabBarComponent } from 'app/components';
 import { Route, MainTabNavigatorParams } from 'app/consts';
-import { ContactListScreen, DashboardScreen, SettingsScreen } from 'app/screens';
+import { ContactListScreen, DashboardScreen, SettingsScreen, AuthenticatorListScreen } from 'app/screens';
 
 const i18n = require('../../loc');
 
@@ -28,7 +28,7 @@ export const MainTabNavigator = () => {
         name={Route.AuthenticatorList}
         component={AuthenticatorListScreen}
         options={() => ({
-          tabBarLabel: i18n.tabNavigator.addressBook,
+          tabBarLabel: i18n.tabNavigator.authenticators,
         })}
       />
       <Tab.Screen
@@ -48,54 +48,3 @@ export const MainTabNavigator = () => {
     </Tab.Navigator>
   );
 };
-// import { images } from 'app/assets';
-// import { BottomTabBarIcon, BottomTabBarComponent } from 'app/components';
-// import { Route } from 'app/consts';
-// import { ContactListScreen, DashboardScreen, SettingsScreen, AuthenticatorListScreen } from 'app/screens';
-// import { palette } from 'app/styles';
-
-// export const MainTabNavigator = createBottomTabNavigator(
-//   {
-//     [Route.Dashboard]: {
-//       screen: DashboardScreen,
-//       navigationOptions: {
-//         tabBarIcon: ({ focused }: { focused: boolean }) => (
-//           <BottomTabBarIcon source={focused ? images.dashboard : images.dashboardInactive} />
-//         ),
-//       },
-//     },
-//     [Route.AuthenticatorList]: {
-//       screen: AuthenticatorListScreen,
-//       navigationOptions: {
-//         tabBarIcon: ({ focused }: { focused: boolean }) => (
-//           <BottomTabBarIcon source={focused ? images.dashboard : images.dashboardInactive} />
-//         ),
-//       },
-//     },
-//     [Route.ContactList]: {
-//       screen: ContactListScreen,
-//       navigationOptions: {
-//         tabBarIcon: ({ focused }: { focused: boolean }) => (
-//           <BottomTabBarIcon source={focused ? images.addressBook : images.addressBookInactive} />
-//         ),
-//       },
-//     },
-//     [Route.Settings]: {
-//       screen: SettingsScreen,
-//       navigationOptions: {
-//         tabBarIcon: ({ focused }: { focused: boolean }) => (
-//           <BottomTabBarIcon source={focused ? images.settings : images.settingsInactive} />
-//         ),
-//       },
-//     },
-//   },
-//   {
-//     tabBarComponent: props => <BottomTabBarComponent {...props} />,
-//     tabBarOptions: {
-//       // @ts-ignore
-//       keyboardHidesTabBar: true,
-//       activeTintColor: palette.secondary,
-//       inactiveTintColor: palette.textWhiteMuted,
-//     },
-//   },
-// );

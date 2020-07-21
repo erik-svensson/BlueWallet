@@ -68,7 +68,7 @@ export enum Route {
   AdvancedOptions = 'AdvancedOptions',
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
-  IntagrateKey = 'IntagrateKey',
+  IntegrateKey = 'IntegrateKey',
 }
 
 export interface Wallet {
@@ -141,6 +141,7 @@ export type NavigationProp<T, R> = StackNavigationProp<T, R>;
 
 export type MainTabNavigatorParams = {
   [Route.Dashboard]: undefined;
+  [Route.AuthenticatorList]: undefined;
   [Route.ContactList]: undefined;
   [Route.Settings]: undefined;
 };
@@ -233,6 +234,14 @@ export type MainCardStackNavigatorParams = {
     pin: string;
   };
   [Route.FilterTransactions]: { onFilterPress: ({}) => void };
+  [Route.CreateAuthenticator]: undefined;
+  [Route.EnterPIN]: { id: string };
+  [Route.CreateAuthenticatorSuccess]: { id: string };
+  [Route.DeleteEntity]: { onConfirm: () => void; name: string; subtitle: string; title: string };
+  [Route.ExportAuthenticator]: { id: string };
+  [Route.ImportAuthenticator]: undefined;
+  [Route.CreateWalletSuccess]: { secret: string };
+  [Route.IntegrateKey]: { onFilterPress: ({}) => void };
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {

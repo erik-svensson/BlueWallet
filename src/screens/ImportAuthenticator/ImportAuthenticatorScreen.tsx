@@ -1,10 +1,10 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { Text, StyleSheet, Alert, View } from 'react-native';
-import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, TextAreaItem, FlatButton, Button, InputItem } from 'app/components';
-import { Route, CONST } from 'app/consts';
+import { Route, CONST, MainCardStackNavigatorParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { actions } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
@@ -15,8 +15,6 @@ interface ActionProps {
   createAuthenticator: Function;
 }
 
-type Props = NavigationInjectedProps & ActionProps;
-
 interface State {
   name: string;
   mnemonic: string;
@@ -24,13 +22,13 @@ interface State {
   mnemonicError: string;
 }
 
+interface Props extends ActionProps {
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ImportAuthenticator>;
+}
+
 type DynamicState = Pick<State, keyof State>;
 
 class ImportAuthenticatorScreen extends Component<Props, State> {
-  static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={i18n.authenticators.import.title} />,
-  });
-
   state = {
     name: '',
     mnemonic: '',
@@ -152,6 +150,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
             />
           </>
         }
+        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.authenticators.import.title} />}
       >
         <View style={styles.inputItemContainer}>
           <Text style={styles.title}>{i18n.authenticators.import.subtitle}</Text>
