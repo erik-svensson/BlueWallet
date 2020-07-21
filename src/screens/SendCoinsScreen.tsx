@@ -337,26 +337,20 @@ export class SendCoinsScreen extends Component<Props, State> {
     for (const [index, transaction] of this.state.addresses.entries()) {
       if (!transaction.amount || transaction.amount < 0 || parseFloat(transaction.amount) === 0) {
         error = i18n.send.details.amount_field_is_not_valid;
-        console.log('validation error');
       } else if (!this.state.fee || !requestedSatPerByte || parseFloat(requestedSatPerByte) < 1) {
         error = i18n.send.details.fee_field_is_not_valid;
-        console.log('validation error');
       } else if (!transaction.address) {
         error = i18n.send.details.address_field_is_not_valid;
-        console.log('validation error');
       } else if (this.recalculateAvailableBalance(this.state.fromWallet.getBalance(), transaction.amount, 0) < 0) {
         // first sanity check is that sending amount is not bigger than available balance
         error = i18n.send.details.total_exceeds_balance;
-        console.log('validation error');
       } else if (BitcoinBIP70TransactionDecode.isExpired(this.state.bip70TransactionExpiration)) {
         error = 'Transaction has expired.';
-        console.log('validation error');
       } else if (transaction.address) {
         const address = transaction.address.trim().toLowerCase();
         if (address.startsWith('lnb') || address.startsWith('lightning:lnb')) {
           error =
             'This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.';
-          console.log('validation error');
         }
       }
 
@@ -364,8 +358,6 @@ export class SendCoinsScreen extends Component<Props, State> {
         try {
           bitcoin.address.toOutputScript(transaction.address, config.network);
         } catch (err) {
-          console.log('validation error');
-          console.log(err);
           error = i18n.send.details.address_field_is_not_valid;
         }
       }
