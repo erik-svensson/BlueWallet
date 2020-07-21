@@ -1,10 +1,11 @@
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
-import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button } from 'app/components';
-import { Route, Authenticator } from 'app/consts';
+import { Route, Authenticator, MainCardStackNavigatorParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
 import { AuthenticatorsState } from 'app/state/authenticators/reducer';
@@ -16,16 +17,19 @@ interface MapStateProps {
   authenticator?: Authenticator;
 }
 
-type Props = NavigationInjectedProps & MapStateProps;
+interface Props extends MapStateProps {
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.EnterPIN>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.EnterPIN>;
+}
 
 class EnterPINScreen extends Component<Props> {
-  static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} isBackArrow={false} title={i18n.authenticators.add.title} />,
-  });
-
   navigate = () => {
-    const { navigation } = this.props;
-    const id = navigation.getParam('id');
+    const {
+      navigation,
+      route: {
+        params: { id },
+      },
+    } = this.props;
     navigation.navigate(Route.CreateAuthenticatorSuccess, { id });
   };
 
@@ -40,10 +44,13 @@ class EnterPINScreen extends Component<Props> {
   );
 
   render() {
-    const { authenticator } = this.props;
+    const { authenticator, navigation } = this.props;
 
     return (
-      <ScreenTemplate footer={<Button onPress={this.navigate} title={i18n.send.details.next} />}>
+      <ScreenTemplate
+        footer={<Button onPress={this.navigate} title={i18n.send.details.next} />}
+        header={<Header navigation={navigation} isBackArrow={false} title={i18n.authenticators.add.title} />}
+      >
         <Text style={styles.subtitle}>{i18n.authenticators.enterPIN.subtitle}</Text>
         <Text style={styles.description}>{i18n.authenticators.enterPIN.description}</Text>
         {authenticator && this.renderPIN(authenticator.pin)}
@@ -53,7 +60,7 @@ class EnterPINScreen extends Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: Props): MapStateProps => {
-  const id = props.navigation.getParam('id');
+  const { id } = props.route.params;
   return {
     authenticator: selectors.getById(state, id),
   };

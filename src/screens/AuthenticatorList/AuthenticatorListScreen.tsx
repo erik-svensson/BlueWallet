@@ -4,7 +4,7 @@ import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { icons, images } from 'app/assets';
-import { Header, Image, ListEmptyState } from 'app/components';
+import { Header, Image, ListEmptyState, ScreenTemplate } from 'app/components';
 import { Route, Authenticator } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
@@ -28,11 +28,6 @@ interface ActionProps {
 type Props = NavigationInjectedProps & MapStateProps & ActionProps;
 
 class AuthenticatorListScreen extends Component<Props> {
-  static navigationOptions = () => ({
-    // must be dynamic, as function as language switch stops to work
-    tabBarLabel: i18n.tabNavigator.authenticators,
-  });
-
   componentDidMount() {
     const { loadAuthenticators } = this.props;
     loadAuthenticators();
@@ -119,13 +114,16 @@ class AuthenticatorListScreen extends Component<Props> {
     const sortedAuthenticators = authenticators.sort((a, b) => b.createdAt.valueOf() - a.createdAt.valueOf());
 
     return (
-      <>
-        <Header
-          navigation={navigation}
-          isBackArrow={false}
-          title={i18n.tabNavigator.authenticators}
-          addFunction={() => navigation.navigate(Route.CreateAuthenticator)}
-        />
+      <ScreenTemplate
+        header={
+          <Header
+            navigation={navigation}
+            isBackArrow={false}
+            title={i18n.tabNavigator.authenticators}
+            addFunction={() => navigation.navigate(Route.CreateAuthenticator)}
+          />
+        }
+      >
         {this.hasAuthenticators() ? (
           <View style={styles.container}>
             {this.renderHeader()}
@@ -140,7 +138,7 @@ class AuthenticatorListScreen extends Component<Props> {
         ) : (
           this.renderEmptyList()
         )}
-      </>
+      </ScreenTemplate>
     );
   }
 }

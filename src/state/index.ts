@@ -6,6 +6,7 @@ import { contactsReducer, ContactsState } from './contacts/reducer';
 import { transactionsReducer, TransactionsState } from './transactions/reducer';
 import { WalletsState, walletsReducer } from './wallets/reducer';
 
+export { actions, selectors } from './authenticators';
 export interface ApplicationState {
   contacts: ContactsState;
   transactions: TransactionsState;

@@ -1,10 +1,16 @@
+import { CompositeNavigationProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { Text, StyleSheet, Alert } from 'react-native';
-import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, FlatButton, Button } from 'app/components';
-import { Route, Authenticator as IAuthenticator } from 'app/consts';
+import {
+  Route,
+  Authenticator as IAuthenticator,
+  MainTabNavigatorParams,
+  MainCardStackNavigatorParams,
+} from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { actions } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
@@ -14,14 +20,14 @@ const i18n = require('../../../loc');
 interface ActionProps {
   createAuthenticator: Function;
 }
-
-type Props = NavigationInjectedProps & ActionProps;
+interface Props extends ActionProps {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParams, Route.AuthenticatorList>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateAuthenticator>
+  >;
+}
 
 class CreateAuthenticatorScreen extends Component<Props> {
-  static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={i18n.authenticators.add.title} />,
-  });
-
   scanQRCode = () => {
     const { navigation } = this.props;
     navigation.navigate(Route.ScanQrCode, {
@@ -74,6 +80,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
   render() {
     return (
       <ScreenTemplate
+        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.authenticators.add.title} />}
         footer={
           <>
             <Button onPress={this.scanQRCode} title={i18n.wallets.publicKey.scan} />
@@ -88,7 +95,6 @@ class CreateAuthenticatorScreen extends Component<Props> {
         <Text style={styles.subtitle}>{i18n.authenticators.add.subtitle}</Text>
         <Text style={styles.description}>{i18n.authenticators.add.description}</Text>
         <Text style={styles.description}>{i18n._.or}</Text>
-
         <Text style={styles.description}>{i18n.authenticators.add.subdescription}</Text>
       </ScreenTemplate>
     );
