@@ -119,21 +119,25 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     ]);
   };
 
-  createVaultWalletMessage = (wallet: any, onError: Function) => {
+  generateWallet = async (wallet: any) => {
     const { navigation } = this.props;
+    await wallet.generate();
+    BlueApp.wallets.push(wallet);
+    await BlueApp.saveToDisk();
+    this.props.loadWallets();
+    navigation.navigate(Route.CreateWalletSuccess, {
+      secret: wallet.getSecret(),
+    });
+  };
+
+  createVaultWalletMessage = (wallet: any, onError: Function) => {
     CreateMessage({
       title: i18n.message.creatingWallet,
       description: i18n.message.creatingWalletDescription,
       type: MessageType.processingState,
       asyncTask: async () => {
         try {
-          await wallet.generate();
-          BlueApp.wallets.push(wallet);
-          await BlueApp.saveToDisk();
-          loadWallets();
-          navigation.navigate(Route.CreateWalletSuccess, {
-            secret: wallet.getSecret(),
-          });
+          await this.generateWallet(wallet);
         } catch (_) {
           onError();
         }
@@ -141,11 +145,11 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     });
   };
 
-  createAIRWalletAddInstantPublicKey = (wallet: any) => (instantPublicKey: string) => {
+  createAIRWalletAddInstantPublicKey = (wallet: any, label: string) => (instantPublicKey: string) => {
     const { navigation } = this.props;
     const onError = () =>
       this.showAlert(() => {
-        this.navigateToIntegrateInstantPublicKey(wallet);
+        this.navigateToIntegrateInstantPublicKey(wallet, label);
       });
     try {
       wallet.addPublicKey(instantPublicKey);
@@ -156,12 +160,16 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     }
   };
 
-  navigateToIntegrateInstantPublicKey = (wallet: any) => {
+  navigateToIntegrateInstantPublicKey = (wallet: any, label: string) => {
     const { navigation } = this.props;
     navigation.navigate(Route.IntagrateKey, {
-      onBarCodeScan: this.createAIRWalletAddInstantPublicKey(wallet),
+      onBarCodeScan: this.createAIRWalletAddInstantPublicKey(wallet, label),
       title: i18n.wallets.publicKey.instantSubtitle,
       description: i18n.wallets.publicKey.instantDescription,
+      onBackArrow: () => {
+        wallet.clearPublickKeys();
+        this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWalletAddRecoveryPublicKey);
+      },
     });
   };
 
@@ -174,14 +182,14 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     });
   };
 
-  createAIRWallet = (label: string) => async (recoveryPublicKey: string) => {
+  createAIRWalletAddRecoveryPublicKey = (label: string) => async (recoveryPublicKey: string) => {
     try {
       const wallet = new HDSegwitP2SHAirWallet();
       wallet.addPublicKey(recoveryPublicKey);
       wallet.setLabel(label);
-      this.navigateToIntegrateInstantPublicKey(wallet);
-    } catch (error) {
-      this.showAlert(() => this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWallet));
+      this.navigateToIntegrateInstantPublicKey(wallet, label);
+    } catch (_) {
+      this.showAlert(() => this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWalletAddRecoveryPublicKey));
     }
   };
 
@@ -192,7 +200,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       return this.navigateToIntegrateRecoveryPublicKey(label, this.createARWallet);
     }
     if (selectedIndex === 1) {
-      return this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWallet);
+      return this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWalletAddRecoveryPublicKey);
     }
     this.createWallet();
   };
@@ -209,15 +217,11 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       wallet.setLabel(label || i18n.wallets.details.title);
 
       if (this.state.activeBitcoin) {
-        await wallet.generate();
-        BlueApp.wallets.push(wallet);
-        await BlueApp.saveToDisk();
-        this.props.loadWallets();
-        this.setState({ isSuccess: true, secret: wallet.getSecret().split(' ') });
+        await this.generateWallet(wallet);
       }
-      this.setState({ isLoading: false });
     } catch (error) {
-      Alert.alert(i18n.wallets.add.publicKeyError);
+      this.setState({ isLoading: false });
+      Alert.alert(i18n.walllets.add.failed);
     }
   };
 
@@ -227,6 +231,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   get validationError(): string | undefined {
     const walletLabels = BlueApp.getWallets().map((wallet: Wallet) => wallet.label) || [];
+    if (this.state.isLoading) {
+      return;
+    }
     if (walletLabels.includes(this.state.label)) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
@@ -273,24 +280,20 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
                 </View>
               </RadioButton>
               <RadioButton style={styles.radioButton} value={HDSegwitP2SHWallet.type}>
-                {/* -> legacyHDP2SH */}
                 <View style={styles.radioButtonContent}>
                   <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyHDP2SHTitle}</Text>
                   <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.legacyHDP2SH}</Text>
                 </View>
               </RadioButton>
               <RadioButton style={styles.radioButton} value={SegwitP2SHWallet.type}>
-                {/* -> LegacyP2SH */}
                 <View style={styles.radioButtonContent}>
                   <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyP2SHTitle}</Text>
                   <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.LegacyP2SH}</Text>
                 </View>
               </RadioButton>
               <RadioButton style={styles.radioButton} value={HDSegwitBech32Wallet.type}>
-                {/* -> LegacyHDSegWit */}
                 <View style={styles.radioButtonContent}>
                   <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyHDSegWitTitle}</Text>
-
                   <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.LegacyHDSegWit}</Text>
                 </View>
               </RadioButton>

@@ -11,9 +11,14 @@ const i18n = require('../../loc');
 type Props = NavigationInjectedProps;
 
 export class IntegrateKeyScreen extends React.PureComponent<Props> {
-  static navigationOptions = (props: NavigationScreenProps) => ({
-    header: <Header navigation={props.navigation} isBackArrow title={i18n.wallets.add.title} />,
-  });
+  static navigationOptions = (props: NavigationScreenProps) => {
+    const { navigation } = props;
+    const onBackArrow = navigation.getParam('onBackArrow');
+
+    return {
+      header: <Header navigation={navigation} onBackArrow={onBackArrow} isBackArrow title={i18n.wallets.add.title} />,
+    };
+  };
 
   scanKey = () => {
     const { navigation } = this.props;

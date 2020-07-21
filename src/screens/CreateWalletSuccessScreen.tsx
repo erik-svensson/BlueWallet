@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 
 import { Button, Header, ScreenTemplate, Text, Mnemonic } from 'app/components';
+import { Route } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -16,7 +17,7 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
     header: <Header navigation={props.navigation} title={i18n.wallets.add.title} />,
   });
 
-  navigateBack = () => this.props.navigation.goBack();
+  navigate = () => this.props.navigation.navigate(Route.Dashboard);
 
   render() {
     const { getParam } = this.props.navigation;
@@ -25,7 +26,7 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
       <ScreenTemplate
         footer={
           <>
-            <Button onPress={this.navigateBack} title={i18n.wallets.addSuccess.okButton} />
+            <Button onPress={this.navigate} title={i18n.wallets.addSuccess.okButton} />
           </>
         }
       >

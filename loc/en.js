@@ -156,6 +156,7 @@ module.exports = {
       latest: 'Latest transaction',
     },
     add: {
+      failed: 'Failed to create wallet',
       title: 'Add new wallet',
       subtitle: 'Name your wallet',
       description: 'Please enter name for your new wallet.',
