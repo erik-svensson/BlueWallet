@@ -13,7 +13,6 @@ import BitcoinBIP70TransactionDecode from '../../bip70/bip70';
 import { HDLegacyP2PKHWallet, HDSegwitBech32Wallet, HDSegwitP2SHWallet, WatchOnlyWallet } from '../../class';
 import config from '../../config';
 import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
-import { BitcoinUnit } from '../../models/bitcoinUnits';
 import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
 import { DashboarContentdHeader } from './Dashboard/DashboarContentdHeader';
 
@@ -44,6 +43,8 @@ interface State {
   bip70TransactionExpiration: null;
   renderWalletSelectionButtonHidden: boolean;
 }
+
+const SATOSHI_IN_BTC = 100000000;
 
 export class SendCoinsScreen extends Component<Props, State> {
   static navigationOptions = (props: NavigationScreenProps<{ transaction: Transaction }>) => {
@@ -158,18 +159,18 @@ export class SendCoinsScreen extends Component<Props, State> {
     /** @type {HDSegwitBech32Wallet} */
     const { transaction } = this.state;
     const wallet = this.state.fromWallet;
-    await wallet.fetchUtxo();
+    await wallet.fetchUtxos();
     const changeAddress = await wallet.getAddressForTransaction();
     const requestedSatPerByte: string | number = +this.state.fee.toString().replace(/\D/g, '');
 
     const targets: any[] = [];
-    const amount = new BigNumber(transaction.amount).multipliedBy(100000000).toNumber();
+    const amount = this.satoshiToNumber(transaction.amount).toNumber();
     if (amount > 0.0) {
       targets.push({ address: transaction.address, value: amount });
     }
 
     const { tx, fee, psbt } = await wallet.createTransaction(
-      wallet.getUtxo(),
+      wallet.getUtxos(),
       targets,
       requestedSatPerByte,
       changeAddress,
@@ -198,7 +199,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     await BlueApp.saveToDisk();
     this.setState({ isLoading: false }, () =>
       this.props.navigation.navigate(Route.SendCoinsConfirm, {
-        fee: new BigNumber(fee).dividedBy(100000000).toNumber(),
+        fee: this.numberToSatoshi(fee).toNumber(),
         memo: this.state.memo,
         fromWallet: wallet,
         tx: tx.toHex(),
@@ -214,7 +215,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     let availableBalance;
     try {
       availableBalance = new BigNumber(balance);
-      availableBalance = availableBalance.div(100000000); // sat2btc
+      availableBalance = availableBalance.div(SATOSHI_IN_BTC); // sat2btc
       availableBalance = availableBalance.minus(amount);
       availableBalance = availableBalance.minus(fee);
       availableBalance = availableBalance.toString(10);
@@ -225,13 +226,13 @@ export class SendCoinsScreen extends Component<Props, State> {
     return (availableBalance === 'NaN' && balance) || availableBalance;
   }
 
-  calculateFee(utxos: any, txhex: any, utxoIsInSatoshis: any) {
+  calculateFee(utxos: any, txhex: any, utxoIsInSatoshis: boolean) {
     const index = {};
     let c = 1;
     index[0] = 0;
     for (const utxo of utxos) {
       if (!utxoIsInSatoshis) {
-        utxo.value = new BigNumber(utxo.value).multipliedBy(100000000).toNumber();
+        utxo.value = this.numberToSatoshi(utxo.value).toNumber();
       }
       index[c] = utxo.value + index[c - 1];
       c++;
@@ -248,7 +249,7 @@ export class SendCoinsScreen extends Component<Props, State> {
       totalOutput += o.value * 1;
     }
 
-    return new BigNumber(totalInput - totalOutput).dividedBy(100000000).toNumber();
+    return this.satoshiToNumber(totalInput - totalOutput).toNumber();
   }
 
   validateTransaction = (): string | null => {
@@ -286,9 +287,44 @@ export class SendCoinsScreen extends Component<Props, State> {
     return null;
   };
 
+  getActualSatoshi = (tx: any, feeSatoshi: any) => feeSatoshi.dividedBy(Math.round(tx.length / 2)).toNumber();
+
+  increaseFee = ({ feeSatoshi, requestedSatPerByte, actualSatoshiPerByte }: any) =>
+    feeSatoshi
+      .multipliedBy(requestedSatPerByte / actualSatoshiPerByte)
+      .plus(10)
+      .dividedBy(SATOSHI_IN_BTC)
+      .toNumber();
+
+  isFeeNotEnough = ({ actualSatoshiPerByte, requestedSatPerByte }: any) =>
+    Math.round(actualSatoshiPerByte) !== requestedSatPerByte || Math.floor(actualSatoshiPerByte) < 1;
+
+  numberToSatoshi = (amount: number) => new BigNumber(amount).multipliedBy(SATOSHI_IN_BTC);
+
+  satoshiToNumber = (amount: number) => new BigNumber(amount).dividedBy(SATOSHI_IN_BTC);
+
+  navigateToConfirm = ({ utxos, tx, actualSatoshiPerByte }: any) => {
+    const { transaction } = this.state;
+
+    this.props.navigation.navigate(Route.SendCoinsConfirm, {
+      recipients: [transaction],
+      // HD wallet's utxo is in sats, classic segwit wallet utxos are in btc
+      fee: this.calculateFee(
+        utxos,
+        tx,
+        this.state.fromWallet.type === HDSegwitP2SHWallet.type ||
+          this.state.fromWallet.type === HDLegacyP2PKHWallet.type,
+      ),
+      memo: this.state.memo,
+      fromWallet: this.state.fromWallet,
+      tx,
+      satoshiPerByte: actualSatoshiPerByte.toFixed(2),
+    });
+  };
+
   confirmTransaction = async () => {
     this.setState({ isLoading: true });
-    const requestedSatPerByte: any = this.state.fee.toString().replace(/\D/g, '');
+    const { fee: requestedSatPerByte } = this.state;
     const error = this.validateTransaction();
 
     if (error) {
@@ -315,83 +351,44 @@ export class SendCoinsScreen extends Component<Props, State> {
     // legacy send below
 
     this.setState({ isLoading: true }, async () => {
-      let utxo: any;
-      let actualSatoshiPerByte: any;
-      let tx: any, txid: any;
-      let tries = 1;
-      let fee = 0.000001; // initial fee guess
-      const firstTransaction = this.state.transaction;
+      const { transaction, fromWallet, memo } = this.state;
       try {
-        await this.state.fromWallet.fetchUtxo();
-        utxo = this.state.fromWallet.utxo;
-        do {
-          console.log('try #', tries, 'fee=', fee);
-          if (this.recalculateAvailableBalance(this.state.fromWallet.getBalance(), firstTransaction.amount, fee) < 0) {
-            // we could not add any fee. user is trying to send all he's got. that wont work
-            // throw new Error(loc.send.details.total_exceeds_balance);
-          }
+        await fromWallet.fetchUtxos();
+        const utxos = fromWallet.getUtxos();
+        let fee = 0.000001; // initial fee guess
+        let actualSatoshiPerByte: any;
+        let tx: any;
+        const MAX_TRIES = 5;
 
-          const startTime = Date.now();
-          tx = this.state.fromWallet.createTx(
-            utxo,
-            firstTransaction.amount,
-            fee,
-            firstTransaction.address,
-            this.state.memo,
-          );
-          const endTime = Date.now();
-          console.log('create tx ', (endTime - startTime) / 1000, 'sec');
+        for (let tries = 0; tries < MAX_TRIES; tries++) {
+          tx = fromWallet.createTx(utxos, transaction.amount, fee, transaction.address);
 
-          const txDecoded = bitcoin.Transaction.fromHex(tx);
-          txid = txDecoded.getId();
-          console.log('txid', txid);
-          console.log('txhex', tx);
+          const feeSatoshi = this.numberToSatoshi(fee);
 
-          const feeSatoshi = new BigNumber(fee).multipliedBy(100000000);
-          actualSatoshiPerByte = feeSatoshi.dividedBy(Math.round(tx.length / 2));
-          actualSatoshiPerByte = actualSatoshiPerByte.toNumber();
-          console.log({ satoshiPerByte: actualSatoshiPerByte });
+          actualSatoshiPerByte = this.getActualSatoshi(tx, feeSatoshi);
 
-          if (Math.round(actualSatoshiPerByte) !== requestedSatPerByte * 1 || Math.floor(actualSatoshiPerByte) < 1) {
-            console.log('fee is not correct, retrying');
-            fee = feeSatoshi
-              .multipliedBy(requestedSatPerByte / actualSatoshiPerByte)
-              .plus(10)
-              .dividedBy(100000000)
-              .toNumber();
+          if (this.isFeeNotEnough({ requestedSatPerByte, actualSatoshiPerByte })) {
+            fee = this.increaseFee({ feeSatoshi, requestedSatPerByte, actualSatoshiPerByte });
           } else {
             break;
           }
-        } while (tries++ < 5);
+        }
+
+        const txDecoded = bitcoin.Transaction.fromHex(tx);
+        const txid = txDecoded.getId();
 
         BlueApp.tx_metadata = BlueApp.tx_metadata || {};
         BlueApp.tx_metadata[txid] = {
           txhex: tx,
-          memo: this.state.memo,
+          memo,
         };
         await BlueApp.saveToDisk();
+        this.setState({ isLoading: false }, () => this.navigateToConfirm({ utxos, tx, actualSatoshiPerByte }));
       } catch (err) {
-        Alert.alert(err.toString());
+        Alert.alert(err.message);
         this.setState({ isLoading: false });
         return;
       }
-
-      this.setState({ isLoading: false }, () =>
-        this.props.navigation.navigate(Route.SendCoinsConfirm, {
-          recipients: [firstTransaction],
-          // HD wallet's utxo is in sats, classic segwit wallet utxos are in btc
-          fee: this.calculateFee(
-            utxo,
-            tx,
-            this.state.fromWallet.type === HDSegwitP2SHWallet.type ||
-              this.state.fromWallet.type === HDLegacyP2PKHWallet.type,
-          ),
-          memo: this.state.memo,
-          fromWallet: this.state.fromWallet,
-          tx,
-          satoshiPerByte: actualSatoshiPerByte.toFixed(2),
-        }),
-      );
     });
   };
 
@@ -413,7 +410,6 @@ export class SendCoinsScreen extends Component<Props, State> {
 
   renderAddressInput = () => {
     const { transaction } = this.state;
-
     return (
       <InputItem
         multiline

@@ -127,8 +127,8 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     assert.ok(hd.validateMnemonic());
 
     await hd.fetchBalance();
-    await hd.fetchUtxo();
-    const utxo = hd.getUtxo();
+    await hd.fetchUtxos();
+    const utxo = hd.getUtxos();
     assert.strictEqual(utxo.length, 4);
     assert.ok(utxo[0].txId);
     assert.ok(utxo[0].vout === 0 || utxo[0].vout === 1);
@@ -182,7 +182,7 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     assert.ok(hd.getTransactions().length >= 76);
   });
 
-  it('can fetchBalance, fetchTransactions, fetchUtxo and create transactions', async () => {
+  it('can fetchBalance, fetchTransactions, fetchUtxos and create transactions', async () => {
     if (!process.env.HD_MNEMONIC_BIP84) {
       console.error('process.env.HD_MNEMONIC_BIP84 not set, skipped');
       return;
@@ -246,12 +246,12 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     }
     assert.strictEqual(txFound, 4);
 
-    await hd.fetchUtxo();
+    await hd.fetchUtxos();
     const changeAddress = await hd.getChangeAddressAsync();
     assert.ok(changeAddress && changeAddress.startsWith('bc1'));
 
     const { tx, inputs, outputs, fee } = hd.createTransaction(
-      hd.getUtxo(),
+      hd.getUtxos(),
       [{ address: 'bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu', value: 51000 }],
       13,
       changeAddress,

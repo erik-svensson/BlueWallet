@@ -301,7 +301,7 @@ export class AppStorage {
    */
   async saveToDisk() {
     const walletsToSave = this.stringifyArray(this.wallets);
-    const authenticatorsToSave = this.stringifyArray(this.authenticators);
+    const authenticatorsToSave = this.stringifyArray(this.authenticators || []);
 
     let data = {
       wallets: walletsToSave,
