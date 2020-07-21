@@ -4,7 +4,7 @@ import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, TextAreaItem, FlatButton, Button, InputItem } from 'app/components';
-import { Route } from 'app/consts';
+import { Route, CONST } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { actions } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
@@ -26,7 +26,6 @@ interface State {
 
 type DynamicState = Pick<State, keyof State>;
 
-const MNEMONIC_LENGTH = 12;
 class ImportAuthenticatorScreen extends Component<Props, State> {
   static navigationOptions = (props: NavigationScreenProps) => ({
     header: <Header navigation={props.navigation} isBackArrow title={i18n.authenticators.import.title} />,
@@ -53,7 +52,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     this.setState({ [fieldNameError]: '' } as DynamicState);
   };
 
-  validateMnemonic = (mnemonic: string) => mnemonic.split(' ').length === MNEMONIC_LENGTH;
+  validateMnemonic = (mnemonic: string) => mnemonic.split(' ').length === CONST.mnemonicWordsAmount;
 
   validateName = (name: string) => !!name;
 

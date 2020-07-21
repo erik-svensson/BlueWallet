@@ -6,6 +6,8 @@ export const CONST = {
   allWallets: 'All wallets',
   receive: 'receive',
   send: 'send',
+  webGeneratorUrl: 'www.keygenerator.bitcoinvault.global',
+  mnemonicWordsAmount: 12,
 };
 
 export enum FlowType {
@@ -19,6 +21,7 @@ export enum Route {
   EnterPIN = 'EnterPIN',
   ExportAuthenticator = 'ExportAuthenticator',
   ImportAuthenticator = 'ImportAuthenticator',
+  CreateWalletSuccess = 'CreateWalletSuccess',
   DeleteEntity = 'DeleteEntity',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticator = 'CreateAuthenticator',

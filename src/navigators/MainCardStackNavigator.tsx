@@ -29,13 +29,14 @@ import {
   CurrentPinScreen,
   ConfirmPinScreen,
   FilterTransactionsScreen,
-  IntagrateKeyScreen,
+  IntegrateKeyScreen,
   CreateAuthenticatorScreen,
   EnterPINScreen,
   CreateAuthenticatorSuccessScreen,
   DeleteEntityScreen,
   ExportAuthenticatorScreen,
   ImportAuthenticatorScreen,
+  CreateWalletSuccessScreen,
 } from 'app/screens';
 
 export const MainCardStackNavigator = createStackNavigator(
@@ -46,6 +47,7 @@ export const MainCardStackNavigator = createStackNavigator(
         header: null,
       },
     },
+    [Route.CreateWalletSuccess]: CreateWalletSuccessScreen,
     [Route.ExportAuthenticator]: ExportAuthenticatorScreen,
     [Route.ImportAuthenticator]: ImportAuthenticatorScreen,
     [Route.DeleteEntity]: DeleteEntityScreen,
@@ -53,7 +55,7 @@ export const MainCardStackNavigator = createStackNavigator(
     [Route.CreateAuthenticator]: CreateAuthenticatorScreen,
     [Route.CreateWallet]: CreateWalletScreen,
     [Route.EnterPIN]: EnterPINScreen,
-    [Route.IntagrateKey]: IntagrateKeyScreen,
+    [Route.IntagrateKey]: IntegrateKeyScreen,
     [Route.ImportWallet]: ImportWalletScreen,
     [Route.DeleteWallet]: DeleteWalletScreen,
     [Route.WalletDetails]: WalletDetailsScreen,

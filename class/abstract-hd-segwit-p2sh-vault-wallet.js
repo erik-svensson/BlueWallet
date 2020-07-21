@@ -73,6 +73,10 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
     }
   }
 
+  clearPublickKeys() {
+    this.pubKeys = [];
+  }
+
   nodeToAddress(hdNode, paymentMethod) {
     const { address } = payments.p2sh({
       redeem: payments.p2wsh({

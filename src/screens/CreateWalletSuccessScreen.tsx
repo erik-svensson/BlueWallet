@@ -2,7 +2,8 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 
-import { Button, Header, ScreenTemplate, Text, Chip } from 'app/components';
+import { Button, Header, ScreenTemplate, Text, Mnemonic } from 'app/components';
+import { Route } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -16,23 +17,23 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
     header: <Header navigation={props.navigation} title={i18n.wallets.add.title} />,
   });
 
-  navigateBack = () => this.props.navigation.goBack();
+  navigate = () => this.props.navigation.navigate(Route.Dashboard);
 
   render() {
+    const { getParam } = this.props.navigation;
+    const secret = getParam('secret');
     return (
       <ScreenTemplate
         footer={
           <>
-            <Button onPress={this.navigateBack} title={i18n.wallets.addSuccess.okButton} />
+            <Button onPress={this.navigate} title={i18n.wallets.addSuccess.okButton} />
           </>
         }
       >
         <Text style={styles.subtitle}>{i18n.wallets.addSuccess.subtitle}</Text>
         <Text style={styles.description}>{i18n.wallets.addSuccess.description}</Text>
         <View style={styles.mnemonicPhraseContainer}>
-          {this.props.secret.map((secret, index) => (
-            <Chip key={index.toString()} label={`${index + 1}. ${secret}`} />
-          ))}
+          <Mnemonic mnemonic={secret} />
         </View>
       </ScreenTemplate>
     );

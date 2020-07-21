@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import React from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
@@ -6,20 +5,19 @@ import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioGroup, RadioButton } from 'app/components';
 import { Route, Wallet } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import {
-  AppStorage,
   HDSegwitBech32Wallet,
   HDSegwitP2SHWallet,
   SegwitP2SHWallet,
   HDSegwitP2SHArWallet,
+  HDSegwitP2SHAirWallet,
   BlueApp,
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
-
-import CreateWalletSuccessScreen from './CreateWalletSuccessScreen';
 
 const i18n = require('../../loc');
 
@@ -31,45 +29,19 @@ interface Props extends NavigationInjectedProps {
 interface State {
   label: string;
   isLoading: boolean;
-  isSuccess: boolean;
-  activeBitcoin: boolean;
-  isAdvancedOptionsEnabled: boolean;
-  walletBaseURI: string;
   selectedIndex: number;
-  secret: string[];
-  publicKey: string;
 }
 
 export class CreateWalletScreen extends React.PureComponent<Props, State> {
   state: State = {
     label: '',
     isLoading: false,
-    isSuccess: false,
-    activeBitcoin: false,
-    isAdvancedOptionsEnabled: false,
-    walletBaseURI: '',
     selectedIndex: 0,
-    secret: [],
-    publicKey: '',
   };
 
   static navigationOptions = (props: NavigationScreenProps) => ({
     header: <Header navigation={props.navigation} isBackArrow title={i18n.wallets.add.title} />,
   });
-
-  async componentDidMount() {
-    let walletBaseURI = await AsyncStorage.getItem(AppStorage.LNDHUB);
-    const { isAdvancedOptionsEnabled } = this.props.appSettings;
-    walletBaseURI = walletBaseURI || '';
-
-    this.setState({
-      isLoading: false,
-      activeBitcoin: true,
-      label: '',
-      isAdvancedOptionsEnabled,
-      walletBaseURI,
-    });
-  }
 
   onSelect = (selectedIndex: number) =>
     this.setState({
@@ -82,14 +54,114 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   getWalletClassByIndex = (index: number) => {
     switch (index) {
-      case 2:
-        return HDSegwitBech32Wallet;
       case 0:
         return HDSegwitP2SHArWallet;
       case 1:
+        return HDSegwitP2SHAirWallet;
+      case 3:
         return SegwitP2SHWallet;
+      case 4:
+        return HDSegwitBech32Wallet;
+      case 2:
       default:
         return HDSegwitP2SHWallet;
+    }
+  };
+
+  createARWallet = (label: string) => (publicKey: string) => {
+    const { navigation } = this.props;
+
+    const onError = () => this.showAlert(() => this.navigateToIntegrateRecoveryPublicKey(label, this.createARWallet));
+    try {
+      const wallet = new HDSegwitP2SHArWallet([publicKey]);
+      wallet.setLabel(label || i18n.wallets.details.title);
+      navigation.goBack();
+      this.createVaultWalletMessage(wallet, onError);
+    } catch (_) {
+      onError();
+    }
+  };
+
+  showAlert = (onPress: Function) => {
+    Alert.alert('Error', i18n.wallets.add.publicKeyError, [
+      {
+        text: 'OK',
+        onPress: () => onPress(),
+      },
+    ]);
+  };
+
+  generateWallet = async (wallet: any) => {
+    const { navigation } = this.props;
+    await wallet.generate();
+    BlueApp.wallets.push(wallet);
+    await BlueApp.saveToDisk();
+    this.props.loadWallets();
+    navigation.navigate(Route.CreateWalletSuccess, {
+      secret: wallet.getSecret(),
+    });
+  };
+
+  createVaultWalletMessage = (wallet: any, onError: Function) => {
+    CreateMessage({
+      title: i18n.message.creatingWallet,
+      description: i18n.message.creatingWalletDescription,
+      type: MessageType.processingState,
+      asyncTask: async () => {
+        try {
+          await this.generateWallet(wallet);
+        } catch (_) {
+          onError();
+        }
+      },
+    });
+  };
+
+  createAIRWalletAddInstantPublicKey = (wallet: any, label: string) => (instantPublicKey: string) => {
+    const { navigation } = this.props;
+    const onError = () =>
+      this.showAlert(() => {
+        this.navigateToIntegrateInstantPublicKey(wallet, label);
+      });
+    try {
+      wallet.addPublicKey(instantPublicKey);
+      navigation.goBack();
+      this.createVaultWalletMessage(wallet, onError);
+    } catch (_) {
+      onError();
+    }
+  };
+
+  navigateToIntegrateInstantPublicKey = (wallet: any, label: string) => {
+    const { navigation } = this.props;
+    navigation.navigate(Route.IntagrateKey, {
+      onBarCodeScan: this.createAIRWalletAddInstantPublicKey(wallet, label),
+      title: i18n.wallets.publicKey.instantSubtitle,
+      description: i18n.wallets.publicKey.instantDescription,
+      onBackArrow: () => {
+        wallet.clearPublickKeys();
+        this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWalletAddRecoveryPublicKey);
+      },
+    });
+  };
+
+  navigateToIntegrateRecoveryPublicKey = (label: string, create: Function) => {
+    const { navigation } = this.props;
+    navigation.navigate(Route.IntagrateKey, {
+      onBarCodeScan: create(label),
+      title: i18n.wallets.publicKey.recoverySubtitle,
+      description: i18n.wallets.publicKey.recoveryDescription,
+    });
+  };
+
+  createAIRWalletAddRecoveryPublicKey = (label: string) => (recoveryPublicKey: string) => {
+    try {
+      const wallet = new HDSegwitP2SHAirWallet();
+      wallet.addPublicKey(recoveryPublicKey);
+      wallet.setLabel(label);
+      this.navigateToIntegrateInstantPublicKey(wallet, label);
+    } catch (_) {
+      this.showAlert(() => this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWalletAddRecoveryPublicKey));
     }
   };
 
@@ -97,11 +169,10 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     const { selectedIndex, label } = this.state;
 
     if (selectedIndex === 0) {
-      return this.props.navigation.navigate(Route.IntagrateKey, {
-        label,
-        wallet: this.getWalletClassByIndex(selectedIndex),
-        loadWallets: this.props.loadWallets,
-      });
+      return this.navigateToIntegrateRecoveryPublicKey(label, this.createARWallet);
+    }
+    if (selectedIndex === 1) {
+      return this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWalletAddRecoveryPublicKey);
     }
     this.createWallet();
   };
@@ -117,111 +188,93 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
       wallet.setLabel(label || i18n.wallets.details.title);
 
-      if (this.state.activeBitcoin) {
-        await wallet.generate();
-        BlueApp.wallets.push(wallet);
-        await BlueApp.saveToDisk();
-        this.props.loadWallets();
-        this.setState({ isSuccess: true, secret: wallet.getSecret().split(' ') });
-      }
-      this.setState({ isLoading: false });
+      await this.generateWallet(wallet);
     } catch (error) {
-      Alert.alert(i18n.wallets.add.publicKeyError);
+      this.setState({ isLoading: false });
+      Alert.alert(i18n.walllets.add.failed);
     }
   };
 
   get canCreateWallet(): boolean {
-    return this.state.activeBitcoin && !!this.state.label && !this.validationError;
+    return !!this.state.label && !this.validationError;
   }
 
   get validationError(): string | undefined {
     const walletLabels = BlueApp.getWallets().map((wallet: Wallet) => wallet.label) || [];
+    if (this.state.isLoading) {
+      return;
+    }
     if (walletLabels.includes(this.state.label)) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
   }
 
   renderAdvancedSection() {
-    if (this.state.activeBitcoin) {
-      return (
-        <>
-          <Text style={styles.advancedOptionsLabel}>{i18n.wallets.add.walletType}</Text>
-          {!this.state.isAdvancedOptionsEnabled ? (
-            <RadioGroup color={palette.secondary} onSelect={this.onSelect} selectedIndex={this.state.selectedIndex}>
-              <RadioButton style={styles.radioButton} value={SegwitP2SHWallet.type}>
-                {/* -> AR */}
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{`${HDSegwitP2SHArWallet.typeReadable}`}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.ar}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitP2SHWallet.type}>
-                {/* -> AIR */}
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{`${HDSegwitP2SHWallet.typeReadable} -> AIR`}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.air}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitBech32Wallet.type}>
-                {/* -> legacy */}
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{`${HDSegwitBech32Wallet.typeReadable} -> legacy`}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.legacy}</Text>
-                </View>
-              </RadioButton>
-            </RadioGroup>
-          ) : (
-            <RadioGroup color={palette.secondary} onSelect={this.onSelect} selectedIndex={this.state.selectedIndex}>
-              <RadioButton style={styles.radioButton} value={SegwitP2SHWallet.type}>
-                {/* -> AR */}
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{`${SegwitP2SHWallet.typeReadable} -> AR`}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.ar}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitP2SHWallet.type}>
-                {/* -> AIR */}
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{`${HDSegwitP2SHWallet.typeReadable} -> AIR`}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.air}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitBech32Wallet.type}>
-                {/* -> legacyHDP2SH */}
-                <View style={styles.radioButtonContent}>
-                  <Text
-                    style={styles.radioButtonTitle}
-                  >{`${HDSegwitBech32Wallet.typeReadable} -> Legacy HD P2SH`}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.legacyHDP2SH}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitBech32Wallet.type}>
-                {/* -> LegacyP2SH */}
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{`${HDSegwitBech32Wallet.typeReadable} -> Legacy P2SH`}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.LegacyP2SH}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitBech32Wallet.type}>
-                {/* -> LegacyHDSegWit */}
-                <View style={styles.radioButtonContent}>
-                  <Text
-                    style={styles.radioButtonTitle}
-                  >{`${HDSegwitBech32Wallet.typeReadable} -> Legacy HD SegWit`}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.LegacyHDSegWit}</Text>
-                </View>
-              </RadioButton>
-            </RadioGroup>
-          )}
-        </>
-      );
-    }
+    const { isAdvancedOptionsEnabled } = this.props.appSettings;
+
+    return (
+      <>
+        <Text style={styles.advancedOptionsLabel}>{i18n.wallets.add.walletType}</Text>
+        {!isAdvancedOptionsEnabled ? (
+          <RadioGroup color={palette.secondary} onSelect={this.onSelect} selectedIndex={this.state.selectedIndex}>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHArWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{HDSegwitP2SHArWallet.typeReadable}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.ar}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHAirWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{HDSegwitP2SHAirWallet.typeReadable}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.air}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyTitle}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.legacy}</Text>
+              </View>
+            </RadioButton>
+          </RadioGroup>
+        ) : (
+          <RadioGroup color={palette.secondary} onSelect={this.onSelect} selectedIndex={this.state.selectedIndex}>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHArWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{HDSegwitP2SHArWallet.typeReadable}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.ar}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHAirWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{HDSegwitP2SHAirWallet.typeReadable}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.air}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyHDP2SHTitle}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.legacyHDP2SH}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={SegwitP2SHWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyP2SHTitle}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.LegacyP2SH}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={HDSegwitBech32Wallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyHDSegWitTitle}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.LegacyHDSegWit}</Text>
+              </View>
+            </RadioButton>
+          </RadioGroup>
+        )}
+      </>
+    );
   }
 
   render() {
-    if (this.state.isSuccess) {
-      return <CreateWalletSuccessScreen secret={this.state.secret} navigation={this.props.navigation} />;
-    }
     return (
       <ScreenTemplate
         footer={

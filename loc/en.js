@@ -156,6 +156,7 @@ module.exports = {
       latest: 'Latest transaction',
     },
     add: {
+      failed: 'Failed to create wallet',
       title: 'Add new wallet',
       subtitle: 'Name your wallet',
       description: 'Please enter name for your new wallet.',
@@ -169,6 +170,10 @@ module.exports = {
       segwidAddress: 'It contains a tree of native segwit addresses, generated from a single 24-word seed',
       ar: 'It can make Alert & Recovey transactions but lacks Instant transactions',
       air: 'It can make Alert, Instant and Recovery transactions',
+      legacyTitle: 'Legacy',
+      legacyHDP2SHTitle: 'Legacy HD P2SH',
+      legacyP2SHTitle: 'Legacy P2SH',
+      legacyHDSegWitTitle: 'Legacy HD SegWit',
       legacy: 'It can make default type of transactions',
       legacyHDP2SH: 'It contains a tree of P2SH addresses generated from a single 24-word seed',
       LegacyP2SH: 'It contains a single P2SH address',
@@ -176,9 +181,11 @@ module.exports = {
       publicKeyError: 'Provided public key is invalid',
     },
     publicKey: {
-      subtitle: 'Integrate Recovery Key',
-      description:
+      recoverySubtitle: 'Integrate Recovery Key',
+      recoveryDescription:
         'Go to the Web Key Generator on a separate device and use this app to scan the Recovery Key’s generated QR code.',
+      instantSubtitle: 'Integrate Instant Key',
+      instantDescription: `Go to the Web Key Generator on a separate device and use this app to scan the Instant Key's generated QR code.`,
       scan: 'Scan',
     },
     addSuccess: {
