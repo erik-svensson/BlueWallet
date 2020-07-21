@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import React from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
@@ -8,7 +7,6 @@ import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioGroup
 import { Route, Wallet } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import {
-  AppStorage,
   HDSegwitBech32Wallet,
   HDSegwitP2SHWallet,
   SegwitP2SHWallet,
@@ -31,45 +29,19 @@ interface Props extends NavigationInjectedProps {
 interface State {
   label: string;
   isLoading: boolean;
-  isSuccess: boolean;
-  activeBitcoin: boolean;
-  isAdvancedOptionsEnabled: boolean;
-  walletBaseURI: string;
   selectedIndex: number;
-  secret: string[];
-  publicKey: string;
 }
 
 export class CreateWalletScreen extends React.PureComponent<Props, State> {
   state: State = {
     label: '',
     isLoading: false,
-    isSuccess: false,
-    activeBitcoin: false,
-    isAdvancedOptionsEnabled: false,
-    walletBaseURI: '',
     selectedIndex: 0,
-    secret: [],
-    publicKey: '',
   };
 
   static navigationOptions = (props: NavigationScreenProps) => ({
     header: <Header navigation={props.navigation} isBackArrow title={i18n.wallets.add.title} />,
   });
-
-  async componentDidMount() {
-    let walletBaseURI = await AsyncStorage.getItem(AppStorage.LNDHUB);
-    const { isAdvancedOptionsEnabled } = this.props.appSettings;
-    walletBaseURI = walletBaseURI || '';
-
-    this.setState({
-      isLoading: false,
-      activeBitcoin: true,
-      label: '',
-      isAdvancedOptionsEnabled,
-      walletBaseURI,
-    });
-  }
 
   onSelect = (selectedIndex: number) =>
     this.setState({
@@ -96,7 +68,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     }
   };
 
-  createARWallet = (label: string) => async (publicKey: string) => {
+  createARWallet = (label: string) => (publicKey: string) => {
     const { navigation } = this.props;
 
     const onError = () => this.showAlert(() => this.navigateToIntegrateRecoveryPublicKey(label, this.createARWallet));
@@ -182,7 +154,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     });
   };
 
-  createAIRWalletAddRecoveryPublicKey = (label: string) => async (recoveryPublicKey: string) => {
+  createAIRWalletAddRecoveryPublicKey = (label: string) => (recoveryPublicKey: string) => {
     try {
       const wallet = new HDSegwitP2SHAirWallet();
       wallet.addPublicKey(recoveryPublicKey);
@@ -216,9 +188,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
       wallet.setLabel(label || i18n.wallets.details.title);
 
-      if (this.state.activeBitcoin) {
-        await this.generateWallet(wallet);
-      }
+      await this.generateWallet(wallet);
     } catch (error) {
       this.setState({ isLoading: false });
       Alert.alert(i18n.walllets.add.failed);
@@ -226,7 +196,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   };
 
   get canCreateWallet(): boolean {
-    return this.state.activeBitcoin && !!this.state.label && !this.validationError;
+    return !!this.state.label && !this.validationError;
   }
 
   get validationError(): string | undefined {
@@ -240,68 +210,68 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   }
 
   renderAdvancedSection() {
-    if (this.state.activeBitcoin) {
-      return (
-        <>
-          <Text style={styles.advancedOptionsLabel}>{i18n.wallets.add.walletType}</Text>
-          {!this.state.isAdvancedOptionsEnabled ? (
-            <RadioGroup color={palette.secondary} onSelect={this.onSelect} selectedIndex={this.state.selectedIndex}>
-              <RadioButton style={styles.radioButton} value={HDSegwitP2SHArWallet.type}>
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{HDSegwitP2SHArWallet.typeReadable}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.ar}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitP2SHAirWallet.type}>
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{HDSegwitP2SHAirWallet.typeReadable}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.air}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitP2SHWallet.type}>
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyTitle}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.legacy}</Text>
-                </View>
-              </RadioButton>
-            </RadioGroup>
-          ) : (
-            <RadioGroup color={palette.secondary} onSelect={this.onSelect} selectedIndex={this.state.selectedIndex}>
-              <RadioButton style={styles.radioButton} value={HDSegwitP2SHArWallet.type}>
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{HDSegwitP2SHArWallet.typeReadable}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.ar}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitP2SHAirWallet.type}>
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{HDSegwitP2SHAirWallet.typeReadable}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.air}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitP2SHWallet.type}>
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyHDP2SHTitle}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.legacyHDP2SH}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={SegwitP2SHWallet.type}>
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyP2SHTitle}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.LegacyP2SH}</Text>
-                </View>
-              </RadioButton>
-              <RadioButton style={styles.radioButton} value={HDSegwitBech32Wallet.type}>
-                <View style={styles.radioButtonContent}>
-                  <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyHDSegWitTitle}</Text>
-                  <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.LegacyHDSegWit}</Text>
-                </View>
-              </RadioButton>
-            </RadioGroup>
-          )}
-        </>
-      );
-    }
+    const { isAdvancedOptionsEnabled } = this.props.appSettings;
+
+    return (
+      <>
+        <Text style={styles.advancedOptionsLabel}>{i18n.wallets.add.walletType}</Text>
+        {!isAdvancedOptionsEnabled ? (
+          <RadioGroup color={palette.secondary} onSelect={this.onSelect} selectedIndex={this.state.selectedIndex}>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHArWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{HDSegwitP2SHArWallet.typeReadable}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.ar}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHAirWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{HDSegwitP2SHAirWallet.typeReadable}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.air}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyTitle}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.legacy}</Text>
+              </View>
+            </RadioButton>
+          </RadioGroup>
+        ) : (
+          <RadioGroup color={palette.secondary} onSelect={this.onSelect} selectedIndex={this.state.selectedIndex}>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHArWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{HDSegwitP2SHArWallet.typeReadable}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.ar}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHAirWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{HDSegwitP2SHAirWallet.typeReadable}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.air}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={HDSegwitP2SHWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyHDP2SHTitle}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.legacyHDP2SH}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={SegwitP2SHWallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyP2SHTitle}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.LegacyP2SH}</Text>
+              </View>
+            </RadioButton>
+            <RadioButton style={styles.radioButton} value={HDSegwitBech32Wallet.type}>
+              <View style={styles.radioButtonContent}>
+                <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyHDSegWitTitle}</Text>
+                <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.LegacyHDSegWit}</Text>
+              </View>
+            </RadioButton>
+          </RadioGroup>
+        )}
+      </>
+    );
   }
 
   render() {
