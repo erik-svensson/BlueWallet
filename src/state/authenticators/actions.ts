@@ -109,20 +109,21 @@ const deleteAuthenticatorFailure = (error: string): DeleteAuthenticatorFailureAc
 
 interface CreateAuthenticator {
   name: string;
-  entropy: string;
+  entropy?: string;
+  mnemonic?: string;
 }
 interface Meta {
   onSuccess?: Function;
   onFailure?: Function;
 }
 
-export const createAuthenticator = ({ name, entropy }: CreateAuthenticator, meta?: Meta) => async (
+export const createAuthenticator = ({ name, entropy, mnemonic }: CreateAuthenticator, meta?: Meta) => async (
   dispatch: ThunkDispatch<any, any, AnyAction>,
 ): Promise<AuthenticatorsActionType> => {
   try {
     dispatch(createAuthenticatorRequest());
     const authenticator = new Authenticator(name);
-    await authenticator.init(entropy);
+    await authenticator.init({ entropy, mnemonic });
     BlueApp.addAuthenticator(authenticator);
     await BlueApp.saveToDisk();
     const createAuthenticatorSuccessDispatch = dispatch(createAuthenticatorSuccess(authenticator));

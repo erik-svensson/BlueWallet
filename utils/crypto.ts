@@ -3,9 +3,11 @@ import { crypto } from 'bitcoinjs-lib';
 import * as ecurve from 'ecurve';
 import { pbkdf2 } from 'pbkdf2';
 
-import { bytesToBits } from './buffer';
+import { bytesToBits, bitsToBytes } from './buffer';
 
 const bigi = require('bigi');
+
+const i18n = require('../loc');
 
 interface GeneratePrivateKey {
   password: Buffer;
@@ -59,4 +61,26 @@ export const bytesToMnemonic = (bytes: Buffer): string => {
   const random128bits = bytesToBits(bytes);
   const random132bits = create132BitKeyWithSha256(bytes, random128bits);
   return generateWordsFromBytes(random132bits).join(' ');
+};
+
+export const mnemonicToBits = (mnemonic: string) => {
+  const WORD_BIT_LENGHT = 11;
+
+  return mnemonic.split(' ').reduce((bits, word) => {
+    const index = bip39.wordlists.english.indexOf(word);
+    if (index === -1) {
+      throw new Error(
+        i18n.formatString(i18n.wallets.errors.noIndexForWord, {
+          word,
+        }),
+      );
+    }
+    return bits + index.toString(2).padStart(WORD_BIT_LENGHT, '0');
+  }, '');
+};
+
+export const mnemonicToEntropy = (mnemonic: string) => {
+  const SALT_LENGHT = 4;
+  const bits128 = mnemonicToBits(mnemonic).slice(SALT_LENGHT);
+  return bitsToBytes(bits128);
 };

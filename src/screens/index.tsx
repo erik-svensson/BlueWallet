@@ -39,3 +39,4 @@ export { default as EnterPINScreen } from './EnterPIN';
 export { default as CreateAuthenticatorSuccessScreen } from './CreateAuthenticatorSuccess';
 export { default as DeleteEntityScreen } from './DeleteEntity';
 export { default as ExportAuthenticatorScreen } from './ExportAuthenticator';
+export { default as ImportAuthenticatorScreen } from './ImportAuthenticator';

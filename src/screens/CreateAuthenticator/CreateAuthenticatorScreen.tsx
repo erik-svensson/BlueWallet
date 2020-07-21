@@ -50,7 +50,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
     ]);
   };
 
-  createAuthenticator = async (json: string) => {
+  createAuthenticator = (json: string) => {
     const { navigation, createAuthenticator } = this.props;
     try {
       const data = JSON.parse(json);
@@ -66,13 +66,22 @@ class CreateAuthenticatorScreen extends Component<Props> {
     }
   };
 
+  navigateToImport = () => {
+    const { navigation } = this.props;
+    navigation.navigate(Route.ImportAuthenticator);
+  };
+
   render() {
     return (
       <ScreenTemplate
         footer={
           <>
             <Button onPress={this.scanQRCode} title={i18n.wallets.publicKey.scan} />
-            <FlatButton containerStyle={styles.importButtonContainer} title={i18n.authenticators.import.title} />
+            <FlatButton
+              onPress={this.navigateToImport}
+              containerStyle={styles.importButtonContainer}
+              title={i18n.authenticators.import.title}
+            />
           </>
         }
       >

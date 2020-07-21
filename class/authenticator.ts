@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Authenticator as IAuthenticator } from 'app/consts';
 
-import { generatePrivateKey, privateKeyToPublicKey, bytesToMnemonic } from '../utils/crypto';
+import { generatePrivateKey, privateKeyToPublicKey, bytesToMnemonic, mnemonicToEntropy } from '../utils/crypto';
 
 const i18n = require('../loc');
 
@@ -42,15 +42,24 @@ export class Authenticator implements IAuthenticator {
     return authenticator;
   }
 
-  async init(entropy: string) {
-    const buffer = Buffer.from(entropy, ENCODING);
+  async init({ entropy, mnemonic }: { entropy?: string; mnemonic?: string }) {
+    if (entropy === undefined && mnemonic === undefined) {
+      throw new Error('Not provided entropy or mnemonic');
+    }
+    const _entropy = mnemonic === undefined ? entropy : mnemonicToEntropy(mnemonic).toString(ENCODING);
+
+    if (_entropy === undefined) {
+      throw new Error('Couldn`t get entropy');
+    }
+
+    const buffer = Buffer.from(_entropy, ENCODING);
     try {
       this.privateKey = await generatePrivateKey({
         salt: buffer,
         password: buffer,
       });
-      this.entropy = entropy;
-      this.secret = bytesToMnemonic(buffer);
+      this.entropy = _entropy;
+      this.secret = mnemonic || bytesToMnemonic(buffer);
       this.publicKey = privateKeyToPublicKey(this.privateKey);
     } catch (_) {
       throw new Error(i18n.wallets.errors.invalidPrivateKey);

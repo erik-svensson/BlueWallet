@@ -5,6 +5,7 @@ import { promisify } from 'util';
 import config from '../config';
 import signer from '../models/signer';
 import { bitsToBytes } from '../utils/buffer';
+import { mnemonicToBits } from '../utils/crypto';
 import { AbstractHDSegwitP2SHWallet } from './abstract-hd-segwit-p2sh-wallet';
 
 const { payments, ECPair } = require('bitcoinjs-lib');
@@ -90,7 +91,6 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
   // convert mnemonic generated in https://keygenerator.cloudbestenv.com/
   static async mnemonicToKeyPair(mnemonic) {
     const SALT_LENGHT = 4;
-    const WORD_BIT_LENGHT = 11;
     const WORDS_LENGTH = 12;
 
     const words = mnemonic.split(' ');
@@ -106,20 +106,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
       );
     }
 
-    const bits128 = mnemonic
-      .split(' ')
-      .reduce((bits, word) => {
-        const index = bip39.wordlists.english.indexOf(word);
-        if (index === -1) {
-          throw new Error(
-            i18n.formatString(i18n.wallets.errors.noIndexForWord, {
-              noIndexForWord: word,
-            }),
-          );
-        }
-        return bits + index.toString(2).padStart(WORD_BIT_LENGHT, '0');
-      }, '')
-      .slice(SALT_LENGHT);
+    const bits128 = mnemonicToBits(mnemonic).slice(SALT_LENGHT);
 
     const generatedBytes = bitsToBytes(bits128);
     const privateKey = await promisify(pbkdf2)(generatedBytes, generatedBytes, 100000, 32, 'sha256');

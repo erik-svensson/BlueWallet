@@ -18,6 +18,7 @@ export enum Route {
   AuthenticatorList = 'AuthenticatorList',
   EnterPIN = 'EnterPIN',
   ExportAuthenticator = 'ExportAuthenticator',
+  ImportAuthenticator = 'ImportAuthenticator',
   DeleteEntity = 'DeleteEntity',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticator = 'CreateAuthenticator',
@@ -135,7 +136,7 @@ export interface Authenticator {
   name: string;
   id: string;
   QRCode: string;
-  init: (entropy: string) => void;
+  init: ({ entropy, mnemonic }: { entropy?: string; mnemonic?: string }) => void;
   pin: string;
   secret: string;
   createdAt: Dayjs;
