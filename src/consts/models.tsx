@@ -7,6 +7,7 @@ export const CONST = {
   receive: 'receive',
   send: 'send',
   webGeneratorUrl: 'www.keygenerator.bitcoinvault.global',
+  mnemonicWordsAmount: 12,
 };
 
 export enum FlowType {
