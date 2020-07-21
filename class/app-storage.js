@@ -400,7 +400,7 @@ export class AppStorage {
     }
   }
   getAuthenticators() {
-    return this.authenticators;
+    return this.authenticators || [];
   }
 
   removeAuthenticatorById(id) {
