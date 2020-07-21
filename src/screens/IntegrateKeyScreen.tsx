@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { NavigationInjectedProps, NavigationScreenProps } from 'react-navigation';
 
 import { ScreenTemplate, Text, Header, Button } from 'app/components';
@@ -39,9 +39,12 @@ export class IntegrateKeyScreen extends React.PureComponent<Props> {
       <ScreenTemplate footer={<Button onPress={this.scanKey} title={i18n.wallets.publicKey.scan} />}>
         <Text style={styles.subtitle}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
-        <View style={styles.webGeneratorUrlWrapper}>
+        <TouchableOpacity
+          style={styles.webGeneratorUrlWrapper}
+          onPress={() => Linking.openURL(`https://${CONST.webGeneratorUrl}`)}
+        >
           <Text style={styles.webGeneratorUrl}>{CONST.webGeneratorUrl}</Text>
-        </View>
+        </TouchableOpacity>
       </ScreenTemplate>
     );
   }
