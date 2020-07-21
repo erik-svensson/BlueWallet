@@ -93,8 +93,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   generateWallet = async (wallet: any) => {
     const { navigation } = this.props;
-    console.log('BlueApp.wallets', BlueApp.wallets);
-
     await wallet.generate();
     BlueApp.wallets.push(wallet);
     await BlueApp.saveToDisk();
@@ -193,7 +191,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       await this.generateWallet(wallet);
     } catch (error) {
       this.setState({ isLoading: false });
-      Alert.alert(JSON.stringify(error.message));
+      Alert.alert(i18n.wallets.add.failed);
     }
   };
 
