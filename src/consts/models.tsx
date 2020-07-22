@@ -203,6 +203,8 @@ export interface FinalizedPSBT {
   fee: number;
 }
 
+export type NavigationProp<T, R> = StackNavigationProp<T, R>;
+
 export type MainTabNavigatorParams = {
   [Route.Dashboard]: undefined;
   [Route.AuthenticatorList]: undefined;
@@ -212,6 +214,7 @@ export type MainTabNavigatorParams = {
 
 export type RootStackParams = {
   [Route.MainCardStackNavigator]: undefined;
+  [Route.ImportWalletQRCode]: undefined;
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
   [Route.UnlockTransaction]: { onSuccess: () => void };
   [Route.PasswordNavigator]: undefined;

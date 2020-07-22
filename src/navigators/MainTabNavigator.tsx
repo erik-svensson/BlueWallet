@@ -29,6 +29,7 @@ export const MainTabNavigator = () => {
         component={AuthenticatorListScreen}
         options={() => ({
           tabBarLabel: i18n.tabNavigator.authenticators,
+          tabBarLabel: i18n.tabNavigator.dashboard,
         })}
       />
       <Tab.Screen
