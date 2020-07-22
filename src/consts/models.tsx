@@ -94,6 +94,10 @@ export interface Wallet {
   unconfirmed_transactions: Transaction[];
   utxo: any[];
   _xpub: string;
+  getID: () => string;
+  weOwnAddress: (clipboard: string) => void;
+  isInvoiceGeneratedByWallet: (clipboard: string) => void;
+  getPreferredBalanceUnit: () => string;
 }
 
 export interface Contact {
