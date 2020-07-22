@@ -276,6 +276,14 @@ module.exports = {
   },
   send: {
     header: 'Send coins',
+    transaction: {
+      instant: 'Instant',
+      instantDesc: 'This method allows you to send immediate transfers. Use with extreme caution.',
+      alert: 'Alert',
+      alertDesc:
+        'This transaction waits 144 blocks or ca. 24 hours to be confirmed. Within this time you can recover your coins.',
+      type: 'Transaction type',
+    },
     success: {
       title: 'Success',
       description: 'Hooray! You have successfully finished the transaction.',

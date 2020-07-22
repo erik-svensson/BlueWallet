@@ -434,30 +434,33 @@ export class SendCoinsScreen extends Component<Props, State> {
   };
 
   onVaultTranscationSelect = (index: number, vaultTxType: number) => {
-    console.log('vaultTxType', vaultTxType);
     this.setState({ vaultTxType });
   };
 
   renderVaultTransactions = () => {
     return (
-      <RadioGroup
-        color={palette.secondary}
-        onSelect={this.onVaultTranscationSelect}
-        selectedIndex={this.state.vaultTxType}
-      >
-        <RadioButton style={styles.radioButton} value={bitcoin.payments.VaultTxType.Alert}>
-          <View style={styles.radioButtonContent}>
-            <Text style={styles.radioButtonTitle}>{i18n.send.transaction.alert}</Text>
-            <Text style={styles.radioButtonSubtitle}>{i18n.send.transaction.alertDesc}</Text>
-          </View>
-        </RadioButton>
-        <RadioButton style={styles.radioButton} value={bitcoin.payments.VaultTxType.Instant}>
-          <View style={styles.radioButtonContent}>
-            <Text style={styles.radioButtonTitle}>{i18n.send.transaction.instant}</Text>
-            <Text style={styles.radioButtonSubtitle}>{i18n.send.transaction.instantDesc}</Text>
-          </View>
-        </RadioButton>
-      </RadioGroup>
+      <View>
+        <Text style={styles.radioButtonsTitle}>{i18n.send.transaction.type}</Text>
+        <RadioGroup
+          color={palette.secondary}
+          onSelect={this.onVaultTranscationSelect}
+          selectedIndex={this.state.vaultTxType}
+        >
+          <RadioButton style={styles.radioButton} value={bitcoin.payments.VaultTxType.Alert}>
+            <View style={styles.radioButtonContent}>
+              <Text style={styles.radioButtonTitle}>{i18n.send.transaction.alert}</Text>
+              <Text style={styles.radioButtonSubtitle}>{i18n.send.transaction.alertDesc}</Text>
+              <Text style={styles.radioButtonsTitle}>{i18n.send.transaction.type}</Text>
+            </View>
+          </RadioButton>
+          <RadioButton style={styles.radioButton} value={bitcoin.payments.VaultTxType.Instant}>
+            <View style={styles.radioButtonContent}>
+              <Text style={styles.radioButtonTitle}>{i18n.send.transaction.instant}</Text>
+              <Text style={styles.radioButtonSubtitle}>{i18n.send.transaction.instantDesc}</Text>
+            </View>
+          </RadioButton>
+        </RadioGroup>
+      </View>
     );
   };
 
@@ -568,5 +571,10 @@ const styles = StyleSheet.create({
   radioButtonSubtitle: {
     ...typography.overline,
     color: palette.textGrey,
+  },
+  radioButtonsTitle: {
+    ...typography.overline,
+    color: palette.textGrey,
+    marginBottom: 16,
   },
 });

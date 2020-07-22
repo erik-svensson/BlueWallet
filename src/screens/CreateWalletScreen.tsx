@@ -134,15 +134,14 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   navigateToIntegrateInstantPublicKey = (wallet: any, label: string) => {
     const { navigation } = this.props;
-    console.log('wallet', wallet);
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: this.createAIRWalletAddInstantPublicKey(wallet, label),
       title: i18n.wallets.publicKey.instantSubtitle,
       description: i18n.wallets.publicKey.instantDescription,
-      // onBackArrow: () => {
-      //   wallet.clearPublickKeys();
-      //   this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWalletAddRecoveryPublicKey);
-      // },
+      onBackArrow: () => {
+        wallet.clearPublickKeys();
+        this.navigateToIntegrateRecoveryPublicKey(label, this.createAIRWalletAddRecoveryPublicKey);
+      },
     });
   };
 

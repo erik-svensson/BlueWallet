@@ -314,6 +314,7 @@ module.exports.multiGetHistoryByAddress = async function(addresses, batchsize) {
 
     const results = await mainClient.blockchainScripthash_getHistoryBatch(scripthashes);
 
+    console.log('history', results);
     for (const history of results) {
       ret[scripthash2addr[history.param]] = history.result;
       for (const hist of ret[scripthash2addr[history.param]]) {
