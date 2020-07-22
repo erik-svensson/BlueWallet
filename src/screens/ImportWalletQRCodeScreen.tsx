@@ -28,6 +28,7 @@ import {
   HDLegacyP2PKHWallet,
   HDSegwitBech32Wallet,
   HDSegwitP2SHWallet,
+  HDSegwitP2SHArWallet,
 } from '../../class';
 
 const BlueApp = require('../../BlueApp');
@@ -110,6 +111,16 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
     this.setState({ isLoading: true });
   };
 
+  saveARWallet = async (wallet: HDSegwitP2SHArWallet, pubKeyHex: string) => {
+    wallet.addPublicKey(pubKeyHex);
+    await wallet.generateAddresses();
+    await wallet.fetchBalance();
+    await wallet.fetchTransactions();
+    if (wallet.getBalance() > 0 || wallet.getTransactions().length !== 0) {
+      return this.saveWallet(wallet);
+    }
+  };
+
   importMnemonic = async (text: string) => {
     if (this.state.isLoading) {
       return;
@@ -118,6 +129,14 @@ class ImportWalletQRCodeScreen extends React.Component<Props, State> {
       // make sure it re-renders
       await sleep(100);
       try {
+        const wallet = new HDSegwitP2SHArWallet();
+
+        wallet.setMnemonic(text);
+        this.props.navigation.navigate(Route.IntegrateKey, {
+          onBarCodeScan: key => this.saveARWallet(wallet, key),
+          title: i18n.wallets.publicKey.recoverySubtitle,
+          description: i18n.wallets.publicKey.recoveryDescription,
+        });
         // trying other wallet types
         const segwitWallet = new SegwitP2SHWallet();
         segwitWallet.setSecret(text);

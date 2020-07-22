@@ -77,6 +77,7 @@ export enum Route {
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
   IntegrateKey = 'IntegrateKey',
+  ImportWalletChooseType = 'ImportWalletChooseType',
 }
 
 export interface Wallet {
@@ -243,8 +244,7 @@ export type MainCardStackNavigatorParams = {
   [Route.Dashboard]: { activeWallet?: Wallet };
   [Route.MainCardStackNavigator]: undefined;
   [Route.CreateWallet]: undefined;
-  [Route.ImportWallet]: undefined;
-
+  [Route.ImportWallet]: { walletType: string };
   [Route.WalletDetails]: { wallet: Wallet };
   [Route.CreateContact]: undefined;
   [Route.ContactDetails]: { contact: Contact };
@@ -311,6 +311,8 @@ export type MainCardStackNavigatorParams = {
     headerTitle: string;
     onBackArrow?: () => void;
   };
+  // [Route.IntegrateKey]: { onFilterPress: ({}) => void };
+  [Route.ImportWalletChooseType]: undefined;
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {

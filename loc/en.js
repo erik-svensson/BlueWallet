@@ -18,6 +18,7 @@ module.exports = {
     created: 'Created',
     invalid: 'Invalid',
     satoshi: 'Sat',
+    next: 'Next',
   },
   tabNavigator: {
     dashboard: 'Dashboard',
@@ -140,6 +141,9 @@ module.exports = {
       import: 'Import',
       scanQrCode: 'or scan QR code',
       walletInUseValidationError: 'Wallet is already in use. Please enter a valid wallet.',
+      chooseTypeDescription: 'Please choose type of the wallet which you want to import.',
+      importARDescription1: 'Please write your mnemonic in order to import your wallet',
+      importARDescription2: 'scan QR code by clicking on “or scan QR code” below',
     },
     exportWallet: {
       title: 'Mnemonic phrase',
