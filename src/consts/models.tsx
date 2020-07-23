@@ -137,6 +137,18 @@ export interface Filters {
   transactionType?: string;
 }
 
+export interface Utxo {
+  address: string;
+  height: number;
+  spent_height: number;
+  tx_hash: string;
+  tx_pos: number;
+  txid: string;
+  value: number;
+  vout: number;
+  wif: string;
+}
+
 // @ts-ignore
 export type NavigationProp<T, R> = StackNavigationProp<T, R>;
 

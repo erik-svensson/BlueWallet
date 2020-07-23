@@ -285,6 +285,9 @@ module.exports = {
       type: 'Transaction type',
       scanInstantKeyTitle: 'Scan Instant Key',
       scanInstantKeyDesc: 'Scan the Instant Key QR code to start the transaction.',
+      lightningError:
+        'This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.',
+      watchOnlyError: 'Watch only wallets cannot send transactions',
     },
     success: {
       title: 'Success',

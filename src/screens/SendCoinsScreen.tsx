@@ -5,7 +5,7 @@ import { View, StyleSheet, Text, TouchableOpacity, Alert, AsyncStorage } from 'r
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, StyledText, Image, RadioGroup, RadioButton } from 'app/components';
-import { CONST, MainCardStackNavigatorParams, Route, RootStackParams } from 'app/consts';
+import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { typography, palette } from 'app/styles';
 
@@ -100,7 +100,7 @@ export class SendCoinsScreen extends Component<Props, State> {
   showModal = () => {
     const wallets = BlueApp.getWallets();
     const { wallet } = this.state;
-    const selectedIndex = wallets.findIndex((w: any) => w.label === wallet.label);
+    const selectedIndex = wallets.findIndex((w: Wallet) => w.label === wallet.label);
     this.props.navigation.navigate(Route.ActionSheet, {
       wallets,
       selectedIndex,
@@ -129,7 +129,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     });
   };
 
-  getUnspentUtxos = (utxos: any) => utxos.filter((u: any) => u.spent_height === 0);
+  getUnspentUtxos = (utxos: Utxo[]) => utxos.filter((u: Utxo) => u.spent_height === 0);
 
   createHDBech32Transaction = async () => {
     /** @type {HDSegwitBech32Wallet} */
@@ -144,27 +144,12 @@ export class SendCoinsScreen extends Component<Props, State> {
       targets.push({ address: transaction.address, value: amount });
     }
 
-    const { tx, fee, psbt } = await wallet.createTransaction(
+    const { tx, fee } = await wallet.createTransaction(
       this.getUnspentUtxos(wallet.getUtxos()),
       targets,
       requestedSatPerByte,
       changeAddress,
     );
-
-    if (wallet.type === WatchOnlyWallet.type) {
-      // watch-only wallets with enabled HW wallet support have different flow. we have to show PSBT to user as QR code
-      // so he can scan it and sign it. then we have to scan it back from user (via camera and QR code), and ask
-      // user whether he wants to broadcast it
-
-      this.setState({ isLoading: false }, () =>
-        this.props.navigation.navigate('PsbtWithHardwareWallet', {
-          memo: this.state.memo,
-          wallet,
-          psbt,
-        }),
-      );
-      return;
-    }
 
     BlueApp.tx_metadata = BlueApp.tx_metadata || {};
     BlueApp.tx_metadata[tx.getId()] = {
@@ -220,7 +205,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     if (transaction.address) {
       const address = transaction.address.trim().toLowerCase();
       if (address.startsWith('lnb') || address.startsWith('lightning:lnb')) {
-        return 'This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.';
+        return i18n.send.transaction.lightningError;
       }
     }
 
@@ -233,9 +218,17 @@ export class SendCoinsScreen extends Component<Props, State> {
     return null;
   };
 
-  getActualSatoshi = (tx: any, feeSatoshi: any) => feeSatoshi.dividedBy(Math.round(tx.length / 2)).toNumber();
+  getActualSatoshi = (tx: string, feeSatoshi: any) => feeSatoshi.dividedBy(Math.round(tx.length / 2)).toNumber();
 
-  increaseFee = ({ feeSatoshi, requestedSatPerByte, actualSatoshiPerByte }: any) =>
+  increaseFee = ({
+    feeSatoshi,
+    requestedSatPerByte,
+    actualSatoshiPerByte,
+  }: {
+    feeSatoshi: any;
+    requestedSatPerByte: number;
+    actualSatoshiPerByte: any;
+  }) =>
     feeSatoshi
       .multipliedBy(requestedSatPerByte / actualSatoshiPerByte)
       .plus(10)
@@ -250,7 +243,15 @@ export class SendCoinsScreen extends Component<Props, State> {
     requestedSatPerByte: number;
   }) => !(Math.round(actualSatoshiPerByte) !== requestedSatPerByte || Math.floor(actualSatoshiPerByte) < 1);
 
-  navigateToConfirm = ({ fee, tx, actualSatoshiPerByte }: { fee: number; tx: any; actualSatoshiPerByte: any }) => {
+  navigateToConfirm = ({
+    fee,
+    tx,
+    actualSatoshiPerByte,
+  }: {
+    fee: number;
+    tx: string;
+    actualSatoshiPerByte: number;
+  }) => {
     const { transaction, wallet, memo } = this.state;
 
     this.props.navigation.navigate(Route.SendCoinsConfirm, {
@@ -271,7 +272,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     const utxosUnspent = this.getUnspentUtxos(utxos);
     let fee = 0.000001; // initial fee guess
     let actualSatoshiPerByte: any;
-    let tx: any;
+    let tx = '';
     const MAX_TRIES = 5;
 
     for (let tries = 0; tries < MAX_TRIES; tries++) {
@@ -315,7 +316,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     const { type } = wallet;
     switch (type) {
       case HDSegwitP2SHArWallet.type:
-        return this.createStandardTransaction((utxos: any, amount: number, fee: number, address: string) =>
+        return this.createStandardTransaction((utxos: Utxo[], amount: number, fee: number, address: string) =>
           wallet.createTx({
             utxos,
             amount,
@@ -327,7 +328,7 @@ export class SendCoinsScreen extends Component<Props, State> {
       case HDSegwitP2SHAirWallet.type:
         const { vaultTxType } = this.state;
         if (vaultTxType === bitcoin.payments.VaultTxType.Alert) {
-          return this.createStandardTransaction((utxos: any, amount: number, fee: number, address: string) =>
+          return this.createStandardTransaction((utxos: Utxo[], amount: number, fee: number, address: string) =>
             wallet.createTx({
               utxos,
               amount,
@@ -341,7 +342,7 @@ export class SendCoinsScreen extends Component<Props, State> {
           this.setState({ isLoading: false });
           return this.navigateToScanInstantPrivateKey(async (instantPrivateKey: string) => {
             try {
-              await this.createStandardTransaction((utxos: any, amount: number, fee: number, address: string) =>
+              await this.createStandardTransaction((utxos: Utxo[], amount: number, fee: number, address: string) =>
                 wallet.createTx({
                   utxos,
                   amount,
@@ -358,10 +359,11 @@ export class SendCoinsScreen extends Component<Props, State> {
         }
 
       case WatchOnlyWallet.type:
+        throw new Error(i18n.send.transaction.watchOnlyError);
       case HDSegwitBech32Wallet.type:
         return this.createHDBech32Transaction();
       default:
-        return this.createStandardTransaction((utxos: any, amount: number, fee: number, address: string) =>
+        return this.createStandardTransaction((utxos: Utxo[], amount: number, fee: number, address: string) =>
           wallet.createTx(utxos, amount, fee, address),
         );
     }
