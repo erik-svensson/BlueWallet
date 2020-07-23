@@ -304,8 +304,10 @@ export class SendCoinsScreen extends Component<Props, State> {
     const { navigation } = this.props;
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan,
-      title: i18n.wallets.publicKey.instantSubtitle,
-      description: i18n.wallets.publicKey.instantDescription,
+      title: i18n.send.transaction.scanInstantKeyTitle,
+      description: i18n.send.transaction.scanInstantKeyDesc,
+      withLink: false,
+      headerTitle: i18n.wallets.dashboard.send,
     });
   };
 

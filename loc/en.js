@@ -283,6 +283,8 @@ module.exports = {
       alertDesc:
         'This transaction waits 144 blocks or ca. 24 hours to be confirmed. Within this time you can recover your coins.',
       type: 'Transaction type',
+      scanInstantKeyTitle: 'Scan Instant Key',
+      scanInstantKeyDesc: 'Scan the Instant Key QR code to start the transaction.',
     },
     success: {
       title: 'Success',

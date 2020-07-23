@@ -242,7 +242,13 @@ export type MainCardStackNavigatorParams = {
   [Route.ExportAuthenticator]: { id: string };
   [Route.ImportAuthenticator]: undefined;
   [Route.CreateWalletSuccess]: { secret: string };
-  [Route.IntegrateKey]: { onBarCodeScan: Function; title: string; description: string };
+  [Route.IntegrateKey]: {
+    onBarCodeScan: Function;
+    title: string;
+    description: string;
+    withLink?: boolean;
+    headerTitle: string;
+  };
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {

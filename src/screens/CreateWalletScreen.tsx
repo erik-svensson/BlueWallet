@@ -137,6 +137,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: this.createAIRWalletAddInstantPublicKey(wallet, label),
       title: i18n.wallets.publicKey.instantSubtitle,
+      headerTitle: i18n.wallets.add.title,
       description: i18n.wallets.publicKey.instantDescription,
       onBackArrow: () => {
         wallet.clearPublickKeys();
@@ -149,6 +150,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     const { navigation } = this.props;
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: create(label),
+      headerTitle: i18n.wallets.add.title,
       title: i18n.wallets.publicKey.recoverySubtitle,
       description: i18n.wallets.publicKey.recoveryDescription,
     });
@@ -156,7 +158,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   createAIRWalletAddRecoveryPublicKey = (label: string) => (recoveryPublicKey: string) => {
     try {
-      console.log('recoveryPublicKey', recoveryPublicKey);
       const wallet = new HDSegwitP2SHAirWallet();
       wallet.addPublicKey(recoveryPublicKey);
       wallet.setLabel(label);
