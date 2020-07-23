@@ -1,8 +1,11 @@
+import { ECPair, VaultTxType } from 'bitcoinjs-lib';
 import dayjs, { Dayjs } from 'dayjs';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Authenticator as IAuthenticator } from 'app/consts';
 
+import config from '../config';
+import signer from '../models/signer';
 import { generatePrivateKey, privateKeyToPublicKey, bytesToMnemonic, mnemonicToEntropy } from '../utils/crypto';
 
 const i18n = require('../loc');
@@ -15,6 +18,7 @@ export class Authenticator implements IAuthenticator {
   publicKey: string;
   entropy: string;
   secret: string;
+  keyPair: ECPair.ECPairInterface | null;
   readonly id: string;
   createdAt: Dayjs;
 
@@ -24,6 +28,7 @@ export class Authenticator implements IAuthenticator {
     this.entropy = '';
     this.publicKey = '';
     this.secret = '';
+    this.keyPair = null;
     this.createdAt = dayjs();
   }
 
@@ -38,6 +43,13 @@ export class Authenticator implements IAuthenticator {
 
     authenticator.createdAt = dayjs(createdAt);
     authenticator.privateKey = parsedPrivateKey;
+    try {
+      authenticator.keyPair = ECPair.fromPrivateKey(parsedPrivateKey, {
+        network: config.network,
+      });
+    } catch (_) {
+      throw new Error(i18n.wallets.errors.invalidPrivateKey);
+    }
 
     return authenticator;
   }
@@ -61,8 +73,29 @@ export class Authenticator implements IAuthenticator {
       this.entropy = _entropy;
       this.secret = mnemonic || bytesToMnemonic(buffer);
       this.publicKey = privateKeyToPublicKey(this.privateKey);
+      this.keyPair = ECPair.fromPrivateKey(this.privateKey, {
+        network: config.network,
+      });
     } catch (_) {
       throw new Error(i18n.wallets.errors.invalidPrivateKey);
+    }
+  }
+
+  async signAndFinalizePSBT({
+    encodedPSBT,
+    vaultTxType = VaultTxType.NonVault,
+  }: {
+    encodedPSBT: string;
+    vaultTxType?: VaultTxType;
+  }) {
+    try {
+      return signer.signAndFinalizePSBT({
+        encodedPSBT,
+        keyPairs: [this.keyPair],
+        vaultTxType,
+      });
+    } catch (_) {
+      throw new Error('Unable to sign tx with authenticator');
     }
   }
 

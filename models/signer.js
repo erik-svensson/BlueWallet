@@ -442,3 +442,16 @@ exports.createTransaction = function(utxos, toAddress, _amount, _fixedFee, WIF, 
 
   return txb.build().toHex();
 };
+
+exports.signAndFinalizePSBT = function(encodedPSBT, keyPairs, vaultTxType = bitcoinjs.VaultTxType.NonVault) {
+  const psbt = bitcoinjs.Psbt.fromBase64(encodedPSBT, {
+    network: config.network,
+  });
+
+  keyPairs.forEach(keyPair => {
+    psbt.signAllInputs(keyPair);
+  });
+
+  const tx = psbt.finalizeAllInputs(vaultTxType).extractTransaction();
+  return tx.toHex();
+};
