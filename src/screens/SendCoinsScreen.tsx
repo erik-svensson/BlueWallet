@@ -204,7 +204,7 @@ export class SendCoinsScreen extends Component<Props, State> {
   validateTransaction = (): string | null => {
     const { fee: requestedSatPerByte, transaction, wallet } = this.state;
 
-    if (!transaction.amount || transaction.amount < 0 || transaction.amount === 0) {
+    if (!transaction.amount || transaction.amount <= 0) {
       return i18n.send.details.amount_field_is_not_valid;
     }
     if (!requestedSatPerByte || requestedSatPerByte < 1) {
@@ -336,6 +336,7 @@ export class SendCoinsScreen extends Component<Props, State> {
           );
         }
         if (vaultTxType === bitcoin.payments.VaultTxType.Instant) {
+          this.setState({ isLoading: false });
           return this.navigateToScanInstantPrivateKey(async (instantPrivateKey: string) => {
             try {
               await this.createStandardTransaction((utxos: any, amount: number, fee: number, address: string) =>
@@ -389,12 +390,9 @@ export class SendCoinsScreen extends Component<Props, State> {
         label={i18n.transactions.details.amount}
         suffix="BTCV"
         keyboardType="numeric"
-        value={transaction.amount?.toString()}
         setValue={text => {
           const amount = Number(text.replace(',', '.'));
-          if (!Number.isNaN(amount)) {
-            this.setState({ transaction: { ...transaction, amount } });
-          }
+          this.setState({ transaction: { ...transaction, amount: !Number.isNaN(amount) ? amount : undefined } });
         }}
       />
     );
@@ -450,7 +448,6 @@ export class SendCoinsScreen extends Component<Props, State> {
             <View style={styles.radioButtonContent}>
               <Text style={styles.radioButtonTitle}>{i18n.send.transaction.alert}</Text>
               <Text style={styles.radioButtonSubtitle}>{i18n.send.transaction.alertDesc}</Text>
-              <Text style={styles.radioButtonsTitle}>{i18n.send.transaction.type}</Text>
             </View>
           </RadioButton>
           <RadioButton style={styles.radioButton} value={bitcoin.payments.VaultTxType.Instant}>
