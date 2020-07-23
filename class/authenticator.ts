@@ -13,6 +13,11 @@ const i18n = require('../loc');
 const ENCODING = 'hex';
 const PIN_LENGTH = 4;
 
+interface FinalizedPSBT {
+  txHex: string;
+  vaultTxType: VaultTxType;
+}
+
 export class Authenticator implements IAuthenticator {
   privateKey: Buffer | null;
   publicKey: string;
@@ -81,22 +86,24 @@ export class Authenticator implements IAuthenticator {
     }
   }
 
-  async signAndFinalizePSBT({
-    encodedPSBT,
-    vaultTxType = VaultTxType.NonVault,
-  }: {
-    encodedPSBT: string;
-    vaultTxType?: VaultTxType;
-  }) {
+  async signAndFinalizePSBT(encodedPSBT: string): Promise<FinalizedPSBT> {
+    let txHex: string;
+    let vaultTxType = VaultTxType.Recovery;
     try {
-      return signer.signAndFinalizePSBT({
-        encodedPSBT,
-        keyPairs: [this.keyPair],
-        vaultTxType,
-      });
+      txHex = signer.signAndFinalizePSBT(encodedPSBT, [this.keyPair], vaultTxType);
     } catch (_) {
-      throw new Error('Unable to sign tx with authenticator');
+      try {
+        vaultTxType = VaultTxType.Instant;
+        txHex = signer.signAndFinalizePSBT(encodedPSBT, [this.keyPair], vaultTxType);
+      } catch (e) {
+        throw new Error('Unable to sign tx with authenticator: ' + e);
+      }
     }
+
+    return {
+      txHex,
+      vaultTxType,
+    };
   }
 
   get pin() {
