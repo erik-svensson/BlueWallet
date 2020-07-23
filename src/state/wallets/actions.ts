@@ -74,7 +74,7 @@ export const loadWallets = (walletIndex?: number) => async (
         };
         wallet.transactions.forEach(enhanceTransactions);
         wallet.unconfirmed_transactions.forEach(enhanceTransactions);
-        dispatch(loadTransactionsSuccess(wallet.secret, [...wallet.transactions, ...wallet.unconfirmed_transactions]));
+        dispatch(loadTransactionsSuccess(wallet.id, [...wallet.transactions, ...wallet.unconfirmed_transactions]));
       }
     });
     return dispatch(loadWalletsSuccess(wallets));

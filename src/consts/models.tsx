@@ -100,6 +100,7 @@ export interface Wallet {
   weOwnAddress: (clipboard: string) => void;
   isInvoiceGeneratedByWallet: (clipboard: string) => void;
   getPreferredBalanceUnit: () => string;
+  id: string;
 }
 
 export interface Contact {
@@ -108,6 +109,14 @@ export interface Contact {
   address: string;
 }
 
+export enum TxType {
+  NONVAULT = 'NONVAULT',
+  ALERT_PENDING = 'ALERT_PENDING',
+  ALERT_CONFIRMED = 'ALERT_CONFIRMED',
+  ALERT_RECOVERED = 'ALERT_RECOVERED',
+  RECOVERY = 'ALERT_RECOVERED',
+  INSTANT = 'INSTANT',
+}
 export interface Transaction {
   hash: string;
   txid: string;
@@ -116,6 +125,7 @@ export interface Transaction {
   received: string; // date string, same value as 'time' field but human readable
   walletLabel: string;
   confirmations: number;
+  tx_type: TxType;
   inputs: any[];
   outputs: any[];
   note?: string;

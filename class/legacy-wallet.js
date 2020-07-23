@@ -139,7 +139,7 @@ export class LegacyWallet extends AbstractWallet {
       this._lastTxFetch = +new Date();
       const txids = await BlueElectrum.getTransactionsByAddress(this.getAddress());
       for (const tx of txids) {
-        if (!this.transactionConfirmed(tx.tx_hash)) txids_to_update.push(tx.tx_hash);
+        if (!this.transactionConfirmed(tx.tx_hash)) txids_to_update.push(tx);
       }
       await this._update_unconfirmed_tx(txids_to_update);
     } catch (Err) {
@@ -227,11 +227,18 @@ export class LegacyWallet extends AbstractWallet {
     return this.balance;
   }
 
-  async _update_unconfirmed_tx(txid_list) {
+  async _update_unconfirmed_tx(txs) {
     try {
+      console.log('txs', txs);
+
+      const txid_list = txs.map(t => t.tx_hash);
+      console.log('txid_list', txid_list);
+
       const txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txid_list);
       const unconfirmed_transactions = [];
+
       for (const tx of txs_full) {
+        console.log('_update_unconfirmed_tx', tx);
         let value = 0;
         for (const input of tx.inputs) {
           if (!input.txid) continue; // coinbase
@@ -241,6 +248,7 @@ export class LegacyWallet extends AbstractWallet {
           if (!output.addresses) continue; // OP_RETURN
           if (this.weOwnAddress(output.addresses[0])) value += output.value;
         }
+        tx.tx_type = txs.find(t => t.tx_hash === tx.txid).tx_type;
         tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();
         if (tx.time) tx.received = new Date(tx.time * 1000).toISOString();
         else tx.received = new Date().toISOString();

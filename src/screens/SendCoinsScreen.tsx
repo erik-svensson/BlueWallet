@@ -269,7 +269,10 @@ export class SendCoinsScreen extends Component<Props, State> {
     const { fee: requestedSatPerByte, transaction, memo, wallet } = this.state;
     await wallet.fetchUtxos();
     const utxos = wallet.getUtxos();
+    console.log('utxos', utxos);
     const utxosUnspent = this.getUnspentUtxos(utxos);
+    console.log('utxosUnspent', utxosUnspent);
+
     let fee = 0.000001; // initial fee guess
     let actualSatoshiPerByte: any;
     let tx = '';

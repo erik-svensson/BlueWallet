@@ -223,7 +223,7 @@ class DashboardScreen extends Component<Props, State> {
               <TransactionList
                 search={query}
                 filters={filters}
-                transactions={isAllWallets(activeWallet) ? allTransactions : transactions[activeWallet.secret] || []}
+                transactions={isAllWallets(activeWallet) ? allTransactions : transactions[activeWallet.id] || []}
                 transactionNotes={this.props.transactionNotes}
                 label={activeWallet.label}
                 headerHeight={this.state.contentdHeaderHeight}

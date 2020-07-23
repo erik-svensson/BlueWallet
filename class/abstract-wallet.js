@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { BitcoinUnit, Chain } from '../models/bitcoinUnits';
 
 const createHash = require('create-hash');
@@ -32,6 +34,7 @@ export class AbstractWallet {
     this.preferredBalanceUnit = BitcoinUnit.BTC;
     this.chain = Chain.ONCHAIN;
     this.hideBalance = false;
+    this.id = uuidv4();
   }
 
   getID() {

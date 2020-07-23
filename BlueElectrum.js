@@ -142,6 +142,8 @@ module.exports.getTransactionsByAddress = async function(address) {
   const hash = bitcoin.crypto.sha256(script);
   const reversedHash = Buffer.from(reverse(hash));
   const history = await mainClient.blockchainScripthash_getHistory(reversedHash.toString('hex'));
+  console.log('blockchainScripthash_getHistory', history);
+
   return history;
 };
 
@@ -195,7 +197,11 @@ module.exports.multiGetTransactionsFullByAddress = async function(addresses) {
 module.exports.multiGetTransactionsFullByTxid = async function(txid_list) {
   const ret = [];
   const txfull = await this.multiGetTransactionByTxid(txid_list);
+  console.log('multiGetTransactionsFullByTxid txfull', txfull);
+
   for (const txid in txfull) {
+    console.log('multiGetTransactionsFullByTxid txid', txid);
+
     const full = txfull[txid];
     for (const input of full.vin) {
       if (!input.txid) continue;
@@ -314,6 +320,7 @@ module.exports.multiGetHistoryByAddress = async function(addresses, batchsize) {
 
     const results = await mainClient.blockchainScripthash_getHistoryBatch(scripthashes);
 
+    console.log('blockchainScripthash_getHistoryBatch', results);
     for (const history of results) {
       ret[scripthash2addr[history.param]] = history.result;
       for (const hist of ret[scripthash2addr[history.param]]) {
@@ -334,6 +341,7 @@ module.exports.multiGetTransactionByTxid = async function(txids, batchsize, verb
   const chunks = splitIntoChunks(txids, batchsize);
   for (const chunk of chunks) {
     const results = await mainClient.blockchainTransaction_getBatch(chunk, verbose);
+    console.log('blockchainTransaction_getBatch', results);
     for (const txdata of results) {
       ret[txdata.param] = txdata.result;
     }
