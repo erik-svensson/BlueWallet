@@ -25,6 +25,7 @@ export enum Route {
   PasswordNavigator = 'PasswordNavigator',
   Dashboard = 'Dashboard',
   AuthenticatorList = 'AuthenticatorList',
+  RecoveryTransactionList = 'RecoveryTransactionList',
   EnterPIN = 'EnterPIN',
   ExportAuthenticator = 'ExportAuthenticator',
   ImportAuthenticator = 'ImportAuthenticator',
@@ -228,6 +229,8 @@ export type MainCardStackNavigatorParams = {
     satoshiPerByte: any;
     fromWallet: Wallet;
   };
+  [Route.RecoveryTransactionList]: { wallet: Wallet };
+
   [Route.ScanQrCode]: { onBarCodeScan: (code: string) => void };
   [Route.ChooseContactList]: {
     onContactPress?: (data: string) => void;

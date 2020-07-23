@@ -276,6 +276,9 @@ module.exports = {
   },
   send: {
     header: 'Send coins',
+    recovery: {
+      recover: 'Recover',
+    },
     transaction: {
       instant: 'Instant',
       instantDesc: 'This method allows you to send immediate transfers. Use with extreme caution.',

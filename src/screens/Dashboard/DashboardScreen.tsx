@@ -77,10 +77,14 @@ class DashboardScreen extends Component<Props, State> {
 
   _keyExtractor = (item: Wallet, index: number) => index.toString();
 
-  sendCoins = () => {
+  getActiveWallet = () => {
     const { lastSnappedTo } = this.state;
     const { wallets } = this.props;
-    const activeWallet = isAllWallets(wallets[lastSnappedTo]) ? wallets[1] : wallets[lastSnappedTo];
+    return isAllWallets(wallets[lastSnappedTo]) ? wallets[1] : wallets[lastSnappedTo];
+  };
+
+  sendCoins = () => {
+    const activeWallet = this.getActiveWallet();
     this.props.navigation.navigate(Route.SendCoins, {
       fromAddress: activeWallet.getAddress(),
       fromSecret: activeWallet.getSecret(),
@@ -89,11 +93,16 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   receiveCoins = () => {
-    const { lastSnappedTo } = this.state;
-    const { wallets } = this.props;
-    const activeWallet = isAllWallets(wallets[lastSnappedTo]) ? wallets[1] : wallets[lastSnappedTo];
+    const activeWallet = this.getActiveWallet();
     this.props.navigation.navigate(Route.ReceiveCoins, {
       secret: activeWallet.getSecret(),
+    });
+  };
+
+  recoverCoins = () => {
+    const activeWallet = this.getActiveWallet();
+    this.props.navigation.navigate(Route.RecoveryTransactionList, {
+      wallet: activeWallet,
     });
   };
 
@@ -190,9 +199,11 @@ class DashboardScreen extends Component<Props, State> {
                   label={
                     activeWallet.label === CONST.allWallets ? i18n.wallets.dashboard.allWallets : activeWallet.label
                   }
+                  type={activeWallet.type}
                   unit={activeWallet.preferredBalanceUnit}
                   onReceivePress={this.receiveCoins}
                   onSendPress={this.sendCoins}
+                  onReceveryPress={this.recoverCoins}
                 />
                 {isAllWallets(activeWallet) ? (
                   <WalletsCarousel
