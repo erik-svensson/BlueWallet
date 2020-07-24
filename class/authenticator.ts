@@ -1,4 +1,4 @@
-import { ECPair, VaultTxType } from 'bitcoinjs-lib';
+import { ECPair, VaultTxType, address } from 'bitcoinjs-lib';
 import dayjs, { Dayjs } from 'dayjs';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -13,9 +13,16 @@ const i18n = require('../loc');
 const ENCODING = 'hex';
 const PIN_LENGTH = 4;
 
+interface Recipient {
+  address: string;
+  value: number;
+}
+
 interface FinalizedPSBT {
   txHex: string;
   vaultTxType: VaultTxType;
+  recipients: Recipient[];
+  fee: number;
 }
 
 export class Authenticator implements IAuthenticator {
@@ -87,22 +94,31 @@ export class Authenticator implements IAuthenticator {
   }
 
   async signAndFinalizePSBT(encodedPSBT: string): Promise<FinalizedPSBT> {
-    let txHex: string;
+    let tx, fee;
     let vaultTxType = VaultTxType.Recovery;
     try {
-      txHex = signer.signAndFinalizePSBT(encodedPSBT, [this.keyPair], vaultTxType);
+      ({ tx, fee } = signer.signAndFinalizePSBT(encodedPSBT, [this.keyPair], vaultTxType));
     } catch (_) {
       try {
         vaultTxType = VaultTxType.Instant;
-        txHex = signer.signAndFinalizePSBT(encodedPSBT, [this.keyPair], vaultTxType);
+        ({ tx, fee } = signer.signAndFinalizePSBT(encodedPSBT, [this.keyPair], vaultTxType));
       } catch (e) {
         throw new Error('Unable to sign tx with authenticator: ' + e);
       }
     }
 
+    const recipients = tx.outs.map(output => {
+      return {
+        address: address.fromOutputScript(output.script, config.network),
+        value: output.value,
+      };
+    });
+
     return {
-      txHex,
+      txHex: tx.toHex(),
       vaultTxType,
+      recipients,
+      fee,
     };
   }
 

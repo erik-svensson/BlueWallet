@@ -452,6 +452,8 @@ exports.signAndFinalizePSBT = function(encodedPSBT, keyPairs, vaultTxType = bitc
     psbt.signAllInputs(keyPair);
   });
 
-  const tx = psbt.finalizeAllInputs(vaultTxType).extractTransaction();
-  return tx.toHex();
+  return {
+    tx: psbt.finalizeAllInputs(vaultTxType).extractTransaction(),
+    fee: psbt.getFee(),
+  };
 };
