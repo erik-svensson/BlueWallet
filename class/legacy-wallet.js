@@ -134,6 +134,7 @@ export class LegacyWallet extends AbstractWallet {
    * @return {Promise.<void>}
    */
   async fetchTransactions() {
+    // TO DO
     const txids_to_update = [];
     try {
       this._lastTxFetch = +new Date();
@@ -229,16 +230,13 @@ export class LegacyWallet extends AbstractWallet {
 
   async _update_unconfirmed_tx(txs) {
     try {
-      console.log('txs', txs);
-
       const txid_list = txs.map(t => t.tx_hash);
-      console.log('txid_list', txid_list);
 
       const txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txid_list);
       const unconfirmed_transactions = [];
+      const transactions = [];
 
       for (const tx of txs_full) {
-        console.log('_update_unconfirmed_tx', tx);
         let value = 0;
         for (const input of tx.inputs) {
           if (!input.txid) continue; // coinbase
@@ -254,10 +252,12 @@ export class LegacyWallet extends AbstractWallet {
         else tx.received = new Date().toISOString();
         tx.walletLabel = this.label;
         if (!tx.confirmations) tx.confirmations = 0;
-        if (tx.confirmations < 6) unconfirmed_transactions.push(tx);
-        else this.transactions.push(tx);
+        transactions.push(tx);
+        // if (tx.confirmations < 6) unconfirmed_transactions.push(tx);
+        // else this.transactions.push(tx);
       }
-      this.unconfirmed_transactions = unconfirmed_transactions; // all unconfirmed transactions will be updated
+      // this.unconfirmed_transactions = unconfirmed_transactions; // all unconfirmed transactions will be updated
+      this.transactions = transactions;
     } catch (err) {
       console.warn(err.message);
     }

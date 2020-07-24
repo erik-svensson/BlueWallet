@@ -1,17 +1,17 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { SectionList, SectionListData, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Header, Image, ScreenTemplate, TransactionItem } from 'app/components';
-import { MainCardStackNavigatorParams, Route, RootStackParams, Transaction, Filters } from 'app/consts';
+import { Header, Image, ScreenTemplate, TransactionItem, Button } from 'app/components';
+import { MainCardStackNavigatorParams, Route, RootStackParams, Transaction } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { NavigationService } from 'app/services';
 import { ApplicationState } from 'app/state';
-import { selectors, actions } from 'app/state/transactions';
+import { selectors } from 'app/state/transactions';
 import { TransactionsState } from 'app/state/transactions/reducer';
 import { palette, typography } from 'app/styles';
 
@@ -28,11 +28,6 @@ interface NavigationProps {
 
   route: RouteProp<MainCardStackNavigatorParams, Route.RecoveryTransactionList>;
 }
-
-// interface State {
-// transactions: ReadonlyArray<SectionListData<TransactionWithDay>>;
-// wallet: any;
-// }
 
 interface MapStateProps {
   transactions: Transaction[];
@@ -76,7 +71,9 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
       selectedIndex,
       onPress: (index: number) => {
         const newWallet = recoveryWallets[index];
-        navigation.setParams({ wallet: newWallet });
+        this.setState({ selectedTransactions: [] }, () => {
+          navigation.setParams({ wallet: newWallet });
+        });
       },
     });
   };
@@ -91,7 +88,6 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
   };
 
   addTranscation = (transaction: Transaction) => {
-    console.log('addTranscation', transaction);
     this.setState((state: State) => ({ selectedTransactions: [...state.selectedTransactions, transaction] }));
   };
 
@@ -100,8 +96,6 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
       selectedTransactions: state.selectedTransactions.filter(t => t.hash !== transaction.hash),
     }));
   };
-
-  // toggle
 
   isChecked = (transaction: Transaction) => {
     const { selectedTransactions } = this.state;
@@ -130,12 +124,29 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
     areAllTransactionsSelected ? this.removeAllTransactions() : this.addAllTransactions();
   };
 
+  canSubmit = () => {
+    const { selectedTransactions } = this.state;
+    return !!selectedTransactions.length;
+  };
+
+  submit = () => {
+    const { navigation, route } = this.props;
+    const { wallet } = route.params;
+    const { selectedTransactions } = this.state;
+
+    navigation.navigate(Route.RecoverySend, { wallet, transactions: selectedTransactions });
+  };
+
   render() {
     const { navigation, route, transactions } = this.props;
     const { wallet } = route.params;
+
     const areAllTransactionsSelected = this.areAllTransactionsSelected();
     return (
-      <ScreenTemplate header={<Header title={i18n.send.recovery.recover} isBackArrow navigation={navigation} />}>
+      <ScreenTemplate
+        header={<Header title={i18n.send.recovery.recover} isBackArrow navigation={navigation} />}
+        footer={<Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />}
+      >
         <DashboarContentdHeader
           onSelectPress={this.showModal}
           balance={wallet.balance}

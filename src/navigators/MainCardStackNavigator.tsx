@@ -34,6 +34,7 @@ import {
   CreateWalletSuccessScreen,
   IntegrateKeyScreen,
   RecoveryTransactionListScreen,
+  RecoverySendScreen,
 } from 'app/screens';
 
 const Stack = createStackNavigator<MainCardStackNavigatorParams>();
@@ -71,5 +72,6 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.CreateWalletSuccess} component={CreateWalletSuccessScreen} />
     <Stack.Screen name={Route.IntegrateKey} component={IntegrateKeyScreen} />
     <Stack.Screen name={Route.RecoveryTransactionList} component={RecoveryTransactionListScreen} />
+    <Stack.Screen name={Route.RecoverySend} component={RecoverySendScreen} />
   </Stack.Navigator>
 );

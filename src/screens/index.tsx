@@ -43,3 +43,4 @@ export { default as ExportAuthenticatorScreen } from './ExportAuthenticator';
 export { default as ImportAuthenticatorScreen } from './ImportAuthenticator';
 export { default as CreateWalletSuccessScreen } from './CreateWalletSuccessScreen';
 export { default as RecoveryTransactionListScreen } from './RecoveryTransactionList';
+export { default as RecoverySendScreen } from './RecoverySend';

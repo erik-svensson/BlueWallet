@@ -24,6 +24,7 @@ export enum FlowType {
 export enum Route {
   PasswordNavigator = 'PasswordNavigator',
   Dashboard = 'Dashboard',
+  RecoverySend = 'RecoverySend',
   AuthenticatorList = 'AuthenticatorList',
   RecoveryTransactionList = 'RecoveryTransactionList',
   EnterPIN = 'EnterPIN',
@@ -148,6 +149,13 @@ export interface Filters {
   transactionType?: string;
 }
 
+export interface TransactionInput {
+  addresses: string[];
+  txid: string;
+  vout: number;
+  value: number;
+}
+
 export interface Utxo {
   address: string;
   height: number;
@@ -240,7 +248,7 @@ export type MainCardStackNavigatorParams = {
     fromWallet: Wallet;
   };
   [Route.RecoveryTransactionList]: { wallet: Wallet };
-
+  [Route.RecoverySend]: { transactions: Transaction[]; wallet: any };
   [Route.ScanQrCode]: { onBarCodeScan: (code: string) => void };
   [Route.ChooseContactList]: {
     onContactPress?: (data: string) => void;

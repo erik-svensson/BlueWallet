@@ -197,11 +197,8 @@ module.exports.multiGetTransactionsFullByAddress = async function(addresses) {
 module.exports.multiGetTransactionsFullByTxid = async function(txid_list) {
   const ret = [];
   const txfull = await this.multiGetTransactionByTxid(txid_list);
-  console.log('multiGetTransactionsFullByTxid txfull', txfull);
 
   for (const txid in txfull) {
-    console.log('multiGetTransactionsFullByTxid txid', txid);
-
     const full = txfull[txid];
     for (const input of full.vin) {
       if (!input.txid) continue;

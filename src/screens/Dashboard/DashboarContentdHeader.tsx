@@ -15,7 +15,7 @@ interface Props {
   type?: string;
   onSendPress?: () => void;
   onReceivePress?: () => void;
-  onSelectPress: () => void;
+  onSelectPress?: () => void;
   onReceveryPress?: () => void;
 }
 
@@ -35,7 +35,7 @@ export const DashboarContentdHeader = ({
     <View style={styles.header}>
       <TouchableOpacity style={styles.chooseWalletButton} onPress={onSelectPress}>
         <Text style={styles.chooseWalletButtonText}>{i18n.formatBalance(Number(balance), unit, true)}</Text>
-        <Image source={icons.iconDropdown} style={styles.icon} />
+        {onSelectPress && <Image source={icons.iconDropdown} style={styles.icon} />}
       </TouchableOpacity>
       <View style={styles.descriptionContainer}>
         <Text style={styles.buttonDescription}>{label}</Text>

@@ -255,6 +255,7 @@ module.exports = {
       verify: 'Verify on coinb.in',
       amount: 'Amount',
       fee: 'Fee',
+      transactioFee: 'Transaction fee',
       txSize: 'TX size',
       satoshiPerByte: 'Satoshi per byte',
       from: 'From',
@@ -278,6 +279,7 @@ module.exports = {
     header: 'Send coins',
     recovery: {
       recover: 'Recover',
+      useWalletAddress: 'Use address of this wallet',
     },
     transaction: {
       instant: 'Instant',
