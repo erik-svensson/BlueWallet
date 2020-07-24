@@ -153,6 +153,8 @@ exports.createHDSegwitVaultTransaction = function({
   keyPairs,
   paymentMethod,
 }) {
+  console.log('VAULT');
+
   const feeInSatoshis = parseInt((fixedFee * 100000000).toFixed(0));
   const amountToOutputSatoshi = parseInt(((amount - fixedFee) * 100000000).toFixed(0)); // how much payee should get
   const psbt = new bitcoinjs.Psbt({ network: config.network });
@@ -200,6 +202,10 @@ exports.createHDSegwitVaultTransaction = function({
       break;
     }
   }
+
+  console.log('unspentAmountSatoshi', unspentAmountSatoshi);
+  console.log('amountToOutputSatoshi', amountToOutputSatoshi);
+  console.log('feeInSatoshis!', feeInSatoshis);
 
   if (unspentAmountSatoshi < amountToOutputSatoshi + feeInSatoshis) {
     throw new Error('Not enough balance. Please, try sending a smaller amount.');

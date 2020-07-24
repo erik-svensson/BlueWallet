@@ -55,16 +55,7 @@ export class RecoverySendScreen extends Component<Props, State> {
   };
 
   async componentDidMount() {
-    const { route } = this.props;
-
     await this.loadTransactionsFees();
-    const { wallet, transactions } = route.params;
-    const utxos = this.getUtxos();
-    console.log('utxos', utxos);
-    const amount = this.getTransactionsAmount();
-    console.log('amount', amount);
-
-    console.log('transactions', transactions);
   }
 
   loadTransactionsFees = async () => {
@@ -160,14 +151,42 @@ export class RecoverySendScreen extends Component<Props, State> {
     const { transactions } = this.props.route.params;
 
     return compose(
-      map((i: TransactionInput) => ({ address: i.addresses[0], txid: i.txid, vout: i.vout, value: i.value })),
+      map((i: TransactionInput) => ({
+        address: i.addresses[0],
+        txid: i.txid,
+        vout: i.vout,
+        value: btcToSatoshi(i.value).toNumber(),
+      })),
       flatten,
       map(({ inputs }) => inputs),
     )(transactions);
   };
 
+  navigateToConfirm = ({
+    fee,
+    tx,
+    actualSatoshiPerByte,
+    amount,
+  }: {
+    fee: number;
+    amount: number;
+    tx: string;
+    actualSatoshiPerByte: number;
+  }) => {
+    const { memo, address } = this.state;
+    const { wallet } = this.props.route.params;
+
+    this.props.navigation.navigate(Route.SendCoinsConfirm, {
+      recipients: [{ amount, address }],
+      fee,
+      memo,
+      fromWallet: wallet,
+      tx,
+      satoshiPerByte: actualSatoshiPerByte.toFixed(2),
+    });
+  };
+
   createRecoveryTransaction = async (keyPairs: any) => {
-    await this.loadTransactionsFees();
     const { wallet } = this.props.route.params;
     const { fee: requestedSatPerByte, memo, address } = this.state;
 
@@ -177,14 +196,17 @@ export class RecoverySendScreen extends Component<Props, State> {
     const MAX_TRIES = 5;
 
     const utxos = this.getUtxos();
-    console.log('utxos', utxos);
+
     const amount = this.getTransactionsAmount();
-    console.log('amount', amount);
+
+    let amountWithoutFee = 0;
 
     for (let tries = 0; tries < MAX_TRIES; tries++) {
+      amountWithoutFee = amount - fee;
+
       tx = await wallet.createTx({
         utxos,
-        amount,
+        amount: amountWithoutFee,
         fee,
         address,
         keyPairs,
@@ -211,10 +233,27 @@ export class RecoverySendScreen extends Component<Props, State> {
       memo,
     };
     await BlueApp.saveToDisk();
-    // this.setState({ isLoading: false }, () => this.navigateToConfirm({ fee, tx, actualSatoshiPerByte }));
+    this.navigateToConfirm({ amount: amountWithoutFee, fee, tx, actualSatoshiPerByte });
   };
 
-  confirmTransaction = async () => {
+  create = async (keyPairs: any) => {
+    try {
+      await this.createRecoveryTransaction(keyPairs);
+    } catch (_) {
+      Alert.alert(i18n.send.recovery.invalidSign);
+    }
+  };
+
+  submit = async () => {
+    const { navigation } = this.props;
+
+    navigation.navigate(Route.RecoverySeed, {
+      onBarCodeScan: (keyPair: any) => this.create([keyPair]),
+      onSubmit: (keyPair: any) => this.create([keyPair]),
+      buttonText: i18n.send.recovery.recover,
+      subtitle: i18n.send.recovery.confirmSeed,
+      description: i18n.send.recovery.confirmSeedDesc,
+    });
     // this.setState({ isLoading: true });
     // const { wallet } = this.props.route.params;
     // const error = this.validateTransaction();
@@ -272,13 +311,7 @@ export class RecoverySendScreen extends Component<Props, State> {
 
     return (
       <ScreenTemplate
-        footer={
-          <Button
-            title={i18n.send.details.next}
-            onPress={this.confirmTransaction}
-            containerStyle={styles.buttonContainer}
-          />
-        }
+        footer={<Button title={i18n.send.details.next} onPress={this.submit} containerStyle={styles.buttonContainer} />}
         header={<Header navigation={this.props.navigation} isBackArrow title={i18n.send.recovery.recover} />}
       >
         <DashboarContentdHeader balance={wallet.balance} label={wallet.label} unit={wallet.preferredBalanceUnit} />

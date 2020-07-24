@@ -25,6 +25,7 @@ export enum Route {
   PasswordNavigator = 'PasswordNavigator',
   Dashboard = 'Dashboard',
   RecoverySend = 'RecoverySend',
+  RecoverySeed = 'RecoverySeed',
   AuthenticatorList = 'AuthenticatorList',
   RecoveryTransactionList = 'RecoveryTransactionList',
   EnterPIN = 'EnterPIN',
@@ -154,6 +155,9 @@ export interface TransactionInput {
   txid: string;
   vout: number;
   value: number;
+  scriptSig: { asm: string; hex: string };
+  sequence: number;
+  txinwitness: string[];
 }
 
 export interface Utxo {
@@ -249,6 +253,13 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.RecoveryTransactionList]: { wallet: Wallet };
   [Route.RecoverySend]: { transactions: Transaction[]; wallet: any };
+  [Route.RecoverySeed]: {
+    onSubmit: Function;
+    onBarCodeScan: (privateKey: string) => void;
+    subtitle: string;
+    description: string;
+    buttonText: string;
+  };
   [Route.ScanQrCode]: { onBarCodeScan: (code: string) => void };
   [Route.ChooseContactList]: {
     onContactPress?: (data: string) => void;
