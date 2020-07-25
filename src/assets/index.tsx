@@ -59,4 +59,5 @@ export const icons = {
   delete: require('./images/icon_delete.png'),
   filter: require('./images/filter.png'),
   scan: require('./images/scan.png'),
+  tick: require('./images/tick.png'),
 };

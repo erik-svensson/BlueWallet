@@ -1,12 +1,11 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { CheckBox } from 'react-native-elements';
+import { StyleSheet, Text, View, TouchableOpacity, SectionList } from 'react-native';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Header, Image, ScreenTemplate, TransactionItem, Button } from 'app/components';
+import { Header, Image, ScreenTemplate, TransactionItem, Button, CheckBox } from 'app/components';
 import { MainCardStackNavigatorParams, Route, RootStackParams, Transaction } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { NavigationService } from 'app/services';
@@ -137,6 +136,20 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
     navigation.navigate(Route.RecoverySend, { wallet, transactions: selectedTransactions });
   };
 
+  toggleTransaction = (isChecked: boolean, transaction: Transaction) => () =>
+    isChecked ? this.removeTranscation(transaction) : this.addTranscation(transaction);
+
+  renderItem = ({ item: transaction }: { item: Transaction }) => {
+    const isChecked = this.isChecked(transaction);
+    const toggle = this.toggleTransaction(isChecked, transaction);
+    return (
+      <View style={styles.itemWrapper}>
+        <TransactionItem onPress={toggle} item={transaction} />
+        <CheckBox onPress={toggle} right checked={isChecked} />
+      </View>
+    );
+  };
+
   render() {
     const { navigation, route, transactions } = this.props;
     const { wallet } = route.params;
@@ -153,16 +166,14 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
           label={wallet.label}
           unit={wallet.preferredBalanceUnit}
         />
-        <CheckBox
-          right
-          checkedIcon="dot-circle-o"
-          title="All"
-          uncheckedIcon="circle-o"
+        <TouchableOpacity
+          style={styles.toggleAllWrapper}
           onPress={this.toggleAllTransactions(areAllTransactionsSelected)}
-          checked={areAllTransactionsSelected}
-        />
+        >
+          <Text style={styles.toggleAllText}>{areAllTransactionsSelected ? '-' : '+'}</Text>
+        </TouchableOpacity>
 
-        {transactions.map((t: Transaction) => {
+        {/* {transactions.map((t: Transaction) => {
           const isChecked = this.isChecked(t);
           return (
             <View key={t.hash}>
@@ -170,18 +181,20 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
                 onPress={() => (isChecked ? this.removeTranscation(t) : this.addTranscation(t))}
                 item={t}
               />
-              <CheckBox right checkedIcon="dot-circle-o" uncheckedIcon="circle-o" checked={isChecked} />
+              <CheckBox
+                onPress={() => (isChecked ? this.removeTranscation(t) : this.addTranscation(t))}
+                right
+                checked={isChecked}
+              />
             </View>
           );
-        })}
-        {/* <SectionList
-          ListFooterComponent={search ? <View style={{ height: transactions.length ? headerHeight / 2 : 0 }} /> : null}
-          sections={transactions}
-          keyExtractor={(item, index) => `${item.txid}-${index}`}
-          renderItem={item => <TransactionItem item={item.item} onPress={this.onTransactionItemPress} />}
-          renderSectionHeader={this.renderSectionTitle}
+        })} */}
+        <SectionList
+          sections={transactions.map(t => ({ data: [t] }))}
+          keyExtractor={item => item.txid}
+          renderItem={this.renderItem}
           ListEmptyComponent={this.renderListEmpty}
-        /> */}
+        />
       </ScreenTemplate>
     );
   }
@@ -204,5 +217,23 @@ const styles = StyleSheet.create({
   noTransactionsLabel: {
     ...typography.caption,
     color: palette.textGrey,
+  },
+  toggleAllWrapper: {
+    width: 30,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  itemWrapper: {
+    display: 'flex',
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  toggleAllText: {
+    ...typography.headline2,
+
+    color: palette.textSecondary,
   },
 });

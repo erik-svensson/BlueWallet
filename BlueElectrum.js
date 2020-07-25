@@ -303,7 +303,7 @@ module.exports.multiGetUtxoByAddress = async function(addresses, batchsize) {
   return res;
 };
 
-module.exports.multiGetHistoryByAddress = async function(addresses, batchsize, label = '') {
+module.exports.multiGetHistoryByAddress = async function(addresses, batchsize) {
   batchsize = batchsize || 100;
   if (!mainClient) throw new Error('Electrum client is not connected');
   const ret = {};
@@ -323,9 +323,6 @@ module.exports.multiGetHistoryByAddress = async function(addresses, batchsize, l
 
     const results = await mainClient.blockchainScripthash_getHistoryBatch(scripthashes);
 
-    if (label === 'Ar') {
-      console.log('results', results);
-    }
     for (const history of results) {
       ret[scripthash2addr[history.param]] = history.result;
       for (const hist of ret[scripthash2addr[history.param]]) {

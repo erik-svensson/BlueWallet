@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 8,
+    flexGrow: 1,
   },
   statusContainer: {
     borderRadius: 3,
