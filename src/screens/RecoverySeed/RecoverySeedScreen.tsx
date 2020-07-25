@@ -70,13 +70,10 @@ class RecoverySeedScreen extends Component<Props, State> {
     return navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (privateKey: string) => {
         try {
-          console.log('privateKey', privateKey);
           const keyPair = privateKeyToKeyPair(privateKey);
-          console.log('keyPair', keyPair);
 
           onSubmit(keyPair);
         } catch (_) {
-          console.log('ERROR', _.message);
           Alert.alert(i18n.wallets.errors.invalidPrivateKey);
         }
       },
@@ -104,7 +101,6 @@ class RecoverySeedScreen extends Component<Props, State> {
     const { subtitle, buttonText, description, onBackArrow } = this.props.route.params;
 
     const { isLoading } = this.state;
-    console.log('subtitle', subtitle);
     return (
       <ScreenTemplate
         header={

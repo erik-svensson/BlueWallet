@@ -258,7 +258,7 @@ export type MainCardStackNavigatorParams = {
     subtitle: string;
     description: string;
     buttonText: string;
-    onBackArrow?: Function;
+    onBackArrow?: () => void;
   };
   [Route.ScanQrCode]: { onBarCodeScan: (code: string) => void };
   [Route.ChooseContactList]: {

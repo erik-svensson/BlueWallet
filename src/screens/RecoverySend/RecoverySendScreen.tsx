@@ -1,35 +1,21 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { ECPair, address as btcAddress, payments, Transaction } from 'bitcoinjs-lib';
 import { map, compose, flatten } from 'lodash/fp';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
 
 import { images, icons } from 'app/assets';
-import { Header, ScreenTemplate, Button, InputItem, StyledText, Image, RadioGroup, RadioButton } from 'app/components';
-import {
-  CONST,
-  MainCardStackNavigatorParams,
-  Route,
-  RootStackParams,
-  TransactionInput,
-  Utxo,
-  Wallet,
-} from 'app/consts';
+import { Header, ScreenTemplate, Button, InputItem, Image } from 'app/components';
+import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, TransactionInput } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../../BlueApp';
-import { HDSegwitBech32Wallet, HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet, WatchOnlyWallet } from '../../../class';
+import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from '../../../class';
 import config from '../../../config';
-import { BitcoinTransaction } from '../../../models/bitcoinTransactionInfo';
 import NetworkTransactionFees, { NetworkTransactionFee } from '../../../models/networkTransactionFees';
-import { btcToSatoshi, satoshiToBtc } from '../../../utils/bitcoin';
+import { btcToSatoshi } from '../../../utils/bitcoin';
 import { DashboarContentdHeader } from '../Dashboard/DashboarContentdHeader';
-
-const BigNumber = require('bignumber.js');
-
-import { ECPair } from 'bitcoinjs-lib';
-
-const bitcoin = require('bitcoinjs-lib');
 
 const i18n = require('../../../loc');
 
@@ -58,8 +44,6 @@ export class RecoverySendScreen extends Component<Props, State> {
   };
 
   async componentDidMount() {
-    console.log('UPDATED');
-
     await this.loadTransactionsFees();
   }
 
@@ -111,7 +95,7 @@ export class RecoverySendScreen extends Component<Props, State> {
     }
 
     try {
-      bitcoin.address.toOutputScript(address, config.network);
+      btcAddress.toOutputScript(address, config.network);
     } catch (_) {
       return i18n.send.details.address_field_is_not_valid;
     }
@@ -193,7 +177,6 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   createRecoveryTransaction = async (keyPairs: any) => {
     try {
-      console.log('keyPairs', keyPairs);
       const { wallet } = this.props.route.params;
       const { fee: requestedSatPerByte, memo, address } = this.state;
 
@@ -217,7 +200,7 @@ export class RecoverySendScreen extends Component<Props, State> {
           fee,
           address,
           keyPairs,
-          vaultTxType: bitcoin.payments.VaultTxType.Recovery,
+          vaultTxType: payments.VaultTxType.Recovery,
         });
 
         const feeSatoshi = btcToSatoshi(fee);
@@ -231,7 +214,7 @@ export class RecoverySendScreen extends Component<Props, State> {
         fee = this.increaseFee({ feeSatoshi, requestedSatPerByte, actualSatoshiPerByte });
       }
 
-      const txDecoded = bitcoin.Transaction.fromHex(tx);
+      const txDecoded = Transaction.fromHex(tx);
       const txid = txDecoded.getId();
 
       BlueApp.tx_metadata = BlueApp.tx_metadata || {};
@@ -256,31 +239,33 @@ export class RecoverySendScreen extends Component<Props, State> {
     });
   };
 
-  // navigateToScanSecondRecoverySeed = () => {
-  //   navigation.navigate(Route.RecoverySeed, {
-  //     onSubmit: (secondKeyPair: ECPair.ECPairInterface) =>
-  //       this.createRecoveryTransaction([firstKeyPair, secondKeyPair]),
-  //     buttonText: i18n.send.recovery.recover,
-  //     subtitle: i18n.send.recovery.confirmSecondSeed,
-  //     description: i18n.send.recovery.confirmSecondSeedDesc,
-  //   })
-  // }
-  createRecoveryForAir = () => {
+  navigateToProvideFirstRecoverySeedForAIR = () => {
     const { navigation } = this.props;
-    console.log('createRecoveryForAir');
+    const { wallet, transactions } = this.props.route.params;
+
     navigation.navigate(Route.RecoverySeed, {
-      onSubmit: (firstKeyPair: ECPair.ECPairInterface) =>
-        navigation.navigate(Route.RecoverySeed, {
-          onSubmit: (secondKeyPair: ECPair.ECPairInterface) =>
-            this.createRecoveryTransaction([firstKeyPair, secondKeyPair]),
-          buttonText: i18n.send.recovery.recover,
-          subtitle: i18n.send.recovery.confirmSecondSeed,
-          description: i18n.send.recovery.confirmSecondSeedDesc,
-        }),
+      onSubmit: (firstKeyPair: ECPair.ECPairInterface) => this.navigateToProvideSecondRecoverySeedForAIR(firstKeyPair),
       buttonText: i18n.send.recovery.recover,
+      onBackArrow: () => navigation.navigate(Route.RecoverySend, { wallet, transactions }),
       subtitle: i18n.send.recovery.confirmFirstSeed,
       description: i18n.send.recovery.confirmFirstSeedDesc,
     });
+  };
+
+  navigateToProvideSecondRecoverySeedForAIR = (firstKeyPair: ECPair.ECPairInterface) => {
+    const { navigation } = this.props;
+
+    navigation.navigate(Route.RecoverySeed, {
+      onSubmit: (secondKeyPair: ECPair.ECPairInterface) =>
+        this.createRecoveryTransaction([firstKeyPair, secondKeyPair]),
+      onBackArrow: () => this.navigateToProvideFirstRecoverySeedForAIR(),
+      buttonText: i18n.send.recovery.recover,
+      subtitle: i18n.send.recovery.confirmSecondSeed,
+      description: i18n.send.recovery.confirmSecondSeedDesc,
+    });
+  };
+  createRecoveryForAir = () => {
+    this.navigateToProvideFirstRecoverySeedForAIR();
   };
 
   submit = () => {
@@ -288,7 +273,6 @@ export class RecoverySendScreen extends Component<Props, State> {
       wallet: { type },
     } = this.props.route.params;
 
-    console.log('type', type);
     switch (type) {
       case HDSegwitP2SHArWallet.type:
         return this.createRecoveryForAr();
@@ -422,13 +406,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   inputsContainer: {},
-  fee: {
-    flexDirection: 'row',
-    alignSelf: 'flex-end',
-  },
-  addressContainer: {
-    // marginTop: 24,
-  },
+  addressContainer: {},
   qrCodeIcon: { position: 'absolute', right: 0, bottom: 25 },
   addressBookIcon: { position: 'absolute', right: 40, bottom: 25 },
   icon: {
@@ -438,26 +416,5 @@ const styles = StyleSheet.create({
   },
   addressInput: {
     paddingEnd: 100,
-  },
-  radioButton: {
-    paddingStart: 0,
-    paddingVertical: 8,
-  },
-  radioButtonContent: {
-    paddingStart: 10,
-    top: -3,
-  },
-  radioButtonTitle: {
-    ...typography.caption,
-    marginBottom: 2,
-  },
-  radioButtonSubtitle: {
-    ...typography.overline,
-    color: palette.textGrey,
-  },
-  radioButtonsTitle: {
-    ...typography.overline,
-    color: palette.textGrey,
-    marginBottom: 16,
   },
 });
