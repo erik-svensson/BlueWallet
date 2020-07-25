@@ -255,10 +255,10 @@ export type MainCardStackNavigatorParams = {
   [Route.RecoverySend]: { transactions: Transaction[]; wallet: any };
   [Route.RecoverySeed]: {
     onSubmit: Function;
-    onBarCodeScan: (privateKey: string) => void;
     subtitle: string;
     description: string;
     buttonText: string;
+    onBackArrow?: Function;
   };
   [Route.ScanQrCode]: { onBarCodeScan: (code: string) => void };
   [Route.ChooseContactList]: {

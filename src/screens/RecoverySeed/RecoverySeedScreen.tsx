@@ -19,6 +19,7 @@ interface Props {
 
 interface State {
   mnemonic: string[];
+  isLoading: boolean;
 }
 
 class RecoverySeedScreen extends Component<Props, State> {
@@ -27,6 +28,7 @@ class RecoverySeedScreen extends Component<Props, State> {
       map(() => ''),
       range(CONST.mnemonicWordsAmount),
     )(0),
+    isLoading: false,
   };
 
   setWordInMnemonic = (word: string, index: number) => {
@@ -61,16 +63,20 @@ class RecoverySeedScreen extends Component<Props, State> {
     const {
       navigation,
       route: {
-        params: { onBarCodeScan },
+        params: { onSubmit },
       },
     } = this.props;
 
     return navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (privateKey: string) => {
         try {
+          console.log('privateKey', privateKey);
           const keyPair = privateKeyToKeyPair(privateKey);
-          onBarCodeScan(keyPair);
+          console.log('keyPair', keyPair);
+
+          onSubmit(keyPair);
         } catch (_) {
+          console.log('ERROR', _.message);
           Alert.alert(i18n.wallets.errors.invalidPrivateKey);
         }
       },
@@ -82,23 +88,31 @@ class RecoverySeedScreen extends Component<Props, State> {
     const { onSubmit } = this.props.route.params;
 
     try {
+      this.setState({ isLoading: true });
       const keyPair = await mnemonicToKeyPair(mnemonic.join(' '));
+      this.setState({ isLoading: false });
+
       onSubmit(keyPair);
-    } catch (_) {
-      Alert.alert(i18n.wallets.errors.invalidMnemonic);
+    } catch (e) {
+      this.setState({ isLoading: false });
+      Alert.alert(e.message);
     }
   };
 
   render() {
     const { navigation } = this.props;
-    const { subtitle, buttonText, description } = this.props.route.params;
+    const { subtitle, buttonText, description, onBackArrow } = this.props.route.params;
 
+    const { isLoading } = this.state;
+    console.log('subtitle', subtitle);
     return (
       <ScreenTemplate
-        header={<Header navigation={navigation} isBackArrow title={i18n.send.recovery.recover} />}
+        header={
+          <Header onBackArrow={onBackArrow} navigation={navigation} isBackArrow title={i18n.send.recovery.recover} />
+        }
         footer={
           <>
-            <Button disabled={!this.canSubmit()} title={buttonText} onPress={this.submit} />
+            <Button loading={isLoading} disabled={!this.canSubmit()} title={buttonText} onPress={this.submit} />
             <FlatButton
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}

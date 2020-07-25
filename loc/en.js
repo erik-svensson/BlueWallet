@@ -240,7 +240,7 @@ module.exports = {
       invalidPrivateKey: 'Invalid private key',
       invalidPublicKey: 'Invalid public key',
       invalidMnemonic: 'Invalid mnemonic',
-      invalidSign: `Couldn't sign transaction, seed phrase is invalid`,
+      invalidSign: `Couldn't sign transaction`,
     },
   },
   transactions: {
@@ -282,7 +282,12 @@ module.exports = {
       recover: 'Recover',
       useWalletAddress: 'Use address of this wallet',
       confirmSeed: 'Confirm with Recovery Seed',
+      dupa: 'd',
       confirmSeedDesc: 'Please enter your Recovery Seed in order to proceed.',
+      confirmFirstSeed: 'Confirm with first Recovery Seed',
+      confirmFirstSeedDesc: 'Please enter your first Recovery Seed in order to proceed.',
+      confirmSecondSeed: 'Confirm with second Recovery Seed',
+      confirmSecondSeedDesc: 'Please enter your second Recovery Seed in order to proceed.',
     },
     transaction: {
       instant: 'Instant',

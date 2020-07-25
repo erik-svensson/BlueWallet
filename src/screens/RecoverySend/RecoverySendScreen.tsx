@@ -1,6 +1,6 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { map, compose, flatten, reduce } from 'lodash/fp';
+import { map, compose, flatten } from 'lodash/fp';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
 
@@ -26,6 +26,9 @@ import { btcToSatoshi, satoshiToBtc } from '../../../utils/bitcoin';
 import { DashboarContentdHeader } from '../Dashboard/DashboarContentdHeader';
 
 const BigNumber = require('bignumber.js');
+
+import { ECPair } from 'bitcoinjs-lib';
+
 const bitcoin = require('bitcoinjs-lib');
 
 const i18n = require('../../../loc');
@@ -55,6 +58,8 @@ export class RecoverySendScreen extends Component<Props, State> {
   };
 
   async componentDidMount() {
+    console.log('UPDATED');
+
     await this.loadTransactionsFees();
   }
 
@@ -187,87 +192,111 @@ export class RecoverySendScreen extends Component<Props, State> {
   };
 
   createRecoveryTransaction = async (keyPairs: any) => {
-    const { wallet } = this.props.route.params;
-    const { fee: requestedSatPerByte, memo, address } = this.state;
+    try {
+      console.log('keyPairs', keyPairs);
+      const { wallet } = this.props.route.params;
+      const { fee: requestedSatPerByte, memo, address } = this.state;
 
-    let fee = 0.000001; // initial fee guess
-    let actualSatoshiPerByte: any;
-    let tx = '';
-    const MAX_TRIES = 5;
+      let fee = 0.000001; // initial fee guess
+      let actualSatoshiPerByte: any;
+      let tx = '';
+      const MAX_TRIES = 5;
 
-    const utxos = this.getUtxos();
+      const utxos = this.getUtxos();
 
-    const amount = this.getTransactionsAmount();
+      const amount = this.getTransactionsAmount();
 
-    let amountWithoutFee = 0;
+      let amountWithoutFee = 0;
 
-    for (let tries = 0; tries < MAX_TRIES; tries++) {
-      amountWithoutFee = amount - fee;
+      for (let tries = 0; tries < MAX_TRIES; tries++) {
+        amountWithoutFee = amount - fee;
 
-      tx = await wallet.createTx({
-        utxos,
-        amount: amountWithoutFee,
-        fee,
-        address,
-        keyPairs,
-        vaultTxType: bitcoin.payments.VaultTxType.Recovery,
-      });
+        tx = await wallet.createTx({
+          utxos,
+          amount: amountWithoutFee,
+          fee,
+          address,
+          keyPairs,
+          vaultTxType: bitcoin.payments.VaultTxType.Recovery,
+        });
 
-      const feeSatoshi = btcToSatoshi(fee);
+        const feeSatoshi = btcToSatoshi(fee);
 
-      actualSatoshiPerByte = this.getActualSatoshi(tx, feeSatoshi);
+        actualSatoshiPerByte = this.getActualSatoshi(tx, feeSatoshi);
 
-      if (this.isFeeEnough({ requestedSatPerByte, actualSatoshiPerByte })) {
-        break;
+        if (this.isFeeEnough({ requestedSatPerByte, actualSatoshiPerByte })) {
+          break;
+        }
+
+        fee = this.increaseFee({ feeSatoshi, requestedSatPerByte, actualSatoshiPerByte });
       }
 
-      fee = this.increaseFee({ feeSatoshi, requestedSatPerByte, actualSatoshiPerByte });
-    }
+      const txDecoded = bitcoin.Transaction.fromHex(tx);
+      const txid = txDecoded.getId();
 
-    const txDecoded = bitcoin.Transaction.fromHex(tx);
-    const txid = txDecoded.getId();
-
-    BlueApp.tx_metadata = BlueApp.tx_metadata || {};
-    BlueApp.tx_metadata[txid] = {
-      txhex: tx,
-      memo,
-    };
-    await BlueApp.saveToDisk();
-    this.navigateToConfirm({ amount: amountWithoutFee, fee, tx, actualSatoshiPerByte });
-  };
-
-  create = async (keyPairs: any) => {
-    try {
-      await this.createRecoveryTransaction(keyPairs);
+      BlueApp.tx_metadata = BlueApp.tx_metadata || {};
+      BlueApp.tx_metadata[txid] = {
+        txhex: tx,
+        memo,
+      };
+      await BlueApp.saveToDisk();
+      this.navigateToConfirm({ amount: amountWithoutFee, fee, tx, actualSatoshiPerByte });
     } catch (_) {
-      Alert.alert(i18n.send.recovery.invalidSign);
+      Alert.alert(i18n.wallets.errors.invalidSign);
     }
   };
 
-  submit = async () => {
+  createRecoveryForAr = () => {
     const { navigation } = this.props;
-
     navigation.navigate(Route.RecoverySeed, {
-      onBarCodeScan: (keyPair: any) => this.create([keyPair]),
-      onSubmit: (keyPair: any) => this.create([keyPair]),
+      onSubmit: (keyPair: ECPair.ECPairInterface) => this.createRecoveryTransaction([keyPair]),
       buttonText: i18n.send.recovery.recover,
       subtitle: i18n.send.recovery.confirmSeed,
       description: i18n.send.recovery.confirmSeedDesc,
     });
-    // this.setState({ isLoading: true });
-    // const { wallet } = this.props.route.params;
-    // const error = this.validateTransaction();
-    // if (error) {
-    //   this.setState({ isLoading: false });
-    //   Alert.alert(error);
-    //   return;
-    // }
-    // try {
-    //   await this.createRecoveryTransaction();
-    // } catch (err) {
-    //   Alert.alert(err.message);
-    //   this.setState({ isLoading: false });
-    // }
+  };
+
+  // navigateToScanSecondRecoverySeed = () => {
+  //   navigation.navigate(Route.RecoverySeed, {
+  //     onSubmit: (secondKeyPair: ECPair.ECPairInterface) =>
+  //       this.createRecoveryTransaction([firstKeyPair, secondKeyPair]),
+  //     buttonText: i18n.send.recovery.recover,
+  //     subtitle: i18n.send.recovery.confirmSecondSeed,
+  //     description: i18n.send.recovery.confirmSecondSeedDesc,
+  //   })
+  // }
+  createRecoveryForAir = () => {
+    const { navigation } = this.props;
+    console.log('createRecoveryForAir');
+    navigation.navigate(Route.RecoverySeed, {
+      onSubmit: (firstKeyPair: ECPair.ECPairInterface) =>
+        navigation.navigate(Route.RecoverySeed, {
+          onSubmit: (secondKeyPair: ECPair.ECPairInterface) =>
+            this.createRecoveryTransaction([firstKeyPair, secondKeyPair]),
+          buttonText: i18n.send.recovery.recover,
+          subtitle: i18n.send.recovery.confirmSecondSeed,
+          description: i18n.send.recovery.confirmSecondSeedDesc,
+        }),
+      buttonText: i18n.send.recovery.recover,
+      subtitle: i18n.send.recovery.confirmFirstSeed,
+      description: i18n.send.recovery.confirmFirstSeedDesc,
+    });
+  };
+
+  submit = () => {
+    const {
+      wallet: { type },
+    } = this.props.route.params;
+
+    console.log('type', type);
+    switch (type) {
+      case HDSegwitP2SHArWallet.type:
+        return this.createRecoveryForAr();
+      case HDSegwitP2SHAirWallet.type:
+        return this.createRecoveryForAir();
+      default:
+        throw new Error(`Unsupported wallet type: ${type}`);
+    }
   };
 
   renderFeeInput = () => {
@@ -286,7 +315,7 @@ export class RecoverySendScreen extends Component<Props, State> {
     );
   };
 
-  setAddress = (address: string) => this.setState({ address });
+  setAddress = (address: string) => this.setState({ address: address.trim() });
 
   renderAddressInput = () => {
     const { address } = this.state;
@@ -306,12 +335,24 @@ export class RecoverySendScreen extends Component<Props, State> {
     this.setState({ address: wallet.getAddressForTransaction() });
   };
 
+  canSubmit = () => {
+    const { address, fee } = this.state;
+    return !!(address && fee);
+  };
+
   render() {
     const { wallet } = this.props.route.params;
 
     return (
       <ScreenTemplate
-        footer={<Button title={i18n.send.details.next} onPress={this.submit} containerStyle={styles.buttonContainer} />}
+        footer={
+          <Button
+            title={i18n.send.details.next}
+            onPress={this.submit}
+            disabled={!this.canSubmit()}
+            containerStyle={styles.buttonContainer}
+          />
+        }
         header={<Header navigation={this.props.navigation} isBackArrow title={i18n.send.recovery.recover} />}
       >
         <DashboarContentdHeader balance={wallet.balance} label={wallet.label} unit={wallet.preferredBalanceUnit} />
