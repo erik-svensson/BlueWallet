@@ -31,19 +31,6 @@ export class LegacyWallet extends AbstractWallet {
     return false;
   }
 
-  /**
-   * Simple function which says if we hve some low-confirmed transactions
-   * and we better fetch them
-   *
-   * @return {boolean}
-   */
-  timeToRefreshTransaction() {
-    if (this.unconfirmed_transactions) {
-      return true;
-    }
-    return false;
-  }
-
   async generate() {
     const that = this;
     return new Promise(function(resolve) {
@@ -134,15 +121,11 @@ export class LegacyWallet extends AbstractWallet {
    * @return {Promise.<void>}
    */
   async fetchTransactions() {
-    // TO DO
-    const txids_to_update = [];
     try {
       this._lastTxFetch = +new Date();
       const txids = await BlueElectrum.getTransactionsByAddress(this.getAddress());
-      for (const tx of txids) {
-        if (!this.transactionConfirmed(tx.tx_hash)) txids_to_update.push(tx);
-      }
-      await this._update_unconfirmed_tx(txids_to_update);
+
+      await this.setTransactions(txids);
     } catch (Err) {
       console.warn(Err.message);
     }
@@ -228,12 +211,11 @@ export class LegacyWallet extends AbstractWallet {
     return this.balance;
   }
 
-  async _update_unconfirmed_tx(txs) {
+  async setTransactions(txs) {
     try {
       const txid_list = txs.map(t => t.tx_hash);
 
       const txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txid_list);
-      const unconfirmed_transactions = [];
       const transactions = [];
 
       for (const tx of txs_full) {
@@ -253,10 +235,7 @@ export class LegacyWallet extends AbstractWallet {
         tx.walletLabel = this.label;
         if (!tx.confirmations) tx.confirmations = 0;
         transactions.push(tx);
-        // if (tx.confirmations < 6) unconfirmed_transactions.push(tx);
-        // else this.transactions.push(tx);
       }
-      // this.unconfirmed_transactions = unconfirmed_transactions; // all unconfirmed transactions will be updated
       this.transactions = transactions;
     } catch (err) {
       console.warn(err.message);

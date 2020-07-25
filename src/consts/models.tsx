@@ -95,7 +95,6 @@ export interface Wallet {
   type: string;
   typeReadable: string;
   unconfirmed_balance: number;
-  unconfirmed_transactions: Transaction[];
   utxo: any[];
   _xpub: string;
   getID: () => string;
