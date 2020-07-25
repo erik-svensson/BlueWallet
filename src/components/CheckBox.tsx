@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { CheckBox as CheckBoxNative } from 'react-native-elements';
 
 import { icons } from 'app/assets';
@@ -9,11 +9,11 @@ import { Image } from './Image';
 
 interface Props {
   checked: boolean;
+  onPress: () => void;
+  right: boolean;
 }
-export const CheckBox = ({ checked, ...props }: Props) => (
+export const CheckBox = ({ ...props }: Props) => (
   <CheckBoxNative
-    checked={checked}
-    style={{ margin: 0 }}
     checkedIcon={
       <View style={styles.checked}>
         <Image source={icons.tick} style={styles.icon} resizeMode="contain" />
@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 1,
-    margin: 0,
     borderRadius: 2,
     borderColor: palette.border,
   },

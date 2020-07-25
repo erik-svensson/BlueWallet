@@ -1,5 +1,6 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { groupBy, sortBy, map, compose } from 'lodash/fp';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, SectionList } from 'react-native';
 import { connect } from 'react-redux';
@@ -15,7 +16,10 @@ import { TransactionsState } from 'app/state/transactions/reducer';
 import { palette, typography } from 'app/styles';
 
 import BlueApp from '../../../BlueApp';
+import { formatDate } from '../../../utils/date';
 import { DashboarContentdHeader } from '../Dashboard/DashboarContentdHeader';
+
+const mapNoCap = map.convert({ cap: false });
 
 const i18n = require('../../../loc');
 
@@ -150,16 +154,99 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
     );
   };
 
+  getDataForSectionList = () => {
+    const { transactions } = this.props;
+    console.log('transactions', transactions);
+    const mocked = [
+      {
+        confirmations: 0,
+        hash: '8cb583f4a57b2edsadsa17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
+        received: '2020-07-25T14:30:32.145Z',
+        tx_type: 'ALERT_PENDING',
+        txid: '9a8d1729867776747dsadasaf8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
+        version: 1,
+        vsize: 189,
+        value: -400500,
+        walletLabel: 'Ar',
+        walletPreferredBalanceUnit: 'BTCV',
+        weight: 755,
+      },
+      {
+        confirmations: 0,
+        hash: '8cb583f4a57b2e173dsaddsad53375dee5007018cee7d4d4213e00c203fed5164b03260f',
+        received: '2020-07-25T12:30:32.145Z',
+        tx_type: 'ALERT_PENDING',
+        txid: '9a8d17298677767dsadsa47af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
+        version: 1,
+        vsize: 189,
+        value: -404000,
+        walletLabel: 'Ar',
+        walletPreferredBalanceUnit: 'BTCV',
+        weight: 755,
+      },
+      {
+        confirmations: 0,
+        hash: '8cb583f4a57b2e1735fdsfdsfds3375dee5007018cee7d4d4213e00c203fed5164b03260f',
+        received: '2020-05-25T14:30:32.145Z',
+        tx_type: 'ALERT_PENDING',
+        txid: '9a8d17298677767fdsfdsfsfd47af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
+        version: 1,
+        value: -50000,
+
+        vsize: 189,
+        walletLabel: 'Ar',
+        walletPreferredBalanceUnit: 'BTCV',
+        weight: 755,
+      },
+      {
+        confirmations: 0,
+        hash: '8cb583f4a57bfdsfds2e17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
+        received: '2020-07-23T14:30:32.145Z',
+        tx_type: 'ALERT_PENDING',
+        txid: '9a8d1fdsfsd729867776747af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
+        version: 1,
+        value: -40000,
+        vsize: 189,
+        walletLabel: 'Ar',
+        walletPreferredBalanceUnit: 'BTCV',
+        weight: 755,
+      },
+      {
+        confirmations: 0,
+        hash: '8cb583f4a57bfdsgdfgfds2e17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
+        received: '2020-03-23T14:30:32.145Z',
+        tx_type: 'ALERT_PENDING',
+        txid: '9a8d1fdsfsd72gfgd9867776747af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
+        version: 1,
+        value: -40000,
+        vsize: 189,
+        walletLabel: 'Ar',
+        walletPreferredBalanceUnit: 'BTCV',
+        weight: 755,
+      },
+    ];
+
+    return compose(
+      mapNoCap((txs: Transaction[], date: string) => ({
+        title: date,
+        data: txs,
+      })),
+      groupBy(({ received }) => formatDate(received, 'll')),
+      sortBy('received'),
+    )(mocked) as [{ title: string; data: Transaction[] }];
+  };
+
   render() {
     const { navigation, route, transactions } = this.props;
     const { wallet } = route.params;
 
     const areAllTransactionsSelected = this.areAllTransactionsSelected();
     return (
-      <ScreenTemplate
-        header={<Header title={i18n.send.recovery.recover} isBackArrow navigation={navigation} />}
-        footer={<Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />}
+      <View
+      // header={<Header title={i18n.send.recovery.recover} isBackArrow navigation={navigation} />}
+      // footer={<Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />}
       >
+        <Header title={i18n.send.recovery.recover} isBackArrow navigation={navigation} />
         <DashboarContentdHeader
           onSelectPress={this.showModal}
           balance={wallet.balance}
@@ -172,30 +259,13 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
         >
           <Text style={styles.toggleAllText}>{areAllTransactionsSelected ? '-' : '+'}</Text>
         </TouchableOpacity>
-
-        {/* {transactions.map((t: Transaction) => {
-          const isChecked = this.isChecked(t);
-          return (
-            <View key={t.hash}>
-              <TransactionItem
-                onPress={() => (isChecked ? this.removeTranscation(t) : this.addTranscation(t))}
-                item={t}
-              />
-              <CheckBox
-                onPress={() => (isChecked ? this.removeTranscation(t) : this.addTranscation(t))}
-                right
-                checked={isChecked}
-              />
-            </View>
-          );
-        })} */}
         <SectionList
-          sections={transactions.map(t => ({ data: [t] }))}
+          sections={this.getDataForSectionList()}
           keyExtractor={item => item.txid}
           renderItem={this.renderItem}
           ListEmptyComponent={this.renderListEmpty}
         />
-      </ScreenTemplate>
+      </View>
     );
   }
 }
