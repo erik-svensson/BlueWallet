@@ -1,3 +1,4 @@
+import { findLast } from 'lodash';
 import { NativeModules } from 'react-native';
 
 import config from '../config';
@@ -214,7 +215,6 @@ export class LegacyWallet extends AbstractWallet {
   async setTransactions(txs) {
     try {
       const txid_list = txs.map(t => t.tx_hash);
-
       const txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txid_list);
       const transactions = [];
 
@@ -228,7 +228,7 @@ export class LegacyWallet extends AbstractWallet {
           if (!output.addresses) continue; // OP_RETURN
           if (this.weOwnAddress(output.addresses[0])) value += output.value;
         }
-        tx.tx_type = txs.find(t => t.tx_hash === tx.txid).tx_type;
+        tx.tx_type = findLast(txs, t => t.tx_hash === tx.txid).tx_type;
         tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();
         if (tx.time) tx.received = new Date(tx.time * 1000).toISOString();
         else tx.received = new Date().toISOString();

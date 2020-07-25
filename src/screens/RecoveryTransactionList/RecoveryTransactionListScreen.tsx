@@ -190,7 +190,7 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
 const mapStateToProps = (state: ApplicationState & TransactionsState, props: Props): MapStateProps => {
   const { wallet } = props.route.params;
   return {
-    transactions: selectors.getRecoveryTransactionsByWalletId(state, wallet.id),
+    transactions: selectors.getTransactionsToRecoverByWalletSecret(state, wallet.secret),
   };
 };
 

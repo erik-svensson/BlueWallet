@@ -73,7 +73,7 @@ export const loadWallets = (walletIndex?: number) => async (
           t.walletLabel = walletLabel;
         };
         wallet.transactions.forEach(enhanceTransactions);
-        dispatch(loadTransactionsSuccess(wallet.id, wallet.transactions));
+        dispatch(loadTransactionsSuccess(wallet.secret, wallet.transactions));
       }
     });
     return dispatch(loadWalletsSuccess(wallets));

@@ -193,12 +193,19 @@ module.exports.multiGetTransactionsFullByAddress = async function(addresses) {
   return ret;
 };
 
-module.exports.multiGetTransactionsFullByTxid = async function(txid_list) {
+module.exports.multiGetTransactionsFullByTxid = async function(txid_list, label = '') {
   const ret = [];
   const txfull = await this.multiGetTransactionByTxid(txid_list);
 
+  if (label === 'Ar') {
+    console.log('multiGetTransactionsFullByTxid txfull', txfull);
+  }
   for (const txid in txfull) {
     const full = txfull[txid];
+    if (label === 'Ar') {
+      console.log('multiGetTransactionsFullByTxid', full);
+    }
+
     for (const input of full.vin) {
       if (!input.txid) continue;
       // now we need to fetch previous TX where this VIN became an output, so we can see its amount
@@ -296,7 +303,7 @@ module.exports.multiGetUtxoByAddress = async function(addresses, batchsize) {
   return res;
 };
 
-module.exports.multiGetHistoryByAddress = async function(addresses, batchsize) {
+module.exports.multiGetHistoryByAddress = async function(addresses, batchsize, label = '') {
   batchsize = batchsize || 100;
   if (!mainClient) throw new Error('Electrum client is not connected');
   const ret = {};
@@ -316,6 +323,9 @@ module.exports.multiGetHistoryByAddress = async function(addresses, batchsize) {
 
     const results = await mainClient.blockchainScripthash_getHistoryBatch(scripthashes);
 
+    if (label === 'Ar') {
+      console.log('results', results);
+    }
     for (const history of results) {
       ret[scripthash2addr[history.param]] = history.result;
       for (const hist of ret[scripthash2addr[history.param]]) {

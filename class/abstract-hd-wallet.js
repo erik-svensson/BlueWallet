@@ -98,7 +98,8 @@ export class AbstractHDWallet extends LegacyWallet {
     const txids_to_update = [];
     try {
       this._lastTxFetch = +new Date();
-      const tx_addr_dict = await BlueElectrum.multiGetHistoryByAddress(this.getAddress());
+      const tx_addr_dict = await BlueElectrum.multiGetHistoryByAddress(this.getAddress(), this.label);
+
       for (const addr in tx_addr_dict) {
         for (const tx of tx_addr_dict[addr]) {
           txids_to_update.push(tx);

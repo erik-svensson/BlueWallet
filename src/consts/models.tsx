@@ -101,7 +101,6 @@ export interface Wallet {
   weOwnAddress: (clipboard: string) => void;
   isInvoiceGeneratedByWallet: (clipboard: string) => void;
   getPreferredBalanceUnit: () => string;
-  id: string;
 }
 
 export interface Contact {
@@ -115,7 +114,7 @@ export enum TxType {
   ALERT_PENDING = 'ALERT_PENDING',
   ALERT_CONFIRMED = 'ALERT_CONFIRMED',
   ALERT_RECOVERED = 'ALERT_RECOVERED',
-  RECOVERY = 'ALERT_RECOVERED',
+  RECOVERY = 'RECOVERY',
   INSTANT = 'INSTANT',
 }
 export interface Transaction {
