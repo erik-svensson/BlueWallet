@@ -31,7 +31,12 @@ const filterTransactionThatHasBeenRecovered = (txs: Transaction[]) => {
 
   return txs.filter(tx => {
     if (tx.tx_type == TxType.ALERT_PENDING) {
-      return hasNotBeenRecovered(tx, rTxInputsTxIds);
+      const r = hasNotBeenRecovered(tx, rTxInputsTxIds);
+      if (r) {
+        console.log('r', tx);
+      }
+      // if()
+      return r;
     }
     return true;
   });

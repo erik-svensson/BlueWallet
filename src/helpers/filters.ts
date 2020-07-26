@@ -97,6 +97,9 @@ export const filterBySearch = (search: string, transactions: Transaction[]) =>
   });
 
 export const filterTransaction = (filters: any, transactions: Transaction[]) => {
+  if (!filters.isFilteringOn) {
+    return transactions;
+  }
   const filteredByType = filterByTransactionType(transactions, filters.transactionType);
   const filteredbyAddress = filters.address
     ? filterByAddress(filteredByType, filters.transactionType, filters.address)

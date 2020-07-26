@@ -9,6 +9,7 @@ import { isAllWallets } from 'app/helpers/helpers';
 import { SecureStorageService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { loadTransactions, TransactionsActionType } from 'app/state/transactions/actions';
+import { allFilteredTransactions } from 'app/state/transactions/selectors';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { palette } from 'app/styles';
 
@@ -223,7 +224,8 @@ class DashboardScreen extends Component<Props, State> {
               <TransactionList
                 search={query}
                 filters={filters}
-                transactions={isAllWallets(activeWallet) ? allTransactions : transactions[activeWallet.secret] || []}
+                transactions={allTransactions}
+                // transactions={isAllWallets(activeWallet) ? allTransactions : transactions[activeWallet.secret] || []}
                 transactionNotes={this.props.transactionNotes}
                 label={activeWallet.label}
                 headerHeight={this.state.contentdHeaderHeight}
@@ -252,7 +254,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   wallets: state.wallets.wallets,
   isInitialized: state.wallets.isInitialized,
   transactions: state.transactions.transactions,
-  allTransactions: Object.values(state.transactions.transactions).reduce((prev, current) => [...prev, ...current], []),
+  allTransactions: allFilteredTransactions(state),
   transactionNotes: state.transactions.transactionNotes,
 });
 
