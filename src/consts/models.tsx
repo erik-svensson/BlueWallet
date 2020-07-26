@@ -14,6 +14,8 @@ export const CONST = {
   webGeneratorUrl: 'www.keygenerator.bitcoinvault.global',
   mnemonicWordsAmount: 12,
   satoshiInBtc: 100000000,
+  alertBlocks: 144,
+  confirmationsBlocks: 6,
 };
 
 export enum FlowType {

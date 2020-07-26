@@ -19,6 +19,7 @@ import BlueApp from '../../../BlueApp';
 import { formatDate } from '../../../utils/date';
 import { DashboarContentdHeader } from '../Dashboard/DashboarContentdHeader';
 
+// @ts-ignore
 const mapNoCap = map.convert({ cap: false });
 
 const i18n = require('../../../loc');
@@ -156,76 +157,75 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 
   getDataForSectionList = () => {
     const { transactions } = this.props;
-    const mocked = [
-      {
-        confirmations: 0,
-        hash: '8cb583f4a57b2edsadsa17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
-        received: '2020-07-25T14:30:32.145Z',
-        tx_type: 'ALERT_PENDING',
-        txid: '9a8d1729867776747dsadasaf8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
-        version: 1,
-        vsize: 189,
-        value: -400500,
-        walletLabel: 'Ar',
-        walletPreferredBalanceUnit: 'BTCV',
-        weight: 755,
-      },
-      {
-        confirmations: 0,
-        hash: '8cb583f4a57b2e173dsaddsad53375dee5007018cee7d4d4213e00c203fed5164b03260f',
-        received: '2020-07-25T12:30:32.145Z',
-        tx_type: 'ALERT_PENDING',
-        txid: '9a8d17298677767dsadsa47af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
-        version: 1,
-        vsize: 189,
-        value: -404000,
-        walletLabel: 'Ar',
-        walletPreferredBalanceUnit: 'BTCV',
-        weight: 755,
-      },
-      {
-        confirmations: 0,
-        hash: '8cb583f4a57b2e1735fdsfdsfds3375dee5007018cee7d4d4213e00c203fed5164b03260f',
-        received: '2020-05-25T14:30:32.145Z',
-        tx_type: 'ALERT_PENDING',
-        txid: '9a8d17298677767fdsfdsfsfd47af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
-        version: 1,
-        value: -50000,
+    // const mocked = [
+    //   {
+    //     confirmations: 0,
+    //     hash: '8cb583f4a57b2edsadsa17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
+    //     received: '2020-07-25T14:30:32.145Z',
+    //     tx_type: 'ALERT_PENDING',
+    //     txid: '9a8d1729867776747dsadasaf8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
+    //     version: 1,
+    //     vsize: 189,
+    //     value: -400500,
+    //     walletLabel: 'Ar',
+    //     walletPreferredBalanceUnit: 'BTCV',
+    //     weight: 755,
+    //   },
+    //   {
+    //     confirmations: 0,
+    //     hash: '8cb583f4a57b2e173dsaddsad53375dee5007018cee7d4d4213e00c203fed5164b03260f',
+    //     received: '2020-07-25T12:30:32.145Z',
+    //     tx_type: 'ALERT_PENDING',
+    //     txid: '9a8d17298677767dsadsa47af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
+    //     version: 1,
+    //     vsize: 189,
+    //     value: -404000,
+    //     walletLabel: 'Ar',
+    //     walletPreferredBalanceUnit: 'BTCV',
+    //     weight: 755,
+    //   },
+    //   {
+    //     confirmations: 0,
+    //     hash: '8cb583f4a57b2e1735fdsfdsfds3375dee5007018cee7d4d4213e00c203fed5164b03260f',
+    //     received: '2020-05-25T14:30:32.145Z',
+    //     tx_type: 'ALERT_PENDING',
+    //     txid: '9a8d17298677767fdsfdsfsfd47af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
+    //     version: 1,
+    //     value: -50000,
 
-        vsize: 189,
-        walletLabel: 'Ar',
-        walletPreferredBalanceUnit: 'BTCV',
-        weight: 755,
-      },
-      {
-        confirmations: 0,
-        hash: '8cb583f4a57bfdsfds2e17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
-        received: '2020-07-23T14:30:32.145Z',
-        tx_type: 'ALERT_PENDING',
-        txid: '9a8d1fdsfsd729867776747af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
-        version: 1,
-        value: -40000,
-        vsize: 189,
-        walletLabel: 'Ar',
-        walletPreferredBalanceUnit: 'BTCV',
-        weight: 755,
-      },
-      {
-        confirmations: 0,
-        hash: '8cb583f4a57bfdsgdfgfds2e17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
-        received: '2020-03-23T14:30:32.145Z',
-        tx_type: 'ALERT_PENDING',
-        txid: '9a8d1fdsfsd72gfgd9867776747af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
-        version: 1,
-        value: -40000,
-        vsize: 189,
-        walletLabel: 'Ar',
-        walletPreferredBalanceUnit: 'BTCV',
-        weight: 755,
-      },
-    ];
+    //     vsize: 189,
+    //     walletLabel: 'Ar',
+    //     walletPreferredBalanceUnit: 'BTCV',
+    //     weight: 755,
+    //   },
+    //   {
+    //     confirmations: 0,
+    //     hash: '8cb583f4a57bfdsfds2e17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
+    //     received: '2020-07-23T14:30:32.145Z',
+    //     tx_type: 'ALERT_PENDING',
+    //     txid: '9a8d1fdsfsd729867776747af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
+    //     version: 1,
+    //     value: -40000,
+    //     vsize: 189,
+    //     walletLabel: 'Ar',
+    //     walletPreferredBalanceUnit: 'BTCV',
+    //     weight: 755,
+    //   },
+    //   {
+    //     confirmations: 0,
+    //     hash: '8cb583f4a57bfdsgdfgfds2e17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
+    //     received: '2020-03-23T14:30:32.145Z',
+    //     tx_type: 'ALERT_PENDING',
+    //     txid: '9a8d1fdsfsd72gfgd9867776747af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
+    //     version: 1,
+    //     value: -40000,
+    //     vsize: 189,
+    //     walletLabel: 'Ar',
+    //     walletPreferredBalanceUnit: 'BTCV',
+    //     weight: 755,
+    //   },
+    // ];
 
-    console.log('RECALC', transactions);
     return compose(
       mapNoCap((txs: Transaction[], date: string) => ({
         title: date,
@@ -243,7 +243,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
   isEmptyList = () => !!!this.props.transactions.length;
 
   render() {
-    const { navigation, route, transactions } = this.props;
+    const { navigation, route } = this.props;
     const { wallet } = route.params;
 
     const areAllTransactionsSelected = this.areAllTransactionsSelected();
@@ -320,14 +320,12 @@ const styles = StyleSheet.create({
   },
   itemWrapper: {
     display: 'flex',
-    borderWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   toggleAllText: {
     ...typography.headline2,
-
     color: palette.textSecondary,
   },
 });

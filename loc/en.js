@@ -244,6 +244,11 @@ module.exports = {
     },
   },
   transactions: {
+    label: {
+      pending: 'pending',
+      recovered: 'recovered',
+      done: 'done',
+    },
     list: {
       conf: 'Confirmations',
     },

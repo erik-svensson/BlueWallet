@@ -216,10 +216,12 @@ export class LegacyWallet extends AbstractWallet {
   async setTransactions(txs) {
     try {
       const txid_list = txs.map(t => t.tx_hash);
+      // console.log('setTransactions', txs);
+
       const txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txid_list);
       const transactions = [];
 
-      console.log('setTransactions', txs_full);
+      console.log('setTransactions FULL txs_full', txs_full);
       for (const tx of txs_full) {
         let value = 0;
         for (const input of tx.inputs) {

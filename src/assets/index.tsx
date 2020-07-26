@@ -60,4 +60,7 @@ export const icons = {
   filter: require('./images/filter.png'),
   scan: require('./images/scan.png'),
   tick: require('./images/tick.png'),
+  arrowLeft: require('./images/arrowLeft.png'),
+  arrowRight: require('./images/arrowRight.png'),
+  wallet: require('./images/wallet.png'),
 };

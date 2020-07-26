@@ -8,6 +8,7 @@ export const palette = {
   textGrey: 'rgb(148, 149, 149)',
   lightGrey: 'rgb(237,238,239)',
   grey: 'rgb(222, 223, 225)',
+  green: 'rgb(92, 211, 145)',
   gradientPrimaryFirst: 'rgb(247, 9, 73)',
   gradientPrimarySecond: 'rgb(31, 1, 31)',
   gradientSecondaryFirst: 'rgb(255, 214, 99)',
