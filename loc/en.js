@@ -287,7 +287,6 @@ module.exports = {
       recover: 'Recover',
       useWalletAddress: 'Use address of this wallet',
       confirmSeed: 'Confirm with Recovery Seed',
-      dupa: 'd',
       confirmSeedDesc: 'Please enter your Recovery Seed in order to proceed.',
       confirmFirstSeed: 'Confirm with first Recovery Seed',
       confirmFirstSeedDesc: 'Please enter your first Recovery Seed in order to proceed.',
