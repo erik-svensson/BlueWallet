@@ -55,7 +55,7 @@
     "postinstall": "./node_modules/.bin/rn-nodeify --install buffer,events,process,stream,util,inherits,fs,path --hack; npm run releasenotes2json; npx jetify",
     "test": "echo",
     "testOriginal": "yarn jest",
-    "jest": "node node_modules/jest/bin/jest.js tests/integration/*",
+    "jest": "node node_modules/jest/bin/jest.js utils/tests tests/integration/*",
     "install_local": "cd src && yarn install",
     "lint": "eslint '**/*.{js,ts,tsx}'",
     "lint:fix": "yarn lint --fix",

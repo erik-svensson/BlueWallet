@@ -1,19 +1,19 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, StyledText, Image, RadioGroup, RadioButton } from 'app/components';
 import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
+import { loadTransactionsFees } from 'app/helpers/fees';
 import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../BlueApp';
 import { HDSegwitBech32Wallet, HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet, WatchOnlyWallet } from '../../class';
 import config from '../../config';
 import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
-import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
 import { btcToSatoshi, satoshiToBtc } from '../../utils/bitcoin';
 import { DashboarContentdHeader } from './Dashboard/DashboarContentdHeader';
 
@@ -61,32 +61,11 @@ export class SendCoinsScreen extends Component<Props, State> {
   }
 
   async componentDidMount() {
-    await this.loadTransactionsFees();
+    const fee = await loadTransactionsFees();
+    if (fee) {
+      this.setState({ fee });
+    }
   }
-
-  loadTransactionsFees = async () => {
-    try {
-      const recommendedFees = await NetworkTransactionFees.recommendedFees();
-      if (recommendedFees && recommendedFees.hasOwnProperty('fastestFee')) {
-        await AsyncStorage.setItem(NetworkTransactionFee.StorageKey, JSON.stringify(recommendedFees));
-        this.setState({
-          fee: Number(recommendedFees.fastestFee),
-        });
-        return;
-      }
-    } catch (_) {}
-    try {
-      const cachedNetworkTransactionFees = JSON.parse(
-        (await AsyncStorage.getItem(NetworkTransactionFee.StorageKey)) as string,
-      );
-
-      if (cachedNetworkTransactionFees && cachedNetworkTransactionFees.hasOwnProperty('halfHourFee')) {
-        this.setState({
-          fee: Number(cachedNetworkTransactionFees.fastestFee),
-        });
-      }
-    } catch (_) {}
-  };
 
   chooseItemFromModal = (index: number) => {
     const wallets = BlueApp.getWallets();

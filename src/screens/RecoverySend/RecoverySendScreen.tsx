@@ -3,17 +3,17 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { ECPair, address as btcAddress, payments, Transaction } from 'bitcoinjs-lib';
 import { map, compose, flatten } from 'lodash/fp';
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, Image } from 'app/components';
 import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, TransactionInput } from 'app/consts';
+import { loadTransactionsFees } from 'app/helpers/fees';
 import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../../BlueApp';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from '../../../class';
 import config from '../../../config';
-import NetworkTransactionFees, { NetworkTransactionFee } from '../../../models/networkTransactionFees';
 import { btcToSatoshi } from '../../../utils/bitcoin';
 import { DashboarContentdHeader } from '../Dashboard/DashboarContentdHeader';
 
@@ -44,32 +44,11 @@ export class RecoverySendScreen extends Component<Props, State> {
   };
 
   async componentDidMount() {
-    await this.loadTransactionsFees();
+    const fee = await loadTransactionsFees();
+    if (fee) {
+      this.setState({ fee });
+    }
   }
-
-  loadTransactionsFees = async () => {
-    try {
-      const recommendedFees = await NetworkTransactionFees.recommendedFees();
-      if (recommendedFees && recommendedFees.hasOwnProperty('fastestFee')) {
-        await AsyncStorage.setItem(NetworkTransactionFee.StorageKey, JSON.stringify(recommendedFees));
-        this.setState({
-          fee: Number(recommendedFees.fastestFee),
-        });
-        return;
-      }
-    } catch (_) {}
-    try {
-      const cachedNetworkTransactionFees = JSON.parse(
-        (await AsyncStorage.getItem(NetworkTransactionFee.StorageKey)) as string,
-      );
-
-      if (cachedNetworkTransactionFees && cachedNetworkTransactionFees.hasOwnProperty('halfHourFee')) {
-        this.setState({
-          fee: Number(cachedNetworkTransactionFees.fastestFee),
-        });
-      }
-    } catch (_) {}
-  };
 
   renderSetTransactionFeeHeader = () => (
     <View style={{ alignItems: 'center' }}>
