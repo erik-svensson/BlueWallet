@@ -373,7 +373,6 @@ export class AppStorage {
    * @return {Promise.<void>}
    */
   async fetchWalletTransactions(index) {
-    console.log('fetchWalletTransactions for wallet#', index);
     if (index || index === 0) {
       let c = 0;
       for (const wallet of this.wallets) {
@@ -388,12 +387,8 @@ export class AppStorage {
         }
       }
     } else {
-      console.log('FETCHING ALL', this.wallets);
-
       for (const wallet of this.wallets) {
-        console.log('FETCHING', wallet);
         await wallet.fetchTransactions();
-        console.log('POFETCH');
 
         if (wallet.fetchPendingTransactions) {
           await wallet.fetchPendingTransactions();

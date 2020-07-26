@@ -193,18 +193,11 @@ module.exports.multiGetTransactionsFullByAddress = async function(addresses) {
   return ret;
 };
 
-module.exports.multiGetTransactionsFullByTxid = async function(txid_list, label = '') {
+module.exports.multiGetTransactionsFullByTxid = async function(txid_list) {
   const ret = [];
   const txfull = await this.multiGetTransactionByTxid(txid_list);
-
-  if (label === 'Ar') {
-    console.log('multiGetTransactionsFullByTxid txfull', txfull);
-  }
   for (const txid in txfull) {
     const full = txfull[txid];
-    if (label === 'Ar') {
-      console.log('multiGetTransactionsFullByTxid', full);
-    }
 
     for (const input of full.vin) {
       if (!input.txid) continue;

@@ -7,9 +7,8 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, Image, TransactionItem, Button, CheckBox } from 'app/components';
-import { MainCardStackNavigatorParams, Route, RootStackParams, Transaction } from 'app/consts';
+import { MainCardStackNavigatorParams, Route, RootStackParams, Transaction, Wallet } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
-import { NavigationService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/transactions';
 import { TransactionsState } from 'app/state/transactions/reducer';
@@ -47,19 +46,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
     selectedTransactions: [],
   };
 
-  renderSectionTitle = ({ section }: { section: any }) => {
-    return (
-      <View style={{ marginTop: 30, marginBottom: 10 }}>
-        <Text style={{ ...typography.caption, color: palette.textGrey }}>{section.title}</Text>
-      </View>
-    );
-  };
-
-  onTransactionItemPress = (item: Transaction) => {
-    NavigationService.navigate(Route.TransactionDetails, { transaction: item });
-  };
-
-  canMakeRecoveryTransactions = (wallet: any) =>
+  canMakeRecoveryTransactions = (wallet: Wallet) =>
     [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type].includes(wallet.type);
 
   showModal = () => {
@@ -68,7 +55,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
     const { wallet } = route.params;
     const recoveryWallets = wallets.filter(this.canMakeRecoveryTransactions);
 
-    const selectedIndex = recoveryWallets.findIndex((w: any) => w.label === wallet.label);
+    const selectedIndex = recoveryWallets.findIndex((w: Wallet) => w.label === wallet.label);
 
     navigation.navigate(Route.ActionSheet, {
       wallets: recoveryWallets,
@@ -157,75 +144,6 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 
   getDataForSectionList = () => {
     const { transactions } = this.props;
-    // const mocked = [
-    //   {
-    //     confirmations: 0,
-    //     hash: '8cb583f4a57b2edsadsa17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
-    //     received: '2020-07-25T14:30:32.145Z',
-    //     tx_type: 'ALERT_PENDING',
-    //     txid: '9a8d1729867776747dsadasaf8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
-    //     version: 1,
-    //     vsize: 189,
-    //     value: -400500,
-    //     walletLabel: 'Ar',
-    //     walletPreferredBalanceUnit: 'BTCV',
-    //     weight: 755,
-    //   },
-    //   {
-    //     confirmations: 0,
-    //     hash: '8cb583f4a57b2e173dsaddsad53375dee5007018cee7d4d4213e00c203fed5164b03260f',
-    //     received: '2020-07-25T12:30:32.145Z',
-    //     tx_type: 'ALERT_PENDING',
-    //     txid: '9a8d17298677767dsadsa47af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
-    //     version: 1,
-    //     vsize: 189,
-    //     value: -404000,
-    //     walletLabel: 'Ar',
-    //     walletPreferredBalanceUnit: 'BTCV',
-    //     weight: 755,
-    //   },
-    //   {
-    //     confirmations: 0,
-    //     hash: '8cb583f4a57b2e1735fdsfdsfds3375dee5007018cee7d4d4213e00c203fed5164b03260f',
-    //     received: '2020-05-25T14:30:32.145Z',
-    //     tx_type: 'ALERT_PENDING',
-    //     txid: '9a8d17298677767fdsfdsfsfd47af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
-    //     version: 1,
-    //     value: -50000,
-
-    //     vsize: 189,
-    //     walletLabel: 'Ar',
-    //     walletPreferredBalanceUnit: 'BTCV',
-    //     weight: 755,
-    //   },
-    //   {
-    //     confirmations: 0,
-    //     hash: '8cb583f4a57bfdsfds2e17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
-    //     received: '2020-07-23T14:30:32.145Z',
-    //     tx_type: 'ALERT_PENDING',
-    //     txid: '9a8d1fdsfsd729867776747af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
-    //     version: 1,
-    //     value: -40000,
-    //     vsize: 189,
-    //     walletLabel: 'Ar',
-    //     walletPreferredBalanceUnit: 'BTCV',
-    //     weight: 755,
-    //   },
-    //   {
-    //     confirmations: 0,
-    //     hash: '8cb583f4a57bfdsgdfgfds2e17353375dee5007018cee7d4d4213e00c203fed5164b03260f',
-    //     received: '2020-03-23T14:30:32.145Z',
-    //     tx_type: 'ALERT_PENDING',
-    //     txid: '9a8d1fdsfsd72gfgd9867776747af8e5f40fbeff91375e223b0ce08b8dbc7a38f8f73f41a0',
-    //     version: 1,
-    //     value: -40000,
-    //     vsize: 189,
-    //     walletLabel: 'Ar',
-    //     walletPreferredBalanceUnit: 'BTCV',
-    //     weight: 755,
-    //   },
-    // ];
-
     return compose(
       mapNoCap((txs: Transaction[], date: string) => ({
         title: date,
@@ -323,6 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    marginRight: -10,
   },
   toggleAllText: {
     ...typography.headline2,

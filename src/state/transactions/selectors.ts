@@ -48,5 +48,3 @@ export const getTransactionsToRecoverByWalletSecret = createSelector(
     });
   },
 );
-
-// export const getGroupedTransactions = createSelector(getTransactionsToRecoverByWalletSecret, txs => )
