@@ -388,8 +388,13 @@ export class AppStorage {
         }
       }
     } else {
+      console.log('FETCHING ALL', this.wallets);
+
       for (const wallet of this.wallets) {
+        console.log('FETCHING', wallet);
         await wallet.fetchTransactions();
+        console.log('POFETCH');
+
         if (wallet.fetchPendingTransactions) {
           await wallet.fetchPendingTransactions();
         }

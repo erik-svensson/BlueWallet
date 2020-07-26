@@ -122,6 +122,7 @@ export class LegacyWallet extends AbstractWallet {
    * @return {Promise.<void>}
    */
   async fetchTransactions() {
+    console.log('FETCH LEGACY');
     try {
       this._lastTxFetch = +new Date();
       const txids = await BlueElectrum.getTransactionsByAddress(this.getAddress());
@@ -218,6 +219,7 @@ export class LegacyWallet extends AbstractWallet {
       const txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txid_list);
       const transactions = [];
 
+      console.log('setTransactions', txs_full);
       for (const tx of txs_full) {
         let value = 0;
         for (const input of tx.inputs) {
@@ -233,6 +235,7 @@ export class LegacyWallet extends AbstractWallet {
         if (tx.time) tx.received = new Date(tx.time * 1000).toISOString();
         else tx.received = new Date().toISOString();
         tx.walletLabel = this.label;
+        console.log('tx', tx);
         if (!tx.confirmations) tx.confirmations = 0;
         transactions.push(tx);
       }

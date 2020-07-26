@@ -1,12 +1,12 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { groupBy, sortBy, map, compose } from 'lodash/fp';
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SectionList } from 'react-native';
+import React, { PureComponent } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, SectionList, SectionListData } from 'react-native';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Header, Image, ScreenTemplate, TransactionItem, Button, CheckBox } from 'app/components';
+import { Header, Image, TransactionItem, Button, CheckBox } from 'app/components';
 import { MainCardStackNavigatorParams, Route, RootStackParams, Transaction } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { NavigationService } from 'app/services';
@@ -41,7 +41,7 @@ interface State {
 
 type Props = NavigationProps & MapStateProps;
 
-export class RecoveryTransactionListScreen extends Component<Props, State> {
+export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
   state = {
     selectedTransactions: [],
   };
@@ -156,7 +156,6 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
 
   getDataForSectionList = () => {
     const { transactions } = this.props;
-    console.log('transactions', transactions);
     const mocked = [
       {
         confirmations: 0,
@@ -226,6 +225,7 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
       },
     ];
 
+    console.log('RECALC', transactions);
     return compose(
       mapNoCap((txs: Transaction[], date: string) => ({
         title: date,
@@ -233,8 +233,14 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
       })),
       groupBy(({ received }) => formatDate(received, 'll')),
       sortBy('received'),
-    )(mocked) as [{ title: string; data: Transaction[] }];
+    )(transactions) as [{ title: string; data: Transaction[] }];
   };
+
+  renderSectionHeader = ({ section: { title } }: { section: SectionListData<Transaction> }) => (
+    <Text style={styles.sectionHeader}>{title}</Text>
+  );
+
+  isEmptyList = () => !!!this.props.transactions.length;
 
   render() {
     const { navigation, route, transactions } = this.props;
@@ -242,29 +248,35 @@ export class RecoveryTransactionListScreen extends Component<Props, State> {
 
     const areAllTransactionsSelected = this.areAllTransactionsSelected();
     return (
-      <View
-      // header={<Header title={i18n.send.recovery.recover} isBackArrow navigation={navigation} />}
-      // footer={<Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />}
-      >
+      <View>
         <Header title={i18n.send.recovery.recover} isBackArrow navigation={navigation} />
-        <DashboarContentdHeader
-          onSelectPress={this.showModal}
-          balance={wallet.balance}
-          label={wallet.label}
-          unit={wallet.preferredBalanceUnit}
-        />
-        <TouchableOpacity
-          style={styles.toggleAllWrapper}
-          onPress={this.toggleAllTransactions(areAllTransactionsSelected)}
-        >
-          <Text style={styles.toggleAllText}>{areAllTransactionsSelected ? '-' : '+'}</Text>
-        </TouchableOpacity>
-        <SectionList
-          sections={this.getDataForSectionList()}
-          keyExtractor={item => item.txid}
-          renderItem={this.renderItem}
-          ListEmptyComponent={this.renderListEmpty}
-        />
+        <View style={styles.container}>
+          <DashboarContentdHeader
+            onSelectPress={this.showModal}
+            balance={wallet.balance}
+            label={wallet.label}
+            unit={wallet.preferredBalanceUnit}
+          />
+          {!this.isEmptyList() && (
+            <TouchableOpacity
+              style={styles.toggleAllWrapper}
+              onPress={this.toggleAllTransactions(areAllTransactionsSelected)}
+            >
+              <Text style={styles.toggleAllText}>{areAllTransactionsSelected ? '-' : '+'}</Text>
+            </TouchableOpacity>
+          )}
+          <View style={styles.listViewWrapper}>
+            <SectionList
+              sections={this.getDataForSectionList()}
+              keyExtractor={item => item.txid}
+              renderItem={this.renderItem}
+              stickySectionHeadersEnabled={false}
+              renderSectionHeader={this.renderSectionHeader}
+              ListEmptyComponent={this.renderListEmpty}
+            />
+          </View>
+          <Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />
+        </View>
       </View>
     );
   }
@@ -280,6 +292,16 @@ const mapStateToProps = (state: ApplicationState & TransactionsState, props: Pro
 export default connect(mapStateToProps)(RecoveryTransactionListScreen);
 
 const styles = StyleSheet.create({
+  sectionHeader: {
+    color: palette.textGrey,
+    paddingVertical: 20,
+    ...typography.body,
+  },
+  listViewWrapper: { height: '60%', paddingBottom: 20 },
+  container: {
+    paddingHorizontal: 20,
+    paddingTop: 24,
+  },
   noTransactionsContainer: {
     alignItems: 'center',
   },
@@ -290,7 +312,9 @@ const styles = StyleSheet.create({
   },
   toggleAllWrapper: {
     width: 30,
+    marginTop: -20,
     display: 'flex',
+    alignSelf: 'flex-end',
     justifyContent: 'center',
     alignItems: 'center',
   },

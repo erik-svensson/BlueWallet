@@ -111,6 +111,8 @@ export class WatchOnlyWallet extends LegacyWallet {
   }
 
   async fetchTransactions() {
+    console.log('FETCH WATCH');
+
     if (this.secret.startsWith('xpub') || this.secret.startsWith('ypub') || this.secret.startsWith('zpub')) {
       if (!this._hdWalletInstance) this.init();
       return this._hdWalletInstance.fetchTransactions();
