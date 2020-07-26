@@ -4,9 +4,12 @@ import { Transaction } from 'app/consts';
 
 import { formatDate } from '../../utils/date';
 
+// @ts-ignore
 const mapNoCap = map.convert({ cap: false });
 
-export const getGroupedTransactions = (transactions: Transaction, ...fps) =>
+type FP = (...args: any[]) => any;
+
+export const getGroupedTransactions = (transactions: Transaction[], ...fps: FP[]) =>
   compose(
     mapNoCap((txs: Transaction[], date: string) => ({
       title: date,

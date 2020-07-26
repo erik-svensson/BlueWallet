@@ -1,5 +1,4 @@
-import { curry } from 'lodash/fp';
-import moment from 'moment/min/moment-with-locales';
+import { curry, map } from 'lodash/fp';
 import React, { PureComponent } from 'react';
 import { SectionList, SectionListData, StyleSheet, Text, View } from 'react-native';
 
@@ -13,12 +12,6 @@ import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
-interface TransactionWithDay extends Transaction {
-  day: moment.Moment;
-  walletLabel: string;
-  note: string;
-}
-
 interface Props {
   label: string;
   search: string;
@@ -29,7 +22,7 @@ interface Props {
 }
 
 export class TransactionList extends PureComponent<Props> {
-  renderSectionTitle = ({ section }: { section: SectionListData<Transation> }) => {
+  renderSectionTitle = ({ section }: { section: SectionListData<Transaction> }) => {
     return (
       <View style={{ marginTop: 30, marginBottom: 10 }}>
         <Text style={{ ...typography.caption, color: palette.textGrey }}>{section.title}</Text>
@@ -50,17 +43,24 @@ export class TransactionList extends PureComponent<Props> {
     );
   };
 
+  getSectionData = () => {
+    const { search, transactions, filters, transactionNotes } = this.props;
+
+    return getGroupedTransactions(
+      transactions,
+      map((tx: Transaction) => ({ ...tx, note: transactionNotes[tx.txid] })),
+      curry(filterBySearch)(search),
+      curry(filterTransaction)(filters),
+    );
+  };
+
   render() {
-    const { headerHeight, search, transactions, filters } = this.props;
+    const { headerHeight, search, transactions } = this.props;
     return (
       <View style={{ padding: 20 }}>
         <SectionList
           ListFooterComponent={search ? <View style={{ height: transactions.length ? headerHeight / 2 : 0 }} /> : null}
-          sections={getGroupedTransactions(
-            transactions,
-            curry(filterBySearch)(search),
-            curry(filterTransaction)(filters),
-          )}
+          sections={this.getSectionData()}
           keyExtractor={(item, index) => `${item.txid}-${index}`}
           renderItem={item => <TransactionItem item={item.item} onPress={this.onTransactionItemPress} />}
           renderSectionHeader={this.renderSectionTitle}
