@@ -1,11 +1,13 @@
+import { curry } from 'lodash/fp';
 import moment from 'moment/min/moment-with-locales';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { SectionList, SectionListData, StyleSheet, Text, View } from 'react-native';
 
 import { images } from 'app/assets';
 import { Image, TransactionItem } from 'app/components';
 import { Route, Transaction, Filters } from 'app/consts';
 import { filterTransaction, filterBySearch } from 'app/helpers/filters';
+import { getGroupedTransactions } from 'app/helpers/transactions';
 import { NavigationService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
@@ -26,50 +28,8 @@ interface Props {
   headerHeight: number;
 }
 
-interface State {
-  transactions: ReadonlyArray<SectionListData<TransactionWithDay>>;
-}
-
-export class TransactionList extends Component<Props, State> {
-  state: State = {
-    transactions: [],
-  };
-
-  static getDerivedStateFromProps(props: Props) {
-    moment.locale(i18n._.languageCode);
-    const groupedTransactions = [] as any;
-    const fileteredTransactions = props.filters.isFilteringOn
-      ? filterTransaction(props.transactions, props.filters)
-      : props.transactions;
-
-    const dataToGroup = fileteredTransactions
-      .map((transaction: Transaction) => {
-        const note = props.transactionNotes[transaction.txid];
-        return {
-          ...transaction,
-          day: moment(transaction.received).format('ll'),
-          walletLabel: transaction.walletLabel || props.label,
-          note,
-        };
-      })
-      .sort((a: any, b: any) => b.time - a.time);
-
-    const filteredBySearch = props.search ? filterBySearch(dataToGroup, props.search.toLowerCase()) : dataToGroup;
-    const uniqueValues = [...new Set(filteredBySearch.map((item: any) => item.day))].sort(
-      (a: any, b: any) => new Date(b).getTime() - new Date(a).getTime(),
-    );
-    uniqueValues.map(uniqueValue =>
-      groupedTransactions.push({
-        title: uniqueValue,
-        data: filteredBySearch.filter((transaction: any) => transaction.day === uniqueValue),
-      }),
-    );
-    return {
-      transactions: groupedTransactions,
-    };
-  }
-
-  renderSectionTitle = ({ section }: { section: any }) => {
+export class TransactionList extends PureComponent<Props> {
+  renderSectionTitle = ({ section }: { section: SectionListData<Transation> }) => {
     return (
       <View style={{ marginTop: 30, marginBottom: 10 }}>
         <Text style={{ ...typography.caption, color: palette.textGrey }}>{section.title}</Text>
@@ -91,13 +51,16 @@ export class TransactionList extends Component<Props, State> {
   };
 
   render() {
-    const { transactions } = this.state;
-    const { headerHeight, search } = this.props;
+    const { headerHeight, search, transactions, filters } = this.props;
     return (
       <View style={{ padding: 20 }}>
         <SectionList
           ListFooterComponent={search ? <View style={{ height: transactions.length ? headerHeight / 2 : 0 }} /> : null}
-          sections={transactions}
+          sections={getGroupedTransactions(
+            transactions,
+            curry(filterBySearch)(search),
+            curry(filterTransaction)(filters),
+          )}
           keyExtractor={(item, index) => `${item.txid}-${index}`}
           renderItem={item => <TransactionItem item={item.item} onPress={this.onTransactionItemPress} />}
           renderSectionHeader={this.renderSectionTitle}
