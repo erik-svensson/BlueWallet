@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import { palette, typography } from 'app/styles';
 
-type LabelType = 'warning' | 'success' | 'error';
+type LabelType = 'warning' | 'success' | 'error' | 'neutral';
 
 interface Props {
   type: LabelType;
@@ -37,5 +37,8 @@ const styles = StyleSheet.create({
   },
   error: {
     backgroundColor: palette.textRed,
+  },
+  neutral: {
+    backgroundColor: palette.textGrey,
   },
 });

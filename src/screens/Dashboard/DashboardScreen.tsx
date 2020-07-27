@@ -269,16 +269,12 @@ class DashboardScreen extends Component<Props, State> {
 
 const mapStateToProps = (state: ApplicationState & TransactionsState, props: Props) => {
   const activeWallet = props.route?.params?.activeWallet;
-
   return {
     wallets: state.wallets.wallets,
     isInitialized: state.wallets.isInitialized,
     transactions: state.transactions.transactions,
-    allTransactions: transactionsSelectors.allFilteredTransactions(state),
-    activeWalletTransactions: transactionsSelectors.filteredTransactionsByWalletSecret(
-      state,
-      activeWallet?.secret || '',
-    ),
+    allTransactions: transactionsSelectors.allTransactions(state),
+    activeWalletTransactions: transactionsSelectors.getTranasctionsByWalletSecret(state, activeWallet?.secret || ''),
     transactionNotes: state.transactions.transactionNotes,
   };
 };
