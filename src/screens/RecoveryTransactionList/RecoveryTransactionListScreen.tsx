@@ -1,6 +1,5 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { groupBy, sortBy, map, compose } from 'lodash/fp';
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, SectionList, SectionListData } from 'react-native';
 import { connect } from 'react-redux';
@@ -8,6 +7,7 @@ import { connect } from 'react-redux';
 import { images } from 'app/assets';
 import { Header, Image, TransactionItem, Button, CheckBox } from 'app/components';
 import { MainCardStackNavigatorParams, Route, RootStackParams, Transaction, Wallet } from 'app/consts';
+import { getGroupedTransactions } from 'app/helpers/transactions';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/transactions';
@@ -15,11 +15,7 @@ import { TransactionsState } from 'app/state/transactions/reducer';
 import { palette, typography } from 'app/styles';
 
 import BlueApp from '../../../BlueApp';
-import { formatDate } from '../../../utils/date';
 import { DashboarContentdHeader } from '../Dashboard/DashboarContentdHeader';
-
-// @ts-ignore
-const mapNoCap = map.convert({ cap: false });
 
 const i18n = require('../../../loc');
 
@@ -142,18 +138,6 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
     );
   };
 
-  getDataForSectionList = () => {
-    const { transactions } = this.props;
-    return compose(
-      mapNoCap((txs: Transaction[], date: string) => ({
-        title: date,
-        data: txs,
-      })),
-      groupBy(({ received }) => formatDate(received, 'll')),
-      sortBy('received'),
-    )(transactions) as [{ title: string; data: Transaction[] }];
-  };
-
   renderSectionHeader = ({ section: { title } }: { section: SectionListData<Transaction> }) => (
     <Text style={styles.sectionHeader}>{title}</Text>
   );
@@ -161,7 +145,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
   isEmptyList = () => !!!this.props.transactions.length;
 
   render() {
-    const { navigation, route } = this.props;
+    const { navigation, route, transactions } = this.props;
     const { wallet } = route.params;
 
     const areAllTransactionsSelected = this.areAllTransactionsSelected();
@@ -185,7 +169,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
           )}
           <View style={styles.listViewWrapper}>
             <SectionList
-              sections={this.getDataForSectionList()}
+              sections={getGroupedTransactions(transactions)}
               keyExtractor={item => item.txid}
               renderItem={this.renderItem}
               stickySectionHeadersEnabled={false}

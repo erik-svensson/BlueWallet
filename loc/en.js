@@ -248,6 +248,7 @@ module.exports = {
       pending: 'pending',
       recovered: 'recovered',
       done: 'done',
+      cancelled: 'cancelled',
     },
     list: {
       conf: 'Confirmations',

@@ -13,10 +13,12 @@ const renderLabel = (txType: TxType) => {
   switch (txType) {
     case TxType.ALERT_PENDING:
       return <Label type="warning">{i18n.transactions.label.pending}</Label>;
-    case TxType.RECOVERY:
-      return <Label type="error">{i18n.transactions.label.recovered}</Label>;
+    case TxType.ALERT_RECOVERED:
+      return <Label type="neutral">{i18n.transactions.label.cancelled}</Label>;
     case TxType.ALERT_CONFIRMED:
       return <Label type="success">{i18n.transactions.label.done}</Label>;
+    case TxType.RECOVERY:
+      return <Label type="error">{i18n.transactions.label.recovered}</Label>;
     default:
       return null;
   }
@@ -27,7 +29,11 @@ const renderArrowIcon = (value: number) => (
 );
 
 const renderCofirmations = (txType: TxType, confirmations: number) => {
-  const maxConfirmations = [TxType.ALERT_PENDING, TxType.RECOVERY, TxType.ALERT_CONFIRMED].includes(txType)
+  if (txType === TxType.ALERT_RECOVERED) {
+    return null;
+  }
+
+  const maxConfirmations = [TxType.ALERT_PENDING, TxType.ALERT_CONFIRMED].includes(txType)
     ? CONST.alertBlocks
     : CONST.confirmationsBlocks;
   const confs = confirmations > maxConfirmations ? maxConfirmations : confirmations;
