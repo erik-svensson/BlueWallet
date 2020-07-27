@@ -103,7 +103,7 @@ export class Authenticator implements IAuthenticator {
         vaultTxType = VaultTxType.Instant;
         ({ tx, fee } = signer.signAndFinalizePSBT(encodedPSBT, [this.keyPair], vaultTxType));
       } catch (e) {
-        throw new Error('Unable to sign tx with authenticator: ' + e);
+        throw new Error(`Unable to sign tx with authenticator: ${e.message}`);
       }
     }
 
