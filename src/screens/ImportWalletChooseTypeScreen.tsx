@@ -4,14 +4,14 @@ import { NavigationInjectedProps } from 'react-navigation';
 
 import { ScreenTemplate, Text, Header, Button, RadioGroup, RadioButton } from 'app/components';
 import { Route, Wallet } from 'app/consts';
-import { HDSegwitP2SHWallet, HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet, BlueApp } from 'app/legacy';
+import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet, BlueApp } from 'app/legacy';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
 import { WalletsActionType } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
-const WalletTypes = [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type, HDSegwitP2SHWallet.type];
+const WalletTypes = [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type, 'legacy'];
 
 interface Props extends NavigationInjectedProps {
   appSettings: AppSettingsState;
@@ -43,10 +43,8 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
     });
 
   get validationError(): string | undefined {
+    if (this.state.isLoading) return;
     const walletLabels = BlueApp.getWallets().map((wallet: Wallet) => wallet.label) || [];
-    if (this.state.isLoading) {
-      return;
-    }
     if (walletLabels.includes(this.state.label)) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
