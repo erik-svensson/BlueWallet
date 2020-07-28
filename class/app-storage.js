@@ -478,6 +478,14 @@ export class AppStorage {
     return finalBalance;
   }
 
+  getIncomingBalance() {
+    let finalBalance = 0;
+    for (const wal of this.wallets) {
+      finalBalance += wal.incoming_balance;
+    }
+    return finalBalance;
+  }
+
   /**
    * Simple async sleeper function
    *

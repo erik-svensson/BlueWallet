@@ -20,7 +20,7 @@ module.exports = {
     satoshi: 'Sat',
   },
   tabNavigator: {
-    dashboard: 'Dashboard',
+    wallets: 'Wallets',
     settings: 'Settings',
     addressBook: 'Address book',
     authenticators: 'Authenticators',
@@ -159,6 +159,7 @@ module.exports = {
     wallet: {
       none: 'None',
       latest: 'Latest transaction',
+      pendingBalance: 'Pending balance',
     },
     add: {
       failed: 'Failed to create wallet',

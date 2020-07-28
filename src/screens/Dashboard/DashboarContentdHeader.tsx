@@ -17,6 +17,7 @@ interface Props {
   onReceivePress?: () => void;
   onSelectPress?: () => void;
   onReceveryPress?: () => void;
+  incomingBalance?: number;
 }
 
 const shouldRenderRecover = (type: string) => [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type].includes(type);
@@ -26,6 +27,7 @@ export const DashboarContentdHeader = ({
   unit,
   label,
   type,
+  incomingBalance,
   onSendPress,
   onReceivePress,
   onSelectPress,
@@ -37,10 +39,18 @@ export const DashboarContentdHeader = ({
         <Text style={styles.chooseWalletButtonText}>{i18n.formatBalance(Number(balance), unit, true)}</Text>
         {onSelectPress && <Image source={icons.iconDropdown} style={styles.icon} />}
       </TouchableOpacity>
+
       <View style={styles.descriptionContainer}>
         <Text style={styles.buttonDescription}>{label}</Text>
         <Image source={images.coin} style={styles.coinIcon} />
       </View>
+      {incomingBalance !== undefined && (
+        <View style={styles.pendingBalanceWrapper}>
+          <Text style={styles.pendingBalanceText}>{i18n.formatBalance(Number(incomingBalance), unit, true)}</Text>
+
+          <Text style={styles.buttonDescription}>{i18n.wallets.wallet.pendingBalance}</Text>
+        </View>
+      )}
       {onReceivePress && onSelectPress && (
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={styles.circleButton} onPress={onSendPress}>
@@ -72,11 +82,20 @@ const styles = StyleSheet.create({
   icon: {
     height: 16,
     width: 16,
+    position: 'absolute',
+    right: 0,
   },
   coinIcon: {
     width: 17,
     height: 17,
     margin: 4,
+  },
+  pendingBalanceWrapper: {
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   chooseWalletButton: {
     paddingHorizontal: 20,
@@ -87,6 +106,10 @@ const styles = StyleSheet.create({
   },
   chooseWalletButtonText: {
     ...typography.headline4,
+  },
+  pendingBalanceText: {
+    ...typography.headline4,
+    color: palette.lightRed,
   },
   descriptionContainer: {
     flexDirection: 'row',

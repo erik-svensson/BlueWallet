@@ -138,6 +138,17 @@ export class AbstractHDWallet extends LegacyWallet {
     try {
       const balance = await BlueElectrum.multiGetBalanceByAddress(this.getAddress());
       this.balance = balance.balance + balance.unconfirmed_balance;
+      this.confirmed_balance = balance.balance;
+      this.incoming_balance = balance.incoming_balance;
+      this.outgoing_balance = balance.outgoing_balance;
+
+      console.log('BALANCE', balance);
+      console.log('balance.unconfirmed_balance', balance.unconfirmed_balance);
+      console.log('balance.balance_outgoing', balance.outgoing_balance);
+      console.log('balance.confirmed', balance.balance);
+
+      console.log('balance.balance_incoming', balance.incoming_balance);
+
       this.unconfirmed_balance = balance.unconfirmed_balance;
       this._lastBalanceFetch = +new Date();
       for (const address in balance.addresses) {

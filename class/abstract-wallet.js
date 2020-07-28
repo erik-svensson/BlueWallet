@@ -22,7 +22,10 @@ export class AbstractWallet {
     this.label = '';
     this.secret = ''; // private key or recovery phrase
     this.balance = 0; // SAT
+    this.confirmed_balance = 0; // SAT
     this.unconfirmed_balance = 0; // SAT
+    this.incoming_balance = 0; // SAT
+    this.outgoing_balance = 0; // SAT
     this.transactions = [];
     this._address = false;
     this.utxo = [];

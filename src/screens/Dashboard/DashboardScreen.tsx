@@ -215,6 +215,7 @@ class DashboardScreen extends Component<Props, State> {
                 <DashboarContentdHeader
                   onSelectPress={this.showModal}
                   balance={activeWallet.balance}
+                  incomingBalance={activeWallet.incoming_balance}
                   label={
                     activeWallet.label === CONST.allWallets ? i18n.wallets.dashboard.allWallets : activeWallet.label
                   }
