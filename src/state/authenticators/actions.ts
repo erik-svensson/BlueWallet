@@ -216,10 +216,11 @@ export const signTransaction = (encodedPsbt: string, meta: Meta) => async (
     } = getState();
     for (let i = 0; i < authenticators.length; i++) {
       try {
-        const transaction = await authenticators[i].signAndFinalizePSBT(encodedPsbt);
+        const authenticator = authenticators[i];
+        const finalizedPsbt = await authenticator.signAndFinalizePSBT(encodedPsbt);
         const signTransactionSuccessDispatch = dispatch(signTransactionSuccess());
         if (meta?.onSuccess) {
-          meta.onSuccess(transaction);
+          meta.onSuccess({ authenticator, finalizedPsbt });
         }
         return signTransactionSuccessDispatch;
       } catch (_) {}

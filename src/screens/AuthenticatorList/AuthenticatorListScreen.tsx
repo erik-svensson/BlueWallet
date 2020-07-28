@@ -67,21 +67,22 @@ class AuthenticatorListScreen extends Component<Props> {
   signTransaction = () => {
     const { navigation, signTransaction } = this.props;
     navigation.navigate(Route.ScanQrCode, {
-      onBarCodeScan: (json: string) => {
+      onBarCodeScan: (psbt: string) => {
         navigation.goBack();
         try {
-          const { name, psbt } = JSON.parse(json);
-
-          if (!name || !psbt) {
-            throw new Error('Invalid data');
-          }
           signTransaction(psbt, {
-            onSuccess: ({ recipients, txHex, fee }: FinalizedPSBT) => {
+            onSuccess: ({
+              finalizedPsbt: { recipients, txHex, fee },
+              authenticator,
+            }: {
+              finalizedPsbt: FinalizedPSBT;
+              authenticator: Authenticator;
+            }) => {
               navigation.navigate(Route.SendCoinsConfirm, {
                 fee,
                 // pretending that we are sending from real wallet
                 fromWallet: {
-                  label: name,
+                  label: authenticator.name,
                   preferredBalanceUnit: CONST.preferredBalanceUnit,
                   broadcastTx: BlueElectrum.broadcastV2,
                 },
