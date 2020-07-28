@@ -27,5 +27,5 @@ export const getAlertPendingTransactions = createSelector(getTranasctionsByWalle
 );
 
 export const getTransactionsToRecoverByWalletSecret = createSelector(getAlertPendingTransactions, txs =>
-  txs.filter(tx => tx.value < 0),
+  txs.filter(tx => tx.value < 0 && tx.confirmations > 0),
 );

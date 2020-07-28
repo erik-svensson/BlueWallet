@@ -20,12 +20,11 @@ export const Label = ({ type, children }: Props) => (
 const styles = StyleSheet.create({
   labelWrapper: {
     borderRadius: 2,
-    maxWidth: 65,
+    maxWidth: 75,
   },
   label: {
     ...typography.status,
     paddingVertical: 2,
-    paddingHorizontal: 8,
     textAlign: 'center',
     textTransform: 'uppercase',
   },
@@ -39,6 +38,6 @@ const styles = StyleSheet.create({
     backgroundColor: palette.textRed,
   },
   neutral: {
-    backgroundColor: palette.textGrey,
+    backgroundColor: palette.mediumGrey,
   },
 });
