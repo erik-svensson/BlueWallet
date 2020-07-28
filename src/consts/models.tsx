@@ -304,14 +304,13 @@ export type MainCardStackNavigatorParams = {
   [Route.ImportAuthenticator]: undefined;
   [Route.CreateWalletSuccess]: { secret: string };
   [Route.IntegrateKey]: {
-    onBarCodeScan: Function;
+    onBarCodeScan: (text: string) => void;
     title: string;
     description: string;
     withLink?: boolean;
-    headerTitle: string;
+    headerTitle?: string;
     onBackArrow?: () => void;
   };
-  // [Route.IntegrateKey]: { onFilterPress: ({}) => void };
   [Route.ImportWalletChooseType]: undefined;
 };
 export type DateType = Date | Dayjs;
