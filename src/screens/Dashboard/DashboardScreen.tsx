@@ -1,17 +1,15 @@
-import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, StyleSheet, RefreshControl, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
-import { Transaction, CONST, Filters, MainCardStackNavigatorParams, Route, Wallet } from 'app/consts';
+import { Wallet, Route, Transaction, CONST, Filters } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { SecureStorageService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { selectors as transactionsSelectors } from 'app/state/transactions';
 import { loadTransactions, TransactionsActionType } from 'app/state/transactions/actions';
-import { TransactionsState } from 'app/state/transactions/reducer';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { palette } from 'app/styles';
 
@@ -24,7 +22,6 @@ const i18n = require('../../../loc');
 
 interface Props {
   navigation: StackNavigationProp<any, Route.Dashboard>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.Dashboard>;
   wallets: Wallet[];
   transactions: Record<string, Transaction[]>;
   allTransactions: Transaction[];
@@ -38,8 +35,8 @@ interface State {
   isFetching: boolean;
   filters: Filters;
   query: string;
-  activeWallet: Wallet;
   contentdHeaderHeight: number;
+  lastSnappedTo: number;
 }
 
 class DashboardScreen extends Component<Props, State> {
@@ -50,6 +47,7 @@ class DashboardScreen extends Component<Props, State> {
     },
     contentdHeaderHeight: 0,
     isFetching: false,
+    lastSnappedTo: 0,
   };
 
   walletCarouselRef = React.createRef<WalletsCarousel>();
@@ -75,30 +73,20 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   chooseItemFromModal = (index: number) => {
-    const { wallets } = this.props;
-    this.setState({ activeWallet: wallets[index] });
+    this.setState({ lastSnappedTo: index });
   };
 
   _keyExtractor = (item: Wallet, index: number) => index.toString();
 
   getActiveWallet = () => {
-    const { activeWallet } = this.state;
-    const { wallets } = this.props;
+    const { lastSnappedTo } = this.state;
 
-    let wallet;
-    if (wallets.length === 0) {
-      return;
-    }
-    if (!activeWallet) {
-      wallet = wallets[0];
-    }
-    console.log('wallet', wallet);
-    return isAllWallets(wallet) ? wallets[1] : wallet;
+    const { wallets } = this.props;
+    return isAllWallets(wallets[lastSnappedTo]) ? wallets[1] : wallets[lastSnappedTo];
   };
 
   sendCoins = () => {
     const activeWallet = this.getActiveWallet();
-    console.log('activeWallet', activeWallet);
     this.props.navigation.navigate(Route.SendCoins, {
       fromAddress: activeWallet.getAddress(),
       fromSecret: activeWallet.getSecret(),
@@ -121,19 +109,11 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   showModal = () => {
+    const { lastSnappedTo } = this.state;
     const { wallets } = this.props;
-
-    const activeWallet = this.props.route?.params?.activeWallet;
-    let selectedIndex;
-    if (!activeWallet || isAllWallets(activeWallet)) {
-      selectedIndex = 0;
-    } else {
-      selectedIndex = wallets.findIndex(w => w.secret === activeWallet.secret);
-    }
-
     this.props.navigation.navigate(Route.ActionSheet, {
       wallets,
-      selectedIndex,
+      selectedIndex: lastSnappedTo,
       onPress: this.chooseItemFromModal,
     });
   };
@@ -167,12 +147,9 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   render() {
-    const { query, filters } = this.state;
+    const { lastSnappedTo, query, filters } = this.state;
     const { wallets, isInitialized, transactions, allTransactions } = this.props;
-    // const aW = this.props.route?.params?.activeWallet;
-    const activeWallet = this.getActiveWallet();
-
-    console.log('activeWallet', activeWallet);
+    const activeWallet = wallets[lastSnappedTo];
     if (!isInitialized) {
       return (
         <View style={styles.loadingIndicatorContainer}>
@@ -221,11 +198,11 @@ class DashboardScreen extends Component<Props, State> {
                 <DashboarContentdHeader
                   onSelectPress={this.showModal}
                   balance={activeWallet.balance}
-                  incomingBalance={activeWallet.incoming_balance}
                   label={
                     activeWallet.label === CONST.allWallets ? i18n.wallets.dashboard.allWallets : activeWallet.label
                   }
                   type={activeWallet.type}
+                  incomingBalance={activeWallet.incoming_balance}
                   unit={activeWallet.preferredBalanceUnit}
                   onReceivePress={this.receiveCoins}
                   onSendPress={this.sendCoins}
@@ -274,15 +251,13 @@ class DashboardScreen extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: ApplicationState & TransactionsState, props: Props) => {
-  return {
-    wallets: state.wallets.wallets,
-    isInitialized: state.wallets.isInitialized,
-    allTransactions: transactionsSelectors.allTransactions(state),
-    transactions: transactionsSelectors.transactions(state),
-    transactionNotes: state.transactions.transactionNotes,
-  };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+  wallets: state.wallets.wallets,
+  isInitialized: state.wallets.isInitialized,
+  transactions: transactionsSelectors.transactions(state),
+  allTransactions: transactionsSelectors.allTransactions(state),
+  transactionNotes: state.transactions.transactionNotes,
+});
 
 const mapDispatchToProps = {
   loadWallets,

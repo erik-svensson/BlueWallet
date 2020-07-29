@@ -121,8 +121,8 @@ export enum TxType {
   ALERT_PENDING = 'ALERT_PENDING',
   ALERT_CONFIRMED = 'ALERT_CONFIRMED',
   ALERT_RECOVERED = 'ALERT_RECOVERED',
-  RECOVERY = 'RECOVERY',
   INSTANT = 'INSTANT',
+  RECOVERY = 'RECOVERY',
 }
 export interface Transaction {
   hash: string;

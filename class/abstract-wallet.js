@@ -128,8 +128,6 @@ export class AbstractWallet {
     return 0;
   }
 
-  // createTx () { throw Error('not implemented') }
-
   getAddress() {
     throw Error('not implemented');
   }

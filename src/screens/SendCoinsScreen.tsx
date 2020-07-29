@@ -142,6 +142,7 @@ export class SendCoinsScreen extends Component<Props, State> {
         memo: this.state.memo,
         fromWallet: wallet,
         tx: tx.toHex(),
+        txDecoded: tx,
         recipients: targets,
         satoshiPerByte: requestedSatPerByte,
       }),
@@ -225,10 +226,12 @@ export class SendCoinsScreen extends Component<Props, State> {
   navigateToConfirm = ({
     fee,
     tx,
+    txDecoded,
     actualSatoshiPerByte,
   }: {
     fee: number;
     tx: string;
+    txDecoded: any;
     actualSatoshiPerByte: number;
   }) => {
     const { transaction, wallet, memo } = this.state;
@@ -237,6 +240,7 @@ export class SendCoinsScreen extends Component<Props, State> {
       recipients: [transaction],
       // HD wallet's utxo is in sats, classic segwit wallet utxos are in btc
       fee,
+      txDecoded,
       memo,
       fromWallet: wallet,
       tx,
@@ -280,7 +284,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     };
 
     await BlueApp.saveToDisk();
-    this.setState({ isLoading: false }, () => this.navigateToConfirm({ fee, tx, actualSatoshiPerByte }));
+    this.setState({ isLoading: false }, () => this.navigateToConfirm({ fee, tx, txDecoded, actualSatoshiPerByte }));
   };
 
   navigateToScanInstantPrivateKey = (onBarCodeScan: Function) => {
