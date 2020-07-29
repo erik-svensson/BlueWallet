@@ -156,7 +156,9 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         description: i18n.wallets.importWallet.scanWalletAddressDescription,
         withLink: false,
       });
-    } catch (_) {}
+    } catch (_) {
+      this.showErrorMessageScreen();
+    }
   };
 
   saveARWallet = async (wallet: HDSegwitP2SHArWallet, pubKeyHex: string) => {
@@ -231,7 +233,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   };
 
   importMnemonic = async (mnemonic: string) => {
-    const trimmedMemonic = memonic.trim();
+    const trimmedMemonic = mnemonic.trim();
 
     if (this.props?.route.params.walletType === HDSegwitP2SHArWallet.type) {
       return this.createARWallet(trimmedMemonic);
