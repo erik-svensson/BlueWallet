@@ -3,8 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import { NavigationInjectedProps } from 'react-navigation';
 
 import { ScreenTemplate, Text, Header, Button, RadioGroup, RadioButton } from 'app/components';
-import { Route, Wallet } from 'app/consts';
-import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet, BlueApp } from 'app/legacy';
+import { Route } from 'app/consts';
+import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
 import { WalletsActionType } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
@@ -41,14 +41,6 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
     this.setState({
       selectedIndex,
     });
-
-  get validationError(): string | undefined {
-    if (this.state.isLoading) return;
-    const walletLabels = BlueApp.getWallets().map((wallet: Wallet) => wallet.label) || [];
-    if (walletLabels.includes(this.state.label)) {
-      return i18n.wallets.importWallet.walletInUseValidationError;
-    }
-  }
 
   render() {
     return (
