@@ -28,7 +28,6 @@ interface Props {
   wallets: Wallet[];
   transactions: Record<string, Transaction[]>;
   allTransactions: Transaction[];
-  activeWalletTransactions: Transaction[];
   transactionNotes: Record<string, string>;
   isInitialized: boolean;
   loadWallets: () => Promise<WalletsActionType>;
@@ -39,6 +38,7 @@ interface State {
   isFetching: boolean;
   filters: Filters;
   query: string;
+  activeWallet: Wallet;
   contentdHeaderHeight: number;
 }
 
@@ -75,24 +75,30 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   chooseItemFromModal = (index: number) => {
-    const { navigation, wallets } = this.props;
-    navigation.setParams({ activeWallet: wallets[index] });
+    const { wallets } = this.props;
+    this.setState({ activeWallet: wallets[index] });
   };
 
   _keyExtractor = (item: Wallet, index: number) => index.toString();
 
   getActiveWallet = () => {
+    const { activeWallet } = this.state;
     const { wallets } = this.props;
-    const activeWallet = this.props.route?.params?.activeWallet;
 
-    if (!activeWallet) {
-      return wallets[1];
+    let wallet;
+    if (wallets.length === 0) {
+      return;
     }
-    return isAllWallets(activeWallet) ? wallets[1] : activeWallet;
+    if (!activeWallet) {
+      wallet = wallets[0];
+    }
+    console.log('wallet', wallet);
+    return isAllWallets(wallet) ? wallets[1] : wallet;
   };
 
   sendCoins = () => {
     const activeWallet = this.getActiveWallet();
+    console.log('activeWallet', activeWallet);
     this.props.navigation.navigate(Route.SendCoins, {
       fromAddress: activeWallet.getAddress(),
       fromSecret: activeWallet.getSecret(),
@@ -163,9 +169,10 @@ class DashboardScreen extends Component<Props, State> {
   render() {
     const { query, filters } = this.state;
     const { wallets, isInitialized, transactions, allTransactions } = this.props;
-    const aW = this.props.route?.params?.activeWallet;
-    const activeWallet = aW || wallets[0];
+    // const aW = this.props.route?.params?.activeWallet;
+    const activeWallet = this.getActiveWallet();
 
+    console.log('activeWallet', activeWallet);
     if (!isInitialized) {
       return (
         <View style={styles.loadingIndicatorContainer}>
@@ -268,13 +275,11 @@ class DashboardScreen extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState & TransactionsState, props: Props) => {
-  const activeWallet = props.route?.params?.activeWallet;
   return {
     wallets: state.wallets.wallets,
     isInitialized: state.wallets.isInitialized,
     allTransactions: transactionsSelectors.allTransactions(state),
     transactions: transactionsSelectors.transactions(state),
-    activeWalletTransactions: transactionsSelectors.getTranasctionsByWalletSecret(state, activeWallet?.secret || ''),
     transactionNotes: state.transactions.transactionNotes,
   };
 };

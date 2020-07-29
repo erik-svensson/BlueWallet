@@ -270,6 +270,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     }
 
     const txDecoded = bitcoin.Transaction.fromHex(tx);
+    console.log('txDecoded', txDecoded);
     const txid = txDecoded.getId();
 
     BlueApp.tx_metadata = BlueApp.tx_metadata || {};
@@ -277,6 +278,7 @@ export class SendCoinsScreen extends Component<Props, State> {
       txhex: tx,
       memo,
     };
+
     await BlueApp.saveToDisk();
     this.setState({ isLoading: false }, () => this.navigateToConfirm({ fee, tx, actualSatoshiPerByte }));
   };

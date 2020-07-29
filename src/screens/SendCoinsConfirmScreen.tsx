@@ -9,6 +9,8 @@ import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { palette, typography } from 'app/styles';
 
+import { satoshiToBtc } from '../../utils/bitcoin';
+
 const Bignumber = require('bignumber.js');
 
 const BlueElectrum = require('../../BlueElectrum');
@@ -36,7 +38,30 @@ export class SendCoinsConfirmScreen extends Component<Props> {
   constructor(props: Props) {
     super(props);
     const { fee, memo, recipients, tx, satoshiPerByte, fromWallet } = props.route.params;
+
+    const balance = fromWallet.balance;
+    const incomingBalance = fromWallet.incoming_balance;
+
+    console.log('recipients', recipients);
+    console.log('recipients amount', recipients[0].amount);
+    console.log('recipients fee', fee);
+
+    const availableBalance = satoshiToBtc(balance) - recipients[0].amount - fee;
+
+    const pendingBalance = incomingBalance;
+
+    console.log('oldBalance', satoshiToBtc(balance));
+
+    console.log('availableBalance', availableBalance);
+    console.log('pendingBalance', satoshiToBtc(pendingBalance));
+
+    console.log('oldPendingBalance', satoshiToBtc(incomingBalance));
+
     this.state = {
+      pendingBalance,
+      oldPendingBalance: incomingBalance,
+      oldBalance: balance,
+      availableBalance,
       isLoading: false,
       fee,
       feeSatoshi: new Bignumber(fee).multipliedBy(100000000).toNumber(),
@@ -125,6 +150,12 @@ export class SendCoinsConfirmScreen extends Component<Props> {
         <View style={styles.container}>
           <View>
             <View style={styles.chooseWalletButton}>
+              <Text>AVAILABLE BALANCE: {this.state.availableBalance}</Text>
+              <Text>OLD AVAILABLE BALANCE: {this.state.oldBalance}</Text>
+
+              <Text>PENDING BALANCE: {this.state.pendingBalance}</Text>
+              <Text>OLD PENDING BALANCE: {this.state.oldPendingBalance}</Text>
+
               <Text style={typography.headline4}>
                 {item.amount || currency.satoshiToBTC(item.value)} {fromWallet.preferredBalanceUnit}
               </Text>
