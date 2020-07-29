@@ -162,9 +162,8 @@ class DashboardScreen extends Component<Props, State> {
 
   render() {
     const { query, filters } = this.state;
-    const { wallets, isInitialized, activeWalletTransactions, allTransactions } = this.props;
+    const { wallets, isInitialized, transactions, allTransactions } = this.props;
     const aW = this.props.route?.params?.activeWallet;
-
     const activeWallet = aW || wallets[0];
 
     if (!isInitialized) {
@@ -243,7 +242,7 @@ class DashboardScreen extends Component<Props, State> {
               <TransactionList
                 search={query}
                 filters={filters}
-                transactions={isAllWallets(activeWallet) ? allTransactions : activeWalletTransactions || []}
+                transactions={isAllWallets(activeWallet) ? allTransactions : transactions[activeWallet.secret] || []}
                 transactionNotes={this.props.transactionNotes}
                 label={activeWallet.label}
                 headerHeight={this.state.contentdHeaderHeight}
@@ -273,8 +272,8 @@ const mapStateToProps = (state: ApplicationState & TransactionsState, props: Pro
   return {
     wallets: state.wallets.wallets,
     isInitialized: state.wallets.isInitialized,
-    transactions: state.transactions.transactions,
     allTransactions: transactionsSelectors.allTransactions(state),
+    transactions: transactionsSelectors.transactions(state),
     activeWalletTransactions: transactionsSelectors.getTranasctionsByWalletSecret(state, activeWallet?.secret || ''),
     transactionNotes: state.transactions.transactionNotes,
   };
