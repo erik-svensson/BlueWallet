@@ -1,5 +1,6 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import * as bitcoin from 'bitcoinjs-lib';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 
@@ -18,7 +19,6 @@ import { btcToSatoshi, satoshiToBtc } from '../../utils/bitcoin';
 import { DashboarContentdHeader } from './Dashboard/DashboarContentdHeader';
 
 const BigNumber = require('bignumber.js');
-const bitcoin = require('bitcoinjs-lib');
 
 const i18n = require('../../loc');
 
@@ -141,7 +141,6 @@ export class SendCoinsScreen extends Component<Props, State> {
         fee: btcToSatoshi(fee).toNumber(),
         memo: this.state.memo,
         fromWallet: wallet,
-        tx: tx.toHex(),
         txDecoded: tx,
         recipients: targets,
         satoshiPerByte: requestedSatPerByte,
@@ -223,15 +222,26 @@ export class SendCoinsScreen extends Component<Props, State> {
     requestedSatPerByte: number;
   }) => !(Math.round(actualSatoshiPerByte) !== requestedSatPerByte || Math.floor(actualSatoshiPerByte) < 1);
 
+  isAlert = (wallet: Wallet) => {
+    const { type } = wallet;
+    const { vaultTxType } = this.state;
+    switch (type) {
+      case HDSegwitP2SHArWallet.type:
+        return true;
+      case HDSegwitP2SHAirWallet.type:
+        return vaultTxType === bitcoin.payments.VaultTxType.Alert;
+      default:
+        return false;
+    }
+  };
+
   navigateToConfirm = ({
     fee,
-    tx,
     txDecoded,
     actualSatoshiPerByte,
   }: {
     fee: number;
-    tx: string;
-    txDecoded: any;
+    txDecoded: bitcoin.Transaction;
     actualSatoshiPerByte: number;
   }) => {
     const { transaction, wallet, memo } = this.state;
@@ -241,9 +251,9 @@ export class SendCoinsScreen extends Component<Props, State> {
       // HD wallet's utxo is in sats, classic segwit wallet utxos are in btc
       fee,
       txDecoded,
+      isAlert: this.isAlert(wallet),
       memo,
       fromWallet: wallet,
-      tx,
       satoshiPerByte: actualSatoshiPerByte.toFixed(2),
     });
   };
@@ -274,7 +284,6 @@ export class SendCoinsScreen extends Component<Props, State> {
     }
 
     const txDecoded = bitcoin.Transaction.fromHex(tx);
-    console.log('txDecoded', txDecoded);
     const txid = txDecoded.getId();
 
     BlueApp.tx_metadata = BlueApp.tx_metadata || {};
@@ -284,7 +293,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     };
 
     await BlueApp.saveToDisk();
-    this.setState({ isLoading: false }, () => this.navigateToConfirm({ fee, tx, txDecoded, actualSatoshiPerByte }));
+    this.setState({ isLoading: false }, () => this.navigateToConfirm({ fee, txDecoded, actualSatoshiPerByte }));
   };
 
   navigateToScanInstantPrivateKey = (onBarCodeScan: Function) => {

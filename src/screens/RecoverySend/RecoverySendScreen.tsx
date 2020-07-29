@@ -132,13 +132,13 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   navigateToConfirm = ({
     fee,
-    tx,
+    txDecoded,
     actualSatoshiPerByte,
     amount,
   }: {
     fee: number;
     amount: number;
-    tx: string;
+    txDecoded: Transaction;
     actualSatoshiPerByte: number;
   }) => {
     const { memo, address } = this.state;
@@ -149,7 +149,7 @@ export class RecoverySendScreen extends Component<Props, State> {
       fee,
       memo,
       fromWallet: wallet,
-      tx,
+      txDecoded,
       satoshiPerByte: actualSatoshiPerByte.toFixed(2),
     });
   };
@@ -202,7 +202,7 @@ export class RecoverySendScreen extends Component<Props, State> {
         memo,
       };
       await BlueApp.saveToDisk();
-      this.navigateToConfirm({ amount: amountWithoutFee, fee, tx, actualSatoshiPerByte });
+      this.navigateToConfirm({ amount: amountWithoutFee, fee, txDecoded, actualSatoshiPerByte });
     } catch (_) {
       Alert.alert(i18n.wallets.errors.invalidSign);
     }

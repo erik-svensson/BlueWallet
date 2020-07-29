@@ -343,6 +343,8 @@ module.exports = {
     },
     confirm: {
       sendNow: 'Send now',
+      availableBalance: 'Available balance after transaction',
+      pendingBalance: 'Pending balance after transaction',
     },
     create: {
       amount: 'Amount',

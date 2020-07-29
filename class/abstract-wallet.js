@@ -1,3 +1,6 @@
+import * as bitcoin from 'bitcoinjs-lib';
+
+import config from '../config';
 import { BitcoinUnit, Chain } from '../models/bitcoinUnits';
 
 const createHash = require('create-hash');
@@ -57,6 +60,24 @@ export class AbstractWallet {
 
   getXpub() {
     return this._address;
+  }
+
+  isAddressMine(address) {
+    if (!this._address) {
+      return false;
+    }
+    for (let i = 0; i < this._address.length; i++) {
+      if (address === this._address[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isOutputScriptMine(script) {
+    const address = bitcoin.address.fromOutputScript(script, config.network);
+
+    return this.isAddressMine(address);
   }
 
   /**

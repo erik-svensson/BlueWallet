@@ -1,4 +1,4 @@
-import { VaultTxType } from 'bitcoinjs-lib';
+import { VaultTxType, Transaction as BtcTransaction } from 'bitcoinjs-lib';
 import { Dayjs } from 'dayjs';
 import React from 'react';
 import { KeyboardType, StyleProp, ViewStyle } from 'react-native';
@@ -108,6 +108,7 @@ export interface Wallet {
   weOwnAddress: (clipboard: string) => void;
   isInvoiceGeneratedByWallet: (clipboard: string) => void;
   getPreferredBalanceUnit: () => string;
+  isOutputScriptMine: (script: Uint8Array) => boolean;
 }
 
 export interface Contact {
@@ -234,6 +235,8 @@ export type RootStackParams = {
     tx: any;
     satoshiPerByte: any;
     wallet: Wallet;
+    size: number;
+    feeSatoshi: number;
   };
 };
 
@@ -266,9 +269,10 @@ export type MainCardStackNavigatorParams = {
     memo: string;
     recipients: any;
     size?: number;
-    tx: any;
+    txDecoded: BtcTransaction;
+    isAlert?: boolean;
     satoshiPerByte: any;
-    fromWallet: Wallet;
+    fromWallet: any;
   };
   [Route.RecoveryTransactionList]: { wallet: Wallet };
   [Route.RecoverySend]: { transactions: Transaction[]; wallet: any };
