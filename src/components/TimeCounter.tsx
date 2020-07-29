@@ -44,6 +44,8 @@ export const TimeCounter = ({ timestamp, onCountFinish, isVisible, navigation }:
     }
   };
 
+  const goBack = () => navigation.goBack();
+
   return (
     <Overlay isVisible={isVisible}>
       <View style={styles.container}>
@@ -54,7 +56,7 @@ export const TimeCounter = ({ timestamp, onCountFinish, isVisible, navigation }:
           </Text>
         </View>
         <KeyboardAvoidingView style={styles.footer} keyboardVerticalOffset={20}>
-          <Button onPress={() => navigation.goBack()} title={i18n.onboarding.goBack} />
+          <Button onPress={goBack} title={i18n.onboarding.goBack} />
         </KeyboardAvoidingView>
       </View>
     </Overlay>
