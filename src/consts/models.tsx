@@ -274,6 +274,7 @@ export type MainCardStackNavigatorParams = {
     isAlert?: boolean;
     satoshiPerByte: any;
     fromWallet: Wallet;
+    pendingAmountDecrease?: number;
   };
   [Route.RecoveryTransactionList]: { wallet: Wallet };
   [Route.RecoverySend]: { transactions: Transaction[]; wallet: any };

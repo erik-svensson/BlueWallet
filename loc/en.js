@@ -117,6 +117,7 @@ module.exports = {
   },
   wallets: {
     dashboard: {
+      availableBalance: 'Available balance',
       title: 'Wallets',
       allWallets: 'All wallets',
       noWallets: 'No wallets',

@@ -5,7 +5,17 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { images, icons } from 'app/assets';
-import { Header, ScreenTemplate, Button, InputItem, StyledText, Image, RadioGroup, RadioButton } from 'app/components';
+import {
+  Header,
+  ScreenTemplate,
+  Button,
+  InputItem,
+  StyledText,
+  Image,
+  RadioGroup,
+  RadioButton,
+  WalletDropdown,
+} from 'app/components';
 import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { loadTransactionsFees } from 'app/helpers/fees';
@@ -16,7 +26,6 @@ import { HDSegwitBech32Wallet, HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet, Watc
 import config from '../../config';
 import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
 import { btcToSatoshi, satoshiToBtc } from '../../utils/bitcoin';
-import { DashboarContentdHeader } from './Dashboard/DashboarContentdHeader';
 
 const BigNumber = require('bignumber.js');
 
@@ -474,7 +483,7 @@ export class SendCoinsScreen extends Component<Props, State> {
         }
         header={<Header navigation={this.props.navigation} isBackArrow title={i18n.send.header} />}
       >
-        <DashboarContentdHeader
+        <WalletDropdown
           onSelectPress={this.showModal}
           balance={wallet.balance}
           label={wallet.label}

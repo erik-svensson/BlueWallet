@@ -6,11 +6,11 @@ import { View, StyleSheet, Alert, Dimensions } from 'react-native';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, StyledText, Image, Text } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, CONST } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { palette, typography } from 'app/styles';
 
-import { satoshiToBtc, btcToSatoshi } from '../../utils/bitcoin';
+import { satoshiToBtc, btcToSatoshi, roundBtcToSatoshis } from '../../utils/bitcoin';
 
 const BlueElectrum = require('../../BlueElectrum');
 const currency = require('../../currency');
@@ -54,7 +54,7 @@ export class SendCoinsConfirmScreen extends Component<Props> {
   };
 
   getNewBalances = () => {
-    const { fee, txDecoded, fromWallet, isAlert } = this.props.route.params;
+    const { fee, txDecoded, fromWallet, isAlert, pendingAmountDecrease } = this.props.route.params;
     const balance = fromWallet.balance;
     const incomingBalance = fromWallet.incoming_balance;
     const amount = this.getAmountByTx(txDecoded);
@@ -65,9 +65,12 @@ export class SendCoinsConfirmScreen extends Component<Props> {
         pendingBalance: satoshiToBtc(incomingBalance + amount.my) - fee,
       };
     }
+
+    const decrese = pendingAmountDecrease ? roundBtcToSatoshis(pendingAmountDecrease) : 0;
+
     return {
-      availableBalance: satoshiToBtc(balance - amount.foreign) - fee,
-      pendingBalance: satoshiToBtc(incomingBalance).toNumber(),
+      availableBalance: satoshiToBtc(balance + amount.my - amount.foreign) - fee,
+      pendingBalance: satoshiToBtc(incomingBalance).toNumber() - decrese,
     };
   };
 
@@ -151,13 +154,13 @@ export class SendCoinsConfirmScreen extends Component<Props> {
       <View style={styles.balancesContainer}>
         <View style={styles.balanceWrapper}>
           <Text style={styles.balanceText}>
-            {availableBalance} {fromWallet.preferredBalanceUnit}
+            {roundBtcToSatoshis(availableBalance)} {fromWallet.preferredBalanceUnit}
           </Text>
           <Text style={styles.buttonDescription}>{i18n.send.confirm.availableBalance}</Text>
         </View>
         <View style={styles.balanceWrapper}>
           <Text style={styles.pendingBalanceText}>
-            {pendingBalance} {fromWallet.preferredBalanceUnit}
+            {roundBtcToSatoshis(pendingBalance)} {fromWallet.preferredBalanceUnit}
           </Text>
           <Text style={styles.buttonDescription}>{i18n.send.confirm.pendingBalance}</Text>
         </View>
