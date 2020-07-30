@@ -21,11 +21,16 @@ const styles = StyleSheet.create({
   labelWrapper: {
     display: 'flex',
   },
+  // label: {
+  //   ...typography.status,
+  //   paddingVertical: 2,
+  //   paddingHorizontal: 8,
+  //   borderRadius: 2,
+  //   maxWidth: 75,
+  //   alignItems: 'center',
+  // },
   label: {
     ...typography.status,
-    paddingVertical: 2,
-    paddingHorizontal: 8,
-    borderRadius: 2,
     textAlign: 'center',
     alignSelf: 'flex-start',
     textTransform: 'uppercase',
