@@ -61,7 +61,7 @@ export class Header extends PureComponent<Props, State> {
   }
 
   backAction = () => {
-    this.props.onBackArrow && this.props?.onBackArrow;
+    this.props.onBackArrow && this.props.onBackArrow();
     return true;
   };
 
