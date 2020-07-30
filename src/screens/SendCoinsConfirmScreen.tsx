@@ -6,7 +6,7 @@ import { View, StyleSheet, Alert, Dimensions } from 'react-native';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, StyledText, Image, Text } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, CONST } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { palette, typography } from 'app/styles';
 

@@ -117,7 +117,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     });
   };
 
-  getUnspentUtxos = (utxos: Utxo[]) => utxos.filter((u: Utxo) => u.spent_height === 0);
+  getUnspentUtxos = (utxos: Utxo[]) => utxos.filter((u: Utxo) => u.spend_tx_num === 0);
 
   createHDBech32Transaction = async () => {
     /** @type {HDSegwitBech32Wallet} */
@@ -305,7 +305,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     this.setState({ isLoading: false }, () => this.navigateToConfirm({ fee, txDecoded, actualSatoshiPerByte }));
   };
 
-  navigateToScanInstantPrivateKey = (onBarCodeScan: Function) => {
+  navigateToScanInstantPrivateKey = (onBarCodeScan: (privateKey: string) => void) => {
     const { navigation } = this.props;
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan,

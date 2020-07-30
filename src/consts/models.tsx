@@ -171,7 +171,7 @@ export interface TransactionInput {
 export interface Utxo {
   address: string;
   height: number;
-  spent_height: number;
+  spend_tx_num: number;
   tx_hash: string;
   tx_pos: number;
   txid: string;

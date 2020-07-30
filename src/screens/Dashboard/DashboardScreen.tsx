@@ -149,7 +149,8 @@ class DashboardScreen extends Component<Props, State> {
   render() {
     const { lastSnappedTo, query, filters } = this.state;
     const { wallets, isInitialized, transactions, allTransactions } = this.props;
-    const activeWallet = wallets[lastSnappedTo];
+    const activeWallet = wallets[lastSnappedTo] || wallets[0];
+
     if (!isInitialized) {
       return (
         <View style={styles.loadingIndicatorContainer}>
