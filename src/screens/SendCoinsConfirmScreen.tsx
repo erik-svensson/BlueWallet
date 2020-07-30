@@ -1,5 +1,6 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Transaction } from 'bitcoinjs-lib';
 import React, { Component } from 'react';
 import { View, StyleSheet, Alert, Dimensions } from 'react-native';
 
@@ -33,7 +34,7 @@ interface Props {
 }
 
 export class SendCoinsConfirmScreen extends Component<Props> {
-  getAmountByTx = (txDecoded: any): { my: number; foreign: number } => {
+  getAmountByTx = (txDecoded: Transaction): { my: number; foreign: number } => {
     const { fromWallet } = this.props.route.params;
     return txDecoded.outs.reduce(
       (amount: { my: number; foreign: number }, out: { value: number; script: Uint8Array }) => {
@@ -134,6 +135,36 @@ export class SendCoinsConfirmScreen extends Component<Props> {
     });
   };
 
+  shouldRenderNewBalances = () => {
+    const { fromWallet } = this.props.route.params;
+    return !!(fromWallet.balance !== undefined && fromWallet.incoming_balance !== undefined);
+  };
+
+  renderNewBalances = () => {
+    const {
+      route: { params },
+    } = this.props;
+    const { fromWallet } = params;
+
+    const { availableBalance, pendingBalance } = this.getNewBalances();
+    return (
+      <View style={styles.balancesContainer}>
+        <View style={styles.balanceWrapper}>
+          <Text style={styles.balanceText}>
+            {availableBalance} {fromWallet.preferredBalanceUnit}
+          </Text>
+          <Text style={styles.buttonDescription}>{i18n.send.confirm.availableBalance}</Text>
+        </View>
+        <View style={styles.balanceWrapper}>
+          <Text style={styles.pendingBalanceText}>
+            {pendingBalance} {fromWallet.preferredBalanceUnit}
+          </Text>
+          <Text style={styles.buttonDescription}>{i18n.send.confirm.pendingBalance}</Text>
+        </View>
+      </View>
+    );
+  };
+
   render() {
     const {
       navigation,
@@ -142,8 +173,6 @@ export class SendCoinsConfirmScreen extends Component<Props> {
     const { fromWallet, recipients, satoshiPerByte } = params;
 
     const item = recipients[0];
-
-    const { availableBalance, pendingBalance } = this.getNewBalances();
 
     return (
       <ScreenTemplate
@@ -172,20 +201,7 @@ export class SendCoinsConfirmScreen extends Component<Props> {
               </Text>
             </View>
           </View>
-          <View style={styles.balancesContainer}>
-            <View style={styles.balanceWrapper}>
-              <Text style={styles.balanceText}>
-                {availableBalance} {fromWallet.preferredBalanceUnit}
-              </Text>
-              <Text style={styles.buttonDescription}>{i18n.send.confirm.availableBalance}</Text>
-            </View>
-            <View style={styles.balanceWrapper}>
-              <Text style={styles.pendingBalanceText}>
-                {pendingBalance} {fromWallet.preferredBalanceUnit}
-              </Text>
-              <Text style={styles.buttonDescription}>{i18n.send.confirm.pendingBalance}</Text>
-            </View>
-          </View>
+          {this.shouldRenderNewBalances() && this.renderNewBalances()}
         </View>
       </ScreenTemplate>
     );

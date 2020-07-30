@@ -109,6 +109,7 @@ export interface Wallet {
   isInvoiceGeneratedByWallet: (clipboard: string) => void;
   getPreferredBalanceUnit: () => string;
   isOutputScriptMine: (script: Uint8Array) => boolean;
+  broadcastTx: (txHex: string) => { code: number; message: string };
 }
 
 export interface Contact {
@@ -184,7 +185,7 @@ export interface Recipient {
 }
 
 export interface FinalizedPSBT {
-  txHex: string;
+  tx: BtcTransaction;
   vaultTxType: VaultTxType;
   recipients: Recipient[];
   fee: number;
@@ -272,7 +273,7 @@ export type MainCardStackNavigatorParams = {
     txDecoded: BtcTransaction;
     isAlert?: boolean;
     satoshiPerByte: any;
-    fromWallet: any;
+    fromWallet: Wallet;
   };
   [Route.RecoveryTransactionList]: { wallet: Wallet };
   [Route.RecoverySend]: { transactions: Transaction[]; wallet: any };

@@ -71,7 +71,7 @@ class AuthenticatorListScreen extends Component<Props> {
         navigation.goBack();
         signTransaction(psbt, {
           onSuccess: ({
-            finalizedPsbt: { recipients, txHex, fee },
+            finalizedPsbt: { recipients, tx, fee },
             authenticator,
           }: {
             finalizedPsbt: FinalizedPSBT;
@@ -85,9 +85,9 @@ class AuthenticatorListScreen extends Component<Props> {
                 preferredBalanceUnit: CONST.preferredBalanceUnit,
                 broadcastTx: BlueElectrum.broadcastV2,
               },
-              tx: txHex,
+              txDecoded: tx,
               recipients,
-              satoshiPerByte: this.getActualSatoshiPerByte(txHex, fee),
+              satoshiPerByte: this.getActualSatoshiPerByte(tx.toHex(), fee),
             });
           },
           onFailure: Alert.alert,
