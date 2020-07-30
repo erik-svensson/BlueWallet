@@ -100,9 +100,6 @@ export class AbstractHDWallet extends LegacyWallet {
       this._lastTxFetch = +new Date();
       const tx_addr_dict = await BlueElectrum.multiGetHistoryByAddress(this.getAddress());
 
-      if (this.label === 'Ar test') {
-        console.log('tx_addr_dict', tx_addr_dict);
-      }
       for (const addr in tx_addr_dict) {
         for (const tx of tx_addr_dict[addr]) {
           txids_to_update.push(tx);
@@ -144,15 +141,8 @@ export class AbstractHDWallet extends LegacyWallet {
       this.confirmed_balance = balance.balance;
       this.incoming_balance = balance.incoming_balance;
       this.outgoing_balance = balance.outgoing_balance;
-
-      console.log('BALANCE', balance);
-      console.log('balance.unconfirmed_balance', balance.unconfirmed_balance);
-      console.log('balance.balance_outgoing', balance.outgoing_balance);
-      console.log('balance.confirmed', balance.balance);
-
-      console.log('balance.balance_incoming', balance.incoming_balance);
-
       this.unconfirmed_balance = balance.unconfirmed_balance;
+
       this._lastBalanceFetch = +new Date();
       for (const address in balance.addresses) {
         this._addr_balances[address] = {

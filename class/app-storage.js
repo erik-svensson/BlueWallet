@@ -479,11 +479,7 @@ export class AppStorage {
   }
 
   getIncomingBalance() {
-    let finalBalance = 0;
-    for (const wal of this.wallets) {
-      finalBalance += wal.incoming_balance;
-    }
-    return finalBalance;
+    return this.wallets.reduce((sum, wallet) => sum + wallet.incoming_balance, 0);
   }
 
   /**

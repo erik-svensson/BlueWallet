@@ -66,11 +66,11 @@ export class SendCoinsConfirmScreen extends Component<Props> {
       };
     }
 
-    const decrese = pendingAmountDecrease ? roundBtcToSatoshis(pendingAmountDecrease) : 0;
+    const decreasePending = pendingAmountDecrease ? roundBtcToSatoshis(pendingAmountDecrease) : 0;
 
     return {
       availableBalance: satoshiToBtc(balance + amount.my - amount.foreign) - fee,
-      pendingBalance: satoshiToBtc(incomingBalance).toNumber() - decrese,
+      pendingBalance: satoshiToBtc(incomingBalance).toNumber() - decreasePending,
     };
   };
 
@@ -246,9 +246,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // paddingVertical: '20%',
     justifyContent: 'flex-start',
-    // alignItems: 'flex-start',
   },
   buttonContainer: {
     width: '100%',
@@ -270,9 +268,7 @@ const styles = StyleSheet.create({
     color: palette.textSecondary,
   },
   feeBox: {
-    // backgroundColor: palette.textSecondary,
     borderRadius: 4,
-    // padding: 10,
   },
   feeBoxContainer: {
     flexDirection: 'row',
