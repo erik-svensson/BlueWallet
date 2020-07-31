@@ -20,6 +20,7 @@ import {
 import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../BlueApp';
+import { renderCofirmations } from '../components/TransactionItem';
 
 const i18n = require('../../loc');
 
@@ -156,7 +157,7 @@ class TransactionDetailsScreen extends Component<Props, State> {
             transaction.walletPreferredBalanceUnit,
           )} ${transaction.walletPreferredBalanceUnit}`}
         </Text>
-        {this.renderLabel(transaction.tx_type)}
+        <Label type={transaction.tx_type} />
         <Chip
           containerStyle={styles.chipContainer}
           label={`${transaction.confirmations < 7 ? transaction.confirmations : '6'} ${
@@ -179,21 +180,6 @@ class TransactionDetailsScreen extends Component<Props, State> {
     });
   };
 
-  renderLabel = (txType: TxType) => {
-    switch (txType) {
-      case TxType.ALERT_PENDING:
-        return <Label type="warning">{i18n.transactions.label.pending}</Label>;
-      case TxType.ALERT_RECOVERED:
-        return <Label type="neutral">{i18n.transactions.label.cancelled}</Label>;
-      case TxType.ALERT_CONFIRMED:
-        return <Label type="success">{i18n.transactions.label.done}</Label>;
-      case TxType.RECOVERY:
-        return <Label type="error">{i18n.transactions.label.recovered}</Label>;
-      default:
-        return null;
-    }
-  };
-
   getTransactionTypeLabel = (txType: TxType) => {
     switch (txType) {
       case TxType.ALERT_PENDING:
@@ -213,7 +199,6 @@ class TransactionDetailsScreen extends Component<Props, State> {
 
   render() {
     const { transaction } = this.props.route.params;
-    getWalletTypeByLabel(transaction.walletLabel);
     const fromValue = this.state.from.filter(onlyUnique).join(', ');
     const toValue = arrDiff(this.state.from, this.state.to.filter(onlyUnique)).join(', ');
     return (

@@ -15,11 +15,7 @@ export const isWalletLableInUse = (value: string): boolean => {
 
 export const getWalletTypeByLabel = (label: string): string => {
   const wallets = BlueApp.getWallets();
-  return (
-    wallets?.filter((wallet: Wallet) => {
-      if (wallet?.label === label) {
-        return wallet;
-      }
-    })[0].typeReadable || ''
-  );
+  return wallets?.find(item => {
+    return item.label === label;
+  }).type;
 };

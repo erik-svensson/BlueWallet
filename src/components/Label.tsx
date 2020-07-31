@@ -2,18 +2,25 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import { TxType } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
-type LabelType = 'warning' | 'success' | 'error' | 'neutral';
+const i18n = require('../../loc');
+
+const readableTransactionType = {
+  [TxType.ALERT_PENDING]: i18n.transactions.label.pending,
+  [TxType.ALERT_RECOVERED]: i18n.transactions.label.cancelled,
+  [TxType.ALERT_CONFIRMED]: i18n.transactions.label.done,
+  [TxType.RECOVERY]: i18n.transactions.label.recovered,
+};
 
 interface Props {
-  type: LabelType;
-  children: React.ReactNode;
+  type: TxType;
 }
 
-export const Label = ({ type, children }: Props) => (
+export const Label = ({ type }: Props) => (
   <View style={styles.labelWrapper}>
-    <Text style={[styles.label, styles[type]]}>{children}</Text>
+    <Text style={[styles.label, styles[type]]}>{readableTransactionType[type]}</Text>
   </View>
 );
 
@@ -31,16 +38,16 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     overflow: 'hidden',
   },
-  warning: {
+  ALERT_PENDING: {
     backgroundColor: palette.textSecondary,
   },
-  success: {
+  ALERT_CONFIRMED: {
     backgroundColor: palette.green,
   },
-  error: {
+  RECOVERY: {
     backgroundColor: palette.textRed,
   },
-  neutral: {
+  ALERT_RECOVERED: {
     backgroundColor: palette.mediumGrey,
   },
 });
