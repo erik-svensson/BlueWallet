@@ -61,6 +61,11 @@ class AuthenticatorListScreen extends Component<Props> {
     });
   };
 
+  navigateToPair = (id: string) => {
+    const { navigation } = this.props;
+    navigation.navigate(Route.PairAuthenticator, { id });
+  };
+
   getActualSatoshiPerByte = (tx: string, feeSatoshi: number) =>
     new BigNumber(feeSatoshi).dividedBy(Math.round(tx.length / 2)).toNumber();
 
@@ -112,7 +117,11 @@ class AuthenticatorListScreen extends Component<Props> {
             {i18n._.created} {formatDate(item.createdAt)}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.authenticatorRightColumn} onPress={() => this.onDeletePress(item)}>
+        <TouchableOpacity
+          style={styles.authenticatorRightColumn}
+          // onPress={() => this.onDeletePress(item)}
+          onPress={() => this.navigateToPair(item.id)}
+        >
           <Text style={styles.delete}>{i18n._.delete}</Text>
         </TouchableOpacity>
       </View>
