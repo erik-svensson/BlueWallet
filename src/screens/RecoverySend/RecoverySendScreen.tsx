@@ -7,7 +7,14 @@ import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, Image, WalletDropdown } from 'app/components';
-import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, TransactionInput } from 'app/consts';
+import {
+  CONST,
+  Transaction as ITransaction,
+  MainCardStackNavigatorParams,
+  Route,
+  RootStackParams,
+  TransactionInput,
+} from 'app/consts';
 import { loadTransactionsFees } from 'app/helpers/fees';
 import { typography, palette } from 'app/styles';
 
@@ -116,7 +123,7 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   getTransactionsPendingAmount = () => {
     const { transactions } = this.props.route.params;
-    return transactions.reduce((sum: number, t: any) => sum + t.value, 0);
+    return transactions.reduce((sum: number, t: ITransaction) => sum + t.value, 0);
   };
 
   getUtxos = () => {
