@@ -96,6 +96,10 @@ export const filterBySearch = (search: string, transactions: Transaction[]) =>
     );
   });
 
+export const filterByStatus = (transactions: Transaction[], status: string) => {
+  return transactions.filter(transaction => transaction.tx_type === status);
+};
+
 export const filterTransaction = (filters: any, transactions: Transaction[]) => {
   if (!filters.isFilteringOn) {
     return transactions;
@@ -114,5 +118,8 @@ export const filterTransaction = (filters: any, transactions: Transaction[]) => 
   const fileteredByToAmount = filters.toAmount
     ? fileterByToAmount(fileteredByFromAmount, filters.toAmount)
     : fileteredByFromAmount;
-  return fileteredByToAmount;
+  const filteredByStatus = filters.transactionStatus
+    ? filterByStatus(fileteredByToAmount, filters.transactionStatus)
+    : fileteredByToAmount;
+  return filteredByStatus;
 };
