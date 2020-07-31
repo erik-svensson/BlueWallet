@@ -267,7 +267,9 @@ module.exports = {
     },
     transactionTypeLabel: {
       alert: 'Alert',
-      other: 'Other',
+      recovery: 'Recovery',
+      instant: 'Instant',
+      nonvault: 'Standard',
     },
     list: {
       conf: 'Confirmations',

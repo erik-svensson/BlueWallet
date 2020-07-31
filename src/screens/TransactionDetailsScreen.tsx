@@ -200,8 +200,14 @@ class TransactionDetailsScreen extends Component<Props, State> {
       case TxType.ALERT_RECOVERED:
       case TxType.ALERT_CONFIRMED:
         return i18n.transactions.transactionTypeLabel.alert;
+      case TxType.RECOVERY:
+        return i18n.transactions.transactionTypeLabel.recovery;
+      case TxType.INSTANT:
+        return i18n.transactions.transactionTypeLabel.instant;
+      case TxType.NONVAULT:
+        return i18n.transactions.transactionTypeLabel.nonvault;
       default:
-        return i18n.transactions.transactionTypeLabel.other;
+        return '';
     }
   };
 
