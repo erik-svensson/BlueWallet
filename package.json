@@ -103,7 +103,7 @@
     "i18next": "^19.4.5",
     "intl": "1.2.5",
     "lottie-react-native": "3.1.1",
-    "mocha": "5.0.0",
+    "mocha": "8.1.0",
     "moment": "^2.24.0",
     "node-libs-react-native": "1.0.3",
     "path-browserify": "1.0.0",
