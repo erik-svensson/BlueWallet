@@ -1,7 +1,7 @@
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, NativeModules } from 'react-native';
 
 import { Button, Header, ScreenTemplate, Text, Chip } from 'app/components';
 import { MainCardStackNavigatorParams, Route, MainTabNavigatorParams } from 'app/consts';
@@ -18,6 +18,16 @@ interface Props {
 }
 
 export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
+  constructor(props: Props) {
+    super(props);
+    this.preventScreenshot();
+  }
+
+  preventScreenshot = async () => {
+    const result = await NativeModules.PreventScreenshotModule.forbid();
+    console.log(result);
+  };
+
   navigateBack = () => {
     this.props.navigation.navigate(Route.Dashboard);
   };
