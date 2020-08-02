@@ -8,9 +8,9 @@ const i18n = require('../../loc');
 export const isIos = () => Platform.OS === CONST.ios;
 export const isAndroid = () => Platform.OS === CONST.android;
 
-export const isDeviceSecured = () => {
+export const checkDeviceSecurity = () => {
   if (JailMonkey.isJailBroken()) {
-    if (isIos()) Alert.alert(i18n.security.jailBrokenPhone);
-    else if (isAndroid()) Alert.alert(i18n.security.rootedPhone);
+    if (isIos()) Alert.alert(i18n.security.title, i18n.security.jailBrokenPhone);
+    else if (isAndroid()) Alert.alert(i18n.security.title, i18n.security.rootedPhone);
   }
 };
