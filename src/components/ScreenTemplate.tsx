@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { CONST } from 'app/consts';
 import { palette } from 'app/styles';
 import { ifIphoneX } from 'app/styles/helpers';
 
@@ -66,7 +67,7 @@ export class ScreenTemplate extends React.PureComponent<Props> {
         </Container>
         {!!footer && (
           <KeyboardAvoidingView
-            behavior={Platform.OS == 'ios' ? 'padding' : undefined}
+            behavior={Platform.OS == CONST.ios ? 'padding' : undefined}
             style={styles.footer}
             keyboardVerticalOffset={20}
           >

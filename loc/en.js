@@ -358,4 +358,8 @@ module.exports = {
     fromDate: 'From date',
     clearFilters: 'Clear filters',
   },
+  security: {
+    jailBrokenPhone: 'Your phone is JailBroken. That may occure security issues.',
+    rootedPhone: 'Your phone has been rooted. That may occure security issues.',
+  },
 };

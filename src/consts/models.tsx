@@ -10,6 +10,8 @@ export const CONST = {
   allWallets: 'All wallets',
   receive: 'receive',
   send: 'send',
+  android: 'android',
+  ios: 'ios',
 };
 
 export enum FlowType {
