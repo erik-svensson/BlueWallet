@@ -17,7 +17,7 @@ YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside', `\`-
 
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
-    dsn: 'https://23377936131848ca8003448a893cb622@sentry.io/1295736',
+    dsn: 'https://dc67fd6d5c2949f2a6853e60eb69d899@o429172.ingest.sentry.io/5375289',
   });
 }
 
