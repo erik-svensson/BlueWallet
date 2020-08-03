@@ -18,6 +18,8 @@ export const CONST = {
   preferredBalanceUnit: 'BTCV',
   alertBlocks: 144,
   confirmationsBlocks: 6,
+  android: 'android',
+  ios: 'ios',
 };
 
 export const ELECTRUM_VAULT_SEED_PREFIXES = {

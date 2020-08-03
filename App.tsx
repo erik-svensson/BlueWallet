@@ -11,6 +11,7 @@ import { i18n } from 'app/locale';
 import { RootNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
 import { SecureStorageService, AppStateManager, navigationRef } from 'app/services';
+import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { persistor, store } from 'app/state/store';
 
 import config from './config';
@@ -39,6 +40,7 @@ export default class App extends React.PureComponent<State> {
     if (isPinSet) {
       this.setState({ isPinSet });
     }
+    checkDeviceSecurity();
   }
 
   handleAppComesToForeground = async () => {

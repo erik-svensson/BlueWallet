@@ -589,4 +589,11 @@ module.exports = {
     },
     today: 'Today',
   },
+  security: {
+    jailBrokenPhone:
+      'Your device appears to be jailbroken. This may occurs security issues, crashes, or other problems. We do not recommend using GoldWallet with jailbroken device.',
+    rootedPhone:
+      'Your device appears to be rooted. This may occurs security issues, crashes, or other problems. We do not recommend using GoldWallet with rooted device.',
+    title: 'Security issue',
+  },
 };
