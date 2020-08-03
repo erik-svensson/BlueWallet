@@ -1,4 +1,4 @@
-import { CONST, Wallet } from 'app/consts';
+import { CONST, Wallet, TxType } from 'app/consts';
 
 import BlueApp from '../../BlueApp';
 
@@ -18,4 +18,12 @@ export const getWalletTypeByLabel = (label: string): string => {
   return wallets?.find(item => {
     return item.label === label;
   }).type;
+};
+
+export const getConfirmationsText = (txType: TxType, confirmations: number): string => {
+  const maxConfirmations = [TxType.ALERT_PENDING, TxType.ALERT_CONFIRMED].includes(txType)
+    ? CONST.alertBlocks
+    : CONST.confirmationsBlocks;
+  const confs = confirmations > maxConfirmations ? maxConfirmations : confirmations;
+  return `${confs}/${maxConfirmations}`;
 };

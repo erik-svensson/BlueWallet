@@ -1,26 +1,16 @@
-/* eslint-disable react-native/no-unused-styles */
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TextProps } from 'react-native';
 
-import { TxType } from 'app/consts';
-import { palette, typography } from 'app/styles';
-
-const i18n = require('../../loc');
-
-const readableTransactionType = {
-  [TxType.ALERT_PENDING]: i18n.transactions.label.pending,
-  [TxType.ALERT_RECOVERED]: i18n.transactions.label.cancelled,
-  [TxType.ALERT_CONFIRMED]: i18n.transactions.label.done,
-  [TxType.RECOVERY]: i18n.transactions.label.recovered,
-};
+import { typography } from 'app/styles';
 
 interface Props {
-  type: TxType;
+  additionalLabelStyle: TextProps;
+  children: string;
 }
 
-export const Label = ({ type }: Props) => (
+export const Label = ({ children, additionalLabelStyle }: Props) => (
   <View style={styles.labelWrapper}>
-    <Text style={[styles.label, styles[type]]}>{readableTransactionType[type]}</Text>
+    <Text style={[styles.label, additionalLabelStyle]}>{children}</Text>
   </View>
 );
 
@@ -37,17 +27,5 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     textTransform: 'uppercase',
     overflow: 'hidden',
-  },
-  ALERT_PENDING: {
-    backgroundColor: palette.textSecondary,
-  },
-  ALERT_CONFIRMED: {
-    backgroundColor: palette.green,
-  },
-  RECOVERY: {
-    backgroundColor: palette.textRed,
-  },
-  ALERT_RECOVERED: {
-    backgroundColor: palette.mediumGrey,
   },
 });

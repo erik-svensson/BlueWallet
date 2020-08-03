@@ -6,10 +6,10 @@ import { View, StyleSheet, Text, Linking, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux';
 
 import { images, icons } from 'app/assets';
-import { Image, Header, StyledText, Chip, ScreenTemplate, Label } from 'app/components';
+import { Image, Header, StyledText, Chip, ScreenTemplate, TranscationLabelStatus } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
 import { Route, MainCardStackNavigatorParamList, RootStackParamList, TxType } from 'app/consts';
-import { getWalletTypeByLabel } from 'app/helpers/helpers';
+import { getWalletTypeByLabel, getConfirmationsText } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import {
   createTransactionNote,
@@ -20,7 +20,6 @@ import {
 import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../BlueApp';
-import { renderCofirmations } from '../components/TransactionItem';
 
 const i18n = require('../../loc');
 
@@ -157,14 +156,17 @@ class TransactionDetailsScreen extends Component<Props, State> {
             transaction.walletPreferredBalanceUnit,
           )} ${transaction.walletPreferredBalanceUnit}`}
         </Text>
-        <Label type={transaction.tx_type} />
-        <Chip
-          containerStyle={styles.chipContainer}
-          label={`${transaction.confirmations < 7 ? transaction.confirmations : '6'} ${
-            i18n.transactions.details.confirmations
-          }`}
-          textStyle={typography.overline}
-        />
+        <TranscationLabelStatus type={transaction.tx_type} />
+
+        {transaction.tx_type !== TxType.ALERT_RECOVERED && (
+          <Chip
+            containerStyle={styles.chipContainer}
+            label={`${getConfirmationsText(transaction.tx_type, transaction.confirmations)} ${
+              i18n.transactions.details.confirmations
+            }`}
+            textStyle={typography.overline}
+          />
+        )}
       </View>
     );
   };
