@@ -46,7 +46,14 @@ module.exports = {
       'Your Transaction Password will be used to verify all of the transactions. You cannot change it later. Transaction Password must contain at least 8 alphanumerical characters.',
     changePin: 'Change PIN',
     currentPin: 'Current PIN',
+    failedTimes: 'Failed times',
+    failedTimesErrorInfo: 'After three unsuccessful attempts, entering will be blocked for',
+    goBack: 'Go back',
+    minutes: 'minutes.',
+    numberOfAttemptsExceeded: 'The number of attempts exceeded',
     pinDoesNotMatch: 'PIN does not match. Please enter a valid PIN.',
+    seconds: 'seconds',
+    tryAgain: 'Try again after',
     successDescription: 'Hooray! \n You have successfully created your PIN.',
     successDescriptionChangedPin: 'Hooray! \n You have successfully changed your PIN.',
     successButton: 'Go to Dashboard',
@@ -357,5 +364,12 @@ module.exports = {
     fromAmount: 'From amount',
     fromDate: 'From date',
     clearFilters: 'Clear filters',
+  },
+  security: {
+    jailBrokenPhone:
+      'Your device appears to be jailbroken. This may occurs security issues, crashes, or other problems. We do not recommend using GoldWallet with jailbroken device.',
+    rootedPhone:
+      'Your device appears to be rooted. This may occurs security issues, crashes, or other problems. We do not recommend using GoldWallet with rooted device.',
+    title: 'Security issue',
   },
 };
