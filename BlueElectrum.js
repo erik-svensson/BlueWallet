@@ -25,12 +25,11 @@ async function connectMain() {
   const tcp = await AsyncStorage.getItem(AppStorage.ELECTRUM_TCP_PORT);
   // const usingPeer = !!host && !!tcp ? { host, tcp } : await getRandomHardcodedPeer();
   // hardocoded for testing purpose
-  const usingPeer = { host: '188.166.204.85', tcp: '50002' };
+  const usingPeer = { host: 'testnet.bitcoinvault.global', tcp: '50001' };
   try {
     console.log('begin connection:', JSON.stringify(usingPeer));
-    console.log('begin RELOADED:', usingPeer.tcp, usingPeer.host, 'ssl');
 
-    mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, 'tls');
+    mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, 'tcp');
 
     // mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, 'ssl');
     mainClient.onError = function(e) {
