@@ -1,12 +1,9 @@
 import JailMonkey from 'jail-monkey';
-import { Platform, Alert } from 'react-native';
+import { Alert } from 'react-native';
 
-import { CONST } from 'app/consts';
+import { isAndroid, isIos } from 'app/styles';
 
 const i18n = require('../../loc');
-
-export const isIos = () => Platform.OS === CONST.ios;
-export const isAndroid = () => Platform.OS === CONST.android;
 
 export const checkDeviceSecurity = () => {
   if (JailMonkey.isJailBroken()) {

@@ -8,6 +8,7 @@ const iphoneXHeight = 812;
 const iphoneXMaxHeight = 896;
 
 export const isIos = () => Platform.OS === CONST.ios;
+export const isAndroid = () => Platform.OS === CONST.android;
 
 export const isIphoneX = (): boolean => {
   return (
