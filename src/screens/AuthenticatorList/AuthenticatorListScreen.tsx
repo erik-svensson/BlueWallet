@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import React, { PureComponent } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, ListRenderItemInfo } from 'react-native';
+import { SwipeListView, RowMap } from 'react-native-swipe-list-view';
 import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
@@ -31,7 +32,10 @@ interface ActionProps {
 
 type Props = NavigationInjectedProps & MapStateProps & ActionProps;
 
-class AuthenticatorListScreen extends Component<Props> {
+const HIDDEN_ITEM_WIDHT = 75;
+const HIDDEN_ITEM_NUMBER = 3;
+
+class AuthenticatorListScreen extends PureComponent<Props> {
   componentDidMount() {
     const { loadAuthenticators } = this.props;
     loadAuthenticators();
@@ -64,6 +68,12 @@ class AuthenticatorListScreen extends Component<Props> {
   navigateToPair = (id: string) => {
     const { navigation } = this.props;
     navigation.navigate(Route.PairAuthenticator, { id });
+  };
+
+  navigateToExport = (id: string) => {
+    const { navigation } = this.props;
+
+    navigation.navigate(Route.ExportAuthenticator, { id });
   };
 
   getActualSatoshiPerByte = (tx: string, feeSatoshi: number) =>
@@ -101,32 +111,16 @@ class AuthenticatorListScreen extends Component<Props> {
     });
   };
 
-  renderItem = ({ item }: { item: Authenticator }) => {
-    const { navigation } = this.props;
-
-    return (
-      <View style={styles.authenticatorWrapper}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate(Route.ExportAuthenticator, { id: item.id });
-          }}
-          style={styles.authenticatorLeftColumn}
-        >
-          <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.date}>
-            {i18n._.created} {formatDate(item.createdAt)}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.authenticatorRightColumn}
-          // onPress={() => this.onDeletePress(item)}
-          onPress={() => this.navigateToPair(item.id)}
-        >
-          <Text style={styles.delete}>{i18n._.delete}</Text>
-        </TouchableOpacity>
+  renderItem = ({ item }: { item: Authenticator }) => (
+    <View style={styles.authenticatorWrapper}>
+      <View style={styles.authenticatorLeftColumn}>
+        <Text style={styles.name}>{item.name}</Text>
+        <Text style={styles.date}>
+          {i18n._.created} {formatDate(item.createdAt)}
+        </Text>
       </View>
-    );
-  };
+    </View>
+  );
 
   renderHeader = () => (
     <View style={styles.headerContainer}>
@@ -154,13 +148,55 @@ class AuthenticatorListScreen extends Component<Props> {
     return !!authenticators.length;
   };
 
-  render() {
-    const { navigation, authenticators, loadAuthenticators, isLoading } = this.props;
+  closeRow = (rowMap: RowMap<Authenticator>, rowKey: string) => {
+    if (rowMap[rowKey]) {
+      rowMap[rowKey].closeRow();
+    }
+  };
 
-    const sortedAuthenticators = authenticators.sort((a, b) => b.createdAt.valueOf() - a.createdAt.valueOf());
+  renderHiddenItem = ({ item }: ListRenderItemInfo<Authenticator>, rowMap: RowMap<Authenticator>) => (
+    <View style={styles.rowBack}>
+      <TouchableOpacity
+        style={[styles.backRightBtn, styles.backRightBtnLeft]}
+        onPress={() => {
+          this.navigateToExport(item.id);
+          this.closeRow(rowMap, item.id);
+        }}
+      >
+        <Text style={styles.backTextWhite}>Export</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.backRightBtn, styles.backRightBtnCenter]}
+        onPress={() => {
+          this.navigateToPair(item.id);
+          this.closeRow(rowMap, item.id);
+        }}
+      >
+        <Text style={styles.backTextWhite}>Pair</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.backRightBtn, styles.backRightBtnRight]}
+        onPress={() => {
+          this.onDeletePress(item);
+          this.closeRow(rowMap, item.id);
+        }}
+      >
+        <Text style={styles.backTextWhite}>Delete</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  getAuthenticatorsList = () => {
+    const { authenticators } = this.props;
+    return authenticators.sort((a, b) => b.createdAt.valueOf() - a.createdAt.valueOf()).map(a => ({ ...a, key: a.id }));
+  };
+
+  render() {
+    const { navigation, loadAuthenticators, isLoading } = this.props;
 
     return (
       <ScreenTemplate
+        noScroll={true}
         header={
           <Header
             navigation={navigation}
@@ -173,12 +209,17 @@ class AuthenticatorListScreen extends Component<Props> {
         {this.hasAuthenticators() ? (
           <View style={styles.container}>
             {this.renderHeader()}
-            <FlatList
+            <SwipeListView
               refreshing={isLoading}
-              onRefresh={() => loadAuthenticators()}
               style={styles.list}
-              data={sortedAuthenticators}
+              data={this.getAuthenticatorsList()}
+              onRefresh={() => loadAuthenticators()}
               renderItem={this.renderItem}
+              renderHiddenItem={this.renderHiddenItem}
+              rightOpenValue={-HIDDEN_ITEM_WIDHT * HIDDEN_ITEM_NUMBER}
+              previewRowKey={'0'}
+              previewOpenValue={-40}
+              previewOpenDelay={3000}
             />
           </View>
         ) : (
@@ -212,6 +253,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   authenticatorWrapper: {
+    backgroundColor: palette.white,
     paddingVertical: 8,
     display: 'flex',
     flexDirection: 'row',
@@ -221,20 +263,8 @@ const styles = StyleSheet.create({
   authenticatorLeftColumn: {
     flexGrow: 6,
   },
-  authenticatorRightColumn: {
-    padding: 15,
-    top: -15,
-    right: -15,
-    flexGrow: 2,
-  },
   name: {
     ...typography.headline5,
-  },
-  delete: {
-    right: 15,
-    ...typography.headline6,
-    color: palette.textRed,
-    textAlign: 'right',
   },
   date: {
     color: palette.textGrey,
@@ -276,5 +306,37 @@ const styles = StyleSheet.create({
   headerContainer: {
     marginBottom: 26,
     marginTop: 20,
+  },
+  // new
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: palette.white,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // paddingLeft: 15,
+  },
+  backRightBtn: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75,
+  },
+  backTextWhite: {
+    color: palette.white,
+  },
+  backRightBtnLeft: {
+    backgroundColor: 'green',
+    right: HIDDEN_ITEM_WIDHT * 2,
+  },
+  backRightBtnCenter: {
+    backgroundColor: 'blue',
+    right: HIDDEN_ITEM_WIDHT * 1,
+  },
+  backRightBtnRight: {
+    backgroundColor: 'red',
+    right: HIDDEN_ITEM_WIDHT * 0,
   },
 });

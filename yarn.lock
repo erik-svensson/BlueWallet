@@ -8063,6 +8063,11 @@ react-native-svg@9.5.1:
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-9.5.1.tgz#eb21fa7eb5d71649620541e6549c6ed425d80240"
   integrity sha512-cRGfomzG/5LEwuJ6ct3m5yccckeI9aj8BNYwDPVxOeJ84LuJuvk5OqcjlYNeEzOWmWiH+QrFXfpLH1ag04bUeQ==
 
+react-native-swipe-list-view@^3.2.3:
+  version "3.2.3"
+  resolved "https://npm.registry.megatherium.solutions/react-native-swipe-list-view/-/react-native-swipe-list-view-3.2.3.tgz#2b4aa361f26b6e55efe38a829ce122dff6c00292"
+  integrity sha512-f0B92eZiO0mCk7ZFtn8tbLz4lb+mR8xzcfjFqCVSDeXnuNw7GenUMsccGnclIOhnxnip5BHvUHavlD41peGqig==
+
 "react-native-tcp@git+https://github.com/aprock/react-native-tcp.git":
   version "4.0.0"
   resolved "git+https://github.com/aprock/react-native-tcp.git#9044772c49966d04704dec50f6e8281818d84b56"
