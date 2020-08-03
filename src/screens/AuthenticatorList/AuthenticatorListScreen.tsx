@@ -32,7 +32,7 @@ interface ActionProps {
 
 type Props = NavigationInjectedProps & MapStateProps & ActionProps;
 
-const HIDDEN_ITEM_WIDHT = 75;
+const HIDDEN_ITEM_WIDTH = 75;
 const HIDDEN_ITEM_NUMBER = 3;
 
 class AuthenticatorListScreen extends PureComponent<Props> {
@@ -216,7 +216,7 @@ class AuthenticatorListScreen extends PureComponent<Props> {
               onRefresh={() => loadAuthenticators()}
               renderItem={this.renderItem}
               renderHiddenItem={this.renderHiddenItem}
-              rightOpenValue={-HIDDEN_ITEM_WIDHT * HIDDEN_ITEM_NUMBER}
+              rightOpenValue={-HIDDEN_ITEM_WIDTH * HIDDEN_ITEM_NUMBER}
               previewRowKey={'0'}
               previewOpenValue={-40}
               previewOpenDelay={3000}
@@ -329,14 +329,14 @@ const styles = StyleSheet.create({
   },
   backRightBtnLeft: {
     backgroundColor: 'green',
-    right: HIDDEN_ITEM_WIDHT * 2,
+    right: HIDDEN_ITEM_WIDTH * 2,
   },
   backRightBtnCenter: {
     backgroundColor: 'blue',
-    right: HIDDEN_ITEM_WIDHT * 1,
+    right: HIDDEN_ITEM_WIDTH * 1,
   },
   backRightBtnRight: {
     backgroundColor: 'red',
-    right: HIDDEN_ITEM_WIDHT * 0,
+    right: HIDDEN_ITEM_WIDTH * 0,
   },
 });
