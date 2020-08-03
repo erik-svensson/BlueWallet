@@ -25,7 +25,7 @@ export { SendTransactionDetailsScreen } from './SendTransactionDetailsScreen';
 export { default as ScanQrCodeScreen } from './ScanQrCodeScreen';
 export { CreatePinScreen } from './PinFlow/CreatePinScreen';
 export { ConfirmPinScreen } from './PinFlow/ConfirmPinScreen';
-export { default as CurrentPinScreen } from './PinFlow/CurrentPinScreen';
+export { CurrentPinScreen } from './PinFlow/CurrentPinScreen';
 export { CreateTransactionPassword } from './PinFlow/CreateTransactionPassword';
 export { ConfirmTransactionPassword } from './PinFlow/ConfirmTransactionPassword';
 export { UnlockTransaction } from './UnlockTransaction';
