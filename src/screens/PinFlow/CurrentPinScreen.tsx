@@ -46,39 +46,32 @@ class CurrentPinScreen extends PureComponent<Props, State> {
   };
 
   handleFailedAttempt = (increasedFailedTimes: number) => {
+    const { attempt } = this.props.timeCounter;
     const isFinalAttempt = increasedFailedTimes > 2;
-    if (isFinalAttempt) {
-      const { attempt } = this.props.timeCounter;
-      let timestamp = dayjs();
+    const finalAttempt = 3;
+    const firstAttempt = 0;
+    let currentDate = dayjs();
+    let blockedTimeInMinutes = 1;
 
-      if (attempt === 0) {
-        timestamp = timestamp.add(1, 'minute');
-      } else if (attempt === 1) {
-        timestamp = timestamp.add(2, 'minute');
-      } else if (attempt > 1) {
-        timestamp = timestamp.add(10, 'minute');
-      }
-      this.props.setTimeCounter(timestamp.unix());
+    if (attempt === 0) {
+      currentDate = currentDate.add(1, 'minute');
+      blockedTimeInMinutes = 1;
+    } else if (attempt === 1) {
+      currentDate = currentDate.add(2, 'minute');
+      blockedTimeInMinutes = 2;
+    } else if (attempt > 1) {
+      currentDate = currentDate.add(10, 'minute');
+      blockedTimeInMinutes = 10;
+    }
+
+    if (isFinalAttempt) {
+      this.props.setTimeCounter(currentDate.unix());
       this.props.setFailedAttempts(attempt + 1);
       this.setState({ isCount: true });
     }
-  };
 
-  getFailedTimesError = (increasedFailedTimes: number) => {
-    const { attempt } = this.props.timeCounter;
-    const finalAttempt = 3;
-    const firstAttempt = 0;
-
-    let blockedTimeInMinutes = 1;
-    if (attempt === 0) {
-      blockedTimeInMinutes = 1;
-    } else if (attempt === 1) {
-      blockedTimeInMinutes = 2;
-    } else if (attempt > 1) {
-      blockedTimeInMinutes = 10;
-    }
     return increasedFailedTimes !== firstAttempt && increasedFailedTimes !== finalAttempt
-      ? `\n${i18n.onboarding.failedTimesErrorInfo} ${blockedTimeInMinutes} ${i18n.onboarding.minutes}\n${i18n.onboarding.failedTimes} ${increasedFailedTimes}/3`
+      ? `\n${i18n.onboarding.failedTimesErrorInfo} ${blockedTimeInMinutes} ${i18n.onboarding.minutes}\n${i18n.onboarding.failedTimes} ${increasedFailedTimes}/${finalAttempt}`
       : '';
   };
 
@@ -94,8 +87,7 @@ class CurrentPinScreen extends PureComponent<Props, State> {
           });
         } else {
           const increasedFailedTimes = this.state.failedTimes + 1;
-          const failedTimesError = this.getFailedTimesError(increasedFailedTimes);
-          this.handleFailedAttempt(increasedFailedTimes);
+          const failedTimesError = this.handleFailedAttempt(increasedFailedTimes);
           this.setState({
             error: i18n.onboarding.pinDoesNotMatch + failedTimesError,
             pin: '',
