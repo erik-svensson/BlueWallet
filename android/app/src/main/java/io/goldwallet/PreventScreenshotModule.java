@@ -30,7 +30,7 @@ public class PreventScreenshotModule extends ReactContextBaseJavaModule {
       public void run() {
         try {
           getCurrentActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-          promise.resolve("Done. Screenshot taking locked.");
+          promise.resolve("Blocked taking screenshoots.");
         } catch(Exception e) {
           promise.reject(PREVENT_SCREENSHOT_ERROR_CODE, "Forbid screenshot taking failure.");
         }
@@ -45,7 +45,7 @@ public class PreventScreenshotModule extends ReactContextBaseJavaModule {
       public void run() {
         try {
           getCurrentActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-          promise.resolve("Done. Screenshot taking unlocked.");
+          promise.resolve("Unlock taking screenshots.");
         } catch (Exception e) {
           promise.reject(PREVENT_SCREENSHOT_ERROR_CODE, "Allow screenshot taking failure.");
         }
