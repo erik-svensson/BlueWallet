@@ -16,7 +16,7 @@ interface Props {
 export const EditTextScreen = (props: Props) => {
   const { params } = props.route;
   const { label, header, onSave, title } = params;
-  const keyboardType = params.keyboardType || 'default';
+  const keyboardType = params.keyboardType || 'visible-password';
   const validate = params.validate || null;
   const validateOnSave = params.validateOnSave || null;
   const [value, setValue] = useState(params.value || '');
