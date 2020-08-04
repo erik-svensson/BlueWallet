@@ -75,7 +75,6 @@ export default connect(mapStateToProps)(PairAuthenticatorScreen);
 
 const styles = StyleSheet.create({
   publicKeyContainer: {
-    padding: 20,
     paddingTop: 0,
     borderColor: palette.lightGrey,
   },
