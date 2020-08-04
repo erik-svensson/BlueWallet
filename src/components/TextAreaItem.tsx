@@ -31,6 +31,8 @@ export class TextAreaItem extends PureComponent<Props, State> {
           placeholder={placeholder}
           placeholderTextColor={palette.textGrey}
           numberOfLines={100}
+          autoCorrect={false}
+          keyboardType="visible-password"
           selectionColor={palette.textSecondary}
           multiline={true}
           onFocus={this.onFocus}

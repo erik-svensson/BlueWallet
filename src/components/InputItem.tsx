@@ -93,7 +93,8 @@ export class InputItem extends PureComponent<Props, State> {
 
   render() {
     const { isAnimatedFocused, isActive } = this.state;
-    const { label, suffix, error } = this.props;
+    const { label, suffix, error, secureTextEntry } = this.props;
+    const keyboardType = secureTextEntry ? 'default' : 'visible-password';
 
     const top = this.state.isAnimatedFocused.interpolate({
       inputRange: [0, 1],
@@ -111,6 +112,8 @@ export class InputItem extends PureComponent<Props, State> {
         {!!suffix && <Text style={styles.suffix}>{suffix}</Text>}
         <BaseTextInput
           ref={this.inputItemRef}
+          autoCorrect={false}
+          keyboardType={keyboardType}
           {...this.props}
           style={[
             styles.input,
