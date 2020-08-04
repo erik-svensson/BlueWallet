@@ -38,6 +38,7 @@ import {
   RecoverySeedScreen,
   ImportWalletChooseTypeScreen,
   PairAuthenticatorScreen,
+  OptionsAuthenticatorScreen,
 } from 'app/screens';
 
 const Stack = createStackNavigator<MainCardStackNavigatorParams>();
@@ -79,5 +80,6 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.RecoverySeed} component={RecoverySeedScreen} />
     <Stack.Screen name={Route.ImportWalletChooseType} component={ImportWalletChooseTypeScreen} />
     <Stack.Screen name={Route.PairAuthenticator} component={PairAuthenticatorScreen} />
+    <Stack.Screen name={Route.OptionsAuthenticator} component={OptionsAuthenticatorScreen} />
   </Stack.Navigator>
 );

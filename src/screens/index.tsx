@@ -41,6 +41,7 @@ export { default as DeleteEntityScreen } from './DeleteEntity';
 export { default as ExportAuthenticatorScreen } from './ExportAuthenticator';
 export { default as ImportAuthenticatorScreen } from './ImportAuthenticator';
 export { default as PairAuthenticatorScreen } from './PairAuthenticator';
+export { default as OptionsAuthenticatorScreen } from './OptionsAuthenticator';
 export { default as CreateWalletSuccessScreen } from './CreateWalletSuccessScreen';
 export { default as RecoveryTransactionListScreen } from './RecoveryTransactionList';
 export { default as RecoverySendScreen } from './RecoverySend';

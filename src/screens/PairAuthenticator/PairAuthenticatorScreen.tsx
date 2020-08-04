@@ -1,11 +1,11 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, Dimensions } from 'react-native';
 import Share from 'react-native-share';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate, Button, TextAreaItem } from 'app/components';
+import { Header, ScreenTemplate, FlatButton, TextAreaItem } from 'app/components';
 import { Route, Authenticator, MainCardStackNavigatorParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
@@ -46,19 +46,19 @@ class PairAuthenticatorScreen extends Component<Props> {
       return null;
     }
     return (
-      <ScreenTemplate
-        footer={<Button onPress={this.share} title={i18n.receive.details.share} />}
-        header={<Header navigation={navigation} title={i18n.authenticators.add.title} />}
-      >
-        <Text style={styles.subtitle}>{i18n.authenticators.enterPIN.subtitle}</Text>
-        {/* <Text style={styles.description}>{i18n.authenticators.enterPIN.description}</Text> */}
-        {this.renderPIN(authenticator.pin)}
-        <TextAreaItem
-          value={authenticator.exportPublicKey}
-          editable={false}
-          // placeholder={i18n.wallets.importWallet.placeholder}
-          style={styles.textArea}
-        />
+      <ScreenTemplate header={<Header navigation={navigation} isBackArrow title={i18n.authenticators.pair.title} />}>
+        <View>
+          <Text style={styles.subtitle}>{i18n.authenticators.pair.pin}</Text>
+          <Text style={styles.description}>{i18n.authenticators.pair.descPin}</Text>
+          {this.renderPIN(authenticator.pin)}
+        </View>
+
+        <View style={styles.publicKeyContainer}>
+          <Text style={styles.subtitle}>{i18n.authenticators.pair.publicKey}</Text>
+          <Text style={styles.description}>{i18n.authenticators.pair.descPublicKey}</Text>
+          <TextAreaItem value={authenticator.exportPublicKey} editable={false} style={styles.textArea} />
+          <FlatButton onPress={this.share} title={i18n.receive.details.share} />
+        </View>
       </ScreenTemplate>
     );
   }
@@ -74,18 +74,25 @@ const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: P
 export default connect(mapStateToProps)(PairAuthenticatorScreen);
 
 const styles = StyleSheet.create({
+  publicKeyContainer: {
+    width: Dimensions.get('window').width,
+    alignSelf: 'center',
+    marginTop: '4%',
+    padding: 20,
+    paddingTop: '5%',
+    borderTopWidth: 1,
+    borderColor: palette.lightGrey,
+  },
   subtitle: {
-    marginTop: 12,
-    marginBottom: 18,
+    marginBottom: '4%',
     ...typography.headline4,
     textAlign: 'center',
   },
   textArea: {
-    marginTop: 24,
     height: 130,
   },
   description: {
-    marginBottom: 52,
+    marginBottom: '4%',
     color: palette.textGrey,
     ...typography.caption,
     textAlign: 'center',

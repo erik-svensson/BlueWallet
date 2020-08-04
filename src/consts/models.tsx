@@ -36,6 +36,7 @@ export enum Route {
   ExportAuthenticator = 'ExportAuthenticator',
   PairAuthenticator = 'PairAuthenticator',
   ImportAuthenticator = 'ImportAuthenticator',
+  OptionsAuthenticator = 'OptionsAuthenticator',
   CreateWalletSuccess = 'CreateWalletSuccess',
   DeleteEntity = 'DeleteEntity',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
@@ -312,6 +313,7 @@ export type MainCardStackNavigatorParams = {
   [Route.DeleteEntity]: { onConfirm: () => void; name: string; subtitle: string; title: string };
   [Route.ExportAuthenticator]: { id: string };
   [Route.ImportAuthenticator]: undefined;
+  [Route.OptionsAuthenticator]: { id: string };
   [Route.CreateWalletSuccess]: { secret: string };
   [Route.IntegrateKey]: {
     onBarCodeScan: (text: string) => void;
