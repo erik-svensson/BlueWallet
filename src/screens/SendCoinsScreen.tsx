@@ -471,6 +471,8 @@ export class SendCoinsScreen extends Component<Props, State> {
     );
   };
 
+  isStateSettedUp = () => this.state !== null && this.state.fromWallet && this.state.fee;
+
   render() {
     const { wallet, fee, isLoading } = this.state;
     return (
@@ -508,7 +510,7 @@ export class SendCoinsScreen extends Component<Props, State> {
                 })
               }
             >
-              <Image style={styles.icon} source={images.ContactList} />
+              <Image style={styles.icon} source={images.addressBook} />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.qrCodeIcon}

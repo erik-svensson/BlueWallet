@@ -40,10 +40,12 @@ export default class App extends React.PureComponent<State> {
     if (isPinSet) {
       this.setState({ isPinSet });
     }
-    checkDeviceSecurity();
+    if (!__DEV__) {
+      checkDeviceSecurity();
+    }
   }
 
-  handleAppComesToForeground = async () => {
+  lockScreen = () => {
     this.setState({
       successfullyAuthenticated: false,
     });
@@ -70,7 +72,7 @@ export default class App extends React.PureComponent<State> {
     return (
       <I18nextProvider i18n={i18n}>
         <Provider store={store}>
-          <AppStateManager handleAppComesToForeground={this.handleAppComesToForeground} />
+          <AppStateManager handleAppComesToBackground={this.lockScreen} />
           <PersistGate loading={null} persistor={persistor}>
             <View style={styles.wrapper}>
               <NavigationContainer ref={navigationRef as any}>

@@ -346,6 +346,13 @@ module.exports = {
       timePending: 'Time pending',
     },
   },
+  timeCounter: {
+    title: 'Application blocked',
+    description:
+      'Your application has been blocked due to the unsuccessful login attempts. Please wait required time in order to try again.',
+    tryAgain: 'Try again',
+    closeTheApp: 'Close the application',
+  },
   send: {
     header: 'Send coins',
     recovery: {
@@ -381,6 +388,10 @@ module.exports = {
       description: 'You have successfully sent your coins.',
       done: 'Done',
       return: 'Return to Dashboard',
+    },
+    error: {
+      title: 'Error',
+      description: 'Before creating a transaction, you must first add a Bitcoin Vault wallet.',
     },
     details: {
       title: 'create transaction',
@@ -547,6 +558,13 @@ module.exports = {
       canceled: 'Canceled',
     },
   },
+  security: {
+    jailBrokenPhone:
+      'Your device appears to be jailbroken. This may occurs security issues, crashes, or other problems. We do not recommend using GoldWallet with jailbroken device.',
+    rootedPhone:
+      'Your device appears to be rooted. This may occurs security issues, crashes, or other problems. We do not recommend using GoldWallet with rooted device.',
+    title: 'Security issue',
+  },
   calendar: {
     monthNames: {
       january: 'January',
@@ -569,7 +587,7 @@ module.exports = {
       april: 'Apr',
       may: 'May',
       june: 'Jun',
-      july: 'Hul',
+      july: 'Jul',
       august: 'Aug',
       september: 'Sep',
       october: 'Oct',
@@ -602,5 +620,54 @@ module.exports = {
     rootedPhone:
       'Your device appears to be rooted. This may occurs security issues, crashes, or other problems. We do not recommend using GoldWallet with rooted device.',
     title: 'Security issue',
+  },
+  calendar: {
+    monthNames: {
+      january: 'January',
+      february: 'February',
+      march: 'March',
+      april: 'April',
+      may: 'May',
+      june: 'June',
+      july: 'July',
+      august: 'August',
+      september: 'September',
+      october: 'October',
+      november: 'November',
+      december: 'December',
+    },
+    monthNamesShort: {
+      january: 'Jan',
+      february: 'Feb',
+      march: 'Mar',
+      april: 'Apr',
+      may: 'May',
+      june: 'Jun',
+      july: 'Jul',
+      august: 'Aug',
+      september: 'Sep',
+      october: 'Oct',
+      november: 'Nov',
+      december: 'Dec',
+    },
+    dayNames: {
+      sunday: 'Sunday',
+      monday: 'Monday',
+      tuesday: 'Tuesday',
+      wednesday: 'Wednesday',
+      thursday: 'Thursday',
+      friday: 'Friday',
+      saturday: 'Saturday',
+    },
+    dayNamesShort: {
+      sunday: 'Sun',
+      monday: 'Mon',
+      tuesday: 'Tue',
+      wednesday: 'Wed',
+      thursday: 'Thu',
+      friday: 'Fri',
+      saturday: 'Sat',
+    },
+    today: 'Today',
   },
 };

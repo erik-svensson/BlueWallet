@@ -1,4 +1,13 @@
 import { NativeModules } from 'react-native';
 
-export const preventScreenshots = () => NativeModules.PreventScreenshotModule.forbid();
-export const allowScreenshots = () => NativeModules.PreventScreenshotModule.allow();
+import { isIos } from 'app/styles/helpers';
+
+export const preventScreenshots = () => {
+  if (isIos()) return;
+  return NativeModules.PreventScreenshotModule.forbid();
+};
+
+export const allowScreenshots = () => {
+  if (isIos()) return;
+  return NativeModules.PreventScreenshotModule.allow();
+};

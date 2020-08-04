@@ -1,7 +1,7 @@
 import { VaultTxType, Transaction as BtcTransaction } from 'bitcoinjs-lib';
 import { Dayjs } from 'dayjs';
 import React from 'react';
-import { KeyboardType, StyleProp, ViewStyle } from 'react-native';
+import { KeyboardType, StyleProp, ViewStyle, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 
 import { FastImageSource } from 'app/components';
@@ -22,6 +22,15 @@ export const CONST = {
   ios: 'ios',
 };
 
+export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
+
+export interface SocketOptions {
+  host: string;
+  port: number;
+  rejectUnauthorized: boolean;
+}
+
+export type SocketCallback = (address: string) => void;
 export const ELECTRUM_VAULT_SEED_PREFIXES = {
   SEED_PREFIX: '01', // Standard wallet
   SEED_PREFIX_SW: '100', // Segwit wallet
@@ -88,6 +97,7 @@ export enum Route {
   AdvancedOptions = 'AdvancedOptions',
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
+  TimeCounter = 'TimeCounter',
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
 }
@@ -216,7 +226,6 @@ export type MainTabNavigatorParams = {
 
 export type RootStackParams = {
   [Route.MainCardStackNavigator]: undefined;
-  [Route.ImportWalletQRCode]: undefined;
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
   [Route.UnlockTransaction]: { onSuccess: () => void };
   [Route.PasswordNavigator]: undefined;
@@ -320,6 +329,10 @@ export type MainCardStackNavigatorParams = {
     pin: string;
   };
   [Route.FilterTransactions]: { onFilterPress: ({}) => void };
+  [Route.TimeCounter]: {
+    onTryAgain: () => void;
+    timestamp: number;
+  };
   [Route.CreateAuthenticator]: undefined;
   [Route.EnterPIN]: { id: string };
   [Route.PairAuthenticator]: { id: string };

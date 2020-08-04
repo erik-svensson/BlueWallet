@@ -15,6 +15,9 @@ export interface ApplicationState {
   wallets: WalletsState;
   authenticators: AuthenticatorsState;
   timeCounter: TimeCounterState;
+  authenticators: AuthenticatorsState;
+  timeCounter: TimeCounterState;
+  authenticators: AuthenticatorsState;
 }
 
 export const rootReducer = combineReducers({
@@ -24,4 +27,7 @@ export const rootReducer = combineReducers({
   wallets: walletsReducer,
   authenticators: authenticatorsReducer,
   timeCounter: timeCounterReducer,
+  authenticators: authenticatorsReducer,
+  timeCounter: timeCounterReducer,
+  authenticators: authenticatorsReducer,
 });
