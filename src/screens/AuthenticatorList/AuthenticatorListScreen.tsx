@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, FlatList } from 'react-native';
 import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -29,7 +29,7 @@ interface ActionProps {
 
 type Props = NavigationInjectedProps & MapStateProps & ActionProps;
 
-class AuthenticatorListScreen extends PureComponent<Props> {
+class AuthenticatorListScreen extends Component<Props> {
   componentDidMount() {
     const { loadAuthenticators } = this.props;
     loadAuthenticators();

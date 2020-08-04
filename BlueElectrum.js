@@ -28,10 +28,7 @@ async function connectMain() {
   const usingPeer = { host: 'testnet.bitcoinvault.global', tcp: '50001' };
   try {
     console.log('begin connection:', JSON.stringify(usingPeer));
-
     mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, 'tcp');
-
-    // mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, 'ssl');
     mainClient.onError = function(e) {
       console.log('ElectrumClient error: ' + e);
       mainConnected = false;
