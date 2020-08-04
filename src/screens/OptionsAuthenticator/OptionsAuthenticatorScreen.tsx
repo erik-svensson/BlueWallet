@@ -1,11 +1,11 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 import { icons } from 'app/assets';
-import { Header, ScreenTemplate, Image } from 'app/components';
+import { Header, ScreenTemplate, Image, Separator } from 'app/components';
 import { Authenticator, MainCardStackNavigatorParams, Route } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
@@ -86,6 +86,7 @@ class OptionsAuthenticatorScreen extends Component<Props> {
           <Text style={[styles.desc, styles.center]}>
             {i18n._.created} {formatDate(authenticator.createdAt)}
           </Text>
+          <Separator />
           <View style={styles.optionsContainer}>
             <Text style={[styles.desc, styles.bottomSpace]}>{i18n.authenticators.options.sectionTitle}</Text>
             <TouchableOpacity style={styles.optionWrapper} onPress={this.navigateToExport}>
@@ -158,12 +159,7 @@ const styles = StyleSheet.create({
     ...typography.caption,
   },
   optionsContainer: {
-    width: Dimensions.get('window').width,
-    alignSelf: 'center',
-    marginTop: 20,
-    padding: 20,
-    paddingTop: 24,
-    borderTopWidth: 1,
+    paddingTop: 4,
     borderColor: palette.lightGrey,
   },
 });

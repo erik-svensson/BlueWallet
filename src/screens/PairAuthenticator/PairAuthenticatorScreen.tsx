@@ -1,11 +1,11 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, Dimensions } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import Share from 'react-native-share';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate, FlatButton, TextAreaItem } from 'app/components';
+import { Header, ScreenTemplate, FlatButton, TextAreaItem, Separator } from 'app/components';
 import { Route, Authenticator, MainCardStackNavigatorParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
@@ -52,7 +52,7 @@ class PairAuthenticatorScreen extends Component<Props> {
           <Text style={styles.description}>{i18n.authenticators.pair.descPin}</Text>
           {this.renderPIN(authenticator.pin)}
         </View>
-
+        <Separator />
         <View style={styles.publicKeyContainer}>
           <Text style={styles.subtitle}>{i18n.authenticators.pair.publicKey}</Text>
           <Text style={styles.description}>{i18n.authenticators.pair.descPublicKey}</Text>
@@ -75,12 +75,8 @@ export default connect(mapStateToProps)(PairAuthenticatorScreen);
 
 const styles = StyleSheet.create({
   publicKeyContainer: {
-    width: Dimensions.get('window').width,
-    alignSelf: 'center',
-    marginTop: '4%',
     padding: 20,
-    paddingTop: '5%',
-    borderTopWidth: 1,
+    paddingTop: 0,
     borderColor: palette.lightGrey,
   },
   subtitle: {
