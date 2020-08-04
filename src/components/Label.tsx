@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextProps } from 'react-native';
+import { View, Text, StyleSheet, StyleProp, TextProps } from 'react-native';
 
-import { typography } from 'app/styles';
+import { typography, palette } from 'app/styles';
 
 interface Props {
-  additionalLabelStyle: TextProps;
+  labelStyle: StyleProp<TextProps>;
   children: string;
 }
 
-export const Label = ({ children, additionalLabelStyle }: Props) => (
+export const Label = ({ children, labelStyle }: Props) => (
   <View style={styles.labelWrapper}>
-    <Text style={[styles.label, additionalLabelStyle]}>{children}</Text>
+    <Text style={[styles.label, labelStyle]}>{children}</Text>
   </View>
 );
 
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   },
   label: {
     ...typography.status,
+    backgroundColor: palette.mediumGrey,
     paddingVertical: 2,
     paddingHorizontal: 8,
     borderRadius: 2,

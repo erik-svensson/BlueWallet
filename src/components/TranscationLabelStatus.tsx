@@ -16,9 +16,8 @@ const readableTransactionType = {
   [TxType.RECOVERY]: i18n.transactions.label.recovered,
 };
 
-export const TranscationLabelStatus = ({ type }: { type: TxType }) => (
-  <Label additionalLabelStyle={styles[type]}>{readableTransactionType[type]}</Label>
-);
+export const TranscationLabelStatus = ({ type }: { type: TxType }) =>
+  !!readableTransactionType[type] && <Label labelStyle={styles[type]}>{readableTransactionType[type]}</Label>;
 
 const styles = StyleSheet.create({
   ALERT_PENDING: {
