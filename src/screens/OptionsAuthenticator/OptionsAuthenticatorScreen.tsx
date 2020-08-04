@@ -35,38 +35,39 @@ type Props = MapStateProps & ActionProps & NavigationProps;
 class OptionsAuthenticatorScreen extends Component<Props> {
   onDelete = () => {
     const { deleteAuthenticator, navigation, authenticator } = this.props;
-    navigation.navigate(Route.DeleteEntity, {
-      name: authenticator.name,
-      title: i18n.authenticators.delete.title,
-      subtitle: i18n.authenticators.delete.subtitle,
-      onConfirm: () => {
-        deleteAuthenticator(authenticator.id, {
-          onSuccess: () => {
-            CreateMessage({
-              title: i18n.message.success,
-              description: i18n.authenticators.delete.success,
-              type: MessageType.success,
-              buttonProps: {
-                title: i18n.message.returnToAuthenticators,
-                onPress: () => navigation.navigate(Route.AuthenticatorList),
-              },
-            });
-          },
-        });
-      },
-    });
+    authenticator &&
+      navigation.navigate(Route.DeleteEntity, {
+        name: authenticator.name,
+        title: i18n.authenticators.delete.title,
+        subtitle: i18n.authenticators.delete.subtitle,
+        onConfirm: () => {
+          deleteAuthenticator(authenticator.id, {
+            onSuccess: () => {
+              CreateMessage({
+                title: i18n.message.success,
+                description: i18n.authenticators.delete.success,
+                type: MessageType.success,
+                buttonProps: {
+                  title: i18n.message.returnToAuthenticators,
+                  onPress: () => navigation.navigate(Route.AuthenticatorList),
+                },
+              });
+            },
+          });
+        },
+      });
   };
 
   navigateToPair = () => {
     const { authenticator, navigation } = this.props;
 
-    navigation.navigate(Route.PairAuthenticator, { id: authenticator.id });
+    authenticator && navigation.navigate(Route.PairAuthenticator, { id: authenticator.id });
   };
 
   navigateToExport = () => {
     const { authenticator, navigation } = this.props;
 
-    navigation.navigate(Route.ExportAuthenticator, { id: authenticator.id });
+    authenticator && navigation.navigate(Route.ExportAuthenticator, { id: authenticator.id });
   };
 
   render() {
