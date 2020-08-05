@@ -1,4 +1,13 @@
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
-export const preventScreenshots = () => NativeModules.PreventScreenshotModule.forbid();
-export const allowScreenshots = () => NativeModules.PreventScreenshotModule.allow();
+import { CONST } from 'app/consts';
+
+export const preventScreenshots = () => {
+  if (Platform.OS === CONST.ios) return;
+  return NativeModules.PreventScreenshotModule.forbid();
+};
+
+export const allowScreenshots = () => {
+  if (Platform.OS === CONST.ios) return;
+  return NativeModules.PreventScreenshotModule.allow();
+};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { KeyboardType, StyleProp, ViewStyle } from 'react-native';
+import { KeyboardType, StyleProp, ViewStyle, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 
 import { FastImageSource } from 'app/components';
@@ -13,6 +13,8 @@ export const CONST = {
   android: 'android',
   ios: 'ios',
 };
+
+export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
 
 export enum FlowType {
   password = 'password',

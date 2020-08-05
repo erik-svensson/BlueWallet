@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, TextInput as BaseTextInput, View, Text, Animated, TextInputProps } from 'react-native';
 
+import { defaultKeyboardType } from 'app/consts';
 import { palette, typography, fonts } from 'app/styles';
 
 interface Props extends TextInputProps {
@@ -94,7 +95,7 @@ export class InputItem extends PureComponent<Props, State> {
   render() {
     const { isAnimatedFocused, isActive } = this.state;
     const { label, suffix, error, secureTextEntry } = this.props;
-    const keyboardType = secureTextEntry ? 'default' : 'visible-password';
+    const keyboardType = secureTextEntry ? 'default' : defaultKeyboardType;
 
     const top = this.state.isAnimatedFocused.interpolate({
       inputRange: [0, 1],
