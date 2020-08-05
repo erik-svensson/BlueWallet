@@ -62,7 +62,7 @@ export class SendCoinsScreen extends Component<Props, State> {
 
     const addresses = toAddress ? [{ address: toAddress }] : [];
     if (wallets.length === 0) {
-      Alert.alert('Before creating a transaction, you must first add a Bitcoin wallet.');
+      Alert.alert(i18n.send.error.title, i18n.send.error.description);
       props.navigation.goBack();
     } else {
       if (!fromWallet && wallets.length > 0) {
@@ -535,8 +535,12 @@ export class SendCoinsScreen extends Component<Props, State> {
     return newAddresses;
   };
 
+  isStateSettedUp = () => this.state !== null && this.state.fromWallet && this.state.fee;
+
   render() {
+    if (!this.isStateSettedUp()) return null;
     const { fromWallet, fee, isLoading } = this.state;
+
     return (
       <ScreenTemplate
         footer={

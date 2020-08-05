@@ -213,6 +213,10 @@ module.exports = {
       done: 'Done',
       return: 'Return to Dashboard',
     },
+    error: {
+      title: 'Error',
+      description: 'Before creating a transaction, you must first add a Bitcoin Vault wallet.',
+    },
     details: {
       title: 'create transaction',
       amount_field_is_not_valid: 'Amount field is not valid',
