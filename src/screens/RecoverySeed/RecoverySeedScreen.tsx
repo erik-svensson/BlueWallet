@@ -86,8 +86,6 @@ class RecoverySeedScreen extends Component<Props, State> {
 
     try {
       const keyPair = await mnemonicToKeyPair(mnemonic.join(' '));
-      console.log('keyPair', keyPair);
-
       this.setState({ isLoading: false });
 
       onSubmit(keyPair);
