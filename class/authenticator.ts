@@ -1,4 +1,4 @@
-import { ECPair, VaultTxType, address, Network } from 'bitcoinjs-lib';
+import { ECPair, VaultTxType, address, TxOutput } from 'bitcoinjs-lib';
 import dayjs, { Dayjs } from 'dayjs';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -98,7 +98,7 @@ export class Authenticator implements IAuthenticator {
       }
     }
 
-    const recipients = tx.outs.map((output: { script: Buffer; network: Network; value: number }) => {
+    const recipients = tx.outs.map((output: TxOutput) => {
       return {
         address: address.fromOutputScript(output.script, config.network),
         value: output.value,
