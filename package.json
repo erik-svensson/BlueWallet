@@ -54,14 +54,12 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "postinstall": "./node_modules/.bin/rn-nodeify --install buffer,events,process,stream,util,inherits,fs,path --hack; npm run releasenotes2json; npx jetify",
-    "test": "echo",
-    "testOriginal": "yarn jest",
-    "jest": "node node_modules/jest/bin/jest.js utils/tests tests/integration/*",
+    "test": "yarn jest",
+    "unit": "echo",
+    "jest": "node node_modules/jest/bin/jest.js tests/*",
     "install_local": "cd src && yarn install",
     "lint": "eslint '**/*.{js,ts,tsx}'",
     "lint:fix": "yarn lint --fix",
-    "unit": "echo",
-    "unitOriginal": "./node_modules/.bin/mocha tests/unit/*",
     "typescript:check": "tsc --noEmit",
     "prettier:fix": "prettier --write '**/*.{js,ts,tsx}'",
     "precommit": "yarn lint-staged",
@@ -114,7 +112,6 @@
     "intl": "1.2.5",
     "lodash": "^4.17.19",
     "lottie-react-native": "3.1.1",
-    "mocha": "5.2.0",
     "moment": "^2.24.0",
     "node-libs-react-native": "1.0.3",
     "path-browserify": "1.0.0",
@@ -215,7 +212,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn unit && yarn test"
+      "pre-push": "yarn test"
     }
   }
 }
