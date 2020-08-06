@@ -7827,6 +7827,11 @@ react-native-camera@^3.33.0:
   dependencies:
     prop-types "^15.6.2"
 
+react-native-config@^1.3.3:
+  version "1.3.3"
+  resolved "https://npm.registry.megatherium.solutions/react-native-config/-/react-native-config-1.3.3.tgz#307ba512f92e4ecdc9ced06288610c0608da3ae7"
+  integrity sha512-uc84IFVLqu2dC7Zutg3OlK6RZYvJlGbIdi0v1ZxjUhU379Nz9IkZR1t8J1L5QSnGV8885mtwWDPJRdQyVNFsAw==
+
 react-native-confirmation-code-field@5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/react-native-confirmation-code-field/-/react-native-confirmation-code-field-5.1.0.tgz#7f501c733bfaffb71abfa93657ec8fe75efb5956"
