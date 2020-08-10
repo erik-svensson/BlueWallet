@@ -61,6 +61,7 @@ export enum Route {
   AdvancedOptions = 'AdvancedOptions',
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
+  TimeCounter = 'TimeCounter',
 }
 
 export interface Wallet {
@@ -225,4 +226,8 @@ export type MainCardStackNavigatorParams = {
     pin: string;
   };
   [Route.FilterTransactions]: { onFilterPress: ({}) => void };
+  [Route.TimeCounter]: {
+    onCountFinish: () => void;
+    timestamp: number;
+  };
 };

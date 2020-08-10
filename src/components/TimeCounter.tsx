@@ -1,79 +1,67 @@
-import { StackNavigationProp } from '@react-navigation/stack';
-import dayjs from 'dayjs';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
-import { Overlay } from 'react-native-elements';
+import React, { Component } from 'react';
+import { View, StyleSheet } from 'react-native';
 
-import { MainCardStackNavigatorParams, Route } from 'app/consts';
-import { useInterval } from 'app/helpers/useInterval';
-import { typography } from 'app/styles';
+import { palette, fonts } from 'app/styles';
 
-import { Button } from './Button';
-
-const i18n = require('../../loc');
+import { Text } from './Text';
 
 interface Props {
-  timestamp: number;
-  isVisible: boolean;
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CurrentPin>;
-  onCountFinish?: () => void;
+  value: number;
 }
 
-export const TimeCounter = ({ timestamp, onCountFinish, isVisible, navigation }: Props) => {
-  const currentTimestamp = dayjs().unix();
-  const secondsToCount = (timestamp - currentTimestamp).toFixed(0);
-  const [seconds, setSeconds] = useState(parseInt(secondsToCount));
+export class TimeCounter extends Component<Props> {
+  render() {
+    const { value } = this.props;
+    const minutes = Math.floor(value / 60);
+    const seconds = value - minutes * 60;
+    const middleElement = 2;
+    const getStringifiedWithZero = (number: number) => (number < 10 ? `0${number}` : `${number}`);
+    const time = getStringifiedWithZero(minutes) + ':' + getStringifiedWithZero(seconds);
 
-  const isTimeUp = (): boolean => seconds === 0;
-
-  useInterval(
-    () => {
-      setSeconds(seconds - 1);
-    },
-    seconds > 0 ? 1000 : null,
-  );
-
-  useEffect(() => {
-    if (isTimeUp()) {
-      onFinish();
-    }
-  });
-
-  const onFinish = () => {
-    if (onCountFinish) {
-      onCountFinish();
-    }
-  };
-
-  const goBack = () => navigation.goBack();
-
-  return (
-    <Overlay isVisible={isVisible}>
+    return (
       <View style={styles.container}>
-        <View style={styles.timerContainer}>
-          <Text style={typography.headline4}>{i18n.onboarding.numberOfAttemptsExceeded}</Text>
-          <Text style={typography.headline4}>
-            {i18n.onboarding.tryAgain} {seconds} {i18n.onboarding.seconds}
-          </Text>
-        </View>
-        <KeyboardAvoidingView style={styles.footer} keyboardVerticalOffset={20}>
-          <Button onPress={goBack} title={i18n.onboarding.goBack} />
-        </KeyboardAvoidingView>
+        {[...Array(time.length)].map((el, index) => {
+          const number = time[index];
+          if (index === middleElement) {
+            return (
+              <View key={index} style={styles.breakContainer}>
+                <Text style={styles.number}>{number}</Text>
+              </View>
+            );
+          }
+          return (
+            <View key={index} style={styles.valueContainer}>
+              <Text style={styles.number}>{number}</Text>
+            </View>
+          );
+        })}
       </View>
-    </Overlay>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
-  timerContainer: {
+  valueContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: palette.borderGrey,
+    width: 40,
+    height: 40,
     alignItems: 'center',
-    flexGrow: 1,
+    justifyContent: 'center',
+    marginHorizontal: 6,
+  },
+  breakContainer: {
+    width: 4,
+    height: 40,
+    alignItems: 'center',
     justifyContent: 'center',
   },
-  footer: {
-    marginBottom: 12,
+  number: {
+    fontFamily: fonts.ubuntu.light,
+    fontSize: 24,
   },
 });

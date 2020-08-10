@@ -1,5 +1,5 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
@@ -38,6 +38,7 @@ interface State {
 }
 
 class CurrentPinScreen extends PureComponent<Props, State> {
+  focusListener: any;
   state = {
     pin: '',
     error: '',
@@ -108,6 +109,12 @@ class CurrentPinScreen extends PureComponent<Props, State> {
 
   render() {
     const { error } = this.state;
+    if (this.isTimeCounterVisible()) {
+      this.props.navigation.navigate(Route.TimeCounter, {
+        onCountFinish: this.onCountFinish,
+        timestamp: this.props.timeCounter.timestamp,
+      });
+    }
     return (
       <ScreenTemplate
         noScroll
@@ -120,14 +127,6 @@ class CurrentPinScreen extends PureComponent<Props, State> {
           <PinInput value={this.state.pin} onTextChange={this.updatePin} />
           <Text style={styles.errorText}>{error}</Text>
         </View>
-        {this.isTimeCounterVisible() && (
-          <TimeCounter
-            navigation={this.props.navigation}
-            onCountFinish={this.onCountFinish}
-            isVisible={this.isTimeCounterVisible()}
-            timestamp={this.props.timeCounter.timestamp}
-          />
-        )}
       </ScreenTemplate>
     );
   }

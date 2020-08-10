@@ -205,6 +205,13 @@ module.exports = {
       sendCoins: 'Send coins',
     },
   },
+  timeCounter: {
+    title: 'Application blocked',
+    description:
+      'Your application has been blocked due to the unsuccessful login attempts. Please wait required time in order to try again.',
+    tryAgain: 'Try again',
+    closeTheApp: 'Close the application',
+  },
   send: {
     header: 'Send coins',
     success: {

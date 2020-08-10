@@ -54,7 +54,7 @@ export default class App extends React.PureComponent<State> {
   };
 
   get showUnlockScreen(): boolean {
-    if (__DEV__) {
+    if (false) {
       // do not check PIN during development
       BlueApp.startAndDecrypt();
       return false;
