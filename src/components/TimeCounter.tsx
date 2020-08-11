@@ -10,29 +10,17 @@ interface Props {
   value: number;
 }
 
-export const TimeCounter = ({ value }: Props) => {
-  const middleElement = 2;
-  const time = secondsToFormat(value, 'mm:ss');
-  return (
-    <View style={styles.container}>
-      {time.split('').map((el, index) => {
-        const number = time[index];
-        if (index === middleElement) {
-          return (
-            <View key={index} style={styles.breakContainer}>
-              <Text style={styles.number}>{number}</Text>
-            </View>
-          );
-        }
-        return (
-          <View key={index} style={styles.valueContainer}>
-            <Text style={styles.number}>{number}</Text>
-          </View>
-        );
-      })}
-    </View>
-  );
-};
+export const TimeCounter = ({ value }: Props) => (
+  <View style={styles.container}>
+    {secondsToFormat(value, 'mm:ss')
+      .split('')
+      .map((element, index) => (
+        <View key={index} style={element === ':' ? styles.breakContainer : styles.valueContainer}>
+          <Text style={styles.number}>{element}</Text>
+        </View>
+      ))}
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {

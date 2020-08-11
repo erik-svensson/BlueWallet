@@ -53,15 +53,12 @@ class CurrentPinScreen extends PureComponent<Props, State> {
     let currentDate = dayjs();
     let blockedTimeInMinutes = 1;
 
-    if (attempt === 0) {
-      currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
-    } else if (attempt === 1) {
+    if (attempt === 1) {
       blockedTimeInMinutes = 2;
-      currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
     } else if (attempt > 1) {
       blockedTimeInMinutes = 10;
-      currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
     }
+    currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
 
     if (isFinalAttempt) {
       this.props.setTimeCounter(currentDate.unix());
