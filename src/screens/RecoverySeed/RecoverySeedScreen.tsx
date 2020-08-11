@@ -38,6 +38,13 @@ class RecoverySeedScreen extends Component<Props, State> {
     this.setState({ mnemonic: newMnemonic });
   };
 
+  static getDerivedStateFromProps(props: Props, state: State) {
+    if (props.route.params.mnemonic && !state.mnemonic[0]) {
+      return { mnemonic: props.route.params?.mnemonic };
+    }
+    return null;
+  }
+
   renderInputs = () => {
     const { mnemonic } = this.state;
     return compose(
@@ -88,7 +95,7 @@ class RecoverySeedScreen extends Component<Props, State> {
       const keyPair = await mnemonicToKeyPair(mnemonic.join(' '));
       this.setState({ isLoading: false });
 
-      onSubmit(keyPair);
+      onSubmit(keyPair, mnemonic);
     } catch (e) {
       this.setState({ isLoading: false });
       Alert.alert(e.message);
