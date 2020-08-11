@@ -38,7 +38,9 @@ export default class App extends React.PureComponent<State> {
     if (isPinSet) {
       this.setState({ isPinSet });
     }
-    checkDeviceSecurity();
+    if (!__DEV__) {
+      checkDeviceSecurity();
+    }
   }
 
   handleAppComesToForeground = async () => {

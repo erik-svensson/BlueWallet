@@ -38,7 +38,6 @@ interface State {
 }
 
 class CurrentPinScreen extends PureComponent<Props, State> {
-  focusListener: any;
   state = {
     pin: '',
     error: '',
@@ -55,14 +54,13 @@ class CurrentPinScreen extends PureComponent<Props, State> {
     let blockedTimeInMinutes = 1;
 
     if (attempt === 0) {
-      currentDate = currentDate.add(1, 'minute');
-      blockedTimeInMinutes = 1;
+      currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
     } else if (attempt === 1) {
-      currentDate = currentDate.add(2, 'minute');
       blockedTimeInMinutes = 2;
+      currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
     } else if (attempt > 1) {
-      currentDate = currentDate.add(10, 'minute');
       blockedTimeInMinutes = 10;
+      currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
     }
 
     if (isFinalAttempt) {

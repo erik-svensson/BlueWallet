@@ -32,6 +32,10 @@ export const TimeCounterScreen = (props: Props) => {
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', exitApp);
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', exitApp);
+    };
   });
 
   const exitApp = () => {

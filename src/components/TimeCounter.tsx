@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { palette, fonts } from 'app/styles';
+import { secondsToFormat } from 'app/utils/date';
 
 import { Text } from './Text';
 
@@ -9,36 +10,29 @@ interface Props {
   value: number;
 }
 
-export class TimeCounter extends Component<Props> {
-  render() {
-    const { value } = this.props;
-    const minutes = Math.floor(value / 60);
-    const seconds = value - minutes * 60;
-    const middleElement = 2;
-    const getStringifiedWithZero = (number: number) => (number < 10 ? `0${number}` : `${number}`);
-    const time = getStringifiedWithZero(minutes) + ':' + getStringifiedWithZero(seconds);
-
-    return (
-      <View style={styles.container}>
-        {[...Array(time.length)].map((el, index) => {
-          const number = time[index];
-          if (index === middleElement) {
-            return (
-              <View key={index} style={styles.breakContainer}>
-                <Text style={styles.number}>{number}</Text>
-              </View>
-            );
-          }
+export const TimeCounter = ({ value }: Props) => {
+  const middleElement = 2;
+  const time = secondsToFormat(value, 'mm:ss');
+  return (
+    <View style={styles.container}>
+      {time.split('').map((el, index) => {
+        const number = time[index];
+        if (index === middleElement) {
           return (
-            <View key={index} style={styles.valueContainer}>
+            <View key={index} style={styles.breakContainer}>
               <Text style={styles.number}>{number}</Text>
             </View>
           );
-        })}
-      </View>
-    );
-  }
-}
+        }
+        return (
+          <View key={index} style={styles.valueContainer}>
+            <Text style={styles.number}>{number}</Text>
+          </View>
+        );
+      })}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

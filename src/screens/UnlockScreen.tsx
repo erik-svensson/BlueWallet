@@ -68,14 +68,13 @@ class UnlockScreen extends PureComponent<Props, State> {
     let blockedTimeInMinutes = 1;
 
     if (attempt === 0) {
-      currentDate = currentDate.add(1, 'minute');
-      blockedTimeInMinutes = 1;
+      currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
     } else if (attempt === 1) {
-      currentDate = currentDate.add(2, 'minute');
       blockedTimeInMinutes = 2;
+      currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
     } else if (attempt > 1) {
-      currentDate = currentDate.add(10, 'minute');
       blockedTimeInMinutes = 10;
+      currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
     }
 
     if (isFinalAttempt) {
@@ -130,21 +129,19 @@ class UnlockScreen extends PureComponent<Props, State> {
         onCountFinish: this.onCountFinish,
         timestamp: this.props.timeCounter.timestamp,
       });
+      return null;
     }
-    if (!this.isTimeCounterVisible()) {
-      return (
-        <View style={styles.container}>
-          <StatusBar barStyle="dark-content" />
-          <View style={styles.imageContainer}>
-            <Image source={images.portraitLogo} style={styles.logo} resizeMode="contain" />
-          </View>
-          <PinView value={pin} length={CONST.pinCodeLength as number} />
-          <Text style={styles.errorText}>{error}</Text>
-          <PinInputView value={pin} onTextChange={this.updatePin} onClearPress={this.onClearPress} />
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        <View style={styles.imageContainer}>
+          <Image source={images.portraitLogo} style={styles.logo} resizeMode="contain" />
         </View>
-      );
-    }
-    return null;
+        <PinView value={pin} length={CONST.pinCodeLength} />
+        <Text style={styles.errorText}>{error}</Text>
+        <PinInputView value={pin} onTextChange={this.updatePin} onClearPress={this.onClearPress} />
+      </View>
+    );
   }
 }
 
