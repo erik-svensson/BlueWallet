@@ -62,8 +62,8 @@ class RecoverySeedScreen extends Component<Props, State> {
   };
 
   canSubmit = () => {
-    const { mnemonic } = this.state;
-    return mnemonic.every(word => word !== '');
+    const { mnemonic, isLoading } = this.state;
+    return mnemonic.every(word => word !== '') && !isLoading;
   };
 
   scanQRCode = () => {
@@ -87,19 +87,27 @@ class RecoverySeedScreen extends Component<Props, State> {
     });
   };
 
-  submit = async () => {
+  submit = () => {
     const { mnemonic } = this.state;
     const { onSubmit } = this.props.route.params;
 
-    try {
-      const keyPair = await mnemonicToKeyPair(mnemonic.join(' '));
-      this.setState({ isLoading: false });
-
-      onSubmit(keyPair, mnemonic);
-    } catch (e) {
-      this.setState({ isLoading: false });
-      Alert.alert(e.message);
-    }
+    this.setState(
+      {
+        isLoading: true,
+      },
+      async () => {
+        setTimeout(async () => {
+          try {
+            const keyPair = await mnemonicToKeyPair(mnemonic.join(' '));
+            onSubmit(keyPair, mnemonic);
+            this.setState({ isLoading: false });
+          } catch (e) {
+            this.setState({ isLoading: false });
+            Alert.alert(e.message);
+          }
+        });
+      },
+    );
   };
 
   render() {
