@@ -68,7 +68,7 @@ class CurrentPinScreen extends PureComponent<Props, State> {
       setFailedAttemptStep(increasedFailedAttemptStep);
     }
 
-    return !finalAttempt
+    return !isFinalAttempt
       ? `\n${i18n.onboarding.failedTimesErrorInfo} ${blockedTimeInMinutes} ${i18n.onboarding.minutes}\n${i18n.onboarding.failedTimes} ${increasedFailedAttemptStep}/${finalAttempt}`
       : '';
   };
