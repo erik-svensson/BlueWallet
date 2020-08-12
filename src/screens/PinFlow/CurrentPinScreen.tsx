@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
 import { Route, CONST, FlowType, MainCardStackNavigatorParams, firstAttempt, finalAttempt } from 'app/consts';
+import { noop } from 'app/helpers/helpers';
 import { SecureStorageService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import {
@@ -39,6 +40,7 @@ interface State {
 }
 
 class CurrentPinScreen extends PureComponent<Props, State> {
+  unsubscribeFocusListener: Function = noop;
   state = {
     pin: '',
     error: '',
@@ -104,6 +106,16 @@ class CurrentPinScreen extends PureComponent<Props, State> {
     return dayjs().unix() < this.props.timeCounter.timestamp && this.state.isCount;
   };
 
+  componentDidMount() {
+    this.unsubscribeFocusListener = this.props.navigation.addListener('focus', () => {
+      this.setState({ pin: '', error: '' });
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeFocusListener();
+  }
+
   render() {
     const { error } = this.state;
     if (this.isTimeCounterVisible()) {
@@ -121,7 +133,7 @@ class CurrentPinScreen extends PureComponent<Props, State> {
           <Text style={typography.headline4}>{i18n.onboarding.currentPin}</Text>
         </View>
         <View style={styles.pinContainer}>
-          <PinInput value={this.state.pin} onTextChange={this.updatePin} />
+          <PinInput value={this.state.pin} onTextChange={this.updatePin} navigation={this.props.navigation} />
           <Text style={styles.errorText}>{error}</Text>
         </View>
       </ScreenTemplate>
