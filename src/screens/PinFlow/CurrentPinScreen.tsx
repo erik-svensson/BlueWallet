@@ -48,7 +48,7 @@ class CurrentPinScreen extends PureComponent<Props, State> {
   handleFailedAttempt = (increasedFailedAttemptStep: number) => {
     const { attempt } = this.props.timeCounter;
     const { setFailedAttempts, setFailedAttemptStep, setTimeCounter } = this.props;
-    const isFinalAttempt = increasedFailedAttemptStep > 2;
+    const isFinalAttempt = increasedFailedAttemptStep === finalAttempt;
     let currentDate = dayjs();
     let blockedTimeInMinutes = 1;
 
@@ -68,7 +68,7 @@ class CurrentPinScreen extends PureComponent<Props, State> {
       setFailedAttemptStep(increasedFailedAttemptStep);
     }
 
-    return increasedFailedAttemptStep !== firstAttempt && increasedFailedAttemptStep !== finalAttempt
+    return !finalAttempt
       ? `\n${i18n.onboarding.failedTimesErrorInfo} ${blockedTimeInMinutes} ${i18n.onboarding.minutes}\n${i18n.onboarding.failedTimes} ${increasedFailedAttemptStep}/${finalAttempt}`
       : '';
   };
