@@ -98,7 +98,7 @@ class CurrentPinScreen extends PureComponent<Props, State> {
     });
   };
 
-  onCountFinish = () => {
+  onTryAgain = () => {
     this.setState({ isCount: false });
   };
 
@@ -120,7 +120,7 @@ class CurrentPinScreen extends PureComponent<Props, State> {
     const { error } = this.state;
     if (this.isTimeCounterVisible()) {
       this.props.navigation.navigate(Route.TimeCounter, {
-        onCountFinish: this.onCountFinish,
+        onTryAgain: this.onTryAgain,
         timestamp: this.props.timeCounter.timestamp,
       });
     }

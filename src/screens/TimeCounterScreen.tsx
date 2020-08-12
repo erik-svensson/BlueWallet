@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const TimeCounterScreen = (props: Props) => {
-  const { timestamp, onCountFinish } = props.route.params;
+  const { timestamp, onTryAgain } = props.route.params;
   const currentTimestamp = dayjs().unix();
   const secondsToCount = (timestamp - currentTimestamp).toFixed(0);
   const [seconds, setSeconds] = useState(parseInt(secondsToCount));
@@ -43,9 +43,9 @@ export const TimeCounterScreen = (props: Props) => {
     return true;
   };
 
-  const onFinish = () => {
-    if (onCountFinish) {
-      onCountFinish();
+  const onTryAgainPress = () => {
+    if (onTryAgain) {
+      onTryAgain();
     }
     props.navigation.goBack();
   };
@@ -54,7 +54,7 @@ export const TimeCounterScreen = (props: Props) => {
     <ScreenTemplate
       footer={
         <>
-          <Button disabled={seconds !== 0} onPress={onFinish} title={i18n.timeCounter.tryAgain} />
+          <Button disabled={seconds !== 0} onPress={onTryAgainPress} title={i18n.timeCounter.tryAgain} />
           <FlatButton containerStyle={styles.flatButton} onPress={exitApp} title={i18n.timeCounter.closeTheApp} />
         </>
       }

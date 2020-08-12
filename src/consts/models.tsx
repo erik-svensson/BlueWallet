@@ -227,7 +227,7 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.FilterTransactions]: { onFilterPress: ({}) => void };
   [Route.TimeCounter]: {
-    onCountFinish: () => void;
+    onTryAgain: () => void;
     timestamp: number;
   };
 };

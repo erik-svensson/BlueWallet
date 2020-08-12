@@ -115,8 +115,8 @@ class UnlockScreen extends PureComponent<Props, State> {
     });
   };
 
-  onCountFinish = () => {
-    this.setState({ isCount: false });
+  onTryAgain = () => {
+    this.setState({ isCount: false, error: '' });
   };
 
   isTimeCounterVisible = () => {
@@ -127,7 +127,7 @@ class UnlockScreen extends PureComponent<Props, State> {
     const { error, pin } = this.state;
     if (this.isTimeCounterVisible()) {
       NavigationService.navigate(Route.TimeCounter, {
-        onCountFinish: this.onCountFinish,
+        onTryAgain: this.onTryAgain,
         timestamp: this.props.timeCounter.timestamp,
       });
       return null;
