@@ -19,11 +19,11 @@ interface Props {
 
 export class PinInput extends PureComponent<Props> {
   codeFieldRef = React.createRef<any>();
-  onFocus: Function = noop;
+  unsubscribeFocusListener: Function = noop;
 
   componentDidMount() {
     // workaround for autoFocus prop issues
-    this.onFocus = this.props.navigation.addListener('focus', () => {
+    this.unsubscribeFocusListener = this.props.navigation.addListener('focus', () => {
       setTimeout(() => {
         this.focus();
       }, 500);
@@ -31,7 +31,7 @@ export class PinInput extends PureComponent<Props> {
   }
 
   componentWillUnmount() {
-    this.onFocus();
+    this.unsubscribeFocusListener();
   }
 
   focus = () => {

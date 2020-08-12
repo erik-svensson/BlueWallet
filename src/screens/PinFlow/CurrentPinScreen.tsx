@@ -40,7 +40,7 @@ interface State {
 }
 
 class CurrentPinScreen extends PureComponent<Props, State> {
-  onFocus: Function = noop;
+  unsubscribeFocusListener: Function = noop;
   state = {
     pin: '',
     error: '',
@@ -107,13 +107,13 @@ class CurrentPinScreen extends PureComponent<Props, State> {
   };
 
   componentDidMount() {
-    this.onFocus = this.props.navigation.addListener('focus', () => {
+    this.unsubscribeFocusListener = this.props.navigation.addListener('focus', () => {
       this.setState({ pin: '', error: '' });
     });
   }
 
   componentWillUnmount() {
-    this.onFocus();
+    this.unsubscribeFocusListener();
   }
 
   render() {
