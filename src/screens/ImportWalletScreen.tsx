@@ -1,6 +1,5 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Function } from 'lodash';
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, Text, Keyboard, Alert } from 'react-native';
 import { connect } from 'react-redux';
@@ -37,12 +36,10 @@ interface State {
   text: string;
   label: string;
   validationError: string;
-  isLoading: boolean;
 }
 
 export class ImportWalletScreen extends PureComponent<Props, State> {
   state = {
-    isLoading: false,
     text: '',
     label: '',
     validationError: '',
@@ -131,6 +128,15 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     ]);
   };
 
+  createWalletMessage = (asyncTask: () => void) => {
+    CreateMessage({
+      title: i18n.message.creatingWallet,
+      description: i18n.message.creatingWalletDescription,
+      type: MessageType.processingState,
+      asyncTask,
+    });
+  };
+
   createARWallet = (mnemonic: string) => {
     try {
       const wallet = new HDSegwitP2SHArWallet();
@@ -139,13 +145,8 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         onBarCodeScan: (key: string) => {
           try {
             wallet.addPublicKey(key);
-            CreateMessage({
-              title: i18n.message.creatingWallet,
-              description: i18n.message.creatingWalletDescription,
-              type: MessageType.processingState,
-              asyncTask: () => {
-                this.saveVaultWallet(wallet);
-              },
+            this.createWalletMessage(() => {
+              this.saveVaultWallet(wallet);
             });
           } catch (e) {
             this.showAlert(e.message);
@@ -217,39 +218,24 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     }
   };
 
-  renderSubtitle = () => {
-    const { walletType } = this.props?.route.params;
-    if (walletType === HDSegwitP2SHArWallet.type || walletType === HDSegwitP2SHAirWallet.type) {
-      return (
-        <>
-          <View style={styles.arSubtitleContainer}>
-            <Text style={styles.subtitle}>{i18n.wallets.importWallet.importARDescription1}</Text>
-            <Text style={styles.subtitle}>{i18n._.or}</Text>
-            <Text style={styles.subtitle}>{i18n.wallets.importWallet.importARDescription2}</Text>
-          </View>
-          <InputItem
-            error={this.state.validationError}
-            setValue={this.onLabelChange}
-            label={i18n.wallets.add.inputLabel}
-          />
-        </>
-      );
-    }
-    return <Text style={styles.subtitle}>{i18n.wallets.importWallet.subtitle}</Text>;
-  };
+  renderSubtitle = () => (
+    <>
+      <View style={styles.arSubtitleContainer}>
+        <Text style={styles.subtitle}>{i18n.wallets.importWallet.importARDescription1}</Text>
+        <Text style={styles.subtitle}>{i18n._.or}</Text>
+        <Text style={styles.subtitle}>{i18n.wallets.importWallet.importARDescription2}</Text>
+      </View>
+      <InputItem error={this.state.validationError} setValue={this.onLabelChange} label={i18n.wallets.add.inputLabel} />
+    </>
+  );
 
   addRecoveryKey = (wallet: HDSegwitP2SHAirWallet) => {
     this.props.navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: (recoveryPublicKey: string) => {
         try {
           wallet.addPublicKey(recoveryPublicKey);
-          CreateMessage({
-            title: i18n.message.creatingWallet,
-            description: i18n.message.creatingWalletDescription,
-            type: MessageType.processingState,
-            asyncTask: () => {
-              this.saveVaultWallet(wallet);
-            },
+          this.createWalletMessage(() => {
+            this.saveVaultWallet(wallet);
           });
         } catch (error) {
           this.showAlert(error.message);
@@ -266,16 +252,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     });
   };
 
-  importMnemonic = async (mnemonic: string) => {
-    const trimmedMemonic = mnemonic.trim();
-
-    if (this.props?.route.params.walletType === HDSegwitP2SHArWallet.type) {
-      return this.createARWallet(trimmedMemonic);
-    }
-    if (this.props?.route.params.walletType === HDSegwitP2SHAirWallet.type) {
-      return this.createAIRWallet(trimmedMemonic);
-    }
-
+  importLegacyWallet = async (trimmedMemonic: string) => {
     try {
       // trying other wallet types
       const segwitWallet = new SegwitP2SHWallet();
@@ -375,10 +352,10 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       // nope?
 
       // TODO: try a raw private key
-    } catch (Err) {
-      this.showErrorMessageScreen({});
+    } catch (e) {
+      this.showErrorMessageScreen({ description: e.message });
     }
-    this.showErrorMessageScreen({});
+    this.showErrorMessageScreen({ title: i18n.message.wrongMnemonic, description: i18n.message.wrongMnemonicDesc });
     // ReactNativeHapticFeedback.trigger('notificationError', {
     //   ignoreAndroidSystemSettings: false,
     // });
@@ -393,15 +370,28 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     // 7. check if its private key (segwit address P2SH) TODO
     // 7. check if its private key (legacy address) TODO
   };
+
+  importMnemonic = (mnemonic: string) => {
+    const trimmedMemonic = mnemonic.trim();
+
+    if (this.props?.route.params.walletType === HDSegwitP2SHArWallet.type) {
+      return this.createARWallet(trimmedMemonic);
+    }
+    if (this.props?.route.params.walletType === HDSegwitP2SHAirWallet.type) {
+      return this.createAIRWallet(trimmedMemonic);
+    }
+    this.createWalletMessage(() => {
+      this.importLegacyWallet(trimmedMemonic);
+    });
+  };
   render() {
-    const { validationError, text, isLoading } = this.state;
+    const { validationError, text } = this.state;
     return (
       <ScreenTemplate
         footer={
           <>
             <Button
               disabled={!text || !!validationError}
-              loading={isLoading}
               title={i18n.wallets.importWallet.import}
               onPress={this.onImportButtonPress}
             />

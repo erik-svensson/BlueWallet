@@ -27,6 +27,9 @@ module.exports = {
     authenticators: 'Authenticators',
   },
   message: {
+    wrongMnemonic: 'Wrong mnemonic',
+    wrongMnemonicDesc:
+      'Your mnemonic didn`t match any supported wallet. You are trying to import incorrect mnemonic or wallet that was never used',
     somethingWentWrong: 'Something went wrong',
     somethingWentWrongWhileCreatingWallet:
       'Something went wrong while we were creating your wallet. Please return to Dashboard and try again.',
@@ -157,7 +160,7 @@ module.exports = {
       header: 'Import wallet',
       subtitle:
         "Write here your mnemonic, private key, WIF or anything you've got. GoldWallet will do its best to guess the correct format and import you wallet.",
-      placeholder: 'Mnemonic, private key, WIF',
+      placeholder: 'Mnemonic',
       import: 'Import',
       scanQrCode: 'or scan QR code',
       walletInUseValidationError: 'Wallet is already in use. Please enter a valid wallet.',
