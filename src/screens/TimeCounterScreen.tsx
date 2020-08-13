@@ -44,9 +44,7 @@ export const TimeCounterScreen = (props: Props) => {
   };
 
   const onTryAgainPress = () => {
-    if (onTryAgain) {
-      onTryAgain();
-    }
+    onTryAgain();
     props.navigation.goBack();
   };
 
