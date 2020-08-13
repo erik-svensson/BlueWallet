@@ -117,13 +117,10 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     }
   };
 
-  showAlert = (error?: string, onPress?: () => void) => {
-    Alert.alert('Error', error || i18n.wallets.add.publicKeyError, [
+  showAlert = (error: string) => {
+    Alert.alert('Error', error, [
       {
         text: 'OK',
-        onPress: () => {
-          onPress && onPress();
-        },
       },
     ]);
   };
