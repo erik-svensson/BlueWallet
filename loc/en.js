@@ -35,6 +35,7 @@ module.exports = {
     successfullWalletDelete: 'Your wallet has been successfully deleted. You can now return to Dashboard.',
     returnToDashboard: 'Return to Dashboard',
     returnToWalletChoose: 'Return to wallet type choose',
+    returnToWalletImport: 'Return to wallet import',
     generateAddressesError: 'Couldn`t generate addresses',
     noTransactions: 'No transactions found on wallet',
     noTransactionsDesc: 'Probably you are trying to import the wallet that was never used',
