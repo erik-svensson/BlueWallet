@@ -160,7 +160,7 @@ module.exports = {
       header: 'Import wallet',
       subtitle:
         "Write here your mnemonic, private key, WIF or anything you've got. GoldWallet will do its best to guess the correct format and import you wallet.",
-      placeholder: 'Mnemonic',
+      placeholder: 'Mnemonic, private key, WIF',
       import: 'Import',
       scanQrCode: 'or scan QR code',
       walletInUseValidationError: 'Wallet is already in use. Please enter a valid wallet.',
