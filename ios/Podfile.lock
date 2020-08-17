@@ -2,6 +2,7 @@ PODS:
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
     - React
+  - CocoaAsyncSocket (7.6.4)
   - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
   - DoubleConversion (1.1.6)
@@ -296,6 +297,9 @@ PODS:
     - React
   - react-native-splash-screen (3.2.0):
     - React
+  - react-native-tcp-socket (4.2.0):
+    - CocoaAsyncSocket
+    - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
   - React-RCTAnimation (0.61.5):
@@ -399,8 +403,6 @@ PODS:
   - Sentry (4.4.3):
     - Sentry/Core (= 4.4.3)
   - Sentry/Core (4.4.3)
-  - TcpSockets (4.0.0):
-    - React
   - ToolTipMenu (5.2.1):
     - React
   - Yoga (1.14.0)
@@ -435,6 +437,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
+  - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -471,13 +474,13 @@ DEPENDENCIES:
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - RNWatch (from `../node_modules/react-native-watch-connectivity`)
-  - TcpSockets (from `../node_modules/react-native-tcp`)
   - ToolTipMenu (from `../node_modules/react-native-tooltip`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
     - boost-for-react-native
+    - CocoaAsyncSocket
     - Crashlytics
     - Fabric
     - Firebase
@@ -553,6 +556,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/slider"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
+  react-native-tcp-socket:
+    :path: "../node_modules/react-native-tcp-socket"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -623,8 +628,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-vector-icons"
   RNWatch:
     :path: "../node_modules/react-native-watch-connectivity"
-  TcpSockets:
-    :path: "../node_modules/react-native-tcp"
   ToolTipMenu:
     :path: "../node_modules/react-native-tooltip"
   Yoga:
@@ -633,6 +636,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
+  CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
@@ -675,6 +679,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: e22a8ca00f758273d2408953965cb8db67da7925
   react-native-slider: 884693dd50f84745baa511ecdcde4c16f32182fb
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
+  react-native-tcp-socket: 30f23b4eb99f6df49c6e94b39f5244964be5967b
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -713,10 +718,9 @@ SPEC CHECKSUMS:
   SDWebImage: 84000f962cbfa70c07f19d2234cbfcf5d779b5dc
   SDWebImageWebPCoder: 36f8f47bd9879a8aea6044765c1351120fd8e3a8
   Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
-  TcpSockets: 4ef55305239923b343ed0a378b1fac188b1373b0
   ToolTipMenu: 8ac61aded0fbc4acfe7e84a7d0c9479d15a9a382
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 10567d1e173aae9ab5e898db3c41267100a01a22
+PODFILE CHECKSUM: f0bca8d0d072be505bfc7de58aede2d13d71f541
 
-COCOAPODS: 1.9.2
+COCOAPODS: 1.9.3

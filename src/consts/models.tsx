@@ -16,6 +16,14 @@ export const CONST = {
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
 
+export interface SocketOptions {
+  host: string;
+  port: number;
+  rejectUnauthorized: boolean;
+}
+
+export type SocketCallback = (address: string) => void;
+
 export enum FlowType {
   password = 'password',
   newPin = 'newPin',
