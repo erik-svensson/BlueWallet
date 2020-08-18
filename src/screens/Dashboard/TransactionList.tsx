@@ -1,6 +1,6 @@
 import { curry, map } from 'lodash/fp';
 import React, { PureComponent } from 'react';
-import { SectionList, SectionListData, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { images } from 'app/assets';
 import { Image, TransactionItem } from 'app/components';
@@ -22,10 +22,10 @@ interface Props {
 }
 
 export class TransactionList extends PureComponent<Props> {
-  renderSectionTitle = ({ section }: { section: SectionListData<Transaction> }) => {
+  renderSectionTitle = (title: string) => {
     return (
       <View style={{ marginTop: 30, marginBottom: 10 }}>
-        <Text style={{ ...typography.caption, color: palette.textGrey }}>{section.title}</Text>
+        <Text style={{ ...typography.caption, color: palette.textGrey }}>{title}</Text>
       </View>
     );
   };
@@ -54,18 +54,32 @@ export class TransactionList extends PureComponent<Props> {
     );
   };
 
+  renderTransactions = () => {
+    const sections = this.getSectionData();
+    return sections.map(section => {
+      const { data: transactions, title } = section;
+      return (
+        <View key={title}>
+          {this.renderSectionTitle(title)}
+          {transactions.map(t => (
+            <TransactionItem key={t.txid} item={t} onPress={this.onTransactionItemPress} />
+          ))}
+        </View>
+      );
+    });
+  };
+
   render() {
     const { headerHeight, search, transactions } = this.props;
+
+    this.renderTransactions();
+    if (transactions.length === 0) {
+      return this.renderListEmpty();
+    }
     return (
       <View style={{ padding: 20 }}>
-        <SectionList
-          ListFooterComponent={search ? <View style={{ height: transactions.length ? headerHeight / 2 : 0 }} /> : null}
-          sections={this.getSectionData()}
-          keyExtractor={(item, index) => `${item.txid}-${index}`}
-          renderItem={item => <TransactionItem item={item.item} onPress={this.onTransactionItemPress} />}
-          renderSectionHeader={this.renderSectionTitle}
-          ListEmptyComponent={this.renderListEmpty}
-        />
+        {search ? <View style={{ height: transactions.length ? headerHeight / 2 : 0 }} /> : null}
+        {this.renderTransactions()}
       </View>
     );
   }
