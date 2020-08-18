@@ -250,16 +250,16 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     });
   };
 
-  importLegacyWallet = async (trimmedMemonic: string) => {
+  importLegacyWallet = async (trimmedMnemonic: string) => {
     try {
       // trying other wallet types
       const segwitWallet = new SegwitP2SHWallet();
-      segwitWallet.setSecret(trimmedMemonic);
+      segwitWallet.setSecret(trimmedMnemonic);
       if (segwitWallet.getAddress()) {
         // ok its a valid WIF
 
         const legacyWallet = new LegacyWallet();
-        legacyWallet.setSecret(trimmedMemonic);
+        legacyWallet.setSecret(trimmedMnemonic);
 
         await legacyWallet.fetchBalance();
         if (legacyWallet.getBalance() > 0) {
@@ -277,7 +277,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       // case - WIF is valid, just has uncompressed pubkey
 
       const legacyWallet = new LegacyWallet();
-      legacyWallet.setSecret(trimmedMemonic);
+      legacyWallet.setSecret(trimmedMnemonic);
       if (legacyWallet.getAddress()) {
         await legacyWallet.fetchBalance();
         await legacyWallet.fetchTransactions();
@@ -287,7 +287,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       // if we're here - nope, its not a valid WIF
 
       const hd2 = new HDSegwitP2SHWallet();
-      await hd2.setSecret(trimmedMemonic);
+      await hd2.setSecret(trimmedMnemonic);
       if (hd2.validateMnemonic()) {
         await hd2.fetchBalance();
         if (hd2.getBalance() > 0) {
@@ -297,7 +297,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       }
 
       const hd4 = new HDSegwitBech32Wallet();
-      await hd4.setSecret(trimmedMemonic);
+      await hd4.setSecret(trimmedMnemonic);
       if (hd4.validateMnemonic()) {
         await hd4.fetchBalance();
         if (hd4.getBalance() > 0) {
@@ -307,7 +307,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       }
 
       const hd3 = new HDLegacyP2PKHWallet();
-      await hd3.setSecret(trimmedMemonic);
+      await hd3.setSecret(trimmedMnemonic);
       if (hd3.validateMnemonic()) {
         await hd3.fetchBalance();
         if (hd3.getBalance() > 0) {
@@ -340,7 +340,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       // not valid? maybe its a watch-only address?
 
       const watchOnly = new WatchOnlyWallet();
-      watchOnly.setSecret(trimmedMemonic);
+      watchOnly.setSecret(trimmedMnemonic);
       if (watchOnly.valid()) {
         await watchOnly.fetchTransactions();
         await watchOnly.fetchBalance();
@@ -370,21 +370,21 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   };
 
   importMnemonic = (mnemonic: string) => {
-    const trimmedMemonic = mnemonic.trim().replace(/ +/g, ' ');
+    const trimmedMnemonic = mnemonic.trim().replace(/ +/g, ' ');
 
-    if (isElectrumVaultMnemonic(trimmedMemonic)) {
+    if (isElectrumVaultMnemonic(trimmedMnemonic)) {
       this.showAlert(i18n.wallets.importWallet.unsupportedElectrumVaultMnemonic);
       return;
     }
 
     if (this.props?.route.params.walletType === HDSegwitP2SHArWallet.type) {
-      return this.createARWallet(trimmedMemonic);
+      return this.createARWallet(trimmedMnemonic);
     }
     if (this.props?.route.params.walletType === HDSegwitP2SHAirWallet.type) {
-      return this.createAIRWallet(trimmedMemonic);
+      return this.createAIRWallet(trimmedMnemonic);
     }
     this.createWalletMessage(() => {
-      this.importLegacyWallet(trimmedMemonic);
+      this.importLegacyWallet(trimmedMnemonic);
     });
   };
   render() {
