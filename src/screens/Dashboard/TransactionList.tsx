@@ -69,19 +69,20 @@ export class TransactionList extends PureComponent<Props> {
     });
   };
 
-  render() {
+  renderContent = () => {
     const { headerHeight, search, transactions } = this.props;
-
-    this.renderTransactions();
     if (transactions.length === 0) {
       return this.renderListEmpty();
     }
     return (
-      <View style={{ padding: 20 }}>
+      <>
         {search ? <View style={{ height: transactions.length ? headerHeight / 2 : 0 }} /> : null}
         {this.renderTransactions()}
-      </View>
+      </>
     );
+  };
+  render() {
+    return <View style={{ padding: 20 }}>{this.renderContent()}</View>;
   }
 }
 
