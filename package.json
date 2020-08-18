@@ -7,7 +7,6 @@
     "@babel/preset-typescript": "^7.9.0",
     "@babel/runtime": "^7.6.2",
     "@react-native-community/eslint-config": "^0.0.5",
-    "@types/": "react-native-community/async-storage",
     "@types/bigi": "^1.4.2",
     "@types/bip21": "^1.1.30",
     "@types/ecurve": "^1.0.0",
