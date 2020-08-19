@@ -4,8 +4,9 @@ import 'intl';
 import 'intl/locale-data/jsonp/en';
 import './shim.js';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppRegistry, StatusBar } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 
 import App from './App';
 
@@ -15,11 +16,16 @@ if (!Error.captureStackTrace) {
   Error.captureStackTrace = () => {};
 }
 
-const BlueAppComponent = () => (
-  <>
-    <StatusBar backgroundColor="rgba(0,0,0,0)" translucent />
-    <App />
-  </>
-);
+const BlueAppComponent = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+  return (
+    <>
+      <StatusBar backgroundColor="rgba(0,0,0,0)" translucent />
+      <App />
+    </>
+  );
+};
 
 AppRegistry.registerComponent('GoldWallet', () => BlueAppComponent);
