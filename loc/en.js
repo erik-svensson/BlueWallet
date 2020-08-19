@@ -27,6 +27,7 @@ module.exports = {
     authenticators: 'Authenticators',
   },
   message: {
+    hooray: 'Hooray!',
     wrongMnemonic: 'Wrong mnemonic',
     wrongMnemonicDesc:
       'Your mnemonic does not match any supported wallet. You are trying to import an invalid mnemonic or wallet that has never been used',
@@ -34,7 +35,7 @@ module.exports = {
     somethingWentWrongWhileCreatingWallet:
       'Something went wrong while we were creating your wallet. Please return to Dashboard and try again.',
     success: 'Success',
-    successfullWalletImport: 'Your wallet has been successfully imported. You can now return to Dashboard.',
+    successfullWalletImport: `You have successfully imported your wallet. It's now ready to use.`,
     successfullWalletDelete: 'Your wallet has been successfully deleted. You can now return to Dashboard.',
     returnToDashboard: 'Return to Dashboard',
     returnToWalletChoose: 'Return to the wallet type selection',
@@ -44,11 +45,11 @@ module.exports = {
     noTransactionsDesc: 'You are probably trying to import a wallet that has never been used',
     returnToAuthenticators: 'Return to Authenticators',
     creatingWallet: 'Creating your wallet',
-    creatingWalletDescription: 'Please be patient while we create your wallet. It may take a while.',
+    creatingWalletDescription: 'Please be patient while we create your wallet.\nIt may take a while.',
     creatingAuthenticator: 'Creating your authenticator',
-    creatingAuthenticatorDescription: 'Please be patient while we create your authenticator. It may take a while.',
+    creatingAuthenticatorDescription: 'Please be patient while we create your authenticator.\nIt may take a while.',
     importingAuthenticator: 'Importing your authenticator',
-    importingAuthenticatorDescription: 'Please be patient while we import your authenticator. It may take a while.',
+    importingAuthenticatorDescription: 'Please be patient while we import your authenticator.\nIt may take a while.',
   },
   onboarding: {
     onboarding: 'Onboarding',
@@ -80,8 +81,8 @@ module.exports = {
   },
   unlockTransaction: {
     headerText: 'Confirm transaction',
-    title: 'Confirm Transaction Password',
-    description: 'Confirm Transaction Password in order to proceed the transaction.',
+    title: 'Confirm Transaction',
+    description: 'Enter your Transaction Password to proceed.',
   },
   authenticators: {
     sign: {
@@ -142,13 +143,14 @@ module.exports = {
     dashboard: {
       availableBalance: 'Available balance',
       title: 'Wallets',
+      wallet: 'wallet',
       allWallets: 'All wallets',
       noWallets: 'No wallets',
       noWalletsDesc1: 'No wallets to show.',
       noWalletsDesc2: 'to add your first wallet.',
       send: 'Send',
       receive: 'Receive',
-      recover: 'Recover',
+      recover: 'Cancel',
       noTransactions: 'No transactions to show.',
     },
     walletModal: {
@@ -198,7 +200,7 @@ module.exports = {
       failed: 'Failed to create wallet',
       title: 'Add new wallet',
       subtitle: 'Name your wallet',
-      description: 'Please enter name for your new wallet.',
+      description: 'Chose the name and type of your wallet.',
       inputLabel: 'Name',
       addWalletButton: 'Add new wallet',
       importWalletButton: 'Import wallet',
@@ -207,32 +209,33 @@ module.exports = {
       multipleAddresses: 'It contains a tree of P2SH addresses generated from a single 24-word seed',
       singleAddress: 'It contains a single P2SH address',
       segwidAddress: 'It contains a tree of native segwit addresses, generated from a single 24-word seed',
-      ar: 'It can make Alert & Recovery transactions but lacks Instant transactions',
-      air: 'It can make Alert, Instant and Recovery transactions',
+      ar: 'Makes Standard and Cancel transactions.',
+      air: 'Makes Standard, Cancel, and Fast transactions.',
       legacyTitle: 'Legacy',
       legacyHDP2SHTitle: 'Legacy HD P2SH',
       legacyP2SHTitle: 'Legacy P2SH',
       legacyHDSegWitTitle: 'Legacy HD SegWit',
-      legacy: 'It can make default type of transactions',
+      legacy: 'Makes default types of transactions.',
       legacyHDP2SH: 'It contains a tree of P2SH addresses generated from a single 24-word seed',
       LegacyP2SH: 'It contains a single P2SH address',
       LegacyHDSegWit: 'It contains a tree of native segwit addresses, generated from a single 24-word seed',
       publicKeyError: 'Provided public key is invalid',
     },
     publicKey: {
-      recoverySubtitle: 'Integrate Recovery Key',
+      recoverySubtitle: 'Add Cancel Key',
+      webKeyGenerator: 'Web Key Generator:',
       recoveryDescription:
-        'Go to the Web Key Generator on a separate device and use this app to scan the Recovery Key’s generated QR code.',
-      instantSubtitle: 'Integrate Instant Key',
-      instantDescription: `Go to the Web Key Generator on a separate device and use this app to scan the Instant Key's generated QR code.`,
+        'Go to the web Key Generator on a separate device and use this app to scan the Public Key QR code.',
+      instantSubtitle: 'Add Fast Key',
+      instantDescription:
+        'Go to the web Key Generator on a separate device and use this app to scan the Public Key QR code.',
       scan: 'Scan',
     },
     addSuccess: {
       title: 'Add new wallet',
-      subtitle: 'Success',
-      description:
-        'Your wallet has been created. Please take a moment to write down this mnemonic phrase on a piece of paper. It’s your backup. You can use it to restore the wallet on other devices.',
-      okButton: 'OK, I wrote this down!',
+      subtitle: 'Your wallet is ready!\nYou created your wallet!',
+      description: `Write down this seed phrase somewhere safe. It's your backup in case you need to restore your wallet. You will also need it to make Cancel transactions.`,
+      okButton: 'OK, I wrote this down',
     },
     details: {
       edit: 'Edit',
@@ -335,10 +338,10 @@ module.exports = {
   send: {
     header: 'Send coins',
     recovery: {
-      recover: 'Recover',
+      recover: 'Cancel',
       useWalletAddress: 'Use address of this wallet',
-      confirmSeed: 'Confirm with Recovery Seed',
-      confirmSeedDesc: 'Please enter your Recovery Seed in order to proceed.',
+      confirmSeed: 'Confirm with your seed phrase',
+      confirmSeedDesc: 'Enter your seed phrase in the same order as you wrote it down before.',
       confirmFirstSeed: 'Confirm with first Recovery Seed',
       confirmFirstSeedDesc: 'Please enter your first Recovery Seed in order to proceed.',
       confirmSecondSeed: 'Confirm with second Recovery Seed',
@@ -387,6 +390,7 @@ module.exports = {
     },
     confirm: {
       sendNow: 'Send now',
+      cancelNow: 'Cancel now',
       availableBalance: 'Available balance after transaction',
       pendingBalance: 'Pending balance after transaction',
     },

@@ -69,7 +69,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
   showSuccessImportMessageScreen = () =>
     CreateMessage({
-      title: i18n.message.success,
+      title: i18n.message.hooray,
       description: i18n.message.successfullWalletImport,
       type: MessageType.success,
       buttonProps: {

@@ -17,9 +17,13 @@ const BlueElectrum = require('../../BlueElectrum');
 const EV = require('../../events');
 const i18n = require('../../loc');
 
-const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void) => (
+const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void, buttonTitle: string) => (
   <View style={styles.footer}>
-    <Button title={i18n.send.confirm.sendNow} containerStyle={styles.buttonContainer} onPress={onSendPress} />
+    <Button
+      title={buttonTitle || i18n.send.confirm.sendNow}
+      containerStyle={styles.buttonContainer}
+      onPress={onSendPress}
+    />
     <StyledText title={i18n.transactions.details.transactionDetails} onPress={onDetailsPress} />
   </View>
 );
@@ -178,14 +182,14 @@ export class SendCoinsConfirmScreen extends Component<Props> {
       navigation,
       route: { params },
     } = this.props;
-    const { fromWallet, recipients, satoshiPerByte } = params;
+    const { fromWallet, recipients, satoshiPerByte, headerTitle, buttonTitle } = params;
 
     const item = recipients[0];
 
     return (
       <ScreenTemplate
-        footer={ScreenFooter(this.goToUnlockScreen, this.goToDetails)}
-        header={<Header navigation={navigation} isBackArrow title={i18n.send.header} />}
+        footer={ScreenFooter(this.goToUnlockScreen, this.goToDetails, buttonTitle)}
+        header={<Header navigation={navigation} isBackArrow title={headerTitle || i18n.send.header} />}
       >
         <View style={styles.container}>
           <View>
