@@ -214,7 +214,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && yarn translate:check-missing",
+      "pre-commit": "yarn translate:check-missing && lint-staged",
       "pre-push": "yarn test"
     }
   }
