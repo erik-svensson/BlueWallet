@@ -146,10 +146,111 @@ class DashboardScreen extends Component<Props, State> {
     });
   };
 
+  hasWallets = () => {
+    const { wallets } = this.props;
+    return wallets.length > 0;
+  };
+
+  renderHeader = () => {
+    const { query } = this.state;
+
+    if (this.hasWallets()) {
+      return (
+        <DashboardHeader
+          onFilterPress={() => {
+            this.props.navigation.navigate(Route.FilterTransactions, {
+              onFilterPress: this.onFilterPress,
+            });
+          }}
+          onAddPress={() => {
+            this.props.navigation.navigate(Route.CreateWallet);
+          }}
+        >
+          <SearchBar query={query} setQuery={this.setQuery} onFocus={this.scrollToTransactionList} />
+        </DashboardHeader>
+      );
+    }
+    return (
+      <Header
+        title={i18n.wallets.dashboard.title}
+        addFunction={() => this.props.navigation.navigate(Route.CreateWallet)}
+      />
+    );
+  };
+
+  renderWallets = () => {
+    const { wallets } = this.props;
+
+    const activeWallet = this.getActiveWallet();
+
+    return (
+      <View
+        onLayout={event => {
+          const { height } = event.nativeEvent.layout;
+          this.setState({
+            contentdHeaderHeight: height,
+          });
+        }}
+      >
+        <DashboarContentdHeader
+          onSelectPress={this.showModal}
+          balance={activeWallet.balance}
+          label={activeWallet.label === CONST.allWallets ? i18n.wallets.dashboard.allWallets : activeWallet.label}
+          type={activeWallet.type}
+          typeReadable={activeWallet.typeReadable}
+          incomingBalance={activeWallet.incoming_balance}
+          unit={activeWallet.preferredBalanceUnit}
+          onReceivePress={this.receiveCoins}
+          onSendPress={this.sendCoins}
+          onReceveryPress={this.recoverCoins}
+        />
+        {isAllWallets(activeWallet) ? (
+          <WalletsCarousel
+            ref={this.walletCarouselRef}
+            data={wallets.filter(wallet => wallet.label !== CONST.allWallets)}
+            keyExtractor={this._keyExtractor as any}
+            onSnapToItem={() => {
+              this.props.loadWallets();
+            }}
+          />
+        ) : (
+          <View style={{ alignItems: 'center' }}>
+            <WalletCard wallet={activeWallet} showEditButton />
+          </View>
+        )}
+      </View>
+    );
+  };
+
+  renderContent = () => {
+    const { query, filters } = this.state;
+    const { transactions, allTransactions } = this.props;
+    const activeWallet = this.getActiveWallet();
+
+    if (this.hasWallets()) {
+      return (
+        <TransactionList
+          ListHeaderComponent={<>{this.renderWallets()}</>}
+          search={query}
+          filters={filters}
+          transactions={isAllWallets(activeWallet) ? allTransactions : transactions[activeWallet.secret] || []}
+          transactionNotes={this.props.transactionNotes}
+          label={activeWallet.label}
+          headerHeight={this.state.contentdHeaderHeight}
+        />
+      );
+    }
+    return (
+      <ListEmptyState
+        variant={ListEmptyState.Variant.Dashboard}
+        onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
+      />
+    );
+  };
+
   render() {
-    const { lastSnappedTo, query, filters } = this.state;
-    const { wallets, isInitialized, transactions, allTransactions } = this.props;
-    const activeWallet = wallets[lastSnappedTo] || wallets[0];
+    const { filters } = this.state;
+    const { isInitialized } = this.props;
 
     if (!isInitialized) {
       return (
@@ -162,84 +263,12 @@ class DashboardScreen extends Component<Props, State> {
       <>
         <ScreenTemplate
           ref={this.screenTemplateRef}
+          noScroll
           contentContainer={styles.contentContainer}
-          refreshControl={<RefreshControl onRefresh={this.refreshTransactions} refreshing={this.state.isFetching} />}
-          header={
-            wallets.length ? (
-              <DashboardHeader
-                onFilterPress={() => {
-                  this.props.navigation.navigate(Route.FilterTransactions, {
-                    onFilterPress: this.onFilterPress,
-                  });
-                }}
-                onAddPress={() => {
-                  this.props.navigation.navigate(Route.CreateWallet);
-                }}
-              >
-                <SearchBar query={query} setQuery={this.setQuery} onFocus={this.scrollToTransactionList} />
-              </DashboardHeader>
-            ) : (
-              <Header
-                title={i18n.wallets.dashboard.title}
-                addFunction={() => this.props.navigation.navigate(Route.CreateWallet)}
-              />
-            )
-          }
+          // refreshControl={<RefreshControl onRefresh={this.refreshTransactions} refreshing={this.state.isFetching} />}
+          header={this.renderHeader()}
         >
-          {wallets.length ? (
-            <>
-              <View
-                onLayout={event => {
-                  const { height } = event.nativeEvent.layout;
-                  this.setState({
-                    contentdHeaderHeight: height,
-                  });
-                }}
-              >
-                <DashboarContentdHeader
-                  onSelectPress={this.showModal}
-                  balance={activeWallet.balance}
-                  label={
-                    activeWallet.label === CONST.allWallets ? i18n.wallets.dashboard.allWallets : activeWallet.label
-                  }
-                  type={activeWallet.type}
-                  typeReadable={activeWallet.typeReadable}
-                  incomingBalance={activeWallet.incoming_balance}
-                  unit={activeWallet.preferredBalanceUnit}
-                  onReceivePress={this.receiveCoins}
-                  onSendPress={this.sendCoins}
-                  onReceveryPress={this.recoverCoins}
-                />
-                {isAllWallets(activeWallet) ? (
-                  <WalletsCarousel
-                    ref={this.walletCarouselRef}
-                    data={wallets.filter(wallet => wallet.label !== CONST.allWallets)}
-                    keyExtractor={this._keyExtractor as any}
-                    onSnapToItem={() => {
-                      this.props.loadWallets();
-                    }}
-                  />
-                ) : (
-                  <View style={{ alignItems: 'center' }}>
-                    <WalletCard wallet={activeWallet} showEditButton />
-                  </View>
-                )}
-              </View>
-              <TransactionList
-                search={query}
-                filters={filters}
-                transactions={isAllWallets(activeWallet) ? allTransactions : transactions[activeWallet.secret] || []}
-                transactionNotes={this.props.transactionNotes}
-                label={activeWallet.label}
-                headerHeight={this.state.contentdHeaderHeight}
-              />
-            </>
-          ) : (
-            <ListEmptyState
-              variant={ListEmptyState.Variant.Dashboard}
-              onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
-            />
-          )}
+          {this.renderContent()}
         </ScreenTemplate>
         {!!filters.isFilteringOn && (
           <View style={styles.clearFiltersButtonContainer}>
