@@ -152,11 +152,11 @@ export const FilterTransactionsScreen = (props: Props) => {
       case TxType.ALERT_PENDING:
         return i18n.filterTransactions.status.pending;
       case TxType.ALERT_RECOVERED:
-        return i18n.filterTransactions.status.cancelled;
+        return i18n.filterTransactions.status.annulled;
       case TxType.ALERT_CONFIRMED:
         return i18n.filterTransactions.status.done;
       case TxType.RECOVERY:
-        return i18n.filterTransactions.status.recovered;
+        return i18n.filterTransactions.status.canceled;
       default:
         return '';
     }
@@ -204,10 +204,10 @@ export const FilterTransactionsScreen = (props: Props) => {
 
       <CardGroup
         onCardPressAction={title => setTransactionType(title)}
-        lebel={i18n.filterTransactions.transactionType}
+        label={i18n.filterTransactions.transactionType}
         cards={[
-          { title: CONST.receive, content: renderCardContent(i18n.filterTransactions.from) },
-          { title: CONST.send, content: renderCardContent(i18n.filterTransactions.to) },
+          { title: i18n.filterTransactions.received, content: renderCardContent(i18n.filterTransactions.from) },
+          { title: i18n.filterTransactions.sent, content: renderCardContent(i18n.filterTransactions.to) },
         ]}
       />
     </ScreenTemplate>

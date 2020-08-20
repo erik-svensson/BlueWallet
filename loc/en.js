@@ -15,7 +15,7 @@ module.exports = {
     copied: 'Copied!',
     or: 'or',
     delete: 'Delete',
-    created: 'Created',
+    created: 'Created on',
     invalid: 'Invalid',
     satoshi: 'Sat',
     next: 'Next',
@@ -27,7 +27,9 @@ module.exports = {
     authenticators: 'Authenticators',
   },
   message: {
+    allDone: 'All done!',
     hooray: 'Hooray!',
+    cancelTxSuccess: 'You have successfully canceled your transaction.\nYour coins are on the way.',
     wrongMnemonic: 'Wrong mnemonic',
     wrongMnemonicDesc:
       'Your mnemonic does not match any supported wallet. You are trying to import an invalid mnemonic or wallet that has never been used',
@@ -104,11 +106,11 @@ module.exports = {
     },
     import: {
       title: 'Import authenticator',
-      success: 'Your authenticator has been successfully imported. You can now return to Authenticators.',
+      success: 'You have successfully imported your authenticator. It is now ready to use.',
       subtitle: 'Import your authenticator',
-      desc1: 'Please write your mnemonic in order to import your authenticator',
+      desc1: 'Write down the seed phrase or scan the QR code of the authenticator you want to import.',
       desc2: 'scan QR code by clicking on “or scan QR code” below',
-      textAreaPlaceholder: 'Mnemonic',
+      textAreaPlaceholder: 'Seed phrase',
     },
     export: {
       title: 'Export authenticator',
@@ -116,27 +118,27 @@ module.exports = {
     delete: {
       title: 'Delete authenticator',
       subtitle: 'Delete your authenticator',
-      success: 'Your authenticator has been successfully deleted. You can now return to Authenticators.',
+      success: 'Your authenticator has been successfully deleted. You can always create a new one.',
     },
     list: {
-      noAuthenticatorsDesc1: 'No authenticators to show. \n Tap',
+      noAuthenticatorsDesc1: '\nTap',
       noAuthenticatorsDesc2: 'to add your first authenticator.',
-      noAuthenticators: 'No Authenticators',
+      noAuthenticators: 'No Authenticators yet',
       scan: 'Scan',
       title: 'Bitcoin Vault authenticators',
     },
     add: {
+      successTitle: 'Your authenticator is ready!',
       title: 'Add new authenticator',
       subtitle: 'Pair authenticator',
-      successDescription:
-        'Your authenticator has been created. Please take a moment to write down this mnemonic phrase on a piece of paper. It’s your backup. You can use it to restore this authenticator on other devices. The authenticator allows you to confirm Instant and Recovery transactions.',
+      successDescription: `Write down this seed phrase somewhere safe. It's your backup in case you need to restore your authenticator. Remember that the authenticator is necessary to confirm Fast and Cancel transactions.`,
       description:
-        'Select the option to “create wallet” on Electrum Vault (desktop application). Follow the steps until you see a QR code. Scan it using “Scan” button below to continue',
-      subdescription: 'import you authenticator by clicking on Import authenticator” below.',
+        'Open your Electrum Vault desktop application and create a new wallet. Follow the steps on the screen until you see a QR code. Use this app to scan it to proceed.',
+      subdescription: 'You can also import your authenticator by choosing the option below.',
     },
     enterPIN: {
       subtitle: 'Enter PIN',
-      description: 'Please enter the following PIN into the Electrum Vault (desktop application).',
+      description: 'Enter this PIN into the Electrum Vault desktop application to finish the pairing process.',
     },
   },
   wallets: {
@@ -162,22 +164,24 @@ module.exports = {
       header: 'Import wallet',
       subtitle:
         "Write here your mnemonic, private key, WIF or anything you've got. GoldWallet will do its best to guess the correct format and import you wallet.",
-      placeholder: 'Mnemonic, private key, WIF',
+      placeholder: 'Seed phrase, private key, WIF',
       import: 'Import',
       scanQrCode: 'or scan QR code',
       walletInUseValidationError: 'Wallet is already in use. Please enter a valid wallet.',
-      chooseTypeDescription: 'Please choose type of the wallet which you want to import.',
-      importARDescription1: 'Please write your mnemonic in order to import your wallet',
-      importARDescription2: 'scan QR code by clicking on “or scan QR code” below',
+      chooseTypeDescription: 'Choose the type of the wallet you want to import.',
+      importARDescription1: 'Enter the seed phrase',
+      importARDescription2: 'scan the QR code of the wallet you want to impor',
       scanWalletAddress: 'Scan wallet address',
       scanWalletAddressDescription: 'Scan the Public Address QR code to start the integration with GoldWallet.',
-      scanPublicKey: 'Scan Public Key',
-      scanPublicKeyDescription: "Please scan your wallet's Public Addres QR code to integrate with the GoldWallet.",
+      scanFastPubKey: 'Scan the Fast Key QR code',
+      scanCancelPubKey: 'Scan the Cancel Key QR code',
+      scanPublicKeyDescription:
+        'Open the first PDF document you generated when you created the wallet you want to import and use this app to scan the Public Key QR code.',
       unsupportedElectrumVaultMnemonic:
         'This seed is from Electrum Vault and is currently not supported. Will be supported in the near future.',
     },
     exportWallet: {
-      title: 'Mnemonic phrase',
+      title: 'Seed phrase',
       header: 'Export wallet',
     },
     exportWalletXpub: {
@@ -200,7 +204,7 @@ module.exports = {
       failed: 'Failed to create wallet',
       title: 'Add new wallet',
       subtitle: 'Name your wallet',
-      description: 'Chose the name and type of your wallet.',
+      description: 'Choose the name and type of your wallet.',
       inputLabel: 'Name',
       addWalletButton: 'Add new wallet',
       importWalletButton: 'Import wallet',
@@ -225,16 +229,16 @@ module.exports = {
       recoverySubtitle: 'Add Cancel Key',
       webKeyGenerator: 'Web Key Generator:',
       recoveryDescription:
-        'Go to the web Key Generator on a separate device and use this app to scan the Public Key QR code.',
+        'Go to the web Key Generator on a separate device and use this app to scan the Public Key QR code. Remember to export your keys as a PDF!',
       instantSubtitle: 'Add Fast Key',
       instantDescription:
-        'Go to the web Key Generator on a separate device and use this app to scan the Public Key QR code.',
+        'Go to the web Key Generator on a separate device and use this app to scan the Public Key QR code. Remember to export your keys as a PDF!',
       scan: 'Scan',
     },
     addSuccess: {
       title: 'Add new wallet',
       subtitle: 'Your wallet is ready!\nYou created your wallet!',
-      description: `Write down this seed phrase somewhere safe. It's your backup in case you need to restore your wallet. You will also need it to make Cancel transactions.`,
+      description: `Write down this seed phrase somewhere safe. It's your backup in case you need to restore your wallet.`,
       okButton: 'OK, I wrote this down',
     },
     details: {
@@ -289,15 +293,14 @@ module.exports = {
   transactions: {
     label: {
       pending: 'pending',
-      recovered: 'recovered',
+      annulled: 'annulled',
       done: 'done',
-      cancelled: 'cancelled',
+      canceled: 'canceled',
     },
     transactionTypeLabel: {
-      alert: 'Alert',
-      recovery: 'Recovery',
-      instant: 'Instant',
-      nonvault: 'Standard',
+      standard: 'Standard',
+      canceled: 'Canceled',
+      fast: 'Fast',
     },
     list: {
       conf: 'Confirmations',
@@ -340,29 +343,34 @@ module.exports = {
     recovery: {
       recover: 'Cancel',
       useWalletAddress: 'Use address of this wallet',
-      confirmSeed: 'Confirm with your seed phrase',
-      confirmSeedDesc: 'Enter your seed phrase in the same order as you wrote it down before.',
-      confirmFirstSeed: 'Confirm with first Recovery Seed',
-      confirmFirstSeedDesc: 'Please enter your first Recovery Seed in order to proceed.',
-      confirmSecondSeed: 'Confirm with second Recovery Seed',
-      confirmSecondSeedDesc: 'Please enter your second Recovery Seed in order to proceed.',
+      confirmSeed: 'Confirm with Cancel Seed Phrase',
+      confirmSeedDesc:
+        'Open the PDF document you generated when you created your wallet and write down the Private Key seed phrase in the same order.',
+      confirmFirstSeed: 'Confirm with Cancel Seed Phrase',
+      confirmFirstSeedDesc:
+        'Open the first PDF document you generated when you created your wallet and write down the Private Key seed phrase in the same order.',
+      confirmSecondSeed: 'Confirm with Fast Seed Phrase',
+      confirmSecondSeedDesc:
+        'Open the second PDF document you generated when you created your wallet and write down the Private Key seed phrase in the same order.',
     },
     transaction: {
-      instant: 'Instant',
-      instantDesc: 'This method allows you to send immediate transfers. Use with extreme caution.',
-      alert: 'Alert',
+      instant: 'Fast',
+      instantDesc: 'This transaction will be confirmed immediately. Use with extreme caution.',
+      fastSuccess: 'You have successfully made your fast transaction.',
+      alert: 'Standard',
       alertDesc:
-        'This transaction waits 144 blocks or ca. 24 hours to be confirmed. Within this time you can recover your coins.',
+        'This transaction needs 144 blocks or about 24 hours to be confirmed. You can cancel it within this time.',
       type: 'Transaction type',
-      scanInstantKeyTitle: 'Scan Instant Key',
-      scanInstantKeyDesc: 'Scan the Instant Key QR code to start the transaction.',
+      scanInstantKeyTitle: 'Scan the Fast Key',
+      scanInstantKeyDesc:
+        'Open the PDF document you generated when you created your wallet and scan the Public Key QR code to send the transaction.',
       lightningError:
         'This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.',
       watchOnlyError: 'Watch only wallets cannot send transactions',
     },
     success: {
       title: 'Success',
-      description: 'Hooray! You have successfully finished the transaction.',
+      description: 'You have successfully sent your coins.',
       done: 'Done',
       return: 'Return to Dashboard',
     },
@@ -509,6 +517,8 @@ module.exports = {
     cancel: 'Cancel',
   },
   filterTransactions: {
+    received: 'Received',
+    sent: 'Sent',
     header: 'Filter transactions',
     receive: 'Receive',
     send: 'Send',
@@ -524,9 +534,9 @@ module.exports = {
     transactionStatus: 'Transaction status',
     status: {
       pending: 'Pending',
-      recovered: 'Recovered',
+      annulled: 'Annulled',
       done: 'Done',
-      cancelled: 'Cancelled',
+      canceled: 'Canceled',
     },
   },
   calendar: {

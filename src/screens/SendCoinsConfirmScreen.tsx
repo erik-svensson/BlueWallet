@@ -84,7 +84,7 @@ export class SendCoinsConfirmScreen extends Component<Props> {
   };
 
   broadcast = () => {
-    const { txDecoded, fromWallet } = this.props.route.params;
+    const { txDecoded, fromWallet, successMsgDesc } = this.props.route.params;
 
     this.setState({ isLoading: true }, async () => {
       try {
@@ -102,8 +102,8 @@ export class SendCoinsConfirmScreen extends Component<Props> {
           EV(EV.enum.REMOTE_TRANSACTIONS_COUNT_CHANGED); // someone should fetch txs
 
           CreateMessage({
-            title: i18n.send.success.title,
-            description: i18n.send.success.description,
+            title: i18n.message.hooray,
+            description: successMsgDesc || i18n.send.success.description,
             type: MessageType.success,
             buttonProps: {
               title: i18n.message.returnToDashboard,
