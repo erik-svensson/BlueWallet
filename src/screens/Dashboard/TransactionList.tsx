@@ -20,6 +20,9 @@ interface Props {
   transactionNotes: Record<string, string>;
   headerHeight: number;
   ListHeaderComponent: React.ReactElement;
+  refreshing: boolean;
+  onRefresh: () => void;
+  reference: React.Ref<SectionList>;
 }
 
 export class TransactionList extends PureComponent<Props> {
@@ -64,9 +67,12 @@ export class TransactionList extends PureComponent<Props> {
   };
 
   render() {
-    const { headerHeight, search, transactions, ListHeaderComponent } = this.props;
+    const { headerHeight, search, transactions, ListHeaderComponent, refreshing, onRefresh, reference } = this.props;
     return (
       <SectionList
+        ref={reference}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
         style={styles.section}
         stickySectionHeadersEnabled={false}
         ListHeaderComponent={ListHeaderComponent}

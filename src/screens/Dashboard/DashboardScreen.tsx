@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { View, StyleSheet, RefreshControl, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, TouchableOpacity, SectionList } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
@@ -51,7 +51,7 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   walletCarouselRef = React.createRef<WalletsCarousel>();
-  screenTemplateRef = React.createRef<ScreenTemplate>();
+  transactionListRef = React.createRef<SectionList>();
   componentDidMount() {
     SecureStorageService.getSecuredValue('pin')
       .then(() => {
@@ -121,10 +121,10 @@ class DashboardScreen extends Component<Props, State> {
   setQuery = (query: string) => this.setState({ query });
 
   scrollToTransactionList = () => {
-    this.screenTemplateRef.current?.scrollRef.current?.scrollTo({
-      x: 0,
-      y: this.state.contentdHeaderHeight + 24,
-      animated: true,
+    // hack, there is no scrollTo method available on SectionList, https://github.com/facebook/react-native/issues/13151
+    // @ts-ignore
+    this.transactionListRef.current?._wrapperListRef._listRef.scrollToOffset({
+      offset: this.state.contentdHeaderHeight + 24,
     });
   };
 
@@ -139,10 +139,10 @@ class DashboardScreen extends Component<Props, State> {
         isFilteringOn: false,
       },
     });
-    this.screenTemplateRef.current?.scrollRef.current?.scrollTo({
-      x: 0,
-      y: 1,
-      animated: true,
+    // check comment above
+    // @ts-ignore
+    this.transactionListRef.current?._wrapperListRef._listRef.scrollToOffset({
+      offset: 1,
     });
   };
 
@@ -230,6 +230,9 @@ class DashboardScreen extends Component<Props, State> {
     if (this.hasWallets()) {
       return (
         <TransactionList
+          reference={this.transactionListRef}
+          refreshing={this.state.isFetching}
+          onRefresh={this.refreshTransactions}
           ListHeaderComponent={<>{this.renderWallets()}</>}
           search={query}
           filters={filters}
@@ -261,13 +264,7 @@ class DashboardScreen extends Component<Props, State> {
     }
     return (
       <>
-        <ScreenTemplate
-          ref={this.screenTemplateRef}
-          noScroll
-          contentContainer={styles.contentContainer}
-          // refreshControl={<RefreshControl onRefresh={this.refreshTransactions} refreshing={this.state.isFetching} />}
-          header={this.renderHeader()}
-        >
+        <ScreenTemplate noScroll contentContainer={styles.contentContainer} header={this.renderHeader()}>
           {this.renderContent()}
         </ScreenTemplate>
         {!!filters.isFilteringOn && (
