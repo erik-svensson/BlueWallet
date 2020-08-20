@@ -203,11 +203,19 @@ export const FilterTransactionsScreen = (props: Props) => {
       <Calendar isVisible={isCalendarVisible} onDateSelect={onDateSelect} onClose={closeCalendar} />
 
       <CardGroup
-        onCardPressAction={title => setTransactionType(title)}
+        onCardPressAction={title =>
+          setTransactionType(title === i18n.filterTransactions.sent ? CONST.send : CONST.receive)
+        }
         label={i18n.filterTransactions.transactionType}
         cards={[
-          { title: i18n.filterTransactions.received, content: renderCardContent(i18n.filterTransactions.from) },
-          { title: i18n.filterTransactions.sent, content: renderCardContent(i18n.filterTransactions.to) },
+          {
+            title: i18n.filterTransactions.received,
+            content: renderCardContent(i18n.filterTransactions.from),
+          },
+          {
+            title: i18n.filterTransactions.sent,
+            content: renderCardContent(i18n.filterTransactions.to),
+          },
         ]}
       />
     </ScreenTemplate>
