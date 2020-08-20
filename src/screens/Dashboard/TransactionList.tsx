@@ -67,13 +67,22 @@ export class TransactionList extends PureComponent<Props> {
   };
 
   render() {
-    const { headerHeight, search, transactions, ListHeaderComponent, refreshing, onRefresh, reference } = this.props;
+    const {
+      headerHeight,
+      search,
+      transactions,
+      ListHeaderComponent,
+      refreshing,
+      onRefresh,
+      reference,
+      filters,
+    } = this.props;
     return (
       <SectionList
         ref={reference}
         refreshing={refreshing}
         onRefresh={onRefresh}
-        style={styles.section}
+        style={[styles.section, filters.isFilteringOn && styles.spaceBottom]}
         stickySectionHeadersEnabled={false}
         ListHeaderComponent={ListHeaderComponent}
         ListFooterComponent={search ? <View style={{ height: transactions.length ? headerHeight / 2 : 0 }} /> : null}
@@ -92,8 +101,12 @@ const styles = StyleSheet.create({
   itemWrapper: {
     paddingHorizontal: 20,
   },
+  spaceBottom: {
+    marginBottom: 140,
+  },
   section: {
-    marginBottom: 100,
+    marginBottom: 120,
+    marginTop: -24,
   },
   noTransactionsContainer: {
     alignItems: 'center',

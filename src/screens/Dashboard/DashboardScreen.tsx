@@ -80,31 +80,37 @@ class DashboardScreen extends Component<Props, State> {
 
   getActiveWallet = () => {
     const { lastSnappedTo } = this.state;
+    const { wallets } = this.props;
+    return wallets[lastSnappedTo] || wallets[0];
+  };
+
+  getActionWallet = () => {
+    const { lastSnappedTo } = this.state;
 
     const { wallets } = this.props;
     return isAllWallets(wallets[lastSnappedTo] || wallets[0]) ? wallets[1] : wallets[lastSnappedTo];
   };
 
   sendCoins = () => {
-    const activeWallet = this.getActiveWallet();
+    const actionWallet = this.getActionWallet();
     this.props.navigation.navigate(Route.SendCoins, {
-      fromAddress: activeWallet.getAddress(),
-      fromSecret: activeWallet.getSecret(),
-      fromWallet: activeWallet,
+      fromAddress: actionWallet.getAddress(),
+      fromSecret: actionWallet.getSecret(),
+      fromWallet: actionWallet,
     });
   };
 
   receiveCoins = () => {
-    const activeWallet = this.getActiveWallet();
+    const actionWallet = this.getActionWallet();
     this.props.navigation.navigate(Route.ReceiveCoins, {
-      secret: activeWallet.getSecret(),
+      secret: actionWallet.getSecret(),
     });
   };
 
   recoverCoins = () => {
-    const activeWallet = this.getActiveWallet();
+    const actionWallet = this.getActionWallet();
     this.props.navigation.navigate(Route.RecoveryTransactionList, {
-      wallet: activeWallet,
+      wallet: actionWallet,
     });
   };
 
@@ -180,7 +186,6 @@ class DashboardScreen extends Component<Props, State> {
 
   renderWallets = () => {
     const { wallets } = this.props;
-
     const activeWallet = this.getActiveWallet();
 
     return (
@@ -208,7 +213,7 @@ class DashboardScreen extends Component<Props, State> {
           <WalletsCarousel
             ref={this.walletCarouselRef}
             data={wallets.filter(wallet => wallet.label !== CONST.allWallets)}
-            keyExtractor={this._keyExtractor as any}
+            keyExtractor={this._keyExtractor}
             onSnapToItem={() => {
               this.props.loadWallets();
             }}
