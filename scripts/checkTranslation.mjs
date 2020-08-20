@@ -18,7 +18,7 @@ const RESULT_PATH = path.resolve(REAL_PATH, 'scripts/missing-translations');
 const customizer = (objValue, srcValue) => {
   if (typeof srcValue === 'string') {
     if (!objValue) {
-      return 'TRANSLATION NEEDED';
+      return `TRANSLATION NEEDED | ENG: ${srcValue}`;
     }
     return objValue;
   }
