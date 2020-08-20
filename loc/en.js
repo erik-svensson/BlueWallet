@@ -101,8 +101,9 @@ module.exports = {
       title: 'Pair authenticator',
       pin: 'PIN',
       publicKey: 'Public Key',
-      descPin: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
-      descPublicKey: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
+      descPin: 'Use below PIN on your desktop application to confirm pair authenticator.',
+      descPublicKey:
+        'You can use below public key to import your authenticator in the desktop application during the wallet creation process with the gold wallet option.',
     },
     import: {
       title: 'Import authenticator',
@@ -363,7 +364,7 @@ module.exports = {
       type: 'Transaction type',
       scanInstantKeyTitle: 'Scan the Fast Key',
       scanInstantKeyDesc:
-        'Open the PDF document you generated when you created your wallet and scan the Public Key QR code to send the transaction.',
+        'Open the PDF document you generated when you created your wallet and scan the Private Key QR code to send the transaction.',
       lightningError:
         'This address appears to be for a Lightning invoice. Please, go to your Lightning wallet in order to make a payment for this invoice.',
       watchOnlyError: 'Watch only wallets cannot send transactions',

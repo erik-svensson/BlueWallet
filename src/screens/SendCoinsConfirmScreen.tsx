@@ -195,7 +195,8 @@ export class SendCoinsConfirmScreen extends Component<Props> {
           <View>
             <View style={styles.chooseWalletButton}>
               <Text style={typography.headline4}>
-                {item.amount || satoshiToBtc(item.value).toString()} {fromWallet.preferredBalanceUnit}
+                {roundBtcToSatoshis(item.amount) || satoshiToBtc(item.value).toString()}{' '}
+                {fromWallet.preferredBalanceUnit}
               </Text>
             </View>
             <View style={styles.descriptionContainer}>
