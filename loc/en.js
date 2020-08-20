@@ -122,7 +122,7 @@ module.exports = {
       success: 'Your authenticator has been successfully deleted. You can always create a new one.',
     },
     list: {
-      noAuthenticatorsDesc1: '\nTap',
+      noAuthenticatorsDesc1: 'Tap',
       noAuthenticatorsDesc2: 'to add your first authenticator.',
       noAuthenticators: 'No Authenticators yet',
       scan: 'Scan',
@@ -171,7 +171,7 @@ module.exports = {
       walletInUseValidationError: 'Wallet is already in use. Please enter a valid wallet.',
       chooseTypeDescription: 'Choose the type of the wallet you want to import.',
       importARDescription1: 'Enter the seed phrase',
-      importARDescription2: 'scan the QR code of the wallet you want to impor',
+      importARDescription2: 'scan the QR code of the wallet you want to import',
       scanWalletAddress: 'Scan wallet address',
       scanWalletAddressDescription: 'Scan the Public Address QR code to start the integration with GoldWallet.',
       scanFastPubKey: 'Scan the Fast Key QR code',
