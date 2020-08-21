@@ -471,8 +471,6 @@ export class SendCoinsScreen extends Component<Props, State> {
     );
   };
 
-  isStateSettedUp = () => this.state !== null && this.state.fromWallet && this.state.fee;
-
   render() {
     const { wallet, fee, isLoading } = this.state;
     return (

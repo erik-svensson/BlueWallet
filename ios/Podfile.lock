@@ -406,8 +406,6 @@ PODS:
   - Sentry (5.2.0):
     - Sentry/Core (= 5.2.0)
   - Sentry/Core (5.2.0)
-  - TcpSockets (4.0.0):
-    - React
   - ToolTipMenu (5.2.1):
     - React
   - Yoga (1.14.0)
@@ -729,7 +727,6 @@ SPEC CHECKSUMS:
   SDWebImage: cf6922231e95550934da2ada0f20f2becf2ceba9
   SDWebImageWebPCoder: 36f8f47bd9879a8aea6044765c1351120fd8e3a8
   Sentry: 6e04bc3e11bf771ca79140a112de64dcfbc7d8cb
-  TcpSockets: 4ef55305239923b343ed0a378b1fac188b1373b0
   ToolTipMenu: 8ac61aded0fbc4acfe7e84a7d0c9479d15a9a382
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
