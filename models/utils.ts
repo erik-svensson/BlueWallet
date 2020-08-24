@@ -53,6 +53,9 @@ export const getUtxosFromMaxToMin = (utxos: Utxo[], amount: number): Utxo[] | nu
 export const getUtxosSolutionFromMinToMax = (utxos: Utxo[], amount: number): Solution | null => {
   const sortedUtxos = sortBy(utxos, 'value');
 
+  console.log('utxos', utxos);
+  console.log('amount', amount);
+
   const solution: Solution = { utxos: [], negativeAmount: 0 };
 
   let am = amount;
@@ -76,8 +79,16 @@ export const getUtxosSolutionFromMinToMax = (utxos: Utxo[], amount: number): Sol
   return removeNotNeededUtxos(solution);
 };
 
+export const getUtxosFromMinToMax = (utxos: Utxo[], amount: number): Utxo[] | null => {
+  const sol = getUtxosSolutionFromMinToMax(utxos, amount);
+
+  if (sol === null) {
+    return null;
+  }
+  return sol.utxos;
+};
+
 export const getUtxosWithMinimumRest = (utxos: Utxo[], amount: number): Utxo[] | null => {
-  console.log('amount', amount);
   const TRIALS = 100;
 
   const firstSolution = getUtxosSolutionFromMinToMax(utxos, amount);
@@ -115,8 +126,6 @@ export const getUtxosWithMinimumRest = (utxos: Utxo[], amount: number): Utxo[] |
   }
 
   const [bestSolution] = orderBy([...solutions, firstSolution], ['negativeAmount'], ['desc']);
-
-  console.log('bestSolution', bestSolution);
 
   return bestSolution.utxos;
 };

@@ -62,6 +62,7 @@ export class SendCoinsConfirmScreen extends Component<Props> {
     const balance = fromWallet.balance;
     const incomingBalance = fromWallet.incoming_balance;
     const amount = this.getAmountByTx(txDecoded);
+    console.log('amount', amount);
     if (isAlert) {
       return {
         availableBalance: satoshiToBtc(balance - amount.my - amount.foreign) - fee,
