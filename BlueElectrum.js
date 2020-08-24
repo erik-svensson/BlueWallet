@@ -19,7 +19,7 @@ async function connectMain() {
   const usingPeer = { host: config.host, tcp: config.port };
   try {
     console.log('begin connection:', JSON.stringify(usingPeer));
-    mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, 'tcp');
+    mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, 'tls');
     mainClient.onError = function(e) {
       console.log('ElectrumClient error: ' + e);
       mainConnected = false;
