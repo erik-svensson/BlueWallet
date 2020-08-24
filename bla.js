@@ -13,8 +13,6 @@ const utxoTest = [
 
 const amTest = 0.054385;
 
-const getElementsByIndexs = (arr, indexs) => arr.filter((_, index) => indexs.includes(index));
-
 const removeNotNeededUtxos = ({ utxos, negativeAmount }) => {
   const start = utxos.length - 1;
   let nA = negativeAmount;
@@ -33,14 +31,17 @@ const removeNotNeededUtxos = ({ utxos, negativeAmount }) => {
 const getUtxoWithMinimumRest = (utxos, amount) => {
   const REPS = 100;
   const sortedUtxos = sortBy(utxos, 'value');
+
   const initSolution = { utxos: [], negativeAmount: null };
+
+  let firstSolution = cloneDeep(initSolution);
 
   let am = amount;
   for (let i = 0; i < sortedUtxos.length; i++) {
     const ux = sortedUtxos[i];
     am -= ux.value;
 
-    initSolution.utxos.push(ux);
+    firstSolution.utxos.push(ux);
 
     if (am <= 0) {
       break;
@@ -51,17 +52,15 @@ const getUtxoWithMinimumRest = (utxos, amount) => {
     return null;
   }
 
-  initSolution.negativeAmount = am;
+  firstSolution.negativeAmount = am;
 
-  if (initSolution.negativeAmount === 0) {
-    return initSolution;
+  if (firstSolution.negativeAmount === 0) {
+    return firstSolution;
   }
-
-  // console.log('initSolution', initSolution);
-  // return removeNotNeededUtxos(initSolution);
+  firstSolution = removeNotNeededUtxos(firstSolution);
 
   const upperTreshold = utxos.length - 1;
-  const solutions = range(REPS).map(() => ({ utxos: [], negativeAmount: null }));
+  const solutions = range(REPS).map(() => cloneDeep(initSolution));
 
   for (let i = 0; i < REPS; i++) {
     let a = amount;
@@ -83,7 +82,8 @@ const getUtxoWithMinimumRest = (utxos, amount) => {
       return solutions[i].utxos;
     }
   }
-  const [bestSolution] = orderBy(solutions, ['negativeAmount'], ['desc']);
+
+  const [bestSolution] = orderBy([...solutions, firstSolution], ['negativeAmount'], ['desc']);
 
   return bestSolution.utxos;
 };
