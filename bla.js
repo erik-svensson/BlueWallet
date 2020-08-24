@@ -232,5 +232,12 @@
 // // };
 // // test(utxo, am);
 
-const res = parseInt('2e-9' * 100000000);
-console.log('res', res);
+// const res = parseInt('2e-9' * 100000000);
+// console.log('res', res);
+
+const bitcoin = require('bitcoinjs-lib');
+
+const res = bitcoin.ECPair.fromWIF(
+  'KwuXpwSKhoas1v47mGymsRnRvE1GY3XoGfhdHTQ69P6mTgEpLP5A',
+  // bitcoin.alt_networks.bitcoinvaultTestnet,
+);

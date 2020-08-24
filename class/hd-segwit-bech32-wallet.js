@@ -1,12 +1,13 @@
 import * as bip39 from 'bip39';
+import * as bitcoin from 'bitcoinjs-lib';
 import b58 from 'bs58check';
 import { NativeModules } from 'react-native';
 
 import config from '../config';
+import { satoshiToBtc } from '../utils/bitcoin';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
-const bitcoin = require('bitcoinjs-lib');
 const coinSelectAccumulative = require('coinselect/accumulative');
 const coinSelectSplit = require('coinselect/split');
 
@@ -91,8 +92,8 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     if (!this.seed) {
       this.seed = await bip39.mnemonicToSeed(this.secret);
     }
-
-    const root = HDNode.fromSeed(this.seed);
+    console.log('NOWY ROOT');
+    const root = HDNode.fromSeed(this.seed, config.network);
     const path = this._getPath(`/0/${index}`);
     const child = root.derivePath(path);
     return child.toWIF();
@@ -106,7 +107,10 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   async generateAddresses() {
     if (!this._node0) {
       const xpub = this.constructor._zpubToXpub(await this.getXpub());
+      console.log('HD NODE 2');
+      // const hdNode = HDNode.fromBase58(xpub, config.network);
       const hdNode = HDNode.fromBase58(xpub);
+
       this._node0 = hdNode.derive(0);
     }
     for (let index = 0; index < this.num_addresses; index++) {
@@ -126,7 +130,9 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
 
     if (!this._node0) {
       const xpub = this.constructor._zpubToXpub(await this.getXpub());
+      // const hdNode = HDNode.fromBase58(xpub, config.network);
       const hdNode = HDNode.fromBase58(xpub);
+
       this._node0 = hdNode.derive(0);
     }
     console.warn(this._node0.derive(index).publicKey);
@@ -147,7 +153,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     // first, getting xpub
     const mnemonic = this.secret;
     this.seed = await bip39.mnemonicToSeed(mnemonic);
-    const root = HDNode.fromSeed(this.seed);
+    const root = HDNode.fromSeed(this.seed, config.network);
 
     const path = this._getPath();
     const child = root.derivePath(path).neutered();
@@ -194,6 +200,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
    * @returns {{outputs: Array, tx: Transaction, inputs: Array, fee: Number, psbt: Psbt}}
    */
   async createTransaction(utxos, targets, feeRate, changeAddress, sequence, skipSigning = false) {
+    console.log('HDSegwitBech32Wallet utxos', utxos);
     if (!changeAddress) throw new Error('No change address provided');
     sequence = sequence || HDSegwitBech32Wallet.defaultRBFSequence;
     let algo = coinSelectAccumulative;
@@ -201,15 +208,23 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       // we want to send MAX
       algo = coinSelectSplit;
     }
+    console.log('feeRate', feeRate);
+    console.log('targets', targets);
+
     const { inputs, outputs, fee } = algo(utxos, targets, feeRate);
+
+    console.log('fee', fee);
+    console.log('WORK 2 outputs', outputs);
+    console.log('inputs', inputs);
 
     // .inputs and .outputs will be undefined if no solution was found
     if (!inputs || !outputs) {
       throw new Error('Not enough balance. Try sending smaller amount');
     }
+    console.log('inputs', inputs);
+    console.log('config.network', config.network);
 
     const psbt = new bitcoin.Psbt({ network: config.network });
-
     let c = 0;
     const keypairs = {};
     const values = {};
@@ -219,7 +234,10 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       let keyPair;
       if (!skipSigning) {
         // skiping signing related stuff
-        keyPair = bitcoin.ECPair.fromWIF(this._getWifForAddress(input.address), config.network);
+
+        const wif = this._getWifForAddress(input.address);
+        console.log('wif', wif);
+        keyPair = bitcoin.ECPair.fromWIF(wif, config.network);
         keypairs[c] = keyPair;
       }
       values[c] = input.value;
@@ -293,10 +311,12 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       }
     }
 
+    console.log('FINAZLIE');
     let tx;
     if (!skipSigning) {
       tx = psbt.finalizeAllInputs().extractTransaction();
     }
+
     return { tx, inputs, outputs, fee, psbt };
   }
 

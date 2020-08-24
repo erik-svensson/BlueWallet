@@ -23,7 +23,6 @@ import {
   HDSegwitBech32Wallet,
   HDSegwitP2SHAirWallet,
 } from '../../class';
-import { isElectrumVaultMnemonic } from '../../utils/crypto';
 
 const i18n = require('../../loc');
 
@@ -371,11 +370,6 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
   importMnemonic = (mnemonic: string) => {
     const trimmedMnemonic = mnemonic.trim().replace(/ +/g, ' ');
-
-    if (isElectrumVaultMnemonic(trimmedMnemonic)) {
-      this.showAlert(i18n.wallets.importWallet.unsupportedElectrumVaultMnemonic);
-      return;
-    }
 
     if (this.props?.route.params.walletType === HDSegwitP2SHArWallet.type) {
       return this.createARWallet(trimmedMnemonic);

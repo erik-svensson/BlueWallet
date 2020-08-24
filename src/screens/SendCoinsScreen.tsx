@@ -127,7 +127,12 @@ export class SendCoinsScreen extends Component<Props, State> {
     const requestedSatPerByte: string | number = +this.state.fee.toString().replace(/\D/g, '');
 
     const targets: any[] = [];
-    const amount = satoshiToBtc(transaction.amount).toNumber();
+    const amount = btcToSatoshi(transaction.amount).toNumber();
+    console.log('amount', amount);
+    console.log('amount', transaction.amount);
+    const alAmount = btcToSatoshi(Number(transaction.amount)).toNumber();
+    console.log('alAmount', alAmount);
+
     if (amount > 0.0) {
       targets.push({ address: transaction.address, value: amount });
     }
@@ -144,14 +149,16 @@ export class SendCoinsScreen extends Component<Props, State> {
       txhex: tx.toHex(),
       memo: this.state.memo,
     };
+
     await BlueApp.saveToDisk();
+    console.log('FEE sat 2', fee);
     this.setState({ isLoading: false }, () =>
       this.props.navigation.navigate(Route.SendCoinsConfirm, {
-        fee: btcToSatoshi(fee).toNumber(),
+        fee: satoshiToBtc(fee).toNumber(),
         memo: this.state.memo,
         fromWallet: wallet,
         txDecoded: tx,
-        recipients: targets,
+        recipients: [transaction],
         satoshiPerByte: requestedSatPerByte,
       }),
     );
