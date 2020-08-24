@@ -7,6 +7,7 @@
  *
  **/
 import config from '../config';
+import { getUtxosWithMinimumRest } from './utils';
 
 const bitcoinjs = require('bitcoinjs-lib');
 
@@ -160,11 +161,19 @@ exports.createHDSegwitVaultTransaction = function({
   let unspentAmountSatoshi = 0;
   const inputKeyPairs = [];
 
-  for (const unspent of utxos) {
-    if (unspent.confirmations < 1) {
-      // using only confirmed outputs
-      continue;
-    }
+  const start = new Date().getTime();
+
+  const unspentUtxos = getUtxosWithMinimumRest(utxos, parseInt((amount * 100000000).toFixed(0)));
+  const end = new Date().getTime();
+  const time = end - start;
+  console.log('Execution time: ' + time);
+  console.log('unspentUtxos', unspentUtxos);
+
+  if (unspentUtxos === null) {
+    throw new Error('Not enough balance. Please, try sending a smaller amount.');
+  }
+
+  for (const unspent of unspentUtxos) {
     const keyPair = bitcoinjs.ECPair.fromWIF(unspent.wif, config.network);
 
     const p2Vault = paymentMethod({
@@ -201,10 +210,6 @@ exports.createHDSegwitVaultTransaction = function({
     }
   }
 
-  if (unspentAmountSatoshi < amountToOutputSatoshi + feeInSatoshis) {
-    throw new Error('Not enough balance. Please, try sending a smaller amount.');
-  }
-
   // adding outputs
 
   psbt.addOutput({
@@ -213,13 +218,15 @@ exports.createHDSegwitVaultTransaction = function({
   });
 
   if (amountToOutputSatoshi + feeInSatoshis < unspentAmountSatoshi) {
+    const restValue = unspentAmountSatoshi - amountToOutputSatoshi - feeInSatoshis;
+    console.log('restValue', restValue);
     // sending less than we have, so the rest should go back
-    if (unspentAmountSatoshi - amountToOutputSatoshi - feeInSatoshis > 3 * feeInSatoshis) {
+    if (restValue > 3 * feeInSatoshis) {
       // to prevent @dust error change transferred amount should be at least 3xfee.
       // if not - we just dont send change and it wil add to fee
       psbt.addOutput({
         address: changeAddress,
-        value: unspentAmountSatoshi - amountToOutputSatoshi - feeInSatoshis,
+        value: restValue,
       });
     }
   }
