@@ -18,7 +18,7 @@ let wasConnectedAtLeastOnce = false;
 async function connectMain() {
   const host = await AsyncStorage.getItem(AppStorage.ELECTRUM_HOST);
   const tcp = await AsyncStorage.getItem(AppStorage.ELECTRUM_TCP_PORT);
-  const usingPeer = !!host && !!tcp ? { host, tcp } : defaultPeer;
+  const usingPeer = tcp === '443' ? { host, tcp } : defaultPeer;
 
   try {
     console.log('begin connection:', JSON.stringify(usingPeer));
