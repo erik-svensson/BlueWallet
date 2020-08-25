@@ -52,10 +52,6 @@ export const getUtxosFromMaxToMin = (utxos: Utxo[], amount: number): Utxo[] | nu
 
 export const getUtxosSolutionFromMinToMax = (utxos: Utxo[], amount: number): Solution | null => {
   const sortedUtxos = sortBy(utxos, 'value');
-
-  console.log('utxos', utxos);
-  console.log('amount', amount);
-
   const solution: Solution = { utxos: [], negativeAmount: 0 };
 
   let am = amount;

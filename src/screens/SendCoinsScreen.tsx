@@ -128,10 +128,6 @@ export class SendCoinsScreen extends Component<Props, State> {
 
     const targets: any[] = [];
     const amount = btcToSatoshi(transaction.amount).toNumber();
-    console.log('amount', amount);
-    console.log('amount', transaction.amount);
-    const alAmount = btcToSatoshi(Number(transaction.amount)).toNumber();
-    console.log('alAmount', alAmount);
 
     if (amount > 0.0) {
       targets.push({ address: transaction.address, value: amount });

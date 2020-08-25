@@ -28,8 +28,6 @@ exports.createHDTransaction = function(utxos, toAddress, amount, fixedFee, chang
   let outputNum = 0;
   const unspentUtxos = getUtxosFromMinToMax(utxos, btcToSatoshi(amount, 0));
 
-  console.log('unspentUtxos', unspentUtxos);
-
   if (unspentUtxos === null) {
     throw new Error(i18n.transactions.errors.notEnoughBalance);
   }
@@ -72,7 +70,6 @@ exports.createHDTransaction = function(utxos, toAddress, amount, fixedFee, chang
 };
 
 exports.createHDSegwitTransaction = function(utxos, toAddress, amount, fixedFee, changeAddress) {
-  console.log('createHDSegwitTransaction');
   const feeInSatoshis = btcToSatoshi(fixedFee, 0);
   const amountToOutputSatoshi = btcToSatoshi(amount - fixedFee, 0); // how much payee should get
   const psbt = new bitcoinjs.Psbt({ network: config.network });
@@ -81,20 +78,13 @@ exports.createHDSegwitTransaction = function(utxos, toAddress, amount, fixedFee,
   const ourOutputs = [];
   let outputNum = 0;
 
-  console.log('utxos', utxos);
-
   const unspentUtxos = getUtxosFromMinToMax(utxos, btcToSatoshi(amount, 0));
-
-  console.log('unspentUtxos', unspentUtxos);
 
   if (unspentUtxos === null) {
     throw new Error(i18n.transactions.errors.notEnoughBalance);
   }
   for (const unspent of unspentUtxos) {
-    console.log('unspent', unspent);
     const keyPair = bitcoinjs.ECPair.fromWIF(unspent.wif, config.network);
-    console.log('keyPair', keyPair);
-    console.log('keyPair', config.network);
 
     const p2wpkh = _p2wpkh({
       pubkey: keyPair.publicKey,
@@ -179,8 +169,6 @@ exports.createHDSegwitVaultTransaction = function({
   } else {
     unspentUtxos = getUtxosFromMaxToMin(utxos, amountSatoshis);
   }
-
-  console.log('unspentUtxos', unspentUtxos);
 
   if (unspentUtxos === null) {
     throw new Error(i18n.transactions.errors.notEnoughBalance);
@@ -280,7 +268,7 @@ exports.createSegwitTransaction = function(utxos, toAddress, amount, fixedFee, W
   }
 
   let unspentAmount = 0;
-  for (const unspent of utxos) {
+  for (const unspent of unspentUtxos) {
     psbt.addInput({
       hash: unspent.txid,
       index: unspent.vout,
@@ -294,15 +282,11 @@ exports.createSegwitTransaction = function(utxos, toAddress, amount, fixedFee, W
     unspentAmount += unspent.value;
   }
   const amountToOutput = btcToSatoshi(amount - fixedFee, 0);
-  // const amountToOutput = parseInt(((amount - fixedFee) * 100000000).toFixed(0));
 
   psbt.addOutput({
     address: toAddress,
     value: amountToOutput,
   });
-  console.log('amountToOutput', amountToOutput);
-  console.log('feeInSatoshis', feeInSatoshis);
-  console.log('unspentAmount', unspentAmount);
 
   if (amountToOutput + feeInSatoshis < unspentAmount) {
     // sending less than we have, so the rest should go back
