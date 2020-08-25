@@ -260,11 +260,12 @@ exports.createSegwitTransaction = function(utxos, toAddress, amount, fixedFee, W
 
   const psbt = new bitcoinjs.Psbt({ network: config.network });
   psbt.setVersion(1);
-  const unspentUtxos = getUtxosFromMinToMax(utxos, amount);
+  const unspentUtxos = getUtxosFromMinToMax(utxos, btcToSatoshi(amount, 0));
 
   if (unspentUtxos === null) {
     throw new Error(i18n.transactions.errors.notEnoughBalance);
   }
+  console.log('unspentUtxos', unspentUtxos);
 
   let unspentAmount = 0;
   for (const unspent of unspentUtxos) {
@@ -301,7 +302,7 @@ exports.createSegwitTransaction = function(utxos, toAddress, amount, fixedFee, W
     }
   }
 
-  for (let c = 0; c < utxos.length; c++) {
+  for (let c = 0; c < unspentUtxos.length; c++) {
     psbt.signInput(c, keyPair);
   }
   const tx = psbt.finalizeAllInputs().extractTransaction();
@@ -430,7 +431,7 @@ exports.createTransaction = function(utxos, toAddress, _amount, _fixedFee, WIF, 
   const txb = new bitcoinjs.TransactionBuilder(config.network);
   txb.setVersion(1);
   let unspentAmount = 0;
-  const unspentUtxos = getUtxosFromMinToMax(utxos, _amount);
+  const unspentUtxos = getUtxosFromMinToMax(utxos, btcToSatoshi(_amount, 0));
 
   if (unspentUtxos === null) {
     throw new Error(i18n.transactions.errors.notEnoughBalance);
@@ -438,7 +439,7 @@ exports.createTransaction = function(utxos, toAddress, _amount, _fixedFee, WIF, 
 
   for (const unspent of unspentUtxos) {
     txb.addInput(unspent.txid, unspent.vout);
-    unspentAmount += btcToSatoshi(unspent.value, 0);
+    unspentAmount += unspent.value;
   }
   txb.addOutput(toAddress, amountToOutput);
 

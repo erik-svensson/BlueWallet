@@ -126,7 +126,7 @@ describe('unit - signer', function() {
       assert.equal(oldTx.ins[0].sequence + 1, newTx.ins[0].sequence);
     });
 
-    it.only('should return valid tx hex for segwit transactions with multiple inputs', function(done) {
+    it('should return valid tx hex for segwit transactions with multiple inputs', function(done) {
       const signer = require('../../models/signer');
       const utxos = [
         {
@@ -288,7 +288,7 @@ describe('unit - signer', function() {
           address: 'RPuRPTc9o6DMLsESyhDSkPoinH4JX1RG26',
           account: 'RPuRPTc9o6DMLsESyhDSkPoinH4JX1RG26',
           scriptPubKey: 'a9146fbf1cee74734503297e46a0db3e3fbb06f2e9d387',
-          value: 0.01,
+          value: 1000000,
           confirmations: 108,
           spendable: false,
           solvable: false,
