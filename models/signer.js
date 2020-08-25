@@ -220,7 +220,6 @@ exports.createHDSegwitVaultTransaction = function({
 
   if (amountToOutputSatoshi + feeInSatoshis < unspentAmountSatoshi) {
     const restValue = unspentAmountSatoshi - amountToOutputSatoshi - feeInSatoshis;
-    console.log('restValue', restValue);
     // sending less than we have, so the rest should go back
     if (restValue > 3 * feeInSatoshis) {
       // to prevent @dust error change transferred amount should be at least 3xfee.
@@ -293,7 +292,6 @@ exports.createSegwitTransaction = function(utxos, toAddress, amount, fixedFee, W
 
     const restValue = unspentAmount - amountToOutput - feeInSatoshis;
     if (restValue > 3 * feeInSatoshis) {
-      console.log('restValue', restValue);
       // to prevent @dust error change transferred amount should be at least 3xfee.
       // if not - we just dont send change and it wil add to fee
       psbt.addOutput({

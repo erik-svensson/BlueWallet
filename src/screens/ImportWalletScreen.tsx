@@ -1,5 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import * as bip39 from 'bip39';
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, Text, Keyboard, Alert } from 'react-native';
 import { connect } from 'react-redux';
@@ -23,6 +24,7 @@ import {
   HDSegwitBech32Wallet,
   HDSegwitP2SHAirWallet,
 } from '../../class';
+import { isElectrumVaultMnemonic } from '../../utils/crypto';
 
 const i18n = require('../../loc');
 
@@ -370,6 +372,11 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
   importMnemonic = (mnemonic: string) => {
     const trimmedMnemonic = mnemonic.trim().replace(/ +/g, ' ');
+
+    if (isElectrumVaultMnemonic(trimmedMnemonic) && !bip39.validateMnemonic(trimmedMnemonic)) {
+      this.showErrorMessageScreen({ description: i18n.wallets.importWallet.unsupportedElectrumVaultMnemonic });
+      return;
+    }
 
     if (this.props?.route.params.walletType === HDSegwitP2SHArWallet.type) {
       return this.createARWallet(trimmedMnemonic);
