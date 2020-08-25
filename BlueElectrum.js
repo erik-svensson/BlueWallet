@@ -8,7 +8,7 @@ const reverse = require('buffer-reverse');
 const ElectrumClient = require('electrum-client');
 
 const storageKey = 'ELECTRUM_PEERS';
-export const defaultPeer = { host: '188.166.204.85', tcp: '443' };
+export const defaultPeer = __DEV__ ? { host: '188.166.204.85', tcp: '50001' } : { host: '188.166.204.85', tcp: '443' };
 const hardcodedPeers = [defaultPeer];
 
 let mainClient = false;
@@ -22,7 +22,7 @@ async function connectMain() {
 
   try {
     console.log('begin connection:', JSON.stringify(usingPeer));
-    mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, 'tls');
+    mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, __DEV__ ? 'tcp' : 'tls');
     mainClient.onError = function(e) {
       console.log('ElectrumClient error: ' + e);
       mainConnected = false;
@@ -418,7 +418,7 @@ module.exports.broadcastV2 = async function(hex) {
  * @returns {Promise<boolean>} Whether provided host:port is a valid electrum server
  */
 module.exports.testConnection = async function(host, tcpPort) {
-  const client = new ElectrumClient(tcpPort, host, 'tls');
+  const client = new ElectrumClient(tcpPort, host, 'tcp');
   try {
     await client.connect();
     await client.server_version('2.7.11', '1.4');
