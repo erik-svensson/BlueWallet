@@ -15,7 +15,7 @@ describe('unit - signer', function() {
           address: 'RSvwNKBtqEhbNNF4A7mcUcJ3ZiR7FUSJVn',
           account: 'RSvwNKBtqEhbNNF4A7mcUcJ3ZiR7FUSJVn',
           scriptPubKey: 'a914c19daa4f3035e18a71abc63ababc4d3da8f2840f87',
-          value: 0.001,
+          value: 100000,
           confirmations: 108,
           spendable: true,
           solvable: false,
@@ -45,7 +45,7 @@ describe('unit - signer', function() {
           address: 'RPuRPTc9o6DMLsESyhDSkPoinH4JX1RG26',
           account: 'RPuRPTc9o6DMLsESyhDSkPoinH4JX1RG26',
           scriptPubKey: 'a9146fbf1cee74734503297e46a0db3e3fbb06f2e9d387',
-          value: 0.1,
+          value: 10000000,
           confirmations: 108,
           spendable: false,
           solvable: false,
@@ -126,7 +126,7 @@ describe('unit - signer', function() {
       assert.equal(oldTx.ins[0].sequence + 1, newTx.ins[0].sequence);
     });
 
-    it('should return valid tx hex for segwit transactions with multiple inputs', function(done) {
+    it.only('should return valid tx hex for segwit transactions with multiple inputs', function(done) {
       const signer = require('../../models/signer');
       const utxos = [
         {
@@ -135,7 +135,7 @@ describe('unit - signer', function() {
           address: 'RW4r92uBxhsG3YRgaxb481dKfJ5hhvrdsC',
           account: 'RW4r92uBxhsG3YRgaxb481dKfJ5hhvrdsC',
           scriptPubKey: 'a914e4050160d7beb7404aa2757227cd2e8435cb804087',
-          value: 0.0009,
+          value: 90000,
           confirmations: 67,
           spendable: false,
           solvable: false,
@@ -147,7 +147,7 @@ describe('unit - signer', function() {
           address: 'RW4r92uBxhsG3YRgaxb481dKfJ5hhvrdsC',
           account: 'RW4r92uBxhsG3YRgaxb481dKfJ5hhvrdsC',
           scriptPubKey: 'a914e4050160d7beb7404aa2757227cd2e8435cb804087',
-          value: 0.0019,
+          value: 190000,
           confirmations: 142,
           spendable: false,
           solvable: false,
@@ -177,7 +177,7 @@ describe('unit - signer', function() {
           address: 'RW4r92uBxhsG3YRgaxb481dKfJ5hhvrdsC',
           account: 'RW4r92uBxhsG3YRgaxb481dKfJ5hhvrdsC',
           scriptPubKey: 'a914e4050160d7beb7404aa2757227cd2e8435cb804087',
-          value: 0.004,
+          value: 400000,
           confirmations: 271,
           spendable: false,
           solvable: false,
@@ -208,7 +208,7 @@ describe('unit - signer', function() {
           address: 'RW4r92uBxhsG3YRgaxb481dKfJ5hhvrdsC',
           account: 'RW4r92uBxhsG3YRgaxb481dKfJ5hhvrdsC',
           scriptPubKey: 'a914e4050160d7beb7404aa2757227cd2e8435cb804087',
-          value: 0.004,
+          value: 400000,
           confirmations: 271,
           spendable: false,
           solvable: false,

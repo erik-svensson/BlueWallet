@@ -253,8 +253,6 @@ exports.createHDSegwitVaultTransaction = function({
 };
 
 exports.createSegwitTransaction = function(utxos, toAddress, amount, fixedFee, WIF, changeAddress, sequence) {
-  console.log('createSegwitTransaction 2', utxos);
-
   changeAddress = changeAddress || exports.WIF2segwitAddress(WIF);
 
   if (sequence === undefined) {
@@ -262,6 +260,7 @@ exports.createSegwitTransaction = function(utxos, toAddress, amount, fixedFee, W
   }
 
   const feeInSatoshis = btcToSatoshi(fixedFee, 0);
+
   const keyPair = bitcoinjs.ECPair.fromWIF(WIF, config.network);
   const p2wpkh = _p2wpkh({
     pubkey: keyPair.publicKey,
@@ -274,18 +273,14 @@ exports.createSegwitTransaction = function(utxos, toAddress, amount, fixedFee, W
 
   const psbt = new bitcoinjs.Psbt({ network: config.network });
   psbt.setVersion(1);
-  const unspentUtxos = getUtxosFromMinToMax(
-    utxos,
-    // utxos.map(u => ({ ...u, value: btcToSatoshi(u.value, 0) })),
-    amount,
-  );
+  const unspentUtxos = getUtxosFromMinToMax(utxos, amount);
 
   if (unspentUtxos === null) {
     throw new Error(i18n.transactions.errors.notEnoughBalance);
   }
 
   let unspentAmount = 0;
-  for (const unspent of unspentUtxos) {
+  for (const unspent of utxos) {
     psbt.addInput({
       hash: unspent.txid,
       index: unspent.vout,
@@ -299,6 +294,8 @@ exports.createSegwitTransaction = function(utxos, toAddress, amount, fixedFee, W
     unspentAmount += unspent.value;
   }
   const amountToOutput = btcToSatoshi(amount - fixedFee, 0);
+  // const amountToOutput = parseInt(((amount - fixedFee) * 100000000).toFixed(0));
+
   psbt.addOutput({
     address: toAddress,
     value: amountToOutput,

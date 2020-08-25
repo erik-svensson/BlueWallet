@@ -92,7 +92,6 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     if (!this.seed) {
       this.seed = await bip39.mnemonicToSeed(this.secret);
     }
-    console.log('NOWY ROOT');
     const root = HDNode.fromSeed(this.seed, config.network);
     const path = this._getPath(`/0/${index}`);
     const child = root.derivePath(path);

@@ -151,7 +151,6 @@ export class SendCoinsScreen extends Component<Props, State> {
     };
 
     await BlueApp.saveToDisk();
-    console.log('FEE sat 2', fee);
     this.setState({ isLoading: false }, () =>
       this.props.navigation.navigate(Route.SendCoinsConfirm, {
         fee: satoshiToBtc(fee).toNumber(),
