@@ -62,10 +62,10 @@ class TransactionDetailsScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const {
-      transaction: { txid, hash },
+      transaction: { hash },
     } = props.route.params;
 
-    const note = props.transactionNotes[txid] || '';
+    const note = props.transactionNotes[hash] || '';
 
     let foundTx = {};
     let from = [];
