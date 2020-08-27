@@ -26,7 +26,7 @@ async function connectMain() {
     };
     await mainClient.connect();
 
-    const ver = await mainClient.server_version('2.7.11', '1.4');
+    const ver = await mainClient.server_version('2.7.11', '2.0');
     if (ver && ver[0]) {
       console.log('connected to ', ver);
       mainConnected = true;
