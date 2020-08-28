@@ -85,12 +85,13 @@ export class SegwitP2SHWallet extends LegacyWallet {
    * @return string Signed txhex ready for broadcast
    */
   createTx(utxos, amount, fee, address, memo, sequence) {
+    const newUtxos = JSON.parse(JSON.stringify(utxos));
     // TODO: memo is not used here, get rid of it
     if (sequence === undefined) {
       sequence = 0;
     }
     // transforming UTXOs fields to how module expects it
-    for (const u of utxos) {
+    for (const u of newUtxos) {
       u.value = u.value / 100000000;
       u.value = u.value.toString(10);
     }
@@ -98,7 +99,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
     const amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
     // to compensate that module substracts fee from amount
     return signer.createSegwitTransaction(
-      utxos,
+      newUtxos,
       address,
       amountPlusFee,
       fee,

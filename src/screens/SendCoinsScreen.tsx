@@ -399,13 +399,13 @@ export class SendCoinsScreen extends Component<Props, State> {
     }
 
     // legacy send below
+    let fee = 0.000001; // initial fee guess
 
     this.setState({ isLoading: true }, async () => {
       let utxo: any;
       let actualSatoshiPerByte: any;
       let tx: any, txid: any;
       let tries = 1;
-      let fee = 0.000001; // initial fee guess
       const firstTransaction = this.state.addresses[0];
       try {
         await this.state.fromWallet.fetchUtxo();
@@ -466,12 +466,7 @@ export class SendCoinsScreen extends Component<Props, State> {
         this.props.navigation.navigate(Route.SendCoinsConfirm, {
           recipients: [firstTransaction],
           // HD wallet's utxo is in sats, classic segwit wallet utxos are in btc
-          fee: this.calculateFee(
-            utxo,
-            tx,
-            this.state.fromWallet.type === HDSegwitP2SHWallet.type ||
-              this.state.fromWallet.type === HDLegacyP2PKHWallet.type,
-          ),
+          fee,
           memo: this.state.memo,
           fromWallet: this.state.fromWallet,
           tx,
