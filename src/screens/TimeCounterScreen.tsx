@@ -8,7 +8,7 @@ import { Button, ScreenTemplate, FlatButton } from 'app/components';
 import { TimeCounter } from 'app/components/TimeCounter';
 import { MainCardStackNavigatorParams, Route } from 'app/consts';
 import { useInterval } from 'app/helpers/useInterval';
-import { typography } from 'app/styles';
+import { typography, palette } from 'app/styles';
 
 const i18n = require('../../loc');
 
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   description: {
     ...typography.caption,
-    color: '#949595',
+    color: palette.textGrey,
     textAlign: 'center',
   },
 });
