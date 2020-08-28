@@ -155,7 +155,7 @@ export class SendCoinsConfirmScreen extends Component<Props> {
             <Text style={typography.caption}>{`${i18n.send.details.fee}  `}</Text>
             <View style={styles.feeBox}>
               <Text style={styles.fee}>
-                {fee} {i18n.send.details.feeUnit}
+                {fee} {i18n._.satoshi}
               </Text>
             </View>
           </View>

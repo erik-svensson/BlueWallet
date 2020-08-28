@@ -13,6 +13,7 @@ module.exports = {
     confirm: 'Confirm',
     copy: 'Copy',
     copied: 'Copied!',
+    satoshi: 'Sat',
   },
   tabNavigator: {
     dashboard: 'Dashboard',

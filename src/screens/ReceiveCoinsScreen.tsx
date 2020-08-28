@@ -168,6 +168,8 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
 
   render() {
     const { amount, bip21encoded, wallet } = this.state;
+    const qrCode = bip21encoded.replace('bitcoin:', '');
+
     return (
       <ScreenTemplate
         footer={
@@ -182,10 +184,10 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
           unit={wallet.preferredBalanceUnit}
         />
         <View style={styles.qrcontainer}>
-          {!!bip21encoded && (
+          {!!qrCode && (
             <QRCode
               quietZone={10}
-              value={bip21encoded.replace('bitcoin:', '')}
+              value={qrCode}
               size={140}
               color={BlueApp.settings.foregroundColor}
               logoBackgroundColor={BlueApp.settings.brandingColor}
