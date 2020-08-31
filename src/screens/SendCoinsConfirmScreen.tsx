@@ -2,11 +2,13 @@ import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
+import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, StyledText, Image, Text } from 'app/components';
 import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import * as actions from 'app/state/transactions/actions';
 import { palette, typography } from 'app/styles';
 
 import { HDSegwitBech32Wallet } from '../../class';
@@ -31,11 +33,11 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     StackNavigationProp<MainCardStackNavigatorParams, Route.SendCoinsConfirm>
   >;
-
+  createTransactionNote: (transactionID: string, note: string) => actions.CreateTransactionNoteAction;
   route: RouteProp<MainCardStackNavigatorParams, Route.SendCoinsConfirm>;
 }
 
-export class SendCoinsConfirmScreen extends Component<Props> {
+class SendCoinsConfirmScreen extends Component<Props> {
   constructor(props: Props) {
     super(props);
     const { fee, memo, recipients, tx, satoshiPerByte, fromWallet } = props.route.params;
@@ -76,10 +78,15 @@ export class SendCoinsConfirmScreen extends Component<Props> {
             }
           }
 
+          const {
+            [result]: { hash },
+          } = await BlueElectrum.multiGetTransactionByTxid([result]);
+
           if (this.state.fromWallet.type === HDSegwitBech32Wallet.type) {
             amount = i18n.formatBalanceWithoutSuffix(amount, BitcoinUnit.BTC, false);
           }
 
+          this.props.createTransactionNote(hash, this.state.memo);
           CreateMessage({
             title: i18n.send.success.title,
             description: i18n.send.success.description,
@@ -164,6 +171,12 @@ export class SendCoinsConfirmScreen extends Component<Props> {
     );
   }
 }
+
+const mapDispatchToProps = {
+  createTransactionNote: actions.createTransactionNote,
+};
+
+export default connect(null, mapDispatchToProps)(SendCoinsConfirmScreen);
 
 const styles = StyleSheet.create({
   footer: {
