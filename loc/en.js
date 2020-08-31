@@ -365,6 +365,8 @@ module.exports = {
     cancel: 'Cancel',
   },
   filterTransactions: {
+    received: 'Received',
+    sent: 'Sent',
     header: 'Filter transactions',
     receive: 'Receive',
     send: 'Send',
