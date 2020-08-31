@@ -289,7 +289,7 @@ PODS:
     - React
   - react-native-randombytes (3.5.3):
     - React
-  - react-native-restart (0.0.15):
+  - react-native-restart (0.0.17):
     - React
   - react-native-safe-area-context (3.0.6):
     - React
@@ -675,7 +675,7 @@ SPEC CHECKSUMS:
   react-native-haptic-feedback: 22c9dc85fd8059f83bf9edd9212ac4bd4ae6074d
   react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
-  react-native-restart: fff228304625f55de2ebd4de43938110f4c888ed
+  react-native-restart: d19a0f8d053d065fe64cd2baebb6487111c77149
   react-native-safe-area-context: e22a8ca00f758273d2408953965cb8db67da7925
   react-native-slider: 884693dd50f84745baa511ecdcde4c16f32182fb
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
