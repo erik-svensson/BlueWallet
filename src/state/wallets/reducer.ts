@@ -18,7 +18,7 @@ const initialState: WalletsState = {
 
 export const walletsReducer = (state = initialState, action: WalletsActionType): WalletsState => {
   switch (action.type) {
-    case WalletsAction.LoadWalletsRequest:
+    case WalletsAction.LoadWallets:
       return {
         ...state,
         isLoading: true,
