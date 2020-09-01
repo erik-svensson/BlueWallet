@@ -2,12 +2,11 @@ import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
 import { Authenticator as IAuthenticator, ActionMeta } from 'app/consts';
-import { BlueApp, Authenticator } from 'app/legacy';
 
 const i18n = require('../../../loc');
 
 export enum AuthenticatorsAction {
-  CreateAuthenticatorRequest = 'CreateAuthenticatorRequest',
+  CreateAuthenticator = 'CreateAuthenticator',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticatorFailure = 'CreateAuthenticatorFailure',
   LoadAuthenticators = 'LoadAuthenticators',
@@ -21,8 +20,10 @@ export enum AuthenticatorsAction {
   SignTransactionFailure = 'SignTransactionFailure',
 }
 
-export interface CreateAuthenticatorRequestAction {
-  type: AuthenticatorsAction.CreateAuthenticatorRequest;
+export interface CreateAuthenticatorAction {
+  type: AuthenticatorsAction.CreateAuthenticator;
+  payload: CreateAuthenticator;
+  meta: ActionMeta;
 }
 
 export interface CreateAuthenticatorSuccessAction {
@@ -75,7 +76,7 @@ export interface SignTransactionFailureAction {
 }
 
 export type AuthenticatorsActionType =
-  | CreateAuthenticatorRequestAction
+  | CreateAuthenticatorAction
   | CreateAuthenticatorSuccessAction
   | CreateAuthenticatorFailureAction
   | LoadAuthenticatorsAction
@@ -88,16 +89,24 @@ export type AuthenticatorsActionType =
   | SignTransactionFailureAction
   | SignTransactionRequestAction;
 
-const createAuthenticatorRequest = (): CreateAuthenticatorRequestAction => ({
-  type: AuthenticatorsAction.CreateAuthenticatorRequest,
+interface CreateAuthenticator {
+  name: string;
+  entropy?: string;
+  mnemonic?: string;
+}
+
+export const createAuthenticator = (payload: CreateAuthenticator, meta: ActionMeta): CreateAuthenticatorAction => ({
+  type: AuthenticatorsAction.CreateAuthenticator,
+  payload,
+  meta,
 });
 
-const createAuthenticatorSuccess = (authenticator: IAuthenticator): CreateAuthenticatorSuccessAction => ({
+export const createAuthenticatorSuccess = (authenticator: IAuthenticator): CreateAuthenticatorSuccessAction => ({
   type: AuthenticatorsAction.CreateAuthenticatorSuccess,
   authenticator,
 });
 
-const createAuthenticatorFailure = (error: string): CreateAuthenticatorFailureAction => ({
+export const createAuthenticatorFailure = (error: string): CreateAuthenticatorFailureAction => ({
   type: AuthenticatorsAction.CreateAuthenticatorFailure,
   error,
 });
@@ -145,34 +154,28 @@ const signTransactionFailure = (error: string): SignTransactionFailureAction => 
   error,
 });
 
-interface CreateAuthenticator {
-  name: string;
-  entropy?: string;
-  mnemonic?: string;
-}
-
-export const createAuthenticator = ({ name, entropy, mnemonic }: CreateAuthenticator, meta?: ActionMeta) => async (
-  dispatch: ThunkDispatch<any, any, AnyAction>,
-): Promise<AuthenticatorsActionType> => {
-  try {
-    dispatch(createAuthenticatorRequest());
-    const authenticator = new Authenticator(name);
-    await authenticator.init({ entropy, mnemonic });
-    BlueApp.addAuthenticator(authenticator);
-    await BlueApp.saveToDisk();
-    const createAuthenticatorSuccessDispatch = dispatch(createAuthenticatorSuccess(authenticator));
-    if (meta?.onSuccess) {
-      meta.onSuccess(authenticator);
-    }
-    return createAuthenticatorSuccessDispatch;
-  } catch (e) {
-    const createAuthenticatorFailureDispatch = dispatch(createAuthenticatorFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
-    }
-    return createAuthenticatorFailureDispatch;
-  }
-};
+// export const createAuthenticator = ({ name, entropy, mnemonic }: CreateAuthenticator, meta?: ActionMeta) => async (
+//   dispatch: ThunkDispatch<any, any, AnyAction>,
+// ): Promise<AuthenticatorsActionType> => {
+//   try {
+//     dispatch(createAuthenticatorRequest());
+//     const authenticator = new Authenticator(name);
+//     await authenticator.init({ entropy, mnemonic });
+//     BlueApp.addAuthenticator(authenticator);
+//     await BlueApp.saveToDisk();
+//     const createAuthenticatorSuccessDispatch = dispatch(createAuthenticatorSuccess(authenticator));
+//     if (meta?.onSuccess) {
+//       meta.onSuccess(authenticator);
+//     }
+//     return createAuthenticatorSuccessDispatch;
+//   } catch (e) {
+//     const createAuthenticatorFailureDispatch = dispatch(createAuthenticatorFailure(e.message));
+//     if (meta?.onFailure) {
+//       meta.onFailure(e.message);
+//     }
+//     return createAuthenticatorFailureDispatch;
+//   }
+// };
 
 export const signTransaction = (encodedPsbt: string, meta: ActionMeta) => async (
   dispatch: ThunkDispatch<any, any, AnyAction>,

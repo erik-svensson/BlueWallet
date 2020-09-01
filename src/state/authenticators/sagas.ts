@@ -1,6 +1,6 @@
 import { takeLatest, takeEvery, put } from 'redux-saga/effects';
 
-import { BlueApp } from 'app/legacy';
+import { BlueApp, Authenticator } from 'app/legacy';
 
 import {
   loadAuthenticatorsFailure,
@@ -9,6 +9,9 @@ import {
   deleteAuthenticatorSuccess,
   deleteAuthenticatorFailure,
   DeleteAuthenticatorAction,
+  createAuthenticatorSuccess,
+  createAuthenticatorFailure,
+  CreateAuthenticatorAction,
 } from './actions';
 
 export function* loadAuthenticatorsSaga() {
@@ -44,7 +47,30 @@ export function* deleteAuthenticatorSaga(action: DeleteAuthenticatorAction | unk
   }
 }
 
+export function* createAuthenticatorSaga(action: CreateAuthenticatorAction | unknown) {
+  const {
+    payload: { name, entropy, mnemonic },
+    meta,
+  } = action as CreateAuthenticatorAction;
+  try {
+    const authenticator = new Authenticator(name);
+    yield authenticator.init({ entropy, mnemonic });
+    BlueApp.addAuthenticator(authenticator);
+    yield BlueApp.saveToDisk();
+    yield put(createAuthenticatorSuccess(authenticator));
+    if (meta?.onSuccess) {
+      meta.onSuccess(authenticator);
+    }
+  } catch (e) {
+    yield put(createAuthenticatorFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+  }
+}
+
 export default [
   takeLatest(AuthenticatorsAction.LoadAuthenticators, loadAuthenticatorsSaga),
   takeEvery(AuthenticatorsAction.DeleteAuthenticator, deleteAuthenticatorSaga),
+  takeEvery(AuthenticatorsAction.CreateAuthenticator, createAuthenticatorSaga),
 ];

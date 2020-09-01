@@ -16,7 +16,7 @@ const initialState: AuthenticatorsState = {
 
 export const authenticatorsReducer = (state = initialState, action: AuthenticatorsActionType): AuthenticatorsState => {
   switch (action.type) {
-    case AuthenticatorsAction.CreateAuthenticatorRequest:
+    case AuthenticatorsAction.CreateAuthenticator:
     case AuthenticatorsAction.LoadAuthenticators:
     case AuthenticatorsAction.DeleteAuthenticator:
       return {
