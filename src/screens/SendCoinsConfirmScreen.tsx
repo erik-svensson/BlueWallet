@@ -100,15 +100,10 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
         const result = await fromWallet.broadcastTx(txDecoded.toHex());
 
-        if (result && result?.code) {
-          if (result.code === 1) {
-            const message = result.message.split('\n');
-            throw new Error(`${message[0]}: ${message[2]}`);
-          }
-        } else {
+        if (typeof result === 'string') {
           EV(EV.enum.REMOTE_TRANSACTIONS_COUNT_CHANGED); // someone should fetch txs
           const {
-            [result as string]: { hash },
+            [result]: { hash },
           } = await BlueElectrum.multiGetTransactionByTxid([result]);
 
           createTransactionNote(hash, memo);
@@ -123,6 +118,15 @@ class SendCoinsConfirmScreen extends Component<Props> {
             },
           });
           this.setState({ isLoading: false });
+          return;
+        }
+
+        if (result && result?.code) {
+          if (result.code === 1) {
+            const message = result.message.split('\n');
+            throw new Error(`${message[0]}: ${message[2]}`);
+          }
+          return;
         }
       } catch (error) {
         this.setState({ isLoading: false });
