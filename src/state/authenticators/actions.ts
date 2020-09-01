@@ -1,9 +1,4 @@
-import { AnyAction } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-
 import { Authenticator as IAuthenticator, ActionMeta } from 'app/consts';
-
-const i18n = require('../../../loc');
 
 export enum AuthenticatorsAction {
   CreateAuthenticator = 'CreateAuthenticator',
@@ -15,7 +10,7 @@ export enum AuthenticatorsAction {
   DeleteAuthenticator = 'DeleteAuthenticator',
   DeleteAuthenticatorSuccess = 'DeleteAuthenticatorSuccess',
   DeleteAuthenticatorFailure = 'DeleteAuthenticatorFailure',
-  SignTransactionRequest = 'SignTransactionRequest',
+  SignTransaction = 'SignTransaction',
   SignTransactionSuccess = 'SignTransactionSuccess',
   SignTransactionFailure = 'SignTransactionFailure',
 }
@@ -64,8 +59,12 @@ export interface DeleteAuthenticatorFailureAction {
   error: string;
 }
 
-export interface SignTransactionRequestAction {
-  type: AuthenticatorsAction.SignTransactionRequest;
+export interface SignTransactionAction {
+  type: AuthenticatorsAction.SignTransaction;
+  payload: {
+    encodedPsbt: string;
+  };
+  meta?: ActionMeta;
 }
 export interface SignTransactionSuccessAction {
   type: AuthenticatorsAction.SignTransactionSuccess;
@@ -87,7 +86,7 @@ export type AuthenticatorsActionType =
   | DeleteAuthenticatorFailureAction
   | SignTransactionSuccessAction
   | SignTransactionFailureAction
-  | SignTransactionRequestAction;
+  | SignTransactionAction;
 
 interface CreateAuthenticator {
   name: string;
@@ -141,68 +140,17 @@ export const deleteAuthenticatorFailure = (error: string): DeleteAuthenticatorFa
   error,
 });
 
-const signTransactionRequest = (): SignTransactionRequestAction => ({
-  type: AuthenticatorsAction.SignTransactionRequest,
+export const signTransaction = (encodedPsbt: string, meta?: ActionMeta): SignTransactionAction => ({
+  type: AuthenticatorsAction.SignTransaction,
+  payload: { encodedPsbt },
+  meta,
 });
 
-const signTransactionSuccess = (): SignTransactionSuccessAction => ({
+export const signTransactionSuccess = (): SignTransactionSuccessAction => ({
   type: AuthenticatorsAction.SignTransactionSuccess,
 });
 
-const signTransactionFailure = (error: string): SignTransactionFailureAction => ({
+export const signTransactionFailure = (error: string): SignTransactionFailureAction => ({
   type: AuthenticatorsAction.SignTransactionFailure,
   error,
 });
-
-// export const createAuthenticator = ({ name, entropy, mnemonic }: CreateAuthenticator, meta?: ActionMeta) => async (
-//   dispatch: ThunkDispatch<any, any, AnyAction>,
-// ): Promise<AuthenticatorsActionType> => {
-//   try {
-//     dispatch(createAuthenticatorRequest());
-//     const authenticator = new Authenticator(name);
-//     await authenticator.init({ entropy, mnemonic });
-//     BlueApp.addAuthenticator(authenticator);
-//     await BlueApp.saveToDisk();
-//     const createAuthenticatorSuccessDispatch = dispatch(createAuthenticatorSuccess(authenticator));
-//     if (meta?.onSuccess) {
-//       meta.onSuccess(authenticator);
-//     }
-//     return createAuthenticatorSuccessDispatch;
-//   } catch (e) {
-//     const createAuthenticatorFailureDispatch = dispatch(createAuthenticatorFailure(e.message));
-//     if (meta?.onFailure) {
-//       meta.onFailure(e.message);
-//     }
-//     return createAuthenticatorFailureDispatch;
-//   }
-// };
-
-export const signTransaction = (encodedPsbt: string, meta: ActionMeta) => async (
-  dispatch: ThunkDispatch<any, any, AnyAction>,
-  getState: Function,
-): Promise<AuthenticatorsActionType> => {
-  try {
-    dispatch(signTransactionRequest());
-    const {
-      authenticators: { authenticators },
-    } = getState();
-    for (let i = 0; i < authenticators.length; i++) {
-      try {
-        const authenticator = authenticators[i];
-        const finalizedPsbt = await authenticator.signAndFinalizePSBT(encodedPsbt);
-        const signTransactionSuccessDispatch = dispatch(signTransactionSuccess());
-        if (meta?.onSuccess) {
-          meta.onSuccess({ authenticator, finalizedPsbt });
-        }
-        return signTransactionSuccessDispatch;
-      } catch (_) {}
-    }
-    throw new Error(i18n.authenticators.sign.error);
-  } catch (e) {
-    const signTransactionFailureDispatch = dispatch(signTransactionFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
-    }
-    return signTransactionFailureDispatch;
-  }
-};

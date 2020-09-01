@@ -100,7 +100,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
         const result = await fromWallet.broadcastTx(txDecoded.toHex());
 
-        if (result && result.code) {
+        if (result && result?.code) {
           if (result.code === 1) {
             const message = result.message.split('\n');
             throw new Error(`${message[0]}: ${message[2]}`);
@@ -108,7 +108,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
         } else {
           EV(EV.enum.REMOTE_TRANSACTIONS_COUNT_CHANGED); // someone should fetch txs
           const {
-            [result]: { hash },
+            [result as string]: { hash },
           } = await BlueElectrum.multiGetTransactionByTxid([result]);
 
           createTransactionNote(hash, memo);

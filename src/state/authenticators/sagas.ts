@@ -1,4 +1,4 @@
-import { takeLatest, takeEvery, put } from 'redux-saga/effects';
+import { takeLatest, takeEvery, put, select } from 'redux-saga/effects';
 
 import { BlueApp, Authenticator } from 'app/legacy';
 
@@ -12,7 +12,13 @@ import {
   createAuthenticatorSuccess,
   createAuthenticatorFailure,
   CreateAuthenticatorAction,
+  signTransactionSuccess,
+  signTransactionFailure,
+  SignTransactionAction,
 } from './actions';
+import { list } from './selectors';
+
+const i18n = require('../../../loc');
 
 export function* loadAuthenticatorsSaga() {
   try {
@@ -40,7 +46,6 @@ export function* deleteAuthenticatorSaga(action: DeleteAuthenticatorAction | unk
     }
   } catch (e) {
     yield put(deleteAuthenticatorFailure(e.message));
-
     if (meta?.onFailure) {
       meta.onFailure(e.message);
     }
@@ -69,8 +74,38 @@ export function* createAuthenticatorSaga(action: CreateAuthenticatorAction | unk
   }
 }
 
+export function* signTransactionSaga(action: SignTransactionAction | unknown) {
+  const {
+    payload: { encodedPsbt },
+    meta,
+  } = action as SignTransactionAction;
+
+  try {
+    const authenticators = yield select(list);
+
+    for (let i = 0; i < authenticators.length; i++) {
+      try {
+        const authenticator = authenticators[i];
+        const finalizedPsbt = yield authenticator.signAndFinalizePSBT(encodedPsbt);
+        yield put(signTransactionSuccess());
+        if (meta?.onSuccess) {
+          meta.onSuccess({ authenticator, finalizedPsbt });
+        }
+      } catch (_) {}
+    }
+    throw new Error(i18n.authenticators.sign.error);
+  } catch (e) {
+    yield put(signTransactionFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+  }
+}
+
 export default [
   takeLatest(AuthenticatorsAction.LoadAuthenticators, loadAuthenticatorsSaga),
   takeEvery(AuthenticatorsAction.DeleteAuthenticator, deleteAuthenticatorSaga),
   takeEvery(AuthenticatorsAction.CreateAuthenticator, createAuthenticatorSaga),
+  takeEvery(AuthenticatorsAction.CreateAuthenticator, createAuthenticatorSaga),
+  takeEvery(AuthenticatorsAction.SignTransaction, signTransactionSaga),
 ];
