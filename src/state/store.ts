@@ -1,11 +1,14 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { applyMiddleware, compose, createStore, Middleware, Store } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
+import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
 
-import { rootReducer, ApplicationState } from '.';
+import { rootReducer, ApplicationState, rootSaga } from '.';
 
-const middlewares: Middleware[] = [thunk];
+const sagaMiddleware = createSagaMiddleware();
+
+const middlewares: Middleware[] = [sagaMiddleware, thunk];
 
 function bindMiddleware(middleware: Middleware[]) {
   if (__DEV__) {
@@ -28,4 +31,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const configureStore = (): Store<ApplicationState> => createStore(persistedReducer, bindMiddleware(middlewares));
 
 export const store = configureStore();
+export const runSaga = () => sagaMiddleware.run(rootSaga);
+runSaga();
+
 export const persistor = persistStore(store);

@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { Authenticator as IAuthenticator } from 'app/consts';
+import { Authenticator as IAuthenticator, ActionMeta } from 'app/consts';
 import { BlueApp, Authenticator } from 'app/legacy';
 
 const i18n = require('../../../loc');
@@ -10,10 +10,10 @@ export enum AuthenticatorsAction {
   CreateAuthenticatorRequest = 'CreateAuthenticatorRequest',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticatorFailure = 'CreateAuthenticatorFailure',
-  LoadAuthenticatorsRequest = 'LoadAuthenticatorsRequest',
+  LoadAuthenticators = 'LoadAuthenticators',
   LoadAuthenticatorsSuccess = 'LoadAuthenticatorsSuccess',
   LoadAuthenticatorsFailure = 'LoadAuthenticatorsFailure',
-  DeleteAuthenticatorRequest = 'DeleteAuthenticatorRequest',
+  DeleteAuthenticator = 'DeleteAuthenticator',
   DeleteAuthenticatorSuccess = 'DeleteAuthenticatorSuccess',
   DeleteAuthenticatorFailure = 'DeleteAuthenticatorFailure',
   SignTransactionRequest = 'SignTransactionRequest',
@@ -33,8 +33,8 @@ export interface CreateAuthenticatorFailureAction {
   type: AuthenticatorsAction.CreateAuthenticatorFailure;
   error: string;
 }
-export interface LoadAuthenticatorsRequestAction {
-  type: AuthenticatorsAction.LoadAuthenticatorsRequest;
+export interface LoadAuthenticatorsAction {
+  type: AuthenticatorsAction.LoadAuthenticators;
 }
 
 export interface LoadAuthenticatorsSuccessAction {
@@ -46,8 +46,12 @@ export interface LoadAuthenticatorsFailureAction {
   error: string;
 }
 
-export interface DeleteAuthenticatorRequestAction {
-  type: AuthenticatorsAction.DeleteAuthenticatorRequest;
+export interface DeleteAuthenticatorAction {
+  type: AuthenticatorsAction.DeleteAuthenticator;
+  payload: {
+    id: string;
+  };
+  meta?: ActionMeta;
 }
 
 export interface DeleteAuthenticatorSuccessAction {
@@ -74,10 +78,10 @@ export type AuthenticatorsActionType =
   | CreateAuthenticatorRequestAction
   | CreateAuthenticatorSuccessAction
   | CreateAuthenticatorFailureAction
-  | LoadAuthenticatorsRequestAction
+  | LoadAuthenticatorsAction
   | LoadAuthenticatorsSuccessAction
   | LoadAuthenticatorsFailureAction
-  | DeleteAuthenticatorRequestAction
+  | DeleteAuthenticatorAction
   | DeleteAuthenticatorSuccessAction
   | DeleteAuthenticatorFailureAction
   | SignTransactionSuccessAction
@@ -98,30 +102,32 @@ const createAuthenticatorFailure = (error: string): CreateAuthenticatorFailureAc
   error,
 });
 
-const loadAuthenticatorsRequest = (): LoadAuthenticatorsRequestAction => ({
-  type: AuthenticatorsAction.LoadAuthenticatorsRequest,
+export const loadAuthenticators = (): LoadAuthenticatorsAction => ({
+  type: AuthenticatorsAction.LoadAuthenticators,
 });
 
-const loadAuthenticatorsSuccess = (authenticators: IAuthenticator[]): LoadAuthenticatorsSuccessAction => ({
+export const loadAuthenticatorsSuccess = (authenticators: IAuthenticator[]): LoadAuthenticatorsSuccessAction => ({
   type: AuthenticatorsAction.LoadAuthenticatorsSuccess,
   authenticators,
 });
 
-const loadAuthenticatorsFailure = (error: string): LoadAuthenticatorsFailureAction => ({
+export const loadAuthenticatorsFailure = (error: string): LoadAuthenticatorsFailureAction => ({
   type: AuthenticatorsAction.LoadAuthenticatorsFailure,
   error,
 });
 
-const deleteAuthenticatorRequest = (): DeleteAuthenticatorRequestAction => ({
-  type: AuthenticatorsAction.DeleteAuthenticatorRequest,
+export const deleteAuthenticator = (id: string, meta: ActionMeta): DeleteAuthenticatorAction => ({
+  type: AuthenticatorsAction.DeleteAuthenticator,
+  payload: { id },
+  meta,
 });
 
-const deleteAuthenticatorSuccess = (authenticator: IAuthenticator): DeleteAuthenticatorSuccessAction => ({
+export const deleteAuthenticatorSuccess = (authenticator: IAuthenticator): DeleteAuthenticatorSuccessAction => ({
   type: AuthenticatorsAction.DeleteAuthenticatorSuccess,
   authenticator,
 });
 
-const deleteAuthenticatorFailure = (error: string): DeleteAuthenticatorFailureAction => ({
+export const deleteAuthenticatorFailure = (error: string): DeleteAuthenticatorFailureAction => ({
   type: AuthenticatorsAction.DeleteAuthenticatorFailure,
   error,
 });
@@ -144,12 +150,8 @@ interface CreateAuthenticator {
   entropy?: string;
   mnemonic?: string;
 }
-interface Meta {
-  onSuccess?: Function;
-  onFailure?: Function;
-}
 
-export const createAuthenticator = ({ name, entropy, mnemonic }: CreateAuthenticator, meta?: Meta) => async (
+export const createAuthenticator = ({ name, entropy, mnemonic }: CreateAuthenticator, meta?: ActionMeta) => async (
   dispatch: ThunkDispatch<any, any, AnyAction>,
 ): Promise<AuthenticatorsActionType> => {
   try {
@@ -172,40 +174,7 @@ export const createAuthenticator = ({ name, entropy, mnemonic }: CreateAuthentic
   }
 };
 
-export const loadAuthenticators = () => async (
-  dispatch: ThunkDispatch<any, any, AnyAction>,
-): Promise<AuthenticatorsActionType> => {
-  try {
-    dispatch(loadAuthenticatorsRequest());
-    const authenticators = BlueApp.getAuthenticators();
-    return dispatch(loadAuthenticatorsSuccess(authenticators));
-  } catch (e) {
-    return dispatch(loadAuthenticatorsFailure(e.message));
-  }
-};
-
-export const deleteAuthenticator = (id: string, meta: Meta) => async (
-  dispatch: ThunkDispatch<any, any, AnyAction>,
-): Promise<AuthenticatorsActionType> => {
-  try {
-    dispatch(deleteAuthenticatorRequest());
-    const authenticator = BlueApp.removeAuthenticatorById(id);
-    await BlueApp.saveToDisk();
-    const deleteAuthenticatorSuccessDispatch = dispatch(deleteAuthenticatorSuccess(authenticator));
-    if (meta?.onSuccess) {
-      meta.onSuccess(authenticator);
-    }
-    return deleteAuthenticatorSuccessDispatch;
-  } catch (e) {
-    const deleteAuthenticatorFailureDispatch = dispatch(deleteAuthenticatorFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
-    }
-    return deleteAuthenticatorFailureDispatch;
-  }
-};
-
-export const signTransaction = (encodedPsbt: string, meta: Meta) => async (
+export const signTransaction = (encodedPsbt: string, meta: ActionMeta) => async (
   dispatch: ThunkDispatch<any, any, AnyAction>,
   getState: Function,
 ): Promise<AuthenticatorsActionType> => {

@@ -131,7 +131,7 @@ export interface Wallet {
   isInvoiceGeneratedByWallet?: (clipboard: string) => void;
   getPreferredBalanceUnit: () => string;
   isOutputScriptMine: (script: Uint8Array) => boolean;
-  broadcastTx: (txHex: string) => { code: number; message: string };
+  broadcastTx: (txHex: string) => { code: number; message: string } | string;
   setMnemonic: (mnemonic: string) => void;
 }
 
@@ -362,4 +362,9 @@ export interface Authenticator {
   secret: string;
   createdAt: Dayjs;
   exportPublicKey: string;
+}
+
+export interface ActionMeta {
+  onSuccess?: Function;
+  onFailure?: Function;
 }
