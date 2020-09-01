@@ -9,7 +9,6 @@ import { isAllWallets } from 'app/helpers/helpers';
 import { SecureStorageService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { selectors as transactionsSelectors } from 'app/state/transactions';
-import { loadTransactions, TransactionsActionType } from 'app/state/transactions/actions';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { palette } from 'app/styles';
 
@@ -28,7 +27,6 @@ interface Props {
   transactionNotes: Record<string, string>;
   isInitialized: boolean;
   loadWallets: () => Promise<WalletsActionType>;
-  loadTransactions: (walletAddress: string) => Promise<TransactionsActionType>;
 }
 
 interface State {
@@ -294,7 +292,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 
 const mapDispatchToProps = {
   loadWallets,
-  loadTransactions,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardScreen);
