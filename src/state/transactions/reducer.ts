@@ -22,6 +22,11 @@ export const transactionsReducer = (state = initialState, action: TransactionsAc
           [action.walletAddress]: action.transactions,
         },
       };
+    case TransactionsAction.ClearTransactions:
+      return {
+        ...state,
+        transactions: {},
+      };
     case TransactionsAction.CreateTransactionNote:
       return {
         ...state,

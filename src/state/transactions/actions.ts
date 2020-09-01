@@ -12,6 +12,7 @@ export enum TransactionsAction {
   CreateTransactionNote = 'CreateTransactionNote',
   UpdateTransactionNote = 'UpdateTransactionNote',
   DeleteTransactionNote = 'DeleteTransactionNote',
+  ClearTransactions = 'ClearTransactions',
 }
 
 export interface LoadTransactionsAction {
@@ -53,6 +54,10 @@ export interface DeleteTransactionNoteAction {
   transactionID: string;
 }
 
+export interface ClearTransactionsAction {
+  type: TransactionsAction.ClearTransactions;
+}
+
 export type TransactionsActionType =
   | LoadTransactionsAction
   | LoadTransactionsRequestAction
@@ -60,7 +65,8 @@ export type TransactionsActionType =
   | LoadTransactionsFailureAction
   | CreateTransactionNoteAction
   | UpdateTransactionNoteAction
-  | DeleteTransactionNoteAction;
+  | DeleteTransactionNoteAction
+  | ClearTransactionsAction;
 
 export const loadTransactions = (walletAddress: string) => async (
   dispatch: ThunkDispatch<any, any, AnyAction>,
@@ -110,4 +116,8 @@ export const updateTransactionNote = (transactionID: string, note: string): Upda
 export const deleteTransactionNote = (transactionID: string): DeleteTransactionNoteAction => ({
   type: TransactionsAction.DeleteTransactionNote,
   transactionID,
+});
+
+export const clearTransactions = (): DeleteTransactionNoteAction => ({
+  type: TransactionsAction.ClearTransactions,
 });

@@ -5,7 +5,7 @@ import { Wallet, Transaction } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { BlueApp } from 'app/legacy';
 
-import { loadTransactionsSuccess } from '../transactions/actions';
+import { loadTransactionsSuccess, clearTransactions } from '../transactions/actions';
 
 const BlueElectrum = require('../../../BlueElectrum');
 
@@ -62,6 +62,9 @@ export const loadWallets = (walletIndex?: number) => async (
       allWallets.length > 1
         ? [{ label: 'All wallets', balance: allWalletsBalance, preferredBalanceUnit: 'BTCV' }, ...allWallets]
         : allWallets;
+    // hack, we do this to clear the transactions for deleted wallets, needs proper refactor
+    dispatch(clearTransactions());
+
     wallets.forEach(wallet => {
       if (!isAllWallets(wallet)) {
         const walletBalanceUnit = wallet.getPreferredBalanceUnit();
