@@ -30,7 +30,7 @@ export const ElectrumServerScreen = (props: Props) => {
 
   const onUseDefaultPress = () => {
     setHost(defaultPeer.host);
-    setPort(defaultPeer.tcp);
+    setPort(defaultPeer.port);
   };
 
   const onSavePress = () => {
