@@ -5,10 +5,9 @@ import { Text, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
-import { Route, RootStackParams, MainTabNavigatorParams } from 'app/consts';
+import { Route, RootStackParams, MainTabNavigatorParams, ActionMeta } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { BlueApp } from 'app/legacy';
-import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
+import { deleteWallet, DeleteWalletAction } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -19,7 +18,7 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.DeleteWallet>
   >;
   route: RouteProp<RootStackParams, Route.DeleteWallet>;
-  loadWallets: () => Promise<WalletsActionType>;
+  deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
 }
 
 export const DeleteWalletScreen = (props: Props) => {
@@ -27,17 +26,18 @@ export const DeleteWalletScreen = (props: Props) => {
 
   const onNoButtonPress = () => props.navigation.goBack();
 
-  const onYesButtonPress = async () => {
-    BlueApp.deleteWallet(wallet);
-    await BlueApp.saveToDisk();
-    props.loadWallets();
-    CreateMessage({
-      title: i18n.message.success,
-      description: i18n.message.successfullWalletDelete,
-      type: MessageType.success,
-      buttonProps: {
-        title: i18n.message.returnToDashboard,
-        onPress: () => props.navigation.navigate(Route.Dashboard),
+  const onYesButtonPress = () => {
+    props.deleteWallet(wallet.id, {
+      onSuccess: () => {
+        CreateMessage({
+          title: i18n.message.success,
+          description: i18n.message.successfullWalletDelete,
+          type: MessageType.success,
+          buttonProps: {
+            title: i18n.message.returnToDashboard,
+            onPress: () => props.navigation.navigate(Route.Dashboard),
+          },
+        });
       },
     });
   };
@@ -67,7 +67,7 @@ export const DeleteWalletScreen = (props: Props) => {
 };
 
 const mapDispatchToProps = {
-  loadWallets,
+  deleteWallet,
 };
 
 export default connect(null, mapDispatchToProps)(DeleteWalletScreen);

@@ -19,6 +19,7 @@ const initialState: WalletsState = {
 export const walletsReducer = (state = initialState, action: WalletsActionType): WalletsState => {
   switch (action.type) {
     case WalletsAction.LoadWallets:
+    case WalletsAction.DeleteWallet:
       return {
         ...state,
         isLoading: true,
@@ -31,6 +32,14 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
         isInitialized: true,
         error: null,
       };
+    case WalletsAction.DeleteWalletSuccess:
+      return {
+        ...state,
+        wallets: state.wallets.filter(w => w.id !== action.wallet.id),
+        isLoading: false,
+        error: null,
+      };
+    case WalletsAction.DeleteWalletFailure:
     case WalletsAction.LoadWalletsFailure:
       return {
         ...state,

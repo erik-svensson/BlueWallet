@@ -184,7 +184,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState & WalletsState, props: Props): MapStateProps => {
   const { wallet } = props.route.params;
   return {
-    transactions: selectors.getTransactionsToRecoverByWalletSecret(state, wallet.secret),
+    transactions: selectors.getTransactionsToRecoverByWalletId(state, wallet.id),
   };
 };
 

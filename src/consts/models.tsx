@@ -133,6 +133,7 @@ export interface Wallet {
   isOutputScriptMine: (script: Uint8Array) => boolean;
   broadcastTx: (txHex: string) => { code: number; message: string } | string;
   setMnemonic: (mnemonic: string) => void;
+  id: string;
 }
 
 export interface Contact {
@@ -166,7 +167,7 @@ export interface Transaction {
 
 export interface EnhancedTransactions extends Transaction {
   walletPreferredBalanceUnit: string;
-  walletSecret: string;
+  walletId: string;
   walletLabel: string;
   walletTypeReadable: string;
 }

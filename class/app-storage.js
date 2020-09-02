@@ -363,6 +363,21 @@ export class AppStorage {
     }
     return authenticator;
   }
+
+  removeWalletById(id) {
+    let wallet = null;
+    this.wallets = this.wallets.filter(w => {
+      if (w.id === id) {
+        wallet = w;
+        return false;
+      }
+      return true;
+    });
+    if (wallet === null) {
+      throw new Error(`Couldn't find wallet with id: ${id}`);
+    }
+    return wallet;
+  }
   /**
    *
    * @returns {Array.<AbstractWallet>}
