@@ -10,6 +10,7 @@ import { SecureStorageService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { selectors as transactionsSelectors } from 'app/state/transactions';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
+import * as walletsSelectors from 'app/state/wallets/selectors';
 import { palette } from 'app/styles';
 
 import { DashboarContentdHeader } from './DashboarContentdHeader';
@@ -286,7 +287,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   wallets: state.wallets.wallets,
   isInitialized: state.wallets.isInitialized,
   transactions: transactionsSelectors.transactions(state),
-  allTransactions: transactionsSelectors.allTransactions(state),
+  allTransactions: walletsSelectors.transactions(state),
   transactionNotes: state.transactions.transactionNotes,
 });
 
