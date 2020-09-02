@@ -13,15 +13,6 @@ export const isWalletLableInUse = (value: string): boolean => {
   return walletLabels.includes(value);
 };
 
-export const getWalletTypeByLabel = (label: string): string => {
-  const wallets = BlueApp.getWallets();
-  return (
-    wallets?.find(item => {
-      return item.label === label;
-    }).typeReadable || ''
-  );
-};
-
 export const getConfirmationsText = (txType: TxType, confirmations: number): string => {
   const maxConfirmations = [TxType.ALERT_PENDING, TxType.ALERT_CONFIRMED].includes(txType)
     ? CONST.alertBlocks

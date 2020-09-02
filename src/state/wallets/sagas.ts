@@ -1,6 +1,5 @@
-import { takeEvery, put } from 'redux-saga/effects';
+import { takeEvery, put, all, call } from 'redux-saga/effects';
 
-import { Wallet } from 'app/consts';
 import { BlueApp } from 'app/legacy';
 
 import { WalletsAction, loadWalletsSuccess, loadWalletsFailure } from './actions';
@@ -10,12 +9,17 @@ const BlueElectrum = require('../../../BlueElectrum');
 export function* loadWalletsSaga() {
   try {
     yield BlueElectrum.waitTillConnected();
-    yield BlueApp.fetchWalletBalances();
-    yield BlueApp.fetchWalletTransactions();
+
+    yield all([
+      call(() => BlueApp.fetchWalletBalances()),
+      call(() => BlueApp.fetchWalletTransactions()),
+      call(() => BlueApp.fetchWalletUtxos()),
+    ]);
+
     const wallets = BlueApp.getWallets();
     yield put(loadWalletsSuccess(wallets));
   } catch (e) {
-    yield put(loadWalletsFailure(e));
+    yield put(loadWalletsFailure(e.message));
   }
 }
 

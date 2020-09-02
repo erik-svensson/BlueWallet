@@ -325,22 +325,13 @@ export class AppStorage {
    *
    * @return {Promise.<void>}
    */
-  async fetchWalletBalances(index) {
-    console.log('fetchWalletBalances for wallet#', index);
-    if (index || index === 0) {
-      let c = 0;
-      for (const wallet of this.wallets) {
-        if (c++ === index) {
-          await wallet.fetchBalance();
-        }
-      }
-    } else {
-      for (const wallet of this.wallets) {
-        await wallet.fetchBalance();
-      }
-    }
+  fetchWalletBalances() {
+    return Promise.all(this.wallets.map(w => w.fetchBalance()));
   }
 
+  fetchWalletUtxos() {
+    return Promise.all(this.wallets.map(w => w.fetchUtxos()));
+  }
   /**
    * Fetches from remote endpoint all transactions for each wallet.
    * Returns void.
@@ -351,32 +342,8 @@ export class AppStorage {
    *                        blank to fetch from all wallets
    * @return {Promise.<void>}
    */
-  async fetchWalletTransactions(index) {
-    if (index || index === 0) {
-      let c = 0;
-      for (const wallet of this.wallets) {
-        if (c++ === index) {
-          await wallet.fetchTransactions();
-          if (wallet.fetchPendingTransactions) {
-            await wallet.fetchPendingTransactions();
-          }
-          if (wallet.fetchUserInvoices) {
-            await wallet.fetchUserInvoices();
-          }
-        }
-      }
-    } else {
-      for (const wallet of this.wallets) {
-        await wallet.fetchTransactions();
-
-        if (wallet.fetchPendingTransactions) {
-          await wallet.fetchPendingTransactions();
-        }
-        if (wallet.fetchUserInvoices) {
-          await wallet.fetchUserInvoices();
-        }
-      }
-    }
+  fetchWalletTransactions() {
+    return Promise.all(this.wallets.map(w => w.fetchTransactions()));
   }
   getAuthenticators() {
     return this.authenticators || [];

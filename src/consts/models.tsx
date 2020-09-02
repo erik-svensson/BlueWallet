@@ -168,6 +168,7 @@ export interface EnhancedTransactions extends Transaction {
   walletPreferredBalanceUnit: string;
   walletSecret: string;
   walletLabel: string;
+  walletTypeReadable: string;
 }
 
 export interface AppSettings {
