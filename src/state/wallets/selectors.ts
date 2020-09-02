@@ -11,6 +11,31 @@ const local = (state: ApplicationState): WalletsState => state.wallets;
 
 export const wallets = createSelector(local, state => state.wallets);
 
+export const allWallet = createSelector(wallets, walletsList => {
+  const { incoming_balance, balance } = walletsList.reduce(
+    (acc, wallet) => ({
+      incoming_balance: acc.incoming_balance + wallet.incoming_balance,
+      balance: acc.balance + wallet.balance,
+    }),
+    { incoming_balance: 0, balance: 0 },
+  );
+
+  return {
+    label: 'All wallets',
+    balance,
+    incoming_balance,
+    preferredBalanceUnit: 'BTCV',
+    type: '',
+  };
+});
+
+export const allWallets = createSelector(wallets, allWallet, (walletsList, aw) => {
+  if (walletsList.length > 1) {
+    return [aw, ...walletsList];
+  }
+  return walletsList;
+});
+
 export const transactions = createSelector(wallets, walletsList =>
   flatten(
     walletsList.filter(negate(isAllWallets)).map(wallet => {

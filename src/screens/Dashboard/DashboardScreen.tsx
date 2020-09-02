@@ -284,7 +284,7 @@ class DashboardScreen extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  wallets: state.wallets.wallets,
+  wallets: walletsSelectors.allWallets(state),
   isInitialized: state.wallets.isInitialized,
   transactions: transactionsSelectors.transactions(state),
   allTransactions: walletsSelectors.transactions(state),
