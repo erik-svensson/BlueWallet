@@ -106,6 +106,5 @@ export default [
   takeLatest(AuthenticatorsAction.LoadAuthenticators, loadAuthenticatorsSaga),
   takeEvery(AuthenticatorsAction.DeleteAuthenticator, deleteAuthenticatorSaga),
   takeEvery(AuthenticatorsAction.CreateAuthenticator, createAuthenticatorSaga),
-  takeEvery(AuthenticatorsAction.CreateAuthenticator, createAuthenticatorSaga),
   takeEvery(AuthenticatorsAction.SignTransaction, signTransactionSaga),
 ];

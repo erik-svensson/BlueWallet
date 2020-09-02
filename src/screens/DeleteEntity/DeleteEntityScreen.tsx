@@ -16,7 +16,7 @@ interface Props {
 export const DeleteEntityScreen = ({
   navigation,
   route: {
-    params: { onConfirm, name, subtitle },
+    params: { onConfirm, name, subtitle, title },
   },
 }: Props) => (
   <ScreenTemplate
@@ -31,6 +31,7 @@ export const DeleteEntityScreen = ({
         <Button title={i18n.wallets.deleteWallet.yes} onPress={() => onConfirm()} containerStyle={styles.yesButton} />
       </View>
     }
+    header={<Header navigation={navigation} isBackArrow title={title} />}
   >
     <Text style={styles.title}>{subtitle}</Text>
     <Text style={styles.description}>
@@ -39,17 +40,6 @@ export const DeleteEntityScreen = ({
     </Text>
   </ScreenTemplate>
 );
-
-DeleteEntityScreen.navigationOptions = (props: Props) => {
-  const {
-    route: {
-      params: { title },
-    },
-  } = props;
-  return {
-    header: <Header title={title} />,
-  };
-};
 
 export default DeleteEntityScreen;
 
