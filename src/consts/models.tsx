@@ -254,7 +254,6 @@ export type RootStackParams = {
   };
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
-  [Route.DeleteWallet]: { wallet: Wallet };
   [Route.DeleteContact]: { contact?: Contact };
   [Route.MainCardStackNavigator]: undefined;
   [Route.SendTransactionDetails]: {
