@@ -1,17 +1,11 @@
 import { flatten, negate } from 'lodash';
 import { createSelector } from 'reselect';
 
-import { Transaction, TxType } from 'app/consts';
+import { EnhancedTransactions, TxType } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 
 import { WalletsState } from './reducer';
-
-interface EnhancedTransactions extends Transaction {
-  walletPreferredBalanceUnit: string;
-  walletSecret: string;
-  walletLabel: string;
-}
 
 const local = (state: ApplicationState): WalletsState => state.wallets;
 

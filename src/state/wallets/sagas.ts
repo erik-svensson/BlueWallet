@@ -9,11 +9,11 @@ import { WalletsAction, loadWalletsSuccess, loadWalletsFailure } from './actions
 
 const BlueElectrum = require('../../../BlueElectrum');
 
-export function* loadWalletsSaga(walletIndex?: number) {
+export function* loadWalletsSaga() {
   try {
     yield BlueElectrum.waitTillConnected();
-    yield BlueApp.fetchWalletBalances(walletIndex);
-    yield BlueApp.fetchWalletTransactions(walletIndex);
+    yield BlueApp.fetchWalletBalances();
+    yield BlueApp.fetchWalletTransactions();
     yield BlueApp.saveToDisk();
     const allWalletsBalance = BlueApp.getBalance();
     const allWalletsIncomingBalance = BlueApp.getIncomingBalance();

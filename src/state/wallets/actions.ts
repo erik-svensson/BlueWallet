@@ -9,7 +9,6 @@ export enum WalletsAction {
 
 export interface LoadWalletsAction {
   type: WalletsAction.LoadWallets;
-  walletIndex?: number;
 }
 
 export interface LoadWalletsSuccessAction {
@@ -34,9 +33,8 @@ export type WalletsActionType =
   | LoadWalletsAction
   | UpdateWalletAction;
 
-export const loadWallets = (walletIndex?: number): LoadWalletsAction => ({
+export const loadWallets = (): LoadWalletsAction => ({
   type: WalletsAction.LoadWallets,
-  walletIndex,
 });
 
 export const loadWalletsSuccess = (wallets: Wallet[]): LoadWalletsSuccessAction => ({

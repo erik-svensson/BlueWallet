@@ -4,12 +4,12 @@ import { View, StyleSheet, ActivityIndicator, TouchableOpacity, SectionList } fr
 import { connect } from 'react-redux';
 
 import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
-import { Wallet, Route, Transaction, CONST, Filters } from 'app/consts';
+import { Wallet, Route, Transaction, EnhancedTransactions, CONST, Filters } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { SecureStorageService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { selectors as transactionsSelectors } from 'app/state/transactions';
-import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
+import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
 import * as walletsSelectors from 'app/state/wallets/selectors';
 import { palette } from 'app/styles';
 
@@ -24,10 +24,10 @@ interface Props {
   navigation: StackNavigationProp<any, Route.Dashboard>;
   wallets: Wallet[];
   transactions: Record<string, Transaction[]>;
-  allTransactions: Transaction[];
+  allTransactions: EnhancedTransactions[];
   transactionNotes: Record<string, string>;
   isInitialized: boolean;
-  loadWallets: () => Promise<WalletsActionType>;
+  loadWallets: () => LoadWalletsAction;
 }
 
 interface State {

@@ -164,6 +164,12 @@ export interface Transaction {
   walletPreferredBalanceUnit: string;
 }
 
+export interface EnhancedTransactions extends Transaction {
+  walletPreferredBalanceUnit: string;
+  walletSecret: string;
+  walletLabel: string;
+}
+
 export interface AppSettings {
   isPinSetup: boolean;
 }
