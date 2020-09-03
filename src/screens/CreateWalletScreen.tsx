@@ -13,10 +13,10 @@ import {
   SegwitP2SHWallet,
   HDSegwitP2SHArWallet,
   HDSegwitP2SHAirWallet,
-  BlueApp,
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
+import { selectors } from 'app/state/wallets';
 import { createWallet as createWalletAction, CreateWalletAction } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
 
@@ -27,6 +27,7 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.CreateWallet>;
   appSettings: AppSettingsState;
   createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
+  walletsLabels: string[];
 }
 interface State {
   label: string;
@@ -194,8 +195,8 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   }
 
   get validationError(): string | undefined {
-    const walletLabels = BlueApp.getWallets().map((wallet: Wallet) => wallet.label) || [];
-    if (walletLabels.includes(this.state.label.trim())) {
+    const { walletsLabels } = this.props;
+    if (walletsLabels.includes(this.state.label.trim())) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
   }
@@ -295,6 +296,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   appSettings: state.appSettings,
+  walletsLabels: selectors.getWalletsLabels(state),
 });
 
 const mapDispatchToProps = {
