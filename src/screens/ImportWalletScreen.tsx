@@ -7,13 +7,13 @@ import { connect } from 'react-redux';
 
 import { Header, TextAreaItem, FlatButton, ScreenTemplate, InputItem } from 'app/components';
 import { Button } from 'app/components/Button';
-import { Route, Wallet, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, Wallet, MainCardStackNavigatorParams, ActionMeta } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { isWalletLableInUse } from 'app/helpers/helpers';
-import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
+import { ApplicationState } from 'app/state';
+import { selectors } from 'app/state/wallets';
+import { createWallet as createWalletAction, CreateWalletAction } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
 
-import BlueApp from '../../BlueApp';
 import {
   SegwitP2SHWallet,
   LegacyWallet,
@@ -31,7 +31,8 @@ const i18n = require('../../loc');
 interface Props {
   navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ImportWallet>;
   route: RouteProp<MainCardStackNavigatorParams, Route.ImportWallet>;
-  loadWallets: () => Promise<WalletsActionType>;
+  createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
+  wallets: Wallet[];
 }
 
 interface State {
@@ -89,7 +90,10 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   };
 
   onLabelChange = (value: string) => {
-    const validationError = isWalletLableInUse(value) ? i18n.wallets.importWallet.walletInUseValidationError : '';
+    const { wallets } = this.props;
+    const validationError = wallets.some(w => w.label === value)
+      ? i18n.wallets.importWallet.walletInUseValidationError
+      : '';
     this.setState({
       label: value,
       validationError,
@@ -103,7 +107,8 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   };
 
   saveWallet = async (newWallet: any) => {
-    if (BlueApp.getWallets().some((wallet: Wallet) => wallet.getSecret() === newWallet.secret)) {
+    const { createWallet, wallets } = this.props;
+    if (wallets.some(wallet => wallet.secret === newWallet.secret)) {
       this.showErrorMessageScreen({
         title: i18n.wallets.importWallet.walletInUseValidationError,
         description: i18n.wallets.importWallet.walletInUseValidationError,
@@ -111,11 +116,17 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         buttonTitle: i18n.message.returnToWalletImport,
       });
     } else {
+      await newWallet.fetchUtxos();
       newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
-      BlueApp.wallets.push(newWallet);
-      await BlueApp.saveToDisk();
-      this.props.loadWallets();
-      this.showSuccessImportMessageScreen();
+      createWallet(newWallet, {
+        onSuccess: () => {
+          this.showSuccessImportMessageScreen();
+        },
+        onFailure: (error: string) =>
+          this.showErrorMessageScreen({
+            description: error,
+          }),
+      });
     }
   };
 
@@ -425,11 +436,15 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   }
 }
 
+const mapStateToProps = (state: ApplicationState) => ({
+  wallets: selectors.wallets(state),
+});
+
 const mapDispatchToProps = {
-  loadWallets,
+  createWallet: createWalletAction,
 };
 
-export default connect(null, mapDispatchToProps)(ImportWalletScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ImportWalletScreen);
 
 const styles = StyleSheet.create({
   inputItemContainer: {

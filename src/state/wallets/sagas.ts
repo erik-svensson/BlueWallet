@@ -60,7 +60,9 @@ export function* createWalletSaga(action: CreateWalletAction | unknown) {
     meta,
   } = action as CreateWalletAction;
   try {
-    yield wallet.generate();
+    if (!wallet.secret) {
+      yield wallet.generate();
+    }
     BlueApp.addWallet(wallet);
     yield BlueApp.saveToDisk();
 
