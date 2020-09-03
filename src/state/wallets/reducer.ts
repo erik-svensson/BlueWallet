@@ -21,6 +21,7 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
     case WalletsAction.LoadWallets:
     case WalletsAction.DeleteWallet:
     case WalletsAction.CreateWallet:
+    case WalletsAction.ImportWallet:
       return {
         ...state,
         isLoading: true,
@@ -40,6 +41,7 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
         isLoading: false,
         error: null,
       };
+    case WalletsAction.ImportWalletSuccess:
     case WalletsAction.CreateWalletSuccess:
       return {
         ...state,
@@ -50,6 +52,7 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
     case WalletsAction.DeleteWalletFailure:
     case WalletsAction.LoadWalletsFailure:
     case WalletsAction.CreateWalletFailure:
+    case WalletsAction.ImportWalletFailure:
       return {
         ...state,
         isLoading: false,

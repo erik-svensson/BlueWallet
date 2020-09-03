@@ -10,8 +10,11 @@ import {
   deleteWalletSuccess,
   deleteWalletFailure,
   CreateWalletAction,
+  ImportWalletAction,
   createWalletSuccess,
   createWalletFailure,
+  importWalletSuccess,
+  importWalletFailure,
 } from './actions';
 
 const BlueElectrum = require('../../../BlueElectrum');
@@ -60,9 +63,8 @@ export function* createWalletSaga(action: CreateWalletAction | unknown) {
     meta,
   } = action as CreateWalletAction;
   try {
-    if (!wallet.secret) {
-      yield wallet.generate();
-    }
+    yield wallet.generate();
+
     BlueApp.addWallet(wallet);
     yield BlueApp.saveToDisk();
 
@@ -78,8 +80,35 @@ export function* createWalletSaga(action: CreateWalletAction | unknown) {
   }
 }
 
+export function* importWalletSaga(action: ImportWalletAction | unknown) {
+  const {
+    payload: { wallet },
+    meta,
+  } = action as ImportWalletAction;
+  try {
+    yield all([
+      call(() => wallet.fetchBalance()),
+      call(() => wallet.fetchTransactions()),
+      call(() => wallet.fetchUtxos()),
+    ]);
+    BlueApp.addWallet(wallet);
+    yield BlueApp.saveToDisk();
+
+    yield put(importWalletSuccess(wallet));
+    if (meta?.onSuccess) {
+      meta.onSuccess(wallet);
+    }
+  } catch (e) {
+    yield put(importWalletFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+  }
+}
+
 export default [
   takeEvery(WalletsAction.DeleteWallet, deleteWalletSaga),
   takeEvery(WalletsAction.LoadWallets, loadWalletsSaga),
   takeEvery(WalletsAction.CreateWallet, createWalletSaga),
+  takeEvery(WalletsAction.ImportWallet, importWalletSaga),
 ];
