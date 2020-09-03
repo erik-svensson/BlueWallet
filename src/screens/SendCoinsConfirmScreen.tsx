@@ -77,16 +77,17 @@ class SendCoinsConfirmScreen extends Component<Props> {
               amount += recipient.amount ? +recipient.amount : recipient.value;
             }
           }
-
-          const {
-            [result]: { hash },
-          } = await BlueElectrum.multiGetTransactionByTxid([result]);
+          if (this.state.memo) {
+            const {
+              [result]: { hash },
+            } = await BlueElectrum.multiGetTransactionByTxid([result]);
+            this.props.createTransactionNote(hash, this.state.memo);
+          }
 
           if (this.state.fromWallet.type === HDSegwitBech32Wallet.type) {
             amount = i18n.formatBalanceWithoutSuffix(amount, BitcoinUnit.BTC, false);
           }
 
-          this.props.createTransactionNote(hash, this.state.memo);
           CreateMessage({
             title: i18n.send.success.title,
             description: i18n.send.success.description,
