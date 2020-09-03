@@ -97,13 +97,10 @@ class SendCoinsConfirmScreen extends Component<Props> {
       try {
         await BlueElectrum.ping();
         await BlueElectrum.waitTillConnected();
-        console.log('start');
 
         const result = await fromWallet.broadcastTx(txDecoded.toHex());
-        console.log('result', result);
 
         if (typeof result === 'string') {
-          // console.log('result', result);
           EV(EV.enum.REMOTE_TRANSACTIONS_COUNT_CHANGED); // someone should fetch txs
           const {
             [result]: { hash },
