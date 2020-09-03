@@ -22,9 +22,6 @@ export const DeleteEntityScreen = ({
   const [clicked, setClicked] = useState(false);
 
   const onPress = (fn: Function) => {
-    if (clicked) {
-      return;
-    }
     setClicked(true);
     fn();
   };
@@ -36,11 +33,13 @@ export const DeleteEntityScreen = ({
           <Button
             title={i18n.wallets.deleteWallet.no}
             onPress={() => onPress(navigation.goBack)}
+            disabled={clicked}
             type="outline"
             containerStyle={styles.noButton}
           />
           <Button
             title={i18n.wallets.deleteWallet.yes}
+            disabled={clicked}
             onPress={() => onPress(onConfirm)}
             containerStyle={styles.yesButton}
           />
