@@ -7,6 +7,9 @@ export enum WalletsAction {
   DeleteWallet = 'DeleteWallet',
   DeleteWalletSuccess = 'DeleteWalletSuccess',
   DeleteWalletFailure = 'DeleteWalletFailure',
+  CreateWallet = 'CreateWallet',
+  CreateWalletSuccess = 'CreateWalletSuccess',
+  CreateWalletFailure = 'CreateWalletFailure',
   UpdateWallet = 'UpdateWallet',
 }
 
@@ -40,6 +43,22 @@ export interface DeleteWalletFailureAction {
   error: Error;
 }
 
+export interface CreateWalletAction {
+  type: WalletsAction.CreateWallet;
+  payload: { wallet: Wallet };
+  meta?: ActionMeta;
+}
+
+export interface CreateWalletSuccessAction {
+  type: WalletsAction.CreateWalletSuccess;
+  wallet: Wallet;
+}
+
+export interface CreateWalletFailureAction {
+  type: WalletsAction.CreateWalletFailure;
+  error: Error;
+}
+
 export interface UpdateWalletAction {
   type: WalletsAction.UpdateWallet;
   wallet: Wallet;
@@ -52,6 +71,9 @@ export type WalletsActionType =
   | DeleteWalletSuccessAction
   | DeleteWalletFailureAction
   | DeleteWalletAction
+  | CreateWalletSuccessAction
+  | CreateWalletFailureAction
+  | CreateWalletAction
   | UpdateWalletAction;
 
 export const loadWallets = (): LoadWalletsAction => ({
@@ -83,6 +105,24 @@ export const deleteWalletSuccess = (wallet: Wallet): DeleteWalletSuccessAction =
 
 export const deleteWalletFailure = (error: Error): DeleteWalletFailureAction => ({
   type: WalletsAction.DeleteWalletFailure,
+  error,
+});
+
+export const createWallet = (wallet: Wallet, meta?: ActionMeta): CreateWalletAction => ({
+  type: WalletsAction.CreateWallet,
+  payload: {
+    wallet,
+  },
+  meta,
+});
+
+export const createWalletSuccess = (wallet: Wallet): CreateWalletSuccessAction => ({
+  type: WalletsAction.CreateWalletSuccess,
+  wallet,
+});
+
+export const createWalletFailure = (error: Error): CreateWalletFailureAction => ({
+  type: WalletsAction.CreateWalletFailure,
   error,
 });
 

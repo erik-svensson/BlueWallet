@@ -5,7 +5,7 @@ import { StyleSheet, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioGroup, RadioButton } from 'app/components';
-import { Route, Wallet, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, Wallet, MainCardStackNavigatorParams, ActionMeta } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import {
   HDSegwitBech32Wallet,
@@ -17,7 +17,7 @@ import {
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
-import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
+import { createWallet as createWalletAction, CreateWalletAction } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -26,7 +26,7 @@ interface Props {
   navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CreateWallet>;
   route: RouteProp<MainCardStackNavigatorParams, Route.CreateWallet>;
   appSettings: AppSettingsState;
-  loadWallets: () => Promise<WalletsActionType>;
+  createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
 }
 interface State {
   label: string;
@@ -86,16 +86,17 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     ]);
   };
 
-  generateWallet = async (wallet: any) => {
+  generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
-    const { navigation } = this.props;
+    const { navigation, createWallet } = this.props;
     wallet.setLabel(label || i18n.wallets.details.title);
-    await wallet.generate();
-    BlueApp.wallets.push(wallet);
-    await BlueApp.saveToDisk();
-    this.props.loadWallets();
-    navigation.navigate(Route.CreateWalletSuccess, {
-      secret: wallet.getSecret(),
+    createWallet(wallet, {
+      onSuccess: (w: Wallet) => {
+        navigation.navigate(Route.CreateWalletSuccess, {
+          secret: w.getSecret(),
+        });
+      },
+      onFailure: () => onError(),
     });
   };
 
@@ -104,13 +105,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       title: i18n.message.creatingWallet,
       description: i18n.message.creatingWalletDescription,
       type: MessageType.processingState,
-      asyncTask: async () => {
-        try {
-          await this.generateWallet(wallet);
-        } catch (_) {
-          onError();
-        }
-      },
+      asyncTask: () => this.generateWallet(wallet, onError),
     });
   };
 
@@ -303,7 +298,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const mapDispatchToProps = {
-  loadWallets,
+  createWallet: createWalletAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateWalletScreen);

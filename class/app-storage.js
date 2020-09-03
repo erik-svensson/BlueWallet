@@ -265,6 +265,10 @@ export class AppStorage {
     this.authenticators = [...(this.authenticators || []), a];
   }
 
+  addWallet(w) {
+    this.wallets = [...this.wallets, w];
+  }
+
   stringifyArray(data) {
     const arr = [];
     for (const key of data) {
