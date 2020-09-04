@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash';
+
 import { Wallet } from 'app/consts';
 
 import { WalletsAction, WalletsActionType } from './actions';
@@ -21,6 +23,7 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
     case WalletsAction.LoadWallets:
     case WalletsAction.DeleteWallet:
     case WalletsAction.CreateWallet:
+    case WalletsAction.ImportWallet:
       return {
         ...state,
         isLoading: true,
@@ -28,7 +31,7 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
     case WalletsAction.LoadWalletsSuccess:
       return {
         ...state,
-        wallets: action.wallets,
+        wallets: cloneDeep(action.wallets),
         isLoading: false,
         isInitialized: true,
         error: null,
@@ -40,16 +43,18 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
         isLoading: false,
         error: null,
       };
+    case WalletsAction.ImportWalletSuccess:
     case WalletsAction.CreateWalletSuccess:
       return {
         ...state,
-        wallets: [...state.wallets, action.wallet],
+        wallets: [...state.wallets, cloneDeep(action.wallet)],
         isLoading: false,
         error: null,
       };
     case WalletsAction.DeleteWalletFailure:
     case WalletsAction.LoadWalletsFailure:
     case WalletsAction.CreateWalletFailure:
+    case WalletsAction.ImportWalletFailure:
       return {
         ...state,
         isLoading: false,

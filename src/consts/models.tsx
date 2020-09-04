@@ -134,6 +134,9 @@ export interface Wallet {
   broadcastTx: (txHex: string) => { code: number; message: string } | string;
   setMnemonic: (mnemonic: string) => void;
   generate: () => void;
+  fetchBalance: () => void;
+  fetchUtxos: () => void;
+  fetchTransactions: () => void;
   id: string;
 }
 

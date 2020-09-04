@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
@@ -18,28 +18,43 @@ export const DeleteEntityScreen = ({
   route: {
     params: { onConfirm, name, subtitle, title },
   },
-}: Props) => (
-  <ScreenTemplate
-    footer={
-      <View style={styles.buttonContainer}>
-        <Button
-          title={i18n.wallets.deleteWallet.no}
-          onPress={() => navigation.goBack()}
-          type="outline"
-          containerStyle={styles.noButton}
-        />
-        <Button title={i18n.wallets.deleteWallet.yes} onPress={() => onConfirm()} containerStyle={styles.yesButton} />
-      </View>
-    }
-    header={<Header navigation={navigation} isBackArrow title={title} />}
-  >
-    <Text style={styles.title}>{subtitle}</Text>
-    <Text style={styles.description}>
-      {i18n.wallets.deleteWallet.description1} {name}
-      {i18n.wallets.deleteWallet.description2}
-    </Text>
-  </ScreenTemplate>
-);
+}: Props) => {
+  const [clicked, setClicked] = useState(false);
+
+  const onPress = (fn: Function) => {
+    setClicked(true);
+    fn();
+  };
+
+  return (
+    <ScreenTemplate
+      footer={
+        <View style={styles.buttonContainer}>
+          <Button
+            title={i18n.wallets.deleteWallet.no}
+            onPress={() => onPress(navigation.goBack)}
+            disabled={clicked}
+            type="outline"
+            containerStyle={styles.noButton}
+          />
+          <Button
+            title={i18n.wallets.deleteWallet.yes}
+            disabled={clicked}
+            onPress={() => onPress(onConfirm)}
+            containerStyle={styles.yesButton}
+          />
+        </View>
+      }
+      header={<Header navigation={navigation} isBackArrow title={title} />}
+    >
+      <Text style={styles.title}>{subtitle}</Text>
+      <Text style={styles.description}>
+        {i18n.wallets.deleteWallet.description1} {name}
+        {i18n.wallets.deleteWallet.description2}
+      </Text>
+    </ScreenTemplate>
+  );
+};
 
 export default DeleteEntityScreen;
 
