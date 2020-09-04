@@ -133,6 +133,10 @@ export interface Wallet {
   isOutputScriptMine: (script: Uint8Array) => boolean;
   broadcastTx: (txHex: string) => { code: number; message: string } | string;
   setMnemonic: (mnemonic: string) => void;
+  generate: () => void;
+  fetchBalance: () => void;
+  fetchUtxos: () => void;
+  fetchTransactions: () => void;
   id: string;
 }
 

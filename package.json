@@ -56,7 +56,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "postinstall": "./node_modules/.bin/rn-nodeify --install buffer,events,process,stream,util,inherits,fs,path --hack; npm run releasenotes2json; npx jetify",
-    "test": "yarn jest",
+    "test": "CI=true yarn jest",
+    "test:local": "yarn jest",
     "unit": "echo",
     "jest": "node node_modules/jest/bin/jest.js tests/*",
     "install_local": "cd src && yarn install",
@@ -215,7 +216,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "yarn translate:check-missing && lint-staged",
-      "pre-push": "yarn test"
+      "pre-push": "yarn test:local"
     }
   }
 }

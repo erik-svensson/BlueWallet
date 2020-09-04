@@ -11,6 +11,8 @@ const local = (state: ApplicationState): WalletsState => state.wallets;
 
 export const wallets = createSelector(local, state => state.wallets);
 
+export const getWalletsLabels = createSelector(wallets, walletsList => walletsList.map(w => w.label));
+
 export const allWallet = createSelector(wallets, walletsList => {
   const { incoming_balance, balance } = walletsList.reduce(
     (acc, wallet) => ({
