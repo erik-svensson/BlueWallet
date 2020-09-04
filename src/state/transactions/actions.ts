@@ -1,18 +1,8 @@
-import { Transaction } from 'app/consts';
-
 export enum TransactionsAction {
-  LoadTransactionsSuccess = 'LoadTransactionsSuccess',
   CreateTransactionNote = 'CreateTransactionNote',
   UpdateTransactionNote = 'UpdateTransactionNote',
   DeleteTransactionNote = 'DeleteTransactionNote',
 }
-
-export interface LoadTransactionsSuccessAction {
-  type: TransactionsAction.LoadTransactionsSuccess;
-  transactions: Transaction[];
-  walletAddress: string;
-}
-
 export interface CreateTransactionNoteAction {
   type: TransactionsAction.CreateTransactionNote;
   transactionID: string;
@@ -33,17 +23,7 @@ export interface DeleteTransactionNoteAction {
 export type TransactionsActionType =
   | CreateTransactionNoteAction
   | UpdateTransactionNoteAction
-  | DeleteTransactionNoteAction
-  | LoadTransactionsSuccessAction;
-
-export const loadTransactionsSuccess = (
-  walletAddress: string,
-  transactions: Transaction[],
-): LoadTransactionsSuccessAction => ({
-  type: TransactionsAction.LoadTransactionsSuccess,
-  transactions,
-  walletAddress,
-});
+  | DeleteTransactionNoteAction;
 
 export const createTransactionNote = (transactionID: string, note: string): CreateTransactionNoteAction => ({
   type: TransactionsAction.CreateTransactionNote,

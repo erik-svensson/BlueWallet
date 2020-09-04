@@ -1,57 +1,114 @@
-import { takeEvery, put } from 'redux-saga/effects';
+import { takeEvery, put, all, call } from 'redux-saga/effects';
 
-import { Wallet, Transaction } from 'app/consts';
-import { isAllWallets } from 'app/helpers/helpers';
 import { BlueApp } from 'app/legacy';
 
-import { loadTransactionsSuccess } from '../transactions/actions';
-import { WalletsAction, loadWalletsSuccess, loadWalletsFailure } from './actions';
+import {
+  WalletsAction,
+  loadWalletsSuccess,
+  loadWalletsFailure,
+  DeleteWalletAction,
+  deleteWalletSuccess,
+  deleteWalletFailure,
+  CreateWalletAction,
+  ImportWalletAction,
+  createWalletSuccess,
+  createWalletFailure,
+  importWalletSuccess,
+  importWalletFailure,
+} from './actions';
 
 const BlueElectrum = require('../../../BlueElectrum');
 
-export function* loadWalletsSaga(walletIndex?: number) {
+export function* loadWalletsSaga() {
   try {
     yield BlueElectrum.waitTillConnected();
-    yield BlueApp.fetchWalletBalances(walletIndex);
-    yield BlueApp.fetchWalletTransactions(walletIndex);
-    yield BlueApp.saveToDisk();
-    const allWalletsBalance = BlueApp.getBalance();
-    const allWalletsIncomingBalance = BlueApp.getIncomingBalance();
 
-    const allWallets = BlueApp.getWallets();
-    const wallets: Wallet[] =
-      allWallets.length > 1
-        ? [
-            {
-              label: 'All wallets',
-              balance: allWalletsBalance,
-              incoming_balance: allWalletsIncomingBalance,
-              preferredBalanceUnit: 'BTCV',
-              type: '',
-            },
-            ...allWallets,
-          ]
-        : allWallets;
+    yield all([
+      call(() => BlueApp.fetchWalletBalances()),
+      call(() => BlueApp.fetchWalletTransactions()),
+      call(() => BlueApp.fetchWalletUtxos()),
+    ]);
 
-    for (let i = 0; i < wallets.length; i++) {
-      const wallet = wallets[i];
-      if (!isAllWallets(wallet)) {
-        const walletBalanceUnit = wallet.getPreferredBalanceUnit();
-        const walletLabel = wallet.getLabel();
-
-        // mutating objects on purpose
-        const enhanceTransactions = (t: Transaction) => {
-          t.walletPreferredBalanceUnit = walletBalanceUnit;
-          t.walletLabel = walletLabel;
-        };
-        wallet.transactions.forEach(enhanceTransactions);
-        yield put(loadTransactionsSuccess(wallet.secret, wallet.transactions));
-      }
-    }
+    const wallets = BlueApp.getWallets();
     yield put(loadWalletsSuccess(wallets));
   } catch (e) {
-    yield put(loadWalletsFailure(e));
+    yield put(loadWalletsFailure(e.message));
   }
 }
 
-export default [takeEvery(WalletsAction.LoadWallets, loadWalletsSaga)];
+export function* deleteWalletSaga(action: DeleteWalletAction | unknown) {
+  const {
+    payload: { id },
+    meta,
+  } = action as DeleteWalletAction;
+  try {
+    const wallet = BlueApp.removeWalletById(id);
+    yield BlueApp.saveToDisk();
+
+    yield put(deleteWalletSuccess(wallet));
+    if (meta?.onSuccess) {
+      meta.onSuccess(wallet);
+    }
+  } catch (e) {
+    yield put(deleteWalletFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+  }
+}
+
+export function* createWalletSaga(action: CreateWalletAction | unknown) {
+  const {
+    payload: { wallet },
+    meta,
+  } = action as CreateWalletAction;
+  try {
+    yield wallet.generate();
+
+    BlueApp.addWallet(wallet);
+    yield BlueApp.saveToDisk();
+
+    yield put(createWalletSuccess(wallet));
+    if (meta?.onSuccess) {
+      meta.onSuccess(wallet);
+    }
+  } catch (e) {
+    yield put(createWalletFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+  }
+}
+
+export function* importWalletSaga(action: ImportWalletAction | unknown) {
+  const {
+    payload: { wallet },
+    meta,
+  } = action as ImportWalletAction;
+  try {
+    yield all([
+      call(() => wallet.fetchBalance()),
+      call(() => wallet.fetchTransactions()),
+      call(() => wallet.fetchUtxos()),
+    ]);
+    BlueApp.addWallet(wallet);
+    yield BlueApp.saveToDisk();
+
+    yield put(importWalletSuccess(wallet));
+    if (meta?.onSuccess) {
+      meta.onSuccess(wallet);
+    }
+  } catch (e) {
+    yield put(importWalletFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+  }
+}
+
+export default [
+  takeEvery(WalletsAction.DeleteWallet, deleteWalletSaga),
+  takeEvery(WalletsAction.LoadWallets, loadWalletsSaga),
+  takeEvery(WalletsAction.CreateWallet, createWalletSaga),
+  takeEvery(WalletsAction.ImportWallet, importWalletSaga),
+];

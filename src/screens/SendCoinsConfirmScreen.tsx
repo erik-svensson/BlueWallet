@@ -106,7 +106,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
             [result]: { hash },
           } = await BlueElectrum.multiGetTransactionByTxid([result]);
 
-          createTransactionNote(hash, memo);
+          memo && createTransactionNote(hash, memo);
 
           CreateMessage({
             title: i18n.message.hooray,

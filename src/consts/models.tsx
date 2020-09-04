@@ -133,6 +133,11 @@ export interface Wallet {
   isOutputScriptMine: (script: Uint8Array) => boolean;
   broadcastTx: (txHex: string) => { code: number; message: string } | string;
   setMnemonic: (mnemonic: string) => void;
+  generate: () => void;
+  fetchBalance: () => void;
+  fetchUtxos: () => void;
+  fetchTransactions: () => void;
+  id: string;
 }
 
 export interface Contact {
@@ -162,6 +167,13 @@ export interface Transaction {
   outputs: any[];
   note?: string;
   walletPreferredBalanceUnit: string;
+}
+
+export interface EnhancedTransactions extends Transaction {
+  walletPreferredBalanceUnit: string;
+  walletId: string;
+  walletLabel: string;
+  walletTypeReadable: string;
 }
 
 export interface AppSettings {
@@ -246,7 +258,6 @@ export type RootStackParams = {
   };
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
-  [Route.DeleteWallet]: { wallet: Wallet };
   [Route.DeleteContact]: { contact?: Contact };
   [Route.MainCardStackNavigator]: undefined;
   [Route.SendTransactionDetails]: {

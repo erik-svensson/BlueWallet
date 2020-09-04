@@ -4,12 +4,13 @@ import { View, StyleSheet, ActivityIndicator, TouchableOpacity, SectionList } fr
 import { connect } from 'react-redux';
 
 import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
-import { Wallet, Route, Transaction, CONST, Filters } from 'app/consts';
+import { Wallet, Route, EnhancedTransactions, CONST, Filters } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { SecureStorageService } from 'app/services';
 import { ApplicationState } from 'app/state';
-import { selectors as transactionsSelectors } from 'app/state/transactions';
-import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
+import * as transactionsSelectors from 'app/state/transactions/selectors';
+import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
+import * as walletsSelectors from 'app/state/wallets/selectors';
 import { palette } from 'app/styles';
 
 import { DashboarContentdHeader } from './DashboarContentdHeader';
@@ -22,15 +23,14 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: StackNavigationProp<any, Route.Dashboard>;
   wallets: Wallet[];
-  transactions: Record<string, Transaction[]>;
-  allTransactions: Transaction[];
+  isLoading: boolean;
+  allTransactions: EnhancedTransactions[];
   transactionNotes: Record<string, string>;
   isInitialized: boolean;
-  loadWallets: () => Promise<WalletsActionType>;
+  loadWallets: () => LoadWalletsAction;
 }
 
 interface State {
-  isFetching: boolean;
   filters: Filters;
   query: string;
   contentdHeaderHeight: number;
@@ -44,7 +44,6 @@ class DashboardScreen extends Component<Props, State> {
       isFilteringOn: false,
     },
     contentdHeaderHeight: 0,
-    isFetching: false,
     lastSnappedTo: 0,
   };
 
@@ -63,11 +62,8 @@ class DashboardScreen extends Component<Props, State> {
     this.props.loadWallets();
   }
 
-  refreshTransactions = async () => {
-    this.setState({ isFetching: true });
-    await this.props.loadWallets();
-
-    this.setState({ isFetching: false });
+  refreshTransactions = () => {
+    this.props.loadWallets();
   };
 
   chooseItemFromModal = (index: number) => {
@@ -212,9 +208,6 @@ class DashboardScreen extends Component<Props, State> {
             ref={this.walletCarouselRef}
             data={wallets.filter(wallet => wallet.label !== CONST.allWallets)}
             keyExtractor={this._keyExtractor}
-            onSnapToItem={() => {
-              this.props.loadWallets();
-            }}
           />
         ) : (
           <View style={{ alignItems: 'center' }}>
@@ -225,21 +218,29 @@ class DashboardScreen extends Component<Props, State> {
     );
   };
 
+  getTransactions = () => {
+    const { allTransactions } = this.props;
+
+    const activeWallet = this.getActiveWallet();
+
+    return isAllWallets(activeWallet) ? allTransactions : allTransactions.filter(t => t.walletId === activeWallet.id);
+  };
+
   renderContent = () => {
     const { query, filters } = this.state;
-    const { transactions, allTransactions } = this.props;
+    const { isLoading } = this.props;
     const activeWallet = this.getActiveWallet();
 
     if (this.hasWallets()) {
       return (
         <TransactionList
           reference={this.transactionListRef}
-          refreshing={this.state.isFetching}
+          refreshing={isLoading}
           onRefresh={this.refreshTransactions}
           ListHeaderComponent={<>{this.renderWallets()}</>}
           search={query}
           filters={filters}
-          transactions={isAllWallets(activeWallet) ? allTransactions : transactions[activeWallet.secret] || []}
+          transactions={this.getTransactions()}
           transactionNotes={this.props.transactionNotes}
           label={activeWallet.label}
           headerHeight={this.state.contentdHeaderHeight}
@@ -283,11 +284,11 @@ class DashboardScreen extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  wallets: state.wallets.wallets,
+  wallets: walletsSelectors.allWallets(state),
+  isLoading: walletsSelectors.isLoading(state),
   isInitialized: state.wallets.isInitialized,
-  transactions: transactionsSelectors.transactions(state),
-  allTransactions: transactionsSelectors.allTransactions(state),
-  transactionNotes: state.transactions.transactionNotes,
+  allTransactions: walletsSelectors.transactions(state),
+  transactionNotes: transactionsSelectors.transactionNotes(state),
 });
 
 const mapDispatchToProps = {
