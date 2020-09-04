@@ -1,5 +1,6 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { map, compose, uniq, flatten, join } from 'lodash/fp';
 import moment from 'moment';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Linking, TouchableOpacity } from 'react-native';
@@ -20,23 +21,7 @@ import {
 } from 'app/state/transactions/actions';
 import { typography, palette } from 'app/styles';
 
-import BlueApp from '../../BlueApp';
-
 const i18n = require('../../loc');
-
-function onlyUnique(value: number, index: number, self: any[]) {
-  return self.indexOf(value) === index;
-}
-
-function arrDiff(a1: any[], a2: any[]) {
-  const ret = [];
-  for (const v of a2) {
-    if (a1.indexOf(v) === -1) {
-      ret.push(v);
-    }
-  }
-  return ret;
-}
 
 interface Props {
   transactionNotes: Record<string, string>;
@@ -50,27 +35,7 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.TransactionDetails>;
 }
 
-class TransactionDetailsScreen extends Component<Props, State> {
-  // constructor(props: Props) {
-  //   super(props);
-  //   const {
-  //     transaction: { inputs, outputs },
-  //   } = props.route.params;
-
-  //   for (const input of inputs) {
-  //     from = from.concat(input.addresses);
-  //   }
-  //   for (const output of outputs) {
-  //     if (output.addresses) to = to.concat(output.addresses);
-  //     if (output.scriptPubKey && output.scriptPubKey.addresses) to = to.concat(output.scriptPubKey.addresses);
-  //   }
-
-  //   this.state = {
-  //     from,
-  //     to,
-  //   };
-  // }
-
+class TransactionDetailsScreen extends Component<Props> {
   addToAddressBook = (address: string) => {
     this.props.navigation.navigate(Route.CreateContact, { address });
   };
@@ -150,10 +115,21 @@ class TransactionDetailsScreen extends Component<Props, State> {
     }
   };
 
+  getAddresses = (key: 'inputs' | 'outputs') => {
+    const { transaction } = this.props.route.params;
+
+    return compose(
+      join(', '),
+      uniq,
+      flatten,
+      map((el: { addresses: string[] }) => el.addresses),
+    )(transaction[key]);
+  };
+
   render() {
     const { transaction } = this.props.route.params;
-    const fromValue = this.state.from.filter(onlyUnique).join(', ');
-    const toValue = arrDiff(this.state.from, this.state.to.filter(onlyUnique)).join(', ');
+    const fromValue = this.getAddresses('inputs');
+    const toValue = this.getAddresses('outputs');
     return (
       <ScreenTemplate
         header={
