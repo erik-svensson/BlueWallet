@@ -265,6 +265,10 @@ export class AppStorage {
     this.authenticators = [...(this.authenticators || []), a];
   }
 
+  addWallet(w) {
+    this.wallets = [...this.wallets, w];
+  }
+
   stringifyArray(data) {
     const arr = [];
     for (const key of data) {
@@ -362,6 +366,21 @@ export class AppStorage {
       throw new Error(`Couldn't find authenticator with id: ${id}`);
     }
     return authenticator;
+  }
+
+  removeWalletById(id) {
+    let wallet = null;
+    this.wallets = this.wallets.filter(w => {
+      if (w.id === id) {
+        wallet = w;
+        return false;
+      }
+      return true;
+    });
+    if (wallet === null) {
+      throw new Error(`Couldn't find wallet with id: ${id}`);
+    }
+    return wallet;
   }
   /**
    *

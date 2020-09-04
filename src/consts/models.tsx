@@ -133,6 +133,11 @@ export interface Wallet {
   isOutputScriptMine: (script: Uint8Array) => boolean;
   broadcastTx: (txHex: string) => { code: number; message: string } | string;
   setMnemonic: (mnemonic: string) => void;
+  generate: () => void;
+  fetchBalance: () => void;
+  fetchUtxos: () => void;
+  fetchTransactions: () => void;
+  id: string;
 }
 
 export interface Contact {
@@ -166,7 +171,7 @@ export interface Transaction {
 
 export interface EnhancedTransactions extends Transaction {
   walletPreferredBalanceUnit: string;
-  walletSecret: string;
+  walletId: string;
   walletLabel: string;
   walletTypeReadable: string;
 }
@@ -253,7 +258,6 @@ export type RootStackParams = {
   };
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
-  [Route.DeleteWallet]: { wallet: Wallet };
   [Route.DeleteContact]: { contact?: Contact };
   [Route.MainCardStackNavigator]: undefined;
   [Route.SendTransactionDetails]: {
