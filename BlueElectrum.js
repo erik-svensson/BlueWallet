@@ -36,7 +36,7 @@ async function connectMain() {
     }
   } catch (e) {
     mainConnected = false;
-    console.log('bad connection:', JSON.stringify(usingPeer), e);
+    console.log('bad connection:', JSON.stringify(defaultPeer), e);
   }
 
   if (!mainConnected) {
