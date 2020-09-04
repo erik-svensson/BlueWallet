@@ -11,7 +11,7 @@ import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import { selectors, reducer } from 'app/state/wallets';
 import {
-  updateWallet,
+  updateWallet as updateWalletAction,
   UpdateWalletAction,
   deleteWallet as deleteWalletAction,
   DeleteWalletAction,
@@ -28,7 +28,7 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     StackNavigationProp<MainCardStackNavigatorParams, Route.WalletDetails>
   >;
-  wallet: Wallet;
+  wallet?: Wallet;
   deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
   route: RouteProp<MainCardStackNavigatorParams, Route.WalletDetails>;
   walletsLabels: string[];
@@ -38,6 +38,9 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   validationError = (value: string): string | undefined => {
     const trimmedValue = value.trim();
     const { walletsLabels, wallet } = this.props;
+    if (!wallet) {
+      return;
+    }
     const allOtherWalletLabels = walletsLabels.filter((label: string) => label !== wallet.label);
     if (allOtherWalletLabels.includes(trimmedValue)) {
       return i18n.wallets.importWallet.walletInUseValidationError;
@@ -49,13 +52,14 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   navigateToWalletXpub = () => this.navigateWithWallet(Route.ExportWalletXpub);
 
   navigateToDeleteWallet = () => {
-    const { deleteWallet, navigation } = this.props;
-    const { wallet } = this.props;
+    const { deleteWallet, navigation, wallet } = this.props;
+    if (!wallet) {
+      return;
+    }
     navigation.navigate(Route.DeleteEntity, {
       name: wallet.label,
       title: i18n.wallets.deleteWallet.header,
       subtitle: i18n.wallets.deleteWallet.title,
-
       onConfirm: () => {
         deleteWallet(wallet.id, {
           onSuccess: () => {
@@ -74,22 +78,33 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     });
   };
 
-  navigateWithWallet = (route: Route.ExportWalletXpub | Route.ExportWallet) =>
-    this.props.navigation.navigate(route, {
-      wallet: this.props.wallet,
+  navigateWithWallet = (route: Route.ExportWalletXpub | Route.ExportWallet) => {
+    const { navigation, wallet } = this.props;
+    if (!wallet) {
+      return;
+    }
+    navigation.navigate(route, {
+      wallet,
     });
+  };
 
   setLabel = (label: string) => {
     const trimmedlabel = label.trim();
-    const { wallet } = this.props;
+    const { wallet, updateWallet } = this.props;
+    if (!wallet) {
+      return;
+    }
     const updatedWalelt = cloneDeep(wallet);
     updatedWalelt.setLabel(trimmedlabel);
-    this.props.updateWallet(updatedWalelt);
+    updateWallet(updatedWalelt);
   };
 
   editAmount = () => {
-    const { wallet } = this.props;
-    this.props.navigation.navigate(Route.EditText, {
+    const { wallet, navigation } = this.props;
+    if (!wallet) {
+      return;
+    }
+    navigation.navigate(Route.EditText, {
       title: i18n.wallets.details.nameEdit,
       label: i18n.wallets.details.nameLabel,
       onSave: this.setLabel,
@@ -100,6 +115,9 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   render() {
     const { wallet } = this.props;
+    if (!wallet) {
+      return null;
+    }
     const isWatchOnly = wallet.type === WatchOnlyWallet.type;
     return (
       <ScreenTemplate
@@ -144,13 +162,13 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 const mapStateToProps = (state: ApplicationState & reducer.WalletsState, props: Props) => {
   const { id } = props.route.params;
   return {
-    wallet: selectors.getById(state, id) as Wallet,
+    wallet: selectors.getById(state, id),
     walletsLabels: selectors.getWalletsLabels(state),
   };
 };
 
 const mapDispatchToProps = {
-  updateWallet,
+  updateWallet: updateWalletAction,
   deleteWallet: deleteWalletAction,
 };
 
