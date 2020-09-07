@@ -269,17 +269,17 @@ export class AppStorage {
     this.wallets = [...this.wallets, w];
   }
 
-  updateWallet(w) {
+  updateWallet(walletUpdate) {
     let updatedWallet = null;
     this.wallets = this.wallets.map(wallet => {
-      if (wallet.id === w.id) {
-        updatedWallet = w;
-        return w;
+      if (wallet.id === walletUpdate.id) {
+        updatedWallet = walletUpdate;
+        return walletUpdate;
       }
       return wallet;
     });
     if (updatedWallet === null) {
-      throw new Error(`Couldn't update wallet: ${JSON.stringify(w)}`);
+      throw new Error(`Couldn't update wallet: ${JSON.stringify(walletUpdate)}`);
     }
     return updatedWallet;
   }
