@@ -31,9 +31,6 @@ export const TimeCounterScreen = (props: Props) => {
   );
 
   useEffect(() => {
-    props.navigation.setOptions({
-      gestureEnabled: false,
-    });
     BackHandler.addEventListener('hardwareBackPress', exitApp);
 
     return () => {
