@@ -44,13 +44,11 @@ export const ListItem = ({
     }
   }, []);
 
-  const handleOnItemPress = () => {
-    !!onPress && onPress();
-  };
+  const Container = !!onPress ? TouchableOpacity : View;
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <TouchableOpacity style={styles.touchableOpacityContainer} onPress={handleOnItemPress}>
+      <Container style={styles.touchableOpacityContainer} onPress={onPress}>
         {!!source && (
           <View style={styles.imageContainer}>
             <Image
@@ -66,9 +64,9 @@ export const ListItem = ({
         <View style={styles.textContainer}>
           <Text style={[styles.title, disabled && styles.disabled]}>{title}</Text>
         </View>
-      </TouchableOpacity>
+      </Container>
       {isSwitch() && (
-        <View>
+        <View style={styles.switch}>
           <StyledSwitch onValueChange={onSwitchPress} value={switchValueState} disabled={disabled || false} />
         </View>
       )}
@@ -88,8 +86,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
   },
+  switch: {
+    marginHorizontal: 5,
+  },
   textContainer: {
-    paddingLeft: 20,
+    paddingHorizontal: 20,
   },
   title: {
     ...typography.caption,
