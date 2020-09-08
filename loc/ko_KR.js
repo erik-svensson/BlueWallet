@@ -267,6 +267,12 @@ module.exports = {
     label: { pending: '보류 중', annulled: '무효화', done: '완료', canceled: '취소됨' },
     transactionTypeLabel: { standard: '표준', canceled: '취소됨', fast: '빠른' },
   },
+  timeCounter: {
+    title: '응용 프로그램이 차단됨',
+    description: '로그인 시도가 실패하여 응용 프로그램이 차단되었습니다. 일정시간 후 다시 시도할 수 있습니다.',
+    tryAgain: '다시 시도',
+    closeTheApp: '응용 프로그램 닫기',
+  },
   send: {
     header: '코인 보내기',
     success: {
