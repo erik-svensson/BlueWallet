@@ -187,6 +187,13 @@ export type RootStackParams = {
 };
 
 export type PasswordNavigatorParams = {
+  [Route.CreatePin]: {
+    flowType: string;
+  };
+  [Route.ConfirmPin]: {
+    flowType: string;
+    pin: string;
+  };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
 };

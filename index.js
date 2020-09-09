@@ -28,17 +28,17 @@ class BlueAppComponent extends React.Component {
   }
 
   setIsMigratingData = async () => {
-    SplashScreen.hide();
+    // SplashScreen.hide();
     this.setState({
       isMigratingData: false,
     });
   };
 
-  onSuccessfullyAuthenticated = () => {
-    this.setState({
-      successfullyAuthenticated: true,
-    });
-  };
+  // onSuccessfullyAuthenticated = () => {
+  //   this.setState({
+  //     successfullyAuthenticated: true,
+  //   });
+  // };
 
   render() {
     if (this.state.isMigratingData) {

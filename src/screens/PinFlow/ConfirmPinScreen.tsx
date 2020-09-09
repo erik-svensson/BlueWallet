@@ -57,7 +57,7 @@ export class ConfirmPinScreen extends PureComponent<Props, State> {
               },
             });
           } else {
-            this.props.navigation.navigate(Route.PasswordNavigator);
+            this.props.navigation.navigate(Route.CreateTransactionPassword);
           }
         } else {
           this.setState({

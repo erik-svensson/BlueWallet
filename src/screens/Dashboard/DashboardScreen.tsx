@@ -56,15 +56,16 @@ class DashboardScreen extends Component<Props, State> {
   walletCarouselRef = React.createRef<WalletsCarousel>();
   screenTemplateRef = React.createRef<ScreenTemplate>();
   componentDidMount() {
-    SecureStorageService.getSecuredValue(CONST.pin)
-      .then(() => {
-        SecureStorageService.getSecuredValue(CONST.transactionPassword).catch(() => {
-          this.props.navigation.navigate(Route.PasswordNavigator);
-        });
-      })
-      .catch(() => {
-        this.props.navigation.navigate(Route.CreatePin);
-      });
+    console.log('PASSWORD');
+    // SecureStorageService.getSecuredValue(CONST.pin)
+    //   .then(() => {
+    //     SecureStorageService.getSecuredValue(CONST.transactionPassword).catch(() => {
+    //       this.props.navigation.navigate(Route.PasswordNavigator);
+    //     });
+    //   })
+    //   .catch(() => {
+    //     this.props.navigation.navigate(Route.CreatePin);
+    //   });
     this.props.loadWallets();
   }
 
