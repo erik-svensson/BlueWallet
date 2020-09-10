@@ -65,7 +65,6 @@ export enum Route {
   CurrentPin = 'CurrentPin',
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
-  UnlockScreen = 'UnlockScreen',
   CreateTransactionPassword = 'CreateTransactionPassword',
   ConfirmTransactionPassword = 'ConfirmTransactionPassword',
   AdvancedOptions = 'AdvancedOptions',

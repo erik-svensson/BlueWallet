@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { RootNavigator, PasswordNavigator, UnlockNavigator } from 'app/navigators';
+import { RootNavigator, PasswordNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
 import { navigationRef } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
@@ -37,12 +37,6 @@ class Navigator extends React.Component<Props> {
     return !isPinSet || !isTxPasswordSet;
   };
 
-  shouldRenderRootNavigator = () => {
-    const { isPinSet, isTxPasswordSet, isAuthenticated } = this.props;
-
-    return isPinSet && isTxPasswordSet && isAuthenticated;
-  };
-
   shouldRenderUnlockScreen = () => {
     const { isPinSet, isTxPasswordSet, isAuthenticated } = this.props;
 
@@ -59,26 +53,16 @@ class Navigator extends React.Component<Props> {
       return <PasswordNavigator />;
     }
 
-    // if (this.shouldRenderRootNavigator()) {
-    // <UnlockNavigator />
-
     return (
       <>
         <RootNavigator />
         {this.shouldRenderUnlockScreen() && <UnlockScreen />}
       </>
     );
-    // }
-
-    // if (this.shouldRenderUnlockScreen()) {
-    //   return <UnlockNavigator />;
-    // }
   };
 
   render() {
-    console.log('navigationRe', navigationRef);
-    console.log('navigationRef?.current', navigationRef?.current);
-    return <NavigationContainer ref={navigationRef as any}>{this.renderRoutes()}</NavigationContainer>;
+    return <NavigationContainer ref={navigationRef}>{this.renderRoutes()}</NavigationContainer>;
   }
 }
 

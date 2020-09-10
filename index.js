@@ -6,7 +6,6 @@ import './shim.js';
 
 import React from 'react';
 import { AppRegistry, StatusBar } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 
 import App from './App';
 import WalletMigrate from './walletMigrate';
@@ -28,17 +27,10 @@ class BlueAppComponent extends React.Component {
   }
 
   setIsMigratingData = async () => {
-    // SplashScreen.hide();
     this.setState({
       isMigratingData: false,
     });
   };
-
-  // onSuccessfullyAuthenticated = () => {
-  //   this.setState({
-  //     successfullyAuthenticated: true,
-  //   });
-  // };
 
   render() {
     if (this.state.isMigratingData) {
