@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { images } from 'app/assets';
 import { Image, PinView, PinInputView } from 'app/components';
 import { CONST, Route, finalAttempt, PasswordNavigatorParams } from 'app/consts';
+import { TimeCounterScreen } from 'app/screens';
 import { BiometricService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import {
@@ -76,7 +77,7 @@ class UnlockScreen extends PureComponent<Props, State> {
     const { setFailedAttempts, setFailedAttemptStep, setTimeCounter } = this.props;
     const isFinalAttempt = increasedFailedAttemptStep === finalAttempt;
     let currentDate = dayjs();
-    let blockedTimeInMinutes = 1;
+    let blockedTimeInMinutes = 0.1;
 
     if (attempt === 1) {
       blockedTimeInMinutes = 2;
@@ -141,12 +142,13 @@ class UnlockScreen extends PureComponent<Props, State> {
   render() {
     const { error, pin } = this.state;
     if (this.isTimeCounterVisible()) {
-      this.props.navigation.navigate(Route.TimeCounter, {
-        onTryAgain: this.onTryAgain,
-        timestamp: this.props.timeCounter.timestamp,
-      });
-      return null;
+      return (
+        <View style={styles.container}>
+          <TimeCounterScreen onTryAgain={this.onTryAgain} timestamp={this.props.timeCounter.timestamp} />
+        </View>
+      );
     }
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" />

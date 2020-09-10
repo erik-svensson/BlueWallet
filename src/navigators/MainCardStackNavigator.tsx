@@ -50,7 +50,7 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.AboutUs} component={AboutUsScreen} />
     <Stack.Screen name={Route.AdvancedOptions} component={AdvancedOptionsScreen} />
     <Stack.Screen name={Route.ElectrumServer} component={ElectrumServerScreen} />
-    <Stack.Screen name={Route.CreatePin} component={CreatePinScreen} />
+    <Stack.Screen name={Route.CreatePin} component={CreatePinScreen} options={{ gestureEnabled: false }} />
     <Stack.Screen name={Route.CurrentPin} component={CurrentPinScreen} />
     <Stack.Screen name={Route.ConfirmPin} component={ConfirmPinScreen} />
     <Stack.Screen name={Route.FilterTransactions} component={FilterTransactionsScreen} />

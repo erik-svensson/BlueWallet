@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { RootNavigator, PasswordNavigator, UnlockNavigator } from 'app/navigators';
+import { UnlockScreen } from 'app/screens';
 import { navigationRef } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
@@ -58,16 +59,25 @@ class Navigator extends React.Component<Props> {
       return <PasswordNavigator />;
     }
 
-    if (this.shouldRenderRootNavigator()) {
-      return <RootNavigator />;
-    }
+    // if (this.shouldRenderRootNavigator()) {
+    // <UnlockNavigator />
 
-    if (this.shouldRenderUnlockScreen()) {
-      return <UnlockNavigator />;
-    }
+    return (
+      <>
+        <RootNavigator />
+        {this.shouldRenderUnlockScreen() && <UnlockScreen />}
+      </>
+    );
+    // }
+
+    // if (this.shouldRenderUnlockScreen()) {
+    //   return <UnlockNavigator />;
+    // }
   };
 
   render() {
+    console.log('navigationRe', navigationRef);
+    console.log('navigationRef?.current', navigationRef?.current);
     return <NavigationContainer ref={navigationRef as any}>{this.renderRoutes()}</NavigationContainer>;
   }
 }
