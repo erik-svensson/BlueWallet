@@ -40,6 +40,11 @@ export default class App extends React.PureComponent<State> {
     successfullyAuthenticated: false,
     isTxPasswordSet: false,
   };
+  async componentDidMount() {
+    // await BlueApp.startAndDecrypt();
+    // await SecureStorageService.setSecuredValue(CONST.pin, '');
+    // await SecureStorageService.setSecuredValue(CONST.transactionPassword, '');
+  }
 
   lockScreen = () => {
     this.setState({

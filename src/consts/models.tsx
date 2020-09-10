@@ -72,6 +72,7 @@ export enum Route {
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
   TimeCounter = 'TimeCounter',
+  Unlock = 'Unlock',
 }
 
 export interface Wallet {
@@ -103,6 +104,10 @@ export interface Wallet {
   getPreferredBalanceUnit: () => string;
 }
 
+export interface ActionMeta {
+  onSuccess?: Function;
+  onFailure?: Function;
+}
 export interface Contact {
   id: string;
   name: string;
