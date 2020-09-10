@@ -152,15 +152,11 @@ export const checkCredentials = () => async (
         isTxPasswordSet: !!transactionPassword,
       }),
     );
-    // if (meta?.onSuccess) {
-    //   meta.onSuccess();
-    // }
+
     return success;
   } catch (e) {
     const failure = dispatch(checkCredentialsFailure(e.message));
-    // if (meta?.onFailure) {
-    //   meta.onFailure();
-    // }
+
     return failure;
   }
 };

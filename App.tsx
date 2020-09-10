@@ -20,12 +20,6 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 export default class App extends React.PureComponent {
-  async componentDidMount() {
-    // // await BlueApp.startAndDecrypt();
-    // await SecureStorageService.setSecuredValue(CONST.pin, '');
-    // await SecureStorageService.setSecuredValue(CONST.transactionPassword, '');
-  }
-
   lockScreen = () => {
     store.dispatch({
       type: AuthenticationAction.SetIsAuthenticated,

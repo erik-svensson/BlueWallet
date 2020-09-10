@@ -70,7 +70,6 @@ export enum Route {
   AdvancedOptions = 'AdvancedOptions',
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
-  TimeCounter = 'TimeCounter',
   Unlock = 'Unlock',
 }
 
@@ -198,10 +197,6 @@ export type PasswordNavigatorParams = {
     flowType: string;
     pin: string;
   };
-  [Route.TimeCounter]: {
-    onTryAgain: () => void;
-    timestamp: number;
-  };
   [Route.Message]: {
     title: string;
     source: FastImageSource;
@@ -259,8 +254,4 @@ export type MainCardStackNavigatorParams = {
     pin: string;
   };
   [Route.FilterTransactions]: { onFilterPress: ({}) => void };
-  [Route.TimeCounter]: {
-    onTryAgain: () => void;
-    timestamp: number;
-  };
 };
