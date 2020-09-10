@@ -199,6 +199,18 @@ export type PasswordNavigatorParams = {
     flowType: string;
     pin: string;
   };
+  [Route.TimeCounter]: {
+    onTryAgain: () => void;
+    timestamp: number;
+  };
+  [Route.Message]: {
+    title: string;
+    source: FastImageSource;
+    description: string;
+    buttonProps?: ButtonProps;
+    imageStyle?: StyleProp<ViewStyle>;
+    asyncTask?: () => void;
+  };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
 };

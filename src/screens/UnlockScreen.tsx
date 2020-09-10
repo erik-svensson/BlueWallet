@@ -1,3 +1,4 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import React, { PureComponent } from 'react';
 import { StatusBar, StyleSheet, Text, View, Keyboard } from 'react-native';
@@ -5,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Image, PinView, PinInputView } from 'app/components';
-import { CONST, Route, finalAttempt } from 'app/consts';
+import { CONST, Route, finalAttempt, PasswordNavigatorParams } from 'app/consts';
 import { BiometricService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import {
@@ -34,6 +35,7 @@ interface Props {
   timeCounter: TimeCounterState;
   authenticate: Function;
   setIsAuthenticated: (isAuthenticated: boolean) => SetIsAuthenticatedAction;
+  navigation: StackNavigationProp<PasswordNavigatorParams, Route.TimeCounter>;
 }
 
 interface State {
