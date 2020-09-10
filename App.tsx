@@ -1,22 +1,15 @@
-import { NavigationContainer } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { View, YellowBox, StyleSheet, Text } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
+import { View, YellowBox, StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { CONST, Route } from 'app/consts';
-import { BlueApp } from 'app/legacy';
 import { i18n } from 'app/locale';
-import { RootNavigator, PasswordNavigator } from 'app/navigators';
-import { UnlockScreen } from 'app/screens';
-import { SecureStorageService, AppStateManager, navigationRef, NavigationService } from 'app/services';
-import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
+import { Navigator } from 'app/navigators';
+import { AppStateManager } from 'app/services';
+import { AuthenticationAction } from 'app/state/authentication/actions';
 import { persistor, store } from 'app/state/store';
-
-import Routes from './Routes';
 
 YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside', `\`-[RCTRootView cancelTouches]\``]);
 
@@ -26,41 +19,28 @@ if (process.env.NODE_ENV !== 'development') {
   });
 }
 
-interface State {
-  isPinSet: boolean;
-  successfullyAuthenticated: boolean;
-  isTxPasswordSet: boolean;
-  isLoading: boolean;
-}
-
-export default class App extends React.PureComponent<State> {
-  state: State = {
-    isLoading: true,
-    isPinSet: false,
-    successfullyAuthenticated: false,
-    isTxPasswordSet: false,
-  };
+export default class App extends React.PureComponent {
   async componentDidMount() {
-    // await BlueApp.startAndDecrypt();
+    // // await BlueApp.startAndDecrypt();
     // await SecureStorageService.setSecuredValue(CONST.pin, '');
     // await SecureStorageService.setSecuredValue(CONST.transactionPassword, '');
   }
 
   lockScreen = () => {
-    this.setState({
-      successfullyAuthenticated: false,
+    store.dispatch({
+      type: AuthenticationAction.SetIsAuthenticated,
+      isAuthenticated: false,
     });
   };
 
   render() {
-    console.log('successfullyAuthenticated', this.state.successfullyAuthenticated);
     return (
       <I18nextProvider i18n={i18n}>
         <Provider store={store}>
           <AppStateManager handleAppComesToBackground={this.lockScreen} />
           <PersistGate loading={null} persistor={persistor}>
             <View style={styles.wrapper}>
-              <Routes />
+              <Navigator />
             </View>
           </PersistGate>
         </Provider>

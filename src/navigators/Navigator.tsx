@@ -1,13 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import { View, YellowBox, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 
-import { CONST, Route } from 'app/consts';
-import { BlueApp } from 'app/legacy';
 import { RootNavigator, PasswordNavigator, UnlockNavigator } from 'app/navigators';
-import { UnlockScreen } from 'app/screens';
-import { SecureStorageService, AppStateManager, navigationRef, NavigationService } from 'app/services';
+import { navigationRef } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
 import { checkCredentials as checkCredentialsAction } from 'app/state/authentication/actions';
@@ -24,7 +20,8 @@ interface ActionsDisptach {
 }
 
 type Props = MapStateToProps & ActionsDisptach;
-export class Routes extends React.Component<Props> {
+
+class Navigator extends React.Component<Props> {
   async componentDidMount() {
     const { checkCredentials } = this.props;
     checkCredentials();
@@ -53,8 +50,6 @@ export class Routes extends React.Component<Props> {
 
   renderRoutes = () => {
     const { isLoading } = this.props;
-    console.log('RENDER');
-
     if (isLoading) {
       return null;
     }
@@ -73,8 +68,6 @@ export class Routes extends React.Component<Props> {
   };
 
   render() {
-    console.log('successfullyAuthenticated', this.props.isAuthenticated);
-
     return <NavigationContainer ref={navigationRef as any}>{this.renderRoutes()}</NavigationContainer>;
   }
 }
@@ -90,4 +83,4 @@ const mapDispatchToProps: ActionsDisptach = {
   checkCredentials: checkCredentialsAction,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Routes);
+export default connect(mapStateToProps, mapDispatchToProps)(Navigator);

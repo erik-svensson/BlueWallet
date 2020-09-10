@@ -33,7 +33,7 @@ interface Props {
   setFailedAttemptStep: (failedAttempt: number) => SetFailedAttemptStepAction;
   timeCounter: TimeCounterState;
   authenticate: Function;
-  setIsAuthenticatedAction: (isAuthenticated: boolean) => SetIsAuthenticatedAction;
+  setIsAuthenticated: (isAuthenticated: boolean) => SetIsAuthenticatedAction;
 }
 
 interface State {
@@ -74,12 +74,12 @@ class UnlockScreen extends PureComponent<Props, State> {
     const { setFailedAttempts, setFailedAttemptStep, setTimeCounter } = this.props;
     const isFinalAttempt = increasedFailedAttemptStep === finalAttempt;
     let currentDate = dayjs();
-    let blockedTimeInMinutes = 0.1;
+    let blockedTimeInMinutes = 1;
 
     if (attempt === 1) {
-      blockedTimeInMinutes = 0.1;
+      blockedTimeInMinutes = 2;
     } else if (attempt > 1) {
-      blockedTimeInMinutes = 0.2;
+      blockedTimeInMinutes = 10;
     }
     currentDate = currentDate.add(blockedTimeInMinutes, 'minute');
 

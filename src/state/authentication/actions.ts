@@ -104,12 +104,12 @@ export const authenticate = (pin: string, meta?: ActionMeta) => async (
     const storedPin = await SecureStorageService.getSecuredValue(CONST.pin);
 
     if (pin !== storedPin) {
-      throw new Error('Bad pin');
+      throw new Error('Wrong pin');
     }
     const success = dispatch(authenticateSuccess());
 
-    if (meta?.onFailure) {
-      meta.onFailure();
+    if (meta?.onSuccess) {
+      meta.onSuccess();
     }
     return success;
   } catch (e) {
@@ -143,11 +143,25 @@ export const checkCredentials = () => async (
   try {
     const pin = await SecureStorageService.getSecuredValue(CONST.pin);
     const transactionPassword = await SecureStorageService.getSecuredValue(CONST.transactionPassword);
+
     SplashScreen.hide();
 
-    return dispatch(checkCredentialsSuccess({ isPinSet: !!pin, isTxPasswordSet: !!transactionPassword }));
+    const success = dispatch(
+      checkCredentialsSuccess({
+        isPinSet: !!pin,
+        isTxPasswordSet: !!transactionPassword,
+      }),
+    );
+    // if (meta?.onSuccess) {
+    //   meta.onSuccess();
+    // }
+    return success;
   } catch (e) {
-    return dispatch(checkCredentialsFailure(e.message));
+    const failure = dispatch(checkCredentialsFailure(e.message));
+    // if (meta?.onFailure) {
+    //   meta.onFailure();
+    // }
+    return failure;
   }
 };
 
@@ -172,15 +186,24 @@ const checkCredentialsFailure = (error: string): CheckCredentialsFailureAction =
   error,
 });
 
-export const createPin = (pin: string) => async (
+export const createPin = (pin: string, meta?: ActionMeta) => async (
   dispatch: ThunkDispatch<any, any, AnyAction>,
 ): Promise<AuthenticationActionType> => {
   dispatch(createPinRequest());
   try {
     await SecureStorageService.setSecuredValue(CONST.pin, pin);
-    return dispatch(createPinSuccess());
+    const success = dispatch(createPinSuccess());
+
+    if (meta?.onSuccess) {
+      meta.onSuccess();
+    }
+    return success;
   } catch (e) {
-    return dispatch(createPinFailure(e.message));
+    const failure = dispatch(createPinFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure();
+    }
+    return failure;
   }
 };
 
@@ -197,28 +220,36 @@ const createPinFailure = (error: string): CreatePinFailureAction => ({
   error,
 });
 
-export const createTxPassword = (txPassword: string) => async (
+export const createTxPassword = (txPassword: string, meta?: ActionMeta) => async (
   dispatch: ThunkDispatch<any, any, AnyAction>,
 ): Promise<AuthenticationActionType> => {
   dispatch(createTxPasswordRequest());
   try {
     await SecureStorageService.setSecuredValue(CONST.transactionPassword, txPassword);
-    return dispatch(createTxPasswordSuccess());
+    if (meta?.onSuccess) {
+      meta.onSuccess();
+    }
+    const success = dispatch(createTxPasswordSuccess());
+    return success;
   } catch (e) {
-    return dispatch(createTxPasswordFailure(e.message));
+    const failure = dispatch(createTxPasswordFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure();
+    }
+    return failure;
   }
 };
 
-const createTxPasswordRequest = (): CreatePinRequestAction => ({
-  type: AuthenticationAction.CreatePinRequest,
+const createTxPasswordRequest = (): CreateTxPasswordRequestAction => ({
+  type: AuthenticationAction.CreateTxPasswordRequest,
 });
 
-const createTxPasswordSuccess = (): CreatePinSuccessAction => ({
-  type: AuthenticationAction.CreatePinSuccess,
+const createTxPasswordSuccess = (): CreateTxPasswordSuccessAction => ({
+  type: AuthenticationAction.CreateTxPasswordSuccess,
 });
 
-const createTxPasswordFailure = (error: string): CreatePinFailureAction => ({
-  type: AuthenticationAction.CreatePinFailure,
+const createTxPasswordFailure = (error: string): CreateTxPasswordFailureAction => ({
+  type: AuthenticationAction.CreateTxPasswordFailure,
   error,
 });
 

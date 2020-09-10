@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
 import { Wallet, Route, Transaction, CONST, Filters } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
-import { SecureStorageService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { loadTransactions, TransactionsActionType } from 'app/state/transactions/actions';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
@@ -56,16 +55,6 @@ class DashboardScreen extends Component<Props, State> {
   walletCarouselRef = React.createRef<WalletsCarousel>();
   screenTemplateRef = React.createRef<ScreenTemplate>();
   componentDidMount() {
-    console.log('PASSWORD');
-    // SecureStorageService.getSecuredValue(CONST.pin)
-    //   .then(() => {
-    //     SecureStorageService.getSecuredValue(CONST.transactionPassword).catch(() => {
-    //       this.props.navigation.navigate(Route.PasswordNavigator);
-    //     });
-    //   })
-    //   .catch(() => {
-    //     this.props.navigation.navigate(Route.CreatePin);
-    //   });
     this.props.loadWallets();
   }
 
