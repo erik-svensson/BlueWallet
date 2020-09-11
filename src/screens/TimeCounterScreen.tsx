@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, BackHandler } from 'react-native';
 
 import { Button, ScreenTemplate, FlatButton } from 'app/components';
 import { TimeCounter } from 'app/components/TimeCounter';
-import { useInterval } from 'app/helpers/useInterval';
 import { typography, palette } from 'app/styles';
 import { isIos } from 'app/styles/helpers';
 
@@ -12,25 +11,28 @@ const i18n = require('../../loc');
 
 interface Props {
   timestamp: number;
-  onTryAgain: Function;
+  onTryAgain: () => void;
 }
 
+const getTimeRemaining = (tmStamp: number) => parseInt((tmStamp - dayjs().unix()).toFixed(0));
+
 export const TimeCounterScreen = (props: Props) => {
-  const { timestamp: propTimestamp, onTryAgain: propOnTryAgain } = props;
+  const { timestamp, onTryAgain } = props;
 
-  const timestamp = propTimestamp;
-  const onTryAgain = propOnTryAgain;
+  const [seconds, setSeconds] = useState(getTimeRemaining(timestamp));
 
-  const currentTimestamp = dayjs().unix();
-  const secondsToCount = (timestamp - currentTimestamp).toFixed(0);
-  const [seconds, setSeconds] = useState(parseInt(secondsToCount));
-
-  useInterval(
-    () => {
-      setSeconds(seconds - 1);
-    },
-    seconds > 0 ? 1000 : null,
-  );
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const s = getTimeRemaining(timestamp);
+      if (s > 0) {
+        setSeconds(s);
+      } else {
+        setSeconds(0);
+        clearInterval(interval);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timestamp]);
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', exitApp);

@@ -238,7 +238,6 @@ export class AppStorage {
         return false; // failed loading data or loading/decryptin data
       }
     } catch (error) {
-      console.warn(error.message);
       return false;
     }
   }
