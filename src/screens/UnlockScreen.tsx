@@ -75,7 +75,7 @@ class UnlockScreen extends PureComponent<Props, State> {
     const { setFailedAttempts, setFailedAttemptStep, setTimeCounter } = this.props;
     const isFinalAttempt = increasedFailedAttemptStep === finalAttempt;
     let currentDate = dayjs();
-    let blockedTimeInMinutes = 0.1;
+    let blockedTimeInMinutes = 1;
 
     if (attempt === 1) {
       blockedTimeInMinutes = 2;
