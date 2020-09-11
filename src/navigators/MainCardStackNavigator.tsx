@@ -25,7 +25,6 @@ import {
   CurrentPinScreen,
   ConfirmPinScreen,
   FilterTransactionsScreen,
-  TimeCounterScreen,
 } from 'app/screens';
 
 const Stack = createStackNavigator<MainCardStackNavigatorParams>();
@@ -51,9 +50,8 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.AdvancedOptions} component={AdvancedOptionsScreen} />
     <Stack.Screen name={Route.ElectrumServer} component={ElectrumServerScreen} />
     <Stack.Screen name={Route.CreatePin} component={CreatePinScreen} />
-    <Stack.Screen name={Route.CurrentPin} component={CurrentPinScreen} />
+    <Stack.Screen name={Route.CurrentPin} component={CurrentPinScreen} options={{ gestureEnabled: false }} />
     <Stack.Screen name={Route.ConfirmPin} component={ConfirmPinScreen} />
     <Stack.Screen name={Route.FilterTransactions} component={FilterTransactionsScreen} />
-    <Stack.Screen name={Route.TimeCounter} component={TimeCounterScreen} options={{ gestureEnabled: false }} />
   </Stack.Navigator>
 );

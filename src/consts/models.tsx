@@ -65,13 +65,12 @@ export enum Route {
   CurrentPin = 'CurrentPin',
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
-  UnlockScreen = 'UnlockScreen',
   CreateTransactionPassword = 'CreateTransactionPassword',
   ConfirmTransactionPassword = 'ConfirmTransactionPassword',
   AdvancedOptions = 'AdvancedOptions',
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
-  TimeCounter = 'TimeCounter',
+  Unlock = 'Unlock',
 }
 
 export interface Wallet {
@@ -103,6 +102,10 @@ export interface Wallet {
   getPreferredBalanceUnit: () => string;
 }
 
+export interface ActionMeta {
+  onSuccess?: Function;
+  onFailure?: Function;
+}
 export interface Contact {
   id: string;
   name: string;
@@ -187,6 +190,21 @@ export type RootStackParams = {
 };
 
 export type PasswordNavigatorParams = {
+  [Route.CreatePin]: {
+    flowType: string;
+  };
+  [Route.ConfirmPin]: {
+    flowType: string;
+    pin: string;
+  };
+  [Route.Message]: {
+    title: string;
+    source: FastImageSource;
+    description: string;
+    buttonProps?: ButtonProps;
+    imageStyle?: StyleProp<ViewStyle>;
+    asyncTask?: () => void;
+  };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
 };
@@ -236,8 +254,4 @@ export type MainCardStackNavigatorParams = {
     pin: string;
   };
   [Route.FilterTransactions]: { onFilterPress: ({}) => void };
-  [Route.TimeCounter]: {
-    onTryAgain: () => void;
-    timestamp: number;
-  };
 };

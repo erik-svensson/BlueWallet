@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { appSettingsReducer, AppSettingsState } from './appSettings/reducer';
+import { AuthenticationState, authenticationReducer } from './authentication/reducer';
 import { contactsReducer, ContactsState } from './contacts/reducer';
 import { TimeCounterState, timeCounterReducer } from './timeCounter/reducer';
 import { transactionsReducer, TransactionsState } from './transactions/reducer';
@@ -12,6 +13,7 @@ export interface ApplicationState {
   appSettings: AppSettingsState;
   wallets: WalletsState;
   timeCounter: TimeCounterState;
+  authentication: AuthenticationState;
 }
 
 export const rootReducer = combineReducers({
@@ -20,4 +22,5 @@ export const rootReducer = combineReducers({
   appSettings: appSettingsReducer,
   wallets: walletsReducer,
   timeCounter: timeCounterReducer,
+  authentication: authenticationReducer,
 });
