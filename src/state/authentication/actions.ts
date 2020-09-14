@@ -221,7 +221,7 @@ export const createTxPassword = (txPassword: string, meta?: ActionMeta) => async
 ): Promise<AuthenticationActionType> => {
   dispatch(createTxPasswordRequest());
   try {
-    await SecureStorageService.setSecuredValue(CONST.transactionPassword, txPassword);
+    await SecureStorageService.setSecuredValue(CONST.transactionPassword, txPassword, true);
     if (meta?.onSuccess) {
       meta.onSuccess();
     }
