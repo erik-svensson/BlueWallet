@@ -1,6 +1,5 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 
 import { icons } from 'app/assets';
@@ -42,8 +41,6 @@ const LanguageItem = ({ language, selectedLanguageValue, onLanguageSelect }: Lan
 };
 
 export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedLanguageValue, setselectedLanguageValue] = useState('en');
   const availableLanguages: Language[] = [
     { label: 'English (EN)', value: 'en' },
     { label: '中文 (ZH)', value: 'zh_cn' },
@@ -55,14 +52,6 @@ export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
     { label: 'Tiếng (Việt)', value: 'vi_vn' },
     { label: 'Türkçe (TR)', value: 'tr_tr' },
   ];
-
-  useEffect(() => {
-    (async () => {
-      const language = await AsyncStorage.getItem('lang');
-      setselectedLanguageValue(language || 'en');
-      setIsLoading(false);
-    })();
-  }, [selectedLanguageValue]);
 
   const onLanguageSelect = (value: string, changeLanguage: Function) => {
     Alert.alert(
@@ -84,10 +73,6 @@ export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
       { cancelable: false },
     );
   };
-
-  if (isLoading) {
-    return null;
-  }
 
   return (
     <GlobalContext.Consumer>
