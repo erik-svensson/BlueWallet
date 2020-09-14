@@ -5,11 +5,13 @@ import { View, YellowBox, StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { i18n } from 'app/locale';
+import { i18n as i18nReact } from 'app/locale';
 import { Navigator } from 'app/navigators';
 import { AppStateManager } from 'app/services';
 import { AuthenticationAction } from 'app/state/authentication/actions';
 import { persistor, store } from 'app/state/store';
+
+const i18n = require('./loc');
 
 YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside', `\`-[RCTRootView cancelTouches]\``]);
 
@@ -21,9 +23,22 @@ if (process.env.NODE_ENV !== 'development') {
 
 const getNewKey = () => new Date().toISOString();
 
-export default class App extends React.PureComponent {
+const context = {
+  lang: i18n.lang,
+  // eslint-disable-next-line
+  changeLanguage: (lang: string) => {},
+};
+
+export const GlobalContext = React.createContext(context);
+
+interface State {
+  unlockKey: string;
+  lang: string;
+}
+export default class App extends React.PureComponent<State> {
   state = {
     unlockKey: getNewKey(),
+    lang: i18n.lang,
   };
   lockScreen = () => {
     store.dispatch({
@@ -38,20 +53,32 @@ export default class App extends React.PureComponent {
     });
   };
 
+  changeLanguage = (lang: string) => {
+    this.setState({ lang });
+  };
+
   render() {
+    const { lang } = this.state;
     return (
-      <I18nextProvider i18n={i18n}>
-        <Provider store={store}>
-          <AppStateManager
-            handleAppComesToForeground={this.setUnlockScreenKey}
-            handleAppComesToBackground={this.lockScreen}
-          />
-          <PersistGate loading={null} persistor={persistor}>
-            <View style={styles.wrapper}>
-              <Navigator unlockKey={this.state.unlockKey} />
-            </View>
-          </PersistGate>
-        </Provider>
+      <I18nextProvider i18n={i18nReact}>
+        <GlobalContext.Provider
+          value={{
+            lang,
+            changeLanguage: (language: string) => this.changeLanguage(language),
+          }}
+        >
+          <Provider store={store}>
+            <AppStateManager
+              handleAppComesToForeground={this.setUnlockScreenKey}
+              handleAppComesToBackground={this.lockScreen}
+            />
+            <PersistGate loading={null} persistor={persistor}>
+              <View style={styles.wrapper}>
+                <Navigator key={lang} unlockKey={this.state.unlockKey} />
+              </View>
+            </PersistGate>
+          </Provider>
+        </GlobalContext.Provider>
       </I18nextProvider>
     );
   }

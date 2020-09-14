@@ -2,12 +2,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
-import RNRestart from 'react-native-restart';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Header, Image } from 'app/components';
 import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { typography } from 'app/styles';
+
+import { GlobalContext } from '../../../App';
 
 const i18n = require('../../../loc');
 
@@ -63,17 +64,16 @@ export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
     })();
   }, [selectedLanguageValue]);
 
-  const onLanguageSelect = (value: string) => {
+  const onLanguageSelect = (value: string, changeLanguage: Function) => {
     Alert.alert(
       i18n.selectLanguage.confirmation,
       i18n.selectLanguage.alertDescription,
       [
         {
           text: i18n.selectLanguage.confirm,
-          onPress: () => {
-            i18n.saveLanguage(value);
-            setselectedLanguageValue(value);
-            RNRestart.Restart();
+          onPress: async () => {
+            await i18n.saveLanguage(value);
+            changeLanguage(value);
           },
         },
         {
@@ -90,18 +90,22 @@ export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
   }
 
   return (
-    <ScreenTemplate
-      header={<Header isBackArrow={true} navigation={props.navigation} title={i18n.selectLanguage.header} />}
-    >
-      {availableLanguages.map(language => (
-        <LanguageItem
-          language={language}
-          selectedLanguageValue={selectedLanguageValue}
-          onLanguageSelect={onLanguageSelect}
-          key={language.value}
-        />
-      ))}
-    </ScreenTemplate>
+    <GlobalContext.Consumer>
+      {({ changeLanguage, lang }) => (
+        <ScreenTemplate
+          header={<Header isBackArrow={true} navigation={props.navigation} title={i18n.selectLanguage.header} />}
+        >
+          {availableLanguages.map(language => (
+            <LanguageItem
+              language={language}
+              selectedLanguageValue={lang}
+              onLanguageSelect={(val: string) => onLanguageSelect(val, changeLanguage)}
+              key={language.value}
+            />
+          ))}
+        </ScreenTemplate>
+      )}
+    </GlobalContext.Consumer>
   );
 };
 
