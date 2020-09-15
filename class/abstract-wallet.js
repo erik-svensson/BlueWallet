@@ -1,4 +1,5 @@
 import * as bitcoin from 'bitcoinjs-lib';
+import { v4 as uuidv4 } from 'uuid';
 
 import config from '../config';
 import { BitcoinUnit, Chain } from '../models/bitcoinUnits';
@@ -37,6 +38,7 @@ export class AbstractWallet {
     this.preferredBalanceUnit = BitcoinUnit.BTC;
     this.chain = Chain.ONCHAIN;
     this.hideBalance = false;
+    this.id = uuidv4();
   }
 
   getID() {
@@ -65,6 +67,9 @@ export class AbstractWallet {
   isAddressMine(address) {
     if (!this._address) {
       return false;
+    }
+    if (typeof this._address === 'string') {
+      return this._address === address;
     }
     for (let i = 0; i < this._address.length; i++) {
       if (address === this._address[i]) {

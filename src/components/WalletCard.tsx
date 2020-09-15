@@ -22,9 +22,12 @@ interface Props {
   containerStyle?: StyleProp<ViewStyle>;
 }
 
-// NOTE do not make it PureComponent as we are mutating wallet objects
-// when changing their labels, so it won't rerender
 export class WalletCard extends React.Component<Props> {
+  goToWalletDetails = () => {
+    const { wallet } = this.props;
+    NavigationService.navigate(Route.WalletDetails, { id: wallet.id });
+  };
+
   render() {
     const { showEditButton, wallet, containerStyle } = this.props;
     return (
@@ -34,12 +37,7 @@ export class WalletCard extends React.Component<Props> {
           <View style={styles.cardContent}>
             <View style={styles.row}>
               <Text style={styles.walletType}>{wallet.getLabel()}</Text>
-              {showEditButton && (
-                <StyledText
-                  title={i18n.wallets.details.edit}
-                  onPress={() => NavigationService.navigate(Route.WalletDetails, { wallet })}
-                />
-              )}
+              {showEditButton && <StyledText title={i18n.wallets.details.edit} onPress={this.goToWalletDetails} />}
             </View>
 
             <Text style={styles.balance}>
@@ -47,9 +45,7 @@ export class WalletCard extends React.Component<Props> {
             </Text>
             <View>
               <Text style={styles.latestTransactionTitle}>{i18n.wallets.add.walletType}</Text>
-              <Text style={styles.latestTransaction}>
-                {wallet.typeReadable} {i18n.wallets.dashboard.wallet}
-              </Text>
+              <Text style={styles.latestTransaction}>{wallet.typeReadable}</Text>
             </View>
           </View>
         </>

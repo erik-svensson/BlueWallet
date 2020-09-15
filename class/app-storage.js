@@ -265,6 +265,25 @@ export class AppStorage {
     this.authenticators = [...(this.authenticators || []), a];
   }
 
+  addWallet(w) {
+    this.wallets = [...this.wallets, w];
+  }
+
+  updateWallet(walletUpdate) {
+    let updatedWallet = null;
+    this.wallets = this.wallets.map(wallet => {
+      if (wallet.id === walletUpdate.id) {
+        updatedWallet = walletUpdate;
+        return walletUpdate;
+      }
+      return wallet;
+    });
+    if (updatedWallet === null) {
+      throw new Error(`Couldn't update wallet: ${JSON.stringify(walletUpdate)}`);
+    }
+    return updatedWallet;
+  }
+
   stringifyArray(data) {
     const arr = [];
     for (const key of data) {
@@ -325,22 +344,13 @@ export class AppStorage {
    *
    * @return {Promise.<void>}
    */
-  async fetchWalletBalances(index) {
-    console.log('fetchWalletBalances for wallet#', index);
-    if (index || index === 0) {
-      let c = 0;
-      for (const wallet of this.wallets) {
-        if (c++ === index) {
-          await wallet.fetchBalance();
-        }
-      }
-    } else {
-      for (const wallet of this.wallets) {
-        await wallet.fetchBalance();
-      }
-    }
+  fetchWalletBalances() {
+    return Promise.all(this.wallets.map(w => w.fetchBalance()));
   }
 
+  fetchWalletUtxos() {
+    return Promise.all(this.wallets.map(w => w.fetchUtxos()));
+  }
   /**
    * Fetches from remote endpoint all transactions for each wallet.
    * Returns void.
@@ -351,32 +361,8 @@ export class AppStorage {
    *                        blank to fetch from all wallets
    * @return {Promise.<void>}
    */
-  async fetchWalletTransactions(index) {
-    if (index || index === 0) {
-      let c = 0;
-      for (const wallet of this.wallets) {
-        if (c++ === index) {
-          await wallet.fetchTransactions();
-          if (wallet.fetchPendingTransactions) {
-            await wallet.fetchPendingTransactions();
-          }
-          if (wallet.fetchUserInvoices) {
-            await wallet.fetchUserInvoices();
-          }
-        }
-      }
-    } else {
-      for (const wallet of this.wallets) {
-        await wallet.fetchTransactions();
-
-        if (wallet.fetchPendingTransactions) {
-          await wallet.fetchPendingTransactions();
-        }
-        if (wallet.fetchUserInvoices) {
-          await wallet.fetchUserInvoices();
-        }
-      }
-    }
+  fetchWalletTransactions() {
+    return Promise.all(this.wallets.map(w => w.fetchTransactions()));
   }
   getAuthenticators() {
     return this.authenticators || [];
@@ -396,69 +382,27 @@ export class AppStorage {
     }
     return authenticator;
   }
+
+  removeWalletById(id) {
+    let wallet = null;
+    this.wallets = this.wallets.filter(w => {
+      if (w.id === id) {
+        wallet = w;
+        return false;
+      }
+      return true;
+    });
+    if (wallet === null) {
+      throw new Error(`Couldn't find wallet with id: ${id}`);
+    }
+    return wallet;
+  }
   /**
    *
    * @returns {Array.<AbstractWallet>}
    */
   getWallets() {
     return this.wallets;
-  }
-
-  /**
-   * Getter for all transactions in all wallets.
-   * But if index is provided - only for wallet with corresponding index
-   *
-   * @param index {Integer|null} Wallet index in this.wallets. Empty (or null) for all wallets.
-   * @param limit {Integer} How many txs return, starting from the earliest. Default: all of them.
-   * @return {Array}
-   */
-  getTransactions(index, limit = Infinity) {
-    if (index || index === 0) {
-      let txs = [];
-      let c = 0;
-      for (const wallet of this.wallets) {
-        if (c++ === index) {
-          txs = txs.concat(wallet.getTransactions());
-        }
-      }
-      return txs;
-    }
-
-    let txs = [];
-    for (const wallet of this.wallets) {
-      const walletTransactions = wallet.getTransactions();
-      for (const t of walletTransactions) {
-        t.walletPreferredBalanceUnit = wallet.getPreferredBalanceUnit();
-      }
-      txs = txs.concat(walletTransactions);
-    }
-
-    for (const t of txs) {
-      t.sort_ts = +new Date(t.received);
-    }
-
-    return txs
-      .sort(function(a, b) {
-        return b.sort_ts - a.sort_ts;
-      })
-      .slice(0, limit);
-  }
-
-  /**
-   * Getter for a sum of all balances of all wallets
-   *
-   * @return {number}
-   */
-  getBalance() {
-    let finalBalance = 0;
-    for (const wal of this.wallets) {
-      finalBalance += wal.getBalance();
-    }
-    return finalBalance;
-  }
-
-  getIncomingBalance() {
-    return this.wallets.reduce((sum, wallet) => sum + wallet.incoming_balance, 0);
   }
 
   /**

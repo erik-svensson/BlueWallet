@@ -12,7 +12,7 @@ export const CONST = {
   allWallets: 'All wallets',
   receive: 'receive',
   send: 'send',
-  webGeneratorUrl: 'www.keygenerator.bitcoinvault.global',
+  webGeneratorUrl: 'keygenerator.cloudbestenv.com',
   mnemonicWordsAmount: 12,
   satoshiInBtc: 100000000,
   preferredBalanceUnit: 'BTCV',
@@ -79,7 +79,6 @@ export enum Route {
   SendCoins = 'SendCoins',
   SendCoinsConfirm = 'SendCoinsConfirm',
   EditText = 'EditText',
-  ElectrumServer = 'ElectrumServer',
   AboutUs = 'AboutUs',
   SelectLanguage = 'SelectLanguage',
   ReleaseNotes = 'ReleaseNotes',
@@ -132,8 +131,13 @@ export interface Wallet {
   isInvoiceGeneratedByWallet?: (clipboard: string) => void;
   getPreferredBalanceUnit: () => string;
   isOutputScriptMine: (script: Uint8Array) => boolean;
-  broadcastTx: (txHex: string) => { code: number; message: string };
+  broadcastTx: (txHex: string) => { code: number; message: string } | string;
   setMnemonic: (mnemonic: string) => void;
+  generate: () => void;
+  fetchBalance: () => void;
+  fetchUtxos: () => void;
+  fetchTransactions: () => void;
+  id: string;
 }
 
 export interface Contact {
@@ -165,20 +169,28 @@ export interface Transaction {
   walletPreferredBalanceUnit: string;
 }
 
+export interface EnhancedTransaction extends Transaction {
+  walletPreferredBalanceUnit: string;
+  walletId: string;
+  walletLabel: string;
+  walletTypeReadable: string;
+}
+
 export interface AppSettings {
   isPinSetup: boolean;
 }
 
 export interface Filters {
-  isFilteringOn: boolean;
+  isFilteringOn?: boolean;
+  address?: string;
   dateKey?: number;
   isCalendarVisible?: boolean;
-  address?: string;
   fromDate?: string;
   toDate?: string;
-  fromAmount?: number;
-  toAmount?: number;
+  fromAmount?: string;
+  toAmount?: string;
   transactionType?: string;
+  transactionStatus?: string;
 }
 
 export interface TransactionInput {
@@ -247,7 +259,6 @@ export type RootStackParams = {
   };
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
-  [Route.DeleteWallet]: { wallet: Wallet };
   [Route.DeleteContact]: { contact?: Contact };
   [Route.MainCardStackNavigator]: undefined;
   [Route.SendTransactionDetails]: {
@@ -271,11 +282,11 @@ export type MainCardStackNavigatorParams = {
   [Route.MainCardStackNavigator]: undefined;
   [Route.CreateWallet]: undefined;
   [Route.ImportWallet]: { walletType: string };
-  [Route.WalletDetails]: { wallet: Wallet };
+  [Route.WalletDetails]: { id: string };
   [Route.CreateContact]: { address?: string };
   [Route.ContactDetails]: { contact: Contact };
   [Route.ContactQRCode]: { contact: Contact };
-  [Route.TransactionDetails]: { transaction: Transaction };
+  [Route.TransactionDetails]: { transaction: EnhancedTransaction };
   [Route.ReceiveCoins]: { secret?: string };
   [Route.SendCoins]: {
     fromSecret?: string;
@@ -317,7 +328,6 @@ export type MainCardStackNavigatorParams = {
   [Route.SelectLanguage]: undefined;
   [Route.AboutUs]: undefined;
   [Route.AdvancedOptions]: undefined;
-  [Route.ElectrumServer]: undefined;
   [Route.CreatePin]: {
     flowType: string;
   };
@@ -326,11 +336,11 @@ export type MainCardStackNavigatorParams = {
     flowType: string;
     pin: string;
   };
-  [Route.FilterTransactions]: { onFilterPress: ({}) => void };
   [Route.TimeCounter]: {
     onTryAgain: () => void;
     timestamp: number;
   };
+  [Route.FilterTransactions]: { onFilterPress: () => void };
   [Route.CreateAuthenticator]: undefined;
   [Route.EnterPIN]: { id: string };
   [Route.PairAuthenticator]: { id: string };
@@ -364,4 +374,9 @@ export interface Authenticator {
   secret: string;
   createdAt: Dayjs;
   exportPublicKey: string;
+}
+
+export interface ActionMeta {
+  onSuccess?: Function;
+  onFailure?: Function;
 }

@@ -3,6 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import * as bitcoin from 'bitcoinjs-lib';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
+import { connect } from 'react-redux';
 
 import { images, icons } from 'app/assets';
 import {
@@ -19,9 +20,10 @@ import {
 import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { loadTransactionsFees } from 'app/helpers/fees';
+import { ApplicationState } from 'app/state';
+import { selectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
-import BlueApp from '../../BlueApp';
 import { HDSegwitBech32Wallet, HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet, WatchOnlyWallet } from '../../class';
 import config from '../../config';
 import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
@@ -36,7 +38,7 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     StackNavigationProp<MainCardStackNavigatorParams, Route.SendCoins>
   >;
-
+  wallets: Wallet[];
   route: RouteProp<MainCardStackNavigatorParams, Route.SendCoins>;
 }
 
@@ -50,13 +52,11 @@ interface State {
   vaultTxType: number;
 }
 
-export class SendCoinsScreen extends Component<Props, State> {
+class SendCoinsScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    const { route } = props;
+    const { route, wallets } = props;
     const { toAddress, fromWallet } = route.params;
-
-    const wallets = BlueApp.getWallets();
 
     this.state = {
       isLoading: false,
@@ -77,7 +77,7 @@ export class SendCoinsScreen extends Component<Props, State> {
   }
 
   chooseItemFromModal = (index: number) => {
-    const wallets = BlueApp.getWallets();
+    const { wallets } = this.props;
 
     const wallet = wallets[index];
     this.setState({
@@ -86,7 +86,7 @@ export class SendCoinsScreen extends Component<Props, State> {
   };
 
   showModal = () => {
-    const wallets = BlueApp.getWallets();
+    const { wallets } = this.props;
     const { wallet } = this.state;
     const selectedIndex = wallets.findIndex((w: Wallet) => w.label === wallet.label);
     this.props.navigation.navigate(Route.ActionSheet, {
@@ -122,12 +122,12 @@ export class SendCoinsScreen extends Component<Props, State> {
   createHDBech32Transaction = async () => {
     /** @type {HDSegwitBech32Wallet} */
     const { transaction, wallet } = this.state;
-    await wallet.fetchUtxos();
     const changeAddress = await wallet.getAddressForTransaction();
     const requestedSatPerByte: string | number = +this.state.fee.toString().replace(/\D/g, '');
 
     const targets: any[] = [];
-    const amount = satoshiToBtc(transaction.amount).toNumber();
+    const amount = btcToSatoshi(transaction.amount).toNumber();
+
     if (amount > 0.0) {
       targets.push({ address: transaction.address, value: amount });
     }
@@ -139,19 +139,13 @@ export class SendCoinsScreen extends Component<Props, State> {
       changeAddress,
     );
 
-    BlueApp.tx_metadata = BlueApp.tx_metadata || {};
-    BlueApp.tx_metadata[tx.getId()] = {
-      txhex: tx.toHex(),
-      memo: this.state.memo,
-    };
-    await BlueApp.saveToDisk();
     this.setState({ isLoading: false }, () =>
       this.props.navigation.navigate(Route.SendCoinsConfirm, {
-        fee: btcToSatoshi(fee).toNumber(),
+        fee: satoshiToBtc(fee).toNumber(),
         memo: this.state.memo,
         fromWallet: wallet,
         txDecoded: tx,
-        recipients: targets,
+        recipients: [transaction],
         satoshiPerByte: requestedSatPerByte,
       }),
     );
@@ -244,6 +238,17 @@ export class SendCoinsScreen extends Component<Props, State> {
     }
   };
 
+  isFastTx = (wallet: Wallet) => {
+    const { type } = wallet;
+    const { vaultTxType } = this.state;
+    switch (type) {
+      case HDSegwitP2SHAirWallet.type:
+        return vaultTxType === bitcoin.payments.VaultTxType.Instant;
+      default:
+        return false;
+    }
+  };
+
   navigateToConfirm = ({
     fee,
     txDecoded,
@@ -256,6 +261,8 @@ export class SendCoinsScreen extends Component<Props, State> {
     const { transaction, wallet, memo } = this.state;
 
     const isAlert = this.isAlert(wallet);
+    const isFastTx = this.isFastTx(wallet);
+
     this.props.navigation.navigate(Route.SendCoinsConfirm, {
       recipients: [transaction],
       // HD wallet's utxo is in sats, classic segwit wallet utxos are in btc
@@ -265,13 +272,12 @@ export class SendCoinsScreen extends Component<Props, State> {
       memo,
       fromWallet: wallet,
       satoshiPerByte: actualSatoshiPerByte.toFixed(2),
-      ...(!isAlert && { successMsgDesc: i18n.send.transaction.fastSuccess }),
+      ...(isFastTx && { successMsgDesc: i18n.send.transaction.fastSuccess }),
     });
   };
 
   createStandardTransaction = async (createTx: Function) => {
-    const { fee: requestedSatPerByte, transaction, memo, wallet } = this.state;
-    await wallet.fetchUtxos();
+    const { fee: requestedSatPerByte, transaction, wallet } = this.state;
     const utxos = wallet.getUtxos();
     const utxosUnspent = this.getUnspentUtxos(utxos);
 
@@ -295,15 +301,7 @@ export class SendCoinsScreen extends Component<Props, State> {
     }
 
     const txDecoded = bitcoin.Transaction.fromHex(tx);
-    const txid = txDecoded.getId();
 
-    BlueApp.tx_metadata = BlueApp.tx_metadata || {};
-    BlueApp.tx_metadata[txid] = {
-      txhex: tx,
-      memo,
-    };
-
-    await BlueApp.saveToDisk();
     this.setState({ isLoading: false }, () => this.navigateToConfirm({ fee, txDecoded, actualSatoshiPerByte }));
   };
 
@@ -530,6 +528,12 @@ export class SendCoinsScreen extends Component<Props, State> {
     );
   }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+  wallets: selectors.wallets(state),
+});
+
+export default connect(mapStateToProps)(SendCoinsScreen);
 
 const styles = StyleSheet.create({
   buttonContainer: {

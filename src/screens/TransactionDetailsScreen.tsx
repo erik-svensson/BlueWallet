@@ -1,5 +1,6 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { map, compose, uniq, flatten, join } from 'lodash/fp';
 import moment from 'moment';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Linking, TouchableOpacity } from 'react-native';
@@ -8,9 +9,10 @@ import { connect } from 'react-redux';
 import { images, icons } from 'app/assets';
 import { Image, Header, StyledText, Chip, ScreenTemplate, TranscationLabelStatus } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Route, MainCardStackNavigatorParamList, RootStackParamList, TxType } from 'app/consts';
-import { getWalletTypeByLabel, getConfirmationsText } from 'app/helpers/helpers';
+import { Route, MainCardStackNavigatorParams, RootStackParams, TxType } from 'app/consts';
+import { getConfirmationsText } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
+import { selectors, reducer } from 'app/state/transactions';
 import {
   createTransactionNote,
   updateTransactionNote,
@@ -19,113 +21,34 @@ import {
 } from 'app/state/transactions/actions';
 import { typography, palette } from 'app/styles';
 
-import BlueApp from '../../BlueApp';
-
 const i18n = require('../../loc');
-
-function onlyUnique(value: number, index: number, self: any[]) {
-  return self.indexOf(value) === index;
-}
-
-function arrDiff(a1: any[], a2: any[]) {
-  const ret = [];
-  for (const v of a2) {
-    if (a1.indexOf(v) === -1) {
-      ret.push(v);
-    }
-  }
-  return ret;
-}
 
 interface Props {
   transactionNotes: Record<string, string>;
   createTransactionNote: (transactionID: string, note: string) => CreateTransactionNoteAction;
   updateTransactionNote: (transactionID: string, note: string) => UpdateTransactionNoteAction;
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParamList, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParamList, Route.TransactionDetails>
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.TransactionDetails>
   >;
-
-  route: RouteProp<MainCardStackNavigatorParamList, Route.TransactionDetails>;
-}
-
-interface State {
-  hash: string;
-  isLoading: boolean;
-  tx: any;
-  from: any[];
-  to: any[];
-  wallet: any;
   note: string;
+  route: RouteProp<MainCardStackNavigatorParams, Route.TransactionDetails>;
 }
 
-class TransactionDetailsScreen extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    const {
-      transaction: { txid, hash },
-    } = props.route.params;
-
-    const note = props.transactionNotes[txid] || '';
-
-    let foundTx = {};
-    let from = [];
-    let to = [];
-    for (const tx of BlueApp.getTransactions()) {
-      if (tx.hash === hash) {
-        foundTx = tx;
-        for (const input of foundTx.inputs) {
-          from = from.concat(input.addresses);
-        }
-        for (const output of foundTx.outputs) {
-          if (output.addresses) to = to.concat(output.addresses);
-          if (output.scriptPubKey && output.scriptPubKey.addresses) to = to.concat(output.scriptPubKey.addresses);
-        }
-      }
-    }
-
-    let wallet = false;
-    for (const w of BlueApp.getWallets()) {
-      for (const t of w.getTransactions()) {
-        if (t.hash === hash) {
-          wallet = w;
-        }
-      }
-    }
-    this.state = {
-      hash,
-      isLoading: true,
-      tx: foundTx,
-      from,
-      to,
-      wallet,
-      note,
-    };
-  }
-
-  async componentDidMount() {
-    this.setState({
-      isLoading: false,
-    });
-  }
-
+class TransactionDetailsScreen extends Component<Props> {
   addToAddressBook = (address: string) => {
     this.props.navigation.navigate(Route.CreateContact, { address });
   };
 
   updateNote = (note: string) => {
     const {
-      transaction: { txid },
+      transaction: { hash },
     } = this.props.route.params;
-    if (!this.state.note) {
-      this.props.createTransactionNote(txid, note);
+    if (!this.props.note) {
+      this.props.createTransactionNote(hash, note);
     } else {
-      this.props.updateTransactionNote(txid, note);
+      this.props.updateTransactionNote(hash, note);
     }
-
-    this.setState({
-      note,
-    });
   };
 
   renderHeader = () => {
@@ -166,11 +89,12 @@ class TransactionDetailsScreen extends Component<Props, State> {
 
   editNote = () => {
     const { transaction } = this.props.route.params;
+    const { note } = this.props;
     this.props.navigation.navigate(Route.EditText, {
-      title: moment.unix(transaction.time).format('lll'),
+      title: transaction.time ? moment.unix(transaction.time).format('lll') : '',
       label: i18n.transactions.details.note,
       onSave: this.updateNote,
-      value: this.state.note,
+      value: note,
       header: this.renderHeader(),
     });
   };
@@ -180,21 +104,33 @@ class TransactionDetailsScreen extends Component<Props, State> {
       case TxType.ALERT_PENDING:
       case TxType.ALERT_RECOVERED:
       case TxType.ALERT_CONFIRMED:
-        return i18n.transactions.transactionTypeLabel.standard;
+        return i18n.transactions.transactionTypeLabel.secure;
       case TxType.RECOVERY:
         return i18n.transactions.transactionTypeLabel.canceled;
       case TxType.INSTANT:
+        return i18n.transactions.transactionTypeLabel.secureFast;
       case TxType.NONVAULT:
-        return i18n.transactions.transactionTypeLabel.fast;
+        return i18n.transactions.transactionTypeLabel.standard;
       default:
         return '';
     }
   };
 
+  getAddresses = (key: 'inputs' | 'outputs') => {
+    const { transaction } = this.props.route.params;
+
+    return compose(
+      join(', '),
+      uniq,
+      flatten,
+      map((el: { addresses: string[] }) => el.addresses),
+    )(transaction[key]);
+  };
+
   render() {
     const { transaction } = this.props.route.params;
-    const fromValue = this.state.from.filter(onlyUnique).join(', ');
-    const toValue = arrDiff(this.state.from, this.state.to.filter(onlyUnique)).join(', ');
+    const fromValue = this.getAddresses('inputs');
+    const toValue = this.getAddresses('outputs');
     return (
       <ScreenTemplate
         header={
@@ -208,10 +144,10 @@ class TransactionDetailsScreen extends Component<Props, State> {
         }
       >
         {this.renderHeader()}
-        {this.state.note ? (
+        {this.props.note ? (
           <TouchableOpacity style={styles.noteContainer} onPress={this.editNote}>
             <Text style={styles.contentRowTitle}>{i18n.transactions.details.note}</Text>
-            <Text style={styles.contentRowBody}>{this.state.note}</Text>
+            <Text style={styles.contentRowBody}>{this.props.note}</Text>
           </TouchableOpacity>
         ) : (
           <View style={styles.headerContainer}>
@@ -220,7 +156,7 @@ class TransactionDetailsScreen extends Component<Props, State> {
         )}
         <View style={styles.contentRowContainer}>
           <Text style={styles.contentRowTitle}>{i18n.transactions.details.walletType}</Text>
-          <Text style={styles.contentRowBody}>{getWalletTypeByLabel(transaction.walletLabel)}</Text>
+          <Text style={styles.contentRowBody}>{transaction.walletTypeReadable}</Text>
         </View>
         <View style={styles.contentRowContainer}>
           <View style={styles.row}>
@@ -245,13 +181,13 @@ class TransactionDetailsScreen extends Component<Props, State> {
         <View style={styles.contentRowContainer}>
           <View style={styles.row}>
             <Text style={styles.contentRowTitle}>{i18n.transactions.details.transactionId}</Text>
-            <CopyButton textToCopy={this.state.tx.txid} />
+            <CopyButton textToCopy={transaction.txid} />
           </View>
-          <Text style={styles.contentRowBody}>{this.state.tx.txid}</Text>
+          <Text style={styles.contentRowBody}>{transaction.txid}</Text>
           <StyledText
             title={i18n.transactions.details.viewInBlockRxplorer}
             onPress={() => {
-              const url = `http://explorer.bitcoinvault.global/tx/${this.state.tx.txid}`;
+              const url = `http://explorer.bitcoinvault.global/tx/${transaction.txid}`;
               Linking.canOpenURL(url).then(supported => {
                 if (supported) {
                   Linking.openURL(url);
@@ -277,9 +213,14 @@ class TransactionDetailsScreen extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: ApplicationState) => ({
-  transactionNotes: state.transactions.transactionNotes,
-});
+const mapStateToProps = (state: ApplicationState & reducer.TransactionsState, props: Props) => {
+  const {
+    transaction: { hash },
+  } = props.route.params;
+  return {
+    note: selectors.getTxNoteByHash(state, hash),
+  };
+};
 
 const mapDispatchToProps = {
   createTransactionNote,
