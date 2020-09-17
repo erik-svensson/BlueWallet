@@ -90,10 +90,10 @@ export default class WalletMigrate {
       if (data) {
         const isEncrypted = (await AsyncStorage.getItem('data_encrypted')) || '';
         await RNSecureKeyStore.set('data', data, {
-          accessible: ACCESSIBLE.WHEN_UNLOCKED,
+          accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
         });
         await RNSecureKeyStore.set('data_encrypted', isEncrypted, {
-          accessible: ACCESSIBLE.WHEN_UNLOCKED,
+          accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
         });
         await AsyncStorage.removeItem('data');
         await AsyncStorage.removeItem('data_encrypted');
