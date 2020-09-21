@@ -549,9 +549,10 @@ module.exports = {
   },
   security: {
     jailBrokenPhone:
-      'Thiết bị của bạn có vẻ đã bị bẻ khóa. Điều này có thể dẫn đến các vấn đề bảo mật, sự cố hoặc các vấn đề khác. Chúng tôi khuyên bạn không nên sử dụng GoldWallet với thiết vị đã bị bẻ khóa.',
+      'Có vẻ thiết bị của bạn đã bị bẻ khóa bảo mật (jailbroke). Điều này sẽ gây ra các vấn đề về bảo mật, cũng như những sự cố, rủi ro khác. Chúng tôi khuyến cáo quý khách không nên sử dụng Gold Wallet trên thiết bị jailbreak. Hãy đóng ứng dụng lại.',
     rootedPhone:
-      'Thiết bị của bạn có vẻ đã bị giành quyền truy nhập gốc. Điều này có thể dẫn đến các vấn đề bảo mật, sự cố hoặc các vấn đề khác. Chúng tôi khuyên bạn không nên sử dụng GoldWallet với thiết bị đã bị giành quyền truy nhập gốc.',
+      'Có vẻ thiết bị của bạn đã bị bẻ khóa bảo mật(root). Điều này sẽ gây ra các vấn đề về bảo mật, cũng như những sự cố, rủi ro khác. Chúng tôi khuyến cáo quý khách không nên sử dụng Gold Wallet trên thiết bị root. Hãy đóng ứng dụng lại.',
+    noPinOrFingerprintSet: 'Khuyến cáo không sử dụng Gold Wallet trước khi thiết bị được bảo mật',
     title: 'Vấn đề bảo mật',
   },
 };

@@ -554,9 +554,10 @@ module.exports = {
   },
   security: {
     jailBrokenPhone:
-      'Su dispositivo parece estar liberado. Esto puede producir riesgos de seguridad, errores u otros problemas. No recomendamos usar GoldWallet con un dispositivo liberado.',
+      'Parece que su dispositivo está liberado. Esto puede causar riesgos de seguridad, bloqueos u otros problemas. No recomendamos el uso de GoldWallet con un dispositivo liberado. Por favor, cierre la aplicación.',
     rootedPhone:
-      'Su dispositivo parece estar enraizado. Esto puede riesgos de seguridad, errores u otros problemas. No recomendamos usar GoldWallet con un dispositivo enraizado.',
+      'Su dispositivo parece estar enraizado. Esto puede causar riesgos de seguridad, bloqueos u otros problemas. No recomendamos el uso de GoldWallet con un dispositivo liberado. Por favor, cierre la aplicación.',
+    noPinOrFingerprintSet: 'No recomendamos el uso de GoldWallet hasta que el dispositivo se haya protegido.',
     title: 'Problema de seguridad',
   },
 };

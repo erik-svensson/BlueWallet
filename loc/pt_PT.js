@@ -553,9 +553,10 @@ module.exports = {
   },
   security: {
     jailBrokenPhone:
-      'O seu dispositivo parece ter sido desbloqueado. Isto pode provocar problemas de segurança, colisões ou outros problemas. Não recomendamos a utilização da GoldWallet com um dispositivo desbloqueado.',
+      'O seu dispositivo parece estar desbloqueado. Isso pode causar problemas de segurança,rompimentos ou outros problemas. Não recomendamos o uso do GoldWallet com dispositivo desbloqueado. Feche o aplicativo.',
     rootedPhone:
-      'O seu dispositivo parece ter sido ancorado. Isto pode provocar problemas de segurança, colisões ou outros problemas. Não recomendamos a utilização da GoldWallet com um dispositivo ancorado.',
+      'O seu dispositivo parece estar com acesso ao root. Isso pode causar problemas de segurança, rompimentos ou outros problemas. Não recomendamos o uso do GoldWallet com dispositivo com acesso root. Feche o aplicativo.',
+    noPinOrFingerprintSet: 'Não recomendamos o uso da Gold Wallet até que o dispositivo seja protegido.',
     title: 'Problema de segurança',
   },
 };

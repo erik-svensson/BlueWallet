@@ -550,9 +550,11 @@ module.exports = {
   },
   security: {
     jailBrokenPhone:
-      'Perangkat Anda tampak sudah di-jailbreak. Ini dapat menyebabkan masalah keamanan, kerusakan, atau masalah lainnya. Kami tidak menyarankan penggunaan GoldWallet di perangkat yang sudah di-jailbreak.',
+      'Perangkat Anda telah di jailbreak. Ini dapat menyebabkan masalah keamanan, kerusakan, atau masalah lain. Kami tidak merekomendasikan Anda untuk menggunakan GoldWallet dengan perangkat yang telah di jailbreak. Mohon tutup aplikasi.',
     rootedPhone:
-      'Perangkat Anda tampaknya sudah di-root. Ini dapat menyebabkan masalah keamanan, kerusakan, atau masalah lainnya. Kami tidak menyarankan penggunaan GoldWallet di perangkat yang sudah di-root.',
+      'Perangkat Anda telah di root. Ini dapat menyebabkan masalah keamanan, kerusakan, atau masalah lain. Kami tidak merekomendasikan Anda untuk menggunakan GoldWallet dengan perangkat yang telah di root. Mohon tutup aplikasi.',
+    noPinOrFingerprintSet:
+      'Kami tidak menganjurkan Anda untuk menggunakan Gold Wallet hingga perangkat Anda diamankan.',
     title: 'Masalah keamanan',
   },
 };
