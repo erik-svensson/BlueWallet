@@ -546,10 +546,9 @@ module.exports = {
     closeTheApp: 'Uygulamayı kapatın',
   },
   security: {
-    jailBrokenPhone:
-      'Cihazınızın yazılımını kırdırdığınız (jailbroken) görülüyor. Bu güvenlik sorunlarına, çökmelere veya diğer sorunlara yol açabilir. Yazılımı kırdırılmış (jailbroken) bir cihazda GoldWallet kullanmanızı önermiyoruz.',
-    rootedPhone:
-      'Cihazınızın kök yazılımına erişiminiz olduğu (rooted) görülüyor. Bu güvenlik sorunlarına, çökmelere veya diğer sorunlara yol açabilir. Kök yazılımına erişilmiş (rooted) bir cihazda GoldWallet kullanmanızı önermiyoruz.',
+    jailBrokenPhone: `Cihazınıza jailbreak uygulanmış görünüyor. Bu güvenlik sorunlarına, çökmelere ve diğer sorunlara neden olabilir. GoldWallet'i jailbreak uygulanmış bir cihazda kullanmanızı önermiyoruz. Lütfen uygulamayı kapatın.`,
+    rootedPhone: `Cihazınıza root atılmış görünüyor. Bu güvenlik sorunlarına, çökmelere ve diğer sorunlara neden olabilir. GoldWallet'i root atılmış  bir cihazda kullanmanızı önermiyoruz. Lütfen uygulamayı kapatın.`,
+    noPinOrFingerprintSet: 'Cihazınız güvenli olana kadar Gold Wallet kullanmanızı önermiyoruz.',
     title: 'Güvenlik sorunu',
   },
 };

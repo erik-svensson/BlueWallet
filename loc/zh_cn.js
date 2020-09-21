@@ -498,9 +498,10 @@ module.exports = {
   },
   security: {
     jailBrokenPhone:
-      '您的设备似乎越狱了。这可能会出现安全问题、死机或其它问题。我们不建议在已越狱的设备上使用 GoldWallet。',
+      '您的设备似乎越狱了。 这可能会导致安全问题，设备无法使用或其他隐患。 我们不建议将GoldWallet与被越狱的设备一起使用。 请关闭GoldWallet应用程序。',
     rootedPhone:
-      '您的设备似乎取得了 root 权限。这可能会出现安全问题、死机或其它问题。我们不建议在取得 root 权限的设备上使用 GoldWallet。',
+      '您的设备似乎已被Root（已获得管理员权限）。这可能会导致安全问题，设备无法使用或其他隐患。我们不建议将GoldWallet与已Root(已获得管理员权限)的设备一起使用。请关闭GoldWallet应用程序。',
+    noPinOrFingerprintSet: '我们建议在确保设备安全之后，再使用Gold Wallet',
     title: '安全问题',
   },
 };
