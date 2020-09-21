@@ -346,7 +346,7 @@ PODS:
     - React
   - RNDefaultPreference (1.4.1):
     - React
-  - RNDeviceInfo (5.5.6):
+  - RNDeviceInfo (6.0.2):
     - React
   - RNFastImage (8.1.5):
     - React
@@ -684,7 +684,7 @@ SPEC CHECKSUMS:
   RNCClipboard: 8148e21ac347c51fd6cd4b683389094c216bb543
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNDefaultPreference: 628cb35719f2fe4111c000ccfa7e186400bbc47e
-  RNDeviceInfo: 722dc13c269b9dbf305aa4b790d36731602e99b7
+  RNDeviceInfo: bdd61e8b070d13a1dd9d022091981075ed4cde16
   RNFastImage: 35ae972d6727c84ee3f5c6897e07f84d0a3445e9
   RNFBAnalytics: 20564db4cfd317c304fe5a8e5d840f8c9d105aaa
   RNFBApp: 373cce42559cc7a9a42afc876746e3946de3e32e
