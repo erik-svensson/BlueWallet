@@ -190,11 +190,9 @@ module.exports.multiGetBalanceByAddress = async function(addresses, batchsize) {
       scripthashes.push(reversedHash);
       scripthash2addr[reversedHash] = addr;
     }
-    console.log('scripthashes', scripthashes);
 
     const balances = await mainClient.blockchainScripthash_getBalanceBatch(scripthashes);
 
-    console.log('balances', balances);
     for (const bal of balances) {
       ret.incoming_balance += +bal.result.alert_incoming;
       ret.outgoing_balance += +bal.result.alert_outgoing;
