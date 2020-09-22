@@ -24,14 +24,15 @@ async function connectMain() {
       console.log('ElectrumClient error: ' + e);
       mainConnected = false;
     };
-    await mainClient.connect();
+    const ver = await mainClient.initElectrum({
+      client: '2.7.11',
+      version: config.electrumXProtocolVersion,
+    });
 
-    const ver = await mainClient.server_version('2.7.11', config.electrumXProtocolVersion);
     if (ver && ver[0]) {
       console.log('connected to ', ver);
       mainConnected = true;
       wasConnectedAtLeastOnce = true;
-      // AsyncStorage.setItem(storageKey, JSON.stringify(peers));  TODO: refactor
     }
   } catch (e) {
     mainConnected = false;
@@ -189,9 +190,11 @@ module.exports.multiGetBalanceByAddress = async function(addresses, batchsize) {
       scripthashes.push(reversedHash);
       scripthash2addr[reversedHash] = addr;
     }
+    console.log('scripthashes', scripthashes);
 
     const balances = await mainClient.blockchainScripthash_getBalanceBatch(scripthashes);
 
+    console.log('balances', balances);
     for (const bal of balances) {
       ret.incoming_balance += +bal.result.alert_incoming;
       ret.outgoing_balance += +bal.result.alert_outgoing;
