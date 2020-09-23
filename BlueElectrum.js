@@ -16,11 +16,7 @@ let mainConnected = false;
 let wasConnectedAtLeastOnce = false;
 
 async function connectMain() {
-  const usingPeer = {
-    host: 'testnet.bitcoinvault.global' || config.host,
-    tcp: '50002' || config.port,
-    protocol: 'tls' || config.protocol,
-  };
+  const usingPeer = { host: config.host, tcp: config.port, protocol: config.protocol };
   try {
     console.log('begin connection:', JSON.stringify(usingPeer));
     mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, usingPeer.protocol);
