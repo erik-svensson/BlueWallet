@@ -6,7 +6,6 @@ import './shim.js';
 
 import React, { useEffect } from 'react';
 import { AppRegistry, StatusBar } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 
 import App from './App';
 
@@ -17,9 +16,7 @@ if (!Error.captureStackTrace) {
 }
 
 const BlueAppComponent = () => {
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+  useEffect(() => {}, []);
   return (
     <>
       <StatusBar backgroundColor="rgba(0,0,0,0)" translucent />
