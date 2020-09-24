@@ -107,9 +107,9 @@ export type AuthenticationActionType =
   | CreateTxPasswordFailureAction
   | SetIsAuthenticatedAction;
 
-export const authenticate = (payload: { pin: string }, meta?: ActionMeta): AuthenticateAction => ({
+export const authenticate = (pin: string, meta?: ActionMeta): AuthenticateAction => ({
   type: AuthenticationAction.Authenticate,
-  payload,
+  payload: { pin },
   meta,
 });
 

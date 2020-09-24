@@ -49,8 +49,7 @@ export function* checkCredentialsSaga(action: CheckCredentialsAction | unknown) 
 export function* authenticateSaga(action: AuthenticateAction | unknown) {
   const { meta, payload } = action as AuthenticateAction;
   try {
-    yield call(SecureStorageService.getSecuredValue, CONST.pin);
-
+    const storedPin = yield call(SecureStorageService.getSecuredValue, CONST.pin);
     if (payload.pin !== storedPin) {
       throw new Error('Wrong pin');
     }
@@ -89,12 +88,12 @@ export function* createPinSaga(action: CreatePinAction | unknown) {
 export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) {
   const { meta, payload } = action as CreateTxPasswordAction;
   try {
+    console.log(payload);
     yield call(SecureStorageService.setSecuredValue, CONST.transactionPassword, payload.txPassword);
-    yield put(createTxPasswordSuccess());
-
     if (meta?.onSuccess) {
       meta.onSuccess();
     }
+    yield put(createTxPasswordSuccess());
   } catch (e) {
     yield put(createTxPasswordFailure(e.message));
     if (meta?.onFailure) {
