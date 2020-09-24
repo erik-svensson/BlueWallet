@@ -175,7 +175,7 @@ class SendCoinsScreen extends Component<Props, State> {
 
     const numAmount = this.toNumber(transaction.amount);
 
-    if (!transaction.amount || Number.isNaN(numAmount) || numAmount <= 0) {
+    if (!numAmount || numAmount <= 0) {
       return i18n.send.details.amount_field_is_not_valid;
     }
     if (!requestedSatPerByte || requestedSatPerByte < 1) {
