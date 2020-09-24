@@ -1,7 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
+import JailMonkey from 'jail-monkey';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator, PasswordNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
 import { navigationRef } from 'app/services';
@@ -9,6 +11,9 @@ import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authentication';
 import { checkCredentials as checkCredentialsAction } from 'app/state/authentication/actions';
+import { isAndroid, isIos } from 'app/styles';
+
+const i18n = require('../../loc');
 
 interface MapStateToProps {
   isPinSet: boolean;
@@ -48,10 +53,30 @@ class Navigator extends React.Component<Props> {
     return !isAuthenticated && isTxPasswordSet && isPinSet;
   };
 
+  preventOpenAppWithRootedPhone = () => {
+    if (isIos()) {
+      return RenderMessage({
+        description: i18n.security.jailBrokenPhone,
+        title: i18n.security.title,
+        type: MessageType.error,
+      });
+    } else if (isAndroid()) {
+      return RenderMessage({
+        description: i18n.security.rootedPhone,
+        title: i18n.security.title,
+        type: MessageType.error,
+      });
+    }
+  };
+
   renderRoutes = () => {
     const { isLoading } = this.props;
     if (isLoading) {
       return null;
+    }
+
+    if (!__DEV__ && JailMonkey.isJailBroken()) {
+      return this.preventOpenAppWithRootedPhone();
     }
 
     if (this.shouldRenderOnBoarding()) {
