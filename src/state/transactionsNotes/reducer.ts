@@ -1,14 +1,17 @@
 import { TransactionsAction, TransactionsActionType } from './actions';
 
-export interface TransactionsState {
+export interface TransactionsNotesState {
   transactionNotes: Record<string, string>;
 }
 
-const initialState: TransactionsState = {
+const initialState: TransactionsNotesState = {
   transactionNotes: {},
 };
 
-export const transactionsReducer = (state = initialState, action: TransactionsActionType): TransactionsState => {
+export const transactionsNotesReducer = (
+  state = initialState,
+  action: TransactionsActionType,
+): TransactionsNotesState => {
   switch (action.type) {
     case TransactionsAction.CreateTransactionNote:
       return {

@@ -10,12 +10,12 @@ import { AuthenticatorsState, authenticatorsReducer } from './authenticators/red
 import { contactsReducer, ContactsState } from './contacts/reducer';
 import { filtersReducer } from './filters/reducer';
 import { TimeCounterState, timeCounterReducer } from './timeCounter/reducer';
-import { transactionsReducer, TransactionsState } from './transactions/reducer';
+import { TransactionsNotesState, transactionsNotesReducer } from './transactionsNotes/reducer';
 import { WalletsState, walletsReducer } from './wallets/reducer';
 
 export interface ApplicationState {
   contacts: ContactsState;
-  transactions: TransactionsState;
+  transactions: TransactionsNotesState;
   appSettings: AppSettingsState;
   wallets: WalletsState;
   timeCounter: TimeCounterState;
@@ -26,7 +26,7 @@ export interface ApplicationState {
 
 export const rootReducer = combineReducers({
   contacts: contactsReducer,
-  transactions: transactionsReducer,
+  transactionsNotes: transactionsNotesReducer,
   appSettings: appSettingsReducer,
   wallets: walletsReducer,
   timeCounter: timeCounterReducer,

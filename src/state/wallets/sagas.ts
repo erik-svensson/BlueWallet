@@ -18,6 +18,9 @@ import {
   UpdateWalletAction,
   updateWalletSuccess,
   updateWalletFailure,
+  SendTransactionAction,
+  sendTransactionSuccess,
+  sendTransactionFailure,
 } from './actions';
 
 const BlueElectrum = require('../../../BlueElectrum');
@@ -121,10 +124,38 @@ export function* updateWalletSaga(action: UpdateWalletAction | unknown) {
   }
 }
 
+export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
+  const {
+    payload: { txDecoded },
+    meta,
+  } = action as SendTransactionAction;
+
+  try {
+    yield BlueElectrum.ping();
+    yield BlueElectrum.waitTillConnected();
+    const result = BlueElectrum.broadcast(txDecoded.toHex());
+    if (result?.code === 1) {
+      const message = result.message.split('\n');
+      throw new Error(`${message[0]}: ${message[2]}`);
+    }
+
+    yield put(sendTransactionSuccess());
+    if (meta?.onSuccess) {
+      meta.onSuccess(result);
+    }
+  } catch (e) {
+    yield put(sendTransactionFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure(e.message);
+    }
+  }
+}
+
 export default [
   takeEvery(WalletsAction.DeleteWallet, deleteWalletSaga),
   takeLatest(WalletsAction.LoadWallets, loadWalletsSaga),
   takeEvery(WalletsAction.CreateWallet, createWalletSaga),
   takeEvery(WalletsAction.ImportWallet, importWalletSaga),
   takeEvery(WalletsAction.UpdateWallet, updateWalletSaga),
+  takeEvery(WalletsAction.SendTransaction, sendTransactionSaga),
 ];
