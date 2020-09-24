@@ -4,7 +4,7 @@ import 'intl';
 import 'intl/locale-data/jsonp/en';
 import './shim.js';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { AppRegistry, StatusBar } from 'react-native';
 
 import App from './App';
@@ -16,7 +16,6 @@ if (!Error.captureStackTrace) {
 }
 
 const BlueAppComponent = () => {
-  useEffect(() => {}, []);
   return (
     <>
       <StatusBar backgroundColor="rgba(0,0,0,0)" translucent />

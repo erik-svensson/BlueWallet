@@ -45,7 +45,6 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
     const { createTxPassword, navigation } = this.props;
     const { setPassword } = this.props.route.params;
     if (setPassword === this.state.password) {
-      await SecureStorageService.setSecuredValue(CONST.transactionPassword, setPassword);
       CreateMessage({
         title: i18n.contactCreate.successTitle,
         description: i18n.onboarding.successDescription,
