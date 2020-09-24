@@ -88,7 +88,6 @@ export function* createPinSaga(action: CreatePinAction | unknown) {
 export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) {
   const { meta, payload } = action as CreateTxPasswordAction;
   try {
-    console.log(payload);
     yield call(SecureStorageService.setSecuredValue, CONST.transactionPassword, payload.txPassword);
     if (meta?.onSuccess) {
       meta.onSuccess();
