@@ -138,6 +138,7 @@ export interface Wallet {
   fetchBalance: () => void;
   fetchUtxos: () => void;
   fetchTransactions: () => void;
+  isAnyOfAddressesMine: (addresses: string[]) => boolean;
   id: string;
 }
 
