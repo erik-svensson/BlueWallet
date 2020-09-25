@@ -8,14 +8,6 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // TODO: Add source using env var
-        // String splashSrc = "@mipmap/splash"
-        // if (BuildConfig.IS_BETA === "1") {
-        //     splashSrc = ""
-        // }
-        // String splash = getResources().getString(R.string.splash, splashSrc);
-
         SplashScreen.show(this);
     }
 

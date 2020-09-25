@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
+import config from 'app/../config';
 import JailMonkey from 'jail-monkey';
 import React from 'react';
-import Config from 'react-native-config';
 import { connect } from 'react-redux';
 
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
@@ -93,7 +93,7 @@ class Navigator extends React.Component<Props, State> {
       return this.preventOpenAppWithRootedPhone();
     }
 
-    if (!__DEV__ && Config.IS_BETA && !this.state.isBetaVersionRiskAccepted) {
+    if (!__DEV__ && config.isBeta && !this.state.isBetaVersionRiskAccepted) {
       return <BetaVersionScreen onButtonPress={this.handleAcceptBetaVersionRisk} />;
     }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
 import { ScreenTemplate, Image, Button } from 'app/components';
-import { getLogoSource } from 'app/helpers/images';
+import { logoSource } from 'app/helpers/images';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -13,7 +13,7 @@ interface Props {
 
 export const BetaVersionScreen = ({ onButtonPress }: Props) => (
   <ScreenTemplate footer={<Button onPress={onButtonPress} title={i18n.betaVersion.button} />}>
-    <Image source={getLogoSource()} style={styles.logo} resizeMode="contain" />
+    <Image source={logoSource} style={styles.logo} resizeMode="contain" />
     <Text style={styles.title}>{i18n.betaVersion.title}</Text>
     <Text style={styles.description}>{i18n.betaVersion.description}</Text>
   </ScreenTemplate>

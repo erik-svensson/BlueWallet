@@ -1,6 +1,5 @@
-import Config from 'react-native-config';
+import config from 'app/../config';
 
 import { images } from 'app/assets';
 
-export const getLogoSource = () =>
-  Config.IS_BETA === '1' ? images.goldWalletLogoBlackBeta : images.goldWalletLogoBlack;
+export const logoSource = config.isBeta ? images.goldWalletLogoBlackBeta : images.goldWalletLogoBlack;
