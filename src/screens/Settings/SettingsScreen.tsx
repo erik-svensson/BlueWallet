@@ -28,7 +28,7 @@ export const SettingsScreen = (props: Props) => {
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
 
-  const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
+  // const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
 
   const onAdvancedOptionsChange = () => navigation.navigate(Route.AdvancedOptions);
 
@@ -38,7 +38,8 @@ export const SettingsScreen = (props: Props) => {
 
   const renderGeneralSettings = () => (
     <>
-      <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} />
+      {/* done for presentional purposes, uncomment for final version */}
+      {/* <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} /> */}
       <ListItem title={i18n.settings.advancedOptions} source={icons.buildIcon} onPress={onAdvancedOptionsChange} />
     </>
   );
