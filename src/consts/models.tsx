@@ -100,6 +100,7 @@ export enum Route {
   Unlock = 'Unlock',
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
+  BetaVersion = 'BetaVersion',
 }
 
 export interface Wallet {
