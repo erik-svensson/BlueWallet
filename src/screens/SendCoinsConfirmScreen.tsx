@@ -96,6 +96,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
       route: {
         params: { txDecoded, successMsgDesc, memo },
       },
+      navigation,
     } = this.props;
 
     sendTransaction(
@@ -116,7 +117,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
             type: MessageType.success,
             buttonProps: {
               title: i18n.message.returnToDashboard,
-              onPress: () => this.props.navigation.navigate(Route.MainCardStackNavigator),
+              onPress: () => navigation.navigate(Route.MainCardStackNavigator),
             },
           });
         },
@@ -124,7 +125,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
           Alert.alert('ERROR', error, [
             {
               text: 'OK',
-              onPress: () => this.props.navigation.goBack(),
+              onPress: () => navigation.goBack(),
             },
           ]);
         },

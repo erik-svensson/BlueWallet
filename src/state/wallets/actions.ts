@@ -104,7 +104,6 @@ export interface SendTransactionAction {
   type: WalletsAction.SendTransaction;
   payload: {
     txDecoded: Transaction;
-    memo?: string;
   };
   meta?: ActionMeta;
 }
