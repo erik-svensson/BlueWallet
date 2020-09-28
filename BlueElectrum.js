@@ -29,10 +29,6 @@ async function connectMain() {
       client: '2.7.11',
       version: config.electrumXProtocolVersion,
     });
-    // const relayFee = await mainClient.blockchain_relayfee();
-
-    // const res = (183 * 3 * relayFee) / 1000;
-    // console.log('  const relayFee = await mainClient.blockchain_relayfee()    ', res);
 
     if (ver && ver[0]) {
       console.log('connected to ', ver);
