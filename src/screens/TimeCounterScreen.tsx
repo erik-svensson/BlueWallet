@@ -23,7 +23,7 @@ export const TimeCounterScreen = (props: Props) => {
   const onTryAgain = propOnTryAgain;
   const getLeftSeconds = () => {
     const currentTimestamp = dayjs().unix();
-    return parseInt((timestamp - currentTimestamp).toFixed(0));
+    return timestamp > currentTimestamp ? parseInt((timestamp - currentTimestamp).toFixed(0)) : 0;
   };
   const [seconds, setSeconds] = useState(getLeftSeconds());
 
