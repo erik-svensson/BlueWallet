@@ -7,7 +7,7 @@ import { View, StyleSheet, Alert, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Header, ScreenTemplate, Button, StyledText, Image, Text } from 'app/components';
+import { Header, ScreenTemplate, Button, StyledText, Image, Text, Warning } from 'app/components';
 import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import * as actions from 'app/state/transactions/actions';
@@ -173,11 +173,13 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const {
       route: { params },
     } = this.props;
-    const { fromWallet } = params;
+    const { fromWallet, recipients } = params;
+    const item = recipients[0];
 
     const { availableBalance, pendingBalance } = this.getNewBalances();
     return (
       <View style={styles.balancesContainer}>
+        <Warning type="detailed" amount={item.amount} balanceLeft={roundBtcToSatoshis(pendingBalance)} />
         <View style={styles.balanceWrapper}>
           <Text style={styles.balanceText}>
             {roundBtcToSatoshis(availableBalance)} {fromWallet.preferredBalanceUnit}
@@ -263,6 +265,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: palette.lightGrey,
+    paddingHorizontal: 20,
   },
   balanceText: {
     ...typography.headline4,
