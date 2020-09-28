@@ -81,6 +81,12 @@ export class InputItem extends PureComponent<Props, State> {
     }
   }
 
+  componentDidMount() {
+    if (!!this.props.value) {
+      this.animateFocus();
+    }
+  }
+
   onChangeText = (text: string) => {
     this.setState({ value: text });
     if (this.props.setValue) {
@@ -94,12 +100,8 @@ export class InputItem extends PureComponent<Props, State> {
 
   render() {
     const { isAnimatedFocused, isActive } = this.state;
-    const { label, suffix, error, secureTextEntry, value } = this.props;
+    const { label, suffix, error, secureTextEntry } = this.props;
     const keyboardType = secureTextEntry ? 'default' : defaultKeyboardType;
-
-    if (!!value && !isActive) {
-      this.animateFocus();
-    }
 
     const top = this.state.isAnimatedFocused.interpolate({
       inputRange: [0, 1],
