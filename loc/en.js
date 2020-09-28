@@ -374,10 +374,7 @@ module.exports = {
     },
     warning: 'Warning: ',
     warningGeneral:
-      'Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
-    warningBold: 'will be blocked for 24 hours',
-    detailedWarning:
-      'you are sending AMOUNT BTCV. The amount of BALANCE_LEFT BTCV, which is left on your wallet will be blocked for 24 hours. Your funds are secure, but you will not be able to use them until confirmation or the transaction is canceled.',
+      'Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
     transaction: {
       instant: 'Secure Fast',
       instantDesc: 'This transaction will be confirmed immediately. Use with extreme caution.',

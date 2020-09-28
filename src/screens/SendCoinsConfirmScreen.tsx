@@ -16,7 +16,6 @@ import { palette, typography } from 'app/styles';
 import { satoshiToBtc, btcToSatoshi, roundBtcToSatoshis } from '../../utils/bitcoin';
 
 const BlueElectrum = require('../../BlueElectrum');
-const EV = require('../../events');
 const i18n = require('../../loc');
 
 const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void, buttonTitle?: string) => (
@@ -173,13 +172,12 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const {
       route: { params },
     } = this.props;
-    const { fromWallet, recipients } = params;
-    const item = recipients[0];
+    const { fromWallet, isAlert } = params;
 
     const { availableBalance, pendingBalance } = this.getNewBalances();
     return (
       <View style={styles.balancesContainer}>
-        <Warning type="detailed" amount={item.amount} balanceLeft={roundBtcToSatoshis(pendingBalance)} />
+        {isAlert && <Warning />}
         <View style={styles.balanceWrapper}>
           <Text style={styles.balanceText}>
             {roundBtcToSatoshis(availableBalance)} {fromWallet.preferredBalanceUnit}
