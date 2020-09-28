@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
-import { Text, StyleSheet, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Text, StyleSheet, View, TouchableOpacity, ScrollView, Dimensions, Animated, PanResponder } from 'react-native';
 
 import { WalletItem, GradientView } from 'app/components';
 import { Wallet, RootStackParams, Route } from 'app/consts';
@@ -15,7 +15,73 @@ interface Props {
   route: RouteProp<RootStackParams, Route.ActionSheet>;
 }
 
+const ANIMATED = {
+  HIDDEN: -350,
+  FULL_OPEN: -100,
+  VISIBLE: -300,
+};
+
 export const ActionSheet = (props: Props) => {
+  const [animation, setAnimation] = useState(new Animated.Value(0));
+  const animationValue = new Animated.Value(0);
+
+  // useEffect(() => {
+  //   Animated.timing(animation, {
+  //     toValue: 1,
+  //     duration: 100,
+  //     useNativeDriver: false,
+  //   }).start();
+
+  //   return () => {
+  //     Animated.timing(animation, {
+  //       toValue: 0,
+  //       duration: 5,
+  //       useNativeDriver: false,
+  //     }).start();
+  //   };
+  // }, []);
+
+  const pan = useRef(new Animated.ValueXY()).current;
+
+  const animateMovement = toValue => {
+    Animated.spring(animationValue, {
+      toValue,
+      tension: 120,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        pan.setOffset({
+          x: pan.x._value,
+          y: pan.y._value,
+        });
+      },
+      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }]),
+      onPanResponderRelease: (_, gestureState) => {
+        console.log('gestureState: ', gestureState.moveY);
+        if (gestureState.moveY > 600) {
+          animateMovement(0);
+        } else {
+          animateMovement(800);
+        }
+        pan.flattenOffset();
+      },
+    }),
+  ).current;
+
+  const backgorundColorIntrpolation = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [palette.transparent, palette.modalTransparent],
+  });
+
+  const onScroll = event => {
+    console.log(event.nativeEvent.contentOffset.y);
+  };
+
   const renderWalletItems = () => {
     const { wallets, selectedIndex, onPress } = props.route.params;
 
@@ -36,31 +102,24 @@ export const ActionSheet = (props: Props) => {
       />
     ));
   };
-
+  console.log('pan', pan.getLayout());
   return (
-    <TouchableOpacity
-      activeOpacity={1}
-      onPress={() => {
-        props.navigation.goBack();
-      }}
-      style={styles.modal}
-    >
-      <TouchableOpacity activeOpacity={1}>
-        <ScrollView style={styles.containerStyle} bounces={false} onStartShouldSetResponder={() => true}>
-          <View style={styles.breakLine} />
-          <Text style={styles.titleStyle}>{i18n.wallets.walletModal.wallets}</Text>
-          <View style={styles.walletContainer}>{renderWalletItems()}</View>
-        </ScrollView>
-      </TouchableOpacity>
-    </TouchableOpacity>
+    //{ backgroundColor: backgorundColorIntrpolation }]
+    <ScrollView style={styles.modal} bounces={false}>
+      <View style={styles.containerStyle}>
+        <Animated.View style={[styles.breakLine, { bottom: animationValue }]} {...panResponder.panHandlers} />
+        <Text style={styles.titleStyle}>{i18n.wallets.walletModal.wallets}</Text>
+        <View style={styles.walletContainer}>{renderWalletItems()}</View>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  modal: { flex: 1, justifyContent: 'flex-end', backgroundColor: palette.modalTransparent },
+  modal: { flex: 1, flexDirection: 'column-reverse' },
   containerStyle: {
     paddingHorizontal: 20,
-    maxHeight: SCREEN_HEIGHT / 2,
+    height: SCREEN_HEIGHT / 2,
     backgroundColor: palette.white,
     borderRadius: 8,
   },

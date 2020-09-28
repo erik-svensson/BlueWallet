@@ -31,17 +31,33 @@ export const RootNavigator = () => (
   </Stack.Navigator>
 );
 
+const animConfig = {
+  animation: 'spring',
+  config: {
+    stiffness: 1000,
+    damping: 500,
+    mass: 3,
+    overshootClamping: true,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 0.01,
+  },
+};
+
 const modalOptions = {
   headerShown: false,
   cardStyle: { backgroundColor: 'transparent' },
   cardOverlayEnabled: true,
+  // transitionSpec: {
+  //   open: animConfig,
+  //   close: animConfig,
+  // },
   cardStyleInterpolator: ({ current: { progress } }) => ({
-    overlayStyle: {
-      opacity: progress.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 0.6],
-        extrapolate: 'clamp',
-      }),
-    },
+    // overlayStyle: {
+    //   opacity: progress.interpolate({
+    //     inputRange: [0, 1],
+    //     outputRange: [0, 0.6],
+    //     extrapolate: 'clamp',
+    //   }),
+    // },
   }),
 } as StackNavigationOptions;
