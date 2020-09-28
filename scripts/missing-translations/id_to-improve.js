@@ -355,6 +355,10 @@ const id = {
       title: 'Kesalahan',
       description: 'Sebelum melakukan transaksi, Anda harus menambahkan dompet Bitcoin Vault terlebih dahulu.',
     },
+    warning: 'TRANSLATION NEEDED | ENG: Warning: ',
+    warningGeneral: 'TRANSLATION NEEDED | ENG: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
+    warningBold: 'TRANSLATION NEEDED | ENG: will be blocked for 24 hours',
+    detailedWarning: 'TRANSLATION NEEDED | ENG: you are sending AMOUNT BTCV. The amount of BALANCE_LEFT BTCV, which is left on your wallet will be blocked for 24 hours. Your funds are secure, but you will not be able to use them until confirmation or the transaction is canceled.',
   },
   receive: {
     header: 'Terima koin',
