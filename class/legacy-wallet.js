@@ -98,9 +98,7 @@ export class LegacyWallet extends AbstractWallet {
       this.incoming_balance = balance.alert_incoming;
       this.outgoing_balance = balance.alert_outgoing;
       this._lastBalanceFetch = +new Date();
-    } catch (err) {
-      console.warn(err.message);
-    }
+    } catch (err) {}
   }
 
   /**
@@ -113,9 +111,7 @@ export class LegacyWallet extends AbstractWallet {
       this.utxo = [];
       const utxos = await BlueElectrum.multiGetUtxoByAddress([this.getAddress()]);
       this.utxo = utxos;
-    } catch (err) {
-      console.warn(err.message);
-    }
+    } catch (err) {}
   }
 
   /**
@@ -130,9 +126,7 @@ export class LegacyWallet extends AbstractWallet {
       const txids = await BlueElectrum.getTransactionsByAddress(this.getAddress());
 
       await this.setTransactions(txids);
-    } catch (Err) {
-      console.warn(Err.message);
-    }
+    } catch (Err) {}
   }
 
   async broadcastTx(txhex) {
@@ -156,7 +150,6 @@ export class LegacyWallet extends AbstractWallet {
    * @return string Signed txhex ready for broadcast
    */
   createTx(utxos, amount, fee, toAddress, memo) {
-    // console.log('creating legacy tx ', amount, ' with fee ', fee, 'secret=', this.getSecret(), 'from address', this.getAddress());
     const amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
     return signer.createTransaction(utxos, toAddress, amountPlusFee, fee, this.getSecret(), this.getAddress());
   }
@@ -235,8 +228,6 @@ export class LegacyWallet extends AbstractWallet {
         transactions.push(tx);
       }
       this.transactions = transactions;
-    } catch (err) {
-      console.warn(err.message);
-    }
+    } catch (err) {}
   }
 }

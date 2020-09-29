@@ -39,11 +39,7 @@ export default class BiometricService {
 
       if (success) {
         return success;
-      } else {
-        console.log('cancelled by user');
       }
-    } catch {
-      console.log('biometrics failed'); // for crashlytics to catch
-    }
+    } catch {}
   };
 }

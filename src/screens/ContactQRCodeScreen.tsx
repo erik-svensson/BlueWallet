@@ -26,7 +26,7 @@ export class ContactQRCodeScreen extends React.PureComponent<Props> {
         message: contact.address,
         url: `data:image/png;base64,${data}`,
       };
-      Share.open(shareImageBase64).catch(error => console.log(error));
+      Share.open(shareImageBase64);
     });
   };
 

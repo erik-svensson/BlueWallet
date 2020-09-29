@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import * as Sentry from '@sentry/react-native';
 import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
 
 import {
@@ -113,9 +114,7 @@ export class AppStorage {
     for (const value of data) {
       try {
         decrypted = encryption.decrypt(value, password);
-      } catch (e) {
-        console.log(e.message);
-      }
+      } catch (e) {}
 
       if (decrypted) {
         return decrypted;
@@ -234,7 +233,11 @@ export class AppStorage {
         return false; // failed loading data or loading/decryptin data
       }
     } catch (error) {
-      console.warn(error.message);
+      Sentry.addBreadcrumb({
+        category: 'app-storage',
+        message: `loadFromDisk: ${error.message}`,
+        level: Sentry.Severity.Info,
+      });
       return false;
     }
   }

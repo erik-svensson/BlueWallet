@@ -21,9 +21,7 @@ export default class Biometric {
     try {
       const isSensorAvailable = await Biometrics.isSensorAvailable();
       return isSensorAvailable.biometryType;
-    } catch (e) {
-      console.log(e);
-    }
+    } catch (e) {}
     return false;
   }
 

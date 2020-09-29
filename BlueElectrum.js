@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+import * as Sentry from '@sentry/react-native';
+
 import config from './config';
 
 const BigNumber = require('bignumber.js');
@@ -18,11 +21,19 @@ let wasConnectedAtLeastOnce = false;
 async function connectMain() {
   const usingPeer = { host: config.host, tcp: config.port, protocol: config.protocol };
   try {
-    console.log('begin connection:', JSON.stringify(usingPeer));
+    Sentry.addBreadcrumb({
+      category: 'BlueElectrum',
+      message: `begin connection: ${JSON.stringify(usingPeer)}`,
+      level: Sentry.Severity.Info,
+    });
     mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, usingPeer.protocol);
 
     mainClient.onError = function(e) {
-      console.log('ElectrumClient error: ' + e);
+      Sentry.addBreadcrumb({
+        category: 'BlueElectrum',
+        message: e.message,
+        level: Sentry.Severity.Info,
+      });
       mainConnected = false;
     };
     const ver = await mainClient.initElectrum({
@@ -31,17 +42,29 @@ async function connectMain() {
     });
 
     if (ver && ver[0]) {
-      console.log('connected to ', ver);
+      Sentry.addBreadcrumb({
+        category: 'BlueElectrum',
+        message: `connected to, ${ver}`,
+        level: Sentry.Severity.Info,
+      });
       mainConnected = true;
       wasConnectedAtLeastOnce = true;
     }
   } catch (e) {
     mainConnected = false;
-    console.log('bad connection:', JSON.stringify(usingPeer), e);
+    Sentry.addBreadcrumb({
+      category: 'BlueElectrum',
+      message: `bad connection: ${JSON.stringify(usingPeer)}, Error: ${e.message}`,
+      level: Sentry.Severity.Info,
+    });
   }
 
   if (!mainConnected) {
-    console.log('retry');
+    Sentry.addBreadcrumb({
+      category: 'BlueElectrum',
+      message: 'Reconnect',
+      level: Sentry.Severity.Info,
+    });
     mainClient.keepAlive = () => {}; // dirty hack to make it stop reconnecting
     mainClient.reconnect = () => {}; // dirty hack to make it stop reconnecting
     mainClient.close();
@@ -211,7 +234,6 @@ module.exports.multiGetUtxoByAddress = async function(addresses, batchsize) {
   if (!mainClient) throw new Error('Electrum client is not connected');
   const ret = {};
   const res = [];
-  const uniq = {};
   const chunks = splitIntoChunks(addresses, batchsize);
   for (const chunk of chunks) {
     const scripthashes = [];

@@ -66,7 +66,6 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
           } catch (_) {}
           if (!address) {
             // either sleep expired or getAddressAsync threw an exception
-            console.warn('either sleep expired or getAddressAsync threw an exception');
             address = wallet.getAddressForTransaction();
           } else {
             BlueApp.saveToDisk(); // caching whatever getAddressAsync() generated internally
@@ -79,7 +78,6 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
           } catch (_) {}
           if (!address) {
             // either sleep expired or getAddressAsync threw an exception
-            console.warn('either sleep expired or getAddressAsync threw an exception');
             address = wallet.getAddress();
           } else {
             BlueApp.saveToDisk(); // caching whatever getAddressAsync() generated internally
@@ -134,7 +132,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     if (this.qrCodeSVG === undefined) {
       Share.open({
         message,
-      }).catch(error => console.log(error));
+      });
     } else {
       InteractionManager.runAfterInteractions(async () => {
         this.qrCodeSVG.toDataURL((data: any) => {
@@ -142,7 +140,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
             message,
             url: `data:image/png;base64,${data}`,
           };
-          Share.open(shareImageBase64).catch(error => console.log(error));
+          Share.open(shareImageBase64);
         });
       });
     }

@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-empty-function */
+import * as Sentry from '@sentry/react-native';
 import TcpSocket from 'react-native-tcp-socket';
 
 import { SocketCallback, SocketOptions } from 'app/consts';
@@ -33,16 +34,32 @@ export class Socket {
   setKeepAlive = () => {};
   setNoDelay = () => {};
   onData = (data: Uint8Array) => {
-    console.log('lister has not beet setup yet', data);
+    Sentry.addBreadcrumb({
+      category: 'socket',
+      message: `onData lister has not beet setup yet, ${data}`,
+      level: Sentry.Severity.Info,
+    });
   };
   onError = (error: {}) => {
-    console.log('lister has not beet setup yet', error);
+    Sentry.addBreadcrumb({
+      category: 'socket',
+      message: `onError lister has not beet setup yet, ${error}`,
+      level: Sentry.Severity.Info,
+    });
   };
   onConnect = (data: { host: string; port: number }) => {
-    console.log('lister has not beet setup yet', data);
+    Sentry.addBreadcrumb({
+      category: 'socket',
+      message: `onConnect lister has not beet setup yet, ${data}`,
+      level: Sentry.Severity.Info,
+    });
   };
   onClose = (data: {}) => {
-    console.log('lister has not beet setup yet', data);
+    Sentry.addBreadcrumb({
+      category: 'socket',
+      message: `onClose lister has not beet setup yet, ${data}`,
+      level: Sentry.Severity.Info,
+    });
   };
 
   connect = (port: number, host: string, callback: SocketCallback) => {
@@ -71,7 +88,6 @@ export class Socket {
   };
 
   on = (event: string, listener: (data: {}) => void) => {
-    console.log('listener to assign', listener);
     switch (event) {
       case 'data':
         this.onData = listener;

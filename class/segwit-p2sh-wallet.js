@@ -60,7 +60,6 @@ export class SegwitP2SHWallet extends LegacyWallet {
       const keyPair = bitcoin.ECPair.fromWIF(this.secret, config.network);
       const pubKey = keyPair.publicKey;
       if (!keyPair.compressed) {
-        console.warn('only compressed public keys are good for segwit');
         return false;
       }
       address = pubkeyToP2shSegwitAddress(pubKey);

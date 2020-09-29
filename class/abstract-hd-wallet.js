@@ -120,9 +120,7 @@ export class AbstractHDWallet extends LegacyWallet {
       }
 
       if (txids_to_update) await this.setTransactions(txids_to_update);
-    } catch (err) {
-      console.warn(err.message);
-    }
+    } catch (err) {}
   }
 
   getAddress() {
@@ -164,9 +162,7 @@ export class AbstractHDWallet extends LegacyWallet {
           u: balance.addresses[address].unconfirmed,
         };
       }
-    } catch (err) {
-      console.warn(err.message);
-    }
+    } catch (err) {}
   }
 
   async fetchUtxos() {
@@ -174,9 +170,7 @@ export class AbstractHDWallet extends LegacyWallet {
       this.utxo = [];
       const utxos = await BlueElectrum.multiGetUtxoByAddress(this.getAddress());
       this.utxo = utxos;
-    } catch (err) {
-      console.warn(err.message);
-    }
+    } catch (err) {}
   }
 
   weOwnAddress(addr) {

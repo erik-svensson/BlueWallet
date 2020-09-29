@@ -50,7 +50,6 @@ export class WatchOnlyWallet extends LegacyWallet {
       bitcoin.address.toOutputScript(this.secret, config.network);
       return true;
     } catch (e) {
-      console.warn(e.message);
       return false;
     }
   }

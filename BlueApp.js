@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/react-native';
+
 /**
  * @exports {AppStorage}
  */
@@ -12,7 +14,11 @@ const BlueApp = new AppStorage();
 
 async function startAndDecrypt(retry) {
   if (BlueApp.getWallets().length > 0) {
-    console.log('App already has some wallets, so we are in already started state, exiting startAndDecrypt');
+    Sentry.addBreadcrumb({
+      category: 'BlueApp',
+      message: `App already has some wallets, so we are in already started state, exiting startAndDecrypt`,
+      level: Sentry.Severity.Info,
+    });
     return;
   }
   let password = false;
@@ -23,7 +29,11 @@ async function startAndDecrypt(retry) {
   }
   const success = await BlueApp.loadFromDisk(password);
   if (success) {
-    console.log('loaded from disk');
+    Sentry.addBreadcrumb({
+      category: 'BlueApp',
+      message: `loaded from disk`,
+      level: Sentry.Severity.Info,
+    });
     EV(EV.enum.WALLETS_COUNT_CHANGED);
     EV(EV.enum.TRANSACTIONS_COUNT_CHANGED);
     // now, lets try to fetch balance and txs for first wallet if it is time for it
