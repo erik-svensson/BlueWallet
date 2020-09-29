@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, ScrollView, Dimensions, Animated, PanResponder } from 'react-native';
 
 import { WalletItem, GradientView } from 'app/components';
@@ -8,6 +8,8 @@ import { Wallet, RootStackParams, Route } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
+const TOP_POSITION = -SCREEN_HEIGHT / 2;
+const CLOSE_POSITION = SCREEN_HEIGHT / 4;
 const i18n = require('../../../loc');
 
 interface Props {
@@ -15,71 +17,48 @@ interface Props {
   route: RouteProp<RootStackParams, Route.ActionSheet>;
 }
 
-const ANIMATED = {
-  HIDDEN: -350,
-  FULL_OPEN: -100,
-  VISIBLE: -300,
-};
-
 export const ActionSheet = (props: Props) => {
-  const [animation, setAnimation] = useState(new Animated.Value(0));
-  const animationValue = new Animated.Value(0);
-
-  // useEffect(() => {
-  //   Animated.timing(animation, {
-  //     toValue: 1,
-  //     duration: 100,
-  //     useNativeDriver: false,
-  //   }).start();
-
-  //   return () => {
-  //     Animated.timing(animation, {
-  //       toValue: 0,
-  //       duration: 5,
-  //       useNativeDriver: false,
-  //     }).start();
-  //   };
-  // }, []);
-
-  const pan = useRef(new Animated.ValueXY()).current;
-
-  const animateMovement = toValue => {
-    Animated.spring(animationValue, {
-      toValue,
-      tension: 120,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => {
-        pan.setOffset({
-          x: pan.x._value,
-          y: pan.y._value,
-        });
-      },
-      onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }]),
-      onPanResponderRelease: (_, gestureState) => {
-        console.log('gestureState: ', gestureState.moveY);
-        if (gestureState.moveY > 600) {
-          animateMovement(0);
-        } else {
-          animateMovement(800);
-        }
-        pan.flattenOffset();
-      },
-    }),
-  ).current;
-
-  const backgorundColorIntrpolation = animation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [palette.transparent, palette.modalTransparent],
+  const panResponderValue = new Animated.ValueXY();
+  const animatedValue = new Animated.Value(0);
+  useEffect(() => {
+    open();
   });
 
-  const onScroll = event => {
-    console.log(event.nativeEvent.contentOffset.y);
+  const springAnimation = (toYValue: number, tension?: number) =>
+    Animated.spring(panResponderValue, {
+      toValue: { x: 0, y: toYValue },
+      tension: tension || 0,
+      useNativeDriver: true,
+    }).start();
+
+  const timingAnimation = (toValue: number) =>
+    Animated.timing(animatedValue, { toValue: 1, duration: toValue, useNativeDriver: false }).start();
+
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: (_, gestureState) => {
+      if (gestureState.dy < 0) return;
+      panResponderValue.setValue({ x: 0, y: TOP_POSITION + gestureState.dy });
+    },
+    onPanResponderRelease: (_, gestureState) => {
+      if (gestureState.dy > CLOSE_POSITION) {
+        close();
+      } else {
+        springAnimation(TOP_POSITION, 100);
+      }
+    },
+  });
+
+  const open = () => {
+    timingAnimation(1);
+    springAnimation(TOP_POSITION, 30);
+  };
+
+  const close = () => {
+    timingAnimation(0);
+    springAnimation(0);
+
+    props.navigation.popToTop();
   };
 
   const renderWalletItems = () => {
@@ -96,30 +75,52 @@ export const ActionSheet = (props: Props) => {
         selected={index == selectedIndex}
         index={index}
         onPress={() => {
-          props.navigation.goBack();
+          close();
           onPress(index);
         }}
       />
     ));
   };
-  console.log('pan', pan.getLayout());
+  const animatedBackgroundColor = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [palette.transparent, palette.modalTransparent],
+  });
+
   return (
-    //{ backgroundColor: backgorundColorIntrpolation }]
-    <ScrollView style={styles.modal} bounces={false}>
-      <View style={styles.containerStyle}>
-        <Animated.View style={[styles.breakLine, { bottom: animationValue }]} {...panResponder.panHandlers} />
-        <Text style={styles.titleStyle}>{i18n.wallets.walletModal.wallets}</Text>
-        <View style={styles.walletContainer}>{renderWalletItems()}</View>
-      </View>
-    </ScrollView>
+    <Animated.View style={[styles.modal, { backgroundColor: animatedBackgroundColor }]}>
+      <TouchableOpacity style={styles.closeBackground} onPress={close} />
+      <Animated.View
+        style={[
+          styles.containerStyle,
+          {
+            transform: [{ translateY: panResponderValue.y }],
+          },
+        ]}
+      >
+        <View {...panResponder.panHandlers}>
+          <View style={styles.breakLine} />
+          <Text style={styles.titleStyle}>{i18n.wallets.walletModal.wallets}</Text>
+        </View>
+        <ScrollView bounces={false} style={styles.walletContainer}>
+          {renderWalletItems()}
+        </ScrollView>
+      </Animated.View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  modal: { flex: 1, flexDirection: 'column-reverse' },
+  modal: {
+    flex: 1,
+  },
+  closeBackground: {
+    flex: 1,
+  },
   containerStyle: {
-    paddingHorizontal: 20,
-    height: SCREEN_HEIGHT / 2,
+    position: 'absolute',
+    width: '100%',
+    top: SCREEN_HEIGHT,
+    height: SCREEN_HEIGHT / 2 + 40,
     backgroundColor: palette.white,
     borderRadius: 8,
   },
@@ -128,7 +129,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   walletContainer: {
+    paddingHorizontal: 20,
     marginTop: 31,
+    marginBottom: 50,
+    flex: 1,
   },
   breakLine: {
     marginBottom: 13,
