@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect } from 'react';
+import React, { PureComponent } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, ScrollView, Dimensions, Animated, PanResponder } from 'react-native';
 
 import { WalletItem, GradientView } from 'app/components';
@@ -17,52 +17,53 @@ interface Props {
   route: RouteProp<RootStackParams, Route.ActionSheet>;
 }
 
-export const ActionSheet = (props: Props) => {
-  const panResponderValue = new Animated.ValueXY();
-  const animatedValue = new Animated.Value(0);
-  useEffect(() => {
-    open();
-  });
+export class ActionSheet extends PureComponent<Props> {
+  panResponderValue = new Animated.ValueXY();
+  animatedValue = new Animated.Value(0);
 
-  const springAnimation = (toYValue: number, tension?: number) =>
-    Animated.spring(panResponderValue, {
+  componentDidMount() {
+    this.open();
+  }
+
+  springAnimation = (toYValue: number, tension?: number) =>
+    Animated.spring(this.panResponderValue, {
       toValue: { x: 0, y: toYValue },
       tension: tension || 0,
       useNativeDriver: true,
     }).start();
 
-  const timingAnimation = (toValue: number) =>
-    Animated.timing(animatedValue, { toValue: 1, duration: toValue, useNativeDriver: false }).start();
+  timingAnimation = (toValue: number) =>
+    Animated.timing(this.animatedValue, { toValue, duration: 200, useNativeDriver: false }).start();
 
-  const panResponder = PanResponder.create({
+  panResponder = PanResponder.create({
     onMoveShouldSetPanResponder: () => true,
     onPanResponderMove: (_, gestureState) => {
       if (gestureState.dy < 0) return;
-      panResponderValue.setValue({ x: 0, y: TOP_POSITION + gestureState.dy });
+      this.panResponderValue.setValue({ x: 0, y: TOP_POSITION + gestureState.dy });
     },
     onPanResponderRelease: (_, gestureState) => {
       if (gestureState.dy > CLOSE_POSITION) {
-        close();
+        this.close();
       } else {
-        springAnimation(TOP_POSITION, 100);
+        this.springAnimation(TOP_POSITION, 100);
       }
     },
   });
 
-  const open = () => {
-    timingAnimation(1);
-    springAnimation(TOP_POSITION, 30);
+  open = () => {
+    this.timingAnimation(1);
+    this.springAnimation(TOP_POSITION, 30);
   };
 
-  const close = () => {
-    timingAnimation(0);
-    springAnimation(0);
+  close = () => {
+    this.timingAnimation(0);
+    this.springAnimation(0);
 
-    props.navigation.popToTop();
+    this.props.navigation.popToTop();
   };
 
-  const renderWalletItems = () => {
-    const { wallets, selectedIndex, onPress } = props.route.params;
+  renderWalletItems = () => {
+    const { wallets, selectedIndex, onPress } = this.props.route.params;
 
     return wallets.map((wallet: Wallet, index: number) => (
       <WalletItem
@@ -75,39 +76,42 @@ export const ActionSheet = (props: Props) => {
         selected={index == selectedIndex}
         index={index}
         onPress={() => {
-          close();
+          this.close();
           onPress(index);
         }}
       />
     ));
   };
-  const animatedBackgroundColor = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [palette.transparent, palette.modalTransparent],
-  });
 
-  return (
-    <Animated.View style={[styles.modal, { backgroundColor: animatedBackgroundColor }]}>
-      <TouchableOpacity style={styles.closeBackground} onPress={close} />
-      <Animated.View
-        style={[
-          styles.containerStyle,
-          {
-            transform: [{ translateY: panResponderValue.y }],
-          },
-        ]}
-      >
-        <View {...panResponder.panHandlers}>
-          <View style={styles.breakLine} />
-          <Text style={styles.titleStyle}>{i18n.wallets.walletModal.wallets}</Text>
-        </View>
-        <ScrollView bounces={false} style={styles.walletContainer}>
-          {renderWalletItems()}
-        </ScrollView>
+  render() {
+    const animatedBackgroundColor = this.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [palette.transparent, palette.modalTransparent],
+    });
+
+    return (
+      <Animated.View style={[styles.modal, { backgroundColor: animatedBackgroundColor }]}>
+        <TouchableOpacity style={styles.closeBackground} onPress={this.close} />
+        <Animated.View
+          style={[
+            styles.containerStyle,
+            {
+              transform: [{ translateY: this.panResponderValue.y }],
+            },
+          ]}
+        >
+          <View {...this.panResponder.panHandlers}>
+            <View style={styles.breakLine} />
+            <Text style={styles.titleStyle}>{i18n.wallets.walletModal.wallets}</Text>
+          </View>
+          <ScrollView bounces={false} style={styles.walletContainer}>
+            {this.renderWalletItems()}
+          </ScrollView>
+        </Animated.View>
       </Animated.View>
-    </Animated.View>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   modal: {
