@@ -23,6 +23,7 @@ interface MapStateToProps {
   isAuthenticated: boolean;
   isTxPasswordSet: boolean;
   isLoading: boolean;
+  language: string;
 }
 
 interface ActionsDisptach {
@@ -111,7 +112,11 @@ class Navigator extends React.Component<Props, State> {
   };
 
   render() {
-    return <NavigationContainer ref={navigationRef}>{this.renderRoutes()}</NavigationContainer>;
+    return (
+      <NavigationContainer key={this.props.language} ref={navigationRef}>
+        {this.renderRoutes()}
+      </NavigationContainer>
+    );
   }
 }
 
@@ -120,6 +125,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isPinSet: selectors.isPinSet(state),
   isTxPasswordSet: selectors.isTxPasswordSet(state),
   isAuthenticated: selectors.isAuthenticated(state),
+  language: state.appSettings.language,
 });
 
 const mapDispatchToProps: ActionsDisptach = {
