@@ -48,4 +48,5 @@ export const icons = {
   visibilityOff: require('./images/visibilityOff.png'),
   delete: require('./images/icon_delete.png'),
   filter: require('./images/filter.png'),
+  tick: require('./images/tick.png'),
 };

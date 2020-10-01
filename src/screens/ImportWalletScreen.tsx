@@ -5,12 +5,20 @@ import { View, StyleSheet, Text, Keyboard } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { connect } from 'react-redux';
 
-import { Header, TextAreaItem, FlatButton, ScreenTemplate } from 'app/components';
+import { Header, TextAreaItem, FlatButton, ScreenTemplate, CheckBox } from 'app/components';
 import { Button } from 'app/components/Button';
-import { Route, Wallet, MainCardStackNavigatorParams, MainTabNavigatorParams, RootStackParams } from 'app/consts';
+import {
+  Route,
+  Wallet,
+  MainCardStackNavigatorParams,
+  MainTabNavigatorParams,
+  RootStackParams,
+  CONST,
+} from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
+import { isElectrumVaultMnemonic, ELECTRUM_VAULT_SEED_PREFIXES } from 'app/utils/crypto';
 
 import BlueApp from '../../BlueApp';
 import {
@@ -38,6 +46,8 @@ interface Props {
 export const ImportWalletScreen = (props: Props) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [text, setText] = useState('');
+  const [hasCustomWords, setHasCustomWords] = useState(false);
+
   const [validationError, setValidationError] = useState('');
 
   const showErrorMessageScreen = () =>
@@ -100,9 +110,38 @@ export const ImportWalletScreen = (props: Props) => {
     }
   };
 
+  const getCustomWords = (mnemonic: string): string =>
+    mnemonic
+      .split(' ')
+      .slice(CONST.electrumVaultMnemonicWordsAmount)
+      .join(' ');
+
+  const getElectrumVaultMnemonic = (mnemonic: string): string =>
+    mnemonic
+      .split(' ')
+      .slice(0, CONST.electrumVaultMnemonicWordsAmount)
+      .join(' ');
+
   const importMnemonic = async (mnemonic: string) => {
     try {
+      const customWords = hasCustomWords ? getCustomWords(mnemonic) : '';
+
+      const electrumMnemonic = hasCustomWords ? getElectrumVaultMnemonic(mnemonic) : mnemonic;
+
       // trying other wallet types
+
+      if (isElectrumVaultMnemonic(electrumMnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SEGWIT)) {
+        const electrumHDSegwitBech32Wallet = new HDSegwitBech32Wallet();
+
+        await electrumHDSegwitBech32Wallet.setSecret(electrumMnemonic);
+        if (electrumHDSegwitBech32Wallet.validateMnemonic()) {
+          await electrumHDSegwitBech32Wallet.fetchTransactions();
+          if (electrumHDSegwitBech32Wallet.getTransactions.length > 0) {
+            return saveWallet(electrumHDSegwitBech32Wallet);
+          }
+        }
+      }
+
       const segwitWallet = new SegwitP2SHWallet();
       segwitWallet.setSecret(mnemonic);
       if (segwitWallet.getAddress()) {
@@ -157,7 +196,14 @@ export const ImportWalletScreen = (props: Props) => {
       }
 
       const hd3 = new HDLegacyP2PKHWallet();
-      await hd3.setSecret(mnemonic);
+      if (hasCustomWords) {
+        console.log('customWords', customWords);
+        console.log('electrumMnemonic', electrumMnemonic);
+        hd3.setPassword(customWords);
+        await hd3.setSecret(electrumMnemonic);
+      } else {
+        await hd3.setSecret(mnemonic);
+      }
       if (hd3.validateMnemonic()) {
         await hd3.fetchBalance();
         if (hd3.getBalance() > 0) {
@@ -242,6 +288,7 @@ export const ImportWalletScreen = (props: Props) => {
           placeholder={i18n.wallets.importWallet.placeholder}
           style={styles.textArea}
         />
+        <CheckBox onPress={() => setHasCustomWords(!hasCustomWords)} left checked={hasCustomWords} />
       </View>
     </ScreenTemplate>
   );

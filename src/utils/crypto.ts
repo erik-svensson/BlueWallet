@@ -10,9 +10,9 @@ interface GeneratePrivateKey {
   digest: string;
 }
 
-const ELECTRUM_VAULT_SEED_PREFIXES = {
-  SEED_PREFIX: '01', // Standard wallet
-  SEED_PREFIX_SW: '100', // Segwit wallet
+export const ELECTRUM_VAULT_SEED_PREFIXES = {
+  SEED_PREFIX_LEGACY: '01', // Standard wallet
+  SEED_PREFIX_SEGWIT: '100', // Segwit wallet
 };
 
 const ELECTRUM_VAULT_SEED_KEY = 'Seed version';
@@ -35,10 +35,10 @@ export const generatePrivateKey = ({
     });
   });
 
-export const isElectrumVaultMnemonic = (mnemonic: string) => {
+export const isElectrumVaultMnemonic = (mnemonic: string, prefix: string): boolean => {
   const hmac = hmacSHA512(mnemonic, ELECTRUM_VAULT_SEED_KEY);
   const hex = hmac.toString(CryptoJS.enc.Hex);
-  return Object.values(ELECTRUM_VAULT_SEED_PREFIXES).some(prefix => hex.startsWith(prefix));
+  return hex.startsWith(prefix);
 };
 
 export const electrumVaultMnemonicToSeed = (mnemonic: string, password = '') =>
