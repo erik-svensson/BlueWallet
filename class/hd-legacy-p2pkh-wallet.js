@@ -25,17 +25,15 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
     this.password = password;
   }
 
-  mnemonicToSeed() {
-    const mnemonic = this.secret;
-    return electrumVaultMnemonicToSeed(mnemonic, this.password);
+  getSeed() {
+    return electrumVaultMnemonicToSeed(this.secret, this.password);
   }
 
   async getXpub() {
     if (this._xpub) {
       return this._xpub; // cache hit
     }
-    this.seed = await this.mnemonicToSeed();
-    console.log('this.seed', this.seed.toString('hex'));
+    this.seed = await this.getSeed();
     const root = bitcoin.bip32.fromSeed(this.seed);
 
     const path = 'm/0';
@@ -65,7 +63,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
    */
   async _getWIFByIndex(index) {
     if (!this.seed) {
-      this.seed = await this.mnemonicToSeed();
+      this.seed = await this.getSeed();
     }
 
     const root = HDNode.fromSeed(this.seed);
@@ -89,7 +87,6 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
         u: 0,
       };
     }
-    console.warn(this._address);
   }
 
   createTx(utxos, amount, fee, address) {

@@ -5,16 +5,9 @@ import { View, StyleSheet, Text, Keyboard } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { connect } from 'react-redux';
 
-import { Header, TextAreaItem, FlatButton, ScreenTemplate, CheckBox } from 'app/components';
+import { Header, TextAreaItem, FlatButton, ScreenTemplate, CheckBox, InputItem } from 'app/components';
 import { Button } from 'app/components/Button';
-import {
-  Route,
-  Wallet,
-  MainCardStackNavigatorParams,
-  MainTabNavigatorParams,
-  RootStackParams,
-  CONST,
-} from 'app/consts';
+import { Route, Wallet, MainCardStackNavigatorParams, MainTabNavigatorParams, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
@@ -47,6 +40,7 @@ export const ImportWalletScreen = (props: Props) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [text, setText] = useState('');
   const [hasCustomWords, setHasCustomWords] = useState(false);
+  const [customWords, setCustomWords] = useState('');
 
   const [validationError, setValidationError] = useState('');
 
@@ -110,45 +104,32 @@ export const ImportWalletScreen = (props: Props) => {
     }
   };
 
-  const getCustomWords = (mnemonic: string): string =>
-    mnemonic
-      .split(' ')
-      .slice(CONST.electrumVaultMnemonicWordsAmount)
-      .join(' ');
-
-  const getElectrumVaultMnemonic = (mnemonic: string): string =>
-    mnemonic
-      .split(' ')
-      .slice(0, CONST.electrumVaultMnemonicWordsAmount)
-      .join(' ');
-
   const importMnemonic = async (mnemonic: string) => {
     try {
-      const customWords = hasCustomWords ? getCustomWords(mnemonic) : '';
-
-      const electrumMnemonic = hasCustomWords ? getElectrumVaultMnemonic(mnemonic) : mnemonic;
+      const trimmedMnemonic = mnemonic.trim();
+      const trimmedCustomWords = customWords.trim();
 
       // trying other wallet types
 
-      if (isElectrumVaultMnemonic(electrumMnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SEGWIT)) {
-        const electrumHDSegwitBech32Wallet = new HDSegwitBech32Wallet();
-
-        await electrumHDSegwitBech32Wallet.setSecret(electrumMnemonic);
-        if (electrumHDSegwitBech32Wallet.validateMnemonic()) {
-          await electrumHDSegwitBech32Wallet.fetchTransactions();
-          if (electrumHDSegwitBech32Wallet.getTransactions.length > 0) {
-            return saveWallet(electrumHDSegwitBech32Wallet);
-          }
+      if (isElectrumVaultMnemonic(trimmedMnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SEGWIT)) {
+        const electrumHDSegwitBech32Wallet = new HDSegwitBech32Wallet({ isElectrumVault: true });
+        if (hasCustomWords) {
+          electrumHDSegwitBech32Wallet.setPassword(trimmedCustomWords);
+        }
+        await electrumHDSegwitBech32Wallet.setSecret(trimmedMnemonic);
+        await electrumHDSegwitBech32Wallet.fetchTransactions();
+        if (electrumHDSegwitBech32Wallet.getTransactions().length > 0) {
+          return saveWallet(electrumHDSegwitBech32Wallet);
         }
       }
 
       const segwitWallet = new SegwitP2SHWallet();
-      segwitWallet.setSecret(mnemonic);
+      segwitWallet.setSecret(trimmedMnemonic);
       if (segwitWallet.getAddress()) {
         // ok its a valid WIF
 
         const legacyWallet = new LegacyWallet();
-        legacyWallet.setSecret(mnemonic);
+        legacyWallet.setSecret(trimmedMnemonic);
 
         await legacyWallet.fetchBalance();
         if (legacyWallet.getBalance() > 0) {
@@ -166,7 +147,7 @@ export const ImportWalletScreen = (props: Props) => {
       // case - WIF is valid, just has uncompressed pubkey
 
       const legacyWallet = new LegacyWallet();
-      legacyWallet.setSecret(mnemonic);
+      legacyWallet.setSecret(trimmedMnemonic);
       if (legacyWallet.getAddress()) {
         await legacyWallet.fetchBalance();
         await legacyWallet.fetchTransactions();
@@ -176,7 +157,7 @@ export const ImportWalletScreen = (props: Props) => {
       // if we're here - nope, its not a valid WIF
 
       const hd2 = new HDSegwitP2SHWallet();
-      await hd2.setSecret(mnemonic);
+      await hd2.setSecret(trimmedMnemonic);
       if (hd2.validateMnemonic()) {
         await hd2.fetchBalance();
         if (hd2.getBalance() > 0) {
@@ -186,7 +167,7 @@ export const ImportWalletScreen = (props: Props) => {
       }
 
       const hd4 = new HDSegwitBech32Wallet();
-      await hd4.setSecret(mnemonic);
+      await hd4.setSecret(trimmedMnemonic);
       if (hd4.validateMnemonic()) {
         await hd4.fetchBalance();
         if (hd4.getBalance() > 0) {
@@ -194,16 +175,12 @@ export const ImportWalletScreen = (props: Props) => {
           return saveWallet(hd4);
         }
       }
-
       const hd3 = new HDLegacyP2PKHWallet();
       if (hasCustomWords) {
-        console.log('customWords', customWords);
-        console.log('electrumMnemonic', electrumMnemonic);
-        hd3.setPassword(customWords);
-        await hd3.setSecret(electrumMnemonic);
-      } else {
-        await hd3.setSecret(mnemonic);
+        hd3.setPassword(trimmedCustomWords);
       }
+      await hd3.setSecret(trimmedMnemonic);
+
       if (hd3.validateMnemonic()) {
         await hd3.fetchBalance();
         if (hd3.getBalance() > 0) {
@@ -236,7 +213,7 @@ export const ImportWalletScreen = (props: Props) => {
       // not valid? maybe its a watch-only address?
 
       const watchOnly = new WatchOnlyWallet();
-      watchOnly.setSecret(mnemonic);
+      watchOnly.setSecret(trimmedMnemonic);
       if (watchOnly.valid()) {
         await watchOnly.fetchTransactions();
         await watchOnly.fetchBalance();
@@ -246,7 +223,7 @@ export const ImportWalletScreen = (props: Props) => {
       // nope?
 
       // TODO: try a raw private key
-    } catch (Err) {
+    } catch (error) {
       showErrorMessageScreen();
     }
     showErrorMessageScreen();
@@ -289,6 +266,10 @@ export const ImportWalletScreen = (props: Props) => {
           style={styles.textArea}
         />
         <CheckBox onPress={() => setHasCustomWords(!hasCustomWords)} left checked={hasCustomWords} />
+        <Text>Extend this seed with custom words</Text>
+        {hasCustomWords && (
+          <InputItem value={customWords} setValue={value => setCustomWords(value)} label="Custom words" />
+        )}
       </View>
     </ScreenTemplate>
   );

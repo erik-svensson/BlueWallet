@@ -14,7 +14,6 @@ export const CONST = {
   ios: 'ios',
   transactionPassword: 'transactionPassword',
   pin: 'pin',
-  electrumVaultMnemonicWordsAmount: 12,
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
