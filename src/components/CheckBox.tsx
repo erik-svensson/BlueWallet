@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { ReactElement } from 'react';
+import { StyleSheet, View, ViewStyle, StyleProp, TextStyle } from 'react-native';
 import { CheckBox as CheckBoxNative } from 'react-native-elements';
 
 import { icons } from 'app/assets';
@@ -12,6 +12,9 @@ interface Props {
   onPress: () => void;
   right?: boolean;
   left?: boolean;
+  containerStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
+  title?: ReactElement | string;
 }
 
 export const CheckBox = ({ ...props }: Props) => (

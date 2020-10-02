@@ -1,6 +1,6 @@
 /* global , jasmine */
 
-const { isElectrumVaultMnemonic, electrumVaultMnemonicToSeed } = require('../crypto');
+const { isElectrumVaultMnemonic, electrumVaultMnemonicToSeed, ELECTRUM_VAULT_SEED_PREFIXES } = require('../crypto');
 
 global.crypto = require('crypto'); // shall be used by tests under nodejs CLI, but not in RN environment
 
@@ -10,7 +10,7 @@ describe('Utils crypto', () => {
       jasmine.DEFAULT_TIMEOUT_INTERVAL = 30 * 1000;
       const mnemonic = 'cram swing cover prefer miss modify ritual silly deliver chunk behind inform able';
 
-      const res = isElectrumVaultMnemonic(mnemonic);
+      const res = isElectrumVaultMnemonic(mnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_LEGACY);
 
       expect(res).toBe(true);
     });
@@ -19,7 +19,7 @@ describe('Utils crypto', () => {
       jasmine.DEFAULT_TIMEOUT_INTERVAL = 30 * 1000;
       const mnemonic = 'grant oval resource roast virtual wine chef inmate attack flip fresh reduce';
 
-      const res = isElectrumVaultMnemonic(mnemonic);
+      const res = isElectrumVaultMnemonic(mnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SEGWIT);
 
       expect(res).toBe(true);
     });

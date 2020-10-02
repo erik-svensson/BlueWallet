@@ -85,7 +85,11 @@ export const ImportWalletScreen = (props: Props) => {
   };
 
   const onScanQrCodeButtonPress = () => {
-    props.navigation.navigate(Route.ImportWalletQRCode);
+    props.navigation.navigate(Route.ScanQrCode, {
+      onBarCodeScan: (mnemonic: string) => {
+        importMnemonic(mnemonic);
+      },
+    });
   };
 
   const saveWallet = async (newWallet: any) => {
@@ -265,10 +269,22 @@ export const ImportWalletScreen = (props: Props) => {
           placeholder={i18n.wallets.importWallet.placeholder}
           style={styles.textArea}
         />
-        <CheckBox onPress={() => setHasCustomWords(!hasCustomWords)} left checked={hasCustomWords} />
-        <Text>Extend this seed with custom words</Text>
+        <View style={styles.checkboxContainer}>
+          <CheckBox
+            onPress={() => setHasCustomWords(!hasCustomWords)}
+            containerStyle={styles.checkbox}
+            left
+            checked={hasCustomWords}
+            title={<Text style={styles.checkboxText}>{i18n.wallets.importWallet.extendWithCustomWords}</Text>}
+          />
+        </View>
+
         {hasCustomWords && (
-          <InputItem value={customWords} setValue={value => setCustomWords(value)} label="Custom words" />
+          <InputItem
+            value={customWords}
+            setValue={value => setCustomWords(value)}
+            label={i18n.wallets.importWallet.customWords}
+          />
         )}
       </View>
     </ScreenTemplate>
@@ -282,6 +298,21 @@ const mapDispatchToProps = {
 export default connect(null, mapDispatchToProps)(ImportWalletScreen);
 
 const styles = StyleSheet.create({
+  checkboxContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  checkbox: {
+    marginLeft: -12,
+    backgroundColor: palette.white,
+    borderWidth: 0,
+  },
+  checkboxText: {
+    paddingLeft: 20,
+  },
   inputItemContainer: {
     paddingTop: 16,
     width: '100%',
