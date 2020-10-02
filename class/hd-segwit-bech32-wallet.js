@@ -2,8 +2,7 @@ import * as bip39 from 'bip39';
 import b58 from 'bs58check';
 import { NativeModules } from 'react-native';
 
-import { electrumVaultMnemonicToSeed } from 'app/utils/crypto';
-
+import { electrumVaultMnemonicToSeed } from '../src/utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');

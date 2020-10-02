@@ -1,8 +1,11 @@
 import BigNumber from 'bignumber.js';
 
-import { electrumVaultMnemonicToSeed, isElectrumVaultMnemonic, ELECTRUM_VAULT_SEED_PREFIXES } from 'app/utils/crypto';
-
 import signer from '../models/signer';
+import {
+  electrumVaultMnemonicToSeed,
+  isElectrumVaultMnemonic,
+  ELECTRUM_VAULT_SEED_PREFIXES,
+} from '../src/utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
