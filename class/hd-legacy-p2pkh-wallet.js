@@ -1,7 +1,11 @@
 import BigNumber from 'bignumber.js';
-import * as bip39 from 'bip39';
 
 import signer from '../models/signer';
+import {
+  electrumVaultMnemonicToSeed,
+  isElectrumVaultMnemonic,
+  ELECTRUM_VAULT_SEED_PREFIXES,
+} from '../src/utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
@@ -20,15 +24,22 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
     return true;
   }
 
+  setPassword(password) {
+    this.password = password;
+  }
+
+  getSeed() {
+    return electrumVaultMnemonicToSeed(this.secret, this.password);
+  }
+
   async getXpub() {
     if (this._xpub) {
       return this._xpub; // cache hit
     }
-    const mnemonic = this.secret;
-    this.seed = await bip39.mnemonicToSeed(mnemonic);
+    this.seed = await this.getSeed();
     const root = bitcoin.bip32.fromSeed(this.seed);
 
-    const path = "m/44'/440'/0'";
+    const path = 'm/0';
     const child = root.derivePath(path).neutered();
     this._xpub = child.toBase58();
     return this._xpub;
@@ -42,6 +53,10 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
     return this._getWIFByIndex(true, index);
   }
 
+  validateMnemonic() {
+    return isElectrumVaultMnemonic(this.secret, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_LEGACY);
+  }
+
   /**
    * Get internal/external WIF by wallet index
    * @param {Boolean} internal
@@ -51,11 +66,11 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
    */
   async _getWIFByIndex(index) {
     if (!this.seed) {
-      this.seed = await bip39.mnemonicToSeed(this.secret);
+      this.seed = await this.getSeed();
     }
 
     const root = HDNode.fromSeed(this.seed);
-    const path = `m/44'/440'/0'/0/${index}`;
+    const path = `m/0/${index}`;
     const child = root.derivePath(path);
 
     return child.toWIF();
@@ -65,7 +80,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
     const node = bitcoin.bip32.fromBase58(await this.getXpub());
     for (let index = 0; index < this.num_addresses; index++) {
       const address = bitcoin.payments.p2pkh({
-        pubkey: node.derive(0).derive(index).publicKey,
+        pubkey: node.derive(index).publicKey,
       }).address;
       this._address.push(address);
       this._address_to_wif_cache[address] = await this._getWIFByIndex(index);
@@ -75,7 +90,6 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
         u: 0,
       };
     }
-    console.warn(this._address);
   }
 
   createTx(utxos, amount, fee, address) {

@@ -45,7 +45,6 @@ export enum Route {
   CreateWallet = 'CreateWallet',
   ImportWallet = 'ImportWallet',
   ExportWallet = 'ExportWallet',
-  ImportWalletQRCode = 'ImportWalletQRCode',
   DeleteWallet = 'DeleteWallet',
   ExportWalletXpub = 'ExportWalletXub',
   TransactionDetails = 'TransactionDetails',
@@ -153,7 +152,6 @@ export type MainTabNavigatorParams = {
 
 export type RootStackParams = {
   [Route.MainCardStackNavigator]: undefined;
-  [Route.ImportWalletQRCode]: undefined;
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
   [Route.UnlockTransaction]: { onSuccess: () => void };
   [Route.PasswordNavigator]: undefined;

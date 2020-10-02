@@ -5,12 +5,13 @@ import { View, StyleSheet, Text, Keyboard } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { connect } from 'react-redux';
 
-import { Header, TextAreaItem, FlatButton, ScreenTemplate } from 'app/components';
+import { Header, TextAreaItem, FlatButton, ScreenTemplate, CheckBox, InputItem } from 'app/components';
 import { Button } from 'app/components/Button';
 import { Route, Wallet, MainCardStackNavigatorParams, MainTabNavigatorParams, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadWallets, WalletsActionType } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
+import { isElectrumVaultMnemonic, ELECTRUM_VAULT_SEED_PREFIXES } from 'app/utils/crypto';
 
 import BlueApp from '../../BlueApp';
 import {
@@ -38,6 +39,9 @@ interface Props {
 export const ImportWalletScreen = (props: Props) => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [text, setText] = useState('');
+  const [hasCustomWords, setHasCustomWords] = useState(false);
+  const [customWords, setCustomWords] = useState('');
+
   const [validationError, setValidationError] = useState('');
 
   const showErrorMessageScreen = () =>
@@ -81,7 +85,11 @@ export const ImportWalletScreen = (props: Props) => {
   };
 
   const onScanQrCodeButtonPress = () => {
-    props.navigation.navigate(Route.ImportWalletQRCode);
+    props.navigation.navigate(Route.ScanQrCode, {
+      onBarCodeScan: (mnemonic: string) => {
+        importMnemonic(mnemonic);
+      },
+    });
   };
 
   const saveWallet = async (newWallet: any) => {
@@ -102,14 +110,30 @@ export const ImportWalletScreen = (props: Props) => {
 
   const importMnemonic = async (mnemonic: string) => {
     try {
+      const trimmedMnemonic = mnemonic.trim();
+      const trimmedCustomWords = customWords.trim();
+
       // trying other wallet types
+
+      if (isElectrumVaultMnemonic(trimmedMnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SEGWIT)) {
+        const electrumHDSegwitBech32Wallet = new HDSegwitBech32Wallet({ isElectrumVault: true });
+        if (hasCustomWords) {
+          electrumHDSegwitBech32Wallet.setPassword(trimmedCustomWords);
+        }
+        await electrumHDSegwitBech32Wallet.setSecret(trimmedMnemonic);
+        await electrumHDSegwitBech32Wallet.fetchTransactions();
+        if (electrumHDSegwitBech32Wallet.getTransactions().length > 0) {
+          return saveWallet(electrumHDSegwitBech32Wallet);
+        }
+      }
+
       const segwitWallet = new SegwitP2SHWallet();
-      segwitWallet.setSecret(mnemonic);
+      segwitWallet.setSecret(trimmedMnemonic);
       if (segwitWallet.getAddress()) {
         // ok its a valid WIF
 
         const legacyWallet = new LegacyWallet();
-        legacyWallet.setSecret(mnemonic);
+        legacyWallet.setSecret(trimmedMnemonic);
 
         await legacyWallet.fetchBalance();
         if (legacyWallet.getBalance() > 0) {
@@ -127,7 +151,7 @@ export const ImportWalletScreen = (props: Props) => {
       // case - WIF is valid, just has uncompressed pubkey
 
       const legacyWallet = new LegacyWallet();
-      legacyWallet.setSecret(mnemonic);
+      legacyWallet.setSecret(trimmedMnemonic);
       if (legacyWallet.getAddress()) {
         await legacyWallet.fetchBalance();
         await legacyWallet.fetchTransactions();
@@ -137,7 +161,7 @@ export const ImportWalletScreen = (props: Props) => {
       // if we're here - nope, its not a valid WIF
 
       const hd2 = new HDSegwitP2SHWallet();
-      await hd2.setSecret(mnemonic);
+      await hd2.setSecret(trimmedMnemonic);
       if (hd2.validateMnemonic()) {
         await hd2.fetchBalance();
         if (hd2.getBalance() > 0) {
@@ -147,7 +171,7 @@ export const ImportWalletScreen = (props: Props) => {
       }
 
       const hd4 = new HDSegwitBech32Wallet();
-      await hd4.setSecret(mnemonic);
+      await hd4.setSecret(trimmedMnemonic);
       if (hd4.validateMnemonic()) {
         await hd4.fetchBalance();
         if (hd4.getBalance() > 0) {
@@ -155,9 +179,12 @@ export const ImportWalletScreen = (props: Props) => {
           return saveWallet(hd4);
         }
       }
-
       const hd3 = new HDLegacyP2PKHWallet();
-      await hd3.setSecret(mnemonic);
+      if (hasCustomWords) {
+        hd3.setPassword(trimmedCustomWords);
+      }
+      await hd3.setSecret(trimmedMnemonic);
+
       if (hd3.validateMnemonic()) {
         await hd3.fetchBalance();
         if (hd3.getBalance() > 0) {
@@ -190,7 +217,7 @@ export const ImportWalletScreen = (props: Props) => {
       // not valid? maybe its a watch-only address?
 
       const watchOnly = new WatchOnlyWallet();
-      watchOnly.setSecret(mnemonic);
+      watchOnly.setSecret(trimmedMnemonic);
       if (watchOnly.valid()) {
         await watchOnly.fetchTransactions();
         await watchOnly.fetchBalance();
@@ -200,7 +227,7 @@ export const ImportWalletScreen = (props: Props) => {
       // nope?
 
       // TODO: try a raw private key
-    } catch (Err) {
+    } catch (error) {
       showErrorMessageScreen();
     }
     showErrorMessageScreen();
@@ -242,6 +269,23 @@ export const ImportWalletScreen = (props: Props) => {
           placeholder={i18n.wallets.importWallet.placeholder}
           style={styles.textArea}
         />
+        <View style={styles.checkboxContainer}>
+          <CheckBox
+            onPress={() => setHasCustomWords(!hasCustomWords)}
+            containerStyle={styles.checkbox}
+            left
+            checked={hasCustomWords}
+            title={<Text style={styles.checkboxText}>{i18n.wallets.importWallet.extendWithCustomWords}</Text>}
+          />
+        </View>
+
+        {hasCustomWords && (
+          <InputItem
+            value={customWords}
+            setValue={value => setCustomWords(value)}
+            label={i18n.wallets.importWallet.customWords}
+          />
+        )}
       </View>
     </ScreenTemplate>
   );
@@ -254,6 +298,21 @@ const mapDispatchToProps = {
 export default connect(null, mapDispatchToProps)(ImportWalletScreen);
 
 const styles = StyleSheet.create({
+  checkboxContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  checkbox: {
+    marginLeft: -12,
+    backgroundColor: palette.white,
+    borderWidth: 0,
+  },
+  checkboxText: {
+    paddingLeft: 20,
+  },
   inputItemContainer: {
     paddingTop: 16,
     width: '100%',

@@ -65,6 +65,12 @@ export class InputItem extends PureComponent<Props, State> {
     }
   };
 
+  componentDidMount() {
+    if (!!this.props.value) {
+      this.animateFocus();
+    }
+  }
+
   componentDidUpdate() {
     if (this.props.value) {
       this.animateFocus();

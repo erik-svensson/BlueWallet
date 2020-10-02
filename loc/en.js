@@ -95,6 +95,8 @@ module.exports = {
       import: 'Import',
       scanQrCode: 'or scan QR code',
       walletInUseValidationError: 'Wallet is already in use. Please enter a valid wallet.',
+      extendWithCustomWords: 'Extend this seed with custom words',
+      customWords: 'Custom words',
     },
     exportWallet: {
       title: 'Mnemonic phrase',

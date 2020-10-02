@@ -11,7 +11,7 @@ import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../BlueApp';
 import BitcoinBIP70TransactionDecode from '../../bip70/bip70';
-import { HDLegacyP2PKHWallet, HDSegwitBech32Wallet, HDSegwitP2SHWallet, WatchOnlyWallet } from '../../class';
+import { HDSegwitBech32Wallet, WatchOnlyWallet } from '../../class';
 import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
 import { BitcoinUnit } from '../../models/bitcoinUnits';
 import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/networkTransactionFees';
