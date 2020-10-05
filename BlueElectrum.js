@@ -1,3 +1,6 @@
+import { difference } from 'lodash';
+import { compose, map, mapValues, values, flatten, uniq } from 'lodash/fp';
+
 import config from './config';
 
 const BigNumber = require('bignumber.js');
@@ -137,35 +140,36 @@ module.exports.multiGetTransactionsFullByAddress = async function(addresses) {
   return ret;
 };
 
-module.exports.multiGetTransactionsFullByTxid = async function(txid_list) {
-  const ret = [];
-  const txfull = await this.multiGetTransactionByTxid(txid_list);
-  for (const txid in txfull) {
-    const full = txfull[txid];
+// legacy, set transaction
+module.exports.multiGetTransactionsFullByTxid = async function(txIds) {
+  const txs = await this.multiGetTransactionByTxid(txIds);
 
-    for (const input of full.vin) {
-      if (!input.txid) continue;
-      // now we need to fetch previous TX where this VIN became an output, so we can see its amount
-      const prevTxForVin = await mainClient.blockchainTransaction_get(input.txid, true);
-      if (prevTxForVin && prevTxForVin.vout && prevTxForVin.vout[input.vout]) {
-        input.value = prevTxForVin.vout[input.vout].value;
-        // also, we extract destination address from prev output:
-        if (prevTxForVin.vout[input.vout].scriptPubKey && prevTxForVin.vout[input.vout].scriptPubKey.addresses) {
-          input.addresses = prevTxForVin.vout[input.vout].scriptPubKey.addresses;
-        }
-      }
-    }
-    for (const output of full.vout) {
-      if (output.scriptPubKey && output.scriptPubKey.addresses) output.addresses = output.scriptPubKey.addresses;
-    }
-    full.inputs = full.vin;
-    full.outputs = full.vout;
-    delete full.vin;
-    delete full.vout;
-    delete full.hex;
-    ret.push(full);
-  }
-  return ret;
+  const inputsTxIds = difference(
+    compose(
+      uniq,
+      flatten,
+      map(tx => tx.vin.map(vin => vin.txid)),
+    )(txs),
+    txIds,
+  );
+
+  const inputsTxs = await this.multiGetTransactionByTxid(inputsTxIds);
+
+  const allTxs = { ...txs, ...inputsTxs };
+
+  return compose(
+    values,
+    mapValues(tx => {
+      const inputs = tx.vin.map(input => {
+        const prevOutputOfInput = allTxs[input.txid].vout[input.vout];
+        return { ...input, vaule: prevOutputOfInput.value, addresses: prevOutputOfInput.scriptPubKey.addresses };
+      });
+
+      const outputs = tx.vout.map(output => ({ ...output, addresses: output.scriptPubKey.addresses }));
+
+      return { ...tx, outputs, inputs };
+    }),
+  )(txs);
 };
 
 /**
@@ -242,6 +246,7 @@ module.exports.multiGetUtxoByAddress = async function(addresses, batchsize) {
   return res;
 };
 
+// abstract hd
 module.exports.multiGetHistoryByAddress = async function(addresses, batchsize) {
   batchsize = batchsize || 100;
   if (!mainClient) throw new Error('Electrum client is not connected');
