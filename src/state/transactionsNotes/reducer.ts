@@ -13,12 +13,12 @@ export const transactionsNotesReducer = (
   action: TransactionsActionType,
 ): TransactionsNotesState => {
   switch (action.type) {
-    case TransactionsAction.CreateTransactionNote:
+    case TransactionsAction.CreateTransactionNoteSuccess:
       return {
         ...state,
         transactionNotes: {
           ...state.transactionNotes,
-          [action.transactionID]: action.note,
+          [action.payload.txHash]: action.payload.note,
         },
       };
     case TransactionsAction.UpdateTransactionNote:
@@ -26,12 +26,12 @@ export const transactionsNotesReducer = (
         ...state,
         transactionNotes: {
           ...state.transactionNotes,
-          [action.transactionID]: action.note,
+          [action.txHash]: action.note,
         },
       };
     case TransactionsAction.DeleteTransactionNote:
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { [action.transactionID]: deleted, ...transactionNotes } = state.transactionNotes;
+      const { [action.txHash]: deleted, ...transactionNotes } = state.transactionNotes;
       return {
         ...state,
         transactionNotes,

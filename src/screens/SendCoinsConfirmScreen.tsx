@@ -16,7 +16,6 @@ import { palette, typography } from 'app/styles';
 
 import { satoshiToBtc, btcToSatoshi, roundBtcToSatoshis } from '../../utils/bitcoin';
 
-const BlueElectrum = require('../../BlueElectrum');
 const i18n = require('../../loc');
 
 const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void, buttonTitle?: string) => (
@@ -35,7 +34,7 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     StackNavigationProp<MainCardStackNavigatorParams, Route.SendCoinsConfirm>
   >;
-  createTransactionNote: (transactionID: string, note: string) => txNotesActions.CreateTransactionNoteAction;
+  createTransactionNote: (txid: string, note: string) => txNotesActions.CreateTransactionNoteAction;
   sendTransaction: (
     { txDecoded }: { txDecoded: Transaction },
     meta?: ActionMeta,
@@ -102,13 +101,9 @@ class SendCoinsConfirmScreen extends Component<Props> {
     sendTransaction(
       { txDecoded },
       {
-        onSuccess: async (result: string) => {
+        onSuccess: async (txid: string) => {
           if (memo) {
-            const {
-              [result]: { hash },
-            } = await BlueElectrum.multiGetTransactionByTxid([result]);
-
-            createTransactionNote(hash, memo);
+            createTransactionNote(txid, memo);
           }
 
           CreateMessage({
