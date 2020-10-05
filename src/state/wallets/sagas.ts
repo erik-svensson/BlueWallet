@@ -1,6 +1,5 @@
-import { takeEvery, takeLatest, put, all, call, select } from 'redux-saga/effects';
+import { takeEvery, takeLatest, put, all, call } from 'redux-saga/effects';
 
-import { Wallet } from 'app/consts';
 import { BlueApp } from 'app/legacy';
 
 import {
@@ -22,11 +21,7 @@ import {
   SendTransactionAction,
   sendTransactionSuccess,
   sendTransactionFailure,
-  refreshWalletsSuccess,
-  refreshWalletsFailure,
-  RefreshWalletsAction,
 } from './actions';
-import { wallets as walletsSelector } from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
 
@@ -138,7 +133,7 @@ export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
   try {
     yield BlueElectrum.ping();
     yield BlueElectrum.waitTillConnected();
-    const result = BlueElectrum.broadcast(txDecoded.toHex());
+    const result = yield BlueElectrum.broadcast(txDecoded.toHex());
 
     if (result?.code === 1) {
       const message = result.message.split('\n');
@@ -157,26 +152,6 @@ export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
   }
 }
 
-export function* refreshWalletsSaga(action: RefreshWalletsAction | unknown) {
-  const {
-    payload: { addresses },
-  } = action as RefreshWalletsAction;
-  try {
-    const wallets: Wallet[] = yield select(walletsSelector);
-    const walletsToRefresh = wallets.filter(w => w.isAnyOfAddressesMine(addresses));
-
-    yield all([
-      call(() => Promise.all(walletsToRefresh.map(w => w.fetchBalance()))),
-      call(() => Promise.all(walletsToRefresh.map(w => w.fetchTransactions()))),
-      call(() => Promise.all(walletsToRefresh.map(w => w.fetchUtxos()))),
-    ]);
-
-    yield put(refreshWalletsSuccess(walletsToRefresh));
-  } catch (e) {
-    yield put(refreshWalletsFailure(e.message));
-  }
-}
-
 export default [
   takeEvery(WalletsAction.DeleteWallet, deleteWalletSaga),
   takeLatest(WalletsAction.LoadWallets, loadWalletsSaga),
@@ -184,5 +159,4 @@ export default [
   takeEvery(WalletsAction.ImportWallet, importWalletSaga),
   takeEvery(WalletsAction.UpdateWallet, updateWalletSaga),
   takeEvery(WalletsAction.SendTransaction, sendTransactionSaga),
-  takeEvery(WalletsAction.RefreshWallets, refreshWalletsSaga),
 ];

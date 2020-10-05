@@ -21,9 +21,6 @@ export enum WalletsAction {
   SendTransaction = 'SendTransaction',
   SendTransactionSuccess = 'SendTransactionSuccess',
   SendTransactionFailure = 'SendTransactionFailure',
-  RefreshWallets = 'RefreshWallets',
-  RefreshWalletsSuccess = 'RefreshWalletsSuccess',
-  RefreshWalletsFailure = 'RefreshWalletsFailure',
 }
 
 export interface LoadWalletsAction {
@@ -37,21 +34,6 @@ export interface LoadWalletsSuccessAction {
 
 export interface LoadWalletsFailureAction {
   type: WalletsAction.LoadWalletsFailure;
-  error: Error;
-}
-
-export interface RefreshWalletsAction {
-  type: WalletsAction.RefreshWallets;
-  payload: { addresses: string[] };
-}
-
-export interface RefreshWalletsSuccessAction {
-  type: WalletsAction.RefreshWalletsSuccess;
-  wallets: Wallet[];
-}
-
-export interface RefreshWalletsFailureAction {
-  type: WalletsAction.RefreshWalletsFailure;
   error: Error;
 }
 
@@ -153,10 +135,7 @@ export type WalletsActionType =
   | UpdateWalletSuccessAction
   | SendTransactionAction
   | SendTransactionFailureAction
-  | SendTransactionSuccessAction
-  | RefreshWalletsAction
-  | RefreshWalletsFailureAction
-  | RefreshWalletsSuccessAction;
+  | SendTransactionSuccessAction;
 
 export const loadWallets = (): LoadWalletsAction => ({
   type: WalletsAction.LoadWallets,
@@ -256,20 +235,5 @@ export const sendTransactionSuccess = (): SendTransactionSuccessAction => ({
 
 export const sendTransactionFailure = (error: Error): SendTransactionFailureAction => ({
   type: WalletsAction.SendTransactionFailure,
-  error,
-});
-
-export const refreshWallets = (addresses: string[]): RefreshWalletsAction => ({
-  type: WalletsAction.RefreshWallets,
-  payload: { addresses },
-});
-
-export const refreshWalletsSuccess = (wallets: Wallet[]): RefreshWalletsSuccessAction => ({
-  type: WalletsAction.RefreshWalletsSuccess,
-  wallets,
-});
-
-export const refreshWalletsFailure = (error: Error): RefreshWalletsFailureAction => ({
-  type: WalletsAction.RefreshWalletsFailure,
   error,
 });
