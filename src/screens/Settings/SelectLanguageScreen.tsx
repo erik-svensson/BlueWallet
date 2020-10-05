@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { icons } from 'app/assets';
 import { ScreenTemplate, Header, Image } from 'app/components';
 import { Route, MainCardStackNavigatorParams } from 'app/consts';
+import { selectors } from 'app/state/appSettings';
 import { updateSelectedLanguage } from 'app/state/appSettings/actions';
 import { ApplicationState } from 'app/state/rootReducer';
 import { typography } from 'app/styles';
@@ -43,8 +44,9 @@ const LanguageItem = ({ selectedLanguage, selectedLanguageValue, onLanguageSelec
 
 export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
   const { language } = useSelector((state: ApplicationState) => ({
-    language: state.appSettings.language,
+    language: selectors.language(state),
   }));
+
   const dispatch = useDispatch();
   const availableLanguages: Language[] = [
     { label: 'English (EN)', value: 'en' },
@@ -86,7 +88,7 @@ export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
       {availableLanguages.map(item => (
         <LanguageItem
           selectedLanguage={item}
-          selectedLanguageValue={language || 'en'}
+          selectedLanguageValue={language}
           onLanguageSelect={onLanguageSelect}
           key={item.value}
         />
