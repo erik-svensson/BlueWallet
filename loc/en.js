@@ -372,6 +372,9 @@ module.exports = {
       confirmSecondSeedDesc:
         'Open the second PDF document you generated when you created your wallet and write down the Private Key seed phrase in the same order.',
     },
+    warning: 'Warning: ',
+    warningGeneral:
+      'Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
     transaction: {
       instant: 'Secure Fast',
       instantDesc: 'This transaction will be confirmed immediately. Use with extreme caution.',
@@ -570,5 +573,11 @@ module.exports = {
     noPinOrFingerprintSet:
       'Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
     title: 'Security issue',
+  },
+  betaVersion: {
+    title: 'This is a beta version\nof the GoldWallet',
+    description:
+      'It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
+    button: 'I accept the risk',
   },
 };

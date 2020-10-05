@@ -3,9 +3,10 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { images, icons } from 'app/assets';
+import { icons } from 'app/assets';
 import { Image, ScreenTemplate, Header, ListItem } from 'app/components';
 import { Route, MainCardStackNavigatorParams } from 'app/consts';
+import { logoSource } from 'app/helpers/images';
 import { BiometricService } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { updateBiometricSetting } from 'app/state/appSettings/actions';
@@ -28,7 +29,7 @@ export const SettingsScreen = (props: Props) => {
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
 
-  const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
+  // const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
 
   const onAdvancedOptionsChange = () => navigation.navigate(Route.AdvancedOptions);
 
@@ -38,7 +39,8 @@ export const SettingsScreen = (props: Props) => {
 
   const renderGeneralSettings = () => (
     <>
-      <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} />
+      {/* done for presentional purposes, uncomment for final version */}
+      {/* <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} /> */}
       <ListItem title={i18n.settings.advancedOptions} source={icons.buildIcon} onPress={onAdvancedOptionsChange} />
     </>
   );
@@ -80,7 +82,7 @@ export const SettingsScreen = (props: Props) => {
     <>
       <Header navigation={props.navigation} title={i18n.settings.header} />
       <ScreenTemplate>
-        <Image source={images.goldWalletLogoBlack} style={styles.logo} resizeMode="contain" />
+        <Image source={logoSource} style={styles.logo} resizeMode="contain" />
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.security}>{renderSecuritySettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.about}>{renderAboutSettings()}</LabeledSettingsRow>
@@ -91,7 +93,7 @@ export const SettingsScreen = (props: Props) => {
 
 const styles = StyleSheet.create({
   logo: {
-    height: 82,
+    height: 166,
     width: '100%',
     paddingTop: 3,
   },

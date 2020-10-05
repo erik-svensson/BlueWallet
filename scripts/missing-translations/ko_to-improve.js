@@ -355,6 +355,8 @@ const ko = {
       title: '오류',
       description: '거래를 생성하기 전에 먼저 Bitcoin Vault 지갑을 추가해야 합니다.',
     },
+    warning: 'TRANSLATION NEEDED | ENG: Warning: ',
+    warningGeneral: 'TRANSLATION NEEDED | ENG: Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
   },
   receive: {
     header: '코인 받기',
@@ -549,5 +551,10 @@ const ko = {
     rootedPhone: '귀하의 장치가 루팅된 것 같습니다. 이런 경우 보안 문제나 충돌, 기타 다양한 문제가 발생할 수 있습니다. 루팅된 장치에서는 GoldWallet을 사용하지 않는 것이 좋습니다.',
     title: '보안 문제',
     noPinOrFingerprintSet: 'TRANSLATION NEEDED | ENG: Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
+  },
+  betaVersion: {
+    title: 'TRANSLATION NEEDED | ENG: This is a beta version\nof the GoldWallet',
+    description: 'TRANSLATION NEEDED | ENG: It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
+    button: 'TRANSLATION NEEDED | ENG: I accept the risk',
   },
 }

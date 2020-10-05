@@ -4,11 +4,9 @@ import React, { PureComponent } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { icons } from 'app/assets';
+import { icons, images } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
 import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { SecureStorageService } from 'app/services';
 import {
   createTxPassword as createTxPasswordAction,
   setIsAuthenticated as setIsAuthenticatedAction,
@@ -45,15 +43,19 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
     const { createTxPassword, navigation } = this.props;
     const { setPassword } = this.props.route.params;
     if (setPassword === this.state.password) {
-      CreateMessage({
-        title: i18n.contactCreate.successTitle,
-        description: i18n.onboarding.successDescription,
-        type: MessageType.success,
-        buttonProps: {
-          title: i18n.onboarding.successButton,
-          onPress: () => {
-            createTxPassword(setPassword, { onSuccess: () => navigation.pop() });
-          },
+      createTxPassword(setPassword, {
+        onSuccess: () => {
+          navigation.navigate(Route.Message, {
+            title: i18n.contactCreate.successTitle,
+            description: i18n.onboarding.successDescription,
+            source: images.success,
+            buttonProps: {
+              title: i18n.onboarding.successButton,
+              onPress: () => {
+                navigation.pop();
+              },
+            },
+          });
         },
       });
     } else {
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     width: '100%',
   },
-  visibilityIcon: { position: 'absolute', right: 0, bottom: 36, zIndex: 3 },
+  visibilityIcon: { position: 'absolute', right: 0, bottom: 24, zIndex: 3 },
   icon: {
     width: 24,
     height: 24,

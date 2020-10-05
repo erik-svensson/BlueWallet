@@ -355,6 +355,8 @@ const vi = {
       title: 'Lỗi',
       description: 'Trước khi tạo giao dịch, bạn phải thêm ví Bitcoin Vault.',
     },
+    warning: 'TRANSLATION NEEDED | ENG: Warning: ',
+    warningGeneral: 'TRANSLATION NEEDED | ENG: Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
   },
   receive: {
     header: 'Nhận coin',
@@ -549,5 +551,10 @@ const vi = {
     rootedPhone: 'Thiết bị của bạn có vẻ đã bị giành quyền truy nhập gốc. Điều này có thể dẫn đến các vấn đề bảo mật, sự cố hoặc các vấn đề khác. Chúng tôi khuyên bạn không nên sử dụng GoldWallet với thiết bị đã bị giành quyền truy nhập gốc.',
     title: 'Vấn đề bảo mật',
     noPinOrFingerprintSet: 'TRANSLATION NEEDED | ENG: Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
+  },
+  betaVersion: {
+    title: 'TRANSLATION NEEDED | ENG: This is a beta version\nof the GoldWallet',
+    description: 'TRANSLATION NEEDED | ENG: It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
+    button: 'TRANSLATION NEEDED | ENG: I accept the risk',
   },
 }

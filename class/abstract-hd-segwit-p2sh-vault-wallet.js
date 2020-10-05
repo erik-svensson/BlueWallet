@@ -143,7 +143,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
       address,
       amount: amountPlusFee,
       fixedFee: fee,
-      changeAddress: this.getAddressForTransaction(),
+      changeAddresses: this.getAddressesSortedByAmount(),
       pubKeys: this.pubKeys,
       keyPairs: [...keyPairs, ...keyPairsFromMnemonics, ...keyPairsFromPrivateKeys],
       vaultTxType,

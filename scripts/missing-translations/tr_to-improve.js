@@ -355,6 +355,8 @@ const tr = {
       title: 'Hata',
       description: 'Bir işlem oluşturmadan önce ilk olarak bir Bitcoin Vault Cüzdanı eklemelisiniz',
     },
+    warning: 'TRANSLATION NEEDED | ENG: Warning: ',
+    warningGeneral: 'TRANSLATION NEEDED | ENG: Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
   },
   receive: {
     header: 'Coin al',
@@ -549,5 +551,10 @@ const tr = {
     rootedPhone: 'Cihazınızın kök yazılımına erişiminiz olduğu (rooted) görülüyor. Bu güvenlik sorunlarına, çökmelere veya diğer sorunlara yol açabilir. Kök yazılımına erişilmiş (rooted) bir cihazda GoldWallet kullanmanızı önermiyoruz.',
     title: 'Güvenlik sorunu',
     noPinOrFingerprintSet: 'TRANSLATION NEEDED | ENG: Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
+  },
+  betaVersion: {
+    title: 'TRANSLATION NEEDED | ENG: This is a beta version\nof the GoldWallet',
+    description: 'TRANSLATION NEEDED | ENG: It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
+    button: 'TRANSLATION NEEDED | ENG: I accept the risk',
   },
 }
