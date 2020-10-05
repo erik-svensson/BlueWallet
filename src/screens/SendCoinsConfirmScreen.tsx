@@ -88,7 +88,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     };
   };
 
-  broadcast = async () => {
+  broadcast = () => {
     const {
       createTransactionNote,
       sendTransaction,
@@ -101,7 +101,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     sendTransaction(
       { txDecoded },
       {
-        onSuccess: async (txid: string) => {
+        onSuccess: (txid: string) => {
           if (memo) {
             createTransactionNote(txid, memo);
           }
