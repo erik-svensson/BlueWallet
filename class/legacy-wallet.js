@@ -224,6 +224,7 @@ export class LegacyWallet extends AbstractWallet {
 
       const txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txIdsDiff);
 
+      console.log('txs_full', txs_full);
       const transactions = [];
 
       for (const tx of txs_full) {
