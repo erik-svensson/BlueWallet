@@ -69,8 +69,9 @@ const filterByToDate = (transactions: Transaction[], toDate: number) => {
 const fileterByFromAmount = (transactions: Transaction[], fromAmount: number) => {
   return transactions.filter(transaction => {
     return (
-      parseFloat(i18n.formatBalanceWithoutSuffix(Number(transaction.value), transaction.walletPreferredBalanceUnit)) >=
-      fromAmount
+      Math.abs(
+        parseFloat(i18n.formatBalanceWithoutSuffix(Number(transaction.value), transaction.walletPreferredBalanceUnit)),
+      ) >= Math.abs(fromAmount)
     );
   });
 };
@@ -78,8 +79,9 @@ const fileterByFromAmount = (transactions: Transaction[], fromAmount: number) =>
 const fileterByToAmount = (transactions: Transaction[], toAmount: number) => {
   return transactions.filter(
     transaction =>
-      parseFloat(i18n.formatBalanceWithoutSuffix(Number(transaction.value), transaction.walletPreferredBalanceUnit)) <=
-      toAmount,
+      Math.abs(
+        parseFloat(i18n.formatBalanceWithoutSuffix(Number(transaction.value), transaction.walletPreferredBalanceUnit)),
+      ) <= Math.abs(toAmount),
   );
 };
 
