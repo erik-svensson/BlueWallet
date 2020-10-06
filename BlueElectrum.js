@@ -52,6 +52,14 @@ async function connectMain() {
   }
 }
 
+module.exports.getBlockchainHeaders = function() {
+  return mainClient.blockchainHeaders_subscribe();
+};
+
+module.exports.subscribe = function(event, handler) {
+  return mainClient.subscribe.on(event, handler);
+};
+
 connectMain();
 
 /**

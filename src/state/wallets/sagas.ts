@@ -29,16 +29,11 @@ export function* loadWalletsSaga() {
   try {
     yield BlueElectrum.waitTillConnected();
 
-    const start = new Date().getTime();
     yield all([
-      // call(() => BlueApp.fetchWalletBalances()),
+      call(() => BlueApp.fetchWalletBalances()),
       call(() => BlueApp.fetchWalletTransactions()),
       // call(() => BlueApp.fetchWalletUtxos()),
     ]);
-
-    const end = new Date().getTime();
-    const time = end - start;
-    console.log('Execution time: ' + time);
     const wallets = BlueApp.getWallets();
     yield put(loadWalletsSuccess(wallets));
   } catch (e) {

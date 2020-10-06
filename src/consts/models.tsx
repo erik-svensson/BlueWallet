@@ -173,6 +173,7 @@ export interface Transaction {
   inputs: any[];
   outputs: any[];
   note?: string;
+  height: number;
   walletPreferredBalanceUnit: string;
 }
 

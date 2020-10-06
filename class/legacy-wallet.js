@@ -212,7 +212,7 @@ export class LegacyWallet extends AbstractWallet {
   async setTransactions(txs) {
     try {
       const txid_list = txs.map(t => t.tx_hash);
-      this.transactions = this.transactions.filter(tx => txid_list.includes(tx.txid));
+      this.transactions = this.transactions.filter(tx => tx.height && txid_list.includes(tx.txid));
 
       const alreadyFetchedTxIds = this.transactions.map(tx => tx.txid);
 
@@ -224,7 +224,6 @@ export class LegacyWallet extends AbstractWallet {
 
       const txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txIdsDiff);
 
-      console.log('txs_full', txs_full);
       const transactions = [];
 
       for (const tx of txs_full) {
@@ -237,6 +236,7 @@ export class LegacyWallet extends AbstractWallet {
           if (!output.addresses) continue; // OP_RETURN
           if (this.weOwnAddress(output.addresses[0])) value += output.value;
         }
+        tx.height = txs.find(t => t.tx_hash === tx.txid).height;
         tx.tx_type = findLast(txs, t => t.tx_hash === tx.txid).tx_type;
         tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();
         if (tx.time) {

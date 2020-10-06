@@ -6,6 +6,7 @@ import { appSettingsReducer, AppSettingsState } from './appSettings/reducer';
 import { AuthenticationState, authenticationReducer } from './authentication/reducer';
 import { AuthenticatorsState, authenticatorsReducer } from './authenticators/reducer';
 import { contactsReducer, ContactsState } from './contacts/reducer';
+import { ElectrumXState, electrumXReducer } from './electrumX/reducer';
 import { filtersReducer } from './filters/reducer';
 import { TimeCounterState, timeCounterReducer } from './timeCounter/reducer';
 import { transactionsNotesReducer, TransactionsNotesState } from './transactionsNotes/reducer';
@@ -17,6 +18,7 @@ export interface ApplicationState {
   transactions: TransactionsNotesState;
   appSettings: AppSettingsState;
   wallets: WalletsState;
+  electrumX: ElectrumXState;
   timeCounter: TimeCounterState;
   authenticators: AuthenticatorsState;
   authentication: AuthenticationState;
@@ -28,6 +30,7 @@ export const rootReducer = combineReducers({
   transactions: transactionsNotesReducer,
   appSettings: appSettingsReducer,
   wallets: walletsReducer,
+  electrumX: electrumXReducer,
   timeCounter: timeCounterReducer,
   authenticators: authenticatorsReducer,
   authentication: authenticationReducer,
