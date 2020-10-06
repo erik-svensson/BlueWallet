@@ -1,4 +1,4 @@
-import { findLast } from 'lodash';
+import { findLast, difference } from 'lodash';
 import { NativeModules } from 'react-native';
 
 import config from '../config';
@@ -155,7 +155,7 @@ export class LegacyWallet extends AbstractWallet {
    * @param memo
    * @return string Signed txhex ready for broadcast
    */
-  createTx(utxos, amount, fee, toAddress, memo) {
+  createTx(utxos, amount, fee, toAddress) {
     // console.log('creating legacy tx ', amount, ' with fee ', fee, 'secret=', this.getSecret(), 'from address', this.getAddress());
     const amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
     return signer.createTransaction(utxos, toAddress, amountPlusFee, fee, this.getSecret(), this.getAddress());
@@ -212,8 +212,18 @@ export class LegacyWallet extends AbstractWallet {
   async setTransactions(txs) {
     try {
       const txid_list = txs.map(t => t.tx_hash);
+      this.transactions = this.transactions.filter(tx => txid_list.includes(tx.txid));
 
-      const txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txid_list);
+      const alreadyFetchedTxIds = this.transactions.map(tx => tx.txid);
+
+      const txIdsDiff = difference(txid_list, alreadyFetchedTxIds);
+
+      if (txIdsDiff.length === 0) {
+        return;
+      }
+
+      const txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txIdsDiff);
+
       const transactions = [];
 
       for (const tx of txs_full) {
@@ -228,13 +238,17 @@ export class LegacyWallet extends AbstractWallet {
         }
         tx.tx_type = findLast(txs, t => t.tx_hash === tx.txid).tx_type;
         tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();
-        if (tx.time) tx.received = new Date(tx.time * 1000).toISOString();
-        else tx.received = new Date().toISOString();
+        if (tx.time) {
+          tx.received = new Date(tx.time * 1000).toISOString();
+        } else {
+          tx.received = new Date().toISOString();
+          tx.time = new Date().toISOString();
+        }
         tx.walletLabel = this.label;
         if (!tx.confirmations) tx.confirmations = 0;
         transactions.push(tx);
       }
-      this.transactions = transactions;
+      this.transactions = [...this.transactions, ...transactions];
     } catch (err) {
       console.warn(err.message);
     }
