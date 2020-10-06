@@ -1,5 +1,5 @@
 import { difference } from 'lodash';
-import { compose, map, mapValues, values, flatten, uniq, filter } from 'lodash/fp';
+import { compose, map, mapValues, values, flatten, uniq } from 'lodash/fp';
 
 import config from './config';
 
@@ -126,14 +126,11 @@ module.exports.multiGetTransactionsFullByTxid = async function(txIds) {
     values,
     mapValues(tx => {
       const inputs = tx.vin
+        .filter(input => input.txid)
         .map(input => {
-          if (!input.txid) {
-            return null;
-          }
           const prevOutputOfInput = allTxs[input.txid].vout[input.vout];
           return { ...input, value: prevOutputOfInput.value, addresses: prevOutputOfInput.scriptPubKey.addresses };
-        })
-        .filter(input => input !== null);
+        });
 
       const outputs = tx.vout.map(output => ({ ...output, addresses: output.scriptPubKey.addresses }));
 
