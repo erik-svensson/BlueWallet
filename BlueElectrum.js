@@ -112,7 +112,7 @@ module.exports.ping = async function() {
 };
 
 module.exports.multiGetTransactionsFullByTxid = async function(txIds) {
-  const txs = await this.multiGetTransactionByTxid(txIds);
+  const txs = await this.multiGetTransactionByTxid(uniq(txIds));
 
   const inputsTxIds = difference(
     compose(

@@ -29,11 +29,7 @@ export function* loadWalletsSaga() {
   try {
     yield BlueElectrum.waitTillConnected();
 
-    yield all([
-      call(() => BlueApp.fetchWalletBalances()),
-      call(() => BlueApp.fetchWalletTransactions()),
-      // call(() => BlueApp.fetchWalletUtxos()),
-    ]);
+    yield all([call(() => BlueApp.fetchWalletBalances()), call(() => BlueApp.fetchWalletTransactions())]);
     const wallets = BlueApp.getWallets();
     yield put(loadWalletsSuccess(wallets));
   } catch (e) {
@@ -91,11 +87,7 @@ export function* importWalletSaga(action: ImportWalletAction | unknown) {
     meta,
   } = action as ImportWalletAction;
   try {
-    yield all([
-      call(() => wallet.fetchBalance()),
-      call(() => wallet.fetchTransactions()),
-      call(() => wallet.fetchUtxos()),
-    ]);
+    yield all([call(() => wallet.fetchBalance()), call(() => wallet.fetchTransactions())]);
     BlueApp.addWallet(wallet);
     yield BlueApp.saveToDisk();
 
