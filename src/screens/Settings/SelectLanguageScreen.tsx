@@ -8,7 +8,6 @@ import { ScreenTemplate, Header, Image } from 'app/components';
 import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { selectors } from 'app/state/appSettings';
 import { updateSelectedLanguage } from 'app/state/appSettings/actions';
-import { ApplicationState } from 'app/state/rootReducer';
 import { typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -43,9 +42,7 @@ const LanguageItem = ({ selectedLanguage, selectedLanguageValue, onLanguageSelec
 };
 
 export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
-  const { language } = useSelector((state: ApplicationState) => ({
-    language: selectors.language(state),
-  }));
+  const language = useSelector(selectors.language);
 
   const dispatch = useDispatch();
   const availableLanguages: Language[] = [
