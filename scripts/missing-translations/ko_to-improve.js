@@ -274,17 +274,17 @@ const ko = {
       annulled: '무효화',
       done: '완료',
       canceled: '취소됨',
-      unblocked: 'TRANSLATION NEEDED | ENG: unblocked',
+      unblocked: '차단해제됨',
     },
     transactionTypeLabel: {
       standard: '표준',
       canceled: '취소됨',
       fast: '빠른',
-      secure: 'TRANSLATION NEEDED | ENG: Secure',
-      secureFast: 'TRANSLATION NEEDED | ENG: Secure Fast',
+      secure: '안전한',
+      secureFast: '안전하고 빠른',
     },
     errors: {
-      notEnoughBalance: 'TRANSLATION NEEDED | ENG: Not enough balance. Please, try sending a smaller amount.',
+      notEnoughBalance: '잔액 부족. 적은 금액으로 시도해보세요.',
     },
   },
   send: {
@@ -355,8 +355,8 @@ const ko = {
       title: '오류',
       description: '거래를 생성하기 전에 먼저 Bitcoin Vault 지갑을 추가해야 합니다.',
     },
-    warning: 'TRANSLATION NEEDED | ENG: Warning: ',
-    warningGeneral: 'TRANSLATION NEEDED | ENG: Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
+    warning: '경고: ',
+    warningGeneral: '경고: 안전한 거래 기능 사용 과정에서 귀하의 지갑의 일부 자금이 차단될 수 있습니다. 이것은 UTXO와 비트코인 볼트 지갑 블록체인 범위에 관련된 일반적인 과정입니다. 거래가 검증되거나 (약 24시간 후) 취소되면 (24시간 이내) 자금의 차단이 해제됩니다.',
   },
   receive: {
     header: '코인 받기',
@@ -483,7 +483,7 @@ const ko = {
       annulled: '무효화',
       done: '완료',
       canceled: '취소됨',
-      unblocked: 'TRANSLATION NEEDED | ENG: Unblocked',
+      unblocked: '차단해제됨',
     },
   },
   authenticators: {
@@ -550,11 +550,11 @@ const ko = {
     jailBrokenPhone: '귀하의 장치가 탈옥된 것 같습니다. 이런 경우 보안 문제나 충돌, 기타 다양한 문제가 발생할 수 있습니다. 탈옥된 장치에서는 GoldWallet을 사용하지 않는 것이 좋습니다.',
     rootedPhone: '귀하의 장치가 루팅된 것 같습니다. 이런 경우 보안 문제나 충돌, 기타 다양한 문제가 발생할 수 있습니다. 루팅된 장치에서는 GoldWallet을 사용하지 않는 것이 좋습니다.',
     title: '보안 문제',
-    noPinOrFingerprintSet: 'TRANSLATION NEEDED | ENG: Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
+    noPinOrFingerprintSet: '기기에 암호나 지문이 등록되어 있지 않습니다. 안전하지 않은 기기로의 GoldWallet 사용을 권장하지 않습니다.',
   },
   betaVersion: {
-    title: 'TRANSLATION NEEDED | ENG: This is a beta version\nof the GoldWallet',
-    description: 'TRANSLATION NEEDED | ENG: It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
-    button: 'TRANSLATION NEEDED | ENG: I accept the risk',
+    title: '이것은 GoldWallet의 베타버전입니다',
+    description: '아직 공식 출시 전 최종 테스트 중에 있습니다. 이곳에 보여지는 모든 컨텐츠와 모바일 앱은 \"그대로\"와 \"사용가능\" 기반에 제공되어 있습니다. 소프트웨어 사용은 사용자의 위험 감수하에 이루어집니다.',
+    button: '위험을 감수하겠습니다',
   },
 }
