@@ -4,6 +4,10 @@ import localeData from 'dayjs/plugin/localeData';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Localization from 'react-localization';
 import { LocaleConfig } from 'react-native-calendars';
+import * as RNLocalize from 'react-native-localize';
+
+import { updateSelectedLanguage } from 'app/state/appSettings/actions';
+import { store } from 'app/state/store';
 
 import { BitcoinUnit } from '../models/bitcoinUnits';
 
@@ -18,10 +22,9 @@ dayjs.extend(localeData);
   // finding out whether lang preference was saved
   // For some reason using the AppStorage.LANG constant is not working. Hard coding string for now.
   // hardcoding for presentional purposes
-  // let lang = await AsyncStorage.getItem('lang');
-  const lang = (await AsyncStorage.getItem('lang')) || 'en';
-
-  init(lang);
+  // let lang = await As  yncStorage.getItem('lang');
+  const lang = (await AsyncStorage.getItem('lang')) || RNLocalize.getLocales()[0]?.languageCode || 'en';
+  await strings.saveLanguage(lang);
 })();
 
 const init = lang => {
@@ -29,14 +32,14 @@ const init = lang => {
     strings.setLanguage(lang);
     let localeForDayJSAvailable = true;
     switch (lang) {
-      case 'zh_cn':
-        lang = 'zh-cn';
+      case 'zh':
+        lang = 'zh';
         require('dayjs/locale/zh-cn');
         break;
       case 'es':
         require('dayjs/locale/es');
         break;
-      case 'pt_pt':
+      case 'pt':
         lang = 'pt';
         require('dayjs/locale/pt');
         break;
@@ -44,22 +47,21 @@ const init = lang => {
         lang = 'ja';
         require('dayjs/locale/ja');
         break;
-      case 'id_id':
+      case 'id':
         require('dayjs/locale/id');
         break;
-      case 'tr_tr':
+      case 'tr':
         require('dayjs/locale/tr');
         break;
-      case 'vi_vn':
+      case 'vi':
         require('dayjs/locale/vi');
         break;
-      case 'ko_kr':
+      case 'ko':
         lang = 'ko';
         require('dayjs/locale/ko');
         break;
-      case 'en':
-        break;
       default:
+        lang = 'en';
         localeForDayJSAvailable = false;
         break;
     }
@@ -73,18 +75,19 @@ const init = lang => {
 
 strings = new Localization({
   en: require('./en.js'),
-  pt_pt: require('./pt_PT.js'),
+  pt: require('./pt_PT.js'),
   es: require('./es.js'),
   ja: require('./jp_JP.js'),
-  id_id: require('./id_ID.js'),
-  zh_cn: require('./zh_cn.js'),
-  tr_tr: require('./tr_TR.js'),
-  vi_vn: require('./vi_VN.js'),
-  ko_kr: require('./ko_KR.js'),
+  id: require('./id_ID.js'),
+  zh: require('./zh_cn.js'),
+  tr: require('./tr_TR.js'),
+  vi: require('./vi_VN.js'),
+  kr: require('./ko_KR.js'),
 });
 
 strings.saveLanguage = async lang => {
   await AsyncStorage.setItem('lang', lang);
+  await store.dispatch(updateSelectedLanguage(lang));
   init(lang);
 };
 
