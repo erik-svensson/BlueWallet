@@ -132,6 +132,8 @@ module.exports = {
         'Buka dokumen PDF pertama yang Anda buat saat Anda membuat dompet yang ingin diimpor, lalu gunakan aplikasi ini untuk memindai kode QR Kunci Publik.',
       unsupportedElectrumVaultMnemonic:
         'Benih ini berasal dari Electrum Vault dan belum didukung. Akan didukung di masa yang akan datang.',
+      extendWithCustomWords: 'Perpanjang seed ini dengan kata buatan',
+      customWords: 'kata buatan',
     },
     exportWallet: { title: 'Frasa mnemonik', header: 'Ekspor dompet' },
     exportWalletXpub: { header: 'Dompet XPUB' },

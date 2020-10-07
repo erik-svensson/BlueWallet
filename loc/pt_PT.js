@@ -132,6 +132,8 @@ module.exports = {
         'Abra o primeiro documento PDF que gerou quando criou a carteira que pretende importar e utilize esta aplicação para ler o código QR da Chave Pública.',
       unsupportedElectrumVaultMnemonic:
         'Esta semente é da Electrum Vault e não é atualmente suportada. Será suportada num futuro próximo.',
+      extendWithCustomWords: 'Estenda esta semente com palavras personalizadas',
+      customWords: 'Palavras personalizadas',
     },
     exportWallet: { title: 'Frase da mnemónica', header: 'Exportar carteira' },
     exportWalletXpub: { header: 'Carteira XPUB' },

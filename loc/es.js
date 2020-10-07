@@ -131,6 +131,8 @@ module.exports = {
         'Abra el primer documento PDF que generó cuando creó el monedero que desea importar y use esta aplicación para escanear el código QR de la clave pública.',
       unsupportedElectrumVaultMnemonic:
         'Esta frase mnemotécnica es de Electrum Vault y actualmente no es compatible. Será compatible próximamente.',
+      extendWithCustomWords: 'Extender esta semilla con palabras personalizadas',
+      customWords: 'Palabras personalizadas',
     },
     exportWallet: { title: 'Frase mnemotécnica', header: 'Exportar monedero' },
     exportWalletXpub: { header: 'Monedero XPUB' },
