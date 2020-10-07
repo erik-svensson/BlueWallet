@@ -32,6 +32,7 @@ async function connectMain() {
       client: '2.7.11',
       version: config.electrumXProtocolVersion,
     });
+    bla();
 
     if (ver && ver[0]) {
       console.log('connected to ', ver);
@@ -151,6 +152,24 @@ module.exports.multiGetTransactionsFullByTxid = async function(txIds) {
   )(txs);
 };
 
+module.exports.subscribeToSriptHashes = scriptHashes => {
+  return Promise.all(scriptHashes.map(scriptHash => mainClient.blockchainScripthash_subscribe(scriptHash)));
+};
+
+const bla = async () => {
+  const addr = '2NCmVPJxPnv5K7NiUMGcMdS32wUMMob8U4t';
+  const script = bitcoin.address.toOutputScript(addr, config.network);
+  const hash = bitcoin.crypto.sha256(script);
+  const scriptHash = Buffer.from(reverse(hash)).toString('hex');
+
+  console.log('scriptHash', scriptHash);
+  const res = await mainClient.blockchainScripthash_subscribe(scriptHash);
+  console.log('res', res);
+  mainClient.subscribe.on('blockchain.scripthash.subscribe', (t, b) => {
+    console.log('test', t);
+    console.log('test 2', b);
+  });
+};
 /**
  *
  * @param addresses {Array}

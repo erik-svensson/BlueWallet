@@ -1,6 +1,7 @@
 import { eventChannel } from 'redux-saga';
 import { takeLatest, put, take, call } from 'redux-saga/effects';
 
+// import { WalletAction } from '../wallets/actions';
 import { setBlockHeight, ElectrumXAction } from './actions';
 
 const BlueElectrum = require('../../../BlueElectrum');
@@ -33,4 +34,44 @@ export function* listenBlockchainHeadersSaga() {
   }
 }
 
-export default [takeLatest(ElectrumXAction.StartListeners, listenBlockchainHeadersSaga)];
+function emitScriptHashesChange() {
+  return eventChannel(emitter => {
+    const eventName = 'blockchain.scripthash.subscribe';
+
+    BlueElectrum.subscribe(eventName, (event: string[]) => {
+      console.log('event', event);
+      emitter(event);
+    });
+
+    return () => {
+      BlueElectrum.unsubscribe(eventName);
+    };
+  });
+}
+
+export function* listenScriptHashesSaga() {
+  yield BlueElectrum.waitTillConnected();
+
+  const chan = yield call(emitScriptHashesChange);
+
+  while (true) {
+    const scriptHashes = yield take(chan);
+    console.log('scriptHashes', scriptHashes);
+    // yield put(setBlockHeight(height));
+  }
+}
+
+export function* subscribeToScriptHashes() {
+  const chan = yield call(emitScriptHashesChange);
+
+  while (true) {
+    const scriptHashes = yield take(chan);
+    console.log('scriptHashes', scriptHashes);
+    // yield put(setBlockHeight(height));
+  }
+}
+
+export default [
+  takeLatest(ElectrumXAction.StartListeners, listenScriptHashesSaga),
+  takeLatest(ElectrumXAction.StartListeners, listenBlockchainHeadersSaga),
+];
