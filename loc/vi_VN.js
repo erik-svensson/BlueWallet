@@ -134,6 +134,8 @@ module.exports = {
         'Mở tài liệu PDF đầu tiên bạn đã tạo khi tạo ví bạn muốn nhập và sử dụng ứng dụng này để quét mã QR Khóa Công khai.',
       unsupportedElectrumVaultMnemonic:
         'Từ khóa hạt giống này là từ Electrum Vault và hiện không được hỗ trợ. Sẽ được hỗ trợ trong thời gian sắp tới.',
+      extendWithCustomWords: 'Mở rộng hạt giống này với các từ tùy chỉnh',
+      customWords: 'Từ ngữ tùy chỉnh',
     },
     exportWallet: { title: 'Cụm từ ghi nhớ', header: 'Xuất ví' },
     exportWalletXpub: { header: 'Ví XPUB' },

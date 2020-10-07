@@ -133,6 +133,8 @@ module.exports = {
         '登録するウォレットの生成の時に生成された最初のPDF文書を開き、このアプリで公開鍵QRコードをスキャンします。',
       unsupportedElectrumVaultMnemonic:
         'これはElectrum Vaultのシードです。このシードは現在サポートされていません。後にサポートされる予定です。',
+      extendWithCustomWords: 'このシードをカスタムワードで拡張',
+      customWords: 'カスタムワード',
     },
     exportWallet: { title: 'ニーモニックのフレーズ', header: 'ウォレットの共有' },
     exportWalletXpub: { header: 'ウォレットXPUB' },

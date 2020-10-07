@@ -128,6 +128,8 @@ module.exports = {
         '가져오려는 지갑을 만들 때 생성한 첫 번째 PDF 문서를 열고 이 앱을 사용하여 공개 키 QR 코드를 스캔합니다.',
       unsupportedElectrumVaultMnemonic:
         '이 시드는 Electrum Vault에서 가져 왔으며 현재 지원되지 않습니다. 곧 지원될 예정입니다.',
+      extendWithCustomWords: '이 시드를 커스텀 단어로 연장',
+      customWords: '커스텀 단어',
     },
     exportWallet: { title: '니모닉 문구', header: '지갑 내보내기' },
     exportWalletXpub: { header: '지갑 XPUB' },

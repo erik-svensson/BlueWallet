@@ -131,6 +131,8 @@ module.exports = {
         'İçeri aktarmak istediğiniz cüzdanı ilk oluşturduğunuzda hazırladığınız ilk PDF belgesini açın ve Açık Anahtar QR kodunu taramak için bu uygulamayı kullanın.',
       unsupportedElectrumVaultMnemonic:
         'Bu kök Electrum Vault’tandır ve şu anda desteklenmemektedir. Yakın gelecekte desteklenecektir.',
+      extendWithCustomWords: 'kelimeler',
+      customWords: 'Özel kelimeler',
     },
     exportWallet: { title: 'Özel ipucu ifadesi', header: 'Cüzdanı dışarı aktar' },
     exportWalletXpub: { header: 'Cüzdanın XPUB’ı' },

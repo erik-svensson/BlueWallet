@@ -119,6 +119,8 @@ module.exports = {
       scanCancelPubKey: '扫描取消键 QR 码',
       scanPublicKeyDescription: '打开创建想要导入的钱包时生成的首个 PDF 文件，并使用该应用程序扫描公钥 QR 码。',
       unsupportedElectrumVaultMnemonic: '该种子来自 Electrum Vault，目前不受支持。不久将获得支持。',
+      extendWithCustomWords: '用自定义词扩展此种子',
+      customWords: '自定义词',
     },
     exportWallet: { title: '助记词', header: '退出钱包' },
     exportWalletXpub: { header: '钱包扩展公钥 (XPUB)' },
