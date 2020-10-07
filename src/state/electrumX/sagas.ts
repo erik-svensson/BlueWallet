@@ -7,14 +7,14 @@ const BlueElectrum = require('../../../BlueElectrum');
 
 function emitBlockchainHeaders() {
   return eventChannel(emitter => {
-    const listener = BlueElectrum.subscribe(
-      'blockchain.headers.subscribe',
-      (event: [{ height: number; hex: string }]) => {
-        emitter(event[0]);
-      },
-    );
+    const eventName = 'blockchain.headers.subscribe';
+
+    BlueElectrum.subscribe(eventName, (event: [{ height: number; hex: string }]) => {
+      emitter(event[0]);
+    });
+
     return () => {
-      listener();
+      BlueElectrum.unsubscribe(eventName);
     };
   });
 }

@@ -60,6 +60,10 @@ module.exports.subscribe = function(event, handler) {
   return mainClient.subscribe.on(event, handler);
 };
 
+module.exports.unsubscribe = function(event) {
+  return mainClient.subscribe.off(event);
+};
+
 connectMain();
 
 /**
