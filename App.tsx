@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/react-native';
+import { Integrations } from '@sentry/tracing';
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { View, YellowBox, StyleSheet } from 'react-native';
@@ -18,6 +19,7 @@ YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside', `\`-
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
     dsn: 'https://dc67fd6d5c2949f2a6853e60eb69d899@o429172.ingest.sentry.io/5375289',
+    integrations: [new Integrations.BrowserTracing()],
   });
 }
 
