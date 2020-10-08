@@ -32,7 +32,9 @@ async function connectMain() {
       client: '2.7.11',
       version: config.electrumXProtocolVersion,
     });
-    bla();
+    mainClient.subscribe.removeAllListeners('blockchain.scripthash.subscribe');
+    console.log('remove all listeners');
+    // bla();
 
     if (ver && ver[0]) {
       console.log('connected to ', ver);
@@ -153,6 +155,7 @@ module.exports.multiGetTransactionsFullByTxid = async function(txIds) {
 };
 
 module.exports.subscribeToSriptHashes = scriptHashes => {
+  // return mainClient.blockchainScripthash_subscribe(scriptHashes);
   return Promise.all(scriptHashes.map(scriptHash => mainClient.blockchainScripthash_subscribe(scriptHash)));
 };
 

@@ -1,8 +1,13 @@
+import { difference } from 'lodash';
+import { flatten, compose, map } from 'lodash/fp';
 import { eventChannel } from 'redux-saga';
-import { takeLatest, put, take, call } from 'redux-saga/effects';
+import { takeLatest, put, take, call, select } from 'redux-saga/effects';
 
-// import { WalletAction } from '../wallets/actions';
-import { setBlockHeight, ElectrumXAction } from './actions';
+import { Wallet } from 'app/consts';
+
+import { actions as walletsActions, selectors as walletsSelectors } from '../wallets';
+import { setBlockHeight, ElectrumXAction, scriptHashChanged, setSubscribedScriptHashes } from './actions';
+import { subscribedScriptHashes } from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
 
@@ -15,6 +20,8 @@ function emitBlockchainHeaders() {
     });
 
     return () => {
+      console.log('UNSUB emitBlockchainHeaders');
+
       BlueElectrum.unsubscribe(eventName);
     };
   });
@@ -39,11 +46,11 @@ function emitScriptHashesChange() {
     const eventName = 'blockchain.scripthash.subscribe';
 
     BlueElectrum.subscribe(eventName, (event: string[]) => {
-      console.log('event', event);
       emitter(event);
     });
 
     return () => {
+      console.log('UNSUB emitScriptHashesChange');
       BlueElectrum.unsubscribe(eventName);
     };
   });
@@ -51,27 +58,52 @@ function emitScriptHashesChange() {
 
 export function* listenScriptHashesSaga() {
   yield BlueElectrum.waitTillConnected();
+  console.log('listenScriptHashes');
 
   const chan = yield call(emitScriptHashesChange);
 
   while (true) {
-    const scriptHashes = yield take(chan);
-    console.log('scriptHashes', scriptHashes);
-    // yield put(setBlockHeight(height));
+    const event = yield take(chan);
+    const [scriptHash] = event;
+    console.log('scriptHash', scriptHash);
+
+    yield put(scriptHashChanged(scriptHash));
   }
 }
 
 export function* subscribeToScriptHashes() {
-  const chan = yield call(emitScriptHashesChange);
+  const wallets = yield select(walletsSelectors.wallets);
 
-  while (true) {
-    const scriptHashes = yield take(chan);
-    console.log('scriptHashes', scriptHashes);
-    // yield put(setBlockHeight(height));
-  }
+  const walletsScriptHashes = compose(
+    flatten,
+    map((wallet: Wallet) => wallet.getScriptHashes()),
+  )(wallets);
+
+  console.log('walletsScriptHashedsadsas', walletsScriptHashes);
+  const subScriptHashes: string[] = yield select(subscribedScriptHashes);
+  console.log('subscribedScriptHashes', subScriptHashes);
+
+  // const scriptHashesToSub = walletsScriptHashes;
+  // console.log('subscribedScriptHashes', subscribedScriptHashes);
+
+  const scriptHashesToSub = difference(walletsScriptHashes, subScriptHashes);
+
+  console.log('scriptHashesToSsssub', scriptHashesToSub);
+  yield BlueElectrum.subscribeToSriptHashes(scriptHashesToSub);
+
+  yield put(setSubscribedScriptHashes(scriptHashesToSub));
 }
 
 export default [
+  takeLatest(
+    [
+      walletsActions.WalletsAction.LoadWalletsSuccess,
+      walletsActions.WalletsAction.ImportWalletSuccess,
+      walletsActions.WalletsAction.CreateWalletSuccess,
+      walletsActions.WalletsAction.DeleteWalletSuccess,
+    ],
+    subscribeToScriptHashes,
+  ),
   takeLatest(ElectrumXAction.StartListeners, listenScriptHashesSaga),
   takeLatest(ElectrumXAction.StartListeners, listenBlockchainHeadersSaga),
 ];

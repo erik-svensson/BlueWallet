@@ -62,6 +62,7 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
         error: action.error,
       };
     case WalletsAction.UpdateWalletSuccess:
+    case WalletsAction.RefreshWalletSuccess:
       return {
         ...state,
         wallets: state.wallets.map(wallet => {

@@ -1,7 +1,9 @@
-import { takeEvery, takeLatest, put, all, call } from 'redux-saga/effects';
+import { takeEvery, takeLatest, put, all, call, select } from 'redux-saga/effects';
 
+import { Wallet } from 'app/consts';
 import { BlueApp } from 'app/legacy';
 
+import { actions as electrumXActions } from '../electrumX';
 import {
   WalletsAction,
   loadWalletsSuccess,
@@ -21,7 +23,10 @@ import {
   SendTransactionAction,
   sendTransactionSuccess,
   sendTransactionFailure,
+  refreshWalletSuccess,
+  refreshWalletFailure,
 } from './actions';
+import { wallets as walletsSelector } from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
 
@@ -115,6 +120,26 @@ export function* updateWalletSaga(action: UpdateWalletAction | unknown) {
   }
 }
 
+export function* refreshWalletSaga(action: electrumXActions.ScriptHashChangedAction | unknown) {
+  const { scriptHash } = action as electrumXActions.ScriptHashChangedAction;
+
+  const wallets: Wallet[] = yield select(walletsSelector);
+
+  const walletToRefresh = wallets.find(w => w.getScriptHashes().includes(scriptHash));
+  console.log('walletToRefresh', walletToRefresh);
+  try {
+    if (!walletToRefresh) {
+      throw new Error(`Couldn't find wallet with scripthash: ${scriptHash}`);
+    }
+
+    yield all([call(() => walletToRefresh.fetchBalance()), call(() => walletToRefresh.fetchTransactions())]);
+
+    yield put(refreshWalletSuccess(walletToRefresh));
+  } catch (e) {
+    yield put(refreshWalletFailure(e.message));
+  }
+}
+
 export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
   const {
     payload: { txDecoded },
@@ -144,6 +169,7 @@ export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
 }
 
 export default [
+  takeEvery(electrumXActions.ElectrumXAction.ScriptHashChanged, refreshWalletSaga),
   takeEvery(WalletsAction.DeleteWallet, deleteWalletSaga),
   takeLatest(WalletsAction.LoadWallets, loadWalletsSaga),
   takeEvery(WalletsAction.CreateWallet, createWalletSaga),
