@@ -26,7 +26,7 @@ dayjs.extend(localeData);
   await strings.saveLanguage(lang);
 })();
 
-const init = lang => {
+const init = async lang => {
   if (lang) {
     strings.setLanguage(lang);
     let localeForDayJSAvailable = true;
@@ -63,6 +63,7 @@ const init = lang => {
     if (localeForDayJSAvailable) {
       dayjs.locale(lang.split('_')[0]);
     }
+    await AsyncStorage.setItem('lang', lang);
     LocaleConfig.locales[lang] = strings.getListOfMonthsAndWeekdays();
     LocaleConfig.defaultLocale = lang;
   }
@@ -81,8 +82,7 @@ strings = new Localization({
 });
 
 strings.saveLanguage = async lang => {
-  await AsyncStorage.setItem('lang', lang);
-  init(lang);
+  await init(lang);
 };
 
 strings.transactionTimeToReadable = time => {
