@@ -213,12 +213,34 @@ export class LegacyWallet extends AbstractWallet {
   async setTransactions(txs) {
     try {
       const txid_list = txs.map(t => t.tx_hash);
-      this.transactions = this.transactions.filter(tx => tx.height && txid_list.includes(tx.txid));
+
+      console.log('txid_list', txid_list);
+      this.transactions = this.transactions.filter(tx => {
+        if (!(tx.height > 0)) {
+          return false;
+        }
+        const transaction = findLast(txs, t => t.tx_hash === tx.txid);
+
+        if (!transaction) {
+          return false;
+        }
+        const res = transaction.tx_type === tx.tx_type;
+
+        if (!res) {
+          console.log('transaction', transaction);
+          console.log('tx', tx);
+        }
+        console.log('res', res);
+        return res;
+      });
 
       const alreadyFetchedTxIds = this.transactions.map(tx => tx.txid);
 
       const txIdsDiff = difference(txid_list, alreadyFetchedTxIds);
 
+      console.log('alreadyFetchedTxIds', alreadyFetchedTxIds);
+
+      console.log('txIdsDiff', txIdsDiff);
       if (txIdsDiff.length === 0) {
         return;
       }
@@ -244,7 +266,6 @@ export class LegacyWallet extends AbstractWallet {
           tx.received = new Date(tx.time * 1000).toISOString();
         } else {
           tx.received = new Date().toISOString();
-          tx.time = new Date().toISOString();
         }
         tx.walletLabel = this.label;
         if (!tx.confirmations) tx.confirmations = 0;

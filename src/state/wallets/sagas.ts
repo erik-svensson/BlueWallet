@@ -126,7 +126,6 @@ export function* refreshWalletSaga(action: electrumXActions.ScriptHashChangedAct
   const wallets: Wallet[] = yield select(walletsSelector);
 
   const walletToRefresh = wallets.find(w => w.getScriptHashes().includes(scriptHash));
-  console.log('walletToRefresh', walletToRefresh);
   try {
     if (!walletToRefresh) {
       throw new Error(`Couldn't find wallet with scripthash: ${scriptHash}`);

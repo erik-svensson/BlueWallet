@@ -20,8 +20,6 @@ function emitBlockchainHeaders() {
     });
 
     return () => {
-      console.log('UNSUB emitBlockchainHeaders');
-
       BlueElectrum.unsubscribe(eventName);
     };
   });
@@ -50,7 +48,6 @@ function emitScriptHashesChange() {
     });
 
     return () => {
-      console.log('UNSUB emitScriptHashesChange');
       BlueElectrum.unsubscribe(eventName);
     };
   });
@@ -58,7 +55,6 @@ function emitScriptHashesChange() {
 
 export function* listenScriptHashesSaga() {
   yield BlueElectrum.waitTillConnected();
-  console.log('listenScriptHashes');
 
   const chan = yield call(emitScriptHashesChange);
 
@@ -79,19 +75,17 @@ export function* subscribeToScriptHashes() {
     map((wallet: Wallet) => wallet.getScriptHashes()),
   )(wallets);
 
-  console.log('walletsScriptHashedsadsas', walletsScriptHashes);
   const subScriptHashes: string[] = yield select(subscribedScriptHashes);
-  console.log('subscribedScriptHashes', subScriptHashes);
-
-  // const scriptHashesToSub = walletsScriptHashes;
-  // console.log('subscribedScriptHashes', subscribedScriptHashes);
 
   const scriptHashesToSub = difference(walletsScriptHashes, subScriptHashes);
 
-  console.log('scriptHashesToSsssub', scriptHashesToSub);
   yield BlueElectrum.subscribeToSriptHashes(scriptHashesToSub);
 
-  yield put(setSubscribedScriptHashes(scriptHashesToSub));
+  const scriptHashesToUnsub = difference(subScriptHashes, walletsScriptHashes);
+
+  yield BlueElectrum.unsubscribeFromSriptHashes(scriptHashesToUnsub);
+
+  yield put(setSubscribedScriptHashes(walletsScriptHashes));
 }
 
 export default [

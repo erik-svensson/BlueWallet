@@ -60,7 +60,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
         const { height } = transaction;
         return {
           ...transaction,
-          confirmations: height ? blockHeight - height : 0,
+          confirmations: height > 0 ? blockHeight - height : 0,
           walletPreferredBalanceUnit: walletBalanceUnit,
           walletId: id,
           walletLabel,
