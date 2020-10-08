@@ -5,15 +5,15 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
 import { icons } from 'app/assets';
 import { Header, InputItem, ScreenTemplate, Button } from 'app/components';
-import { CONST, UnlockTransactionParamList, Route } from 'app/consts';
+import { CONST, RootStackParams, Route } from 'app/consts';
 import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 type Props = {
-  navigation: StackNavigationProp<UnlockTransactionParamList, Route.UnlockTransaction>;
-  route: RouteProp<UnlockTransactionParamList, Route.UnlockTransaction>;
+  navigation: StackNavigationProp<RootStackParams, Route.UnlockTransaction>;
+  route: RouteProp<RootStackParams, Route.UnlockTransaction>;
 };
 
 interface State {
