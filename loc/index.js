@@ -20,7 +20,7 @@ dayjs.extend(localeData);
   // finding out whether lang preference was saved
   // For some reason using the AppStorage.LANG constant is not working. Hard coding string for now.
   // hardcoding for presentional purposes
-  // let lang = await As  yncStorage.getItem('lang');
+  // let lang = await AsyncStorage.getItem('lang');
   const lang =
     (await AsyncStorage.getItem('lang')) || RNLocalize.getLocales()[0]?.languageCode || CONST.defaultLanguage;
   await strings.saveLanguage(lang);
@@ -56,7 +56,7 @@ const init = lang => {
         require('dayjs/locale/ko');
         break;
       default:
-        lang = 'en';
+        lang = CONST.defaultLanguage;
         localeForDayJSAvailable = false;
         break;
     }
