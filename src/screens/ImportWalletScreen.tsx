@@ -280,10 +280,10 @@ export const ImportWalletScreen = (props: Props) => {
         </View>
 
         {hasCustomWords && (
-          <InputItem
-            value={customWords}
-            setValue={value => setCustomWords(value)}
-            label={i18n.wallets.importWallet.customWords}
+          <TextAreaItem
+            onChangeText={setCustomWords}
+            placeholder={i18n.wallets.importWallet.customWords}
+            style={styles.textAreaCustomWords}
           />
         )}
       </View>
@@ -331,6 +331,11 @@ const styles = StyleSheet.create({
   textArea: {
     marginTop: 24,
     height: 250,
+  },
+  textAreaCustomWords: {
+    marginTop: 24,
+    height: 160,
+    marginBottom: 24,
   },
   scanQRCodeButtonContainer: {
     marginTop: 12,
