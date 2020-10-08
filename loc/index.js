@@ -6,10 +6,8 @@ import Localization from 'react-localization';
 import { LocaleConfig } from 'react-native-calendars';
 import * as RNLocalize from 'react-native-localize';
 
-import { updateSelectedLanguage } from 'app/state/appSettings/actions';
-import { store } from 'app/state/store';
-
 import { BitcoinUnit } from '../models/bitcoinUnits';
+import { CONST } from '../src/consts';
 
 const BigNumber = require('bignumber.js');
 
@@ -23,7 +21,8 @@ dayjs.extend(localeData);
   // For some reason using the AppStorage.LANG constant is not working. Hard coding string for now.
   // hardcoding for presentional purposes
   // let lang = await As  yncStorage.getItem('lang');
-  const lang = (await AsyncStorage.getItem('lang')) || RNLocalize.getLocales()[0]?.languageCode || 'en';
+  const lang =
+    (await AsyncStorage.getItem('lang')) || RNLocalize.getLocales()[0]?.languageCode || CONST.defaultLanguage;
   await strings.saveLanguage(lang);
 })();
 
@@ -33,18 +32,15 @@ const init = lang => {
     let localeForDayJSAvailable = true;
     switch (lang) {
       case 'zh':
-        lang = 'zh';
         require('dayjs/locale/zh-cn');
         break;
       case 'es':
         require('dayjs/locale/es');
         break;
       case 'pt':
-        lang = 'pt';
         require('dayjs/locale/pt');
         break;
       case 'ja':
-        lang = 'ja';
         require('dayjs/locale/ja');
         break;
       case 'id':
@@ -57,7 +53,6 @@ const init = lang => {
         require('dayjs/locale/vi');
         break;
       case 'ko':
-        lang = 'ko';
         require('dayjs/locale/ko');
         break;
       default:
@@ -87,7 +82,6 @@ strings = new Localization({
 
 strings.saveLanguage = async lang => {
   await AsyncStorage.setItem('lang', lang);
-  await store.dispatch(updateSelectedLanguage(lang));
   init(lang);
 };
 

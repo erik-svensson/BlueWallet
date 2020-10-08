@@ -1,12 +1,13 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Header, Image } from 'app/components';
 import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { selectors } from 'app/state/appSettings';
+import { updateSelectedLanguage } from 'app/state/appSettings/actions';
 import { typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -42,6 +43,8 @@ const LanguageItem = ({ selectedLanguage, selectedLanguageValue, onLanguageSelec
 
 export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
   const language = useSelector(selectors.language);
+  const dispatch = useDispatch();
+
   const availableLanguages: Language[] = [
     { label: 'English (EN)', value: 'en' },
     { label: '中文 (ZH)', value: 'zh' },
@@ -63,6 +66,7 @@ export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
           text: i18n.selectLanguage.confirm,
           onPress: async () => {
             await i18n.saveLanguage(value);
+            dispatch(updateSelectedLanguage(value));
           },
         },
         {
