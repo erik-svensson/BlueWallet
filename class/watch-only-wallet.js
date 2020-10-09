@@ -80,9 +80,6 @@ export class WatchOnlyWallet extends LegacyWallet {
     this._hdWalletInstance = hdWalletInstance;
   }
 
-  getAddresses() {
-    return [this.secret];
-  }
   getScriptHashes() {
     if (this._scriptHashes) {
       return this._scriptHashes;

@@ -133,9 +133,6 @@ export class AbstractHDWallet extends LegacyWallet {
     return this._address;
   }
 
-  getAddresses() {
-    return this._address;
-  }
   getScriptHashes() {
     if (this._scriptHashes) {
       return this._scriptHashes;
