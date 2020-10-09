@@ -87,7 +87,13 @@ export const ImportWalletScreen = (props: Props) => {
   const onScanQrCodeButtonPress = () => {
     props.navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (mnemonic: string) => {
-        importMnemonic(mnemonic);
+        Keyboard.dismiss();
+        CreateMessage({
+          title: i18n.message.creatingWallet,
+          description: i18n.message.creatingWalletDescription,
+          type: MessageType.processingState,
+          asyncTask: () => importMnemonic(mnemonic),
+        });
       },
     });
   };
