@@ -7,7 +7,6 @@ import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledTe
 import { Wallet, Route, EnhancedTransaction, CONST } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
-import { startListeners, StartListenersAction } from 'app/state/electrumX/actions';
 import { clearFilters, ClearFiltersAction } from 'app/state/filters/actions';
 import * as transactionsNotesSelectors from 'app/state/transactionsNotes/selectors';
 import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
@@ -30,7 +29,6 @@ interface Props {
   isInitialized: boolean;
   loadWallets: () => LoadWalletsAction;
   clearFilters: () => ClearFiltersAction;
-  startElectrumXListeners: () => StartListenersAction;
   isFilteringOn?: boolean;
 }
 
@@ -50,7 +48,6 @@ class DashboardScreen extends Component<Props, State> {
   walletCarouselRef = React.createRef<WalletsCarousel>();
   transactionListRef = React.createRef<SectionList>();
   componentDidMount() {
-    this.props.startElectrumXListeners();
     this.props.loadWallets();
   }
 
@@ -276,7 +273,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   loadWallets,
   clearFilters,
-  startElectrumXListeners: startListeners,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardScreen);

@@ -10,6 +10,7 @@ import { Navigator } from 'app/navigators';
 import { AppStateManager } from 'app/services';
 import { AuthenticationAction } from 'app/state/authentication/actions';
 import { persistor, store } from 'app/state/store';
+import { WalletsAction } from 'app/state/wallets/actions';
 
 import config from './config';
 
@@ -29,11 +30,20 @@ export default class App extends React.PureComponent {
     });
   };
 
+  refreshWallets = () => {
+    store.dispatch({
+      type: WalletsAction.LoadWallets,
+    });
+  };
+
   render() {
     return (
       <I18nextProvider i18n={i18n}>
         <Provider store={store}>
-          <AppStateManager handleAppComesToBackground={this.lockScreen} />
+          <AppStateManager
+            handleAppComesToForeground={this.refreshWallets}
+            handleAppComesToBackground={this.lockScreen}
+          />
           <PersistGate loading={null} persistor={persistor}>
             <View style={styles.wrapper}>
               <Navigator />

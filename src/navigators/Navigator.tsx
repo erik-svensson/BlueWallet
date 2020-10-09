@@ -12,6 +12,7 @@ import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authentication';
 import { checkCredentials as checkCredentialsAction } from 'app/state/authentication/actions';
+import { startListeners, StartListenersAction } from 'app/state/electrumX/actions';
 import { isAndroid, isIos } from 'app/styles';
 
 import config from '../../config';
@@ -27,6 +28,7 @@ interface MapStateToProps {
 
 interface ActionsDisptach {
   checkCredentials: Function;
+  startElectrumXListeners: () => StartListenersAction;
 }
 
 type Props = MapStateToProps & ActionsDisptach;
@@ -41,9 +43,9 @@ class Navigator extends React.Component<Props, State> {
   };
 
   async componentDidMount() {
-    const { checkCredentials } = this.props;
+    const { checkCredentials, startElectrumXListeners } = this.props;
     checkCredentials();
-
+    startElectrumXListeners();
     if (!__DEV__) {
       checkDeviceSecurity();
     }
@@ -124,6 +126,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
 
 const mapDispatchToProps: ActionsDisptach = {
   checkCredentials: checkCredentialsAction,
+  startElectrumXListeners: startListeners,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigator);

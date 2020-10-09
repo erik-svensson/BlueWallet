@@ -55,6 +55,7 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
     case WalletsAction.LoadWalletsFailure:
     case WalletsAction.CreateWalletFailure:
     case WalletsAction.ImportWalletFailure:
+    case WalletsAction.RefreshWalletFailure:
       return {
         ...state,
         isLoading: false,

@@ -21,6 +21,7 @@ export enum WalletsAction {
   SendTransaction = 'SendTransaction',
   SendTransactionSuccess = 'SendTransactionSuccess',
   SendTransactionFailure = 'SendTransactionFailure',
+  RefreshWallet = 'RefreshWallet',
   RefreshWalletSuccess = 'RefreshWalletSuccess',
   RefreshWalletFailure = 'SendTransactionFailure',
 }
@@ -119,6 +120,11 @@ export interface SendTransactionFailureAction {
   error: Error;
 }
 
+export interface RefreshWalletAction {
+  type: WalletsAction.RefreshWallet;
+  id: string;
+}
+
 export interface RefreshWalletSuccessAction {
   type: WalletsAction.RefreshWalletSuccess;
   wallet: Wallet;
@@ -126,7 +132,7 @@ export interface RefreshWalletSuccessAction {
 
 export interface RefreshWalletFailureAction {
   type: WalletsAction.RefreshWalletFailure;
-  error: string;
+  error: Error;
 }
 
 export type WalletsActionType =
@@ -148,6 +154,7 @@ export type WalletsActionType =
   | SendTransactionAction
   | SendTransactionFailureAction
   | SendTransactionSuccessAction
+  | RefreshWalletAction
   | RefreshWalletSuccessAction
   | RefreshWalletFailureAction;
 
@@ -252,12 +259,17 @@ export const sendTransactionFailure = (error: Error): SendTransactionFailureActi
   error,
 });
 
+export const refreshWallet = (id: string): RefreshWalletAction => ({
+  type: WalletsAction.RefreshWallet,
+  id,
+});
+
 export const refreshWalletSuccess = (wallet: Wallet): RefreshWalletSuccessAction => ({
   type: WalletsAction.RefreshWalletSuccess,
   wallet,
 });
 
-export const refreshWalletFailure = (error: string): RefreshWalletFailureAction => ({
+export const refreshWalletFailure = (error: Error): RefreshWalletFailureAction => ({
   type: WalletsAction.RefreshWalletFailure,
   error,
 });

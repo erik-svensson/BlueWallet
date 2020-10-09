@@ -214,7 +214,6 @@ export class LegacyWallet extends AbstractWallet {
     try {
       const txid_list = txs.map(t => t.tx_hash);
 
-      console.log('txid_list', txid_list);
       this.transactions = this.transactions.filter(tx => {
         if (!(tx.height > 0)) {
           return false;
@@ -224,23 +223,13 @@ export class LegacyWallet extends AbstractWallet {
         if (!transaction) {
           return false;
         }
-        const res = transaction.tx_type === tx.tx_type;
-
-        if (!res) {
-          console.log('transaction', transaction);
-          console.log('tx', tx);
-        }
-        console.log('res', res);
-        return res;
+        return transaction.tx_type === tx.tx_type;
       });
 
       const alreadyFetchedTxIds = this.transactions.map(tx => tx.txid);
 
       const txIdsDiff = difference(txid_list, alreadyFetchedTxIds);
 
-      console.log('alreadyFetchedTxIds', alreadyFetchedTxIds);
-
-      console.log('txIdsDiff', txIdsDiff);
       if (txIdsDiff.length === 0) {
         return;
       }
