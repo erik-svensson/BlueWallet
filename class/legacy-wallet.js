@@ -213,7 +213,18 @@ export class LegacyWallet extends AbstractWallet {
   async setTransactions(txs) {
     try {
       const txid_list = txs.map(t => t.tx_hash);
-      this.transactions = this.transactions.filter(tx => tx.height && txid_list.includes(tx.txid));
+
+      this.transactions = this.transactions.filter(tx => {
+        if (!(tx.height > 0)) {
+          return false;
+        }
+        const transaction = findLast(txs, t => t.tx_hash === tx.txid);
+
+        if (!transaction) {
+          return false;
+        }
+        return transaction.tx_type === tx.tx_type;
+      });
 
       const alreadyFetchedTxIds = this.transactions.map(tx => tx.txid);
 
@@ -244,7 +255,6 @@ export class LegacyWallet extends AbstractWallet {
           tx.received = new Date(tx.time * 1000).toISOString();
         } else {
           tx.received = new Date().toISOString();
-          tx.time = new Date().toISOString();
         }
         tx.walletLabel = this.label;
         if (!tx.confirmations) tx.confirmations = 0;

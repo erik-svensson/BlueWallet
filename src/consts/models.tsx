@@ -140,6 +140,7 @@ export interface Wallet {
   fetchTransactions: () => void;
   isAnyOfAddressesMine: (addresses: string[]) => boolean;
   id: string;
+  getScriptHashes: () => string[];
 }
 
 export interface ActionMeta {

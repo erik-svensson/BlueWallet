@@ -151,6 +151,14 @@ module.exports.multiGetTransactionsFullByTxid = async function(txIds) {
   )(txs);
 };
 
+module.exports.subscribeToSriptHashes = scriptHashes => {
+  return Promise.all(scriptHashes.map(scriptHash => mainClient.blockchainScripthash_subscribe(scriptHash)));
+};
+
+module.exports.unsubscribeFromSriptHashes = scriptHashes => {
+  return Promise.all(scriptHashes.map(scriptHash => mainClient.blockchainScripthash_unsubscribe(scriptHash)));
+};
+
 /**
  *
  * @param addresses {Array}

@@ -60,7 +60,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
         const { height } = transaction;
         return {
           ...transaction,
-          confirmations: height ? blockHeight - height : 0,
+          confirmations: height > 0 ? blockHeight - height : 0,
           walletPreferredBalanceUnit: walletBalanceUnit,
           walletId: id,
           walletLabel,
@@ -86,7 +86,7 @@ export const getAlertPendingTransactions = createSelector(getTranasctionsByWalle
 );
 
 export const getTransactionsToRecoverByWalletId = createSelector(getAlertPendingTransactions, txs =>
-  txs.filter(tx => tx.value < 0 && tx.confirmations > 0),
+  txs.filter(tx => tx.value < 0 && tx.time),
 );
 
 export const hasWallets = createSelector(wallets, walletsList => walletsList.length > 0);

@@ -2,10 +2,12 @@ import { ElectrumXAction, ElectrymXActionType } from './actions';
 
 export interface ElectrumXState {
   blockHeight: number;
+  subscribedScriptHashes: string[];
 }
 
 const initialState: ElectrumXState = {
   blockHeight: 0,
+  subscribedScriptHashes: [],
 };
 
 export const electrumXReducer = (state = initialState, action: ElectrymXActionType): ElectrumXState => {
@@ -14,6 +16,11 @@ export const electrumXReducer = (state = initialState, action: ElectrymXActionTy
       return {
         ...state,
         blockHeight: action.blockHeight,
+      };
+    case ElectrumXAction.SetSubscribedScriptHashes:
+      return {
+        ...state,
+        subscribedScriptHashes: action.scriptHashes,
       };
     default:
       return state;
