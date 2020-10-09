@@ -69,7 +69,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const amount = this.getAmountByTx(txDecoded);
     if (isAlert) {
       return {
-        availableBalance: satoshiToBtc(balance - amount.my - amount.foreign) - fee,
+        availableBalance: satoshiToBtc(balance - amount.my - amount.foreign).toNumber() - fee,
         pendingBalance: satoshiToBtc(incomingBalance + amount.my) - fee,
       };
     }
@@ -87,6 +87,8 @@ class SendCoinsConfirmScreen extends Component<Props> {
       pendingBalance: satoshiToBtc(incomingBalance).toNumber(),
     };
   };
+
+  navgitateToMainCard = () => this.props.navigation.navigate(Route.MainCardStackNavigator);
 
   broadcast = () => {
     const {
@@ -112,7 +114,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
             type: MessageType.success,
             buttonProps: {
               title: i18n.message.returnToDashboard,
-              onPress: () => navigation.navigate(Route.MainCardStackNavigator),
+              onPress: this.navgitateToMainCard,
             },
           });
         },
