@@ -88,6 +88,8 @@ class SendCoinsConfirmScreen extends Component<Props> {
     };
   };
 
+  navgitateToMainCard = () => this.props.navigation.navigate(Route.MainCardStackNavigator);
+
   broadcast = () => {
     const {
       createTransactionNote,
@@ -112,7 +114,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
             type: MessageType.success,
             buttonProps: {
               title: i18n.message.returnToDashboard,
-              onPress: () => navigation.navigate(Route.MainCardStackNavigator),
+              onPress: this.navgitateToMainCard,
             },
           });
         },
