@@ -7,12 +7,13 @@ import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator, PasswordNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
-import { navigationRef } from 'app/services';
+import { navigationRef, AppStateManager } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authentication';
 import { checkCredentials as checkCredentialsAction } from 'app/state/authentication/actions';
 import { startListeners, StartListenersAction } from 'app/state/electrumX/actions';
+import { LoadWalletsAction, loadWallets as loadWalletsAction } from 'app/state/wallets/actions';
 import { isAndroid, isIos } from 'app/styles';
 
 import config from '../../config';
@@ -29,6 +30,7 @@ interface MapStateToProps {
 interface ActionsDisptach {
   checkCredentials: Function;
   startElectrumXListeners: () => StartListenersAction;
+  loadWallets: () => LoadWalletsAction;
 }
 
 type Props = MapStateToProps & ActionsDisptach;
@@ -42,7 +44,7 @@ class Navigator extends React.Component<Props, State> {
     isBetaVersionRiskAccepted: false,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { checkCredentials, startElectrumXListeners } = this.props;
     checkCredentials();
     startElectrumXListeners();
@@ -86,6 +88,11 @@ class Navigator extends React.Component<Props, State> {
     this.setState({ isBetaVersionRiskAccepted: true });
   };
 
+  refreshWallets = () => {
+    const { loadWallets } = this.props;
+    loadWallets();
+  };
+
   renderRoutes = () => {
     const { isLoading } = this.props;
     if (isLoading) {
@@ -113,7 +120,12 @@ class Navigator extends React.Component<Props, State> {
   };
 
   render() {
-    return <NavigationContainer ref={navigationRef}>{this.renderRoutes()}</NavigationContainer>;
+    return (
+      <>
+        <AppStateManager handleAppComesToForeground={this.refreshWallets} />
+        <NavigationContainer ref={navigationRef}>{this.renderRoutes()}</NavigationContainer>
+      </>
+    );
   }
 }
 
@@ -127,6 +139,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
 const mapDispatchToProps: ActionsDisptach = {
   checkCredentials: checkCredentialsAction,
   startElectrumXListeners: startListeners,
+  loadWallets: loadWalletsAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigator);
