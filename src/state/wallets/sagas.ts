@@ -38,6 +38,7 @@ export function* loadWalletsSaga() {
     yield BlueElectrum.waitTillConnected();
 
     yield all([call(() => BlueApp.fetchWalletBalances()), call(() => BlueApp.fetchWalletTransactions())]);
+
     const wallets = BlueApp.getWallets();
     yield put(loadWalletsSuccess(wallets));
   } catch (e) {

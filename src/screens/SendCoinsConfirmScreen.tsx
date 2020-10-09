@@ -207,7 +207,9 @@ class SendCoinsConfirmScreen extends Component<Props> {
               </Text>
             </View>
             <View style={styles.descriptionContainer}>
-              <Text style={styles.buttonDescription}>{fromWallet.label}</Text>
+              <Text style={styles.buttonDescription} numberOfLines={1} ellipsizeMode="tail">
+                {fromWallet.label}
+              </Text>
               <Image source={images.coin} style={styles.coinIcon} />
             </View>
           </View>

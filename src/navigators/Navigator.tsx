@@ -1,8 +1,10 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import JailMonkey from 'jail-monkey';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { CONST } from 'app/consts';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator, PasswordNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
@@ -10,7 +12,9 @@ import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
 import { navigationRef, AppStateManager } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
-import { selectors } from 'app/state/authentication';
+import { selectors as appSettingsSelectors } from 'app/state/appSettings';
+import { updateSelectedLanguage as updateSelectedLanguageAction } from 'app/state/appSettings/actions';
+import { selectors as authenticationSelectors } from 'app/state/authentication';
 import { checkCredentials as checkCredentialsAction } from 'app/state/authentication/actions';
 import { startListeners, StartListenersAction } from 'app/state/electrumX/actions';
 import { LoadWalletsAction, loadWallets as loadWalletsAction } from 'app/state/wallets/actions';
@@ -25,15 +29,21 @@ interface MapStateToProps {
   isAuthenticated: boolean;
   isTxPasswordSet: boolean;
   isLoading: boolean;
+  language: string;
 }
 
 interface ActionsDisptach {
   checkCredentials: Function;
   startElectrumXListeners: () => StartListenersAction;
   loadWallets: () => LoadWalletsAction;
+  updateSelectedLanguage: Function;
 }
 
-type Props = MapStateToProps & ActionsDisptach;
+interface OwnProps {
+  unlockKey: string;
+}
+
+type Props = MapStateToProps & ActionsDisptach & OwnProps;
 
 interface State {
   isBetaVersionRiskAccepted: boolean;
@@ -48,10 +58,21 @@ class Navigator extends React.Component<Props, State> {
     const { checkCredentials, startElectrumXListeners } = this.props;
     checkCredentials();
     startElectrumXListeners();
+    this.initLanguage();
+
     if (!__DEV__) {
       checkDeviceSecurity();
     }
   }
+
+  initLanguage = async () => {
+    const { language, updateSelectedLanguage } = this.props;
+    const detectedLanguage = (await AsyncStorage.getItem('lang')) || CONST.defaultLanguage;
+
+    if (language !== detectedLanguage) {
+      updateSelectedLanguage(detectedLanguage);
+    }
+  };
 
   shouldRenderOnBoarding = () => {
     const { isPinSet, isTxPasswordSet } = this.props;
@@ -94,7 +115,7 @@ class Navigator extends React.Component<Props, State> {
   };
 
   renderRoutes = () => {
-    const { isLoading } = this.props;
+    const { isLoading, unlockKey } = this.props;
     if (isLoading) {
       return null;
     }
@@ -114,7 +135,7 @@ class Navigator extends React.Component<Props, State> {
     return (
       <>
         <RootNavigator />
-        {this.shouldRenderUnlockScreen() && <UnlockScreen />}
+        {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
       </>
     );
   };
@@ -123,23 +144,27 @@ class Navigator extends React.Component<Props, State> {
     return (
       <>
         <AppStateManager handleAppComesToForeground={this.refreshWallets} />
-        <NavigationContainer ref={navigationRef}>{this.renderRoutes()}</NavigationContainer>
+        <NavigationContainer key={this.props.language} ref={navigationRef}>
+          {this.renderRoutes()}
+        </NavigationContainer>
       </>
     );
   }
 }
 
 const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
-  isLoading: selectors.isLoading(state),
-  isPinSet: selectors.isPinSet(state),
-  isTxPasswordSet: selectors.isTxPasswordSet(state),
-  isAuthenticated: selectors.isAuthenticated(state),
+  isLoading: authenticationSelectors.isLoading(state),
+  isPinSet: authenticationSelectors.isPinSet(state),
+  isTxPasswordSet: authenticationSelectors.isTxPasswordSet(state),
+  isAuthenticated: authenticationSelectors.isAuthenticated(state),
+  language: appSettingsSelectors.language(state),
 });
 
 const mapDispatchToProps: ActionsDisptach = {
   checkCredentials: checkCredentialsAction,
   startElectrumXListeners: startListeners,
   loadWallets: loadWalletsAction,
+  updateSelectedLanguage: updateSelectedLanguageAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigator);

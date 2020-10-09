@@ -274,17 +274,17 @@ const jo = {
       annulled: '無効化',
       done: '完了',
       canceled: 'キャンセル済み',
-      unblocked: 'TRANSLATION NEEDED | ENG: unblocked',
+      unblocked: 'ブロック解除',
     },
     transactionTypeLabel: {
       standard: '標準',
       canceled: 'キャンセル済み',
       fast: 'クイック',
-      secure: 'TRANSLATION NEEDED | ENG: Secure',
-      secureFast: 'TRANSLATION NEEDED | ENG: Secure Fast',
+      secure: '安全な',
+      secureFast: '安全で早い',
     },
     errors: {
-      notEnoughBalance: 'TRANSLATION NEEDED | ENG: Not enough balance. Please, try sending a smaller amount.',
+      notEnoughBalance: '残高不足。少ない金額で試してください。',
     },
   },
   send: {
@@ -355,8 +355,8 @@ const jo = {
       title: 'エラー',
       description: '取引を生成する前にビットコインボルトウォレットを追加しなければなりません。',
     },
-    warning: 'TRANSLATION NEEDED | ENG: Warning: ',
-    warningGeneral: 'TRANSLATION NEEDED | ENG: Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
+    warning: '警告: ',
+    warningGeneral: '警告: 安全な取引機能の使用過程でお客様のウォレットの一部の資金がブロックされる可能性があります。これはUTXOやビットコインボルト・ウォレットのブロックチェーン範囲に関する一般的なプロセスです。取引が検証 されるか(約24時間後) キャンセルになると (24時間以内) 資金のブロックが解除されます。',
   },
   receive: {
     header: 'コインの受け取り',
@@ -483,7 +483,7 @@ const jo = {
       annulled: '無効化',
       done: '完了',
       canceled: 'キャンセル済み',
-      unblocked: 'TRANSLATION NEEDED | ENG: Unblocked',
+      unblocked: 'ブロック解除',
     },
   },
   authenticators: {
@@ -550,11 +550,11 @@ const jo = {
     jailBrokenPhone: '貴下の装置が脱獄されたようです。この場合セキュリティ問題や衝突、その他様々な問題が発生する恐れがあります。脱獄された装置ではGoldWalletを使用しないようお願いします。',
     rootedPhone: '貴下の装置がルーティングされたようです。この場合セキュリティ問題や衝突、その他様々な問題が発生する恐れがあります。ルーティングされた装置ではGoldWalletを使用しないようお願いします。\n',
     title: 'セキュリティ問題',
-    noPinOrFingerprintSet: 'TRANSLATION NEEDED | ENG: Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
+    noPinOrFingerprintSet: 'デバイスにパスワード又は指紋が登録されていません。安全ではないデバイスでのGoldWallet使用はお勧めできません。',
   },
   betaVersion: {
-    title: 'TRANSLATION NEEDED | ENG: This is a beta version\nof the GoldWallet',
-    description: 'TRANSLATION NEEDED | ENG: It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
-    button: 'TRANSLATION NEEDED | ENG: I accept the risk',
+    title: 'これはGoldWallletのベータバージョンです',
+    description: 'まだ正式なリリース以前に最終テストを行っています。こちらに見せられる全てのコンテンツやモバイルアプリは\"そのまま\"と\"使用可能\"に基盤し提供されています。ソフトウェアの使用はユーザーのリスクを認識した上で行われます。',
+    button: '私はリスクを認識しています',
   },
 }
