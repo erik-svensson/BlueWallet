@@ -61,7 +61,6 @@ export function* listenScriptHashesSaga() {
   while (true) {
     const event = yield take(chan);
     const [scriptHash] = event;
-    console.log('scriptHash', scriptHash);
 
     yield put(scriptHashChanged(scriptHash));
   }
