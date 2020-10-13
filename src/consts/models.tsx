@@ -22,6 +22,7 @@ export const CONST = {
   ios: 'ios',
   transactionPassword: 'transactionPassword',
   pin: 'pin',
+  defaultLanguage: 'en',
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
@@ -138,7 +139,9 @@ export interface Wallet {
   fetchBalance: () => void;
   fetchUtxos: () => void;
   fetchTransactions: () => void;
+  isAnyOfAddressesMine: (addresses: string[]) => boolean;
   id: string;
+  getScriptHashes: () => string[];
 }
 
 export interface ActionMeta {
@@ -172,6 +175,7 @@ export interface Transaction {
   inputs: any[];
   outputs: any[];
   note?: string;
+  height: number;
   walletPreferredBalanceUnit: string;
 }
 
@@ -254,6 +258,7 @@ export type RootStackParams = {
     validate?: (value: string) => string | undefined;
     validateOnSave?: (value: string) => void;
     keyboardType?: KeyboardType;
+    maxLength?: number;
   };
   [Route.Message]: {
     title: string;

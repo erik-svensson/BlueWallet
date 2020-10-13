@@ -274,17 +274,17 @@ const id = {
       annulled: 'dianulir',
       done: 'selesai',
       canceled: 'dibatalkan',
-      unblocked: 'TRANSLATION NEEDED | ENG: unblocked',
+      unblocked: 'unblocked',
     },
     transactionTypeLabel: {
       standard: 'Standar',
       canceled: 'Dibatalkan',
       fast: 'Cepat',
-      secure: 'TRANSLATION NEEDED | ENG: Secure',
-      secureFast: 'TRANSLATION NEEDED | ENG: Secure Fast',
+      secure: 'Aman',
+      secureFast: 'Aman Cepat',
     },
     errors: {
-      notEnoughBalance: 'TRANSLATION NEEDED | ENG: Not enough balance. Please, try sending a smaller amount.',
+      notEnoughBalance: 'Saldo tidak cukup. Mohon coba untuk mengirimkan jumlah yang lebih sedikit.',
     },
   },
   send: {
@@ -355,8 +355,8 @@ const id = {
       title: 'Kesalahan',
       description: 'Sebelum melakukan transaksi, Anda harus menambahkan dompet Bitcoin Vault terlebih dahulu.',
     },
-    warning: 'TRANSLATION NEEDED | ENG: Warning: ',
-    warningGeneral: 'TRANSLATION NEEDED | ENG: Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
+    warning: 'Peringatan: ',
+    warningGeneral: 'Peringatan: Mohon diingat bahwa dalam proses menggunakan fitur Transaksi Aman, sebagian dari saldo yang tersisa di saldo dompet Anda memilki kemungkinan untuk diblokir secara sementara. Hal ini merupakan bagian dari prosedur umum yang berkaitan dengan UTXO dan parameter blockchain dari dompet Bitcoin Vault. Saldo Anda akan kembali dibuka ketika transaksi Anda diverifikasi (kurang lebih setelah sekitar 24 jam) atau dibatalkan (dalam waktu 24 jam).',
   },
   receive: {
     header: 'Terima koin',
@@ -434,6 +434,8 @@ const id = {
     successTitle: 'Berhasil',
     successDescription: 'Hore! Anda telah berhasil\n menambahkan kontak.',
     successButton: 'Kembali ke Buku alamat',
+    nameMissingAlphanumericCharacterError: 'TRANSLATION NEEDED | ENG: Name is missing alphanumeric character.',
+    nameCannotContainSpecialCharactersError: 'TRANSLATION NEEDED | ENG: Name cannot contain special characters.',
   },
   contactDetails: {
     nameLabel: 'Nama',
@@ -483,7 +485,7 @@ const id = {
       annulled: 'Dianulir',
       done: 'Selesai',
       canceled: 'Dibatalkan',
-      unblocked: 'TRANSLATION NEEDED | ENG: Unblocked',
+      unblocked: 'Unblocked',
     },
   },
   authenticators: {
@@ -550,11 +552,11 @@ const id = {
     jailBrokenPhone: 'Perangkat Anda tampak sudah di-jailbreak. Ini dapat menyebabkan masalah keamanan, kerusakan, atau masalah lainnya. Kami tidak menyarankan penggunaan GoldWallet di perangkat yang sudah di-jailbreak.',
     rootedPhone: 'Perangkat Anda tampaknya sudah di-root. Ini dapat menyebabkan masalah keamanan, kerusakan, atau masalah lainnya. Kami tidak menyarankan penggunaan GoldWallet di perangkat yang sudah di-root.',
     title: 'Masalah keamanan',
-    noPinOrFingerprintSet: 'TRANSLATION NEEDED | ENG: Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
+    noPinOrFingerprintSet: 'Nampaknya perangkat Anda tidak diamankan menggunakan PIN ataupun sidik jari. Kami tidak merekomendasikan untuk menggunakan GoldWallet di perangkat yang tidak diamankan.',
   },
   betaVersion: {
-    title: 'TRANSLATION NEEDED | ENG: This is a beta version\nof the GoldWallet',
-    description: 'TRANSLATION NEEDED | ENG: It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
-    button: 'TRANSLATION NEEDED | ENG: I accept the risk',
+    title: 'Versi ini merupakan GoldWallet versi beta',
+    description: 'Aplikasi masih akan menjalani pengujian akhir sebelum perilisan resmi. Aplikasi mobile dan semua yang konten yang Anda temukan didalamnya disediakan dalam basis \"apa adanya\" dan \"ketika tersedia\". Risiko penggunaan perangkat lunak ditanggung langsung oleh pengguna.',
+    button: 'Saya mengerti dan menerima risikonya',
   },
 }

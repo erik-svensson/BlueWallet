@@ -12,14 +12,16 @@ import { CopyButton } from 'app/components/CopyButton';
 import { Route, MainCardStackNavigatorParams, RootStackParams, TxType } from 'app/consts';
 import { getConfirmationsText } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
-import { selectors, reducer } from 'app/state/transactions';
+import { selectors, reducer } from 'app/state/transactionsNotes';
 import {
   createTransactionNote,
   updateTransactionNote,
   CreateTransactionNoteAction,
   UpdateTransactionNoteAction,
-} from 'app/state/transactions/actions';
+} from 'app/state/transactionsNotes/actions';
 import { typography, palette } from 'app/styles';
+
+import config from '../../config';
 
 const i18n = require('../../loc');
 
@@ -184,17 +186,19 @@ class TransactionDetailsScreen extends Component<Props> {
             <CopyButton textToCopy={transaction.txid} />
           </View>
           <Text style={styles.contentRowBody}>{transaction.txid}</Text>
-          <StyledText
-            title={i18n.transactions.details.viewInBlockRxplorer}
-            onPress={() => {
-              const url = `http://explorer.bitcoinvault.global/tx/${transaction.txid}`;
-              Linking.canOpenURL(url).then(supported => {
-                if (supported) {
-                  Linking.openURL(url);
-                }
-              });
-            }}
-          />
+          {!config.isBeta && (
+            <StyledText
+              title={i18n.transactions.details.viewInBlockRxplorer}
+              onPress={() => {
+                const url = `http://explorer.bitcoinvault.global/tx/${transaction.txid}`;
+                Linking.canOpenURL(url).then(supported => {
+                  if (supported) {
+                    Linking.openURL(url);
+                  }
+                });
+              }}
+            />
+          )}
         </View>
         <View style={styles.contentRowContainer}>
           <Text style={styles.contentRowTitle}>{i18n.transactions.details.transactionType}</Text>
@@ -213,7 +217,7 @@ class TransactionDetailsScreen extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: ApplicationState & reducer.TransactionsState, props: Props) => {
+const mapStateToProps = (state: ApplicationState & reducer.TransactionsNotesState, props: Props) => {
   const {
     transaction: { hash },
   } = props.route.params;

@@ -1,6 +1,7 @@
 import * as bip39 from 'bip39';
 import { sortBy, compose, mapValues, map } from 'lodash/fp';
 
+import { addressToScriptHash } from '../utils/bitcoin';
 import { LegacyWallet } from './legacy-wallet';
 
 const mapValuesNoCap = mapValues.convert({ cap: false });
@@ -87,19 +88,19 @@ export class AbstractHDWallet extends LegacyWallet {
     return addr_min;
   }
 
-  _getExternalWIFByIndex(index) {
+  _getExternalWIFByIndex() {
     throw new Error('Not implemented');
   }
 
-  _getInternalWIFByIndex(index) {
+  _getInternalWIFByIndex() {
     throw new Error('Not implemented');
   }
 
-  _getExternalAddressByIndex(index) {
+  _getExternalAddressByIndex() {
     throw new Error('Not implemented');
   }
 
-  _getInternalAddressByIndex(index) {
+  _getInternalAddressByIndex() {
     throw new Error('Not implemented');
   }
 
@@ -128,6 +129,15 @@ export class AbstractHDWallet extends LegacyWallet {
       this.generateAddresses();
     }
     return this._address;
+  }
+
+  getScriptHashes() {
+    if (this._scriptHashes) {
+      return this._scriptHashes;
+    }
+    this._scriptHashes = this._address.map(addressToScriptHash);
+
+    return this._scriptHashes;
   }
   /**
    * Given that `address` is in our HD hierarchy, try to find
@@ -166,22 +176,21 @@ export class AbstractHDWallet extends LegacyWallet {
   }
 
   async fetchUtxos() {
-    try {
-      this.utxo = [];
-      const utxos = await BlueElectrum.multiGetUtxoByAddress(this.getAddress());
-      this.utxo = utxos;
-    } catch (err) {}
+    this.utxo = [];
+    const utxos = await BlueElectrum.multiGetUtxoByAddress(this.getAddress());
+    this.utxo = utxos;
+    return this.utxo;
   }
 
   weOwnAddress(addr) {
     return this._address.includes(addr);
   }
 
-  _getDerivationPathByAddress(address) {
+  _getDerivationPathByAddress() {
     throw new Error('Not implemented');
   }
 
-  _getNodePubkeyByIndex(address) {
+  _getNodePubkeyByIndex() {
     throw new Error('Not implemented');
   }
 

@@ -274,17 +274,17 @@ const zh = {
       annulled: '无效',
       done: '完成',
       canceled: '已取消',
-      unblocked: 'TRANSLATION NEEDED | ENG: unblocked',
+      unblocked: '未锁定',
     },
     transactionTypeLabel: {
       standard: '标准',
       canceled: '已取消',
       fast: '快速',
-      secure: 'TRANSLATION NEEDED | ENG: Secure',
-      secureFast: 'TRANSLATION NEEDED | ENG: Secure Fast',
+      secure: '安全',
+      secureFast: '快速安全',
     },
     errors: {
-      notEnoughBalance: 'TRANSLATION NEEDED | ENG: Not enough balance. Please, try sending a smaller amount.',
+      notEnoughBalance: '余额不足，请尝试发送较小的金额。',
     },
   },
   send: {
@@ -355,8 +355,8 @@ const zh = {
       title: '错误',
       description: '创建交易之前，必须首先添加 Bitcoin Vault 钱包。',
     },
-    warning: 'TRANSLATION NEEDED | ENG: Warning: ',
-    warningGeneral: 'TRANSLATION NEEDED | ENG: Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
+    warning: '警告: ',
+    warningGeneral: '警告：请注意，在使用安全交易功能的过程中，您钱包中剩余的部分资金可能会被冻结。 这是与UTXO和比特币 Vault钱包的区块链参数的常规过程。 当交易通过验证（大约24小时后）或交易被取消（24小时内）后，资金冻结将被解除。',
   },
   receive: {
     header: '接收币',
@@ -434,6 +434,8 @@ const zh = {
     successTitle: '操作成功',
     successDescription: '太好了！您已成功添加新联系人。',
     successButton: '返回地址簿',
+    nameMissingAlphanumericCharacterError: 'TRANSLATION NEEDED | ENG: Name is missing alphanumeric character.',
+    nameCannotContainSpecialCharactersError: 'TRANSLATION NEEDED | ENG: Name cannot contain special characters.',
   },
   contactDetails: {
     nameLabel: '姓名',
@@ -483,7 +485,7 @@ const zh = {
       annulled: '无效',
       done: '完成',
       canceled: '已取消',
-      unblocked: 'TRANSLATION NEEDED | ENG: Unblocked',
+      unblocked: '未锁定',
     },
   },
   authenticators: {
@@ -550,11 +552,11 @@ const zh = {
     jailBrokenPhone: '您的设备似乎越狱了。这可能会出现安全问题、死机或其它问题。我们不建议在已越狱的设备上使用 GoldWallet。',
     rootedPhone: '您的设备似乎取得了 root 权限。这可能会出现安全问题、死机或其它问题。我们不建议在取得 root 权限的设备上使用 GoldWallet。',
     title: '安全问题',
-    noPinOrFingerprintSet: 'TRANSLATION NEEDED | ENG: Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
+    noPinOrFingerprintSet: '您的设备未设置PIN 密码或指纹登录。 不建议在不安全的设备上使用GoldWallet。',
   },
   betaVersion: {
-    title: 'TRANSLATION NEEDED | ENG: This is a beta version\nof the GoldWallet',
-    description: 'TRANSLATION NEEDED | ENG: It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
-    button: 'TRANSLATION NEEDED | ENG: I accept the risk',
+    title: '这是GoldWallet钱包的测试版',
+    description: '在正式发布之前，GoldWallet仍在接受最终测试。 该移动应用程序及程序上所有内容均基于“按原样 ”和“可使用”呈现。 使用该程序的风险由用户自行承担。',
+    button: '我同意承担风险',
   },
 }

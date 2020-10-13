@@ -1,4 +1,5 @@
 import config from '../config';
+import { addressToScriptHash } from '../utils/bitcoin';
 import { LegacyWallet } from './legacy-wallet';
 
 const BigNumber = require('bignumber.js');
@@ -51,6 +52,13 @@ export class SegwitP2SHWallet extends LegacyWallet {
       return false;
     }
     return ret;
+  }
+
+  getScriptHashes() {
+    if (this._scriptHashes) {
+      return this._scriptHashes;
+    }
+    this._scriptHashes = [addressToScriptHash(this._address)];
   }
 
   getAddress() {

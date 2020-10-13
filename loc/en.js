@@ -514,6 +514,8 @@ module.exports = {
     successTitle: 'Success',
     successDescription: 'Hooray! You have successfully\nadded your contact.',
     successButton: 'Return to Address book',
+    nameMissingAlphanumericCharacterError: 'Name is missing alphanumeric character.',
+    nameCannotContainSpecialCharactersError: 'Name cannot contain special characters.',
   },
   contactDetails: {
     nameLabel: 'Name',
@@ -571,7 +573,7 @@ module.exports = {
     rootedPhone:
       'Your device appears to be rooted. This may occurs security issues, crashes, or other problems. We do not recommend using GoldWallet with rooted device.',
     noPinOrFingerprintSet:
-      'Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
+      'Your device appears to not have a PIN or fingerprint set. We do not recommend using GoldWallet with a not secured device.',
     title: 'Security issue',
   },
   betaVersion: {

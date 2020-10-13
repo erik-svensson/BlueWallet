@@ -274,17 +274,17 @@ const vi = {
       annulled: 'đã bãi bỏ',
       done: 'xong',
       canceled: 'Đã hủy',
-      unblocked: 'TRANSLATION NEEDED | ENG: unblocked',
+      unblocked: 'bỏ chặn',
     },
     transactionTypeLabel: {
       standard: 'Tiêu chuẩn',
       canceled: 'Đã hủy',
       fast: 'Nhanh',
-      secure: 'TRANSLATION NEEDED | ENG: Secure',
-      secureFast: 'TRANSLATION NEEDED | ENG: Secure Fast',
+      secure: 'Bảo mật',
+      secureFast: 'Bảo mật nhanh chóng',
     },
     errors: {
-      notEnoughBalance: 'TRANSLATION NEEDED | ENG: Not enough balance. Please, try sending a smaller amount.',
+      notEnoughBalance: 'Không đủ số dư. Vui lòng, thử gửi một số tiền nhỏ hơn.',
     },
   },
   send: {
@@ -355,8 +355,8 @@ const vi = {
       title: 'Lỗi',
       description: 'Trước khi tạo giao dịch, bạn phải thêm ví Bitcoin Vault.',
     },
-    warning: 'TRANSLATION NEEDED | ENG: Warning: ',
-    warningGeneral: 'TRANSLATION NEEDED | ENG: Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
+    warning: 'Cảnh báo: ',
+    warningGeneral: 'Cảnh báo: Xin lưu ý rằng trong quá trình sử dụng tính năng Giao dịch an toàn, một phần số tiền còn lại trong ví của bạn có thể bị chặn. Đây là một quy trình bình thường được liên kết với UTXO và các thông số blockchain của ví Bitcoin Vault. Tiền của bạn sẽ được bỏ chặn sau khi giao dịch được xác minh (sau khoảng 24 giờ) hoặc bị hủy (trong vòng 24 giờ).',
   },
   receive: {
     header: 'Nhận coin',
@@ -434,6 +434,8 @@ const vi = {
     successTitle: 'Thành công',
     successDescription: 'Xin chúc mừng! Quý khách đã thêm thông tin\n liên lạc thành công.',
     successButton: 'Quay lại Sổ địa chỉ',
+    nameMissingAlphanumericCharacterError: 'TRANSLATION NEEDED | ENG: Name is missing alphanumeric character.',
+    nameCannotContainSpecialCharactersError: 'TRANSLATION NEEDED | ENG: Name cannot contain special characters.',
   },
   contactDetails: {
     nameLabel: 'Tên',
@@ -483,7 +485,7 @@ const vi = {
       annulled: 'Đã bãi bỏ',
       done: 'Xong',
       canceled: 'Đã hủy',
-      unblocked: 'TRANSLATION NEEDED | ENG: Unblocked',
+      unblocked: 'Đã mở khóa',
     },
   },
   authenticators: {
@@ -550,11 +552,11 @@ const vi = {
     jailBrokenPhone: 'Thiết bị của bạn có vẻ đã bị bẻ khóa. Điều này có thể dẫn đến các vấn đề bảo mật, sự cố hoặc các vấn đề khác. Chúng tôi khuyên bạn không nên sử dụng GoldWallet với thiết vị đã bị bẻ khóa.',
     rootedPhone: 'Thiết bị của bạn có vẻ đã bị giành quyền truy nhập gốc. Điều này có thể dẫn đến các vấn đề bảo mật, sự cố hoặc các vấn đề khác. Chúng tôi khuyên bạn không nên sử dụng GoldWallet với thiết bị đã bị giành quyền truy nhập gốc.',
     title: 'Vấn đề bảo mật',
-    noPinOrFingerprintSet: 'TRANSLATION NEEDED | ENG: Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
+    noPinOrFingerprintSet: 'Thiết bị của bạn dường như chưa được thiết lập mã pin hoặc vân tay. Chúng tôi không khuyến khích bạn sử dụng GoldWallet với thiết bị không được bảo mật.',
   },
   betaVersion: {
-    title: 'TRANSLATION NEEDED | ENG: This is a beta version\nof the GoldWallet',
-    description: 'TRANSLATION NEEDED | ENG: It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
-    button: 'TRANSLATION NEEDED | ENG: I accept the risk',
+    title: 'Đây là phiên bản beta\ncủa GoldWallet',
+    description: 'Nó vẫn đang trong quá trình thử nghiệm cuối cùng trước khi phát hành chính thức. Ứng dụng dành cho thiết bị di động và tất cả nội dung được tìm thấy được cung cấp trên cơ sở \"nguyên trạng\" và \"sẵn có\". Người dùng tự chịu rủi ro khi sử dụng phần mềm.',
+    button: 'Tôi chấp nhận rủi ro',
   },
 }

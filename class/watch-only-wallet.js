@@ -1,4 +1,5 @@
 import config from '../config';
+import { addressToScriptHash } from '../utils/bitcoin';
 import { HDLegacyP2PKHWallet } from './hd-legacy-p2pkh-wallet';
 import { HDSegwitBech32Wallet } from './hd-segwit-bech32-wallet';
 import { HDSegwitP2SHWallet } from './hd-segwit-p2sh-wallet';
@@ -39,7 +40,7 @@ export class WatchOnlyWallet extends LegacyWallet {
     );
   }
 
-  createTx(utxos, amount, fee, toAddress, memo) {
+  createTx() {
     throw new Error('Not supported');
   }
 
@@ -77,6 +78,13 @@ export class WatchOnlyWallet extends LegacyWallet {
     }
     await hdWalletInstance.generateAddresses();
     this._hdWalletInstance = hdWalletInstance;
+  }
+
+  getScriptHashes() {
+    if (this._scriptHashes) {
+      return this._scriptHashes;
+    }
+    this._scriptHashes = [addressToScriptHash(this.secret)];
   }
 
   getAddress() {

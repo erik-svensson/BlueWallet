@@ -1,5 +1,5 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -7,7 +7,7 @@ import { icons } from 'app/assets';
 import { Image, ScreenTemplate, Header, ListItem } from 'app/components';
 import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { logoSource } from 'app/helpers/images';
-import { BiometricService } from 'app/services';
+import { BiometricService, AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { updateBiometricSetting } from 'app/state/appSettings/actions';
 
@@ -24,12 +24,17 @@ export const SettingsScreen = (props: Props) => {
   const { isBiometricsEnabled } = useSelector((state: ApplicationState) => ({
     isBiometricsEnabled: state.appSettings.isBiometricsEnabled,
   }));
+  const [biometryTypeAvailable, setBiometryTypeAvailable] = useState(false);
+
+  useEffect(() => {
+    refreshBiometricsAvailability();
+  }, [biometryTypeAvailable]);
 
   const dispatch = useDispatch();
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
 
-  // const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
+  const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
 
   const onAdvancedOptionsChange = () => navigation.navigate(Route.AdvancedOptions);
 
@@ -39,8 +44,7 @@ export const SettingsScreen = (props: Props) => {
 
   const renderGeneralSettings = () => (
     <>
-      {/* done for presentional purposes, uncomment for final version */}
-      {/* <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} /> */}
+      <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} />
       <ListItem title={i18n.settings.advancedOptions} source={icons.buildIcon} onPress={onAdvancedOptionsChange} />
     </>
   );
@@ -49,30 +53,33 @@ export const SettingsScreen = (props: Props) => {
     navigation.navigate(Route.CurrentPin);
   };
 
-  const renderSecuritySettings = () => {
-    const biometryTypeAvailable = BiometricService.biometryType;
-    const isDisabled = biometryTypeAvailable === undefined;
-    return (
-      <>
-        <ListItem
-          title={i18n.settings.changePin}
-          source={icons.lockIcon}
-          iconWidth={15}
-          iconHeight={20}
-          onPress={goToChangePin}
-        />
-        <ListItem
-          disabled={isDisabled}
-          title={isDisabled ? i18n.settings.notSupportedFingerPrint : i18n.settings[biometryTypeAvailable]}
-          source={icons.fingerprintIcon}
-          switchValue={isBiometricsEnabled}
-          onSwitchValueChange={onFingerprintLoginChange}
-          iconWidth={17}
-          iconHeight={19}
-        />
-      </>
-    );
+  const refreshBiometricsAvailability = async () => {
+    await BiometricService.setBiometricsAvailability();
+    setBiometryTypeAvailable(BiometricService.biometryType !== undefined);
   };
+
+  const renderSecuritySettings = () => (
+    <>
+      <ListItem
+        title={i18n.settings.changePin}
+        source={icons.lockIcon}
+        iconWidth={15}
+        iconHeight={20}
+        onPress={goToChangePin}
+      />
+      <ListItem
+        disabled={!biometryTypeAvailable}
+        title={
+          biometryTypeAvailable ? i18n.settings[BiometricService.biometryType] : i18n.settings.notSupportedFingerPrint
+        }
+        source={icons.fingerprintIcon}
+        switchValue={isBiometricsEnabled}
+        onSwitchValueChange={onFingerprintLoginChange}
+        iconWidth={17}
+        iconHeight={19}
+      />
+    </>
+  );
 
   const renderAboutSettings = () => (
     <ListItem onPress={navigateToAboutUs} title={i18n.settings.aboutUs} source={icons.infoIcon} />
@@ -80,6 +87,7 @@ export const SettingsScreen = (props: Props) => {
 
   return (
     <>
+      <AppStateManager handleAppComesToForeground={refreshBiometricsAvailability} />
       <Header navigation={props.navigation} title={i18n.settings.header} />
       <ScreenTemplate>
         <Image source={logoSource} style={styles.logo} resizeMode="contain" />

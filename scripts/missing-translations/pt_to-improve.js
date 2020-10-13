@@ -274,17 +274,17 @@ const pt = {
       annulled: 'anulado',
       done: 'feito',
       canceled: 'cancelado',
-      unblocked: 'TRANSLATION NEEDED | ENG: unblocked',
+      unblocked: 'desbloqueado',
     },
     transactionTypeLabel: {
       standard: 'Padrão',
       canceled: 'Cancelado',
       fast: 'Rápido',
-      secure: 'TRANSLATION NEEDED | ENG: Secure',
-      secureFast: 'TRANSLATION NEEDED | ENG: Secure Fast',
+      secure: 'Seguro',
+      secureFast: 'Segurança Rápida',
     },
     errors: {
-      notEnoughBalance: 'TRANSLATION NEEDED | ENG: Not enough balance. Please, try sending a smaller amount.',
+      notEnoughBalance: 'Não há saldo suficiente. Por favor, tente enviar uma quantia menor.',
     },
   },
   send: {
@@ -355,8 +355,8 @@ const pt = {
       title: 'Erro',
       description: 'Antes de efetuar uma transação, deve primeiro inserir uma carteira Bitcoin Vault.',
     },
-    warning: 'TRANSLATION NEEDED | ENG: Warning: ',
-    warningGeneral: 'TRANSLATION NEEDED | ENG: Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
+    warning: 'Aviso: ',
+    warningGeneral: 'Aviso: Esteja ciente de que no processo de uso do recurso Transação segura, uma parte dos fundos deixados na sua carteira pode ser bloqueada. Este é um procedimento normal vinculado ao UTXO e aos parâmetros de blockchain da carteira Bitcoin Vault. Os seus fundos serão desbloqueados assim que a transação for verificada (após aproximadamente 24 horas) ou cancelada (dentro de 24 horas). ',
   },
   receive: {
     header: 'Receber moedas',
@@ -434,6 +434,8 @@ const pt = {
     successTitle: 'Sucesso',
     successDescription: 'Parabéns! Adicionou o seu contacto\n com sucesso.',
     successButton: 'Voltar à Lista de endereços',
+    nameMissingAlphanumericCharacterError: 'TRANSLATION NEEDED | ENG: Name is missing alphanumeric character.',
+    nameCannotContainSpecialCharactersError: 'TRANSLATION NEEDED | ENG: Name cannot contain special characters.',
   },
   contactDetails: {
     nameLabel: 'Nome',
@@ -483,7 +485,7 @@ const pt = {
       annulled: 'Anulado',
       done: 'Feito',
       canceled: 'Cancelado',
-      unblocked: 'TRANSLATION NEEDED | ENG: Unblocked',
+      unblocked: 'desbloqueado',
     },
   },
   authenticators: {
@@ -550,11 +552,11 @@ const pt = {
     jailBrokenPhone: 'O seu dispositivo parece ter sido desbloqueado. Isto pode provocar problemas de segurança, colisões ou outros problemas. Não recomendamos a utilização da GoldWallet com um dispositivo desbloqueado.',
     rootedPhone: 'O seu dispositivo parece ter sido ancorado. Isto pode provocar problemas de segurança, colisões ou outros problemas. Não recomendamos a utilização da GoldWallet com um dispositivo ancorado.',
     title: 'Problema de segurança',
-    noPinOrFingerprintSet: 'TRANSLATION NEEDED | ENG: Your device appears to not have pin or fingerprint setted. We do not recommend using GoldWallet with not secured device.',
+    noPinOrFingerprintSet: 'O seu dispositivo parece não ter um PIN ou impressão digital configurada. Não recomendamos o uso do GoldWallet com um dispositivo não seguro.',
   },
   betaVersion: {
-    title: 'TRANSLATION NEEDED | ENG: This is a beta version\nof the GoldWallet',
-    description: 'TRANSLATION NEEDED | ENG: It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
-    button: 'TRANSLATION NEEDED | ENG: I accept the risk',
+    title: 'Esta é uma versão beta\nda carteira de ouro',
+    description: 'Ainda está em fase de testes finais antes de seu lançamento oficial. O aplicativo móvel e todo o conteúdo encontrado nele são fornecidos \"\"como estão\"\" e \"\"conforme disponível\"\". O uso do software é feito por conta e risco do usuário.',
+    button: 'Eu aceito o risco',
   },
 }
