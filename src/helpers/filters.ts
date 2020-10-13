@@ -53,7 +53,7 @@ const filterByFromDate = (transactions: Transaction[], fromDate: number) => {
 
 const filterByToDate = (transactions: Transaction[], toDate: number) => {
   return transactions.filter(transaction => {
-    if (!transaction.time) {
+    if (!transaction.received) {
       return;
     }
     return (
@@ -61,7 +61,12 @@ const filterByToDate = (transactions: Transaction[], toDate: number) => {
         moment(toDate)
           .endOf('day')
           .format('X'),
-      ) >= transaction.time
+      ) >=
+      parseInt(
+        moment(transaction.received)
+          .startOf('day')
+          .format('X'),
+      )
     );
   });
 };
@@ -107,6 +112,7 @@ export const filterBySearch = (transactions: Transaction[], search: string) => {
 };
 
 export const filterTransaction = (transactions: Transaction[], filters: any) => {
+  console.log(transactions);
   const filteredByType = filterByTransactionType(transactions, filters.transactionType);
   const filteredbyAddress = filters.address
     ? filterByAddress(filteredByType, filters.transactionType, filters.address)
