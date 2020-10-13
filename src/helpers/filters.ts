@@ -112,7 +112,6 @@ export const filterBySearch = (transactions: Transaction[], search: string) => {
 };
 
 export const filterTransaction = (transactions: Transaction[], filters: any) => {
-  console.log(transactions);
   const filteredByType = filterByTransactionType(transactions, filters.transactionType);
   const filteredbyAddress = filters.address
     ? filterByAddress(filteredByType, filters.transactionType, filters.address)
