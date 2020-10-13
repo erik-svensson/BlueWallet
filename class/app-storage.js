@@ -114,7 +114,9 @@ export class AppStorage {
     for (const value of data) {
       try {
         decrypted = encryption.decrypt(value, password);
-      } catch (e) {}
+      } catch (e) {
+        Sentry.captureException(e);
+      }
 
       if (decrypted) {
         return decrypted;

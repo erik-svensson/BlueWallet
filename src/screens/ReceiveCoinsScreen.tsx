@@ -1,5 +1,6 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import * as Sentry from '@sentry/react-native';
 import bip21 from 'bip21';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, InteractionManager } from 'react-native';
@@ -132,7 +133,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     if (this.qrCodeSVG === undefined) {
       Share.open({
         message,
-      });
+      }).catch(error => Sentry.captureException(error));
     } else {
       InteractionManager.runAfterInteractions(async () => {
         this.qrCodeSVG.toDataURL((data: any) => {
@@ -140,7 +141,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
             message,
             url: `data:image/png;base64,${data}`,
           };
-          Share.open(shareImageBase64);
+          Share.open(shareImageBase64).catch(error => Sentry.captureException(error));
         });
       });
     }
