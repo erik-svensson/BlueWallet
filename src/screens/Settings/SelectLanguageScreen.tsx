@@ -10,8 +10,6 @@ import { ApplicationState } from 'app/state';
 import { updateSelectedLanguage } from 'app/state/appSettings/actions';
 import { typography } from 'app/styles';
 
-import { GlobalContext } from '../../../App';
-
 const i18n = require('../../../loc');
 
 interface Language {
@@ -61,7 +59,7 @@ export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
     { label: 'Türkçe (TR)', value: 'tr' },
   ];
 
-  const onLanguageSelect = (value: string, changeLanguage: Function) => {
+  const onLanguageSelect = (value: string) => {
     Alert.alert(
       i18n.selectLanguage.confirmation,
       i18n.selectLanguage.alertDescription,
@@ -71,7 +69,6 @@ export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
           onPress: async () => {
             await i18n.saveLanguage(value);
             dispatch(updateSelectedLanguage(value));
-            changeLanguage(value);
           },
         },
         {
@@ -84,22 +81,18 @@ export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
   };
 
   return (
-    <GlobalContext.Consumer>
-      {({ changeLanguage, lang }) => (
-        <ScreenTemplate
-          header={<Header isBackArrow={true} navigation={props.navigation} title={i18n.selectLanguage.header} />}
-        >
-          {availableLanguages.map(item => (
-            <LanguageItem
-              selectedLanguage={item}
-              selectedLanguageValue={language}
-              onLanguageSelect={(val: string) => onLanguageSelect(val, changeLanguage)}
-              key={item.value}
-            />
-          ))}
-        </ScreenTemplate>
-      )}
-    </GlobalContext.Consumer>
+    <ScreenTemplate
+      header={<Header isBackArrow={true} navigation={props.navigation} title={i18n.selectLanguage.header} />}
+    >
+      {availableLanguages.map(item => (
+        <LanguageItem
+          selectedLanguage={item}
+          selectedLanguageValue={language}
+          onLanguageSelect={onLanguageSelect}
+          key={item.value}
+        />
+      ))}
+    </ScreenTemplate>
   );
 };
 
