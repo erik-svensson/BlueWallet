@@ -23,14 +23,6 @@ if (process.env.NODE_ENV !== 'development') {
 
 const getNewKey = () => new Date().toISOString();
 
-const context = {
-  lang: i18n.lang,
-  // eslint-disable-next-line
-  changeLanguage: (lang: string) => {},
-};
-
-export const GlobalContext = React.createContext(context);
-
 interface State {
   unlockKey: string;
   lang: string;
@@ -53,32 +45,21 @@ export default class App extends React.PureComponent<State> {
     });
   };
 
-  changeLanguage = (lang: string) => {
-    this.setState({ lang });
-  };
-
   render() {
     const { lang } = this.state;
     return (
       <I18nextProvider i18n={i18nReact}>
-        <GlobalContext.Provider
-          value={{
-            lang,
-            changeLanguage: (language: string) => this.changeLanguage(language),
-          }}
-        >
-          <Provider store={store}>
-            <AppStateManager
-              handleAppComesToForeground={this.setUnlockScreenKey}
-              handleAppComesToBackground={this.lockScreen}
-            />
-            <PersistGate loading={null} persistor={persistor}>
-              <View style={styles.wrapper}>
-                <Navigator key={lang} unlockKey={this.state.unlockKey} />
-              </View>
-            </PersistGate>
-          </Provider>
-        </GlobalContext.Provider>
+        <Provider store={store}>
+          <AppStateManager
+            handleAppComesToForeground={this.setUnlockScreenKey}
+            handleAppComesToBackground={this.lockScreen}
+          />
+          <PersistGate loading={null} persistor={persistor}>
+            <View style={styles.wrapper}>
+              <Navigator key={lang} unlockKey={this.state.unlockKey} />
+            </View>
+          </PersistGate>
+        </Provider>
       </I18nextProvider>
     );
   }
