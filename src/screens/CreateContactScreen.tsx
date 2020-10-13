@@ -84,11 +84,11 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
       name: name.value.trim(),
       address: address.value.trim(),
     });
-    this.showSuccessImportMessageScreen();
     this.setState({
       name: { value: '', error: '' },
       address: { value: '', error: '' },
     });
+    this.showSuccessImportMessageScreen();
   };
 
   validateAddress = () => {
