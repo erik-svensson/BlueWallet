@@ -13,6 +13,7 @@ import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts
 import { typography, palette } from 'app/styles';
 
 import BlueApp from '../../BlueApp';
+import logger from '../../logger';
 import { Chain } from '../../models/bitcoinUnits';
 
 const i18n = require('../../loc');
@@ -134,11 +135,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
       Share.open({
         message,
       }).catch(error => {
-        Sentry.addBreadcrumb({
-          category: 'ReceiveCoins',
-          message: error.message,
-          level: Sentry.Severity.Info,
-        });
+        logger.warn('ReceiveCoins', error.message);
       });
     } else {
       InteractionManager.runAfterInteractions(async () => {
@@ -148,11 +145,7 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
             url: `data:image/png;base64,${data}`,
           };
           Share.open(shareImageBase64).catch(error => {
-            Sentry.addBreadcrumb({
-              category: 'ReceiveCoins',
-              message: error.message,
-              level: Sentry.Severity.Info,
-            });
+            logger.warn('ReceiveCoins', error.message);
           });
         });
       });

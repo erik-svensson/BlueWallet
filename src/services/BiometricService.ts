@@ -1,5 +1,7 @@
 import ReactNativeBiometrics from 'react-native-biometrics';
 
+import logger from '../../logger';
+
 const i18n = require('../../loc');
 
 type BiometryType =
@@ -36,10 +38,12 @@ export default class BiometricService {
         cancelButtonText: i18n.unlock.enter,
       });
       const { success } = checkResult;
-
+      logger.info('BiometricSerivce', 'cancelled by user');
       if (success) {
         return success;
       }
-    } catch {}
+    } catch (e) {
+      logger.error('BiometricSerivce', `cancelled by user: ${e.message}`);
+    }
   };
 }

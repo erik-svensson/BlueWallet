@@ -2,6 +2,7 @@ import { findLast, difference } from 'lodash';
 import { NativeModules } from 'react-native';
 
 import config from '../config';
+import logger from '../logger';
 import { AbstractWallet } from './abstract-wallet';
 
 const { RNRandomBytes } = NativeModules;
@@ -98,7 +99,9 @@ export class LegacyWallet extends AbstractWallet {
       this.incoming_balance = balance.alert_incoming;
       this.outgoing_balance = balance.alert_outgoing;
       this._lastBalanceFetch = +new Date();
-    } catch (err) {}
+    } catch (err) {
+      logger.error('legacy-wallet', `fetchBalance: ${err.message}`);
+    }
   }
 
   /**
@@ -126,7 +129,9 @@ export class LegacyWallet extends AbstractWallet {
       const txids = await BlueElectrum.getTransactionsByAddress(this.getAddress());
 
       await this.setTransactions(txids);
-    } catch (Err) {}
+    } catch (err) {
+      logger.error('legacy-wallet', `fetchTransactions: ${err.message}`);
+    }
   }
 
   async broadcastTx(txhex) {

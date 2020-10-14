@@ -10,6 +10,8 @@ import { Button, ContactAvatar, Header, ScreenTemplate } from 'app/components';
 import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { typography } from 'app/styles';
 
+import logger from '../../logger';
+
 const i18n = require('../../loc');
 
 type Props = {
@@ -30,11 +32,7 @@ export class ContactQRCodeScreen extends React.PureComponent<Props> {
       try {
         Share.open(shareImageBase64);
       } catch (error) {
-        Sentry.addBreadcrumb({
-          category: 'ContactQRCode',
-          message: error.message,
-          level: Sentry.Severity.Info,
-        });
+        logger.warn('ContactQRCode', error.message);
       }
     });
   };

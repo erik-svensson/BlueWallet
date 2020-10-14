@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import * as Sentry from '@sentry/react-native';
 import { difference } from 'lodash';
 import { compose, map, mapValues, values, flatten, uniq } from 'lodash/fp';
 
 import config from './config';
+import logger from './logger';
 
 const BigNumber = require('bignumber.js');
 const bitcoin = require('bitcoinjs-lib');
@@ -23,19 +23,11 @@ let wasConnectedAtLeastOnce = false;
 async function connectMain() {
   const usingPeer = { host: config.host, tcp: config.port, protocol: config.protocol };
   try {
-    Sentry.addBreadcrumb({
-      category: 'BlueElectrum',
-      message: `begin connection: ${JSON.stringify(usingPeer)}`,
-      level: Sentry.Severity.Info,
-    });
+    logger.info('BlueElectrum', `begin connection: ${JSON.stringify(usingPeer)}`);
     mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, usingPeer.protocol);
 
     mainClient.onError = function(e) {
-      Sentry.addBreadcrumb({
-        category: 'BlueElectrum',
-        message: e.message,
-        level: Sentry.Severity.Info,
-      });
+      logger.error('BlueElectrum', e.message);
       mainConnected = false;
     };
     const ver = await mainClient.initElectrum({
@@ -44,29 +36,17 @@ async function connectMain() {
     });
 
     if (ver && ver[0]) {
-      Sentry.addBreadcrumb({
-        category: 'BlueElectrum',
-        message: `connected to, ${ver}`,
-        level: Sentry.Severity.Info,
-      });
+      logger.info('BlueElectrum', `connected to, ${ver}`);
       mainConnected = true;
       wasConnectedAtLeastOnce = true;
     }
   } catch (e) {
     mainConnected = false;
-    Sentry.addBreadcrumb({
-      category: 'BlueElectrum',
-      message: `bad connection: ${JSON.stringify(usingPeer)}, Error: ${e.message}`,
-      level: Sentry.Severity.Info,
-    });
+    logger.error('BlueElectrum', `bad connection: ${JSON.stringify(usingPeer)}, Error: ${e.message}`);
   }
 
   if (!mainConnected) {
-    Sentry.addBreadcrumb({
-      category: 'BlueElectrum',
-      message: 'Reconnect',
-      level: Sentry.Severity.Info,
-    });
+    logger.info('BlueElectrum', 'Reconnect');
     mainClient.keepAlive = () => {}; // dirty hack to make it stop reconnecting
     mainClient.reconnect = () => {}; // dirty hack to make it stop reconnecting
     mainClient.close();
