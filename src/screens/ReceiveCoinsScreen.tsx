@@ -133,7 +133,13 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
     if (this.qrCodeSVG === undefined) {
       Share.open({
         message,
-      }).catch(error => Sentry.captureException(error));
+      }).catch(error => {
+        Sentry.addBreadcrumb({
+          category: 'ReceiveCoins',
+          message: error.message,
+          level: Sentry.Severity.Info,
+        });
+      });
     } else {
       InteractionManager.runAfterInteractions(async () => {
         this.qrCodeSVG.toDataURL((data: any) => {
@@ -141,7 +147,13 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
             message,
             url: `data:image/png;base64,${data}`,
           };
-          Share.open(shareImageBase64).catch(error => Sentry.captureException(error));
+          Share.open(shareImageBase64).catch(error => {
+            Sentry.addBreadcrumb({
+              category: 'ReceiveCoins',
+              message: error.message,
+              level: Sentry.Severity.Info,
+            });
+          });
         });
       });
     }

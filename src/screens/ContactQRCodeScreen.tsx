@@ -30,7 +30,11 @@ export class ContactQRCodeScreen extends React.PureComponent<Props> {
       try {
         Share.open(shareImageBase64);
       } catch (error) {
-        Sentry.captureException(error);
+        Sentry.addBreadcrumb({
+          category: 'ContactQRCode',
+          message: error.message,
+          level: Sentry.Severity.Info,
+        });
       }
     });
   };
