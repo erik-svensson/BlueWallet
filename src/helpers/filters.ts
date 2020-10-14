@@ -36,33 +36,16 @@ const filterByFromDate = (transactions: Transaction[], fromDate: number) => {
     if (!transaction.received) {
       return;
     }
-    return (
-      parseInt(
-        moment(fromDate)
-          .startOf('day')
-          .format('X'),
-      ) <=
-      parseInt(
-        moment(transaction.received)
-          .startOf('day')
-          .format('X'),
-      )
-    );
+    return moment(fromDate).isSameOrBefore(transaction.received, 'day');
   });
 };
 
 const filterByToDate = (transactions: Transaction[], toDate: number) => {
   return transactions.filter(transaction => {
-    if (!transaction.time) {
+    if (!transaction.received) {
       return;
     }
-    return (
-      parseInt(
-        moment(toDate)
-          .endOf('day')
-          .format('X'),
-      ) >= transaction.time
-    );
+    return moment(toDate).isSameOrAfter(transaction.received, 'day');
   });
 };
 
