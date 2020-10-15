@@ -446,7 +446,7 @@ module.exports = {
       shareWalletAddress: 'Share wallet address',
       receiveWithAmount: 'Receive with amount',
       receiveWithAmountSubtitle:
-        'Enter the amount which you would like to receive. The entered amount will be included in the above QR code',
+        'Enter the amount which you would like to receive. The QR code will update accordingly to include the amount.',
     },
   },
   settings: {
