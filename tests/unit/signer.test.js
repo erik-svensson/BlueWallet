@@ -80,53 +80,7 @@ describe('unit - signer', function() {
       done();
     });
 
-    it('should create Replace-By-Fee tx, given txhex', () => {
-      const txhex =
-        '0100000000010115b7e9d1f6b8164a0e95544a94f5b0fbfaadc35f8415acd0ec0e58d5ce8c1a1e0100000017160014ac19842ed4543c10fbe074f0b9e19f973f0e1d630000000002905f0100000000001976a9140e75eb2af3599acf900cf0b7e666027b105cf3db88ace00f97000000000017a914a06bd87fce37f45094aba65d6ac1e98631ac0759870247304402203aa7c0623bf490d0d7397fd40a003fcb8379a846dbf160d5f6bd267fd2967075022068faf20cd31852825e71911ce3037569ed3929a5a5688adce63bef525bf912950121039a5f64c819f73ca1655e5514a1ddc4ea6911804718876fd93c33f3208f2f645300000000';
-      const signer = require('../../models/signer');
-      const dummyUtxodata = {
-        '1e1a8cced5580eecd0ac15845fc3adfafbb0f5944a54950e4a16b8f6d1e9b715': {
-          // txid we use output from
-          1: 10000000, // output index and it's value in satoshi
-        },
-      };
-      const newhex = signer.createRBFSegwitTransaction(
-        txhex,
-        {
-          YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht: 'RNAFqLmCjZunuhnNpmgF6nTs8KzQddnZDm',
-        },
-        0.0001,
-        'KwWc7DAYgzgRdBcvKD844SC5cHWZ1HY5TxqUACohH59uiH4RNrXT',
-        dummyUtxodata,
-      );
-      const oldTx = bitcoinjs.Transaction.fromHex(txhex);
-      const newTx = bitcoinjs.Transaction.fromHex(newhex);
-      // just checking old tx...
-      assert.equal(
-        bitcoinjs.address.fromOutputScript(oldTx.outs[0].script, config.network),
-        'YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht',
-      ); // old DESTINATION address
-      assert.equal(
-        bitcoinjs.address.fromOutputScript(oldTx.outs[1].script, config.network),
-        'RPuRPTc9o6DMLsESyhDSkPoinH4JX1RG26',
-      ); // old CHANGE address
-      assert.equal(oldTx.outs[0].value, 90000); // 0.0009 because we deducted fee 0.0001
-      assert.equal(oldTx.outs[1].value, 9900000); // 0.099 because 0.1 - 0.001
-      // finaly, new tx checks...
-      assert.equal(oldTx.outs[0].value, newTx.outs[0].value); // DESTINATION output amount remains unchanged
-      assert.equal(oldTx.outs[1].value - newTx.outs[1].value, 0.0001 * 100000000); // CHANGE output decreased on the amount of fee delta
-      assert.equal(
-        bitcoinjs.address.fromOutputScript(newTx.outs[0].script, config.network),
-        'RNAFqLmCjZunuhnNpmgF6nTs8KzQddnZDm',
-      ); // new DESTINATION address
-      assert.equal(
-        bitcoinjs.address.fromOutputScript(newTx.outs[1].script, config.network),
-        'RPuRPTc9o6DMLsESyhDSkPoinH4JX1RG26',
-      ); // CHANGE address remains
-      assert.equal(oldTx.ins[0].sequence + 1, newTx.ins[0].sequence);
-    });
-
-    it('should return valid tx hex for segwit transactions with multiple inputs', function(done) {
+    it('should return valid tx hex for segwit transactions with multiple inputs', async function(done) {
       const signer = require('../../models/signer');
       const utxos = [
         {
@@ -154,7 +108,7 @@ describe('unit - signer', function() {
           safe: true,
         },
       ];
-      const tx = signer.createSegwitTransaction(
+      const { tx } = await signer.createSegwitTransaction(
         utxos,
         'YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht',
         0.0028,

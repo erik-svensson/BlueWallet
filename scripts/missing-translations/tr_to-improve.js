@@ -29,8 +29,7 @@ const tr = {
   },
   message: {
     somethingWentWrong: 'Bir sorun meydana geldi',
-    somethingWentWrongWhileCreatingWallet:
-      'Cüzdanınızı oluştururken bir sorun meydana geldi Lütfen Panoya dönün ve yeniden deneyin.',
+    somethingWentWrongWhileCreatingWallet: 'Cüzdanınızı oluştururken bir sorun meydana geldi Lütfen Panoya dönün ve yeniden deneyin.',
     success: 'Başarılı',
     successfullWalletImport: 'Cüzdanınız başarıyla içeri aktarıldı. Şimdi Panoya geri dönebilirsiniz.',
     successfullWalletDelete: 'Cüzdanınız başarıyla silindi. Şimdi Panoya geri dönebilirsiniz.',
@@ -41,8 +40,7 @@ const tr = {
     hooray: 'Oley!',
     cancelTxSuccess: 'İşleminizi başarıyla iptal ettiniz.\n Coinleriniz yolda.',
     wrongMnemonic: 'Yanlış anımsatıcı',
-    wrongMnemonicDesc:
-      'Anımsatıcınız desteklenen herhangi bir cüzdanla eşleşmiyor. Geçersiz bir anımsatıcıyı içeri aktarmaya çalışıyorsunuz veya cüzdan daha önce kullanılmamış',
+    wrongMnemonicDesc: 'Anımsatıcınız desteklenen herhangi bir cüzdanla eşleşmiyor. Geçersiz bir anımsatıcıyı içeri aktarmaya çalışıyorsunuz veya cüzdan daha önce kullanılmamış',
     returnToWalletChoose: 'Cüzdan türü seçimine geri dön',
     returnToWalletImport: 'Cüzdan içe aktarmaya geri dön',
     generateAddressesError: 'Adresler oluşturulamadı',
@@ -50,11 +48,9 @@ const tr = {
     noTransactionsDesc: 'Muhtemelen daha önce hiç kullanılmamış bir cüzdanı içeri aktarmaya çalışıyorsunuz',
     returnToAuthenticators: 'Kimlik Doğrulayıcılara Geri Dön',
     creatingAuthenticator: 'Kimlik doğrulayıcınız oluşturuluyor',
-    creatingAuthenticatorDescription:
-      'Lütfen biz kimlik doğrulayıcınızı oluştururken bekleyin.\n Biraz zaman alabilir.',
+    creatingAuthenticatorDescription: 'Lütfen biz kimlik doğrulayıcınızı oluştururken bekleyin.\n Biraz zaman alabilir.',
     importingAuthenticator: 'Kimlik doğrulayıcınız içeri aktarılıyor',
-    importingAuthenticatorDescription:
-      'Lütfen biz kimlik doğrulayıcınızı içeri aktarırken bekleyin.\n Biraz zaman alabilir.',
+    importingAuthenticatorDescription: 'Lütfen biz kimlik doğrulayıcınızı içeri aktarırken bekleyin.\n Biraz zaman alabilir.',
   },
   onboarding: {
     onboarding: 'Katılım',
@@ -62,14 +58,12 @@ const tr = {
     createPin: 'PIN oluştur',
     createNewPin: 'Yeni PIN',
     createPassword: 'İşlem şifresi oluştur',
-    createPinDescription:
-      'PIN’iniz uygulamaya giriş yapmak için kullanılacaktır. Daha sonra Ayarlar bölümünden değiştirebilirsiniz.',
+    createPinDescription: 'PIN’iniz uygulamaya giriş yapmak için kullanılacaktır. Daha sonra Ayarlar bölümünden değiştirebilirsiniz.',
     confirmPin: 'PIN’i Onayla',
     confirmNewPin: 'Yeni PIN’i Onayla',
     confirmPassword: 'İşlem şifresini onayla',
     passwordDoesNotMatch: 'Şifre eşleşmiyor. Lütfen geçerli bir şifre girin.',
-    createPasswordDescription:
-      'İşlem Şifreniz tüm işlemleri doğrulamak için kullanılacak. Daha sonra değiştiremezsiniz. İşlem Şifresi en az 8 alfanümreik karakter içermelidir.',
+    createPasswordDescription: 'İşlem Şifreniz tüm işlemleri doğrulamak için kullanılacak. Daha sonra değiştiremezsiniz. İşlem Şifresi en az 8 alfanümreik karakter içermelidir.',
     changePin: 'PIN’i Değiştir',
     currentPin: 'Mevcut PIN',
     pinDoesNotMatch: 'PIN eşleşmiyor. Lütfen geçerli bir PIN girin.',
@@ -87,7 +81,7 @@ const tr = {
   },
   unlock: {
     title: 'Kilidi Aç',
-    touchID: '"Gold Wallet" için Touch ID',
+    touchID: '\"Gold Wallet\" için Touch ID',
     confirmButton: 'Devam etmek için parmak iziyle doğrulama yapın.',
     enter: 'PIN Girin',
   },
@@ -117,8 +111,7 @@ const tr = {
     importWallet: {
       title: 'Cüzdanınızı içeri aktarın',
       header: 'Cüzdanı içeri aktar',
-      subtitle:
-        'Buraya hatırlatıcı ipucunuzu, özel anahtarınızı, WIF’ı veya sahip olduğunuz başka bir şeyi yazın. GoldWallet doğru biçimi tahmin etmek ve cüzdanınızı içeri aktarmak için elinden geleni yapacak.',
+      subtitle: 'Buraya hatırlatıcı ipucunuzu, özel anahtarınızı, WIF’ı veya sahip olduğunuz başka bir şeyi yazın. GoldWallet doğru biçimi tahmin etmek ve cüzdanınızı içeri aktarmak için elinden geleni yapacak.',
       placeholder: 'Özel ipucu, özel anahtar, WIF',
       import: 'İçeri aktar',
       scanQrCode: 'veya QR kodunu tara',
@@ -130,10 +123,8 @@ const tr = {
       scanWalletAddressDescription: 'GoldWallet ile entegrasyonu başlatmak için Açık Adres QR kodunu tarayın',
       scanFastPubKey: 'Hızlı Anahtar QR kodunu tarayın',
       scanCancelPubKey: 'İptal Anahtarı QR kodunu tarayın',
-      scanPublicKeyDescription:
-        'İçeri aktarmak istediğiniz cüzdanı ilk oluşturduğunuzda hazırladığınız ilk PDF belgesini açın ve Açık Anahtar QR kodunu taramak için bu uygulamayı kullanın.',
-      unsupportedElectrumVaultMnemonic:
-        'Bu kök Electrum Vault’tandır ve şu anda desteklenmemektedir. Yakın gelecekte desteklenecektir.',
+      scanPublicKeyDescription: 'İçeri aktarmak istediğiniz cüzdanı ilk oluşturduğunuzda hazırladığınız ilk PDF belgesini açın ve Açık Anahtar QR kodunu taramak için bu uygulamayı kullanın.',
+      unsupportedElectrumVaultMnemonic: 'Bu kök Electrum Vault’tandır ve şu anda desteklenmemektedir. Yakın gelecekte desteklenecektir.',
     },
     exportWallet: {
       title: 'Özel ipucu ifadesi',
@@ -183,8 +174,7 @@ const tr = {
     addSuccess: {
       title: 'Yeni cüzdan ekle',
       subtitle: 'Başarılı',
-      description:
-        'Cüzdanınız oluşturuldu. Lütfen özel ipucu ifadesini bir kağıda not almak için zaman ayırın. Bu sizin yedeğiniz olacaktır. Diğer cihazlarda cüzdanı geri yüklemek için kullanabilirsiniz.',
+      description: 'Cüzdanınız oluşturuldu. Lütfen özel ipucu ifadesini bir kağıda not almak için zaman ayırın. Bu sizin yedeğiniz olacaktır. Diğer cihazlarda cüzdanı geri yüklemek için kullanabilirsiniz.',
       okButton: 'Tamam, bunu yazdım!',
     },
     details: {
@@ -196,14 +186,14 @@ const tr = {
       showWalletXPUB: 'Cüzdan XPUB’ını göster',
       deleteWallet: 'Cüzdanı sil',
       nameEdit: 'Adı düzenle',
+      details: 'TRANSLATION NEEDED | ENG: Details',
     },
     export: {
       title: 'Cüzdanı dışarı aktarma',
     },
     import: {
       title: 'İçeri aktar',
-      explanation:
-        'Buraya hatırlatıcı ipucunuzu, özel anahtarınızı, WIF’ı veya sahip olduğunuz başka bir şeyi yazın. GoldWallet doğru biçimi tahmin etmek ve cüzdanınızı içeri aktarmak için elinden geleni yapacak',
+      explanation: 'Buraya hatırlatıcı ipucunuzu, özel anahtarınızı, WIF’ı veya sahip olduğunuz başka bir şeyi yazın. GoldWallet doğru biçimi tahmin etmek ve cüzdanınızı içeri aktarmak için elinden geleni yapacak',
       imported: 'İçeri aktarıldı',
       error: 'İçeri aktarılamadı. Lütfen sağlanan verilerin geçerli olduğundan emin olun.',
       success: 'Başarılı',
@@ -228,11 +218,9 @@ const tr = {
     publicKey: {
       recoverySubtitle: 'İptal Anahtarı Ekle',
       webKeyGenerator: 'Web Anahtarı Oluşturucu',
-      recoveryDescription:
-        'Ayrı bir cihazdan web Anahtarı Oluşturucuya gidin ve Açık Anahtar QR kodunu taratmak için bu uygulamayı kullanın. Anahtarlarınızı PDF olarak dışarı aktarmayı unutmayın!',
+      recoveryDescription: 'Ayrı bir cihazdan web Anahtarı Oluşturucuya gidin ve Açık Anahtar QR kodunu taratmak için bu uygulamayı kullanın. Anahtarlarınızı PDF olarak dışarı aktarmayı unutmayın!',
       instantSubtitle: 'Hızlı Anahtar Ekle',
-      instantDescription:
-        'Ayrı bir cihazdan web Anahtarı Oluşturucuya gidin ve Açık Anahtar QR kodunu taratmak için bu uygulamayı kullanın. Anahtarlarınızı PDF olarak dışarı aktarmayı unutmayın!',
+      instantDescription: 'Ayrı bir cihazdan web Anahtarı Oluşturucuya gidin ve Açık Anahtar QR kodunu taratmak için bu uygulamayı kullanın. Anahtarlarınızı PDF olarak dışarı aktarmayı unutmayın!',
       scan: 'Tara',
     },
     errors: {
@@ -340,35 +328,28 @@ const tr = {
       amount: 'Tutar',
       fee: 'Ücret',
       setTransactionFee: 'Bir işlem ücreti belirle',
-      headerText:
-        'Ağda bekleyen çok sayıda işlem olduğunda (>1500), işleminizin daha hızlı işlenmesi için gereken ücret artacaktır. Genel değerler 1-500 sat/b’dir.',
+      headerText: 'Ağda bekleyen çok sayıda işlem olduğunda (>1500), işleminizin daha hızlı işlenmesi için gereken ücret artacaktır. Genel değerler 1-500 sat/b’dir.',
     },
     recovery: {
       recover: 'İptal Et',
       useWalletAddress: 'Bu cüzdanın adresini kullanın',
       confirmSeed: 'İptal :Çekirdek İfadesiyle Onaylayın',
-      confirmSeedDesc:
-        'Cüzdanınızı oluştururken hazırladığınız PDF belgesini açın ve Özel Anahtar çekirdek ifadesini aynı sırada yazın.',
+      confirmSeedDesc: 'Cüzdanınızı oluştururken hazırladığınız PDF belgesini açın ve Özel Anahtar çekirdek ifadesini aynı sırada yazın.',
       confirmFirstSeed: 'İptal :Çekirdek İfadesiyle Onaylayın',
-      confirmFirstSeedDesc:
-        'Cüzdanınızı oluştururken hazırladığınız ilk PDF belgesini açın ve Özel Anahtar çekirdek ifadesini aynı sırada yazın.',
+      confirmFirstSeedDesc: 'Cüzdanınızı oluştururken hazırladığınız ilk PDF belgesini açın ve Özel Anahtar çekirdek ifadesini aynı sırada yazın.',
       confirmSecondSeed: 'Hızlı Çekirdek İfadesiyle Onaylayın',
-      confirmSecondSeedDesc:
-        'Cüzdanınızı oluştururken hazırladığınız ikinci PDF belgesini açın ve Özel Anahtar çekirdek ifadesini aynı sırada yazın.',
+      confirmSecondSeedDesc: 'Cüzdanınızı oluştururken hazırladığınız ikinci PDF belgesini açın ve Özel Anahtar çekirdek ifadesini aynı sırada yazın.',
     },
     transaction: {
       instant: 'Hızlı',
       instantDesc: 'Bu işlem anında onaylanır. Çok dikkatli kullanın.',
       fastSuccess: 'Hızlı işleminizi başarıyla gerçekleştirdiniz.',
       alert: 'Standart',
-      alertDesc:
-        'Bu işlemin onaylanması için 144 blok ve yaklaşık 24 saat süre gereklidir. Bu süre içinde işlemi iptal edebilirsiniz.',
+      alertDesc: 'Bu işlemin onaylanması için 144 blok ve yaklaşık 24 saat süre gereklidir. Bu süre içinde işlemi iptal edebilirsiniz.',
       type: 'İşlem türü',
       scanInstantKeyTitle: 'Hızlı Anahtarı taratın',
-      scanInstantKeyDesc:
-        'Cüzdanınızı oluştururken hazırladığınız PDF belgesini açın ve işlemi göndermek için Özel Anahtar QR kodunu taratın.',
-      lightningError:
-        'Bu adres bir Lightning faturası için gibi görünüyor. Lütfen bu fatura için bir ödeme yapmak amacıyla Lightning cüzdanınıza gidin.',
+      scanInstantKeyDesc: 'Cüzdanınızı oluştururken hazırladığınız PDF belgesini açın ve işlemi göndermek için Özel Anahtar QR kodunu taratın.',
+      lightningError: 'Bu adres bir Lightning faturası için gibi görünüyor. Lütfen bu fatura için bir ödeme yapmak amacıyla Lightning cüzdanınıza gidin.',
       watchOnlyError: 'Yalnızca izlenebilir cüzdanlar işlem gönderemez',
     },
     error: {
@@ -376,8 +357,7 @@ const tr = {
       description: 'Bir işlem oluşturmadan önce ilk olarak bir Bitcoin Vault Cüzdanı eklemelisiniz',
     },
     warning: 'Uyarı:',
-    warningGeneral:
-      'Uyarı: Lütfen Güvenli İşlem özelliğini kullanma sırasında cüzdanınızda kalan fonların bir kısmının bloke edilebileceğini dikkate alın. Bu UTXO ve Bitcoin Vault cüzdanının bitcoin parametreleriyle ile ilişkili normal bir prosedürdür. Fonlarınızın blokesi işlem tamamlandıktan sonra (yaklaşık 24 saat sonra) veya iptal edildikten sonra (24 saat içinde) kaldırılacaktır.',
+    warningGeneral: 'Uyarı: Lütfen Güvenli İşlem özelliğini kullanma sırasında cüzdanınızda kalan fonların bir kısmının bloke edilebileceğini dikkate alın. Bu UTXO ve Bitcoin Vault cüzdanının bitcoin parametreleriyle ile ilişkili normal bir prosedürdür. Fonlarınızın blokesi işlem tamamlandıktan sonra (yaklaşık 24 saat sonra) veya iptal edildikten sonra (24 saat içinde) kaldırılacaktır.',
   },
   receive: {
     header: 'Coin al',
@@ -385,6 +365,7 @@ const tr = {
       amount: 'Tutar',
       share: 'Paylaş',
       receiveWithAmount: 'Tutarla al',
+      shareWalletAddress: 'TRANSLATION NEEDED | ENG: Share wallet address',
     },
   },
   settings: {
@@ -421,19 +402,16 @@ const tr = {
     useDefault: 'Varsayılanı kullan',
     host: 'ana bilgisayar',
     port: 'port',
-    successfullSave:
-      'Değişiklikleriniz başarıyla kaydedildi. Değişikliklerin geçerli olması için yeniden başlatma gerekebilir.',
+    successfullSave: 'Değişiklikleriniz başarıyla kaydedildi. Değişikliklerin geçerli olması için yeniden başlatma gerekebilir.',
     connectionError: 'Sağlanan Electrum sunucusuna bağlanılamıyor',
   },
   advancedOptions: {
     title: 'Gelişmiş seçenekleri yapılandır',
-    description:
-      'Gelişmiş seçenekleri yapılandırmak aşağıda yer alan farklı cüzdan türleri arasından seçim yapmanıza imkan verir: \n P2SH, HD P2SH, HD segwit.',
+    description: 'Gelişmiş seçenekleri yapılandırmak aşağıda yer alan farklı cüzdan türleri arasından seçim yapmanıza imkan verir: \n P2SH, HD P2SH, HD segwit.',
   },
   selectLanguage: {
     header: 'Dil',
-    restartInfo:
-      'Yeni bir dil seçerken GoldWallet’ı yeniden başlatmak değişikliğin geçerli olması için gerekli olabilir',
+    restartInfo: 'Yeni bir dil seçerken GoldWallet’ı yeniden başlatmak değişikliğin geçerli olması için gerekli olabilir',
     confirmation: 'Onay',
     confirm: 'Onayla',
     alertDescription: 'Dili seçilsin ve uygulama yeniden başlatılsın mı?',
@@ -528,8 +506,7 @@ const tr = {
       pin: 'PIN',
       publicKey: 'Açık Anahtar',
       descPin: 'Kimlik doğrulayıcının masaüstü uygulamanızla eşleşmesini doğrulamak için bu PIN’i kullanın.',
-      descPublicKey:
-        'Bu Açık Anahtarı, kimlik doğrulayıcınızı GoldWallet seçeneği ile cüzdan oluşturma işlemi sırasında masaüstü uygulamanıza aktarmak için kullanabilirsiniz.',
+      descPublicKey: 'Bu Açık Anahtarı, kimlik doğrulayıcınızı GoldWallet seçeneği ile cüzdan oluşturma işlemi sırasında masaüstü uygulamanıza aktarmak için kullanabilirsiniz.',
     },
     import: {
       title: 'Kimlik doğrulayıcıyı içeri aktar',
@@ -558,10 +535,8 @@ const tr = {
       successTitle: 'Kimlik doğrulayıcınız hazır!',
       title: 'Yeni kimlik doğrulayıcı ekle',
       subtitle: 'Kimlik doğrulayıcıyı eşleştir',
-      successDescription:
-        'Bu çekirdek ifadeyi güvenli bir yere yazın. Kimlik doğrulayıcınızı geri yüklemeniz gerekmesi halinde bu yedek olacaktır. Hızlı ve İptal işlemlerini onaylamak için kimlik doğrulayıcının zorunlu olduğunu unutmayın.',
-      description:
-        'Electrum Vault masaüstü uygulamanızı açın ve yeni bir cüzdan oluşturun. Bir QR kodu görene kadar ekrandaki adımları takip edin. Devam etmek için taratmak üzere bu uygulamayı kullanın.',
+      successDescription: 'Bu çekirdek ifadeyi güvenli bir yere yazın. Kimlik doğrulayıcınızı geri yüklemeniz gerekmesi halinde bu yedek olacaktır. Hızlı ve İptal işlemlerini onaylamak için kimlik doğrulayıcının zorunlu olduğunu unutmayın.',
+      description: 'Electrum Vault masaüstü uygulamanızı açın ve yeni bir cüzdan oluşturun. Bir QR kodu görene kadar ekrandaki adımları takip edin. Devam etmek için taratmak üzere bu uygulamayı kullanın.',
       subdescription: 'Kimlik doğrulayıcınızı aynı zamanda aşağıdaki seçeneği seçerek de içeri aktarabilirsiniz.',
     },
     enterPIN: {
@@ -571,24 +546,19 @@ const tr = {
   },
   timeCounter: {
     title: 'Uygulama engellendi',
-    description:
-      'Başarısız oturum açma denemeleri nedeniyle uygulamanız engellendi. Lütfen yeniden denemek için gerekli sürenin geçmesini bekleyin.',
+    description: 'Başarısız oturum açma denemeleri nedeniyle uygulamanız engellendi. Lütfen yeniden denemek için gerekli sürenin geçmesini bekleyin.',
     tryAgain: 'Yeniden deneyin',
     closeTheApp: 'Uygulamayı kapatın',
   },
   security: {
-    jailBrokenPhone:
-      'Cihazınızın yazılımını kırdırdığınız (jailbroken) görülüyor. Bu güvenlik sorunlarına, çökmelere veya diğer sorunlara yol açabilir. Yazılımı kırdırılmış (jailbroken) bir cihazda GoldWallet kullanmanızı önermiyoruz.',
-    rootedPhone:
-      'Cihazınızın kök yazılımına erişiminiz olduğu (rooted) görülüyor. Bu güvenlik sorunlarına, çökmelere veya diğer sorunlara yol açabilir. Kök yazılımına erişilmiş (rooted) bir cihazda GoldWallet kullanmanızı önermiyoruz.',
+    jailBrokenPhone: 'Cihazınızın yazılımını kırdırdığınız (jailbroken) görülüyor. Bu güvenlik sorunlarına, çökmelere veya diğer sorunlara yol açabilir. Yazılımı kırdırılmış (jailbroken) bir cihazda GoldWallet kullanmanızı önermiyoruz.',
+    rootedPhone: 'Cihazınızın kök yazılımına erişiminiz olduğu (rooted) görülüyor. Bu güvenlik sorunlarına, çökmelere veya diğer sorunlara yol açabilir. Kök yazılımına erişilmiş (rooted) bir cihazda GoldWallet kullanmanızı önermiyoruz.',
     title: 'Güvenlik sorunu',
-    noPinOrFingerprintSet:
-      'Cihazınızda pin veya parmak için belirlenmemiş görünüyor. Güvenli olmayan bir cihazda GoldWallet kullanmanızı önermiyoruz.',
+    noPinOrFingerprintSet: 'Cihazınızda pin veya parmak için belirlenmemiş görünüyor. Güvenli olmayan bir cihazda GoldWallet kullanmanızı önermiyoruz.',
   },
   betaVersion: {
-    title: `Bu GoldWallet'in beta sürümüdür`,
-    description:
-      'Hala resmi olarak piyasaya sürülme öncesinde nihai test aşamasındadır. Mobil uygulaması ve tüm içeriği "olduğu gibi" ve "kullanılabildiği gibi" esasına göre sunulur. Yazılımın kullanımına ait riskler kullanıcıya aittir.',
+    title: 'Bu GoldWallet'in beta sürümüdür',
+    description: 'Hala resmi olarak piyasaya sürülme öncesinde nihai test aşamasındadır. Mobil uygulaması ve tüm içeriği \"olduğu gibi\" ve \"kullanılabildiği gibi\" esasına göre sunulur. Yazılımın kullanımına ait riskler kullanıcıya aittir.',
     button: 'Riski kabul ediyorum',
   },
-};
+}
