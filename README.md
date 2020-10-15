@@ -36,7 +36,7 @@ $ pod install
 Before running you must:
 
 * Add firebase files: 
-    * For Android: `google-services.json` into directory `./android/app/`
+    * For Android: two `google-services.json` files, one in `./android/app/` (with `"package_name": "io.goldwallet.wallet"`) and another in `./android/app/src/beta` (with `"package_name": "io.goldwallet.wallet.testnet"`)
     * For iOS: `GoogleService-Info.plist` into directory `./ios/`
     
 * Create .env file in root directory. Check the .env.example file for template.

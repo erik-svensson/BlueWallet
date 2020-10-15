@@ -12,7 +12,7 @@ const bitcoin = require('bitcoinjs-lib');
 
 let isBeta = true;
 try {
-  isBeta = JSON.parse(IS_BETA);
+  isBeta = IS_BETA === 'true';
 } catch (_) {}
 
 export default {
