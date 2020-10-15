@@ -85,11 +85,13 @@ export function* subscribeToScriptHashes() {
     flatten,
     map((wallet: Wallet) => wallet.getScriptHashes()),
   )(wallets);
+  console.log('walletsScriptHashes', walletsScriptHashes);
 
   const subScriptHashes: string[] = yield select(subscribedScriptHashes);
 
   const scriptHashesToSub = difference(walletsScriptHashes, subScriptHashes);
 
+  console.log('scriptHashesToSub', scriptHashesToSub);
   yield BlueElectrum.subscribeToSriptHashes(scriptHashesToSub);
 
   const scriptHashesToUnsub = difference(subScriptHashes, walletsScriptHashes);
