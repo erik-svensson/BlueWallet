@@ -68,6 +68,10 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const incomingBalance = fromWallet.incoming_balance;
     const amount = this.getAmountByTx(txDecoded);
     if (isAlert) {
+      const outputs = txDecoded.outs.reduce((a: number, out: { value: number }) => {
+        return a + out.value;
+      }, 0);
+      console.log('outputs val', 50000000 - outputs);
       return {
         availableBalance: satoshiToBtc(balance - amount.my - amount.foreign).toNumber() - fee,
         pendingBalance: satoshiToBtc(incomingBalance + amount.my) - fee,

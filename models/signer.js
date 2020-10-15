@@ -10,7 +10,14 @@ import * as bitcoinjs from 'bitcoinjs-lib';
 
 import config from '../config';
 import { btcToSatoshi } from '../utils/bitcoin';
-import { getUtxosWithMinimumRest, getUtxosFromMaxToMin, getUtxosFromMinToMax, splitChange } from './utils';
+import {
+  getUtxosWithMinimumRest,
+  getUtxosFromMaxToMin,
+  getUtxosFromMinToMax,
+  splitChange,
+  getUtxosAmount,
+  getFeeValue,
+} from './utils';
 
 const i18n = require('../loc');
 
@@ -174,6 +181,7 @@ exports.createHDSegwitVaultTransaction = async function({
   if (unspentUtxos === null) {
     throw new Error(i18n.transactions.errors.notEnoughBalance);
   }
+  const utxosAmount = getUtxosAmount(unspentUtxos);
 
   for (const unspent of unspentUtxos) {
     const keyPair = bitcoinjs.ECPair.fromWIF(unspent.wif, config.network);
@@ -219,12 +227,14 @@ exports.createHDSegwitVaultTransaction = async function({
     value: amountToOutputSatoshi,
   });
 
+  let finalRestValueSatoshi = 0;
   if (amountToOutputSatoshi + feeInSatoshis < unspentAmountSatoshi) {
     const restValue = unspentAmountSatoshi - amountToOutputSatoshi - feeInSatoshis;
 
     const changes = await splitChange(restValue);
 
     changes.forEach((change, index) => {
+      finalRestValueSatoshi += change;
       psbt.addOutput({
         address: changeAddresses[index],
         value: change,
@@ -237,7 +247,11 @@ exports.createHDSegwitVaultTransaction = async function({
   });
 
   const tx = psbt.finalizeAllInputs(vaultTxType).extractTransaction();
-  return tx.toHex();
+
+  return {
+    tx: tx.toHex(),
+    fee: getFeeValue({ utxosAmount, amountSend: amountToOutputSatoshi, restValue: finalRestValueSatoshi }),
+  };
 };
 
 exports.createSegwitTransaction = function(utxos, toAddress, amount, fixedFee, WIF, changeAddress, sequence) {

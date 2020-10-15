@@ -151,3 +151,15 @@ export const splitChange = async (value: number): Promise<number[]> => {
 
   return [value];
 };
+
+export const getUtxosAmount = (utxos: Utxo[]): number => utxos.reduce((a, { value }) => a + value, 0);
+
+export const getFeeValue = ({
+  utxosAmount,
+  restValue,
+  amountSend,
+}: {
+  utxosAmount: number;
+  restValue: number;
+  amountSend: number;
+}) => utxosAmount - restValue - amountSend;
