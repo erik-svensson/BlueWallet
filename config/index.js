@@ -1,8 +1,14 @@
-import Config from 'react-native-config';
+import {
+  SENTRY_DSN,
+  HOST,
+  PORT,
+  BTCV_NETWORK,
+  PROTOCOL,
+  ELECTRUM_X_PROTOCOL_VERSION,
+  IS_BETA,
+} from 'react-native-config';
 
 const bitcoin = require('bitcoinjs-lib');
-
-const { SENTRY_DSN, HOST, PORT, BTCV_NETWORK, PROTOCOL, ELECTRUM_X_PROTOCOL_VERSION, IS_BETA } = Config;
 
 let isBeta = true;
 try {

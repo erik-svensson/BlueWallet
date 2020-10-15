@@ -86,6 +86,12 @@ project.ext.react = [
     enableHermes: false
 ]
 
+project.ext.envConfigFiles = [
+        testnet: ".env.testnet",
+        mainnet: ".env.mainnet"
+]
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**
@@ -177,6 +183,7 @@ dependencies {
     implementation project(':react-native-config')
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation project(path: ":@react-native-firebase_analytics")
+
     // JSC from node_modules
     if (useIntlJsc) {
         implementation 'org.webkit:android-jsc-intl:+'
