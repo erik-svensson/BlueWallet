@@ -300,7 +300,7 @@ PODS:
     - React
   - react-native-splash-screen (3.2.0):
     - React
-  - react-native-tcp-socket (4.5.3):
+  - react-native-tcp-socket (4.5.4):
     - CocoaAsyncSocket
     - React-Core
   - React-RCTActionSheet (0.61.5):
@@ -662,15 +662,15 @@ SPEC CHECKSUMS:
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-biometrics: 9d3306e5d29c3bc4e6a3c912d759a94e76a2f683
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
-  react-native-camera: 35854c4f764a4a6cf61c1c3525888b92f0fe4b31
+  react-native-camera: 5c1fbfecf63b802b8ca4a71c60d30a71550fb348
   react-native-config: 9a061347e0136fdb32d43a34d60999297d672361
   react-native-haptic-feedback: 22c9dc85fd8059f83bf9edd9212ac4bd4ae6074d
-  react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
-  react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
-  react-native-safe-area-context: 79fea126c6830c85f65947c223a5e3058a666937
-  react-native-slider: 884693dd50f84745baa511ecdcde4c16f32182fb
+  react-native-image-picker: 3637d63fef7e32a230141ab4660d3ceb773c824f
+  react-native-randombytes: 991545e6eaaf700b4ee384c291ef3d572e0b2ca8
+  react-native-safe-area-context: 01158a92c300895d79dee447e980672dc3fb85a6
+  react-native-slider: 6d83f7b8076a84e965a43fbdcfcf9dac19cea42e
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
-  react-native-tcp-socket: b9c1ae95979fd0e16606e35d5912c3f4e6650535
+  react-native-tcp-socket: 6ef49f9f0f2c20e35d425aea71b8af0588403855
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -684,11 +684,11 @@ SPEC CHECKSUMS:
   ReactNativePrivacySnapshot: cc295e45dc22810e9ff2c93380d643de20a77015
   RemobileReactNativeQrcodeLocalImage: 57aadc12896b148fb5e04bc7c6805f3565f5c3fa
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
-  RNCClipboard: c7abea1baea58adca5c1f29e56dd5261837b4892
-  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
-  RNDefaultPreference: 628cb35719f2fe4111c000ccfa7e186400bbc47e
-  RNDeviceInfo: eb63f95c93ff1aae15353d113c130aebc6127915
+  RNCAsyncStorage: cb9a623793918c6699586281f0b51cbc38f046f9
+  RNCClipboard: 8f9f12fabf3c06e976f19f87a62c89e28dfedfca
+  RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
+  RNDefaultPreference: 12d246dd2222e66dadcd76cc1250560663befc3a
+  RNDeviceInfo: 980848feea8d74412b16f2e3e8758c8294d63ca2
   RNFastImage: e19ba191922e7dab9d932a4d59d62d76660aa222
   RNFBAnalytics: 6fe130045b06fb4173d6f44058894007bb30b9a2
   RNFBApp: 570b136767f588b7eef0ab918284e9fe364d0c3e
@@ -696,7 +696,7 @@ SPEC CHECKSUMS:
   RNFS: c9bbde46b0d59619f8e7b735991c60e0f73d22c1
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNHandoff: d3b0754cca3a6bcd9b25f544f733f7f033ccf5fa
-  RNLocalize: 452d4118e338dee1e5ca3fac4d5a11a4ab26a46a
+  RNLocalize: 4071198b59b461f3b74eebc5fee8c50f13e39e79
   RNRate: 29be49c24b314c4e8ec09d848c3965f61cb0be47
   RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
   RNScreens: 0e91da98ab26d5d04c7b59a9b6bd694124caf88c
@@ -708,7 +708,7 @@ SPEC CHECKSUMS:
   SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   Sentry: 8fa58a051237554f22507fb483b9a1de0171a2dc
-  ToolTipMenu: 8ac61aded0fbc4acfe7e84a7d0c9479d15a9a382
+  ToolTipMenu: bdcaa0e888bcf44778a67fe34639b094352e904e
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: 0f07396b84d5d188b8d7c483fdb806310adb3e84
