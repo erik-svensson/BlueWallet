@@ -6,7 +6,7 @@ const bitcoinjs = require('bitcoinjs-lib');
 
 describe('unit - signer', function() {
   describe('createSegwitTransaction()', function() {
-    it('should return valid tx hex for segwit transactions', function(done) {
+    it('should return valid tx hex for segwit transactions', async function(done) {
       const signer = require('../../models/signer');
       const utxos = [
         {
@@ -22,7 +22,7 @@ describe('unit - signer', function() {
           safe: true,
         },
       ];
-      const tx = signer.createSegwitTransaction(
+      const { tx } = await signer.createSegwitTransaction(
         utxos,
         'YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht',
         0.001,
@@ -36,7 +36,7 @@ describe('unit - signer', function() {
       done();
     });
 
-    it('should return valid tx hex for RBF-able segwit transactions', function(done) {
+    it('should return valid tx hex for RBF-able segwit transactions', async function(done) {
       const signer = require('../../models/signer');
       const utxos = [
         {
@@ -52,7 +52,7 @@ describe('unit - signer', function() {
           safe: true,
         },
       ];
-      const txhex = signer.createSegwitTransaction(
+      const { tx: txhex } = await signer.createSegwitTransaction(
         utxos,
         'YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht',
         0.001,
@@ -122,7 +122,7 @@ describe('unit - signer', function() {
       done();
     });
 
-    it('should return valid tx hex for segwit transactions with change address', function(done) {
+    it('should return valid tx hex for segwit transactions with change address', async function(done) {
       const signer = require('../../models/signer');
       const utxos = [
         {
@@ -138,7 +138,7 @@ describe('unit - signer', function() {
           safe: true,
         },
       ];
-      const tx = signer.createSegwitTransaction(
+      const { tx } = await signer.createSegwitTransaction(
         utxos,
         'YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht',
         0.002,
@@ -152,7 +152,7 @@ describe('unit - signer', function() {
       done();
     });
 
-    it('should return valid tx hex for segwit transactions if change is too small so it causes @dust error', function(done) {
+    it('should return valid tx hex for segwit transactions if change is too small so it causes @dust error', async function(done) {
       // checking that change amount is at least 3x of fee, otherwise screw the change, just add it to fee
       const signer = require('../../models/signer');
       const utxos = [
@@ -169,7 +169,7 @@ describe('unit - signer', function() {
           safe: true,
         },
       ];
-      const txhex = signer.createSegwitTransaction(
+      const { tx: txhex } = await signer.createSegwitTransaction(
         utxos,
         'YQgWXHY2QduhjqMkJHywzDfhx1ntumM5Ht',
         0.003998,
@@ -234,7 +234,7 @@ describe('unit - signer', function() {
 
   describe('createTransaction()', () => {
     const signer = require('../../models/signer');
-    it('should return valid TX hex for legacy transactions', () => {
+    it('should return valid TX hex for legacy transactions', async () => {
       const utxos = [
         {
           txid: '2f445cf016fa2772db7d473bff97515355b4e6148e1c980ce351d47cf54c517f',
@@ -254,7 +254,7 @@ describe('unit - signer', function() {
       const fee = 0.0001;
       const WIF = 'KzbTHhzzZyVhkTYpuReMBkE7zUvvDEZtavq1DJV85MtBZyHK1TTF';
       const fromAddr = 'Yfy3915VPWXgnSxgs14em39uB7fXBy4MSE';
-      const txHex = signer.createTransaction(utxos, toAddr, value, fee, WIF, fromAddr);
+      const { tx: txHex } = await signer.createTransaction(utxos, toAddr, value, fee, WIF, fromAddr);
       assert.equal(
         txHex,
         '01000000017f514cf57cd451e30c981c8e14e6b455535197ff3b477ddb7227fa16f05c442f010000006b483045022100dd8944c1549ee02762c031290cd1f97745c74bab72a78112beac905df5297c79022070d098a067a99c16ab817fbeed3be7b757d601af9bdf82438b208d799e71e22f012103f5438d524ad1cc288963466d6ef1a27d83183f7e9b7fe30879ecdae887692a31ffffffff02905f0100000000001976a9148cfc1bb2ab27001434bcf722038027b6fa600def88aca0bb0d00000000001976a914b620047e2947a5c036aff69c677a75b58923168488ac00000000',
