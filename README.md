@@ -34,17 +34,30 @@ in config/prod/ directory add app.json and MainActivity.java - you will find the
 
 ```
 yarn start android:prod
+or
+yarn start android:beta
+
 ```
 
-if you want to have beta version with different name and id - redo previous steps for config/beta
+if you want to have beta version with different name and id - add .env file, GoogleService-Info.plist, google-services.json, app.json and MainActivity.java config/beta
 
 - To run on iOS:
 
 ```
+
 cd ios
 pod install
-cd ..
-yarn start ios
+
+```
+
+and
+
+```
+
+yarn start ios:prod
+or
+yarn start ios:beta
+
 ```
 
 ## TESTS
