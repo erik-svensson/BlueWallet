@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity, SectionList } from 'react-native';
 import { connect } from 'react-redux';
 
-import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText, Text } from 'app/components';
+import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
 import { Wallet, Route, EnhancedTransaction, CONST } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
@@ -13,7 +13,6 @@ import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
 import * as walletsSelectors from 'app/state/wallets/selectors';
 import { palette } from 'app/styles';
 
-import Config from '../../../config';
 import { DashboarContentdHeader } from './DashboarContentdHeader';
 import { DashboardHeader } from './DashboardHeader';
 import TransactionList from './TransactionList';
@@ -248,7 +247,6 @@ class DashboardScreen extends Component<Props, State> {
     return (
       <>
         <ScreenTemplate noScroll contentContainer={styles.contentContainer} header={this.renderHeader()}>
-          {Config.isBeta ? <Text>beta</Text> : <Text>prod</Text>}
           {this.renderContent()}
         </ScreenTemplate>
         {!!this.props.isFilteringOn && (
