@@ -136,6 +136,7 @@ export function* refreshWalletSaga(action: RefreshWalletAction | unknown) {
     if (!walletToRefresh) {
       throw new Error(`No wallet to refresh`);
     }
+    yield BlueElectrum.waitTillConnected();
 
     yield all([call(() => walletToRefresh.fetchBalance()), call(() => walletToRefresh.fetchTransactions())]);
 
