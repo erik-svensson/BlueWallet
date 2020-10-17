@@ -8,22 +8,59 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3208E93922F63279007F5A27 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3208E93822F63279007F5A27 /* AppCenter-Config.plist */; };
 		32B5A32A2334450100F8D608 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5A3292334450100F8D608 /* Bridge.swift */; };
 		764B49B1420D4AEB8109BF62 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B468CC34D5B41F3950078EF /* libsqlite3.0.tbd */; };
 		782F075B5DD048449E2DECE9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D9B3A7B2CB4255876B67AF /* libz.tbd */; };
 		906451CAD44154C2950030EC /* libPods-GoldWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 731973BA0AC6EA78962CE5B6 /* libPods-GoldWallet.a */; };
+		A23B9D952538E4B5000E53DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		A23B9D972538E569000E53DE /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A23B9D962538E569000E53DE /* Launch Screen.storyboard */; };
+		A23B9D992538F3B4000E53DE /* Launch Screen beta.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A23B9D982538F3B4000E53DE /* Launch Screen beta.storyboard */; };
+		A23B9D9A2538F638000E53DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		A23B9D9B2538F64C000E53DE /* Launch Screen beta.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A23B9D982538F3B4000E53DE /* Launch Screen beta.storyboard */; };
+		A23B9D9C2538F64F000E53DE /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A23B9D962538E569000E53DE /* Launch Screen.storyboard */; };
+		A281C088253846110012082E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
+		A281C089253846110012082E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		A281C08A253846110012082E /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5A3292334450100F8D608 /* Bridge.swift */; };
+		A281C08D253846110012082E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D9B3A7B2CB4255876B67AF /* libz.tbd */; };
+		A281C08E253846110012082E /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B468CC34D5B41F3950078EF /* libsqlite3.0.tbd */; };
+		A281C091253846110012082E /* Ubuntu-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644D243B5FDD00A8F351 /* Ubuntu-Bold.ttf */; };
+		A281C092253846110012082E /* Ubuntu-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644C243B5FDD00A8F351 /* Ubuntu-Light.ttf */; };
+		A281C093253846110012082E /* Ubuntu-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644B243B5FDD00A8F351 /* Ubuntu-Medium.ttf */; };
+		A281C094253846110012082E /* Ubuntu-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644E243B5FDD00A8F351 /* Ubuntu-Regular.ttf */; };
+		A281C095253846110012082E /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3208E93822F63279007F5A27 /* AppCenter-Config.plist */; };
+		A281C096253846110012082E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A2C0A117247E56E00059DACA /* GoogleService-Info.plist */; };
 		A298644F243B5FDD00A8F351 /* Ubuntu-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644B243B5FDD00A8F351 /* Ubuntu-Medium.ttf */; };
 		A2986450243B5FDD00A8F351 /* Ubuntu-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644C243B5FDD00A8F351 /* Ubuntu-Light.ttf */; };
 		A2986451243B5FDD00A8F351 /* Ubuntu-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644D243B5FDD00A8F351 /* Ubuntu-Bold.ttf */; };
 		A2986452243B5FDD00A8F351 /* Ubuntu-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644E243B5FDD00A8F351 /* Ubuntu-Regular.ttf */; };
 		A2C0A118247E56E00059DACA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A2C0A117247E56E00059DACA /* GoogleService-Info.plist */; };
+		E88A24F9BBBF810B6395D790 /* libPods-GoldWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 731973BA0AC6EA78962CE5B6 /* libPods-GoldWallet.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		3271B0B6236E2E0700DA766F /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A281C098253846110012082E /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A281C09A253846110012082E /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -86,9 +123,13 @@
 		90F86BC5194548CA87D729A9 /* libToolTipMenu.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libToolTipMenu.a; sourceTree = "<group>"; };
 		94565BFC6A0C4235B3EC7B01 /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
 		95208B2A05884A76B5BB99C0 /* libRCTGoogleAnalyticsBridge.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTGoogleAnalyticsBridge.a; sourceTree = "<group>"; };
-		9B3A324B70BC8C6D9314FD4F /* Pods-GoldWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoldWallet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoldWallet/Pods-GoldWallet.debug.xcconfig"; sourceTree = "<group>"; };
+		95E4CB75DEE6F3C865572BF0 /* Pods-GoldWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoldWallet.release.xcconfig"; path = "Pods/Target Support Files/Pods-GoldWallet/Pods-GoldWallet.release.xcconfig"; sourceTree = "<group>"; };
 		9DF4E6C040764E4BA1ACC1EB /* libTcpSockets.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libTcpSockets.a; sourceTree = "<group>"; };
 		9F1F51A83D044F3BB26A35FC /* libRNSVG-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNSVG-tvOS.a"; sourceTree = "<group>"; };
+		A23B9D962538E569000E53DE /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		A23B9D982538F3B4000E53DE /* Launch Screen beta.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen beta.storyboard"; sourceTree = "<group>"; };
+		A281C0A0253846110012082E /* Testnet Gold Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Testnet Gold Wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A281C0A1253846110012082E /* GoldWallet-beta.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoldWallet-beta.plist"; path = "/Users/klewandowski/Documents/Projects/GoldWallet/ios/GoldWallet-beta.plist"; sourceTree = "<absolute>"; };
 		A298644B243B5FDD00A8F351 /* Ubuntu-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Ubuntu-Medium.ttf"; path = "../src/assets/fonts/Ubuntu-Medium.ttf"; sourceTree = "<group>"; };
 		A298644C243B5FDD00A8F351 /* Ubuntu-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Ubuntu-Light.ttf"; path = "../src/assets/fonts/Ubuntu-Light.ttf"; sourceTree = "<group>"; };
 		A298644D243B5FDD00A8F351 /* Ubuntu-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Ubuntu-Bold.ttf"; path = "../src/assets/fonts/Ubuntu-Bold.ttf"; sourceTree = "<group>"; };
@@ -100,7 +141,6 @@
 		B43B69B8225C462E00925B1E /* libPods-RCTLinking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libPods-RCTLinking.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B43B69BA225C46D800925B1E /* libRCTLinking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRCTLinking.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B43D046E22584C1B00FBAA95 /* libRNWatch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNWatch.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B459EE96941AE09BCB547DC0 /* Pods-GoldWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoldWallet.release.xcconfig"; path = "Pods/Target Support Files/Pods-GoldWallet/Pods-GoldWallet.release.xcconfig"; sourceTree = "<group>"; };
 		B4D3235A177F4580BA52F2F9 /* libRNCSlider.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCSlider.a; sourceTree = "<group>"; };
 		B642AFB13483418CAB6FF25E /* libRCTQRCodeLocalImage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTQRCodeLocalImage.a; sourceTree = "<group>"; };
 		B9D9B3A7B2CB4255876B67AF /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -116,6 +156,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F11DD40F6E9A4F13B3410B94 /* libRNSentry-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNSentry-tvOS.a"; sourceTree = "<group>"; };
+		F4F272C5C27F3D11829D358B /* Pods-GoldWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoldWallet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GoldWallet/Pods-GoldWallet.debug.xcconfig"; sourceTree = "<group>"; };
 		F6F53AFC25FB422485CB22D6 /* SystemConfiguration.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		FC63C7054F1C4FDFB7A830E5 /* libRCTPrivacySnapshot.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTPrivacySnapshot.a; sourceTree = "<group>"; };
 		FC98DC24A81A463AB8B2E6B1 /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
@@ -130,6 +171,16 @@
 				906451CAD44154C2950030EC /* libPods-GoldWallet.a in Frameworks */,
 				782F075B5DD048449E2DECE9 /* libz.tbd in Frameworks */,
 				764B49B1420D4AEB8109BF62 /* libsqlite3.0.tbd in Frameworks */,
+				E88A24F9BBBF810B6395D790 /* libPods-GoldWallet.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A281C08B253846110012082E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A281C08D253846110012082E /* libz.tbd in Frameworks */,
+				A281C08E253846110012082E /* libsqlite3.0.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +190,8 @@
 		13B07FAE1A68108700A75B9A /* GoldWallet */ = {
 			isa = PBXGroup;
 			children = (
+				A281C0A1253846110012082E /* GoldWallet-beta.plist */,
+				A23B9D962538E569000E53DE /* Launch Screen.storyboard */,
 				32F0A2502310B0910095C559 /* GoldWallet.entitlements */,
 				3208E93822F63279007F5A27 /* AppCenter-Config.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -149,6 +202,7 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				32B5A3292334450100F8D608 /* Bridge.swift */,
 				32B5A3282334450100F8D608 /* GoldWallet-Bridging-Header.h */,
+				A23B9D982538F3B4000E53DE /* Launch Screen beta.storyboard */,
 			);
 			name = GoldWallet;
 			sourceTree = "<group>";
@@ -221,6 +275,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* GoldWallet.app */,
+				A281C0A0253846110012082E /* Testnet Gold Wallet.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -228,8 +283,8 @@
 		A9B365F08E5E8EADC056DBC4 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9B3A324B70BC8C6D9314FD4F /* Pods-GoldWallet.debug.xcconfig */,
-				B459EE96941AE09BCB547DC0 /* Pods-GoldWallet.release.xcconfig */,
+				F4F272C5C27F3D11829D358B /* Pods-GoldWallet.debug.xcconfig */,
+				95E4CB75DEE6F3C865572BF0 /* Pods-GoldWallet.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -294,6 +349,26 @@
 			productReference = 13B07F961A680F5B00A75B9A /* GoldWallet.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A281C085253846110012082E /* GoldWallet beta */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A281C09D253846110012082E /* Build configuration list for PBXNativeTarget "GoldWallet beta" */;
+			buildPhases = (
+				A281C087253846110012082E /* Sources */,
+				A281C08B253846110012082E /* Frameworks */,
+				A281C08F253846110012082E /* Resources */,
+				A281C097253846110012082E /* Bundle React Native code and images */,
+				A281C098253846110012082E /* Embed Watch Content */,
+				A281C09A253846110012082E /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "GoldWallet beta";
+			productName = "Hello World";
+			productReference = A281C0A0253846110012082E /* Testnet Gold Wallet.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -314,6 +389,10 @@
 							};
 						};
 					};
+					A281C085253846110012082E = {
+						DevelopmentTeam = M3A8VW38MH;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "GoldWallet" */;
@@ -331,6 +410,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* GoldWallet */,
+				A281C085253846110012082E /* GoldWallet beta */,
 			);
 		};
 /* End PBXProject section */
@@ -340,13 +420,31 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				A2986451243B5FDD00A8F351 /* Ubuntu-Bold.ttf in Resources */,
+				A23B9D9A2538F638000E53DE /* Images.xcassets in Resources */,
 				A2986450243B5FDD00A8F351 /* Ubuntu-Light.ttf in Resources */,
 				A298644F243B5FDD00A8F351 /* Ubuntu-Medium.ttf in Resources */,
 				A2986452243B5FDD00A8F351 /* Ubuntu-Regular.ttf in Resources */,
 				3208E93922F63279007F5A27 /* AppCenter-Config.plist in Resources */,
 				A2C0A118247E56E00059DACA /* GoogleService-Info.plist in Resources */,
+				A23B9D9B2538F64C000E53DE /* Launch Screen beta.storyboard in Resources */,
+				A23B9D972538E569000E53DE /* Launch Screen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A281C08F253846110012082E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A281C091253846110012082E /* Ubuntu-Bold.ttf in Resources */,
+				A281C092253846110012082E /* Ubuntu-Light.ttf in Resources */,
+				A23B9D952538E4B5000E53DE /* Images.xcassets in Resources */,
+				A23B9D9C2538F64F000E53DE /* Launch Screen.storyboard in Resources */,
+				A23B9D992538F3B4000E53DE /* Launch Screen beta.storyboard in Resources */,
+				A281C093253846110012082E /* Ubuntu-Medium.ttf in Resources */,
+				A281C094253846110012082E /* Ubuntu-Regular.ttf in Resources */,
+				A281C095253846110012082E /* AppCenter-Config.plist in Resources */,
+				A281C096253846110012082E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,6 +555,20 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\nset -e\n\nif [[ ${PODS_ROOT} ]]; then\n  echo \"info: Exec FirebaseCrashlytics Run from Pods\"\n  \"${PODS_ROOT}/FirebaseCrashlytics/run\"\nelse\n  echo \"info: Exec FirebaseCrashlytics Run from framework\"\n  \"${PROJECT_DIR}/FirebaseCrashlytics.framework/run\"\nfi\n";
 		};
+		A281C097253846110012082E /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -470,12 +582,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A281C087253846110012082E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A281C088253846110012082E /* AppDelegate.m in Sources */,
+				A281C089253846110012082E /* main.m in Sources */,
+				A281C08A253846110012082E /* Bridge.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9B3A324B70BC8C6D9314FD4F /* Pods-GoldWallet.debug.xcconfig */;
+			baseConfigurationReference = F4F272C5C27F3D11829D358B /* Pods-GoldWallet.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -515,7 +637,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B459EE96941AE09BCB547DC0 /* Pods-GoldWallet.release.xcconfig */;
+			baseConfigurationReference = 95E4CB75DEE6F3C865572BF0 /* Pods-GoldWallet.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -555,7 +677,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -611,7 +732,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -657,6 +777,82 @@
 			};
 			name = Release;
 		};
+		A281C09E253846110012082E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = GoldWallet/GoldWallet.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = M3A8VW38MH;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+				);
+				INFOPLIST_FILE = "GoldWallet-beta.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.minebest.goldwalletbtcv.beta;
+				PRODUCT_NAME = "Testnet Gold Wallet";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "GoldWallet-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		A281C09F253846110012082E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = GoldWallet/GoldWallet.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M3A8VW38MH;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+				);
+				INFOPLIST_FILE = "GoldWallet-beta.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.minebest.goldwalletbtcv.beta;
+				PRODUCT_NAME = "Testnet Gold Wallet";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "GoldWallet-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 1;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -674,6 +870,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A281C09D253846110012082E /* Build configuration list for PBXNativeTarget "GoldWallet beta" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A281C09E253846110012082E /* Debug */,
+				A281C09F253846110012082E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
