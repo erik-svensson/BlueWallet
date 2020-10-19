@@ -308,6 +308,7 @@ module.exports = {
       unblocked: 'unblocked',
       done: 'done',
       canceled: 'canceled',
+      canceledDone: 'canceled - done',
     },
     transactionTypeLabel: {
       secure: 'Secure',

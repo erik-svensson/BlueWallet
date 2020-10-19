@@ -1,4 +1,4 @@
-import { flatten, negate, max } from 'lodash';
+import { flatten, negate, max, cloneDeep } from 'lodash';
 import { createSelector } from 'reselect';
 
 import { TxType, Wallet } from 'app/consts';
@@ -51,8 +51,8 @@ export const allWallets = createSelector(wallets, allWallet, (walletsList, aw) =
   return walletsList;
 });
 
-export const transactions = createSelector(wallets, electrumXSelectors.blockHeight, (walletsList, blockHeight) =>
-  flatten(
+export const transactions = createSelector(wallets, electrumXSelectors.blockHeight, (walletsList, blockHeight) => {
+  const txs = flatten(
     walletsList.filter(negate(isAllWallets)).map(wallet => {
       const walletBalanceUnit = wallet.getPreferredBalanceUnit();
       const walletLabel = wallet.getLabel();
@@ -62,8 +62,6 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
         const confirmations = height > 0 ? blockHeight - height : 0;
         const inputsAmount = transaction.inputs.reduce((amount, i) => amount + i.value, 0);
         const outputsAmount = transaction.outputs.reduce((amount, o) => amount + o.value, 0);
-        // console.log('inputsAmount', inputsAmount);
-        // console.log('outputsAmount', outputsAmount);
 
         const fee = inputsAmount - outputsAmount;
 
@@ -104,21 +102,10 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
           },
           { outputsMyAmount: 0, outputsForeignAmount: 0 },
         );
-        console.log('fee', btcToSatoshi(fee, 0));
-
-        console.log('outputsMyAmount', btcToSatoshi(outputsMyAmount, 0));
-
-        console.log('inputsMyAmount', btcToSatoshi(inputsMyAmount, 0));
-
-        console.log('calc value', btcToSatoshi(outputsMyAmount - inputsMyAmount, 0));
-
-        console.log('transaction value', transaction.value);
 
         const feeSatoshi = btcToSatoshi(fee, 0);
 
         const myBalanceChangeSatoshi = btcToSatoshi(outputsMyAmount - inputsMyAmount, 0);
-
-        const isMinusTx = myBalanceChangeSatoshi < 0;
 
         let blockedBalance;
         if ([TxType.ALERT_PENDING, TxType.ALERT_CONFIRMED, TxType.ALERT_RECOVERED].includes(transaction.tx_type)) {
@@ -130,20 +117,86 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
           unblockedBalance = blockedBalance;
         }
 
+        const isFromMyWalletTx = wallet.weOwnAddress(transaction.inputs[0].addresses[0]);
+        let toExternalAddress;
+        let toInternalAddress;
+
+        if ([TxType.RECOVERY].includes(transaction.tx_type) && isFromMyWalletTx) {
+          const toAddress = transaction.outputs[0].addresses[0];
+          const isInternalAddress = wallet.weOwnAddress(toAddress);
+
+          if (isInternalAddress) {
+            toInternalAddress = toAddress;
+          } else {
+            toExternalAddress = toAddress;
+          }
+        }
+
         return {
           ...transaction,
           confirmations: max([confirmations, 0]),
           walletPreferredBalanceUnit: walletBalanceUnit,
           walletId: id,
           walletLabel,
-          ...(isMinusTx && { fee: roundBtcToSatoshis(fee), blockedBalance, unblockedBalance }),
-          value: isMinusTx ? myBalanceChangeSatoshi + feeSatoshi : myBalanceChangeSatoshi,
+          toExternalAddress,
+          toInternalAddress,
+          ...(isFromMyWalletTx && { fee: roundBtcToSatoshis(fee), blockedBalance, unblockedBalance }),
+          value: isFromMyWalletTx ? myBalanceChangeSatoshi + feeSatoshi : myBalanceChangeSatoshi,
           walletTypeReadable: wallet.typeReadable,
         };
       });
     }),
-  ),
-);
+  );
+
+  return txs.map(tx => {
+    if (tx.tx_type !== TxType.RECOVERY) {
+      return tx;
+    }
+    console.log('tx', tx.inputs);
+
+    const recoveryInputsTxIds = flatten(tx.inputs.map(({ txid }) => txid));
+    console.log('recoveryInputsTxIds', recoveryInputsTxIds);
+
+    const recoveredTxs = txs.filter(t => {
+      if (t.value >= 0 || t.walletId !== tx.walletId || t.txid === tx.txid) {
+        return false;
+      }
+
+      const inputsTxIds = flatten(t.inputs.map(({ txid }) => txid));
+
+      return inputsTxIds.some(inTxid => recoveryInputsTxIds.includes(inTxid));
+    });
+
+    console.log('recoveredTxs', recoveredTxs);
+    if (recoveredTxs.length === 0) {
+      return tx;
+    }
+
+    const { value, returnedFee, unblockedAmount } = recoveredTxs.reduce(
+      ({ value, returnedFee, unblockedAmount }, rTx) => {
+        return {
+          value: value + Math.abs(rTx.value),
+          returnedFee: returnedFee + Math.abs(rTx.fee),
+          unblockedAmount: unblockedAmount + Math.abs(rTx.blockedBalance || 0),
+        };
+      },
+      { value: 0, returnedFee: 0, unblockedAmount: 0 },
+    );
+
+    const toAddress = tx.outputs[0].addresses[0];
+
+    console.log('toAddress', toAddress);
+
+    console.log('{ value, returnedFee, unblockedAmount }', { value, returnedFee, unblockedAmount });
+    return {
+      ...tx,
+      value,
+      returnedFee,
+      unblockedBalance: unblockedAmount,
+      recoveredTxsCounter: recoveredTxs.length,
+    };
+  });
+});
 
 export const getTranasctionsByWalletId = createSelector(
   transactions,

@@ -46,6 +46,10 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
       {item.blockedBalance && <Text>Blocked: - {item.blockedBalance}</Text>}
       {item.unblockedBalance && <Text>Unblocked: + {item.unblockedBalance}</Text>}
       {item.fee && <Text>Fee: - {item.fee}</Text>}
+      {item.returnedFee && <Text>ReturnedFee: + {item.returnedFee}</Text>}
+      {item.recoveredTxsCounter && <Text>Number of cancled txs: {item.recoveredTxsCounter}</Text>}
+      {item.toExternalAddress && <Text>To external address: {item.toExternalAddress}</Text>}
+      {item.toInternalAddress && <Text>To internal address: {item.toInternalAddress}</Text>}
     </View>
   </TouchableOpacity>
 );
@@ -80,5 +84,5 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   leftColumn: { justifyContent: 'flex-start', maxWidth: '75%' },
-  rightColumn: { marginTop: 3, alignItems: 'flex-end' },
+  rightColumn: { marginTop: 3, alignItems: 'flex-start' },
 });

@@ -11,9 +11,9 @@ const i18n = require('../../loc');
 
 const readableTransactionType = {
   [TxType.ALERT_PENDING]: i18n.transactions.label.pending,
-  [TxType.ALERT_RECOVERED]: i18n.transactions.label.unblocked,
+  [TxType.ALERT_RECOVERED]: i18n.transactions.label.canceled,
   [TxType.ALERT_CONFIRMED]: i18n.transactions.label.done,
-  [TxType.RECOVERY]: i18n.transactions.label.canceled,
+  [TxType.RECOVERY]: i18n.transactions.label.canceledDone,
 };
 
 export const TranscationLabelStatus = ({ type }: { type: TxType }) =>
@@ -27,9 +27,9 @@ const styles = StyleSheet.create({
     backgroundColor: palette.green,
   },
   RECOVERY: {
-    backgroundColor: palette.textRed,
+    backgroundColor: palette.green,
   },
   ALERT_RECOVERED: {
-    backgroundColor: palette.mediumGrey,
+    backgroundColor: palette.textRed,
   },
 });
