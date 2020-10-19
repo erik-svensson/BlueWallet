@@ -129,7 +129,7 @@ export interface Wallet {
   utxo: any[];
   _xpub: string;
   getID: () => string;
-  weOwnAddress: (clipboard: string) => void;
+  weOwnAddress: (clipboard: string) => boolean;
   isInvoiceGeneratedByWallet?: (clipboard: string) => void;
   getPreferredBalanceUnit: () => string;
   isOutputScriptMine: (script: Uint8Array) => boolean;
