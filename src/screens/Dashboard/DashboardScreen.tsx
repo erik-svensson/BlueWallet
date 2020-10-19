@@ -61,10 +61,11 @@ class DashboardScreen extends Component<Props, State> {
 
   _keyExtractor = (item: Wallet, index: number) => index.toString();
 
-  getActiveWallet = () => {
+  getIndex = (index: number) => this.setState({ lastSnappedTo: index });
+
+  getActiveWallet = (filterWallets: Wallet[]) => {
     const { lastSnappedTo } = this.state;
-    const { wallets } = this.props;
-    return wallets[lastSnappedTo] || wallets[0];
+    return filterWallets[lastSnappedTo];
   };
 
   getActionWallet = () => {
@@ -160,7 +161,9 @@ class DashboardScreen extends Component<Props, State> {
 
   renderWallets = () => {
     const { wallets } = this.props;
-    const activeWallet = this.getActiveWallet();
+    const { lastSnappedTo } = this.state;
+    const filterWallets = wallets.filter(wallet => wallet.label !== CONST.allWallets);
+    const activeWallet = this.getActiveWallet(filterWallets);
 
     return (
       <View
@@ -174,7 +177,7 @@ class DashboardScreen extends Component<Props, State> {
         <DashboarContentdHeader
           onSelectPress={this.showModal}
           balance={activeWallet.balance}
-          label={activeWallet.label === CONST.allWallets ? i18n.wallets.dashboard.allWallets : activeWallet.label}
+          label={activeWallet.label}
           type={activeWallet.type}
           typeReadable={activeWallet.typeReadable}
           incomingBalance={activeWallet.incoming_balance}
@@ -183,11 +186,12 @@ class DashboardScreen extends Component<Props, State> {
           onSendPress={this.sendCoins}
           onRecoveryPress={this.recoverCoins}
         />
-        {isAllWallets(activeWallet) ? (
+        {filterWallets.length > 0 ? (
           <WalletsCarousel
             ref={this.walletCarouselRef}
-            data={wallets.filter(wallet => wallet.label !== CONST.allWallets)}
+            data={filterWallets}
             keyExtractor={this._keyExtractor}
+            getIndex={this.getIndex}
           />
         ) : (
           <View style={{ alignItems: 'center' }}>
@@ -200,8 +204,9 @@ class DashboardScreen extends Component<Props, State> {
 
   getTransactions = () => {
     const { allTransactions } = this.props;
-
-    const activeWallet = this.getActiveWallet();
+    const { wallets } = this.props;
+    const filterWallets = wallets.filter(wallet => wallet.label !== CONST.allWallets);
+    const activeWallet = this.getActiveWallet(filterWallets);
 
     return isAllWallets(activeWallet) ? allTransactions : allTransactions.filter(t => t.walletId === activeWallet.id);
   };
@@ -209,7 +214,9 @@ class DashboardScreen extends Component<Props, State> {
   renderContent = () => {
     const { query } = this.state;
     const { isLoading } = this.props;
-    const activeWallet = this.getActiveWallet();
+    const { wallets } = this.props;
+    const filterWallets = wallets.filter(wallet => wallet.label !== CONST.allWallets);
+    const activeWallet = this.getActiveWallet(filterWallets);
 
     if (this.hasWallets()) {
       return (
