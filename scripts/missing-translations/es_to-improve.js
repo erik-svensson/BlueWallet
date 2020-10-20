@@ -269,6 +269,12 @@ const es = {
       walletType: 'Tipo de monedero',
       addToAddressBook: 'Agregar a la libreta de direcciones',
       timePending: 'Tiempo restante',
+      numberOfCancelTransactions: 'TRANSLATION NEEDED | ENG: Number of Cancel transactions:',
+      toExternalWallet: 'TRANSLATION NEEDED | ENG: To the external wallet:',
+      toInternalWallet: 'TRANSLATION NEEDED | ENG: To the internal wallet:',
+      totalReturnedFee: 'TRANSLATION NEEDED | ENG: Total returned fee:',
+      unblocked: 'TRANSLATION NEEDED | ENG: Unblocked',
+      blocked: 'TRANSLATION NEEDED | ENG: Blocked',
     },
     label: {
       pending: 'pendiente',

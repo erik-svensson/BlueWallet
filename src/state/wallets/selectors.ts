@@ -110,7 +110,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
 
         return {
           ...transaction,
-          confirmations: max([confirmations, 0]),
+          confirmations: max([confirmations, 0]) || 0,
           walletPreferredBalanceUnit: walletBalanceUnit,
           walletId: id,
           walletLabel,

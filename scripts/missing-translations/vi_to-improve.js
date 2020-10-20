@@ -269,6 +269,12 @@ const vi = {
       walletType: 'Loại ví',
       addToAddressBook: 'Thêm vào sổ Địa chỉ',
       timePending: 'Thời gian chờ xử lý',
+      numberOfCancelTransactions: 'TRANSLATION NEEDED | ENG: Number of Cancel transactions:',
+      toExternalWallet: 'TRANSLATION NEEDED | ENG: To the external wallet:',
+      toInternalWallet: 'TRANSLATION NEEDED | ENG: To the internal wallet:',
+      totalReturnedFee: 'TRANSLATION NEEDED | ENG: Total returned fee:',
+      unblocked: 'TRANSLATION NEEDED | ENG: Unblocked',
+      blocked: 'TRANSLATION NEEDED | ENG: Blocked',
     },
     label: {
       pending: 'đang chờ xử lý',

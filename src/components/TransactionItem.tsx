@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 8,
     flexGrow: 1,
+    width: '100%',
   },
   walletLabelWrapper: {
     display: 'flex',
