@@ -1,4 +1,4 @@
-import { flatten, negate, max } from 'lodash';
+import { flatten, flattenDeep, negate, max, round } from 'lodash';
 import { flatten as flattenFp, some, map, compose } from 'lodash/fp';
 import { createSelector } from 'reselect';
 
@@ -7,7 +7,7 @@ import { isAllWallets } from 'app/helpers/helpers';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 
-import { roundBtcToSatoshis, btcToSatoshi } from '../../../utils/bitcoin';
+import { roundBtcToSatoshis, btcToSatoshi, satoshiToBtc } from '../../../utils/bitcoin';
 import { selectors as electrumXSelectors } from '../electrumX';
 import { WalletsState } from './reducer';
 
@@ -62,7 +62,7 @@ const getMyAmount = (wallet: Wallet, entities: TxEntity[]) =>
   }, 0);
 
 export const transactions = createSelector(wallets, electrumXSelectors.blockHeight, (walletsList, blockHeight) => {
-  const txs = flatten(
+  const txs = flattenDeep(
     walletsList.filter(negate(isAllWallets)).map(wallet => {
       const walletBalanceUnit = wallet.getPreferredBalanceUnit();
       const walletLabel = wallet.getLabel();
@@ -97,15 +97,50 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
         let toExternalAddress;
         let toInternalAddress;
 
-        if ([TxType.RECOVERY].includes(transaction.tx_type) && isFromMyWalletTx) {
-          const toAddress = transaction.outputs[0].addresses[0];
-          const isInternalAddress = wallet.weOwnAddress(toAddress);
+        const toAddress = transaction.outputs[0].addresses[0];
+        const isToInternalAddress = wallet.weOwnAddress(toAddress);
 
-          if (isInternalAddress) {
+        if ([TxType.RECOVERY].includes(transaction.tx_type) && isFromMyWalletTx) {
+          if (isToInternalAddress) {
             toInternalAddress = toAddress;
           } else {
             toExternalAddress = toAddress;
           }
+        }
+
+        if (TxType.RECOVERY !== transaction.tx_type && isFromMyWalletTx && isToInternalAddress) {
+          // create two transactions for transaction to internal address
+          const outPutSendByUser = transaction.outputs[0];
+          const amountSendBtc = satoshiToBtc(transaction.outputs[0].value).toNumber();
+          const valueWithoutFee = btcToSatoshi(outPutSendByUser.value);
+
+          return [
+            {
+              ...transaction,
+              confirmations: max([confirmations, 0]) || 0,
+              walletPreferredBalanceUnit: walletBalanceUnit,
+              walletId: id,
+              walletLabel,
+              valueWithoutFee,
+              walletTypeReadable: wallet.typeReadable,
+            },
+            {
+              ...transaction,
+              confirmations: max([confirmations, 0]) || 0,
+              walletPreferredBalanceUnit: walletBalanceUnit,
+              walletId: id,
+              walletLabel,
+              fee: roundBtcToSatoshis(fee),
+              ...(blockedAmount !== undefined && {
+                blockedAmount: amountSendBtc - blockedAmount,
+              }),
+              ...(unblockedAmount !== undefined && {
+                unblockedAmount: unblockedAmount + amountSendBtc,
+              }),
+              valueWithoutFee: -valueWithoutFee,
+              walletTypeReadable: wallet.typeReadable,
+            },
+          ];
         }
 
         return {
