@@ -187,7 +187,7 @@ class DashboardScreen extends Component<Props, State> {
           onSendPress={this.sendCoins}
           onRecoveryPress={this.recoverCoins}
         />
-        {wallets.length > 0 ? (
+        {this.hasWallets() ? (
           <WalletsCarousel
             ref={this.walletCarouselRef}
             getIndex={this.getIndex}
