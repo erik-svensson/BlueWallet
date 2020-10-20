@@ -1,7 +1,7 @@
 import { flatten, negate, max } from 'lodash';
 import { createSelector } from 'reselect';
 
-import { TxType, Wallet } from 'app/consts';
+import { TxType, Wallet, CONST } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
@@ -54,7 +54,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
   flatten(
     walletsList.filter(negate(isAllWallets)).map(wallet => {
       const walletBalanceUnit = wallet.getPreferredBalanceUnit();
-      const walletLabel = wallet.getLabel();
+      const walletLabel = wallet.label !== CONST.allWallets ? wallet.getLabel() : 'All wallets';
       const id = wallet.id;
       return wallet.transactions.map(transaction => {
         const { height } = transaction;
