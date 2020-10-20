@@ -56,6 +56,7 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   chooseItemFromModal = (index: number) => {
+    this.walletCarouselRef.current?.snap(index);
     this.setState({ lastSnappedTo: index });
   };
 
