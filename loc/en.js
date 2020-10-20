@@ -350,6 +350,13 @@ module.exports = {
       sendCoins: 'Send coins',
       addToAddressBook: 'Add to Address book',
       timePending: 'Time pending',
+      numberOfCancelTransactions: 'Number of Cancel transactions:',
+      toExternalWallet: 'To the external wallet:',
+      toInternalWallet: 'To the internal wallet:',
+      fee: 'Fee:',
+      totalReturnedFee: 'Total returned fee:',
+      unblocked: 'Unblocked',
+      blocked: 'Blocked',
     },
   },
   timeCounter: {

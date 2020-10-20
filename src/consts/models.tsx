@@ -182,6 +182,7 @@ export interface Transaction {
   toExternalAddress?: string;
   toInternalAddress?: string;
   recoveredTxsCounter?: number;
+  valueWithoutFee: number;
   returnedFee?: number;
   height: number;
   walletPreferredBalanceUnit: string;

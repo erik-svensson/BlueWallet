@@ -22,23 +22,20 @@ const renderCofirmations = (txType: TxType, confirmations: number) =>
   );
 
 const addMissingZerosToSatoshis = (value: number): string => {
-  const arr = value.toString().split('.');
-  console.log('arr', arr);
-  const [integer, decimal] = arr;
-  const decimallWithMissingZeros = (decimal || '').padEnd(8, '0');
+  const [integer, decimal] = value.toString().split('.');
+  const decimallWithMissingZeros = (decimal || '').padEnd(Math.log10(CONST.satoshiInBtc), '0');
 
-  console.log('decimallWithMissingZeros', decimallWithMissingZeros);
   return [integer, decimallWithMissingZeros].join('.');
 };
 
 const getBtcLabel = (value: number): string => `${addMissingZerosToSatoshis(value)} ${CONST.preferredBalanceUnit}`;
 
 export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress: (item: any) => void }) => {
-  const isMinusValue = item.value < 0;
+  const isMinusValue = item.valueWithoutFee < 0;
   return (
     <TouchableOpacity style={styles.container} onPress={() => onPress(item)}>
       <View style={styles.walletLabelWrapper}>
-        {renderArrowIcon(item.value)}
+        {renderArrowIcon(item.valueWithoutFee)}
         <Image source={icons.wallet} style={styles.wallet} resizeMode="contain" />
         <Text style={styles.walletLabel} numberOfLines={1} ellipsizeMode="tail">
           {item.walletLabel}
@@ -59,19 +56,19 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
           ]}
         >
           {!isMinusValue && '+'}
-          {getBtcLabel(satoshiToBtc(item.value).toNumber())}
+          {getBtcLabel(satoshiToBtc(item.valueWithoutFee).toNumber())}
         </Text>
       </View>
       {item.blockedAmount && (
         <View style={styles.rowWrapper}>
-          <Label>Blocked </Label>
+          <Label>{i18n.transactions.details.blocked}</Label>
 
           <Text style={[typography.headline5, { color: palette.textRed }]}>{getBtcLabel(item.blockedAmount)}</Text>
         </View>
       )}
       {item.unblockedAmount && (
         <View style={styles.rowWrapper}>
-          <Label>Unblocked </Label>
+          <Label>{i18n.transactions.details.unblocked}</Label>
           <Text style={[typography.headline5, item.toExternalAddress ? styles.label : null]}>
             +{getBtcLabel(item.unblockedAmount)}
           </Text>
@@ -79,7 +76,7 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
       )}
       {item.returnedFee && (
         <View style={styles.rowWrapper}>
-          <Text style={styles.label}>Total returned fee: </Text>
+          <Text style={styles.label}>{i18n.transactions.details.totalReturnedFee} </Text>
           <Text style={[styles.label, typography.headline5, item.toExternalAddress ? styles.label : null]}>
             +{getBtcLabel(item.returnedFee)}
           </Text>
@@ -87,25 +84,27 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
       )}
       {item.fee && (
         <View style={styles.rowWrapper}>
-          <Text style={styles.label}>Fee: </Text>
+          <Text style={styles.label}>{i18n.transactions.details.fee} </Text>
           <Text style={[styles.label, typography.headline5]}>{getBtcLabel(item.fee)}</Text>
         </View>
       )}
       {item.toInternalAddress && (
         <View>
-          <Text style={styles.label}>To the internal wallet: </Text>
+          <Text style={styles.label}>{i18n.transactions.details.toInternalWallet} </Text>
           <Text style={styles.label}>{item.toInternalAddress}</Text>
         </View>
       )}
       {item.toExternalAddress && (
         <View>
-          <Text style={styles.label}>To the external wallet: </Text>
+          <Text style={styles.label}>{i18n.transactions.details.toExternalWallet} </Text>
           <Text style={styles.label}>{item.toExternalAddress}</Text>
         </View>
       )}
       {item.recoveredTxsCounter && (
         <View>
-          <Text style={styles.label}>Number of Cancel transactions: {item.recoveredTxsCounter} </Text>
+          <Text style={styles.label}>
+            {i18n.transactions.details.numberOfCancelTransactions} {item.recoveredTxsCounter}{' '}
+          </Text>
         </View>
       )}
     </TouchableOpacity>

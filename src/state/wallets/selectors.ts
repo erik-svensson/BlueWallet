@@ -85,14 +85,11 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
 
         let blockedAmount;
         if ([TxType.ALERT_PENDING, TxType.ALERT_CONFIRMED, TxType.ALERT_RECOVERED].includes(transaction.tx_type)) {
-          console.log('outputsMyAmount', outputsMyAmount);
           blockedAmount = outputsMyAmount < 0 ? 0 : -roundBtcToSatoshis(outputsMyAmount);
         }
 
         let unblockedAmount;
         if ([TxType.ALERT_CONFIRMED].includes(transaction.tx_type) && blockedAmount !== undefined) {
-          console.log('blockedAmount', blockedAmount);
-
           unblockedAmount = blockedAmount === 0 ? 0 : -blockedAmount;
         }
 
@@ -120,7 +117,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
           toExternalAddress,
           toInternalAddress,
           ...(isFromMyWalletTx && { fee: roundBtcToSatoshis(fee), blockedAmount, unblockedAmount }),
-          value: isFromMyWalletTx ? myBalanceChangeSatoshi - feeSatoshi : myBalanceChangeSatoshi,
+          valueWithoutFee: isFromMyWalletTx ? myBalanceChangeSatoshi - feeSatoshi : myBalanceChangeSatoshi,
           walletTypeReadable: wallet.typeReadable,
         };
       });
@@ -150,23 +147,27 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
       return tx;
     }
 
-    const { value: v, returnedFee: rF, unblockedAmount: uA } = recoveredTxs.reduce(
+    const { valueWithoutFee: v, returnedFee: rF, unblockedAmount: uA } = recoveredTxs.reduce(
       (
-        { value, returnedFee, unblockedAmount }: { value: number; returnedFee: number; unblockedAmount: number },
+        {
+          valueWithoutFee,
+          returnedFee,
+          unblockedAmount,
+        }: { valueWithoutFee: number; returnedFee: number; unblockedAmount: number },
         rTx,
       ) => {
         return {
-          value: value + Math.abs(rTx.value),
+          valueWithoutFee: valueWithoutFee + Math.abs(rTx.valueWithoutFee),
           returnedFee: returnedFee + Math.abs(rTx.fee || 0),
           unblockedAmount: unblockedAmount + Math.abs(rTx.blockedAmount || 0),
         };
       },
-      { value: 0, returnedFee: 0, unblockedAmount: 0 },
+      { valueWithoutFee: 0, returnedFee: 0, unblockedAmount: 0 },
     );
 
     return {
       ...tx,
-      value: v,
+      valueWithoutFee: v,
       returnedFee: rF,
       unblockedAmount: uA,
       recoveredTxsCounter: recoveredTxs.length,
