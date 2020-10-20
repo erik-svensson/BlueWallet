@@ -2,7 +2,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import { TxType } from 'app/consts';
+import { TxType, CONST } from 'app/consts';
 import { palette } from 'app/styles';
 
 import { Label } from './Label';
@@ -16,8 +16,18 @@ const readableTransactionType = {
   [TxType.RECOVERY]: i18n.transactions.label.canceledDone,
 };
 
-export const TranscationLabelStatus = ({ type }: { type: TxType }) =>
-  readableTransactionType[type] ? <Label labelStyle={styles[type]}>{readableTransactionType[type]}</Label> : null;
+export const TranscationLabelStatus = ({ type, confirmations }: { type: TxType; confirmations: number }) => {
+  let chosenStyleType = type;
+  if (!readableTransactionType[type]) {
+    chosenStyleType = TxType.ALERT_PENDING;
+  }
+  if (!readableTransactionType[type] && CONST.confirmationsBlocks <= confirmations) {
+    chosenStyleType = TxType.ALERT_CONFIRMED;
+  }
+  return readableTransactionType[chosenStyleType] ? (
+    <Label labelStyle={styles[chosenStyleType]}>{readableTransactionType[chosenStyleType]}</Label>
+  ) : null;
+};
 
 const styles = StyleSheet.create({
   ALERT_PENDING: {

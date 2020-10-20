@@ -74,7 +74,7 @@ class TransactionDetailsScreen extends Component<Props> {
             transaction.walletPreferredBalanceUnit,
           )} ${transaction.walletPreferredBalanceUnit}`}
         </Text>
-        <TranscationLabelStatus type={transaction.tx_type} />
+        <TranscationLabelStatus type={transaction.tx_type} confirmations={transaction.confirmations} />
 
         {transaction.tx_type !== TxType.ALERT_RECOVERED && (
           <Chip

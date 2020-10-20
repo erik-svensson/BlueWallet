@@ -85,12 +85,15 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
 
         let blockedAmount;
         if ([TxType.ALERT_PENDING, TxType.ALERT_CONFIRMED, TxType.ALERT_RECOVERED].includes(transaction.tx_type)) {
-          blockedAmount = -roundBtcToSatoshis(outputsMyAmount);
+          console.log('outputsMyAmount', outputsMyAmount);
+          blockedAmount = outputsMyAmount < 0 ? 0 : -roundBtcToSatoshis(outputsMyAmount);
         }
 
         let unblockedAmount;
         if ([TxType.ALERT_CONFIRMED].includes(transaction.tx_type) && blockedAmount !== undefined) {
-          unblockedAmount = -blockedAmount;
+          console.log('blockedAmount', blockedAmount);
+
+          unblockedAmount = blockedAmount === 0 ? 0 : -blockedAmount;
         }
 
         const isFromMyWalletTx = wallet.weOwnAddress(transaction.inputs[0].addresses[0]);
@@ -155,7 +158,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
         return {
           value: value + Math.abs(rTx.value),
           returnedFee: returnedFee + Math.abs(rTx.fee || 0),
-          unblockedAmount: unblockedAmount + (rTx.blockedAmount || 0),
+          unblockedAmount: unblockedAmount + Math.abs(rTx.blockedAmount || 0),
         };
       },
       { value: 0, returnedFee: 0, unblockedAmount: 0 },
