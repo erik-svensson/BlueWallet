@@ -1,7 +1,8 @@
-import { flatten, negate, max, cloneDeep } from 'lodash';
+import { flatten, negate, max } from 'lodash';
+import { flatten as flattenFp, some, map, compose } from 'lodash/fp';
 import { createSelector } from 'reselect';
 
-import { TxType, Wallet } from 'app/consts';
+import { TxType, Wallet, TransactionInput, TransactionOutput } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
@@ -51,6 +52,15 @@ export const allWallets = createSelector(wallets, allWallet, (walletsList, aw) =
   return walletsList;
 });
 
+type TxEntity = TransactionInput | TransactionOutput;
+const getMyAmount = (wallet: Wallet, entities: TxEntity[]) =>
+  entities.reduce((amount: number, entity: TxEntity) => {
+    if (wallet.weOwnAddress(entity.addresses[0])) {
+      return entity.value + amount;
+    }
+    return amount;
+  }, 0);
+
 export const transactions = createSelector(wallets, electrumXSelectors.blockHeight, (walletsList, blockHeight) => {
   const txs = flatten(
     walletsList.filter(negate(isAllWallets)).map(wallet => {
@@ -63,58 +73,24 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
         const inputsAmount = transaction.inputs.reduce((amount, i) => amount + i.value, 0);
         const outputsAmount = transaction.outputs.reduce((amount, o) => amount + o.value, 0);
 
-        const fee = inputsAmount - outputsAmount;
+        const fee = outputsAmount - inputsAmount;
 
-        const { inputsForeignAmount, inputsMyAmount } = transaction.inputs.reduce(
-          (
-            amount: { inputsMyAmount: number; inputsForeignAmount: number },
-            out: { value: number; addresses: string[] },
-          ) => {
-            if (wallet.weOwnAddress(out.addresses[0])) {
-              return {
-                ...amount,
-                inputsMyAmount: out.value + amount.inputsMyAmount,
-              };
-            }
-            return {
-              ...amount,
-              inputsForeignAmount: out.value + amount.inputsForeignAmount,
-            };
-          },
-          { inputsMyAmount: 0, inputsForeignAmount: 0 },
-        );
+        const inputsMyAmount = getMyAmount(wallet, transaction.inputs);
 
-        const { outputsForeignAmount, outputsMyAmount } = transaction.outputs.reduce(
-          (
-            amount: { outputsMyAmount: number; outputsForeignAmount: number },
-            out: { value: number; addresses: string[] },
-          ) => {
-            if (wallet.weOwnAddress(out.addresses[0])) {
-              return {
-                ...amount,
-                outputsMyAmount: out.value + amount.outputsMyAmount,
-              };
-            }
-            return {
-              ...amount,
-              outputsForeignAmount: out.value + amount.outputsForeignAmount,
-            };
-          },
-          { outputsMyAmount: 0, outputsForeignAmount: 0 },
-        );
+        const outputsMyAmount = getMyAmount(wallet, transaction.outputs);
 
         const feeSatoshi = btcToSatoshi(fee, 0);
 
         const myBalanceChangeSatoshi = btcToSatoshi(outputsMyAmount - inputsMyAmount, 0);
 
-        let blockedBalance;
+        let blockedAmount;
         if ([TxType.ALERT_PENDING, TxType.ALERT_CONFIRMED, TxType.ALERT_RECOVERED].includes(transaction.tx_type)) {
-          blockedBalance = roundBtcToSatoshis(outputsMyAmount);
+          blockedAmount = roundBtcToSatoshis(outputsMyAmount);
         }
 
-        let unblockedBalance;
+        let unblockedAmount;
         if ([TxType.ALERT_CONFIRMED].includes(transaction.tx_type)) {
-          unblockedBalance = blockedBalance;
+          unblockedAmount = blockedAmount;
         }
 
         const isFromMyWalletTx = wallet.weOwnAddress(transaction.inputs[0].addresses[0]);
@@ -140,8 +116,8 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
           walletLabel,
           toExternalAddress,
           toInternalAddress,
-          ...(isFromMyWalletTx && { fee: roundBtcToSatoshis(fee), blockedBalance, unblockedBalance }),
-          value: isFromMyWalletTx ? myBalanceChangeSatoshi + feeSatoshi : myBalanceChangeSatoshi,
+          ...(isFromMyWalletTx && { fee: roundBtcToSatoshis(fee), blockedAmount, unblockedAmount }),
+          value: isFromMyWalletTx ? myBalanceChangeSatoshi - feeSatoshi : myBalanceChangeSatoshi,
           walletTypeReadable: wallet.typeReadable,
         };
       });
@@ -152,10 +128,8 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
     if (tx.tx_type !== TxType.RECOVERY) {
       return tx;
     }
-    console.log('tx', tx.inputs);
 
     const recoveryInputsTxIds = flatten(tx.inputs.map(({ txid }) => txid));
-    console.log('recoveryInputsTxIds', recoveryInputsTxIds);
 
     const recoveredTxs = txs.filter(t => {
       if (t.value >= 0 || t.walletId !== tx.walletId || t.txid === tx.txid) {
@@ -167,32 +141,29 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
       return inputsTxIds.some(inTxid => recoveryInputsTxIds.includes(inTxid));
     });
 
-    console.log('recoveredTxs', recoveredTxs);
     if (recoveredTxs.length === 0) {
       return tx;
     }
 
-    const { value, returnedFee, unblockedAmount } = recoveredTxs.reduce(
-      ({ value, returnedFee, unblockedAmount }, rTx) => {
+    const { value: v, returnedFee: rF, unblockedAmount: uA } = recoveredTxs.reduce(
+      (
+        { value, returnedFee, unblockedAmount }: { value: number; returnedFee: number; unblockedAmount: number },
+        rTx,
+      ) => {
         return {
           value: value + Math.abs(rTx.value),
-          returnedFee: returnedFee + Math.abs(rTx.fee),
-          unblockedAmount: unblockedAmount + Math.abs(rTx.blockedBalance || 0),
+          returnedFee: returnedFee + Math.abs(rTx.fee || 0),
+          unblockedAmount: unblockedAmount + (rTx.blockedAmount || 0),
         };
       },
       { value: 0, returnedFee: 0, unblockedAmount: 0 },
     );
 
-    const toAddress = tx.outputs[0].addresses[0];
-
-    console.log('toAddress', toAddress);
-
-    console.log('{ value, returnedFee, unblockedAmount }', { value, returnedFee, unblockedAmount });
     return {
       ...tx,
-      value,
-      returnedFee,
-      unblockedBalance: unblockedAmount,
+      value: v,
+      returnedFee: rF,
+      unblockedAmount: uA,
       recoveredTxsCounter: recoveredTxs.length,
     };
   });

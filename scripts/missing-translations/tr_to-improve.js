@@ -276,6 +276,7 @@ const tr = {
       done: 'tamamlandı',
       canceled: 'İptal Edildi',
       unblocked: 'bloke kalktı',
+      canceledDone: 'TRANSLATION NEEDED | ENG: canceled - done',
     },
     transactionTypeLabel: {
       standard: 'Standart',

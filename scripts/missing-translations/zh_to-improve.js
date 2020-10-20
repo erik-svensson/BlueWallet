@@ -394,6 +394,7 @@ const zh = {
       done: '完成',
       pending: '待定',
       unblocked: '未锁定',
+      canceledDone: 'TRANSLATION NEEDED | ENG: canceled - done',
     },
     list: {
       conf: '确认',

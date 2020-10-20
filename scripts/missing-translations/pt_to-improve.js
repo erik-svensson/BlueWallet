@@ -276,6 +276,7 @@ const pt = {
       done: 'feito',
       canceled: 'cancelado',
       unblocked: 'desbloqueado',
+      canceledDone: 'TRANSLATION NEEDED | ENG: canceled - done',
     },
     transactionTypeLabel: {
       standard: 'Padrão',

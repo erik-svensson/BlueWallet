@@ -394,6 +394,7 @@ const jo = {
       pending: '保留中',
       unblocked: 'ブロック解除',
       annulled: '無効化',
+      canceledDone: 'TRANSLATION NEEDED | ENG: canceled - done',
     },
     list: {
       conf: '確認',

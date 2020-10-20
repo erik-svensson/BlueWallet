@@ -276,6 +276,7 @@ const id = {
       done: 'selesai',
       canceled: 'dibatalkan',
       unblocked: 'unblocked',
+      canceledDone: 'TRANSLATION NEEDED | ENG: canceled - done',
     },
     transactionTypeLabel: {
       standard: 'Standar',

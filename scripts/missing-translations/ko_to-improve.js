@@ -276,6 +276,7 @@ const ko = {
       done: '완료',
       canceled: '취소됨',
       unblocked: '차단해제됨',
+      canceledDone: 'TRANSLATION NEEDED | ENG: canceled - done',
     },
     transactionTypeLabel: {
       standard: '표준',

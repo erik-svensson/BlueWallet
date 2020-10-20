@@ -276,6 +276,7 @@ const es = {
       done: 'finalizada',
       canceled: 'cancelada',
       unblocked: 'desbloqueado',
+      canceledDone: 'TRANSLATION NEEDED | ENG: canceled - done',
     },
     transactionTypeLabel: {
       standard: 'Estándar',

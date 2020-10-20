@@ -43,8 +43,8 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
       <Text style={[typography.headline5, { color: item.value < 0 ? palette.textRed : palette.textBlack }]}>
         {item.walletPreferredBalanceUnit}
       </Text>
-      {item.blockedBalance && <Text>Blocked: - {item.blockedBalance}</Text>}
-      {item.unblockedBalance && <Text>Unblocked: + {item.unblockedBalance}</Text>}
+      {item.blockedAmount && <Text>Blocked: - {item.blockedAmount}</Text>}
+      {item.unblockedAmount && <Text>Unblocked: + {item.unblockedAmount}</Text>}
       {item.fee && <Text>Fee: - {item.fee}</Text>}
       {item.returnedFee && <Text>ReturnedFee: + {item.returnedFee}</Text>}
       {item.recoveredTxsCounter && <Text>Number of cancled txs: {item.recoveredTxsCounter}</Text>}

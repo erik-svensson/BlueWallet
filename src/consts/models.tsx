@@ -173,9 +173,16 @@ export interface Transaction {
   walletLabel: string;
   confirmations: number;
   tx_type: TxType;
-  inputs: any[];
-  outputs: any[];
+  inputs: TransactionInput[];
+  outputs: TransactionOutput[];
   note?: string;
+  fee?: number;
+  blockedAmount?: number;
+  unblockedAmount?: number;
+  toExternalAddress?: string;
+  toInternalAddress?: string;
+  recoveredTxsCounter?: number;
+  returnedFee?: number;
   height: number;
   walletPreferredBalanceUnit: string;
 }
@@ -202,6 +209,13 @@ export interface Filters {
   toAmount?: string;
   transactionType?: string;
   transactionStatus?: string;
+}
+
+export interface TransactionOutput {
+  addresses: string[];
+  value: number;
+  scriptPubKey: { asm: string; addresses: string[]; hex: string; type: string; reqSigs: number };
+  n: number;
 }
 
 export interface TransactionInput {

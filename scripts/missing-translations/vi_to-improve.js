@@ -276,6 +276,7 @@ const vi = {
       done: 'xong',
       canceled: 'Đã hủy',
       unblocked: 'bỏ chặn',
+      canceledDone: 'TRANSLATION NEEDED | ENG: canceled - done',
     },
     transactionTypeLabel: {
       standard: 'Tiêu chuẩn',
