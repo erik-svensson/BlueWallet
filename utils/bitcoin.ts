@@ -8,12 +8,12 @@ const BigNumber = require('bignumber.js');
 const reverse = require('buffer-reverse');
 
 export const btcToSatoshi = (btc: number, precision: number | null = null): number => {
-  const satoshis = new BigNumber(btc).multipliedBy(CONST.satoshiInBtc);
+  const satoshis = new BigNumber(btc).multipliedBy(CONST.satoshiInBtc).toNumber();
   if (precision === null) {
-    return satoshis.toNumber();
+    return satoshis;
   }
 
-  return round(satoshis.toNumber(), precision);
+  return round(satoshis, precision);
 };
 
 export const satoshiToBtc = (satoshi: number) => new BigNumber(satoshi).dividedBy(CONST.satoshiInBtc);
@@ -34,5 +34,5 @@ export const addMissingZerosToSatoshis = (value: number): string => {
   return [integer, decimallWithMissingZeros].join('.');
 };
 
-export const getBtcvLabel = (value: number): string =>
+export const formatToBtcv = (value: number): string =>
   `${value >= 0 ? '+' : ''}${addMissingZerosToSatoshis(value)} ${CONST.preferredBalanceUnit}`;
