@@ -38,10 +38,11 @@ interface Props {
   label: string;
   cards: Card[];
   onCardPressAction: (title: string) => void;
+  activeLabel?: string;
 }
 
-export const CardGroup = ({ label, cards, onCardPressAction }: Props) => {
-  const [choosenCard, setChoosenCard] = useState('');
+export const CardGroup = ({ label, cards, onCardPressAction, activeLabel }: Props) => {
+  const [choosenCard, setChoosenCard] = useState(activeLabel || '');
 
   useEffect(() => {
     if (!choosenCard) {
