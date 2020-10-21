@@ -181,6 +181,7 @@ const mapStateToProps = (state: ApplicationState & WalletsState, props: Props): 
   const { wallet } = props.route.params;
   return {
     wallets: selectors.walletsWithRecoveryTransaction(state),
+    // @ts-ignore - TODO: resolve it later.
     transactions: selectors.getTransactionsToRecoverByWalletId(state, wallet.id),
   };
 };

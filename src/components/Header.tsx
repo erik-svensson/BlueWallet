@@ -1,4 +1,3 @@
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, BackHandler, NativeEventSubscription } from 'react-native';
 
@@ -18,7 +17,7 @@ export const HEADER_HEIGHT = Platform.select({
 
 interface Props {
   navigation?: any;
-  title: string;
+  title?: string;
   isBackArrow?: boolean;
   onBackArrow?: () => void;
   isCancelButton?: boolean;
@@ -43,6 +42,7 @@ export class Header extends PureComponent<Props, State> {
       onLayout={event => {
         const { width } = event.nativeEvent.layout;
         this.setState({
+          
           cancelButtonWidth: width,
         });
       }}

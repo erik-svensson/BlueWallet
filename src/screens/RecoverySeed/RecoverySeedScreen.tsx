@@ -22,8 +22,8 @@ interface State {
   isLoading: boolean;
 }
 
-class RecoverySeedScreen extends Component<Props, State> {
-  state = {
+export class RecoverySeedScreen extends Component<Props, State> {
+  state: State = {
     mnemonic: compose(
       map(() => ''),
       range(CONST.mnemonicWordsAmount),
@@ -42,6 +42,7 @@ class RecoverySeedScreen extends Component<Props, State> {
     if (props.route.params.mnemonic && !state.mnemonic[0]) {
       return { mnemonic: props.route.params?.mnemonic };
     }
+
     return null;
   }
 

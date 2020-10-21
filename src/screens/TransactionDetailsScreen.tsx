@@ -231,6 +231,7 @@ const mapDispatchToProps = {
   updateTransactionNote,
 };
 
+// @ts-ignore - TODO: fix it later
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionDetailsScreen);
 
 const styles = StyleSheet.create({
