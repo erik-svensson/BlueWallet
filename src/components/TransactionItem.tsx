@@ -8,7 +8,7 @@ import { Transaction, TxType } from 'app/consts';
 import { getConfirmationsText } from 'app/helpers/helpers';
 import { typography, palette } from 'app/styles';
 
-import { satoshiToBtc, getBtcLabel } from '../../utils/bitcoin';
+import { satoshiToBtc, getBtcvLabel } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
 
@@ -52,15 +52,14 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
             item.toExternalAddress ? styles.label : null,
           ]}
         >
-          {!isMinusValue && '+'}
-          {getBtcLabel(satoshiToBtc(item.valueWithoutFee).toNumber())}
+          {getBtcvLabel(satoshiToBtc(item.valueWithoutFee).toNumber())}
         </Text>
       </View>
       {item.blockedAmount !== undefined && (
         <View style={styles.rowWrapper}>
           <Label>{i18n.transactions.details.blocked}</Label>
 
-          <Text style={[typography.headline5, { color: palette.textRed }]}>{getBtcLabel(item.blockedAmount)}</Text>
+          <Text style={[typography.headline5, { color: palette.textRed }]}>{getBtcvLabel(item.blockedAmount)}</Text>
         </View>
       )}
 
@@ -68,7 +67,7 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
         <View style={styles.rowWrapper}>
           <Label>{i18n.transactions.details.unblocked}</Label>
           <Text style={[typography.headline5, item.toExternalAddress ? styles.label : null]}>
-            +{getBtcLabel(item.unblockedAmount)}
+            {getBtcvLabel(item.unblockedAmount)}
           </Text>
         </View>
       )}
@@ -76,14 +75,14 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
         <View style={styles.rowWrapper}>
           <Text style={styles.label}>{i18n.transactions.details.totalReturnedFee} </Text>
           <Text style={[styles.label, typography.headline5, item.toExternalAddress ? styles.label : null]}>
-            +{getBtcLabel(item.returnedFee)}
+            {getBtcvLabel(item.returnedFee)}
           </Text>
         </View>
       )}
       {item.fee !== undefined && (
         <View style={styles.rowWrapper}>
           <Text style={styles.label}>{i18n.transactions.details.fee} </Text>
-          <Text style={[styles.label, typography.headline5]}>{getBtcLabel(item.fee)}</Text>
+          <Text style={[styles.label, typography.headline5]}>{getBtcvLabel(item.fee)}</Text>
         </View>
       )}
       {item.toInternalAddress !== undefined && (

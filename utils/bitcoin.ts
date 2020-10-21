@@ -34,5 +34,5 @@ export const addMissingZerosToSatoshis = (value: number): string => {
   return [integer, decimallWithMissingZeros].join('.');
 };
 
-export const getBtcLabel = (value: number): string =>
-  `${addMissingZerosToSatoshis(value)} ${CONST.preferredBalanceUnit}`;
+export const getBtcvLabel = (value: number): string =>
+  `${value >= 0 ? '+' : ''}${addMissingZerosToSatoshis(value)} ${CONST.preferredBalanceUnit}`;
