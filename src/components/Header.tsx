@@ -42,7 +42,6 @@ export class Header extends PureComponent<Props, State> {
       onLayout={event => {
         const { width } = event.nativeEvent.layout;
         this.setState({
-          
           cancelButtonWidth: width,
         });
       }}
