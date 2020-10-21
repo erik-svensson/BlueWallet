@@ -559,4 +559,10 @@ const pt = {
     description: 'Ainda está em fase de testes finais antes de seu lançamento oficial. O aplicativo móvel e todo o conteúdo encontrado nele são fornecidos \"\"como estão\"\" e \"\"conforme disponível\"\". O uso do software é feito por conta e risco do usuário.',
     button: 'Eu aceito o risco',
   },
+  noInternetConnection: {
+    title: 'TRANSLATION NEEDED | ENG: No internet connection',
+    description: 'TRANSLATION NEEDED | ENG: Ensure that WI-FI or mobile data are turned on, then try again.',
+    toastTitle: 'TRANSLATION NEEDED | ENG: You're offline',
+    toastDescription: 'TRANSLATION NEEDED | ENG: Connect to the internet to restore full functionality.',
+  },
 }

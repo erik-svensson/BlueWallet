@@ -5,6 +5,7 @@ import { sagas as authenticatorsSagas } from './authenticators';
 import { sagas as electrumXSagas } from './electrumX';
 import { sagas as transactionsNotesSagas } from './transactionsNotes';
 import { sagas as walletsSagas } from './wallets';
+import { sagas as statusSagas } from './status';
 
 export function* rootSaga() {
   yield all([
@@ -13,5 +14,6 @@ export function* rootSaga() {
     ...authenticationSagas,
     ...transactionsNotesSagas,
     ...electrumXSagas,
+    ...statusSagas,
   ]);
 }

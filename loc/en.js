@@ -582,4 +582,10 @@ module.exports = {
       'It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
     button: 'I accept the risk',
   },
+  noInternetConnection: {
+    title: 'No internet connection',
+    description: 'Ensure that WI-FI or mobile data are turned on, then try again.',
+    toastTitle: 'You\'re offline',
+    toastDescription: 'Connect to the internet to restore full functionality.',
+  }
 };

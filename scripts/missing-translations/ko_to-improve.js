@@ -559,4 +559,10 @@ const ko = {
     description: '아직 공식 출시 전 최종 테스트 중에 있습니다. 이곳에 보여지는 모든 컨텐츠와 모바일 앱은 \"그대로\"와 \"사용가능\" 기반에 제공되어 있습니다. 소프트웨어 사용은 사용자의 위험 감수하에 이루어집니다.',
     button: '위험을 감수하겠습니다',
   },
+  noInternetConnection: {
+    title: 'TRANSLATION NEEDED | ENG: No internet connection',
+    description: 'TRANSLATION NEEDED | ENG: Ensure that WI-FI or mobile data are turned on, then try again.',
+    toastTitle: 'TRANSLATION NEEDED | ENG: You're offline',
+    toastDescription: 'TRANSLATION NEEDED | ENG: Connect to the internet to restore full functionality.',
+  },
 }

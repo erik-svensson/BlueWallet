@@ -13,7 +13,7 @@ import com.android.build.OutputFile
  * These basically call `react-native bundle` with the correct arguments during the Android build
  * cycle. By default, bundleDebugJsAndAssets is skipped, as in debug/dev mode we prefer to load the
  * bundle directly from the development server. Below you can see all the possible configurations
- * and their defaults. If you decide to add a configuration block, make sure to add it before the
+ * and their defaults. If you decide to add a configuration block, make sure to add it befo
  * `apply from: "../../node_modules/react-native/react.gradle"` line.
  *
  * project.ext.react = [

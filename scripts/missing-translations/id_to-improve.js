@@ -559,4 +559,10 @@ const id = {
     description: 'Aplikasi masih akan menjalani pengujian akhir sebelum perilisan resmi. Aplikasi mobile dan semua yang konten yang Anda temukan didalamnya disediakan dalam basis \"apa adanya\" dan \"ketika tersedia\". Risiko penggunaan perangkat lunak ditanggung langsung oleh pengguna.',
     button: 'Saya mengerti dan menerima risikonya',
   },
+  noInternetConnection: {
+    title: 'TRANSLATION NEEDED | ENG: No internet connection',
+    description: 'TRANSLATION NEEDED | ENG: Ensure that WI-FI or mobile data are turned on, then try again.',
+    toastTitle: 'TRANSLATION NEEDED | ENG: You're offline',
+    toastDescription: 'TRANSLATION NEEDED | ENG: Connect to the internet to restore full functionality.',
+  },
 }

@@ -559,4 +559,10 @@ const jo = {
       wallets: 'ウォレット',
     },
   },
+  noInternetConnection: {
+    title: 'TRANSLATION NEEDED | ENG: No internet connection',
+    description: 'TRANSLATION NEEDED | ENG: Ensure that WI-FI or mobile data are turned on, then try again.',
+    toastTitle: 'TRANSLATION NEEDED | ENG: You're offline',
+    toastDescription: 'TRANSLATION NEEDED | ENG: Connect to the internet to restore full functionality.',
+  },
 }

@@ -24,8 +24,14 @@ import {
 } from 'app/state/electrumX/actions';
 import { LoadWalletsAction, loadWallets as loadWalletsAction } from 'app/state/wallets/actions';
 import { isAndroid, isIos } from 'app/styles';
+import { selectors as statusSelectors } from 'app/state/status';
 
 import config from '../../config';
+import { NoInternetConnectionScreen } from 'app/screens/NoInternetConnectionScreen';
+import { updateInternetConnectionStatus as updateInternetConnectionStatusAction, updateServerConnectionStatus as updateServerConnectionStatusAction } from 'app/state/status/actions';
+import ToastManager from 'app/services/ToastManager';
+import { ToastService } from 'app/services/ToastService';
+
 
 const i18n = require('../../loc');
 
@@ -35,6 +41,7 @@ interface MapStateToProps {
   isTxPasswordSet: boolean;
   isLoading: boolean;
   language: string;
+  internetConnectionStatus: boolean;
 }
 
 interface ActionsDisptach {
@@ -43,6 +50,8 @@ interface ActionsDisptach {
   loadWallets: () => LoadWalletsAction;
   fetchBlockHeight: () => FetchBlockHeightAction;
   updateSelectedLanguage: Function;
+  updateInternetConnectionStatus: Function;
+  updateServerConnectionStatus: Function;
 }
 
 interface OwnProps {
@@ -61,10 +70,12 @@ class Navigator extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    const { checkCredentials, startElectrumXListeners, fetchBlockHeight } = this.props;
+    const { checkCredentials, startElectrumXListeners, fetchBlockHeight, updateInternetConnectionStatus, updateServerConnectionStatus } = this.props;
     checkCredentials();
     startElectrumXListeners();
     fetchBlockHeight();
+    updateInternetConnectionStatus();
+    updateServerConnectionStatus();
     this.initLanguage();
 
     if (!__DEV__) {
@@ -91,7 +102,7 @@ class Navigator extends React.Component<Props, State> {
     const { isPinSet, isTxPasswordSet, isAuthenticated } = this.props;
 
     if (__DEV__) {
-      return false;
+      // return false;
     }
     return !isAuthenticated && isTxPasswordSet && isPinSet;
   };
@@ -123,7 +134,8 @@ class Navigator extends React.Component<Props, State> {
   };
 
   renderRoutes = () => {
-    const { isLoading, unlockKey } = this.props;
+    const {getToasts} = ToastService();
+    const { isLoading, unlockKey, internetConnectionStatus, isAuthenticated } = this.props;
     if (isLoading) {
       return null;
     }
@@ -140,9 +152,15 @@ class Navigator extends React.Component<Props, State> {
       return <PasswordNavigator />;
     }
 
+    if (!__DEV__ && !internetConnectionStatus && !isAuthenticated) {
+      return <NoInternetConnectionScreen />
+    }
+
     return (
       <>
         <RootNavigator />
+        <ToastManager toastList={getToasts()} />
+        {/* {(internetConnectionStatus && isAuthenticated) && <Toast secondsAfterHide={20} title={i18n.noInternetConnection.toastTitle} description={i18n.noInternetConnection.toastDescription} />} */}
         {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
       </>
     );
@@ -166,6 +184,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isTxPasswordSet: authenticationSelectors.isTxPasswordSet(state),
   isAuthenticated: authenticationSelectors.isAuthenticated(state),
   language: appSettingsSelectors.language(state),
+  internetConnectionStatus: statusSelectors.internetConnectionStatus(state),
 });
 
 const mapDispatchToProps: ActionsDisptach = {
@@ -174,6 +193,8 @@ const mapDispatchToProps: ActionsDisptach = {
   loadWallets: loadWalletsAction,
   updateSelectedLanguage: updateSelectedLanguageAction,
   fetchBlockHeight: fetchBlockHeightAction,
+  updateInternetConnectionStatus: updateInternetConnectionStatusAction,
+  updateServerConnectionStatus: updateServerConnectionStatusAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigator);

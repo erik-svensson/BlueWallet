@@ -26,6 +26,7 @@ import {
   HDSegwitP2SHAirWallet,
 } from '../../class';
 import { isElectrumVaultMnemonic } from '../../utils/crypto';
+import { ToastService } from 'app/services/ToastService';
 
 const i18n = require('../../loc');
 
@@ -84,6 +85,8 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   onImportButtonPress = () => {
     Keyboard.dismiss();
     this.importMnemonic(this.state.text);
+    const {toast} = ToastService();
+    toast({description: 'asdsadsa', title: 'sdadasdw dwad ', secondsAfterHide: 20});
   };
 
   onChangeText = (mnemonic: string) => {

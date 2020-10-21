@@ -559,4 +559,10 @@ const tr = {
     description: 'Hala resmi olarak piyasaya sürülme öncesinde nihai test aşamasındadır. Mobil uygulaması ve tüm içeriği \"olduğu gibi\" ve \"kullanılabildiği gibi\" esasına göre sunulur. Yazılımın kullanımına ait riskler kullanıcıya aittir.',
     button: 'Riski kabul ediyorum',
   },
+  noInternetConnection: {
+    title: 'TRANSLATION NEEDED | ENG: No internet connection',
+    description: 'TRANSLATION NEEDED | ENG: Ensure that WI-FI or mobile data are turned on, then try again.',
+    toastTitle: 'TRANSLATION NEEDED | ENG: You're offline',
+    toastDescription: 'TRANSLATION NEEDED | ENG: Connect to the internet to restore full functionality.',
+  },
 }

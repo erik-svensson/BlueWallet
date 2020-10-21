@@ -11,6 +11,7 @@ import { filtersReducer } from './filters/reducer';
 import { TimeCounterState, timeCounterReducer } from './timeCounter/reducer';
 import { transactionsNotesReducer, TransactionsNotesState } from './transactionsNotes/reducer';
 import { WalletsState, walletsReducer } from './wallets/reducer';
+import { StatusState, statusReducer } from './status/reducer';
 
 export { actions, selectors } from './authenticators';
 export interface ApplicationState {
@@ -23,6 +24,7 @@ export interface ApplicationState {
   authenticators: AuthenticatorsState;
   authentication: AuthenticationState;
   filters: Filters;
+  status: StatusState;
 }
 
 export const rootReducer = combineReducers({
@@ -35,4 +37,5 @@ export const rootReducer = combineReducers({
   authenticators: authenticatorsReducer,
   authentication: authenticationReducer,
   filters: filtersReducer,
+  status: statusReducer,
 });
