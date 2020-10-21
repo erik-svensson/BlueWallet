@@ -34,6 +34,7 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.ImportWallet>;
   importWallet: (wallet: Wallet, meta?: ActionMeta) => ImportWalletAction;
   wallets: Wallet[];
+  walletsLabels: string[];
 }
 
 interface State {
@@ -108,7 +109,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   };
 
   saveWallet = async (newWallet: any) => {
-    const { importWallet, wallets, route } = this.props;
+    const { importWallet, wallets } = this.props;
     if (wallets.some(wallet => wallet.secret === newWallet.secret)) {
       this.showErrorMessageScreen({
         title: i18n.wallets.importWallet.walletInUseValidationError,
@@ -117,7 +118,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         buttonTitle: i18n.message.returnToWalletImport,
       });
     } else {
-      newWallet.setLabel(this.state.label || route.params.walletLabel);
+      newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
       importWallet(newWallet, {
         onSuccess: () => {
           this.showSuccessImportMessageScreen();
@@ -235,7 +236,6 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         <Text style={styles.subtitle}>{i18n.wallets.importWallet.importARDescription2}</Text>
       </View>
       <InputItem
-        value={this.props.route.params.walletLabel}
         error={this.state.validationError}
         setValue={this.onLabelChange}
         label={i18n.wallets.add.inputLabel}
@@ -332,7 +332,10 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     } catch (e) {
       this.showErrorMessageScreen({ description: e.message });
     }
-    this.showErrorMessageScreen({ title: i18n.message.wrongMnemonic, description: i18n.message.wrongMnemonicDesc });
+    this.showErrorMessageScreen({
+      title: i18n.message.wrongMnemonic,
+      description: i18n.message.wrongMnemonicDesc,
+    });
     // ReactNativeHapticFeedback.trigger('notificationError', {
     //   ignoreAndroidSystemSettings: false,
     // });
@@ -367,7 +370,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     });
   };
   render() {
-    const { validationError, text } = this.state;
+    const { validationError, text, label } = this.state;
     return (
       <ScreenTemplate
         footer={
@@ -378,6 +381,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
               onPress={this.onImportButtonPress}
             />
             <FlatButton
+              disabled={!label}
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}
               onPress={this.onScanQrCodeButtonPress}
@@ -405,6 +409,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: selectors.wallets(state),
+  walletsLabels: selectors.getWalletsLabels(state),
 });
 
 const mapDispatchToProps = {
