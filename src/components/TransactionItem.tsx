@@ -4,11 +4,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { icons } from 'app/assets';
 import { TranscationLabelStatus, Image, Label } from 'app/components';
-import { CONST, Transaction, TxType } from 'app/consts';
+import { Transaction, TxType } from 'app/consts';
 import { getConfirmationsText } from 'app/helpers/helpers';
 import { typography, palette } from 'app/styles';
 
-import { satoshiToBtc } from '../../utils/bitcoin';
+import { satoshiToBtc, getBtcLabel } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
 
@@ -21,19 +21,16 @@ const renderCofirmations = (txType: TxType, confirmations: number) =>
     <Text style={styles.label}>{`${i18n.transactions.list.conf}: ${getConfirmationsText(txType, confirmations)}`}</Text>
   );
 
-const addMissingZerosToSatoshis = (value: number): string => {
-  const [integer, decimal] = value.toString().split('.');
-  const decimallWithMissingZeros = (decimal || '').padEnd(Math.log10(CONST.satoshiInBtc), '0');
-
-  return [integer, decimallWithMissingZeros].join('.');
-};
-
-const getBtcLabel = (value: number): string => `${addMissingZerosToSatoshis(value)} ${CONST.preferredBalanceUnit}`;
-
 export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress: (item: any) => void }) => {
   const isMinusValue = item.valueWithoutFee < 0;
+
+  const isCanceledAlertToMe = !isMinusValue && item.tx_type === TxType.ALERT_RECOVERED;
+
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onPress(item)}>
+    <TouchableOpacity
+      style={[styles.container, isCanceledAlertToMe ? styles.opacity : null]}
+      onPress={() => onPress(item)}
+    >
       <View style={styles.walletLabelWrapper}>
         {renderArrowIcon(item.valueWithoutFee)}
         <Image source={icons.wallet} style={styles.wallet} resizeMode="contain" />
@@ -103,7 +100,7 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
       {item.recoveredTxsCounter && (
         <View>
           <Text style={styles.label}>
-            {i18n.transactions.details.numberOfCancelTransactions} {item.recoveredTxsCounter}{' '}
+            {i18n.transactions.details.numberOfCancelTransactions} {item.recoveredTxsCounter}
           </Text>
         </View>
       )}
@@ -123,6 +120,9 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     flexGrow: 1,
     width: '100%',
+  },
+  opacity: {
+    opacity: 0.5,
   },
   walletLabelWrapper: {
     display: 'flex',

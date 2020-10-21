@@ -1,4 +1,4 @@
-import { flatten, flattenDeep, negate, max, round } from 'lodash';
+import { flatten, flattenDeep, negate, max } from 'lodash';
 import { flatten as flattenFp, some, map, compose } from 'lodash/fp';
 import { createSelector } from 'reselect';
 
@@ -108,6 +108,15 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
           }
         }
 
+        const baseTransaction = {
+          ...transaction,
+          confirmations: max([confirmations, 0]) || 0,
+          walletPreferredBalanceUnit: walletBalanceUnit,
+          walletId: id,
+          walletLabel,
+          walletTypeReadable: wallet.typeReadable,
+        };
+
         if (TxType.RECOVERY !== transaction.tx_type && isFromMyWalletTx && isToInternalAddress) {
           // create two transactions for transaction to internal address
           const outPutSendByUser = transaction.outputs[0];
@@ -116,44 +125,33 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
 
           return [
             {
-              ...transaction,
-              confirmations: max([confirmations, 0]) || 0,
-              walletPreferredBalanceUnit: walletBalanceUnit,
-              walletId: id,
-              walletLabel,
+              ...baseTransaction,
               valueWithoutFee,
-              walletTypeReadable: wallet.typeReadable,
             },
             {
-              ...transaction,
-              confirmations: max([confirmations, 0]) || 0,
-              walletPreferredBalanceUnit: walletBalanceUnit,
-              walletId: id,
-              walletLabel,
+              ...baseTransaction,
               fee: roundBtcToSatoshis(fee),
               ...(blockedAmount !== undefined && {
-                blockedAmount: amountSendBtc - blockedAmount,
+                blockedAmount: roundBtcToSatoshis(amountSendBtc - blockedAmount),
               }),
               ...(unblockedAmount !== undefined && {
-                unblockedAmount: unblockedAmount + amountSendBtc,
+                unblockedAmount: roundBtcToSatoshis(unblockedAmount + amountSendBtc),
               }),
               valueWithoutFee: -valueWithoutFee,
-              walletTypeReadable: wallet.typeReadable,
             },
           ];
         }
 
         return {
-          ...transaction,
-          confirmations: max([confirmations, 0]) || 0,
-          walletPreferredBalanceUnit: walletBalanceUnit,
-          walletId: id,
-          walletLabel,
+          ...baseTransaction,
           toExternalAddress,
           toInternalAddress,
-          ...(isFromMyWalletTx && { fee: roundBtcToSatoshis(fee), blockedAmount, unblockedAmount }),
+          ...(isFromMyWalletTx && {
+            fee: roundBtcToSatoshis(fee),
+            blockedAmount: blockedAmount && roundBtcToSatoshis(blockedAmount),
+            unblockedAmount: unblockedAmount && roundBtcToSatoshis(unblockedAmount),
+          }),
           valueWithoutFee: isFromMyWalletTx ? myBalanceChangeSatoshi - feeSatoshi : myBalanceChangeSatoshi,
-          walletTypeReadable: wallet.typeReadable,
         };
       });
     }),

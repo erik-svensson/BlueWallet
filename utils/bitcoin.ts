@@ -26,3 +26,13 @@ export const addressToScriptHash = (address: string) => {
   const scriptHash = Buffer.from(reverse(hash)).toString('hex');
   return scriptHash;
 };
+
+export const addMissingZerosToSatoshis = (value: number): string => {
+  const [integer, decimal] = value.toString().split('.');
+  const decimallWithMissingZeros = (decimal || '').padEnd(Math.log10(CONST.satoshiInBtc), '0');
+
+  return [integer, decimallWithMissingZeros].join('.');
+};
+
+export const getBtcLabel = (value: number): string =>
+  `${addMissingZerosToSatoshis(value)} ${CONST.preferredBalanceUnit}`;
