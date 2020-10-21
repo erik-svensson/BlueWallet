@@ -114,7 +114,6 @@ class DashboardScreen extends Component<Props, State> {
 
   scrollTo = (offset: number) => {
     // hack, there is no scrollTo method available on SectionList, https://github.com/facebook/react-native/issues/13151
-    // eslint-disable-next-line
     // @ts-ignore
     this.transactionListRef.current?._wrapperListRef._listRef.scrollToOffset({
       offset,

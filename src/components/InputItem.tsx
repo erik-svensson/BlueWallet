@@ -45,7 +45,6 @@ export class InputItem extends PureComponent<Props, State> {
     this.setState({
       isActive: true,
     });
-    // eslint-disable-next-line
     // @ts-ignore
     Animated.timing(this.state.isAnimatedFocused, {
       toValue: 1,

@@ -16,6 +16,7 @@ export const HEADER_HEIGHT = Platform.select({
 }) as number;
 
 interface Props {
+  // TODO: Replace 'any' with the proper type
   navigation?: any;
   title?: string;
   isBackArrow?: boolean;
