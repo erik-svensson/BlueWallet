@@ -126,7 +126,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
             {
               ...baseTransaction,
               valueWithoutFee,
-              value: 0, // not real tx so value is 0,
+              value: 0, // not real tx so value is 0
             },
             {
               ...baseTransaction,
@@ -157,6 +157,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
     }),
   );
 
+  // enhance cancel-done transaction made by our wallet
   return txs.map(tx => {
     if (tx.tx_type !== TxType.RECOVERY || tx.value > 0) {
       return tx;
