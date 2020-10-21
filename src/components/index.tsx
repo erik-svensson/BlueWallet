@@ -7,10 +7,12 @@ export { InputItem } from './InputItem';
 export { TextAreaItem } from './TextAreaItem';
 export { Button } from './Button';
 export { FlatButton, ButtonType } from './FlatButton';
+// eslint-disable-next-line
 // @ts-ignore
 export { Image, FastImageSource } from './Image';
 export { StyledText } from './StyledText';
 export * from './Gradient';
+// eslint-disable-next-line
 // @ts-ignore
 export { WalletItemProps, WalletItem } from './WalletItem';
 export { ScreenTemplate } from './ScreenTemplate';

@@ -45,6 +45,7 @@ export class InputItem extends PureComponent<Props, State> {
     this.setState({
       isActive: true,
     });
+    // eslint-disable-next-line
     // @ts-ignore
     Animated.timing(this.state.isAnimatedFocused, {
       toValue: 1,
@@ -135,7 +136,11 @@ export class InputItem extends PureComponent<Props, State> {
           onBlur={this.onBlur}
           onChangeText={this.onChangeText}
         />
-        {!!error && <Text testID="validation-error-message" style={styles.error}>{error}</Text>}
+        {!!error && (
+          <Text testID="validation-error-message" style={styles.error}>
+            {error}
+          </Text>
+        )}
       </View>
     );
   }

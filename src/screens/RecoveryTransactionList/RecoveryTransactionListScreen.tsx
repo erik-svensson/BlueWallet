@@ -28,6 +28,7 @@ interface MapStateProps {
   wallets: Wallet[];
   transactions: Transaction[];
 }
+
 interface State {
   selectedTransactions: Transaction[];
 }

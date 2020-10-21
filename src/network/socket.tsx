@@ -18,10 +18,13 @@ export function connect(config: SocketOptions, callback: SocketCallback) {
   );
 
   // required functions not supported by react-native-tcp-socket
+  // eslint-disable-next-line
   // @ts-ignore
   client.setEncoding = () => {};
+  // eslint-disable-next-line
   // @ts-ignore
   client.setKeepAlive = () => {};
+  // eslint-disable-next-line
   // @ts-ignore
   client.setNoDelay = () => {};
   return client;
