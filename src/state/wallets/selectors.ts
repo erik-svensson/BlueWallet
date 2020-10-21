@@ -1,9 +1,8 @@
-import { flatten, flattenDeep, negate, max } from 'lodash';
+import { flatten, flattenDeep, max } from 'lodash';
 import { flatten as flattenFp, some, map, compose } from 'lodash/fp';
 import { createSelector } from 'reselect';
 
 import { TxType, Wallet, TransactionInput, TransactionOutput } from 'app/consts';
-import { isAllWallets } from 'app/helpers/helpers';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 
@@ -63,7 +62,7 @@ const getMyAmount = (wallet: Wallet, entities: TxEntity[]) =>
 
 export const transactions = createSelector(wallets, electrumXSelectors.blockHeight, (walletsList, blockHeight) => {
   const txs = flattenDeep(
-    walletsList.filter(negate(isAllWallets)).map(wallet => {
+    walletsList.map(wallet => {
       const walletBalanceUnit = wallet.getPreferredBalanceUnit();
       const walletLabel = wallet.getLabel();
       const id = wallet.id;
@@ -127,12 +126,13 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
             {
               ...baseTransaction,
               valueWithoutFee,
+              value: 0, // not real tx so value is 0,
             },
             {
               ...baseTransaction,
               fee: roundBtcToSatoshis(fee),
               ...(blockedAmount !== undefined && {
-                blockedAmount: roundBtcToSatoshis(amountSendBtc - blockedAmount),
+                blockedAmount: roundBtcToSatoshis(blockedAmount - amountSendBtc),
               }),
               ...(unblockedAmount !== undefined && {
                 unblockedAmount: roundBtcToSatoshis(unblockedAmount + amountSendBtc),
@@ -158,7 +158,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
   );
 
   return txs.map(tx => {
-    if (tx.tx_type !== TxType.RECOVERY) {
+    if (tx.tx_type !== TxType.RECOVERY || tx.value > 0) {
       return tx;
     }
 
@@ -201,8 +201,8 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
     return {
       ...tx,
       valueWithoutFee: v,
-      returnedFee: rF,
-      unblockedAmount: uA,
+      returnedFee: roundBtcToSatoshis(rF),
+      unblockedAmount: roundBtcToSatoshis(uA),
       recoveredTxsCounter: recoveredTxs.length,
     };
   });

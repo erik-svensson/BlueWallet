@@ -56,14 +56,15 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
           {getBtcLabel(satoshiToBtc(item.valueWithoutFee).toNumber())}
         </Text>
       </View>
-      {item.blockedAmount && (
+      {item.blockedAmount !== undefined && (
         <View style={styles.rowWrapper}>
           <Label>{i18n.transactions.details.blocked}</Label>
 
           <Text style={[typography.headline5, { color: palette.textRed }]}>{getBtcLabel(item.blockedAmount)}</Text>
         </View>
       )}
-      {item.unblockedAmount && (
+
+      {item.unblockedAmount !== undefined && (
         <View style={styles.rowWrapper}>
           <Label>{i18n.transactions.details.unblocked}</Label>
           <Text style={[typography.headline5, item.toExternalAddress ? styles.label : null]}>
@@ -71,7 +72,7 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
           </Text>
         </View>
       )}
-      {item.returnedFee && (
+      {item.returnedFee !== undefined && (
         <View style={styles.rowWrapper}>
           <Text style={styles.label}>{i18n.transactions.details.totalReturnedFee} </Text>
           <Text style={[styles.label, typography.headline5, item.toExternalAddress ? styles.label : null]}>
@@ -79,25 +80,25 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
           </Text>
         </View>
       )}
-      {item.fee && (
+      {item.fee !== undefined && (
         <View style={styles.rowWrapper}>
           <Text style={styles.label}>{i18n.transactions.details.fee} </Text>
           <Text style={[styles.label, typography.headline5]}>{getBtcLabel(item.fee)}</Text>
         </View>
       )}
-      {item.toInternalAddress && (
+      {item.toInternalAddress !== undefined && (
         <View>
           <Text style={styles.label}>{i18n.transactions.details.toInternalWallet} </Text>
           <Text style={styles.label}>{item.toInternalAddress}</Text>
         </View>
       )}
-      {item.toExternalAddress && (
+      {item.toExternalAddress !== undefined && (
         <View>
           <Text style={styles.label}>{i18n.transactions.details.toExternalWallet} </Text>
           <Text style={styles.label}>{item.toExternalAddress}</Text>
         </View>
       )}
-      {item.recoveredTxsCounter && (
+      {item.recoveredTxsCounter !== undefined && (
         <View>
           <Text style={styles.label}>
             {i18n.transactions.details.numberOfCancelTransactions} {item.recoveredTxsCounter}
