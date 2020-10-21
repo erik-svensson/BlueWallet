@@ -45,4 +45,4 @@ export { default as CreateWalletSuccessScreen } from './CreateWalletSuccessScree
 export { default as RecoveryTransactionListScreen } from './RecoveryTransactionList';
 export { default as RecoverySendScreen } from './RecoverySend';
 export { default as RecoverySeedScreen } from './RecoverySeed';
-export ImportWalletChooseTypeScreen  from './ImportWalletChooseTypeScreen';
+export { default as ImportWalletChooseTypeScreen } from './ImportWalletChooseTypeScreen';
