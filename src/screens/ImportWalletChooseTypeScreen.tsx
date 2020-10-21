@@ -1,11 +1,15 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavigationInjectedProps } from 'react-navigation';
+import { connect } from 'react-redux';
 
-import { ScreenTemplate, Text, Header, Button, RadioGroup, RadioButton } from 'app/components';
+import { ScreenTemplate, Text, Header, Button, RadioGroup, RadioButton, InputItem } from 'app/components';
 import { Route } from 'app/consts';
+import { maxWalletNameLength } from 'app/consts/text';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
+import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
+import { selectors } from 'app/state/wallets';
 import { WalletsActionType } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
 
@@ -16,6 +20,7 @@ const WalletTypes = [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type, 'leg
 interface Props extends NavigationInjectedProps {
   appSettings: AppSettingsState;
   loadWallets: () => Promise<WalletsActionType>;
+  walletsLabels: string[];
 }
 
 interface State {
@@ -24,16 +29,30 @@ interface State {
   selectedIndex: number;
 }
 
-export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, State> {
+class ImportWalletChooseTypeScreen extends React.PureComponent<Props, State> {
   state: State = {
     label: '',
     isLoading: false,
     selectedIndex: 0,
   };
 
+  get canCreateWallet(): boolean {
+    return !!this.state.label && !this.validationError;
+  }
+
+  get validationError(): string | undefined {
+    const { walletsLabels } = this.props;
+    if (walletsLabels.includes(this.state.label.trim())) {
+      return i18n.wallets.importWallet.walletInUseValidationError;
+    }
+  }
+
+  setLabel = (label: string) => this.setState({ label: label.trim() });
+
   navigateToImportWallet = () => {
     this.props.navigation.navigate(Route.ImportWallet, {
       walletType: WalletTypes[this.state.selectedIndex],
+      walletLabel: this.state.label,
     });
   };
 
@@ -50,7 +69,12 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
             {this.state.isLoading && (
               <Text style={styles.isLoadingDescription}>{i18n.message.creatingWalletDescription}</Text>
             )}
-            <Button loading={this.state.isLoading} onPress={this.navigateToImportWallet} title={i18n._.next} />
+            <Button
+              disabled={!this.canCreateWallet}
+              loading={this.state.isLoading}
+              onPress={this.navigateToImportWallet}
+              title={i18n._.next}
+            />
           </>
         }
         header={<Header navigation={this.props.navigation} isBackArrow title={i18n.wallets.importWallet.header} />}
@@ -59,6 +83,12 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
           <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>
           <Text style={styles.subtitle}>{i18n.wallets.importWallet.chooseTypeDescription}</Text>
         </View>
+        <InputItem
+          error={this.validationError}
+          setValue={this.setLabel}
+          label={i18n.wallets.add.inputLabel}
+          maxLength={maxWalletNameLength}
+        />
         <RadioGroup color={palette.secondary} onSelect={this.onSelect} selectedIndex={this.state.selectedIndex}>
           <RadioButton style={styles.radioButton} value={WalletTypes[0]}>
             <View style={styles.radioButtonContent}>
@@ -83,6 +113,12 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
     );
   }
 }
+
+const mapStateToProps = (state: ApplicationState) => ({
+  walletsLabels: selectors.getWalletsLabels(state),
+});
+
+export default connect(mapStateToProps)(ImportWalletChooseTypeScreen);
 
 const styles = StyleSheet.create({
   subtitle: {

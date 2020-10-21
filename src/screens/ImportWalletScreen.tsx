@@ -108,7 +108,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   };
 
   saveWallet = async (newWallet: any) => {
-    const { importWallet, wallets } = this.props;
+    const { importWallet, wallets, route } = this.props;
     if (wallets.some(wallet => wallet.secret === newWallet.secret)) {
       this.showErrorMessageScreen({
         title: i18n.wallets.importWallet.walletInUseValidationError,
@@ -117,7 +117,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         buttonTitle: i18n.message.returnToWalletImport,
       });
     } else {
-      newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
+      newWallet.setLabel(this.state.label || route.params.walletLabel);
       importWallet(newWallet, {
         onSuccess: () => {
           this.showSuccessImportMessageScreen();
@@ -235,6 +235,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         <Text style={styles.subtitle}>{i18n.wallets.importWallet.importARDescription2}</Text>
       </View>
       <InputItem
+        value={this.props.route.params.walletLabel}
         error={this.state.validationError}
         setValue={this.onLabelChange}
         label={i18n.wallets.add.inputLabel}
