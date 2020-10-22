@@ -7,6 +7,7 @@ import { getStatusBarHeight, palette, typography } from 'app/styles';
 import { FlatButton } from './FlatButton';
 import { GradientView } from './GradientView';
 import { Image } from './Image';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const i18n = require('../../loc');
 
@@ -16,8 +17,7 @@ export const HEADER_HEIGHT = Platform.select({
 }) as number;
 
 interface Props {
-  // TODO: Replace 'any' with the proper type
-  navigation?: any;
+  navigation?: StackNavigationProp<any, any>;
   title?: string;
   isBackArrow?: boolean;
   onBackArrow?: () => void;

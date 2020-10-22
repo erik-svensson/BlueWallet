@@ -82,6 +82,7 @@ class ConfirmPinScreen extends PureComponent<Props, State> {
         noScroll
         header={
           <Header
+            // @ts-ignore
             navigation={this.props.navigation}
             isBackArrow
             title={

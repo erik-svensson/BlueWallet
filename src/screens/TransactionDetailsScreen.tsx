@@ -137,6 +137,7 @@ class TransactionDetailsScreen extends Component<Props> {
       <ScreenTemplate
         header={
           <Header
+            // @ts-ignore
             navigation={this.props.navigation}
             isBackArrow
             title={
