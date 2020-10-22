@@ -43,6 +43,7 @@
     "husky": "^4.2.3",
     "jail-monkey": "^2.3.2",
     "jest": "^26.5.3",
+    "jest-circus": "^26.6.0",
     "jetifier": "^1.6.3",
     "lint-staged": "^10.1.1",
     "metro-react-native-babel-preset": "^0.56.0",
