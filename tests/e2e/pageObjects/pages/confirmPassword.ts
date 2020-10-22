@@ -1,3 +1,5 @@
+import 'detox';
+
 export class ConfirmPassword {
   public readonly elements = {
     input: element(by.id('confirm-transaction-password')),
