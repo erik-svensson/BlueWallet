@@ -16,7 +16,7 @@ export default {
   network: bitcoin.alt_networks[BTCV_NETWORK || 'bitcoinvault'],
   protocol: PROTOCOL || 'tcp',
   electrumXProtocolVersion: ELECTRUM_X_PROTOCOL_VERSION || '2.0',
-  isBeta: true,
+  isBeta,
   applicationId: isBeta ? 'io.goldwallet.wallet.testnet' : 'io.goldwallet.wallet',
   applcationName: isBeta ? 'Testnet Gold Wallet' : 'GoldWallet',
 };

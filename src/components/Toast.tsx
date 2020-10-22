@@ -19,8 +19,7 @@ export const Toast = ({ title, description, secondsAfterHide }: ToastProps) => {
   useEffect(() => {
     if (seconds === secondsAfterHide) {
       fadeIn();
-    }
-    if (seconds === 0) {
+    } else if (seconds === 0) {
       fadeOut();
     }
   });
@@ -89,7 +88,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 13,
     marginHorizontal: 8,
-
     elevation: 5,
     padding: 10,
   },

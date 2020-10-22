@@ -110,7 +110,7 @@ class Navigator extends React.Component<Props, State> {
     const { isPinSet, isTxPasswordSet, isAuthenticated } = this.props;
 
     if (__DEV__) {
-      // return false;
+      return false;
     }
     return !isAuthenticated && isTxPasswordSet && isPinSet;
   };
