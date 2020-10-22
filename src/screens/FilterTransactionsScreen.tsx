@@ -241,7 +241,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
             { title: i18n.filterTransactions.received, content: this.renderCardContent(i18n.filterTransactions.from) },
             { title: i18n.filterTransactions.sent, content: this.renderCardContent(i18n.filterTransactions.to) },
           ]}
-          activeLabel={
+          activeTitle={
             this.props.filters.transactionType === CONST.receive
               ? i18n.filterTransactions.received
               : i18n.filterTransactions.sent
