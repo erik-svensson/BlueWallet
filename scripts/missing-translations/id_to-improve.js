@@ -559,10 +559,13 @@ const id = {
     description: 'Aplikasi masih akan menjalani pengujian akhir sebelum perilisan resmi. Aplikasi mobile dan semua yang konten yang Anda temukan didalamnya disediakan dalam basis \"apa adanya\" dan \"ketika tersedia\". Risiko penggunaan perangkat lunak ditanggung langsung oleh pengguna.',
     button: 'Saya mengerti dan menerima risikonya',
   },
-  noInternetConnection: {
-    title: 'TRANSLATION NEEDED | ENG: No internet connection',
-    description: 'TRANSLATION NEEDED | ENG: Ensure that WI-FI or mobile data are turned on, then try again.',
-    toastTitle: 'TRANSLATION NEEDED | ENG: You're offline',
-    toastDescription: 'TRANSLATION NEEDED | ENG: Connect to the internet to restore full functionality.',
+  connectionIssue: {
+    noInternetTitle: 'TRANSLATION NEEDED | ENG: No internet connection',
+    noInternetDescription: 'TRANSLATION NEEDED | ENG: Ensure that WI-FI or mobile data are turned on, then try again.',
+    offlineMessageTitle: 'TRANSLATION NEEDED | ENG: You're offline',
+    offlineMessageDescription: 'TRANSLATION NEEDED | ENG: Connect to the internet to restore full functionality.',
+    offlineMessageDescription2: 'TRANSLATION NEEDED | ENG: Connect to the internet to continue using these functions.',
+    noNetworkTitle: 'TRANSLATION NEEDED | ENG: No network',
+    noNetworkDescription: 'TRANSLATION NEEDED | ENG: Your internet works, but you are not connected to the network. Please wait a couple of minutes and try again.',
   },
 }

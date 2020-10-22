@@ -23,22 +23,28 @@ export interface UpdateServerConnectionStatusSuccessAction {
   payload: boolean;
 }
 
-export type StatusActionType = UpdateInternetConnectionStatusAction | UpdateServerConnectionStatusAction | UpdateInternetConnectionStatusSuccessAction | UpdateServerConnectionStatusSuccessAction;
+export type StatusActionType =
+  | UpdateInternetConnectionStatusAction
+  | UpdateServerConnectionStatusAction
+  | UpdateInternetConnectionStatusSuccessAction
+  | UpdateServerConnectionStatusSuccessAction;
 
-export const updateInternetConnectionStatus =  (): UpdateInternetConnectionStatusAction => ({
+export const updateInternetConnectionStatus = (): UpdateInternetConnectionStatusAction => ({
   type: StatusAction.UpdateInternetConnectionStatus,
 });
 
-export const updateInternetConnectionStatusSuccess =  (payload: boolean): UpdateInternetConnectionStatusSuccessAction => ({
+export const updateInternetConnectionStatusSuccess = (
+  payload: boolean,
+): UpdateInternetConnectionStatusSuccessAction => ({
   type: StatusAction.UpdateInternetConnectionStatusSuccess,
   payload,
 });
 
-export const updateServerConnectionStatus =  (): UpdateServerConnectionStatusAction => ({
+export const updateServerConnectionStatus = (): UpdateServerConnectionStatusAction => ({
   type: StatusAction.UpdateServerConnectionStatus,
 });
 
-export const updateServerConnectionStatusSuccess =  (payload: boolean): UpdateServerConnectionStatusSuccessAction => ({
+export const updateServerConnectionStatusSuccess = (payload: boolean): UpdateServerConnectionStatusSuccessAction => ({
   type: StatusAction.UpdateServerConnectionStatusSuccess,
   payload,
 });

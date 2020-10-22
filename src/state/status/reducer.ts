@@ -15,21 +15,21 @@ export const statusReducer = (state = initialState, action: StatusActionType): S
     case StatusAction.UpdateInternetConnectionStatus:
       return {
         ...state,
-      }
+      };
     case StatusAction.UpdateInternetConnectionStatusSuccess:
       return {
         ...state,
-        internetConnectionStatus: action.payload
-      }
+        internetConnectionStatus: action.payload,
+      };
     case StatusAction.UpdateServerConnectionStatus:
       return {
         ...state,
-      }
+      };
     case StatusAction.UpdateServerConnectionStatusSuccess:
       return {
         ...state,
-        serverConnectionStatus: action.payload
-      }
+        serverConnectionStatus: action.payload,
+      };
     default:
       return state;
   }
