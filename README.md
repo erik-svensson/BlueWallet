@@ -87,16 +87,9 @@ To control what tests should be executed use the Jest's `-t` flag:
 detox test -c ${CONFIGRURATION} -t ${REGEX}
 ```
 
+**Make sure that firewall doesn't block local TCP/UDP communication. If tests execution stuck on launching, it might be the case.**
 
 ## LICENSE
 
 MIT
 
-
-
-
-
-
-**Make sure that firewall doesn't block local TCP/UDP communication. If tests execution stuck on launching, it might be the case.**
-
-https://stackoverflow.com/questions/62094629/emulator-emulator-error-adbhostserver-cpp102-unable-to-connect-to-adb-daemo
