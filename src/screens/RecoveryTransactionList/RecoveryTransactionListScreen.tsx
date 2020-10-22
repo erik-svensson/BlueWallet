@@ -154,12 +154,15 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
             label={wallet.label}
             unit={wallet.preferredBalanceUnit}
           />
-          {!this.isEmptyList() && (
-            <TouchableOpacity onPress={toggleAll} style={styles.toggleAllWrapper}>
-              <CheckBox onPress={toggleAll} right checked={areAllTransactionsSelected} />
-            </TouchableOpacity>
-          )}
+
           <View style={styles.listViewWrapper}>
+            {!this.isEmptyList() && (
+              <View style={styles.toggleAllWrapper}>
+                <TouchableOpacity onPress={toggleAll}>
+                  <CheckBox onPress={toggleAll} right checked={areAllTransactionsSelected} />
+                </TouchableOpacity>
+              </View>
+            )}
             <SectionList
               sections={getGroupedTransactions(transactions)}
               keyExtractor={item => item.txid}
@@ -213,6 +216,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginTop: -40,
+    top: 40,
     right: -9,
     display: 'flex',
     alignSelf: 'flex-end',
