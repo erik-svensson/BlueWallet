@@ -34,7 +34,6 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.ImportWallet>;
   importWallet: (wallet: Wallet, meta?: ActionMeta) => ImportWalletAction;
   wallets: Wallet[];
-  walletsLabels: string[];
 }
 
 interface State {
@@ -381,7 +380,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
               onPress={this.onImportButtonPress}
             />
             <FlatButton
-              disabled={!label}
+              disabled={!label || !!validationError}
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}
               onPress={this.onScanQrCodeButtonPress}
@@ -409,7 +408,6 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: selectors.wallets(state),
-  walletsLabels: selectors.getWalletsLabels(state),
 });
 
 const mapDispatchToProps = {
