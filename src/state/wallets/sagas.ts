@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import { takeEvery, takeLatest, put, all, call, select, delay } from 'redux-saga/effects';
 
 import { Wallet } from 'app/consts';
@@ -5,6 +6,7 @@ import { BlueApp } from 'app/legacy';
 import { takeLatestPerKey } from 'app/utils/sagas';
 
 import { actions as electrumXActions } from '../electrumX';
+import { internetConnectionStatus, serverConnectionStatus } from '../status/selectors';
 import {
   WalletsAction,
   loadWalletsSuccess,
@@ -32,17 +34,26 @@ import {
 import { getById as getByIdWallet, wallets as walletsSelector } from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
+const i18n = require('../../../loc');
+
+export function* checkConnectionStatus() {
+  if (yield select(internetConnectionStatus)) {
+    Alert.alert(i18n.connectionIssue.offlineMessageTitle, i18n.connectionIssue.offlineMessageDescription2);
+  } else if (yield select(serverConnectionStatus)) {
+    Alert.alert(i18n.connectionIssue.noNetworkTitle, i18n.connectionIssue.noNetworkDescription);
+  }
+}
 
 export function* loadWalletsSaga() {
   try {
     yield BlueElectrum.waitTillConnected();
 
     yield all([call(() => BlueApp.fetchWalletBalances()), call(() => BlueApp.fetchWalletTransactions())]);
-
     const wallets = BlueApp.getWallets();
     yield put(loadWalletsSuccess(wallets));
   } catch (e) {
     yield put(loadWalletsFailure(e.message));
+    yield checkConnectionStatus();
   }
 }
 
@@ -109,6 +120,7 @@ export function* importWalletSaga(action: ImportWalletAction | unknown) {
     if (meta?.onFailure) {
       meta.onFailure(e.message);
     }
+    yield checkConnectionStatus();
   }
 }
 
@@ -170,6 +182,7 @@ export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
     if (meta?.onFailure) {
       meta.onFailure(e.message);
     }
+    yield checkConnectionStatus();
   }
 }
 

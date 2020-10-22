@@ -1,15 +1,10 @@
-import React, { useEffect } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Text, StyleSheet, View, TouchableHighlight, Animated } from 'react-native';
 
-import { Image } from 'app/components';
-import { typography, palette } from 'app/styles';
-import { View } from 'react-native';
 import { images, icons } from 'app/assets';
-import { useState } from 'react';
+import { Image } from 'app/components';
 import { useInterval } from 'app/helpers/useInterval';
-import { TouchableHighlight } from 'react-native';
-import { useRef } from 'react';
-import { Animated } from 'react-native';
+import { typography, palette } from 'app/styles';
 
 export interface ToastProps {
   title: string;
@@ -17,18 +12,18 @@ export interface ToastProps {
   secondsAfterHide: number;
 }
 
-export const Toast = ({title, description, secondsAfterHide}: ToastProps) => {
+export const Toast = ({ title, description, secondsAfterHide }: ToastProps) => {
   const [seconds, setSeconds] = useState(secondsAfterHide);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (seconds === secondsAfterHide) {
-    fadeIn();
+      fadeIn();
     }
     if (seconds === 0) {
       fadeOut();
     }
-  })
+  });
 
   useInterval(
     () => {
@@ -37,12 +32,11 @@ export const Toast = ({title, description, secondsAfterHide}: ToastProps) => {
     seconds > 0 ? 1000 : null,
   );
 
-
   const fadeIn = () => {
     // @ts-ignore
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 500
+      duration: 500,
     }).start();
   };
 
@@ -50,29 +44,29 @@ export const Toast = ({title, description, secondsAfterHide}: ToastProps) => {
     // @ts-ignore
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 500
+      duration: 500,
     }).start();
   };
 
   const onClose = () => {
     fadeOut();
-  }
+  };
 
-    return (
-      <Animated.View style={ [{opacity: fadeAnim}, styles.outerContainer] }>
-        <View style={styles.container}>
-          <Image source={icons.warningIcon} style={styles.warningIcon} />
-          <View style={{ flex: 1, paddingLeft: 10 }}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.description}>{description}</Text>
-          </View>
-          <TouchableHighlight onPress={onClose} style={styles.closeImage}>
-            <Image source={images.closeInverted} style={styles.closeImage} />
-          </TouchableHighlight>
-        </View >
-      </Animated.View>
-    );
-}
+  return (
+    <Animated.View style={[{ opacity: fadeAnim }, styles.outerContainer]}>
+      <View style={styles.container}>
+        <Image source={icons.warningIcon} style={styles.warningIcon} />
+        <View style={{ flex: 1, paddingLeft: 10 }}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.description}>{description}</Text>
+        </View>
+        <TouchableHighlight onPress={onClose} style={styles.closeImage}>
+          <Image source={images.closeInverted} style={styles.closeImage} />
+        </TouchableHighlight>
+      </View>
+    </Animated.View>
+  );
+};
 
 const styles = StyleSheet.create({
   closeImage: {
@@ -95,7 +89,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 13,
     marginHorizontal: 8,
-   
+
     elevation: 5,
     padding: 10,
   },
@@ -104,5 +98,5 @@ const styles = StyleSheet.create({
     top: 30,
     left: 0,
     right: 0,
-  }
+  },
 });

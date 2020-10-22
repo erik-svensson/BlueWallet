@@ -4,13 +4,16 @@ import JailMonkey from 'jail-monkey';
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { Toast } from 'app/components/Toast';
 import { CONST } from 'app/consts';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator, PasswordNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
+import { NoInternetConnectionScreen } from 'app/screens/NoInternetConnectionScreen';
 import { navigationRef, AppStateManager } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
+import { ToastManager } from 'app/services/ToastManager';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import { updateSelectedLanguage as updateSelectedLanguageAction } from 'app/state/appSettings/actions';
@@ -22,16 +25,15 @@ import {
   fetchBlockHeight as fetchBlockHeightAction,
   FetchBlockHeightAction,
 } from 'app/state/electrumX/actions';
+import { selectors as statusSelectors } from 'app/state/status';
+import {
+  updateInternetConnectionStatus as updateInternetConnectionStatusAction,
+  updateServerConnectionStatus as updateServerConnectionStatusAction,
+} from 'app/state/status/actions';
 import { LoadWalletsAction, loadWallets as loadWalletsAction } from 'app/state/wallets/actions';
 import { isAndroid, isIos } from 'app/styles';
-import { selectors as statusSelectors } from 'app/state/status';
 
 import config from '../../config';
-import { NoInternetConnectionScreen } from 'app/screens/NoInternetConnectionScreen';
-import { updateInternetConnectionStatus as updateInternetConnectionStatusAction, updateServerConnectionStatus as updateServerConnectionStatusAction } from 'app/state/status/actions';
-import ToastManager from 'app/services/ToastManager';
-import { ToastService } from 'app/services/ToastService';
-
 
 const i18n = require('../../loc');
 
@@ -70,7 +72,13 @@ class Navigator extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    const { checkCredentials, startElectrumXListeners, fetchBlockHeight, updateInternetConnectionStatus, updateServerConnectionStatus } = this.props;
+    const {
+      checkCredentials,
+      startElectrumXListeners,
+      fetchBlockHeight,
+      updateInternetConnectionStatus,
+      updateServerConnectionStatus,
+    } = this.props;
     checkCredentials();
     startElectrumXListeners();
     fetchBlockHeight();
@@ -134,7 +142,6 @@ class Navigator extends React.Component<Props, State> {
   };
 
   renderRoutes = () => {
-    const {getToasts} = ToastService();
     const { isLoading, unlockKey, internetConnectionStatus, isAuthenticated } = this.props;
     if (isLoading) {
       return null;
@@ -153,14 +160,13 @@ class Navigator extends React.Component<Props, State> {
     }
 
     if (!__DEV__ && !internetConnectionStatus && !isAuthenticated) {
-      return <NoInternetConnectionScreen />
+      return <NoInternetConnectionScreen />;
     }
 
     return (
       <>
         <RootNavigator />
-        <ToastManager toastList={getToasts()} />
-        {/* {(internetConnectionStatus && isAuthenticated) && <Toast secondsAfterHide={20} title={i18n.noInternetConnection.toastTitle} description={i18n.noInternetConnection.toastDescription} />} */}
+        {internetConnectionStatus && isAuthenticated && <ToastManager />}
         {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
       </>
     );

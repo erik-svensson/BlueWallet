@@ -1,38 +1,32 @@
-import React, { PureComponent } from 'react';
-import { AppState } from 'react-native';
-import { Toast, ToastProps } from 'app/components/Toast';
+import dayjs from 'dayjs';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-interface Props {
-  toastList: ToastProps[];
-}
+import { Toast as ToastComponent } from 'app/components/Toast';
+import { selectors as toastMessagesSelectors } from 'app/state/toastMessages';
 
-interface State {
-  appState: string;
-}
+export const ToastManager = () => {
+  const toastMessagesList = useSelector(toastMessagesSelectors.toastMessagesList);
 
-export default class ToastManager extends PureComponent<Props, State> {
-  state = {
-    appState: AppState.currentState,
+  const renderToastComponents = () => {
+    const toastMessagesToRender = toastMessagesList.filter(toast => {
+      const now = dayjs().unix();
+      return (
+        dayjs(toast.createdAt)
+          .add(toast.secondsAfterHide, 'second')
+          .unix() <= now
+      );
+    });
+
+    return toastMessagesToRender.map(toast => (
+      <ToastComponent
+        key={toast.createdAt}
+        secondsAfterHide={toast.secondsAfterHide}
+        title={toast.title}
+        description={toast.description}
+      />
+    ));
   };
 
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
-  }
-
-  handleAppStateChange = (nextAppState: string) => {
-
-  };
-
-  render() {
-    const { toastList } = this.props;
-    return (
-      <>
-        {toastList.map(toast => {
-          return <Toast secondsAfterHide={toast.secondsAfterHide} title={toast.title} description={toast.description} />
-        })}
-      </>
-    )
-  }
-}
+  return <>{renderToastComponents()}</>;
+};
