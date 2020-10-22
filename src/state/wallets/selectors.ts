@@ -151,7 +151,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
             blockedAmount: blockedAmount && roundBtcToSatoshis(blockedAmount),
             unblockedAmount: unblockedAmount && roundBtcToSatoshis(unblockedAmount),
           }),
-          isRecoveredAlertToMe: transaction.value > 0 && transaction.tx_type === TxType.ALERT_RECOVERED,
+          ...(transaction.tx_type === TxType.ALERT_RECOVERED && { isRecoveredAlertToMe: transaction.value > 0 }),
           valueWithoutFee: isFromMyWalletTx ? myBalanceChangeSatoshi - feeSatoshi : myBalanceChangeSatoshi,
         };
       });

@@ -124,7 +124,7 @@ class TransactionDetailsScreen extends Component<Props> {
             <Text
               style={[styles.label, typography.headline5, transaction.toExternalAddress ? styles.lightGrayText : null]}
             >
-              {i18n.transactions.details.returnedFee}{' '}
+              {i18n.transactions.details.returnedFee}&nbsp;
             </Text>
             <Text
               style={[styles.label, typography.headline5, transaction.toExternalAddress ? styles.lightGrayText : null]}
@@ -135,7 +135,7 @@ class TransactionDetailsScreen extends Component<Props> {
         )}
         {transaction.fee !== undefined && (
           <View style={styles.rowWrapper}>
-            <Text style={[styles.label, typography.headline5]}>{i18n.transactions.details.fee} </Text>
+            <Text style={[styles.label, typography.headline5]}>{i18n.transactions.details.fee}&nbsp;</Text>
             <Text style={[styles.label, typography.headline5]}>{formatToBtcv(transaction.fee)}</Text>
           </View>
         )}
