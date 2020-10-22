@@ -1,7 +1,16 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SectionList, SectionListData } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  SectionList,
+  SectionListData,
+  ScrollView,
+  YellowBox,
+} from 'react-native';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
@@ -38,6 +47,11 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
   state = {
     selectedTransactions: [],
   };
+
+  componentDidMount() {
+    // sometimes we need nested this and will not touch performance
+    YellowBox.ignoreWarnings(['VirtualizedLists should never be nested']);
+  }
 
   showModal = () => {
     const { navigation, route, wallets } = this.props;
@@ -155,13 +169,15 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
             unit={wallet.preferredBalanceUnit}
           />
 
-          <View style={styles.listViewWrapper}>
+          <ScrollView
+            style={styles.listViewWrapper}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+          >
             {!this.isEmptyList() && (
-              <View style={styles.toggleAllWrapper}>
-                <TouchableOpacity onPress={toggleAll}>
-                  <CheckBox onPress={toggleAll} right checked={areAllTransactionsSelected} />
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity onPress={toggleAll} style={styles.toggleAllWrapper}>
+                <CheckBox onPress={toggleAll} right checked={areAllTransactionsSelected} />
+              </TouchableOpacity>
             )}
             <SectionList
               sections={getGroupedTransactions(transactions)}
@@ -171,7 +187,9 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
               renderSectionHeader={this.renderSectionHeader}
               ListEmptyComponent={this.renderListEmpty}
             />
-          </View>
+          </ScrollView>
+        </View>
+        <View style={styles.buttonContainer}>
           <Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />
         </View>
       </View>
@@ -195,7 +213,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     ...typography.body,
   },
-  listViewWrapper: { height: '60%', paddingBottom: 20 },
+  listViewWrapper: { paddingBottom: 20, height: '100%' },
   contentContainer: {
     paddingHorizontal: 20,
     paddingTop: 24,
@@ -216,7 +234,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginTop: -40,
-    top: 40,
+    top: 55,
     right: -9,
     display: 'flex',
     alignSelf: 'flex-end',
@@ -233,5 +251,14 @@ const styles = StyleSheet.create({
   transactionItemContainer: {
     flexWrap: 'wrap',
     flex: 1,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 15,
+    right: 15,
+    backgroundColor: palette.background,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
 });
