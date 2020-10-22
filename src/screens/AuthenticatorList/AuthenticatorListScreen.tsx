@@ -134,7 +134,7 @@ class AuthenticatorListScreen extends Component<Props> {
         noScroll={true}
         header={
           <Header
-          // @ts-ignore
+            // @ts-ignore
             navigation={navigation}
             isBackArrow={false}
             title={i18n.tabNavigator.authenticators}

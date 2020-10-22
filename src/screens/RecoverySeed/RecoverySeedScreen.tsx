@@ -123,6 +123,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
     return (
       <ScreenTemplate
         header={
+          // @ts-ignore
           <Header onBackArrow={onBackArrow} navigation={navigation} isBackArrow title={i18n.send.recovery.recover} />
         }
         footer={

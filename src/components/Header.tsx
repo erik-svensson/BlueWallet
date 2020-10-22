@@ -1,3 +1,4 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Platform, StyleSheet, Text, TouchableOpacity, BackHandler, NativeEventSubscription } from 'react-native';
 
@@ -7,7 +8,6 @@ import { getStatusBarHeight, palette, typography } from 'app/styles';
 import { FlatButton } from './FlatButton';
 import { GradientView } from './GradientView';
 import { Image } from './Image';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 const i18n = require('../../loc');
 
