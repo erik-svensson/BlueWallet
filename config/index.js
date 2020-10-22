@@ -11,8 +11,8 @@ try {
 
 export default {
   sentryDsn: SENTRY_DSN || '',
-  host: HOST || 'e1.electrumx.bitcoinvault.global',
-  port: PORT || '50001',
+  host: 'testnet.bitcoinvault.global' || HOST || 'e1.electrumx.bitcoinvault.global',
+  port: '50002' || PORT || '50001',
   network: bitcoin.alt_networks[BTCV_NETWORK || 'bitcoinvault'],
   protocol: PROTOCOL || 'tcp',
   electrumXProtocolVersion: ELECTRUM_X_PROTOCOL_VERSION || '2.0',

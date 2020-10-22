@@ -184,6 +184,7 @@ export interface Transaction {
   recoveredTxsCounter?: number;
   valueWithoutFee: number;
   returnedFee?: number;
+  isRecoveredAlertToMe?: boolean;
   height: number;
   walletPreferredBalanceUnit: string;
 }

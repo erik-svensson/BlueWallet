@@ -97,7 +97,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
         let toInternalAddress;
 
         const toAddress = transaction.outputs[0].addresses[0];
-        const isToInternalAddress = wallet.weOwnAddress(toAddress);
+        const isToInternalAddress = walletsList.some(w => w.weOwnAddress(toAddress));
 
         if ([TxType.RECOVERY].includes(transaction.tx_type) && isFromMyWalletTx) {
           if (isToInternalAddress) {
@@ -151,6 +151,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
             blockedAmount: blockedAmount && roundBtcToSatoshis(blockedAmount),
             unblockedAmount: unblockedAmount && roundBtcToSatoshis(unblockedAmount),
           }),
+          isRecoveredAlertToMe: transaction.value > 0 && transaction.tx_type === TxType.ALERT_RECOVERED,
           valueWithoutFee: isFromMyWalletTx ? myBalanceChangeSatoshi - feeSatoshi : myBalanceChangeSatoshi,
         };
       });
