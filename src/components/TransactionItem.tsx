@@ -12,18 +12,25 @@ import { satoshiToBtc, formatToBtcv } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
 
-const renderArrowIcon = (value: number) => (
-  <Image source={value > 0 ? icons.arrowRight : icons.arrowLeft} style={styles.arrow} resizeMode="contain" />
-);
-
-const renderCofirmations = (txType: TxType, confirmations: number) =>
-  txType !== TxType.ALERT_RECOVERED && (
-    <Text style={styles.label}>{`${i18n.transactions.list.conf}: ${getConfirmationsText(txType, confirmations)}`}</Text>
-  );
-
 const Item = ({ item, onPress }: { item: Transaction; onPress: (item: any) => void }) => {
   const isMinusValue = item.valueWithoutFee < 0;
+  const renderArrowIcon = useCallback(
+    (value: number) => (
+      <Image source={value > 0 ? icons.arrowRight : icons.arrowLeft} style={styles.arrow} resizeMode="contain" />
+    ),
+    [],
+  );
 
+  const renderCofirmations = useCallback(
+    (txType: TxType, confirmations: number) =>
+      txType !== TxType.ALERT_RECOVERED && (
+        <Text style={styles.label}>{`${i18n.transactions.list.conf}: ${getConfirmationsText(
+          txType,
+          confirmations,
+        )}`}</Text>
+      ),
+    [],
+  );
   return (
     <TouchableOpacity
       style={[styles.container, item.isRecoveredAlertToMe ? styles.opacity : null]}
