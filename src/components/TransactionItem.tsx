@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { icons } from 'app/assets';
@@ -21,7 +21,7 @@ const renderCofirmations = (txType: TxType, confirmations: number) =>
     <Text style={styles.label}>{`${i18n.transactions.list.conf}: ${getConfirmationsText(txType, confirmations)}`}</Text>
   );
 
-export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress: (item: any) => void }) => {
+const Item = ({ item, onPress }: { item: Transaction; onPress: (item: any) => void }) => {
   const isMinusValue = item.valueWithoutFee < 0;
 
   return (
@@ -105,6 +105,8 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
     </TouchableOpacity>
   );
 };
+
+export const TransactionItem = React.memo(Item);
 
 const styles = StyleSheet.create({
   rowWrapper: {

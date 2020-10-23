@@ -1,7 +1,7 @@
 import { curry, map } from 'lodash/fp';
-import React, { PureComponent } from 'react';
+import React, { FunctionComponent, useCallback } from 'react';
 import { SectionList, SectionListData, StyleSheet, Text, View } from 'react-native';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Image, TransactionItem } from 'app/components';
@@ -9,7 +9,6 @@ import { Route, Transaction, Filters } from 'app/consts';
 import { filterTransaction, filterBySearch } from 'app/helpers/filters';
 import { getGroupedTransactions } from 'app/helpers/transactions';
 import { NavigationService } from 'app/services';
-import { ApplicationState } from 'app/state';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -27,81 +26,80 @@ interface Props {
   reference: React.Ref<SectionList>;
 }
 
-class TransactionList extends PureComponent<Props> {
-  renderSectionTitle = ({ section }: { section: SectionListData<Transaction> }) => {
+const TransactionList: FunctionComponent<Props> = ({
+  headerHeight,
+  search,
+  transactions,
+  transactionNotes,
+  ListHeaderComponent,
+  refreshing,
+  onRefresh,
+  reference,
+}: Props) => {
+  const filters = useSelector(state => state.filters);
+
+  const renderSectionTitle = useCallback(({ section }: { section: SectionListData<Transaction> }) => {
     return (
       <View style={styles.sectionTitle}>
         <Text style={{ ...typography.caption, color: palette.textGrey }}>{section.title}</Text>
       </View>
     );
-  };
+  }, []);
 
-  onTransactionItemPress = (item: Transaction) => {
+  const onTransactionItemPress = useCallback((item: Transaction) => {
     NavigationService.navigate(Route.TransactionDetails, { transaction: item });
-  };
+  }, []);
 
-  renderListEmpty = () => {
+  const renderListEmpty = useCallback(() => {
     return (
       <View style={styles.noTransactionsContainer}>
         <Image source={images.noTransactions} style={styles.noTransactionsImage} />
         <Text style={styles.noTransactionsLabel}>{i18n.wallets.dashboard.noTransactions}</Text>
       </View>
     );
-  };
+  }, []);
 
-  getSectionData = () => {
-    const { search, transactions, filters, transactionNotes } = this.props;
+  const getSectionData = useCallback(() => {
     return getGroupedTransactions(
       transactions,
       map((tx: Transaction) => ({ ...tx, note: transactionNotes[tx.hash] })),
       curry(filterBySearch)(search),
       curry(filterTransaction)(filters),
     );
-  };
+  }, [filters, search, transactionNotes, transactions]);
 
-  renderItem = ({ item: transaction }: { item: Transaction }) => {
-    return (
-      <View style={styles.itemWrapper}>
-        <TransactionItem item={transaction} onPress={this.onTransactionItemPress} />
-      </View>
-    );
-  };
+  const renderItem = useCallback(
+    ({ item: transaction }: { item: Transaction }) => {
+      return (
+        <View style={styles.itemWrapper}>
+          <TransactionItem item={transaction} onPress={onTransactionItemPress} />
+        </View>
+      );
+    },
+    [onTransactionItemPress],
+  );
 
-  render() {
-    const {
-      headerHeight,
-      search,
-      transactions,
-      ListHeaderComponent,
-      refreshing,
-      onRefresh,
-      reference,
-      filters,
-    } = this.props;
-    return (
-      <SectionList
-        ref={reference}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        style={[styles.section, filters.isFilteringOn && styles.spaceBottom]}
-        stickySectionHeadersEnabled={false}
-        ListHeaderComponent={ListHeaderComponent}
-        ListFooterComponent={search ? <View style={{ height: transactions.length ? headerHeight / 2 : 0 }} /> : null}
-        sections={this.getSectionData()}
-        keyExtractor={(item, index) => `${item.txid}-${index}`}
-        renderItem={this.renderItem}
-        renderSectionHeader={this.renderSectionTitle}
-        ListEmptyComponent={this.renderListEmpty}
-      />
-    );
-  }
-}
+  return (
+    <SectionList
+      ref={reference}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      initialNumToRender={10}
+      removeClippedSubviews
+      style={[styles.section, filters.isFilteringOn && styles.spaceBottom]}
+      stickySectionHeadersEnabled={false}
+      ListHeaderComponent={ListHeaderComponent}
+      ListFooterComponent={search ? <View style={{ height: transactions.length ? headerHeight / 2 : 0 }} /> : null}
+      sections={getSectionData()}
+      keyExtractor={(item, index) => `${item.txid}-${index}`}
+      renderItem={renderItem}
+      renderSectionHeader={renderSectionTitle}
+      ListEmptyComponent={renderListEmpty}
+    />
+  );
+};
 
-const mapStateToProps = (state: ApplicationState) => ({
-  filters: state.filters,
-});
-
-export default connect(mapStateToProps)(TransactionList);
+export default TransactionList;
 
 const styles = StyleSheet.create({
   sectionTitle: { marginTop: 15, marginBottom: 10, paddingHorizontal: 20 },
