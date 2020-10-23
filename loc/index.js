@@ -30,7 +30,7 @@ const init = async lang => {
   if (lang) {
     strings.setLanguage(lang);
     let localeForDayJSAvailable = true;
-    let dayJsLangName = undefined;
+    let dayJsLangName = lang;
     switch (lang) {
       case 'zh':
         dayJsLangName = 'zh-cn';
@@ -63,7 +63,7 @@ const init = async lang => {
         break;
     }
     if (localeForDayJSAvailable) {
-      dayjs.locale(dayJsLangName || lang);
+      dayjs.locale(dayJsLangName);
     }
     await AsyncStorage.setItem('lang', lang);
     LocaleConfig.locales[lang] = strings.getListOfMonthsAndWeekdays();
