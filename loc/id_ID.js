@@ -589,4 +589,14 @@ module.exports = {
       'Aplikasi masih akan menjalani pengujian akhir sebelum perilisan resmi. Aplikasi mobile dan semua yang konten yang Anda temukan didalamnya disediakan dalam basis "apa adanya" dan "ketika tersedia". Risiko penggunaan perangkat lunak ditanggung langsung oleh pengguna.',
     button: 'Saya mengerti dan menerima risikonya',
   },
+  connectionIssue: {
+    noInternetTitle: 'Koneksi Internet Tidak Ada',
+    noInternetDescription: 'Pastikan bahwa WI-FI atau mobile dat  Anda aktif, dan coba kembali.',
+    offlineMessageTitle: "Anda offline",
+    offlineMessageDescription: 'Sambungkan perangkat Anda ke Internet untuk mengembalikan fungsionalitas penuh.',
+    offlineMessageDescription2: 'Sambungkan perangkat Anda ke Internet untuk kembali menggunakan fitur ini',
+    noNetworkTitle: 'TIdak ada Jaringan',
+    noNetworkDescription:
+      'Internet Anda berfungsi, namun Anda tidak tersambung ke jaringan. Mohon tunggu beberapa menit dan coba kembali',
+  },
 };

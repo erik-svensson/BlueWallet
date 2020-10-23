@@ -589,4 +589,14 @@ module.exports = {
       'Hala resmi olarak piyasaya sürülme öncesinde nihai test aşamasındadır. Mobil uygulaması ve tüm içeriği "olduğu gibi" ve "kullanılabildiği gibi" esasına göre sunulur. Yazılımın kullanımına ait riskler kullanıcıya aittir.',
     button: 'Riski kabul ediyorum',
   },
+  connectionIssue: {
+    noInternetTitle: 'İnternet bağlantısı yok',
+    noInternetDescription: 'WI-FI veya mobil verinin açık olduğundan emin olun ve tekrar deneyin.',
+    offlineMessageTitle: "Çevrimdışısınız",
+    offlineMessageDescription: 'Erişim sağlamak için internete bağlanın.',
+    offlineMessageDescription2: 'Erişim sağlamak için internete bağlanın.',
+    noNetworkTitle: 'Ağ bulunmuyor',
+    noNetworkDescription:
+      'İnternetiniz çalışıyor, ancak herhangi bir ağa bağlı değilsiniz. Lütfen birkaç dakika sonra tekrar deneyin.',
+  },
 };

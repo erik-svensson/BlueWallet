@@ -596,4 +596,14 @@ module.exports = {
       'It is still undergoing final testing before its official release. The mobile app and all content found on it are provided on an “as is” and “as available” basis. The use of the software is done at the user’s own risk.',
     button: 'I accept the risk',
   },
+  connectionIssue: {
+    noInternetTitle: 'No internet connection',
+    noInternetDescription: 'Ensure that WI-FI or mobile data are turned on, then try again.',
+    offlineMessageTitle: "You're offline",
+    offlineMessageDescription: 'Connect to the internet to restore full functionality.',
+    offlineMessageDescription2: 'Connect to the internet to continue using these functions.',
+    noNetworkTitle: 'No network',
+    noNetworkDescription:
+      'Your internet works, but you are not connected to the network. Please wait a couple of minutes and try again.',
+  },
 };
