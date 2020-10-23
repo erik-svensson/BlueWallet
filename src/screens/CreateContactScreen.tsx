@@ -47,9 +47,11 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   };
 
   static getDerivedStateFromProps(props: Props, state: State) {
-    if (props.route.params?.address && !state.address) {
+    if (props.route.params?.address && !state.address.value) {
       return {
-        address: props.route.params.address,
+        address: {
+          value: props.route.params.address,
+        }
       };
     }
     return null;
