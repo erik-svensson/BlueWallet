@@ -3,33 +3,33 @@
   "runnerConfig": "tests/e2e/config.json",
   "configurations": {
     "ios.sim.prod": {
-      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet.app",
-      "build": "xcodebuild -workspace ios/GoldWallet.xcworkspace -scheme GoldWallet -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
+      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/GoldWallet.app",
+      "build": "xcodebuild -workspace ios/GoldWallet.xcworkspace -scheme GoldWallet -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -quiet",
       "type": "ios.simulator",
       "device": {
         "type": "iPhone 11"
       }
     },
     "ios.sim.beta": {
-      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet Beta.app",
-      "build": "xcodebuild -workspace ios/GoldWallet.xcworkspace -scheme \"GoldWallet Beta\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
+      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/GoldWallet Beta.app",
+      "build": "xcodebuild -workspace ios/GoldWallet.xcworkspace -scheme \"GoldWallet Beta\" -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -quiet",
       "type": "ios.simulator",
       "device": {
         "type": "iPhone 11"
       }
     },
     "android.emu.prod": {
-      "build": "cd android && ./gradlew assembleProdRelease assembleProdReleaseAndroidTest -DtestBuildType=release && cd ..",
+      "build": "cd android && ./gradlew assembleProdDebug assembleProdDebugAndroidTest -DtestBuildType=debug && cd ..",
       "type": "android.emulator",
-      "binaryPath": "android/app/build/outputs/apk/prod/release/app-prod-release.apk",
+      "binaryPath": "android/app/build/outputs/apk/prod/debug/app-prod-debug.apk",
       "device": {
         "avdName": "Pixel_API_28_AOSP"
       }
     },
     "android.emu.beta": {
-      "build": "cd android && ./gradlew assembleBetaRelease assembleBetaReleaseAndroidTest -DtestBuildType=release && cd ..",
+      "build": "cd android && ./gradlew assembleBetaDebug assembleBetaDebugAndroidTest -DtestBuildType=debug && cd ..",
       "type": "android.emulator",
-      "binaryPath": "android/app/build/outputs/apk/beta/release/app-beta-release.apk",
+      "binaryPath": "android/app/build/outputs/apk/beta/debug/app-beta-debug.apk",
       "device": {
         "avdName": "Pixel_API_28_AOSP"
       }

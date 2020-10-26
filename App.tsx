@@ -15,6 +15,8 @@ import config from './config';
 
 const i18n = require('./loc');
 
+console.disableYellowBox = true;
+
 if (!__DEV__) {
   Sentry.init({
     integrations: [new Integrations.BrowserTracing()],
