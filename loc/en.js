@@ -138,10 +138,10 @@ module.exports = {
     add: {
       successTitle: 'Your authenticator is ready!',
       title: 'Add new authenticator',
-      subtitle: 'Pair authenticator',
+      subtitle: 'Create new authenticator',
       successDescription: `Write down this seed phrase somewhere safe. It's your backup in case you need to restore your authenticator. Remember that the authenticator is necessary to confirm Fast and Cancel transactions.`,
       description:
-        'Open your Electrum Vault desktop application and create a new wallet. Follow the steps on the screen until you see a QR code. Use this app to scan it to proceed.',
+        'You will need it to pair Gold Wallet with desktop application Electrum Vault. It will serve as two-factor authentication.',
       subdescription: 'You can also import your authenticator by choosing the option below.',
     },
     enterPIN: {

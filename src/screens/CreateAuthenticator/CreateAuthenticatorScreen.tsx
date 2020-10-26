@@ -4,13 +4,14 @@ import React, { Component } from 'react';
 import { Text, StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate, FlatButton, Button } from 'app/components';
+import { Header, ScreenTemplate, FlatButton, Button, InputItem } from 'app/components';
 import {
   Route,
   Authenticator as IAuthenticator,
   MainTabNavigatorParams,
   MainCardStackNavigatorParams,
 } from 'app/consts';
+import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { actions } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
@@ -27,7 +28,25 @@ interface Props extends ActionProps {
   >;
 }
 
+interface State {
+  label: string;
+}
+
 class CreateAuthenticatorScreen extends Component<Props> {
+  state: State = {
+    label: '',
+  };
+
+  setLabel = (label: string) => this.setState({ label: label.trim() });
+
+  get validationError(): string | undefined {
+    // const { walletsLabels } = this.props;
+    // if (walletsLabels.includes(this.state.label.trim())) {
+    //   return i18n.wallets.importWallet.walletInUseValidationError;
+    // }
+    return;
+  }
+
   scanQRCode = () => {
     const { navigation } = this.props;
     navigation.navigate(Route.ScanQrCode, {
@@ -95,8 +114,12 @@ class CreateAuthenticatorScreen extends Component<Props> {
       >
         <Text style={styles.subtitle}>{i18n.authenticators.add.subtitle}</Text>
         <Text style={styles.description}>{i18n.authenticators.add.description}</Text>
-        <Text style={styles.description}>{i18n._.or}</Text>
-        <Text style={styles.description}>{i18n.authenticators.add.subdescription}</Text>
+        <InputItem
+          error={this.validationError}
+          setValue={this.setLabel}
+          label={i18n.wallets.add.inputLabel}
+          maxLength={maxWalletNameLength}
+        />
       </ScreenTemplate>
     );
   }
