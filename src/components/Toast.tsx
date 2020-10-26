@@ -32,18 +32,18 @@ export const Toast = ({ title, description, secondsAfterHide }: ToastProps) => {
   );
 
   const fadeIn = () => {
-    // @ts-ignore
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 500,
+      useNativeDriver: true,
     }).start();
   };
 
   const fadeOut = () => {
-    // @ts-ignore
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 500,
+      useNativeDriver: true,
     }).start();
   };
 

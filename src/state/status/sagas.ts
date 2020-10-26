@@ -9,6 +9,7 @@ import {
   updateInternetConnectionStatusSuccess,
   StatusAction,
   updateServerConnectionStatusSuccess,
+  updateServerConnectionStatus,
 } from './actions';
 
 const BlueElectrum = require('../../../BlueElectrum');
@@ -26,22 +27,51 @@ function emitNetInfoStatus() {
   });
 }
 
+function emitServerConnectionStatus() {
+  return eventChannel(emitter => {
+    const eventName = 'blockchain.scripthash.subscribe';
+
+    BlueElectrum.subscribe(eventName, (event: string[]) => {
+      emitter(event);
+    });
+
+    return () => {
+      BlueElectrum.unsubscribe(eventName);
+    };
+  });
+}
+
 export function* updateServerConnectionStatusSaga(action: UpdateServerConnectionStatusAction | unknown) {
+  // while (true) {
+  //   yield delay(10000);
+  //   try {
+  //     yield BlueElectrum.waitTillConnected();
+  //     yield put(updateServerConnectionStatusSuccess(true));
+  //   } catch (e) {
+  //     yield put(
+  //       addToastMessage({
+  //         description: i18n.connectionIssue.noNetworkTitle,
+  //         title: i18n.connectionIssue.noNetworkDescription,
+  //         secondsAfterHide: 20,
+  //       }),
+  //     );
+  //     yield put(updateServerConnectionStatusSuccess(false));
+  //   }
+  // }
+
+  const serverConnectionStatus = yield call(emitServerConnectionStatus);
   while (true) {
-    yield delay(10000);
-    try {
-      yield BlueElectrum.waitTillConnected();
-      yield put(updateServerConnectionStatusSuccess(true));
-    } catch (e) {
+    const serverConnection = yield take(serverConnectionStatus);
+    if (!serverConnection) {
       yield put(
         addToastMessage({
-          description: i18n.connectionIssue.noNetworkTitle,
-          title: i18n.connectionIssue.noNetworkDescription,
+          description: i18n.connectionIssue.offlineMessageDescription,
+          title: i18n.connectionIssue.offlineMessageTitle,
           secondsAfterHide: 20,
         }),
       );
-      yield put(updateServerConnectionStatusSuccess(false));
     }
+    yield put(updateServerConnectionStatusSuccess(!!serverConnection));
   }
 }
 
