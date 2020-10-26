@@ -49,11 +49,6 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
     selectedTransactions: [],
   };
 
-  componentDidMount() {
-    // sometimes we need nested this and will not touch performance
-    YellowBox.ignoreWarnings(['VirtualizedLists should never be nested']);
-  }
-
   showModal = () => {
     const { navigation, route, wallets } = this.props;
     const { wallet } = route.params;
@@ -138,12 +133,68 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
     const isChecked = this.isChecked(transaction);
     const toggle = this.toggleTransaction(isChecked, transaction);
     return (
-      <View style={styles.itemWrapper}>
-        <View style={styles.transactionItemContainer}>
-          <TransactionItem onPress={toggle} item={transaction} />
+      <>
+        <View style={styles.itemWrapper}>
+          <View style={styles.transactionItemContainer}>
+            <TransactionItem onPress={toggle} item={transaction} />
+          </View>
+          <CheckBox onPress={toggle} right checked={isChecked} />
         </View>
-        <CheckBox onPress={toggle} right checked={isChecked} />
-      </View>
+        <View style={styles.itemWrapper}>
+          <View style={styles.transactionItemContainer}>
+            <TransactionItem onPress={toggle} item={transaction} />
+          </View>
+          <CheckBox onPress={toggle} right checked={isChecked} />
+        </View>
+        <View style={styles.itemWrapper}>
+          <View style={styles.transactionItemContainer}>
+            <TransactionItem onPress={toggle} item={transaction} />
+          </View>
+          <CheckBox onPress={toggle} right checked={isChecked} />
+        </View>
+        <View style={styles.itemWrapper}>
+          <View style={styles.transactionItemContainer}>
+            <TransactionItem onPress={toggle} item={transaction} />
+          </View>
+          <CheckBox onPress={toggle} right checked={isChecked} />
+        </View>
+        <View style={styles.itemWrapper}>
+          <View style={styles.transactionItemContainer}>
+            <TransactionItem onPress={toggle} item={transaction} />
+          </View>
+          <CheckBox onPress={toggle} right checked={isChecked} />
+        </View>
+        <View style={styles.itemWrapper}>
+          <View style={styles.transactionItemContainer}>
+            <TransactionItem onPress={toggle} item={transaction} />
+          </View>
+          <CheckBox onPress={toggle} right checked={isChecked} />
+        </View>
+        <View style={styles.itemWrapper}>
+          <View style={styles.transactionItemContainer}>
+            <TransactionItem onPress={toggle} item={transaction} />
+          </View>
+          <CheckBox onPress={toggle} right checked={isChecked} />
+        </View>
+        <View style={styles.itemWrapper}>
+          <View style={styles.transactionItemContainer}>
+            <TransactionItem onPress={toggle} item={transaction} />
+          </View>
+          <CheckBox onPress={toggle} right checked={isChecked} />
+        </View>
+        <View style={styles.itemWrapper}>
+          <View style={styles.transactionItemContainer}>
+            <TransactionItem onPress={toggle} item={transaction} />
+          </View>
+          <CheckBox onPress={toggle} right checked={isChecked} />
+        </View>
+        <View style={styles.itemWrapper}>
+          <View style={styles.transactionItemContainer}>
+            <TransactionItem onPress={toggle} item={transaction} />
+          </View>
+          <CheckBox onPress={toggle} right checked={isChecked} />
+        </View>
+      </>
     );
   };
 
@@ -172,25 +223,26 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
             unit={wallet.preferredBalanceUnit}
           />
 
-          <ScrollView
+          <SectionList
             style={styles.listViewWrapper}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-          >
-            {!this.isEmptyList() && (
-              <TouchableOpacity onPress={toggleAll} style={styles.toggleAllWrapper}>
-                <CheckBox onPress={toggleAll} right checked={areAllTransactionsSelected} />
-              </TouchableOpacity>
-            )}
-            <SectionList
-              sections={getGroupedTransactions(transactions)}
-              keyExtractor={item => item.txid}
-              renderItem={this.renderItem}
-              stickySectionHeadersEnabled={false}
-              renderSectionHeader={this.renderSectionHeader}
-              ListEmptyComponent={this.renderListEmpty}
-            />
-          </ScrollView>
+            ListHeaderComponent={
+              <>
+                {!this.isEmptyList() && (
+                  <TouchableOpacity onPress={toggleAll} style={styles.toggleAllWrapper}>
+                    <CheckBox onPress={toggleAll} right checked={areAllTransactionsSelected} />
+                  </TouchableOpacity>
+                )}
+              </>
+            }
+            sections={getGroupedTransactions(transactions)}
+            keyExtractor={item => item.txid}
+            renderItem={this.renderItem}
+            stickySectionHeadersEnabled={false}
+            renderSectionHeader={this.renderSectionHeader}
+            ListEmptyComponent={this.renderListEmpty}
+          />
         </View>
         <View style={styles.buttonContainer}>
           <Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />
@@ -217,7 +269,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     ...typography.body,
   },
-  listViewWrapper: { paddingBottom: 20, height: '100%' },
+  listViewWrapper: { paddingBottom: 20, height: '90%' },
   contentContainer: {
     paddingHorizontal: 20,
     paddingTop: 24,
