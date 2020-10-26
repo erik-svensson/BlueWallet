@@ -157,7 +157,6 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
             label={wallet.label}
             unit={wallet.preferredBalanceUnit}
           />
-
           <SectionList
             style={styles.listViewWrapper}
             showsVerticalScrollIndicator={false}
