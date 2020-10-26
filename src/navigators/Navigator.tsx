@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import JailMonkey from 'jail-monkey';
 import React from 'react';
-import { AppState } from 'react-native';
 import { connect } from 'react-redux';
 
 import { CONST } from 'app/consts';
@@ -91,10 +90,10 @@ class Navigator extends React.Component<Props, State> {
   shouldRenderUnlockScreen = () => {
     const { isPinSet, isTxPasswordSet, isAuthenticated } = this.props;
 
-    if (__DEV__) {
-      return false;
-    }
-    return !isAuthenticated && isTxPasswordSet && isPinSet && AppState.currentState === 'active';
+    // if (__DEV__) {
+    //   return false;
+    // }
+    return !isAuthenticated && isTxPasswordSet && isPinSet;
   };
 
   preventOpenAppWithRootedPhone = () => {
