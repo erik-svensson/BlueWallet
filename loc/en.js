@@ -218,9 +218,9 @@ module.exports = {
       importWalletButton: 'Import wallet',
       walletType: 'Wallet type',
       advancedOptions: 'Advanced options',
-      multipleAddresses: 'It contains a tree of P2SH addresses generated from a single 24-word seed',
+      multipleAddresses: 'It contains a tree of P2SH addresses generated from a single 12-word seed',
       singleAddress: 'It contains a single P2SH address',
-      segwidAddress: 'It contains a tree of native segwit addresses, generated from a single 24-word seed',
+      segwidAddress: 'It contains a tree of native segwit addresses, generated from a single 12-word seed',
       ar: 'Makes Secure and Cancel transactions.',
       air: 'Makes Secure, Cancel, and Secure Fast transactions.',
       legacyTitle: 'Standard',
@@ -228,9 +228,9 @@ module.exports = {
       legacyP2SHTitle: 'Standard P2SH',
       legacyHDSegWitTitle: 'Standard HD SegWit',
       legacy: 'Makes default types of transactions.',
-      legacyHDP2SH: 'It contains a tree of P2SH addresses generated from a single 24-word seed',
+      legacyHDP2SH: 'It contains a tree of P2SH addresses generated from a single 12-word seed',
       LegacyP2SH: 'It contains a single P2SH address',
-      LegacyHDSegWit: 'It contains a tree of native segwit addresses, generated from a single 24-word seed',
+      LegacyHDSegWit: 'It contains a tree of native segwit addresses, generated from a single 12-word seed',
       publicKeyError: 'Provided public key is invalid',
     },
     publicKey: {
@@ -251,6 +251,7 @@ module.exports = {
     },
     details: {
       edit: 'Edit',
+      details: 'Details',
       latestTransaction: 'Latest transaction',
       typeLabel: 'Type',
       nameLabel: 'Name',
@@ -307,6 +308,7 @@ module.exports = {
       unblocked: 'unblocked',
       done: 'done',
       canceled: 'canceled',
+      canceledDone: 'canceled - done',
     },
     transactionTypeLabel: {
       secure: 'Secure',
@@ -327,6 +329,7 @@ module.exports = {
       verify: 'Verify on coinb.in',
       amount: 'Amount',
       fee: 'Fee',
+      returnedFee: 'Returned fee:',
       transactioFee: 'Transaction fee',
       txSize: 'TX size',
       satoshiPerByte: 'Satoshi per byte',
@@ -348,6 +351,13 @@ module.exports = {
       sendCoins: 'Send coins',
       addToAddressBook: 'Add to Address book',
       timePending: 'Time pending',
+      numberOfCancelTransactions: 'Number of Cancel transactions',
+      toExternalWallet: 'To the external wallet',
+      toInternalWallet: 'To the internal wallet',
+      fee: 'Fee:',
+      totalReturnedFee: 'Total returned fee:',
+      unblocked: 'Unblocked',
+      blocked: 'Blocked',
     },
   },
   timeCounter: {
@@ -438,10 +448,14 @@ module.exports = {
   },
   receive: {
     header: 'Receive coins',
+    label: 'Wallet address',
     details: {
       amount: 'Amount',
       share: 'Share',
+      shareWalletAddress: 'Share wallet address',
       receiveWithAmount: 'Receive with amount',
+      receiveWithAmountSubtitle:
+        'Enter the amount which you would like to receive. The QR code will update accordingly to include the amount.',
     },
   },
   settings: {

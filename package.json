@@ -1,3 +1,4 @@
+
 {
   "name": "goldwallet",
   "version": "6.0.0",
@@ -9,10 +10,11 @@
     "@react-native-community/eslint-config": "^0.0.5",
     "@types/bigi": "^1.4.2",
     "@types/bip21": "^1.1.30",
+    "@types/detox": "^16.4.1",
     "@types/ecurve": "^1.0.0",
     "@types/i18next": "^13.0.0",
-    "@types/jest": "^25.1.4",
-    "@types/lodash": "^4.14.158",
+    "@types/jest": "^26.0.14",
+    "@types/lodash": "^4.14.162",
     "@types/moment": "^2.13.0",
     "@types/pbkdf2": "^3.0.0",
     "@types/react": "^16.9.31",
@@ -25,11 +27,12 @@
     "@types/redux-saga": "^0.10.5",
     "@types/reselect": "^2.2.0",
     "@types/uuid": "^3.4.8",
-    "@typescript-eslint/eslint-plugin": "^2.28.0",
-    "@typescript-eslint/parser": "^2.26.0",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.9.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
+    "detox": "^17.10.3",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",
@@ -40,21 +43,27 @@
     "flow-bin": "^0.102.0",
     "husky": "^4.2.3",
     "jail-monkey": "^2.3.2",
-    "jest": "^25.0.0",
+    "jest": "^26.5.3",
     "jetifier": "^1.6.3",
     "lint-staged": "^10.1.1",
     "metro-react-native-babel-preset": "^0.56.0",
     "prettier": "^1.19.1",
     "react-native-config-node": "^0.0.3",
     "redux-devtools-extension": "^2.13.8",
-    "rn-nodeify": "github:tradle/rn-nodeify"
+    "rn-nodeify": "github:tradle/rn-nodeify",
+    "ts-jest": "^26.4.1",
+    "typescript": "^4.0.3"
   },
   "scripts": {
     "clean": "cd android/; ./gradlew clean; cd ..; rm -r -f /tmp/metro-cache/; rm -r -f node_modules/; npm cache clean --force; npm i; npm start -- --reset-cache",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=8081'",
-    "android:prod": "cp ./config/prod/google-services.json ./android/app && cp ./config/prod/.env ./ && cp ./config/prod/app.json ./ && cp ./config/prod/MainActivity.java ./android/app/src/main/java/io/goldwallet/wallet && react-native run-android --variant=prodDebug",
-    "android:beta": "cp ./config/beta/google-services.json ./android/app && cp ./config/beta/.env ./ && cp ./config/beta/app.json ./ && cp ./config/beta/MainActivity.java ./android/app/src/main/java/io/goldwallet/wallet && react-native run-android --variant=betaDebug",
+    "prepare:prod": "cp ./config/prod/google-services.json ./android/app && cp ./config/prod/GoogleService-Info.plist ./ios && cp ./config/prod/.env ./ && cp ./config/prod/app.json ./ && cp ./config/prod/MainActivity.java ./android/app/src/main/java/io/goldwallet/wallet",
+    "prepare:beta": "cp ./config/beta/google-services.json ./android/app && cp ./config/beta/GoogleService-Info.plist ./ios && cp ./config/beta/.env ./ && cp ./config/beta/app.json ./ && cp ./config/beta/MainActivity.java ./android/app/src/main/java/io/goldwallet/wallet",
+    "android:prod": "yarn prepare:prod && react-native run-android --variant=prodDebug",
+    "android:beta": "yarn prepare:beta && react-native run-android --variant=betaDebug",
+    "ios:prod": "yarn prepare:prod && react-native run-ios",
+    "ios:beta": "yarn prepare:beta && react-native run-ios --scheme='GoldWallet beta'",
     "postinstall": "./node_modules/.bin/rn-nodeify --install buffer,events,process,stream,util,inherits,fs,path --hack; npx jetify",
     "ios": "react-native run-ios",
     "test": "CI=true yarn jest",
@@ -96,7 +105,6 @@
     "@react-navigation/stack": "^5.6.1",
     "@remobile/react-native-qrcode-local-image": "git+https://github.com/BlueWallet/react-native-qrcode-local-image.git",
     "@sentry/react-native": "^1.9.0",
-    "@sentry/tracing": "^5.26.0",
     "@std/esm": "^0.26.0",
     "@types/crypto-js": "^3.1.47",
     "@types/react-native-calendars": "^1.20.7",
@@ -180,8 +188,6 @@
     "rn-fetch-blob": "^0.12.0",
     "secure-random": "1.1.2",
     "stream-browserify": "2.0.2",
-    "ts-jest": "^25.3.1",
-    "typescript": "^3.8.3",
     "url": "0.11.0",
     "util": "0.12.1",
     "uuid": "^3.4.0",
@@ -211,13 +217,13 @@
     "./**/*.{ts,tsx,js,jsx}": [
       "yarn lint:fix"
     ],
-    "./**/*.{ts|tsx}": [
+    "./**/*.{ts,tsx}": [
       "yarn typescript:check"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn translate:check-missing && lint-staged",
+      "pre-commit": "lint-staged",
       "pre-push": "yarn test:local"
     }
   }

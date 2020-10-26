@@ -72,10 +72,12 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
         footer={
           <Button
             title={i18n._.save}
+            testID="submit-create-transaction-password"
             onPress={this.onSave}
             disabled={password.length < CONST.transactionMinPasswordLength}
           />
         }
+        // @ts-ignore
         header={<Header navigation={this.props.navigation} title={i18n.onboarding.onboarding} />}
       >
         <View style={styles.infoContainer}>
@@ -84,10 +86,11 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
         </View>
         <View style={styles.inputItemContainer}>
           <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisability}>
-            <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
+            <Image style={styles.icon} source={isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem
             value={password}
+            testID="create-transaction-password"
             ref={this.inputRef}
             setValue={this.updatePassword}
             autoFocus

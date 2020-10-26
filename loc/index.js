@@ -3,11 +3,17 @@ import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Localization from 'react-localization';
-import { LocaleConfig } from 'react-native-calendars';
+import {
+  LocaleConfig
+} from 'react-native-calendars';
 import * as RNLocalize from 'react-native-localize';
 
-import { BitcoinUnit } from '../models/bitcoinUnits';
-import { CONST } from '../src/consts';
+import {
+  BitcoinUnit
+} from '../models/bitcoinUnits';
+import {
+  CONST
+} from '../src/consts';
 
 const BigNumber = require('bignumber.js');
 
@@ -29,9 +35,10 @@ dayjs.extend(localeData);
 const init = async lang => {
   if (lang) {
     strings.setLanguage(lang);
-    let localeForDayJSAvailable = true;
+    let dayJsLangName = lang;
     switch (lang) {
       case 'zh':
+        dayJsLangName = 'zh-cn';
         require('dayjs/locale/zh-cn');
         break;
       case 'es':
@@ -57,12 +64,9 @@ const init = async lang => {
         break;
       default:
         lang = CONST.defaultLanguage;
-        localeForDayJSAvailable = false;
         break;
     }
-    if (localeForDayJSAvailable) {
-      dayjs.locale(lang.split('_')[0]);
-    }
+    dayjs.locale(dayJsLangName);
     await AsyncStorage.setItem('lang', lang);
     LocaleConfig.locales[lang] = strings.getListOfMonthsAndWeekdays();
     LocaleConfig.defaultLocale = lang;

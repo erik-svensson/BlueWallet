@@ -134,7 +134,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const { fee, recipients, txDecoded, satoshiPerByte, fromWallet } = this.props.route.params;
 
     const tx = txDecoded.toHex();
-    const feeSatoshi = btcToSatoshi(fee).toNumber();
+    const feeSatoshi = btcToSatoshi(fee);
 
     this.props.navigation.navigate(Route.SendTransactionDetails, {
       fee,
@@ -196,6 +196,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     return (
       <ScreenTemplate
         footer={ScreenFooter(this.goToUnlockScreen, this.goToDetails, buttonTitle)}
+        // @ts-ignore
         header={<Header navigation={navigation} isBackArrow title={headerTitle || i18n.send.header} />}
       >
         <View style={styles.container}>

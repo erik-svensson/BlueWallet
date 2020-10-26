@@ -84,10 +84,12 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
         footer={
           <Button
             title={i18n._.save}
+            testID="submit-transaction-password-confirmation"
             onPress={this.onSave}
             disabled={password.length < CONST.transactionMinPasswordLength}
           />
         }
+        // @ts-ignore
         header={<Header navigation={this.props.navigation} isBackArrow title={i18n.onboarding.confirmPassword} />}
       >
         <View style={styles.infoContainer}>
@@ -96,10 +98,11 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
         </View>
         <View style={styles.inputItemContainer}>
           <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisability}>
-            <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
+            <Image style={styles.icon} source={isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem
             value={password}
+            testID="confirm-transaction-password"
             setValue={this.updatePassword}
             autoFocus={true}
             error={error}

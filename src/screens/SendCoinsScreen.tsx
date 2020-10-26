@@ -20,6 +20,7 @@ import {
 } from 'app/components';
 import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadTransactionsFees } from 'app/helpers/fees';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
@@ -127,7 +128,7 @@ class SendCoinsScreen extends Component<Props, State> {
     const requestedSatPerByte: string | number = +this.state.fee.toString().replace(/\D/g, '');
 
     const targets: any[] = [];
-    const amount = btcToSatoshi(this.toNumber(transaction.amount)).toNumber();
+    const amount = btcToSatoshi(this.toNumber(transaction.amount));
 
     if (amount > 0.0) {
       targets.push({ address: transaction.address, value: amount });
@@ -205,7 +206,8 @@ class SendCoinsScreen extends Component<Props, State> {
     return null;
   };
 
-  getActualSatoshi = (tx: string, feeSatoshi: any) => feeSatoshi.dividedBy(Math.round(tx.length / 2)).toNumber();
+  getActualSatoshi = (tx: string, feeSatoshi: any) =>
+    new BigNumber(feeSatoshi).dividedBy(Math.round(tx.length / 2)).toNumber();
 
   increaseFee = ({
     feeSatoshi,
@@ -216,7 +218,7 @@ class SendCoinsScreen extends Component<Props, State> {
     requestedSatPerByte: number;
     actualSatoshiPerByte: any;
   }) =>
-    feeSatoshi
+    new BigNumber(feeSatoshi)
       .multipliedBy(requestedSatPerByte / actualSatoshiPerByte)
       .plus(10)
       .dividedBy(CONST.satoshiInBtc)
@@ -292,9 +294,15 @@ class SendCoinsScreen extends Component<Props, State> {
     const MAX_TRIES = 5;
 
     for (let tries = 0; tries < MAX_TRIES; tries++) {
-      tx = await createTx(utxosUnspent, this.toNumber(transaction.amount), fee, transaction.address);
+      const { tx: txHex, fee: feeSatoshi } = await createTx(
+        utxosUnspent,
+        this.toNumber(transaction.amount),
+        fee,
+        transaction.address,
+      );
+      tx = txHex;
 
-      const feeSatoshi = btcToSatoshi(fee);
+      fee = satoshiToBtc(feeSatoshi).toNumber();
 
       actualSatoshiPerByte = this.getActualSatoshi(tx, feeSatoshi);
 
@@ -310,10 +318,17 @@ class SendCoinsScreen extends Component<Props, State> {
     this.setState({ isLoading: false }, () => this.navigateToConfirm({ fee, txDecoded, actualSatoshiPerByte }));
   };
 
-  navigateToScanInstantPrivateKey = (onBarCodeScan: (privateKey: string) => void) => {
+  navigateToScanInstantPrivateKey = (onBarCodeScanned: (privateKey: string) => void) => {
     const { navigation } = this.props;
     navigation.navigate(Route.IntegrateKey, {
-      onBarCodeScan,
+      onBarCodeScan: scannedKey => {
+        CreateMessage({
+          title: i18n.message.creatingWallet,
+          description: i18n.message.creatingWalletDescription,
+          type: MessageType.processingState,
+          asyncTask: () => onBarCodeScanned(scannedKey),
+        });
+      },
       title: i18n.send.transaction.scanInstantKeyTitle,
       description: i18n.send.transaction.scanInstantKeyDesc,
       withLink: false,
@@ -415,7 +430,6 @@ class SendCoinsScreen extends Component<Props, State> {
     const { transaction } = this.state;
     return (
       <InputItem
-        multiline
         label={i18n.contactDetails.addressLabel}
         style={styles.addressInput}
         value={transaction.address}
@@ -487,6 +501,7 @@ class SendCoinsScreen extends Component<Props, State> {
             disabled={isLoading}
           />
         }
+        // @ts-ignore
         header={<Header navigation={this.props.navigation} isBackArrow title={i18n.send.header} />}
       >
         <WalletDropdown

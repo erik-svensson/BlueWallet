@@ -4,6 +4,7 @@ import { compose, map, mapValues, values, flatten, uniq } from 'lodash/fp';
 
 import config from './config';
 import logger from './logger';
+import { btcToSatoshi } from './utils/bitcoin';
 
 const BigNumber = require('bignumber.js');
 const bitcoin = require('bitcoinjs-lib');
@@ -169,7 +170,7 @@ module.exports.unsubscribeFromSriptHashes = scriptHashes => {
  */
 module.exports.multiGetBalanceByAddress = async function(addresses, batchsize) {
   batchsize = batchsize || 100;
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new Error('Electrum client is not connected');
   const ret = { balance: 0, unconfirmed_balance: 0, incoming_balance: 0, outgoing_balance: 0, addresses: {} };
 
   const chunks = splitIntoChunks(addresses, batchsize);
@@ -346,7 +347,7 @@ module.exports.estimateFee = async function(numberOfBlocks) {
 module.exports.getDustValue = async () => {
   const relayFee = await mainClient.blockchain_relayfee();
   // magic numbers from electrum vault
-  return (183 * 3 * relayFee) / 1000;
+  return btcToSatoshi((183 * 3 * relayFee) / 1000, 0);
 };
 
 module.exports.broadcast = async function(hex) {

@@ -163,7 +163,7 @@ module.exports = {
       multipleAddresses: '여러 개의 주소',
       singleAddress: '고유 주소',
       segwidAddress:
-        '24개의 개별 단어로 구성된 시드 암호문으로부터 생성된 고유한 세그윗 (Segwit) 주소 트리를 포함합니다.',
+        '12개의 개별 단어로 구성된 시드 암호문으로부터 생성된 고유한 세그윗 (Segwit) 주소 트리를 포함합니다.',
       failed: '지갑을 생성하지 못했습니다',
       walletType: '지갑 유형',
       ar: '표준 및 취소 거래를 수행합니다.',
@@ -173,9 +173,9 @@ module.exports = {
       legacyP2SHTitle: '레거시 P2SH',
       legacyHDSegWitTitle: '레거시 HD SegWit',
       legacy: '기본 유형의 거래를 만듭니다.',
-      legacyHDP2SH: '단일 24워드 시드에서 생성된 P2SH 주소 트리를 포함합니다.',
+      legacyHDP2SH: '단일 12워드 시드에서 생성된 P2SH 주소 트리를 포함합니다.',
       LegacyP2SH: '단일 P2SH 주소를 포함합니다.',
-      LegacyHDSegWit: '단일 24워드 시드에서 생성된 네이티브 segwit 주소 트리를 포함합니다.',
+      LegacyHDSegWit: '단일 12워드 시드에서 생성된 네이티브 segwit 주소 트리를 포함합니다.',
       publicKeyError: '입력된 공개 키가 잘못되었습니다',
     },
     addSuccess: {
@@ -353,7 +353,7 @@ module.exports = {
         '지갑을 만들 때 생성한 두 번째 PDF 문서를 연 후 동일한 순서로 개인 키 시드 문구를 적어 둡니다.',
     },
     transaction: {
-      instant: '빠른',
+      instant: '보안 고속 거래',
       instantDesc: '이 거래는 즉시 확인됩니다. 사용할 때 매우 주의해야 합니다.',
       fastSuccess: '빠른 거래를 완료하셨습니다.',
       alert: '표준',
