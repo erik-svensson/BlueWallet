@@ -64,7 +64,8 @@ ios/Pods/
 
 #Firebase
 /ios/GoogleService-Info.plist
-android/app/google-services.json
+android/app/src/prod/google-services.json
+android/app/src/beta/google-services.json
 
 .history
 .vscode
@@ -76,3 +77,9 @@ config/prod/GoogleService-Info.plist
 
 # Testing
 coverage
+
+# Secrets
+android/keystore.properties
+
+android/app/sentry.properties
+ios/sentry.properties

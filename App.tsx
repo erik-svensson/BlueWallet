@@ -17,7 +17,6 @@ const i18n = require('./loc');
 
 if (!__DEV__) {
   Sentry.init({
-    dsn: config.sentryDsn,
     integrations: [new Integrations.BrowserTracing()],
   });
 }

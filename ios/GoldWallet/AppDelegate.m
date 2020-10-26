@@ -12,6 +12,7 @@
 #import <React/RCTRootView.h>
 #import <Firebase.h>
 #import "RNSplashScreen.h"
+#import "ReactNativeConfig.h"
 
 @implementation AppDelegate
 
@@ -25,7 +26,7 @@
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
-                                                      moduleName:@"GoldWallet"
+                                                      moduleName:[ReactNativeConfig envFor:@"APPLICATION_NAME"]
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
   rootView.backgroundColor = [UIColor whiteColor];
