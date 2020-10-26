@@ -84,7 +84,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
         header={<Header navigation={this.props.navigation} isBackArrow title={i18n.authenticators.add.title} />}
         footer={
           <>
-            <Button onPress={this.scanQRCode} title={i18n.wallets.publicKey.scan} />
+            <Button onPress={this.scanQRCode} title={i18n._.confirm} />
             <FlatButton
               onPress={this.navigateToImport}
               containerStyle={styles.importButtonContainer}
