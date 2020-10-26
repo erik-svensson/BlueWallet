@@ -11,7 +11,7 @@
       }
     },
     "ios.sim.beta": {
-      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet.app",
+      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet Beta.app",
       "build": "xcodebuild -workspace ios/GoldWallet.xcworkspace -scheme \"GoldWallet Beta\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
       "type": "ios.simulator",
       "device": {
@@ -19,17 +19,17 @@
       }
     },
     "android.emu.prod": {
-      "build": "yarn prepare:prod && cd android && ./gradlew assembleProdDebug assembleProdDebugAndroidTest -DtestBuildType=debug && cd ..",
+      "build": "cd android && ./gradlew assembleProdRelease assembleProdReleaseAndroidTest -DtestBuildType=release && cd ..",
       "type": "android.emulator",
-      "binaryPath": "android/app/build/outputs/apk/prod/debug/app-prod-debug.apk",
+      "binaryPath": "android/app/build/outputs/apk/prod/release/app-prod-release.apk",
       "device": {
         "avdName": "Pixel_API_28_AOSP"
       }
     },
     "android.emu.beta": {
-      "build": "yarn prepare:beta && cd android && ./gradlew assembleBetaDebug assembleBetaDebugAndroidTest -DtestBuildType=debug && cd ..",
+      "build": "cd android && ./gradlew assembleBetaRelease assembleBetaReleaseAndroidTest -DtestBuildType=release && cd ..",
       "type": "android.emulator",
-      "binaryPath": "android/app/build/outputs/apk/beta/debug/app-beta-debug.apk",
+      "binaryPath": "android/app/build/outputs/apk/beta/release/app-beta-release.apk",
       "device": {
         "avdName": "Pixel_API_28_AOSP"
       }
