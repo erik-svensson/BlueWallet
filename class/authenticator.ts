@@ -8,7 +8,7 @@ const { RNRandomBytes } = NativeModules;
 import { Authenticator as IAuthenticator, FinalizedPSBT } from 'app/consts';
 
 import config from '../config';
-import { bytesToMnemonic, mnemonicToKeyPair, privateKeyToPublicKey } from '../utils/crypto';
+import { bytesToMnemonic, mnemonicToKeyPair, privateKeyToPublicKey, generatePrivateKey } from '../utils/crypto';
 
 const i18n = require('../loc');
 const signer = require('../models/signer');
@@ -17,6 +17,7 @@ const ENCODING = 'hex';
 const PIN_LENGTH = 4;
 
 export class Authenticator implements IAuthenticator {
+  static randomBytesSize = 16;
   privateKey: any | null;
   publicKey: string;
   entropy: string;
@@ -64,15 +65,17 @@ export class Authenticator implements IAuthenticator {
 
   async init() {
     try {
-      RNRandomBytes.randomBytes(16, async (err, bytes) => {
-        const buffer = Buffer.from(bytes);
+      await RNRandomBytes.randomBytes(Authenticator.randomBytesSize, async (err: string, bytes: any) => {
+        if (err) throw new Error(err);
+        // TODO: to check if encoding is correct
+        const buffer = Buffer.from(bytes, 'base64');
         const mnemonic = bytesToMnemonic(buffer);
-
         this.secret = mnemonic || bytesToMnemonic(buffer);
-        this.privateKey = mnemonicToKeyPair(mnemonic);
-        this.keyPair = ECPair.fromPrivateKey(this.privateKey, {
-          network: config.network,
+        this.privateKey = await generatePrivateKey({
+          salt: buffer,
+          password: buffer,
         });
+        this.keyPair = await mnemonicToKeyPair(mnemonic);
         this.publicKey = privateKeyToPublicKey(this.privateKey);
       });
     } catch (_) {

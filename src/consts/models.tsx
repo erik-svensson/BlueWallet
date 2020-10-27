@@ -62,6 +62,7 @@ export enum Route {
   OptionsAuthenticator = 'OptionsAuthenticator',
   CreateWalletSuccess = 'CreateWalletSuccess',
   DeleteEntity = 'DeleteEntity',
+  CreateAuthenticatorPublicKey = 'CreateAuthenticatorPublicKey',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticator = 'CreateAuthenticator',
   WalletDetails = 'WalletDetails',
@@ -385,6 +386,7 @@ export type MainCardStackNavigatorParams = {
   [Route.EnterPIN]: { id: string };
   [Route.PairAuthenticator]: { id: string };
   [Route.AuthenticatorList]: undefined;
+  [Route.CreateAuthenticatorPublicKey]: { id: string };
   [Route.CreateAuthenticatorSuccess]: { id: string };
   [Route.DeleteEntity]: { onConfirm: () => void; name: string; subtitle: string; title: string };
   [Route.ExportAuthenticator]: { id: string };

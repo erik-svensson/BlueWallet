@@ -144,6 +144,12 @@ module.exports = {
         'You will need it to pair Gold Wallet with desktop application Electrum Vault. It will serve as two-factor authentication.',
       subdescription: 'You can also import your authenticator by choosing the option below.',
     },
+    publicKey: {
+      okButton: 'OK, I understand',
+      title: 'Public Key',
+      subtitle:
+        'You can use this Public Key to import your authenticator to the Electrum Vault desktop application during the creation of the 2FA wallet.',
+    },
     enterPIN: {
       subtitle: 'Enter PIN',
       description: 'Enter this PIN into the Electrum Vault desktop application to finish the pairing process.',

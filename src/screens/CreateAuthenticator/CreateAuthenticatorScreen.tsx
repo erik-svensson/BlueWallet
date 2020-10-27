@@ -91,12 +91,15 @@ class CreateAuthenticatorScreen extends Component<Props> {
       createAuthenticator(
         { name: this.state.label },
         {
-          onSuccess: (authenticator: IAuthenticator) =>
-            navigation.navigate(Route.CreateAuthenticatorSuccess, { id: authenticator.id }),
+          onSuccess: (authenticator: IAuthenticator) => {
+            navigation.goBack();
+            navigation.navigate(Route.CreateAuthenticatorPublicKey, { id: authenticator.id });
+          },
           onFailure: (error: string) => this.onCreateAuthenticatorFailure(error),
         },
       );
     } catch (_) {
+      // TODO: change text for error
       this.onCreateAuthenticatorFailure(i18n.wallets.errors.invalidPrivateKey);
     }
   };

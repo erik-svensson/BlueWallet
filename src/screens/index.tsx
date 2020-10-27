@@ -35,6 +35,7 @@ export { IntegrateKeyScreen } from './IntegrateKeyScreen';
 export { default as AuthenticatorListScreen } from './AuthenticatorList';
 export { default as CreateAuthenticatorScreen } from './CreateAuthenticator';
 export { default as EnterPINScreen } from './EnterPIN';
+export { default as CreateAuthenticatorPublicKeyScreen } from './CreateAuthenticatorPublicKey';
 export { default as CreateAuthenticatorSuccessScreen } from './CreateAuthenticatorSuccess';
 export { default as DeleteEntityScreen } from './DeleteEntity';
 export { default as ExportAuthenticatorScreen } from './ExportAuthenticator';
