@@ -94,7 +94,7 @@ export const filterBySearch = (search: string, transactions: Transaction[]): Tra
   });
 
 export const filterByStatus = (transactions: Transaction[], status: string): Transaction[] => {
-  return transactions.filter(transaction => transaction.tx_type === status);
+  return transactions.filter(transaction => transaction.status === status);
 };
 
 export const filterTransaction = (filters: Filters, transactions: Transaction[]): Transaction[] => {

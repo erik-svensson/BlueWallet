@@ -41,6 +41,13 @@ export const ELECTRUM_VAULT_SEED_PREFIXES = {
   SEED_PREFIX_2FA_SW: '102', // Two-factor auth, using segwit
 };
 
+export enum TransactionStatus {
+  PENDING = 'PENDING',
+  DONE = 'DONE',
+  CANCELED = 'CANCELED',
+  'CANCELED-DONE' = 'CANCELED-DONE',
+}
+
 export const ELECTRUM_VAULT_SEED_KEY = 'Seed version';
 
 export enum FlowType {
@@ -186,6 +193,7 @@ export interface Transaction {
   returnedFee?: number;
   isRecoveredAlertToMe?: boolean;
   height: number;
+  status: TransactionStatus;
   walletPreferredBalanceUnit: string;
 }
 

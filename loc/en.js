@@ -576,7 +576,7 @@ module.exports = {
     transactionStatus: 'Transaction status',
     status: {
       pending: 'Pending',
-      unblocked: 'Unblocked',
+      canceledDone: 'Canceled-done',
       done: 'Done',
       canceled: 'Canceled',
     },

@@ -2,7 +2,7 @@ import { flatten, flattenDeep, max } from 'lodash';
 import { flatten as flattenFp, some, map, compose } from 'lodash/fp';
 import { createSelector } from 'reselect';
 
-import { TxType, Wallet, TransactionInput, TransactionOutput } from 'app/consts';
+import { TxType, Wallet, TransactionInput, Transaction, TransactionOutput, TransactionStatus, CONST } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 
@@ -60,6 +60,24 @@ const getMyAmount = (wallet: Wallet, entities: TxEntity[]) =>
     return amount;
   }, 0);
 
+const getTranasctionStatus = (tx: Transaction, confirmations: number): TransactionStatus => {
+  switch (tx.tx_type) {
+    case TxType.NONVAULT:
+    case TxType.INSTANT:
+      return confirmations < CONST.confirmationsBlocks ? TransactionStatus.PENDING : TransactionStatus.DONE;
+    case TxType.ALERT_PENDING:
+      return TransactionStatus.PENDING;
+    case TxType.ALERT_RECOVERED:
+      return TransactionStatus.CANCELED;
+    case TxType.ALERT_CONFIRMED:
+      return TransactionStatus.DONE;
+    case TxType.RECOVERY:
+      return TransactionStatus['CANCELED-DONE'];
+    default:
+      throw new Error(`Unkown tx_type: ${tx.tx_type}`);
+  }
+};
+
 export const transactions = createSelector(wallets, electrumXSelectors.blockHeight, (walletsList, blockHeight) => {
   const txs = flattenDeep(
     walletsList.map(wallet => {
@@ -68,7 +86,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
       const id = wallet.id;
       return wallet.transactions.map(transaction => {
         const { height } = transaction;
-        const confirmations = height > 0 ? blockHeight - height : 0;
+        const confirmations = max([height > 0 ? blockHeight - height : 0, 0]) || 0;
         const inputsAmount = transaction.inputs.reduce((amount, i) => amount + i.value, 0);
         const outputsAmount = transaction.outputs.reduce((amount, o) => amount + o.value, 0);
 
@@ -112,9 +130,10 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
 
         const baseTransaction = {
           ...transaction,
-          confirmations: max([confirmations, 0]) || 0,
+          confirmations,
           walletPreferredBalanceUnit: walletBalanceUnit,
           walletId: id,
+          status: getTranasctionStatus(transaction, confirmations),
           walletLabel,
           walletTypeReadable: wallet.typeReadable,
         };

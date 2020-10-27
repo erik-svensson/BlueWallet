@@ -3,16 +3,15 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { DateObject } from 'react-native-calendars';
-import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Header, ScreenTemplate, InputItem, Image } from 'app/components';
+import { Header, ScreenTemplate, InputItem, Image, Label } from 'app/components';
 import { Button } from 'app/components/Button';
 import { Calendar } from 'app/components/Calendar';
 import { CardGroup } from 'app/components/CardGroup';
 import { RowTemplate } from 'app/components/RowTemplate';
-import { CONST, Route, MainCardStackNavigatorParams, TxType, Filters } from 'app/consts';
+import { CONST, Route, MainCardStackNavigatorParams, Filters, TransactionStatus } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
@@ -45,7 +44,28 @@ interface State {
   isCalendarVisible: boolean;
 }
 
-const transactionStatusList = [TxType.RECOVERY, TxType.ALERT_PENDING, TxType.ALERT_CONFIRMED, TxType.ALERT_RECOVERED];
+const transactionStatusList = [
+  {
+    status: TransactionStatus.PENDING,
+    text: i18n.filterTransactions.status.pending,
+    color: palette.secondary,
+  },
+  {
+    status: TransactionStatus.DONE,
+    text: i18n.filterTransactions.status.done,
+    color: palette.green,
+  },
+  {
+    status: TransactionStatus.CANCELED,
+    text: i18n.filterTransactions.status.canceled,
+    color: palette.textRed,
+  },
+  {
+    status: TransactionStatus['CANCELED-DONE'],
+    text: i18n.filterTransactions.status.canceledDone,
+    color: palette.green,
+  },
+];
 
 class FilterTransactionsScreen extends PureComponent<Props, State> {
   state = {
@@ -151,6 +171,23 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
             ]}
           />
         </View>
+        <View style={styles.transactionStatusContainer}>
+          <Text style={styles.groupTitle}>{i18n.filterTransactions.transactionStatus}</Text>
+          <View style={styles.statusesContainer}>
+            {transactionStatusList.map(({ status, text, color }) => {
+              const isActive = this.isStatusAtive(status);
+              return (
+                <TouchableOpacity
+                  onPress={() => this.props.updateTransactionStatus(isActive ? '' : status)}
+                  key={status}
+                  style={styles.statusContainer}
+                >
+                  <Label labelStyle={isActive ? { backgroundColor: color } : null}>{text}</Label>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
       </>
     );
   };
@@ -166,21 +203,6 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
       title,
     });
 
-  returnStatusCopy = (txType: TxType) => {
-    switch (txType) {
-      case TxType.ALERT_PENDING:
-        return i18n.filterTransactions.status.pending;
-      case TxType.ALERT_RECOVERED:
-        return i18n.filterTransactions.status.unblocked;
-      case TxType.ALERT_CONFIRMED:
-        return i18n.filterTransactions.status.done;
-      case TxType.RECOVERY:
-        return i18n.filterTransactions.status.canceled;
-      default:
-        return '';
-    }
-  };
-
   isStatusAtive = (status: string) => this.props.filters.transactionStatus === status;
 
   setAddress = (address: string) => {
@@ -189,25 +211,6 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
 
   renderCardContent = (label: string) => (
     <View>
-      <View style={styles.transactionStatusContainer}>
-        <Text style={styles.groupTitle}>{i18n.filterTransactions.transactionStatus}</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {transactionStatusList.map((status, index) => (
-            <TouchableOpacity
-              onPress={() => this.props.updateTransactionStatus(this.isStatusAtive(status) ? '' : status)}
-              key={index}
-              style={[
-                styles.statusContainer,
-                {
-                  borderBottomColor: this.props.filters.transactionStatus === status ? palette.secondary : palette.grey,
-                },
-              ]}
-            >
-              <Text style={styles.filterText}>{this.returnStatusCopy(status)}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
       <View style={styles.spacing20}>
         <InputItem label={label} value={this.props.filters.address} editable={false} onChangeText={this.setAddress} />
         <Image style={styles.image} source={images.nextBlackArrow} />
@@ -278,32 +281,33 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   transactionStatusContainer: {
-    alignItems: 'center',
-    marginHorizontal: -20,
+    alignItems: 'flex-start',
     marginBottom: 20,
+    width: '100%',
+  },
+  statusesContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    maxWidth: '100%',
   },
   buttonOverlay: { position: 'absolute', height: '100%', width: '100%' },
   image: {
     width: 8,
     height: 13,
-    top: 15,
+    top: 30,
     right: 10,
     position: 'absolute',
   },
   clearButton: { padding: 10, alignSelf: 'flex-end', position: 'absolute' },
   clearImage: { height: 25, width: 25 },
-  filterText: {
-    ...typography.caption,
-  },
   groupTitle: {
     color: palette.textGrey,
-    ...typography.subtitle4,
+    ...typography.caption,
     marginBottom: 10,
   },
   statusContainer: {
-    paddingHorizontal: 14,
-    paddingVertical: 7,
-    borderBottomWidth: 1,
-    marginHorizontal: 12,
+    paddingRight: 16,
+    marginBottom: 10,
   },
 });
