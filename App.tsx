@@ -15,7 +15,9 @@ import config from './config';
 
 const i18n = require('./loc');
 
-console.disableYellowBox = true;
+if (process['DISABLE_YELLOW_BOX']) {
+  console.disableYellowBox = true;
+}
 
 if (!__DEV__) {
   Sentry.init({
