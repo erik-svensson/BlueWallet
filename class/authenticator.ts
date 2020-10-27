@@ -1,11 +1,14 @@
 import { ECPair, VaultTxType, address, TxOutput } from 'bitcoinjs-lib';
 import dayjs, { Dayjs } from 'dayjs';
+import { NativeModules } from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
+
+const { RNRandomBytes } = NativeModules;
 
 import { Authenticator as IAuthenticator, FinalizedPSBT } from 'app/consts';
 
 import config from '../config';
-import { generatePrivateKey, bytesToMnemonic, mnemonicToEntropy, privateKeyToPublicKey } from '../utils/crypto';
+import { bytesToMnemonic, mnemonicToKeyPair, privateKeyToPublicKey } from '../utils/crypto';
 
 const i18n = require('../loc');
 const signer = require('../models/signer');
@@ -14,7 +17,7 @@ const ENCODING = 'hex';
 const PIN_LENGTH = 4;
 
 export class Authenticator implements IAuthenticator {
-  privateKey: Buffer | null;
+  privateKey: any | null;
   publicKey: string;
   entropy: string;
   secret: string;
@@ -22,6 +25,7 @@ export class Authenticator implements IAuthenticator {
   readonly id: string;
   createdAt: Dayjs;
   exportPublicKey: string;
+  words: string[];
 
   constructor(readonly name: string) {
     this.id = uuidv4();
@@ -32,11 +36,13 @@ export class Authenticator implements IAuthenticator {
     this.exportPublicKey = '';
     this.keyPair = null;
     this.createdAt = dayjs();
+    this.words = [];
   }
 
   static fromJson(json: string) {
     const data = JSON.parse(json);
     const { privateKey, name, createdAt } = data;
+
     const parsedPrivateKey = Buffer.from(privateKey.data, ENCODING);
     const authenticator = new this(name);
     for (const key of Object.keys(data)) {
@@ -56,29 +62,19 @@ export class Authenticator implements IAuthenticator {
     return authenticator;
   }
 
-  async init({ entropy, mnemonic }: { entropy?: string; mnemonic?: string }) {
-    if (entropy === undefined && mnemonic === undefined) {
-      throw new Error('Not provided entropy or mnemonic');
-    }
-    const _entropy = mnemonic === undefined ? entropy : mnemonicToEntropy(mnemonic).toString(ENCODING);
-
-    if (_entropy === undefined) {
-      throw new Error('Couldn`t get entropy');
-    }
-
-    const buffer = Buffer.from(_entropy, ENCODING);
+  async init() {
     try {
-      this.privateKey = await generatePrivateKey({
-        salt: buffer,
-        password: buffer,
+      RNRandomBytes.randomBytes(16, async (err, bytes) => {
+        const buffer = Buffer.from(bytes);
+        const mnemonic = bytesToMnemonic(buffer);
+
+        this.secret = mnemonic || bytesToMnemonic(buffer);
+        this.privateKey = mnemonicToKeyPair(mnemonic);
+        this.keyPair = ECPair.fromPrivateKey(this.privateKey, {
+          network: config.network,
+        });
+        this.publicKey = privateKeyToPublicKey(this.privateKey);
       });
-      this.entropy = _entropy;
-      this.secret = mnemonic || bytesToMnemonic(buffer);
-      this.keyPair = ECPair.fromPrivateKey(this.privateKey, {
-        network: config.network,
-      });
-      this.publicKey = this.keyPair.publicKey.toString(ENCODING);
-      this.exportPublicKey = privateKeyToPublicKey(this.privateKey);
     } catch (_) {
       throw new Error(i18n.wallets.errors.invalidPrivateKey);
     }

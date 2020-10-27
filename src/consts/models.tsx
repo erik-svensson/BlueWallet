@@ -413,7 +413,7 @@ export interface Authenticator {
   pin: string;
   secret: string;
   createdAt: Dayjs;
-  exportPublicKey: string;
+  exportPublicKey?: string;
 }
 
 export interface ActionMeta {

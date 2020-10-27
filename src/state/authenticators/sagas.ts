@@ -54,12 +54,12 @@ export function* deleteAuthenticatorSaga(action: DeleteAuthenticatorAction | unk
 
 export function* createAuthenticatorSaga(action: CreateAuthenticatorAction | unknown) {
   const {
-    payload: { name, entropy, mnemonic },
+    payload: { name },
     meta,
   } = action as CreateAuthenticatorAction;
   try {
     const authenticator = new Authenticator(name);
-    yield authenticator.init({ entropy, mnemonic });
+    yield authenticator.init();
     BlueApp.addAuthenticator(authenticator);
     yield BlueApp.saveToDisk();
     yield put(createAuthenticatorSuccess(authenticator));
