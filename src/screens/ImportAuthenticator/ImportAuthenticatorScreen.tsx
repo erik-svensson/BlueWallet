@@ -1,16 +1,22 @@
 import { StackNavigationProp } from '@react-navigation/stack';
+import { name } from 'dayjs/locale/*';
 import React, { Component } from 'react';
 import { Text, StyleSheet, Alert, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, TextAreaItem, FlatButton, Button, InputItem } from 'app/components';
-import { Route, CONST, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, CONST, MainCardStackNavigatorParams, Authenticator as IAuthenticator } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { actions } from 'app/state/authenticators';
+import { ApplicationState } from 'app/state';
+import { actions, selectors } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
+
+interface MapStateProps {
+  authenticators: IAuthenticator[];
+}
 
 interface ActionProps {
   createAuthenticator: Function;
@@ -25,6 +31,7 @@ interface State {
 
 interface Props extends ActionProps {
   navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ImportAuthenticator>;
+  authenticators: IAuthenticator[];
 }
 
 type DynamicState = Pick<State, keyof State>;
@@ -122,9 +129,19 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     this.createImportMessage(() => this.createAuthenticator({ name, mnemonic }));
   };
 
+  get validationError(): string | undefined {
+    const { authenticators } = this.props;
+    const { name } = this.state;
+    const authenticatorsLabels = authenticators.map(a => a.name);
+    if (authenticatorsLabels.includes(name.trim())) {
+      return i18n.authenticators.import.inUseValidationError;
+    }
+    return;
+  }
+
   hasErrors = () => {
-    const { mnemonicError, nameError } = this.state;
-    return !!(nameError || mnemonicError);
+    const { mnemonicError } = this.state;
+    return !!(this.validationError || mnemonicError);
   };
 
   canSubmit = () => {
@@ -133,7 +150,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
   };
 
   render() {
-    const { mnemonicError, nameError } = this.state;
+    const { mnemonicError, name } = this.state;
 
     return (
       <ScreenTemplate
@@ -148,6 +165,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}
               onPress={this.scanQRCode}
+              disabled={!name || !!this.validationError}
             />
           </>
         }
@@ -161,7 +179,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
           <Text style={styles.subtitle}>{i18n.authenticators.import.desc2}</Text>
 
           <InputItem
-            error={nameError}
+            error={!!this.validationError}
             setValue={this.onFieldChange('name', this.validateName)}
             label={i18n.wallets.add.inputLabel}
             maxLength={maxWalletNameLength}
@@ -178,11 +196,15 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
   }
 }
 
+const mapStateToProps = (state: ApplicationState): MapStateProps => ({
+  authenticators: selectors.list(state),
+});
+
 const mapDispatchToProps: ActionProps = {
   createAuthenticator: actions.createAuthenticator,
 };
 
-export default connect(null, mapDispatchToProps)(ImportAuthenticatorScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ImportAuthenticatorScreen);
 
 const styles = StyleSheet.create({
   inputItemContainer: {

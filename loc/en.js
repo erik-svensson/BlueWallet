@@ -119,6 +119,7 @@ module.exports = {
       desc1: 'Write down the seed phrase or scan the QR code of the authenticator you want to import.',
       desc2: 'scan QR code by clicking on “or scan QR code” below',
       textAreaPlaceholder: 'Seed phrase',
+      inUseValidationError: 'Authenticator is already in use. Please enter a valid authenticator',
     },
     export: {
       title: 'Export authenticator',

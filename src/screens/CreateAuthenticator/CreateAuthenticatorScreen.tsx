@@ -49,8 +49,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
     const { label } = this.state;
     const authenticatorsLabels = authenticators.map(a => a.name);
     if (authenticatorsLabels.includes(label.trim())) {
-      // TODO: replace correct text
-      return i18n.wallets.importWallet.walletInUseValidationError;
+      return i18n.authenticators.import.inUseValidationError;
     }
     return;
   }
@@ -89,7 +88,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
         throw new Error('Invalid data');
       }
       createAuthenticator(
-        { name: this.state.label },
+        { name: this.state.label, mnemonic: '' },
         {
           onSuccess: (authenticator: IAuthenticator) => {
             navigation.goBack();
