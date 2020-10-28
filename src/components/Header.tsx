@@ -5,6 +5,7 @@ import { Platform, StyleSheet, Text, TouchableOpacity, BackHandler, NativeEventS
 import { images, icons } from 'app/assets';
 import { getStatusBarHeight, palette, typography } from 'app/styles';
 
+import { ElipisisText } from './ElipisisText';
 import { FlatButton } from './FlatButton';
 import { GradientView } from './GradientView';
 import { Image } from './Image';
@@ -88,12 +89,9 @@ export class Header extends PureComponent<Props, State> {
       <GradientView variant={GradientView.Variant.Primary} style={styles.container}>
         <>
           {this.renderLeftItem()}
-          <Text
-            numberOfLines={1}
-            style={[styles.title, { marginLeft: (cancelButtonWidth && cancelButtonWidth / 2) || 0 }]}
-          >
+          <ElipisisText style={[styles.title, { marginLeft: (cancelButtonWidth && cancelButtonWidth / 2) || 0 }]}>
             {title}
-          </Text>
+          </ElipisisText>
           {!!addFunction && (
             <TouchableOpacity style={styles.rightElement} onPress={addFunction}>
               <Image source={icons.addIcon} style={styles.addIcon} />

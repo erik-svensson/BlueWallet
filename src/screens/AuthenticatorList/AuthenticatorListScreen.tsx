@@ -5,7 +5,7 @@ import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { icons, images } from 'app/assets';
-import { Header, Image, ListEmptyState, ScreenTemplate } from 'app/components';
+import { Header, Image, ListEmptyState, ScreenTemplate, ElipisisText } from 'app/components';
 import { Route, Authenticator, FinalizedPSBT, CONST } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { selectors, actions } from 'app/state/authenticators';
@@ -84,9 +84,7 @@ class AuthenticatorListScreen extends Component<Props> {
   renderItem = ({ item }: { item: Authenticator }) => (
     <TouchableOpacity style={styles.authenticatorWrapper} onPress={() => this.navigateToOptions(item.id)}>
       <View style={styles.authenticatorLeftColumn}>
-        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.name}>
-          {item.name}
-        </Text>
+        <ElipisisText style={styles.name}>{item.name}</ElipisisText>
         <Text style={styles.date}>
           {i18n._.created} {formatDate(item.createdAt)}
         </Text>

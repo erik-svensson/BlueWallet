@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { images } from 'app/assets';
-import { Image, Dropdown } from 'app/components';
+import { Image, Dropdown, ElipisisText } from 'app/components';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { typography, palette } from 'app/styles';
 
@@ -52,9 +52,7 @@ export const DashboarContentdHeader = ({
         </View>
       )}
       <View>
-        <Text style={styles.chooseWalletButtonText} numberOfLines={1} ellipsizeMode="tail">
-          {label}
-        </Text>
+        <ElipisisText style={styles.chooseWalletButtonText}>{label}</ElipisisText>
         {isAllWallets && (
           <View style={styles.typeReadableContainer}>
             <Text style={styles.buttonDescription}>BTCV</Text>
