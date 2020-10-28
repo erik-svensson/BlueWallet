@@ -199,7 +199,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
                   key={tag}
                   style={styles.statusContainer}
                 >
-                  <Label labelStyle={isActive ? { backgroundColor: palette.textSecondary } : null}>{text}</Label>
+                  <Label labelStyle={isActive ? styles.yellow : null}>{text}</Label>
                 </TouchableOpacity>
               );
             })}
@@ -316,6 +316,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 20,
     width: '100%',
+  },
+  yellow: {
+    backgroundColor: palette.textSecondary,
   },
   statusesContainer: {
     flex: 1,
