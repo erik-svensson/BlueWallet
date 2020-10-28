@@ -29,7 +29,6 @@ import {
   CreateAuthenticatorPublicKeyScreen,
   CreateAuthenticatorSuccessScreen,
   DeleteEntityScreen,
-  ExportAuthenticatorScreen,
   ImportAuthenticatorScreen,
   CreateWalletSuccessScreen,
   IntegrateKeyScreen,
@@ -37,7 +36,6 @@ import {
   RecoverySendScreen,
   RecoverySeedScreen,
   ImportWalletChooseTypeScreen,
-  PairAuthenticatorScreen,
   OptionsAuthenticatorScreen,
 } from 'app/screens';
 
@@ -71,7 +69,6 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.CreateAuthenticatorPublicKey} component={CreateAuthenticatorPublicKeyScreen} />
     <Stack.Screen name={Route.CreateAuthenticatorSuccess} component={CreateAuthenticatorSuccessScreen} />
     <Stack.Screen name={Route.DeleteEntity} component={DeleteEntityScreen} />
-    <Stack.Screen name={Route.ExportAuthenticator} component={ExportAuthenticatorScreen} />
     <Stack.Screen name={Route.ImportAuthenticator} component={ImportAuthenticatorScreen} />
     <Stack.Screen name={Route.CreateWalletSuccess} component={CreateWalletSuccessScreen} />
     <Stack.Screen name={Route.IntegrateKey} component={IntegrateKeyScreen} />
@@ -79,7 +76,6 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.RecoverySend} component={RecoverySendScreen} />
     <Stack.Screen name={Route.RecoverySeed} component={RecoverySeedScreen} />
     <Stack.Screen name={Route.ImportWalletChooseType} component={ImportWalletChooseTypeScreen} />
-    <Stack.Screen name={Route.PairAuthenticator} component={PairAuthenticatorScreen} />
     <Stack.Screen name={Route.OptionsAuthenticator} component={OptionsAuthenticatorScreen} />
   </Stack.Navigator>
 );
