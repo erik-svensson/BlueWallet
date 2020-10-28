@@ -95,10 +95,10 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
       }
     }
 
-    InteractionManager.runAfterInteractions(async () => {
-      const bip21encoded = bip21.encode(this.state.address);
-      this.setState({ bip21encoded });
+    const bip21encoded = bip21.encode(this.state.address, {
+      amount: this.state.amount,
     });
+    this.setState({ bip21encoded });
   };
 
   updateAmount = (amount: string) => {
@@ -169,7 +169,6 @@ export class ReceiveCoinsScreen extends Component<Props, State> {
   render() {
     const { amount, bip21encoded, wallet } = this.state;
     const qrCode = bip21encoded.replace('bitcoin:', '');
-
     return (
       <ScreenTemplate
         footer={
