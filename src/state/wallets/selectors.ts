@@ -2,7 +2,17 @@ import { flatten, flattenDeep, max } from 'lodash';
 import { flatten as flattenFp, some, map, compose } from 'lodash/fp';
 import { createSelector } from 'reselect';
 
-import { TxType, Wallet, TransactionInput, Transaction, TransactionOutput, TransactionStatus, CONST } from 'app/consts';
+import {
+  TxType,
+  Wallet,
+  TransactionInput,
+  Transaction,
+  TransactionOutput,
+  TransactionStatus,
+  CONST,
+  TagsType,
+  Tags,
+} from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 
@@ -76,6 +86,17 @@ const getTranasctionStatus = (tx: Transaction, confirmations: number): Transacti
     default:
       throw new Error(`Unkown tx_type: ${tx.tx_type}`);
   }
+};
+
+const getTranasctionTags = (tx: Transaction): TagsType[] => {
+  const tags: TagsType[] = [tx.status];
+  if (tx.unblockedAmount !== undefined) {
+    tags.push(Tags.UNBLOCKED);
+  }
+  if (tx.blockedAmount !== undefined) {
+    tags.push(Tags.BLOCKED);
+  }
+  return tags;
 };
 
 export const transactions = createSelector(wallets, electrumXSelectors.blockHeight, (walletsList, blockHeight) => {
@@ -180,56 +201,58 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
     }),
   );
 
-  // enhance cancel-done transaction made by our wallet
-  return txs.map(tx => {
-    if (tx.tx_type !== TxType.RECOVERY || tx.value > 0) {
-      return tx;
-    }
-
-    const recoveryInputsTxIds = flatten(tx.inputs.map(({ txid }) => txid));
-
-    const recoveredTxs = txs.filter(t => {
-      if (t.value >= 0 || t.walletId !== tx.walletId || t.txid === tx.txid) {
-        return false;
+  // enhance cancel-done transaction made by our wallet and add tags
+  return txs
+    .map(tx => {
+      if (tx.tx_type !== TxType.RECOVERY || tx.value > 0) {
+        return tx;
       }
 
-      return compose(
-        some((inTxid: string) => recoveryInputsTxIds.includes(inTxid)),
-        flattenFp,
-        map(({ txid }) => txid),
-      )(t.inputs);
-    });
+      const recoveryInputsTxIds = flatten(tx.inputs.map(({ txid }) => txid));
 
-    if (recoveredTxs.length === 0) {
-      return tx;
-    }
+      const recoveredTxs = txs.filter(t => {
+        if (t.value >= 0 || t.walletId !== tx.walletId || t.txid === tx.txid) {
+          return false;
+        }
 
-    const { valueWithoutFee: v, returnedFee: rF, unblockedAmount: uA } = recoveredTxs.reduce(
-      (
-        {
-          valueWithoutFee,
-          returnedFee,
-          unblockedAmount,
-        }: { valueWithoutFee: number; returnedFee: number; unblockedAmount: number },
-        rTx,
-      ) => {
-        return {
-          valueWithoutFee: valueWithoutFee + Math.abs(rTx.valueWithoutFee),
-          returnedFee: returnedFee + Math.abs(rTx.fee || 0),
-          unblockedAmount: unblockedAmount + Math.abs(rTx.blockedAmount || 0),
-        };
-      },
-      { valueWithoutFee: 0, returnedFee: 0, unblockedAmount: 0 },
-    );
+        return compose(
+          some((inTxid: string) => recoveryInputsTxIds.includes(inTxid)),
+          flattenFp,
+          map(({ txid }) => txid),
+        )(t.inputs);
+      });
 
-    return {
-      ...tx,
-      valueWithoutFee: v,
-      returnedFee: roundBtcToSatoshis(rF),
-      unblockedAmount: roundBtcToSatoshis(uA),
-      recoveredTxsCounter: recoveredTxs.length,
-    };
-  });
+      if (recoveredTxs.length === 0) {
+        return tx;
+      }
+
+      const { valueWithoutFee: v, returnedFee: rF, unblockedAmount: uA } = recoveredTxs.reduce(
+        (
+          {
+            valueWithoutFee,
+            returnedFee,
+            unblockedAmount,
+          }: { valueWithoutFee: number; returnedFee: number; unblockedAmount: number },
+          rTx,
+        ) => {
+          return {
+            valueWithoutFee: valueWithoutFee + Math.abs(rTx.valueWithoutFee),
+            returnedFee: returnedFee + Math.abs(rTx.fee || 0),
+            unblockedAmount: unblockedAmount + Math.abs(rTx.blockedAmount || 0),
+          };
+        },
+        { valueWithoutFee: 0, returnedFee: 0, unblockedAmount: 0 },
+      );
+
+      return {
+        ...tx,
+        valueWithoutFee: v,
+        returnedFee: roundBtcToSatoshis(rF),
+        unblockedAmount: roundBtcToSatoshis(uA),
+        recoveredTxsCounter: recoveredTxs.length,
+      };
+    })
+    .map(tx => ({ ...tx, tags: getTranasctionTags(tx) }));
 });
 
 export const getTranasctionsByWalletId = createSelector(

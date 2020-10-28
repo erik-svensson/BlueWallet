@@ -6,16 +6,17 @@ import { DateObject } from 'react-native-calendars';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Header, ScreenTemplate, InputItem, Image, Label } from 'app/components';
+import { Header, ScreenTemplate, InputItem, Image, Label, FlatButton } from 'app/components';
 import { Button } from 'app/components/Button';
 import { Calendar } from 'app/components/Calendar';
 import { CardGroup } from 'app/components/CardGroup';
 import { RowTemplate } from 'app/components/RowTemplate';
-import { CONST, Route, MainCardStackNavigatorParams, Filters, TransactionStatus } from 'app/consts';
+import { CONST, Route, MainCardStackNavigatorParams, Filters, Tags, TagsType } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import * as actions from 'app/state/filters/actions';
+import * as selectors from 'app/state/filters/selectors';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -29,6 +30,7 @@ interface Props {
   navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.FilterTransactions>;
   route: RouteProp<MainCardStackNavigatorParams, Route.FilterTransactions>;
   filters: Filters;
+  tags: TagsType[];
   activateFilters: () => actions.ActivateFiltersAction;
   updateAddress: (value: string) => actions.UpdateAddressAction;
   updateDateKey: (value: number) => actions.UpdateDateKeyAction;
@@ -37,33 +39,44 @@ interface Props {
   updateFromAmount: (value: string) => actions.UpdateFromAmountAction;
   updateToAmount: (value: string) => actions.UpdateToAmountAction;
   updateTransactionType: (value: string) => actions.UpdateTransactionTypeAction;
-  updateTransactionStatus: (value: string) => actions.UpdateTransactionStatusAction;
+  toggleTransactionTag: (value: TagsType) => actions.ToggleTransactionTagAction;
+  clearFilters: () => actions.ClearFiltersAction;
 }
 
 interface State {
   isCalendarVisible: boolean;
 }
 
-const transactionStatusList = [
+const transactionTagsBase = [
   {
-    status: TransactionStatus.PENDING,
+    tag: Tags.PENDING,
     text: i18n.filterTransactions.status.pending,
-    color: palette.secondary,
   },
   {
-    status: TransactionStatus.DONE,
+    tag: Tags.DONE,
     text: i18n.filterTransactions.status.done,
-    color: palette.green,
   },
   {
-    status: TransactionStatus.CANCELED,
-    text: i18n.filterTransactions.status.canceled,
-    color: palette.textRed,
-  },
-  {
-    status: TransactionStatus['CANCELED-DONE'],
+    tag: Tags['CANCELED-DONE'],
     text: i18n.filterTransactions.status.canceledDone,
-    color: palette.green,
+  },
+  {
+    tag: Tags.CANCELED,
+    text: i18n.filterTransactions.status.canceled,
+  },
+];
+
+const transactionTagsReceived = transactionTagsBase;
+
+const transactionTagsSent = [
+  ...transactionTagsBase,
+  {
+    tag: Tags.BLOCKED,
+    text: i18n.transactions.label.blocked,
+  },
+  {
+    tag: Tags.UNBLOCKED,
+    text: i18n.transactions.label.unblocked,
   },
 ];
 
@@ -106,6 +119,10 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
     }
     return '';
   };
+
+  get transactionTagsList() {
+    return this.props.filters.transactionType === CONST.receive ? transactionTagsReceived : transactionTagsSent;
+  }
 
   renderCommonCardContent = () => {
     const { fromDate, toDate, fromAmount, toAmount } = this.props.filters;
@@ -174,15 +191,15 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
         <View style={styles.transactionStatusContainer}>
           <Text style={styles.groupTitle}>{i18n.filterTransactions.transactionStatus}</Text>
           <View style={styles.statusesContainer}>
-            {transactionStatusList.map(({ status, text, color }) => {
-              const isActive = this.isStatusAtive(status);
+            {this.transactionTagsList.map(({ tag, text }) => {
+              const isActive = this.isTagActive(tag);
               return (
                 <TouchableOpacity
-                  onPress={() => this.props.updateTransactionStatus(isActive ? '' : status)}
-                  key={status}
+                  onPress={() => this.props.toggleTransactionTag(tag)}
+                  key={tag}
                   style={styles.statusContainer}
                 >
-                  <Label labelStyle={isActive ? { backgroundColor: color } : null}>{text}</Label>
+                  <Label labelStyle={isActive ? { backgroundColor: palette.textSecondary } : null}>{text}</Label>
                 </TouchableOpacity>
               );
             })}
@@ -203,7 +220,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
       title,
     });
 
-  isStatusAtive = (status: string) => this.props.filters.transactionStatus === status;
+  isTagActive = (tag: TagsType) => this.props.tags.includes(tag);
 
   setAddress = (address: string) => {
     this.props.updateAddress(address);
@@ -219,12 +236,22 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
       {this.renderCommonCardContent()}
     </View>
   );
+
+  clearFilters = () => {
+    this.props.clearFilters();
+  };
+
   render() {
     return (
       <ScreenTemplate
         footer={
           <>
             <Button title={i18n.filterTransactions.filter} onPress={this.onFilterButtonPress} />
+            <FlatButton
+              containerStyle={styles.flatButton}
+              title={i18n.filterTransactions.clearAll}
+              onPress={this.clearFilters}
+            />
           </>
         }
         header={<Header navigation={this.props.navigation} isBackArrow={true} title={i18n.filterTransactions.header} />}
@@ -257,6 +284,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   filters: state.filters,
+  tags: selectors.getTags(state),
 });
 
 const mapDispatchToProps = {
@@ -268,12 +296,16 @@ const mapDispatchToProps = {
   updateFromAmount: actions.updateFromAmount,
   updateToAmount: actions.updateToAmount,
   updateTransactionType: actions.updateTransactionType,
-  updateTransactionStatus: actions.updateTransactionStatus,
+  toggleTransactionTag: actions.toggleTransactionTag,
+  clearFilters: actions.clearFilters,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterTransactionsScreen);
 
 const styles = StyleSheet.create({
+  flatButton: {
+    marginTop: 16,
+  },
   spacing10: {
     marginBottom: 10,
   },
@@ -308,6 +340,6 @@ const styles = StyleSheet.create({
   },
   statusContainer: {
     paddingRight: 16,
-    marginBottom: 10,
+    marginBottom: 16,
   },
 });

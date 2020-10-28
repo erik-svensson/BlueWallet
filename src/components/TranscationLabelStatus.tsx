@@ -16,7 +16,7 @@ const readableTransactionStatus = {
   [TransactionStatus['CANCELED-DONE']]: i18n.transactions.label.canceledDone,
 };
 
-export const TranscationLabelStatus = ({ status }: { status: TranscationStatus }) => {
+export const TranscationLabelStatus = ({ status }: { status: TransactionStatus }) => {
   return readableTransactionStatus[status] ? (
     <Label labelStyle={styles[status]}>{readableTransactionStatus[status]}</Label>
   ) : null;
