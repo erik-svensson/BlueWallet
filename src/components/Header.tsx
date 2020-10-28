@@ -1,11 +1,11 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
-import { Platform, StyleSheet, Text, TouchableOpacity, BackHandler, NativeEventSubscription } from 'react-native';
+import { Platform, StyleSheet, TouchableOpacity, BackHandler, NativeEventSubscription } from 'react-native';
 
 import { images, icons } from 'app/assets';
 import { getStatusBarHeight, palette, typography } from 'app/styles';
 
-import { ElipisisText } from './ElipisisText';
+import { EllipsisText } from './EllipsisText';
 import { FlatButton } from './FlatButton';
 import { GradientView } from './GradientView';
 import { Image } from './Image';
@@ -89,9 +89,9 @@ export class Header extends PureComponent<Props, State> {
       <GradientView variant={GradientView.Variant.Primary} style={styles.container}>
         <>
           {this.renderLeftItem()}
-          <ElipisisText style={[styles.title, { marginLeft: (cancelButtonWidth && cancelButtonWidth / 2) || 0 }]}>
+          <EllipsisText style={[styles.title, { marginLeft: (cancelButtonWidth && cancelButtonWidth / 2) || 0 }]}>
             {title}
-          </ElipisisText>
+          </EllipsisText>
           {!!addFunction && (
             <TouchableOpacity style={styles.rightElement} onPress={addFunction}>
               <Image source={icons.addIcon} style={styles.addIcon} />

@@ -10,7 +10,7 @@ interface Props extends Text {
   ellipsizeMode?: EllipsizeMode;
 }
 
-export const ElipisisText = ({ children, style, numberOfLines = 1, ellipsizeMode = 'tail' }: Props) => (
+export const EllipsisText = ({ children, style, numberOfLines = 1, ellipsizeMode = 'tail' }: Props) => (
   <Text numberOfLines={numberOfLines} ellipsizeMode={ellipsizeMode} style={style}>
     {children}
   </Text>

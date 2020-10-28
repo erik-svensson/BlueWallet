@@ -6,7 +6,7 @@ import { Route, Wallet, CONST } from 'app/consts';
 import { NavigationService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
-import { ElipisisText } from './ElipisisText';
+import { EllipsisText } from './EllipsisText';
 import { GradientView } from './GradientView';
 import { Image } from './Image';
 import { StyledText } from './StyledText';
@@ -38,9 +38,9 @@ export class WalletCard extends React.Component<Props> {
           <Image source={images.coinLogoInCircle} style={styles.iconInCircle} resizeMode="contain" />
           <View style={styles.cardContent}>
             <View style={styles.row}>
-              <ElipisisText style={styles.walletType}>
+              <EllipsisText style={styles.walletType}>
                 {isAllWallets ? wallet.getLabel() : `${i18n.wallets.dashboard.allWallets}`}
-              </ElipisisText>
+              </EllipsisText>
               {showEditButton && isAllWallets && (
                 <StyledText title={i18n.wallets.details.details} onPress={this.goToWalletDetails} />
               )}

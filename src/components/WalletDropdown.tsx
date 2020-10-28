@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { images } from 'app/assets';
-import { Image, Dropdown, ElipisisText } from 'app/components';
+import { Image, Dropdown, EllipsisText } from 'app/components';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -18,7 +18,7 @@ export const WalletDropdown = ({ balance, unit, label, onSelectPress }: Props) =
   <Dropdown
     label={
       <>
-        <ElipisisText style={styles.buttonDescription}>{label}</ElipisisText>
+        <EllipsisText style={styles.buttonDescription}>{label}</EllipsisText>
         <Image source={images.coin} style={styles.coinIcon} />
       </>
     }

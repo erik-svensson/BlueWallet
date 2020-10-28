@@ -7,7 +7,7 @@ import { View, StyleSheet, Alert, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Header, ScreenTemplate, Button, StyledText, Image, Text, Warning, ElipisisText } from 'app/components';
+import { Header, ScreenTemplate, Button, StyledText, Image, Text, Warning, EllipsisText } from 'app/components';
 import { Route, MainCardStackNavigatorParams, RootStackParams, ActionMeta } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import * as txNotesActions from 'app/state/transactionsNotes/actions';
@@ -208,7 +208,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
               </Text>
             </View>
             <View style={styles.descriptionContainer}>
-              <ElipisisText style={styles.buttonDescription}>{fromWallet.label}</ElipisisText>
+              <EllipsisText style={styles.buttonDescription}>{fromWallet.label}</EllipsisText>
               <Image source={images.coin} style={styles.coinIcon} />
             </View>
           </View>

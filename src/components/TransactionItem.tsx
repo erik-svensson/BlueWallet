@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { icons } from 'app/assets';
-import { TranscationLabelStatus, Image, Label, ElipisisText } from 'app/components';
+import { TranscationLabelStatus, Image, Label, EllipsisText } from 'app/components';
 import { Transaction, TxType } from 'app/consts';
 import { getConfirmationsText } from 'app/helpers/helpers';
 import { typography, palette } from 'app/styles';
@@ -32,7 +32,7 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
       <View style={styles.walletLabelWrapper}>
         {renderArrowIcon(item.valueWithoutFee)}
         <Image source={icons.wallet} style={styles.wallet} resizeMode="contain" />
-        <ElipisisText style={styles.walletLabel}>{item.walletLabel}</ElipisisText>
+        <EllipsisText style={styles.walletLabel}>{item.walletLabel}</EllipsisText>
       </View>
       {!!item.note && <Text style={typography.caption}>{item.note}</Text>}
       <Text style={styles.label}>
