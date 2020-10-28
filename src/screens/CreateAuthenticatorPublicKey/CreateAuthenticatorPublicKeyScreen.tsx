@@ -41,6 +41,7 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
     const { authenticator } = this.props;
     Share.open({ message: authenticator?.publicKey });
   };
+
   render() {
     const { authenticator, navigation } = this.props;
 
@@ -55,7 +56,6 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
       >
         <Text style={styles.subtitle}>{i18n.authenticators.publicKey.title}</Text>
         <Text style={styles.description}>{i18n.authenticators.add.description}</Text>
-        <Text>{authenticator.publicKey}</Text>
         {authenticator && <TextAreaItem style={styles.textArea} value={authenticator.publicKey} editable={false} />}
         <FlatButton onPress={this.share} title={i18n.receive.details.share} />
       </ScreenTemplate>

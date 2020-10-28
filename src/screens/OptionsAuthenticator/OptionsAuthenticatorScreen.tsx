@@ -2,10 +2,11 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
+import Share from 'react-native-share';
 import { connect } from 'react-redux';
 
-import { icons } from 'app/assets';
-import { Header, ScreenTemplate, Image, Separator } from 'app/components';
+import { Header, ScreenTemplate, FlatButton, Separator, TextAreaItem, Mnemonic } from 'app/components';
 import { Authenticator, MainCardStackNavigatorParams, Route } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
@@ -57,16 +58,9 @@ class OptionsAuthenticatorScreen extends Component<Props> {
       });
   };
 
-  navigateToPair = () => {
-    const { authenticator, navigation } = this.props;
-
-    authenticator && navigation.navigate(Route.PairAuthenticator, { id: authenticator.id });
-  };
-
-  navigateToExport = () => {
-    const { authenticator, navigation } = this.props;
-
-    authenticator && navigation.navigate(Route.ExportAuthenticator, { id: authenticator.id });
+  share = () => {
+    const { authenticator } = this.props;
+    Share.open({ message: authenticator?.publicKey });
   };
 
   render() {
@@ -87,15 +81,14 @@ class OptionsAuthenticatorScreen extends Component<Props> {
           </Text>
           <Separator />
           <View style={styles.optionsContainer}>
-            <Text style={[styles.desc, styles.bottomSpace]}>{i18n.authenticators.options.sectionTitle}</Text>
-            <TouchableOpacity style={styles.optionWrapper} onPress={this.navigateToExport}>
-              <Image source={icons.export} style={styles.icon} />
-              <Text>{i18n.authenticators.options.export}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionWrapper} onPress={this.navigateToPair}>
-              <Image source={icons.pair} style={styles.icon} />
-              <Text>{i18n.authenticators.options.pair}</Text>
-            </TouchableOpacity>
+            <Text style={styles.subtitlePairKey}>{i18n.authenticators.publicKey.title}</Text>
+            <TextAreaItem value={authenticator.publicKey} editable={false} style={styles.textArea} />
+            <FlatButton onPress={this.share} title={i18n.receive.details.share} />
+            <Text style={styles.subtitle}>{i18n.wallets.exportWallet.title}</Text>
+            <View style={styles.qrCodeContainer}>
+              <QRCode quietZone={10} value={authenticator.QRCode} size={140} ecl={'H'} />
+            </View>
+            <Mnemonic mnemonic={authenticator.secret} />
           </View>
         </View>
         <TouchableOpacity style={styles.deleteWrapper} onPress={this.onDelete}>
@@ -131,20 +124,6 @@ const styles = StyleSheet.create({
     ...typography.headline5,
     color: palette.lightRed,
   },
-  bottomSpace: {
-    marginBottom: 24,
-  },
-  optionWrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 14,
-  },
-  icon: {
-    marginRight: 20,
-    width: 21,
-    height: 21,
-  },
   center: {
     textAlign: 'center',
   },
@@ -160,5 +139,18 @@ const styles = StyleSheet.create({
   optionsContainer: {
     paddingTop: 4,
     borderColor: palette.lightGrey,
+  },
+  textArea: {
+    height: 130,
+  },
+  subtitlePairKey: {
+    marginTop: 12,
+    marginBottom: 18,
+    ...typography.headline4,
+    textAlign: 'center',
+  },
+  qrCodeContainer: {
+    paddingVertical: 24,
+    alignItems: 'center',
   },
 });
