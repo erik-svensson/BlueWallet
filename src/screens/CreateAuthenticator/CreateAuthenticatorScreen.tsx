@@ -57,7 +57,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
 
   canSubmit = () => {
     const { label } = this.state;
-    return !label.length;
+    return !label.length || !!this.validationError;
   };
 
   confirmCreateAuthenticator = () => {
