@@ -430,10 +430,11 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
             />
           </View>
           {hasCustomWords && (
-            <InputItem
+            <TextAreaItem
               value={customWords}
-              setValue={this.setCustomWords}
-              label={i18n.wallets.importWallet.customWords}
+              onChangeText={this.setCustomWords}
+              placeholder={i18n.wallets.importWallet.customWords}
+              style={styles.textAreaCustomWords}
             />
           )}
         </View>
@@ -472,6 +473,11 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     width: '100%',
     flexGrow: 1,
+  },
+  textAreaCustomWords: {
+    marginTop: 24,
+    height: 160,
+    marginBottom: 24,
   },
   title: {
     ...typography.headline4,
