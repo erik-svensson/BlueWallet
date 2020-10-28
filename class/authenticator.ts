@@ -26,7 +26,6 @@ export class Authenticator implements IAuthenticator {
   readonly id: string;
   createdAt: Dayjs;
   exportPublicKey: string;
-  words: string[];
 
   constructor(readonly name: string) {
     this.id = uuidv4();
@@ -37,7 +36,6 @@ export class Authenticator implements IAuthenticator {
     this.exportPublicKey = '';
     this.keyPair = null;
     this.createdAt = dayjs();
-    this.words = [];
   }
 
   static fromJson(json: string) {
@@ -75,8 +73,8 @@ export class Authenticator implements IAuthenticator {
           salt: buffer,
           password: buffer,
         });
+        this.publicKey = await privateKeyToPublicKey(this.privateKey);
         this.keyPair = await mnemonicToKeyPair(mnemonic);
-        this.publicKey = privateKeyToPublicKey(this.privateKey);
       });
     } catch (_) {
       throw new Error(i18n.wallets.errors.invalidPrivateKey);
