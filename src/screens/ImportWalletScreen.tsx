@@ -5,9 +5,9 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet, Text, Keyboard, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Header, TextAreaItem, FlatButton, ScreenTemplate, InputItem } from 'app/components';
+import { Header, TextAreaItem, FlatButton, ScreenTemplate, InputItem, CheckBox } from 'app/components';
 import { Button } from 'app/components/Button';
-import { Route, Wallet, MainCardStackNavigatorParams, ActionMeta } from 'app/consts';
+import { Route, Wallet, MainCardStackNavigatorParams, ActionMeta, ELECTRUM_VAULT_SEED_PREFIXES } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
@@ -40,14 +40,22 @@ interface State {
   text: string;
   label: string;
   validationError: string;
+  hasCustomWords: boolean;
+  customWords: string;
 }
 
 export class ImportWalletScreen extends PureComponent<Props, State> {
   state = {
+    hasCustomWords: false,
     text: '',
+    customWords: '',
     label: '',
     validationError: '',
   };
+
+  setCustomWords = (customWords: string) => this.setState({ customWords });
+
+  toggleHasCustomWords = () => this.setState({ hasCustomWords: !this.state.hasCustomWords });
 
   showErrorMessageScreen = ({
     title = i18n.message.somethingWentWrong,
@@ -267,7 +275,22 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   };
 
   importLegacyWallet = async (trimmedMnemonic: string) => {
+    const { customWords, hasCustomWords } = this.state;
+    const trimmedCustomWords = customWords.trim();
+
     try {
+      if (isElectrumVaultMnemonic(trimmedMnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SW)) {
+        const electrumHDSegwitBech32Wallet = new HDSegwitBech32Wallet({ isElectrumVault: true });
+        if (hasCustomWords) {
+          electrumHDSegwitBech32Wallet.setPassword(trimmedCustomWords);
+        }
+        await electrumHDSegwitBech32Wallet.setSecret(trimmedMnemonic);
+        await electrumHDSegwitBech32Wallet.fetchTransactions();
+        if (electrumHDSegwitBech32Wallet.getTransactions().length > 0) {
+          return this.saveWallet(electrumHDSegwitBech32Wallet);
+        }
+      }
+
       const segwitWallet = new SegwitP2SHWallet();
       segwitWallet.setSecret(trimmedMnemonic);
       if (segwitWallet.getAddress()) {
@@ -310,6 +333,9 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       }
 
       const hdLegactP2PKH = new HDLegacyP2PKHWallet();
+      if (hasCustomWords) {
+        hdLegactP2PKH.setPassword(trimmedCustomWords);
+      }
       await hdLegactP2PKH.setSecret(trimmedMnemonic);
       if (hdLegactP2PKH.validateMnemonic()) {
         await hdSegwitBech32.fetchTransactions();
@@ -352,12 +378,6 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
   importMnemonic = (mnemonic: string) => {
     const trimmedMnemonic = mnemonic.trim().replace(/ +/g, ' ');
-
-    if (isElectrumVaultMnemonic(trimmedMnemonic) && !bip39.validateMnemonic(trimmedMnemonic)) {
-      this.showErrorMessageScreen({ description: i18n.wallets.importWallet.unsupportedElectrumVaultMnemonic });
-      return;
-    }
-
     if (this.props?.route.params.walletType === HDSegwitP2SHArWallet.type) {
       return this.createARWallet(trimmedMnemonic);
     }
@@ -369,7 +389,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     });
   };
   render() {
-    const { validationError, text, label } = this.state;
+    const { validationError, text, label, hasCustomWords, customWords } = this.state;
     return (
       <ScreenTemplate
         footer={
@@ -400,6 +420,22 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
             placeholder={i18n.wallets.importWallet.placeholder}
             style={styles.textArea}
           />
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              onPress={this.toggleHasCustomWords}
+              containerStyle={styles.checkbox}
+              left
+              checked={hasCustomWords}
+              title={<Text style={styles.checkboxText}>{i18n.wallets.importWallet.extendWithCustomWords}</Text>}
+            />
+          </View>
+          {hasCustomWords && (
+            <InputItem
+              value={customWords}
+              setValue={this.setCustomWords}
+              label={i18n.wallets.importWallet.customWords}
+            />
+          )}
         </View>
       </ScreenTemplate>
     );
@@ -417,6 +453,21 @@ const mapDispatchToProps = {
 export default connect(mapStateToProps, mapDispatchToProps)(ImportWalletScreen);
 
 const styles = StyleSheet.create({
+  checkboxContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  checkbox: {
+    marginLeft: -12,
+    backgroundColor: palette.white,
+    borderWidth: 0,
+  },
+  checkboxText: {
+    paddingLeft: 20,
+  },
   inputItemContainer: {
     paddingTop: 16,
     width: '100%',
