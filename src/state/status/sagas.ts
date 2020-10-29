@@ -34,13 +34,15 @@ function* onConnect() {
   yield put(updateServerConnectionStatusSuccess(true));
 }
 
-function onClose() {
-  addToastMessage({
-    description: i18n.connectionIssue.offlineMessageDescription,
-    title: i18n.connectionIssue.offlineMessageTitle,
-    secondsAfterHide: 20,
-  }),
-    updateServerConnectionStatusSuccess(false);
+function* onClose() {
+  yield put(
+    addToastMessage({
+      description: i18n.connectionIssue.offlineMessageDescription,
+      title: i18n.connectionIssue.offlineMessageTitle,
+      secondsAfterHide: 20,
+    }),
+  );
+  yield put(updateServerConnectionStatusSuccess(false));
 }
 
 function* onReconnect() {

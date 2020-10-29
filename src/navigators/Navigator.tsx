@@ -166,7 +166,7 @@ class Navigator extends React.Component<Props, State> {
     return (
       <>
         <RootNavigator />
-        {internetConnectionStatus && isAuthenticated && <ToastManager />}
+        {isAuthenticated && <ToastManager />}
         {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
       </>
     );
