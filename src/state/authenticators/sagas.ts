@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { takeLatest, takeEvery, put, select } from 'redux-saga/effects';
 
 import { BlueApp, Authenticator } from 'app/legacy';
@@ -15,6 +16,9 @@ import {
   signTransactionSuccess,
   signTransactionFailure,
   SignTransactionAction,
+  UpdateAuthenticatorAction,
+  updateAuthenticatorSuccess,
+  updateAuthenticatorFailure,
 } from './actions';
 import { list } from './selectors';
 
@@ -75,6 +79,17 @@ export function* createAuthenticatorSaga(action: CreateAuthenticatorAction | unk
   }
 }
 
+export function* updateAuthenticatorSaga(action: UpdateAuthenticatorAction | unknown) {
+  const { authenticator } = action as UpdateAuthenticatorAction;
+  try {
+    const updatedAuthenticator = cloneDeep(BlueApp.updateAuthenticator(authenticator));
+    yield BlueApp.saveToDisk();
+    yield put(updateAuthenticatorSuccess(updatedAuthenticator));
+  } catch (e) {
+    yield put(updateAuthenticatorFailure(e.message));
+  }
+}
+
 export function* signTransactionSaga(action: SignTransactionAction | unknown) {
   const {
     payload: { encodedPsbt },
@@ -109,4 +124,5 @@ export default [
   takeEvery(AuthenticatorsAction.DeleteAuthenticator, deleteAuthenticatorSaga),
   takeEvery(AuthenticatorsAction.CreateAuthenticator, createAuthenticatorSaga),
   takeEvery(AuthenticatorsAction.SignTransaction, signTransactionSaga),
+  takeEvery(AuthenticatorsAction.UpdateAuthenticator, updateAuthenticatorSaga),
 ];

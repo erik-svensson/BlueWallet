@@ -1,13 +1,15 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { cloneDeep } from 'lodash';
 import React, { Component } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import Share from 'react-native-share';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate, FlatButton, Separator, TextAreaItem, Mnemonic } from 'app/components';
+import { Header, ScreenTemplate, FlatButton, Separator, TextAreaItem, Mnemonic, InputItem } from 'app/components';
 import { Authenticator, MainCardStackNavigatorParams, Route } from 'app/consts';
+import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import { selectors, actions } from 'app/state/authenticators';
@@ -23,21 +25,30 @@ interface MapStateProps {
 
 interface ActionProps {
   deleteAuthenticator: Function;
+  updateAuthenticator: Function;
 }
 
 interface NavigationProps {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ExportAuthenticator>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ExportAuthenticator>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.OptionsAuthenticator>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.OptionsAuthenticator>;
+}
+
+interface State {
+  name: string | undefined;
 }
 
 type Props = MapStateProps & ActionProps & NavigationProps;
 
-class OptionsAuthenticatorScreen extends Component<Props> {
+class OptionsAuthenticatorScreen extends Component<Props, State> {
+  state = {
+    name: this.props.authenticator?.name,
+  };
+
   onDelete = () => {
     const { deleteAuthenticator, navigation, authenticator } = this.props;
     authenticator &&
       navigation.navigate(Route.DeleteEntity, {
-        name: authenticator.name,
+        name: authenticator?.name,
         title: i18n.authenticators.delete.title,
         subtitle: i18n.authenticators.delete.subtitle,
         onConfirm: () => {
@@ -63,6 +74,31 @@ class OptionsAuthenticatorScreen extends Component<Props> {
     Share.open({ message: authenticator?.publicKey });
   };
 
+  setName = (name: string) => this.setState({ name });
+
+  get validationError(): string | undefined {
+    const { name } = this.state;
+    if (name?.length === 0) {
+      return i18n.authenticators.errors.noEmpty;
+    }
+    return;
+  }
+
+  saveNameAuthenticator = () => {
+    const { authenticator, updateAuthenticator } = this.props;
+    const { name } = this.state;
+    if (!!this.validationError) {
+      return;
+    } else {
+      if (!authenticator) {
+        return;
+      }
+      const updatedAuthenticator = cloneDeep(authenticator);
+      updatedAuthenticator.name = name;
+      updateAuthenticator(updatedAuthenticator);
+    }
+  };
+
   render() {
     const { authenticator, navigation } = this.props;
 
@@ -81,6 +117,14 @@ class OptionsAuthenticatorScreen extends Component<Props> {
           </Text>
           <Separator />
           <View style={styles.optionsContainer}>
+            <InputItem
+              onSubmitEditing={this.saveNameAuthenticator}
+              value={this.state.name}
+              error={this.validationError}
+              setValue={this.setName}
+              label={i18n.wallets.add.inputLabel}
+              maxLength={maxWalletNameLength}
+            />
             <Text style={styles.subtitlePairKey}>{i18n.authenticators.publicKey.title}</Text>
             <TextAreaItem value={authenticator.publicKey} editable={false} style={styles.textArea} />
             <FlatButton onPress={this.share} title={i18n.receive.details.share} />
@@ -108,6 +152,7 @@ const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: P
 
 const mapDispatchToProps: ActionProps = {
   deleteAuthenticator: actions.deleteAuthenticator,
+  updateAuthenticator: actions.updateAuthenticator,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OptionsAuthenticatorScreen);

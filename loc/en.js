@@ -155,6 +155,9 @@ module.exports = {
       subtitle: 'Enter PIN',
       description: 'Enter this PIN into the Electrum Vault desktop application to finish the pairing process.',
     },
+    errors: {
+      noEmpty: 'Field can not empty',
+    },
   },
   wallets: {
     dashboard: {

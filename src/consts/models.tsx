@@ -404,7 +404,7 @@ export interface Authenticator {
   privateKey: Buffer | null;
   publicKey: string;
   entropy: string;
-  name: string;
+  name: string | undefined;
   id: string;
   QRCode: string;
   init: ({ entropy, mnemonic }: { entropy?: string; mnemonic?: string }) => void;
