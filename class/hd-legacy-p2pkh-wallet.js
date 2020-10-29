@@ -18,7 +18,7 @@ const bitcoin = require('bitcoinjs-lib');
  */
 export class HDLegacyP2PKHWallet extends AbstractHDWallet {
   static type = 'HDlegacyP2PKH';
-  static typeReadable = 'HD Legacy (BIP44 P2PKH)';
+  static typeReadable = 'HD P2PKH';
 
   allowSend() {
     return true;

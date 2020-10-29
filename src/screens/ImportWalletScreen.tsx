@@ -337,10 +337,14 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         hdLegactP2PKH.setPassword(trimmedCustomWords);
       }
       await hdLegactP2PKH.setSecret(trimmedMnemonic);
+
+      console.log('validate');
       if (hdLegactP2PKH.validateMnemonic()) {
-        await hdSegwitBech32.fetchTransactions();
-        if (hdSegwitBech32.getTransactions().length !== 0) {
-          return this.saveWallet(hdSegwitBech32);
+        console.log('valid');
+
+        await hdLegactP2PKH.fetchTransactions();
+        if (hdLegactP2PKH.getTransactions().length !== 0) {
+          return this.saveWallet(hdLegactP2PKH);
         }
       }
 
