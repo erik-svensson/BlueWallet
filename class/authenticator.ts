@@ -18,22 +18,18 @@ const PIN_LENGTH = 4;
 
 export class Authenticator implements IAuthenticator {
   static randomBytesSize = 16;
-  privateKey: any | null;
+  privateKey: Buffer | null;
   publicKey: string;
-  entropy: string;
   secret: string;
   keyPair: ECPair.ECPairInterface | null;
   readonly id: string;
   createdAt: Dayjs;
-  exportPublicKey: string;
 
   constructor(readonly name: string) {
     this.id = uuidv4();
     this.privateKey = null;
-    this.entropy = '';
     this.publicKey = '';
     this.secret = '';
-    this.exportPublicKey = '';
     this.keyPair = null;
     this.createdAt = dayjs();
   }
@@ -63,18 +59,16 @@ export class Authenticator implements IAuthenticator {
 
   async init({ mnemonic }: { mnemonic?: string }) {
     try {
-      await RNRandomBytes.randomBytes(Authenticator.randomBytesSize, async (err: string, bytes: any) => {
-        if (err) throw new Error(err);
+      RNRandomBytes.randomBytes(Authenticator.randomBytesSize, async (err: string, bytes: any) => {
         // TODO: to check if encoding is correct
         const buffer = Buffer.from(bytes, 'base64');
-        const mnemonicBytes = mnemonic === undefined ? bytesToMnemonic(buffer) : mnemonic;
-        this.secret = mnemonicBytes;
+        this.secret = mnemonic === undefined ? bytesToMnemonic(buffer) : mnemonic;
         this.privateKey = await generatePrivateKey({
           salt: buffer,
           password: buffer,
         });
         this.publicKey = await privateKeyToPublicKey(this.privateKey);
-        this.keyPair = await mnemonicToKeyPair(mnemonicBytes);
+        this.keyPair = await mnemonicToKeyPair(this.secret);
       });
     } catch (_) {
       throw new Error(i18n.wallets.errors.invalidPrivateKey);
@@ -115,6 +109,6 @@ export class Authenticator implements IAuthenticator {
   }
 
   get QRCode() {
-    return JSON.stringify({ entropy: this.entropy, name: this.name });
+    return this.secret;
   }
 }

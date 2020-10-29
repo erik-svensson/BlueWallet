@@ -55,7 +55,6 @@ export enum Route {
   RecoverySeed = 'RecoverySeed',
   AuthenticatorList = 'AuthenticatorList',
   RecoveryTransactionList = 'RecoveryTransactionList',
-  EnterPIN = 'EnterPIN',
   ImportAuthenticator = 'ImportAuthenticator',
   OptionsAuthenticator = 'OptionsAuthenticator',
   CreateWalletSuccess = 'CreateWalletSuccess',
@@ -381,11 +380,10 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.FilterTransactions]: { onFilterPress: () => void };
   [Route.CreateAuthenticator]: undefined;
-  [Route.EnterPIN]: { id: string };
   [Route.AuthenticatorList]: undefined;
   [Route.CreateAuthenticatorPublicKey]: { id?: string };
   [Route.CreateAuthenticatorSuccess]: { id?: string };
-  [Route.DeleteEntity]: { onConfirm: () => void; name: string; subtitle: string; title: string };
+  [Route.DeleteEntity]: { onConfirm: () => void; name: string | undefined; subtitle: string; title: string };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
   [Route.CreateWalletSuccess]: { secret: string };
@@ -403,15 +401,13 @@ export type DateType = Date | Dayjs;
 export interface Authenticator {
   privateKey: Buffer | null;
   publicKey: string;
-  entropy: string;
   name: string | undefined;
-  id: string;
   QRCode: string;
-  init: ({ entropy, mnemonic }: { entropy?: string; mnemonic?: string }) => void;
+  id: string;
+  init: ({ mnemonic }: { mnemonic?: string }) => void;
   pin: string;
   secret: string;
   createdAt: Dayjs;
-  exportPublicKey?: string;
 }
 
 export interface ActionMeta {

@@ -42,13 +42,13 @@ class CreateAuthenticatorScreen extends Component<Props> {
     label: '',
   };
 
-  setLabel = (label: string) => this.setState({ label: label.trim() });
+  setLabel = (label: string) => this.setState({ label });
 
   get validationError(): string | undefined {
     const { authenticators } = this.props;
     const { label } = this.state;
     const authenticatorsLabels = authenticators.map(a => a.name);
-    if (authenticatorsLabels.includes(label.trim())) {
+    if (authenticatorsLabels.includes(label)) {
       return i18n.authenticators.import.inUseValidationError;
     }
     return;
@@ -84,9 +84,6 @@ class CreateAuthenticatorScreen extends Component<Props> {
   createAuthenticator = () => {
     const { navigation, createAuthenticator } = this.props;
     try {
-      if (!this.state.label) {
-        throw new Error('Invalid data');
-      }
       createAuthenticator(
         { name: this.state.label, mnemonic: '' },
         {

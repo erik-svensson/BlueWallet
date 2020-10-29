@@ -21,6 +21,7 @@ const i18n = require('../../../loc');
 
 interface MapStateProps {
   authenticator?: Authenticator;
+  authenticators: Authenticator[];
 }
 
 interface ActionProps {
@@ -34,7 +35,7 @@ interface NavigationProps {
 }
 
 interface State {
-  name: string | undefined;
+  name: undefined | string;
 }
 
 type Props = MapStateProps & ActionProps & NavigationProps;
@@ -77,24 +78,27 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
   setName = (name: string) => this.setState({ name });
 
   get validationError(): string | undefined {
+    const { authenticators, authenticator } = this.props;
     const { name } = this.state;
+    const authenticatorsLabels = authenticators.map(a => a.name);
     if (name?.length === 0) {
       return i18n.authenticators.errors.noEmpty;
     }
+    if (authenticatorsLabels.includes(name) && name !== authenticator?.name) {
+      return i18n.authenticators.import.inUseValidationError;
+    }
+
     return;
   }
 
   saveNameAuthenticator = () => {
     const { authenticator, updateAuthenticator } = this.props;
     const { name } = this.state;
-    if (!!this.validationError) {
+    if (!!this.validationError || !authenticator) {
       return;
     } else {
-      if (!authenticator) {
-        return;
-      }
       const updatedAuthenticator = cloneDeep(authenticator);
-      updatedAuthenticator.name = name;
+      updatedAuthenticator.name = name || '';
       updateAuthenticator(updatedAuthenticator);
     }
   };
@@ -147,6 +151,7 @@ const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: P
   const { id } = props.route.params;
   return {
     authenticator: selectors.getById(state, id),
+    authenticators: selectors.list(state),
   };
 };
 

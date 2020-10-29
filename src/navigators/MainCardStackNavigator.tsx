@@ -25,7 +25,6 @@ import {
   ConfirmPinScreen,
   FilterTransactionsScreen,
   CreateAuthenticatorScreen,
-  EnterPINScreen,
   CreateAuthenticatorPublicKeyScreen,
   CreateAuthenticatorSuccessScreen,
   DeleteEntityScreen,
@@ -65,7 +64,6 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.ConfirmPin} component={ConfirmPinScreen} />
     <Stack.Screen name={Route.FilterTransactions} component={FilterTransactionsScreen} />
     <Stack.Screen name={Route.CreateAuthenticator} component={CreateAuthenticatorScreen} />
-    <Stack.Screen name={Route.EnterPIN} component={EnterPINScreen} />
     <Stack.Screen name={Route.CreateAuthenticatorPublicKey} component={CreateAuthenticatorPublicKeyScreen} />
     <Stack.Screen name={Route.CreateAuthenticatorSuccess} component={CreateAuthenticatorSuccessScreen} />
     <Stack.Screen name={Route.DeleteEntity} component={DeleteEntityScreen} />
