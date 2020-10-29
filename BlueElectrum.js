@@ -67,6 +67,18 @@ module.exports.unsubscribe = function(event) {
   return mainClient.subscribe.off(event);
 };
 
+module.exports.subscribeToConnect = function(handler) {
+  return (mainClient.onConnect = handler);
+};
+
+module.exports.subscribeToClose = function(handler) {
+  return mainClient.setCloseCallback(handler);
+};
+
+module.exports.subscribeToReconnect = function(handler) {
+  return mainClient.setReconnectCallback(handler);
+};
+
 connectMain();
 
 /**

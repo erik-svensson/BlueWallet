@@ -1,15 +1,18 @@
 import NetInfo from '@react-native-community/netinfo';
 import { eventChannel } from 'redux-saga';
-import { takeLatest, take, put, call, delay } from 'redux-saga/effects';
+import { takeLatest, take, put, call } from 'redux-saga/effects';
 
+import { BlueApp } from 'app/legacy';
+
+import { setSubscribedScriptHashes, startListeners } from '../electrumX/actions';
 import { addToastMessage } from '../toastMessages/actions';
+import { loadWalletsSuccess } from '../wallets/actions';
 import {
   UpdateServerConnectionStatusAction,
   UpdateInternetConnectionStatusAction,
   updateInternetConnectionStatusSuccess,
   StatusAction,
   updateServerConnectionStatusSuccess,
-  updateServerConnectionStatus,
 } from './actions';
 
 const BlueElectrum = require('../../../BlueElectrum');
@@ -27,52 +30,31 @@ function emitNetInfoStatus() {
   });
 }
 
-function emitServerConnectionStatus() {
-  return eventChannel(emitter => {
-    const eventName = 'blockchain.scripthash.subscribe';
+function* onConnect() {
+  yield put(updateServerConnectionStatusSuccess(true));
+}
 
-    BlueElectrum.subscribe(eventName, (event: string[]) => {
-      emitter(event);
-    });
+function onClose() {
+  addToastMessage({
+    description: i18n.connectionIssue.offlineMessageDescription,
+    title: i18n.connectionIssue.offlineMessageTitle,
+    secondsAfterHide: 20,
+  }),
+    updateServerConnectionStatusSuccess(false);
+}
 
-    return () => {
-      BlueElectrum.unsubscribe(eventName);
-    };
-  });
+function* onReconnect() {
+  yield put(setSubscribedScriptHashes([]));
+  yield put(startListeners());
+  const wallets = BlueApp.getWallets();
+  yield put(loadWalletsSuccess(wallets));
+  yield put(updateServerConnectionStatusSuccess(false));
 }
 
 export function* updateServerConnectionStatusSaga(action: UpdateServerConnectionStatusAction | unknown) {
-  // while (true) {
-  //   yield delay(10000);
-  //   try {
-  //     yield BlueElectrum.waitTillConnected();
-  //     yield put(updateServerConnectionStatusSuccess(true));
-  //   } catch (e) {
-  //     yield put(
-  //       addToastMessage({
-  //         description: i18n.connectionIssue.noNetworkTitle,
-  //         title: i18n.connectionIssue.noNetworkDescription,
-  //         secondsAfterHide: 20,
-  //       }),
-  //     );
-  //     yield put(updateServerConnectionStatusSuccess(false));
-  //   }
-  // }
-
-  const serverConnectionStatus = yield call(emitServerConnectionStatus);
-  while (true) {
-    const serverConnection = yield take(serverConnectionStatus);
-    if (!serverConnection) {
-      yield put(
-        addToastMessage({
-          description: i18n.connectionIssue.offlineMessageDescription,
-          title: i18n.connectionIssue.offlineMessageTitle,
-          secondsAfterHide: 20,
-        }),
-      );
-    }
-    yield put(updateServerConnectionStatusSuccess(!!serverConnection));
-  }
+  yield BlueElectrum.subscribeToConnect(onConnect);
+  yield BlueElectrum.subscribeToClose(onClose);
+  yield BlueElectrum.subscribeToReconnect(onReconnect);
 }
 
 export function* updateInternetConnectionStatusSaga(action: UpdateInternetConnectionStatusAction | unknown) {
