@@ -17,8 +17,8 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
   static type = 'abstract';
   static typeReadable = 'abstract';
 
-  constructor(pubKeysHex = []) {
-    super();
+  constructor(pubKeysHex = [], isElectrumVault) {
+    super(isElectrumVault);
     let pubKeys;
     try {
       pubKeys = pubKeysHex.map(

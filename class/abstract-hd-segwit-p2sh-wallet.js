@@ -38,6 +38,11 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
   static randomBytesSize = 16;
   static basePath = "m/49'/440'/0'";
 
+  constructor(isElectrumVault = false) {
+    super();
+    this.isElectrumVault = isElectrumVault;
+  }
+
   allowSend() {
     return true;
   }
@@ -78,7 +83,8 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
   }
 
   _getPath(path = '') {
-    return `${AbstractHDSegwitP2SHWallet.basePath}${path}`;
+    const basePath = this.isElectrumVault ? "m/0'" : AbstractHDSegwitP2SHWallet.basePath;
+    return `${basePath}${path}`;
   }
 
   /**
