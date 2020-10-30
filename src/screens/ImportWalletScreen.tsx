@@ -190,9 +190,11 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       onBarCodeScan: (recoveryPublicKey: string) => {
         try {
           wallet.addPublicKey(recoveryPublicKey);
-          this.addInstantPublicKey(wallet);
-        } catch (e) {
-          this.showAlert(e.message);
+          this.createWalletMessage(() => {
+            this.saveVaultWallet(wallet);
+          });
+        } catch (error) {
+          this.showAlert(error.message);
         }
       },
       headerTitle: i18n.wallets.importWallet.header,
@@ -200,7 +202,8 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       description: i18n.wallets.importWallet.scanPublicKeyDescription,
       withLink: false,
       onBackArrow: () => {
-        this.navigateToImportWallet();
+        wallet.clearPublickKeys();
+        this.addInstantPublicKey(wallet);
       },
     });
   };
@@ -209,7 +212,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     try {
       const wallet = new HDSegwitP2SHAirWallet();
       wallet.setMnemonic(mnemonic);
-      this.addRecoveryPublicKey(wallet);
+      this.addInstantPublicKey(wallet);
     } catch (e) {
       this.showAlert(e.message);
     }
@@ -217,6 +220,12 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
   saveVaultWallet = async (wallet: HDSegwitP2SHArWallet | HDSegwitP2SHAirWallet) => {
     try {
+      const { customWords, hasCustomWords } = this.state;
+      const trimmedCustomWords = customWords.trim();
+      if (hasCustomWords) {
+        wallet.setPassword(trimmedCustomWords);
+      }
+
       await wallet.generateAddresses();
       await wallet.fetchTransactions();
       if (wallet.getTransactions().length !== 0) {
@@ -253,14 +262,12 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
   addInstantPublicKey = (wallet: HDSegwitP2SHAirWallet) => {
     this.props.navigation.navigate(Route.IntegrateKey, {
-      onBarCodeScan: (instantPublicKey: string) => {
+      onBarCodeScan: (recoveryPublicKey: string) => {
         try {
-          wallet.addPublicKey(instantPublicKey);
-          this.createWalletMessage(() => {
-            this.saveVaultWallet(wallet);
-          });
-        } catch (error) {
-          this.showAlert(error.message);
+          wallet.addPublicKey(recoveryPublicKey);
+          this.addRecoveryPublicKey(wallet);
+        } catch (e) {
+          this.showAlert(e.message);
         }
       },
       withLink: false,
@@ -268,8 +275,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       title: i18n.wallets.importWallet.scanFastPubKey,
       description: i18n.wallets.importWallet.scanPublicKeyDescription,
       onBackArrow: () => {
-        wallet.clearPublickKeys();
-        this.addRecoveryPublicKey(wallet);
+        this.navigateToImportWallet();
       },
     });
   };

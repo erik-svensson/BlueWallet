@@ -172,7 +172,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       return this.navigateToIntegrateRecoveryPublicKey(this.createARWallet);
     }
     if (selectedIndex === 1) {
-      return this.navigateToIntegrateRecoveryPublicKey(this.createAIRWalletAddRecoveryPublicKey);
+      return this.navigateToIntegrateInstantPublicKey(this.createAIRWalletAddRecoveryPublicKey);
     }
     this.createWallet();
   };
