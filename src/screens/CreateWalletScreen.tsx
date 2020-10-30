@@ -102,7 +102,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     });
   };
 
-  createWalletMessage = (wallet: any, onError: Function) => {
+  createWalletMessage = (wallet: Wallet, onError: Function) => {
     CreateMessage({
       title: i18n.message.creatingWallet,
       description: i18n.message.creatingWalletDescription,
@@ -111,7 +111,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     });
   };
 
-  createAIRWalletAddRecoveryPublicKey = (wallet: any) => (recoveryPublicKey: string) => {
+  createAIRWalletAddRecoveryPublicKey = (wallet: HDSegwitP2SHAirWallet) => (recoveryPublicKey: string) => {
     const { navigation } = this.props;
     const onError = (error: string) =>
       this.showAlert(() => {
@@ -126,7 +126,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     }
   };
 
-  navigateToIntegrateRecoveryPublicKeyForAIR = (wallet: any) => {
+  navigateToIntegrateRecoveryPublicKeyForAIR = (wallet: HDSegwitP2SHAirWallet) => {
     const { navigation } = this.props;
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: this.createAIRWalletAddRecoveryPublicKey(wallet),
