@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, TextAreaItem, FlatButton, Button, InputItem } from 'app/components';
 import { Route, CONST, MainCardStackNavigatorParams, Authenticator as IAuthenticator } from 'app/consts';
-import { maxWalletNameLength } from 'app/consts/text';
+import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import { actions, selectors } from 'app/state/authenticators';
@@ -132,10 +132,9 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     const { authenticators } = this.props;
     const { name } = this.state;
     const authenticatorsLabels = authenticators.map(a => a.name);
-    if (authenticatorsLabels.includes(name.trim())) {
+    if (authenticatorsLabels.includes(name)) {
       return i18n.authenticators.import.inUseValidationError;
     }
-    return;
   }
 
   hasErrors = () => {
@@ -178,12 +177,13 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
           <Text style={styles.subtitle}>{i18n.authenticators.import.desc2}</Text>
 
           <InputItem
-            error={!!this.validationError}
+            error={this.validationError}
             setValue={this.onFieldChange('name', this.validateName)}
             label={i18n.wallets.add.inputLabel}
-            maxLength={maxWalletNameLength}
+            maxLength={maxAuthenticatorNameLength}
           />
           <TextAreaItem
+            autoCapitalize={'none'}
             error={mnemonicError}
             onChangeText={this.onFieldChange('mnemonic', this.validateMnemonic)}
             placeholder={i18n.authenticators.import.textAreaPlaceholder}

@@ -11,7 +11,7 @@ import {
   MainTabNavigatorParams,
   MainCardStackNavigatorParams,
 } from 'app/consts';
-import { maxWalletNameLength } from 'app/consts/text';
+import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import { selectors, actions } from 'app/state/authenticators';
@@ -56,7 +56,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
 
   canSubmit = () => {
     const { label } = this.state;
-    return !label.length || !!this.validationError;
+    return !label.trim().length || !!this.validationError;
   };
 
   confirmCreateAuthenticator = () => {
@@ -121,7 +121,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
           error={this.validationError}
           setValue={this.setLabel}
           label={i18n.wallets.add.inputLabel}
-          maxLength={maxWalletNameLength}
+          maxLength={maxAuthenticatorNameLength}
         />
       </ScreenTemplate>
     );
