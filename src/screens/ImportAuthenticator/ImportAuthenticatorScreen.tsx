@@ -1,5 +1,4 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import { name } from 'dayjs/locale/*';
 import React, { Component } from 'react';
 import { Text, StyleSheet, Alert, View } from 'react-native';
 import { connect } from 'react-redux';
@@ -94,7 +93,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     });
   };
 
-  createAuthenticator = (data: { name: string; mnemonic?: string; entropy?: string }) => {
+  createAuthenticator = (data: { name: string; mnemonic?: string }) => {
     const { navigation, createAuthenticator } = this.props;
     createAuthenticator(data, {
       onSuccess: () => {

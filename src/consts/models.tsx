@@ -381,8 +381,8 @@ export type MainCardStackNavigatorParams = {
   [Route.FilterTransactions]: { onFilterPress: () => void };
   [Route.CreateAuthenticator]: undefined;
   [Route.AuthenticatorList]: undefined;
-  [Route.CreateAuthenticatorPublicKey]: { id?: string };
-  [Route.CreateAuthenticatorSuccess]: { id: string | undefined };
+  [Route.CreateAuthenticatorPublicKey]: { id: string };
+  [Route.CreateAuthenticatorSuccess]: { id: string };
   [Route.DeleteEntity]: { onConfirm: () => void; name: string | undefined; subtitle: string; title: string };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
@@ -401,7 +401,7 @@ export type DateType = Date | Dayjs;
 export interface Authenticator {
   privateKey: Buffer | null;
   publicKey: string;
-  name: string | undefined;
+  name: string;
   QRCode: string;
   id: string;
   init: ({ mnemonic }: { mnemonic?: string }) => void;

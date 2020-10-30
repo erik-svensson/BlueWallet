@@ -16,7 +16,7 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface MapStateProps {
-  authenticator?: Authenticator;
+  authenticator: Authenticator;
 }
 
 interface Props extends MapStateProps {
@@ -34,7 +34,7 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 
   navigate = () => {
     const { navigation, authenticator } = this.props;
-    navigation.navigate(Route.CreateAuthenticatorSuccess, { id: authenticator?.id });
+    navigation.navigate(Route.CreateAuthenticatorSuccess, { id: authenticator.id });
   };
 
   share = () => {

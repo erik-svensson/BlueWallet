@@ -59,17 +59,18 @@ export class Authenticator implements IAuthenticator {
 
   async init({ mnemonic }: { mnemonic?: string }) {
     try {
-      RNRandomBytes.randomBytes(Authenticator.randomBytesSize, async (err: string, bytes: any) => {
-        // TODO: to check if encoding is correct
-        const buffer = Buffer.from(bytes, 'base64');
-        this.secret = mnemonic === undefined ? bytesToMnemonic(buffer) : mnemonic;
-        this.privateKey = await generatePrivateKey({
-          salt: buffer,
-          password: buffer,
-        });
-        this.publicKey = await privateKeyToPublicKey(this.privateKey);
+      if (mnemonic) {
+        this.secret = mnemonic;
         this.keyPair = await mnemonicToKeyPair(this.secret);
-      });
+        this.publicKey = await privateKeyToPublicKey(this.keyPair.privateKey);
+      } else {
+        RNRandomBytes.randomBytes(Authenticator.randomBytesSize, async (err: string, bytes: any) => {
+          const buffer = Buffer.from(bytes, 'base64');
+          this.secret = bytesToMnemonic(buffer);
+          this.keyPair = await mnemonicToKeyPair(this.secret);
+          this.publicKey = await privateKeyToPublicKey(this.keyPair.privateKey);
+        });
+      }
     } catch (_) {
       throw new Error(i18n.wallets.errors.invalidPrivateKey);
     }

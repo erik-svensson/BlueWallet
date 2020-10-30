@@ -35,14 +35,14 @@ interface NavigationProps {
 }
 
 interface State {
-  name: undefined | string;
+  name: string;
 }
 
 type Props = MapStateProps & ActionProps & NavigationProps;
 
 class OptionsAuthenticatorScreen extends Component<Props, State> {
   state = {
-    name: this.props.authenticator?.name,
+    name: this.props.authenticator?.name || '',
   };
 
   onDelete = () => {
@@ -96,11 +96,10 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
     const { name } = this.state;
     if (!!this.validationError || !authenticator) {
       return;
-    } else {
-      const updatedAuthenticator = cloneDeep(authenticator);
-      updatedAuthenticator.name = name || '';
-      updateAuthenticator(updatedAuthenticator);
     }
+    const updatedAuthenticator = cloneDeep(authenticator);
+    updatedAuthenticator.name = name || '';
+    updateAuthenticator(updatedAuthenticator);
   };
 
   render() {

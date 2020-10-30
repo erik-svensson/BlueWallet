@@ -38,7 +38,7 @@ export const generatePrivateKey = ({
     });
   });
 
-export const privateKeyToPublicKey = (privateKey: Buffer) =>
+export const privateKeyToPublicKey = (privateKey: Buffer | undefined) =>
   ecurve
     .getCurveByName('secp256k1')
     .G.multiply(bigi.fromBuffer(privateKey))

@@ -83,21 +83,15 @@ class CreateAuthenticatorScreen extends Component<Props> {
 
   createAuthenticator = () => {
     const { navigation, createAuthenticator } = this.props;
-    try {
-      createAuthenticator(
-        { name: this.state.label, mnemonic: '' },
-        {
-          onSuccess: (authenticator: IAuthenticator) => {
-            navigation.goBack();
-            navigation.navigate(Route.CreateAuthenticatorPublicKey, { id: authenticator.id });
-          },
-          onFailure: (error: string) => this.onCreateAuthenticatorFailure(error),
+    createAuthenticator(
+      { name: this.state.label, mnemonic: '' },
+      {
+        onSuccess: (authenticator: IAuthenticator) => {
+          navigation.navigate(Route.CreateAuthenticatorPublicKey, { id: authenticator.id });
         },
-      );
-    } catch (_) {
-      // TODO: change text for error
-      this.onCreateAuthenticatorFailure(i18n.wallets.errors.invalidPrivateKey);
-    }
+        onFailure: (error: string) => this.onCreateAuthenticatorFailure(error),
+      },
+    );
   };
 
   navigateToImport = () => {

@@ -12,6 +12,6 @@ export const list = createSelector(local, state => state.authenticators);
 
 export const getById = createSelector(
   list,
-  (_: AuthenticatorsState, id: string | undefined) => id,
+  (_: AuthenticatorsState, id: string) => id,
   (data, id) => data.find(a => a.id === id),
 );

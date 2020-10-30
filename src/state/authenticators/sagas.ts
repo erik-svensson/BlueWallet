@@ -63,8 +63,7 @@ export function* createAuthenticatorSaga(action: CreateAuthenticatorAction | unk
   } = action as CreateAuthenticatorAction;
   try {
     const authenticator = new Authenticator(name);
-    // @ts-ignore
-    yield authenticator.init(mnemonic);
+    yield authenticator.init({ mnemonic });
     BlueApp.addAuthenticator(authenticator);
     yield BlueApp.saveToDisk();
     yield put(createAuthenticatorSuccess(authenticator));
