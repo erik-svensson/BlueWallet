@@ -143,6 +143,7 @@ export interface Wallet {
   id: string;
   getScriptHashes: () => string[];
   getAddressForTransaction: () => string;
+  password?: string;
 }
 
 export interface ActionMeta {
