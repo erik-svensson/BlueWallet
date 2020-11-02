@@ -187,6 +187,8 @@ module.exports = {
         'Open the first PDF document you generated when you created the wallet you want to import and use this app to scan the Public Key QR code.',
       unsupportedElectrumVaultMnemonic:
         'This seed is from Electrum Vault and is currently not supported. Will be supported in the near future.',
+      extendWithCustomWords: 'Extend this seed with custom words',
+      customWords: 'Custom words',
     },
     exportWallet: {
       title: 'Seed phrase',
@@ -306,6 +308,7 @@ module.exports = {
     label: {
       pending: 'pending',
       unblocked: 'unblocked',
+      blocked: 'blocked',
       done: 'done',
       canceled: 'canceled',
       canceledDone: 'canceled - done',
@@ -572,11 +575,12 @@ module.exports = {
     fromAmount: 'From amount',
     fromDate: 'From date',
     clearFilters: 'Clear filters',
+    clearAll: 'Clear all',
     transactionType: 'Transaction type',
     transactionStatus: 'Transaction status',
     status: {
       pending: 'Pending',
-      unblocked: 'Unblocked',
+      canceledDone: 'Canceled-done',
       done: 'Done',
       canceled: 'Canceled',
     },
