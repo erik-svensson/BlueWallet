@@ -221,7 +221,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
+      "pre-commit": "yarn typescript:check & lint-staged",
       "pre-push": "yarn test:local"
     }
   }

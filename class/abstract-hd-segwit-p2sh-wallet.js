@@ -48,10 +48,10 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
 
   setMnemonic(walletMnemonic) {
     let valid = false;
-    if (isElectrumVaultMnemonic(walletMnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SW)) {
+    if (bip39.validateMnemonic(walletMnemonic)) {
       valid = true;
+    } else if (isElectrumVaultMnemonic(walletMnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SW)) {
       this.isElectrumVault = true;
-    } else if (bip39.validateMnemonic(walletMnemonic)) {
       valid = true;
     }
 
