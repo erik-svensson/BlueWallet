@@ -19,6 +19,8 @@ module.exports = {
     invalid: 'Invalid',
     satoshi: 'Sat',
     next: 'Next',
+    cancel: 'Cancel',
+    scan: 'Scan',
   },
   tabNavigator: {
     wallets: 'Wallets',
@@ -121,6 +123,11 @@ module.exports = {
       textAreaPlaceholder: 'Seed phrase',
       inUseValidationError: 'Name must be unique. Please enter a valid name.',
       mnemonicLength: 'Mnemonic should have 12 words',
+      scanNext: 'Scan next',
+      multipleQrCodesTitle: 'Scan another QR code',
+      multipleQrCodesDescription:
+        'Some transactions generate multiple QR codes. Make sure to scan all of them from the Electrum Vault application.',
+      code: 'Code: ',
     },
     export: {
       title: 'Export authenticator',

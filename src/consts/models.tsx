@@ -99,6 +99,7 @@ export enum Route {
   Unlock = 'Unlock',
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
+  ChunkedQrCode = 'ChunkedQrCode',
 }
 
 export interface Wallet {
@@ -396,6 +397,11 @@ export type MainCardStackNavigatorParams = {
     onBackArrow?: () => void;
   };
   [Route.ImportWalletChooseType]: undefined;
+  [Route.ChunkedQrCode]: {
+    chunkNo: number;
+    chunksQuantity: number;
+    onScanned: () => void;
+  };
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {
