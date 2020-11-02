@@ -115,6 +115,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
     return (
       <ScreenTemplate
         contentContainer={styles.contentContainer}
+        // @ts-ignore
         header={<Header navigation={navigation} isBackArrow title={i18n.authenticators.options.title} />}
       >
         <View>
