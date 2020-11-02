@@ -111,7 +111,6 @@ export type AuthenticatorsActionType =
 
 interface CreateAuthenticator {
   name: string;
-  entropy?: string;
   mnemonic?: string;
 }
 

@@ -7,6 +7,7 @@ import { Header, ScreenTemplate, TextAreaItem, FlatButton, Button, InputItem } f
 import { Route, CONST, MainCardStackNavigatorParams, Authenticator as IAuthenticator } from 'app/consts';
 import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { matchAlphanumericCharacters } from 'app/helpers/string';
 import { ApplicationState } from 'app/state';
 import { actions, selectors } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
@@ -33,8 +34,6 @@ interface Props extends ActionProps {
   authenticators: IAuthenticator[];
 }
 
-type DynamicState = Pick<State, keyof State>;
-
 class ImportAuthenticatorScreen extends Component<Props, State> {
   state = {
     name: '',
@@ -43,23 +42,30 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     mnemonicError: '',
   };
 
-  onFieldChange = (fieldName: string, validate: Function) => (val: string) => {
-    const trimedVal = val.trim();
-    this.setState({ [fieldName]: trimedVal } as DynamicState);
+  setMnemonic = (mnemonic: string) => {
+    const trimmedMnemonic = mnemonic.trim();
 
-    const fieldNameError = `${fieldName}Error`;
+    this.setState({ mnemonicError: '', mnemonic });
 
-    if (!validate(trimedVal)) {
-      this.setState({ [fieldNameError]: i18n._.invalid } as DynamicState);
-      return;
+    if (!!!trimmedMnemonic) {
+      this.setState({ mnemonicError: i18n.authenticators.errors.noEmpty });
     }
 
-    this.setState({ [fieldNameError]: '' } as DynamicState);
+    if (trimmedMnemonic.split(' ').length !== CONST.mnemonicWordsAmount) {
+      this.setState({ mnemonicError: i18n.authenticators.import.mnemonicLength });
+    }
   };
 
-  validateMnemonic = (mnemonic: string) => mnemonic.split(' ').length === CONST.mnemonicWordsAmount;
+  setName = (name: string) => {
+    this.setState({ nameError: '', name });
+    if (!!!name.trim()) {
+      this.setState({ nameError: i18n.authenticators.errors.noEmpty });
+    }
 
-  validateName = (name: string) => !!name;
+    if (matchAlphanumericCharacters(name)) {
+      this.setState({ nameError: i18n.contactCreate.nameCannotContainSpecialCharactersError });
+    }
+  };
 
   scanQRCode = () => {
     const { navigation } = this.props;
@@ -93,44 +99,50 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     });
   };
 
-  createAuthenticator = (data: { name: string; mnemonic?: string }) => {
+  createAuthenticator = (mnemonic: string) => {
     const { navigation, createAuthenticator } = this.props;
-    createAuthenticator(data, {
-      onSuccess: () => {
-        CreateMessage({
-          title: i18n.message.hooray,
-          description: i18n.authenticators.import.success,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.message.returnToAuthenticators,
-            onPress: () => navigation.navigate(Route.AuthenticatorList),
-          },
-        });
+    const { name } = this.state;
+    createAuthenticator(
+      { mnemonic, name: name.trim() },
+      {
+        onSuccess: () => {
+          CreateMessage({
+            title: i18n.message.hooray,
+            description: i18n.authenticators.import.success,
+            type: MessageType.success,
+            buttonProps: {
+              title: i18n.message.returnToAuthenticators,
+              onPress: () => navigation.navigate(Route.AuthenticatorList),
+            },
+          });
+        },
+        onFailure: (error: string) => this.onCreateAuthenticatorFailure(error),
       },
-      onFailure: (error: string) => this.onCreateAuthenticatorFailure(error),
-    });
+    );
   };
 
-  createAuthenticatorScan = (json: string) => {
+  createAuthenticatorScan = (mnemonic: string) => {
     try {
-      const data = JSON.parse(json);
-      if (!data.entropy || !data.name) {
+      if (!mnemonic) {
         throw new Error('Invalid data');
       }
-      this.createAuthenticator(data);
+      this.createAuthenticator(mnemonic);
     } catch (_) {
       this.onCreateAuthenticatorFailure(i18n.wallets.errors.invalidPrivateKey);
     }
   };
 
   createAuthenticatorForm = () => {
-    const { name, mnemonic } = this.state;
-    this.createImportMessage(() => this.createAuthenticator({ name, mnemonic }));
+    const { mnemonic } = this.state;
+    this.createImportMessage(() => this.createAuthenticator(mnemonic));
   };
 
   get validationError(): string | undefined {
     const { authenticators } = this.props;
-    const { name } = this.state;
+    const { name, nameError } = this.state;
+    if (nameError) {
+      return nameError;
+    }
     const authenticatorsLabels = authenticators.map(a => a.name);
     if (authenticatorsLabels.includes(name)) {
       return i18n.authenticators.import.inUseValidationError;
@@ -178,14 +190,14 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
 
           <InputItem
             error={this.validationError}
-            setValue={this.onFieldChange('name', this.validateName)}
+            setValue={this.setName}
             label={i18n.wallets.add.inputLabel}
             maxLength={maxAuthenticatorNameLength}
           />
           <TextAreaItem
             autoCapitalize={'none'}
             error={mnemonicError}
-            onChangeText={this.onFieldChange('mnemonic', this.validateMnemonic)}
+            onChangeText={this.setMnemonic}
             placeholder={i18n.authenticators.import.textAreaPlaceholder}
             style={styles.textArea}
           />

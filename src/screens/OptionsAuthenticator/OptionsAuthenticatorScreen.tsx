@@ -9,8 +9,9 @@ import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, FlatButton, Separator, TextAreaItem, Mnemonic, InputItem } from 'app/components';
 import { Authenticator, MainCardStackNavigatorParams, Route } from 'app/consts';
-import { maxWalletNameLength } from 'app/consts/text';
+import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { matchAlphanumericCharacters } from 'app/helpers/string';
 import { ApplicationState } from 'app/state';
 import { selectors, actions } from 'app/state/authenticators';
 import { AuthenticatorsState } from 'app/state/authenticators/reducer';
@@ -84,10 +85,12 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
     if (name?.length === 0) {
       return i18n.authenticators.errors.noEmpty;
     }
+    if (matchAlphanumericCharacters(name)) {
+      return i18n.contactCreate.nameCannotContainSpecialCharactersError;
+    }
     if (authenticatorsLabels.includes(name) && name !== authenticator?.name) {
       return i18n.authenticators.import.inUseValidationError;
     }
-
     return;
   }
 
@@ -97,8 +100,9 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
     if (!!this.validationError || !authenticator) {
       return;
     }
+
     const updatedAuthenticator = cloneDeep(authenticator);
-    updatedAuthenticator.name = name || '';
+    updatedAuthenticator.name = name.trim();
     updateAuthenticator(updatedAuthenticator);
   };
 
@@ -127,7 +131,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
               error={this.validationError}
               setValue={this.setName}
               label={i18n.wallets.add.inputLabel}
-              maxLength={maxWalletNameLength}
+              maxLength={maxAuthenticatorNameLength}
             />
             <Text style={styles.subtitlePairKey}>{i18n.authenticators.publicKey.title}</Text>
             <TextAreaItem value={authenticator.publicKey} editable={false} style={styles.textArea} />

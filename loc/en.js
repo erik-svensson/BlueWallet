@@ -120,6 +120,7 @@ module.exports = {
       desc2: 'scan QR code by clicking on “or scan QR code” below',
       textAreaPlaceholder: 'Seed phrase',
       inUseValidationError: 'Authenticator is already in use. Please enter a valid authenticator',
+      mnemonicLength: 'Mnemonic should have 12 words',
     },
     export: {
       title: 'Export authenticator',

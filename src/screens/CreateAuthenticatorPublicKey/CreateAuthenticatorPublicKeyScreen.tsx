@@ -16,7 +16,7 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface MapStateProps {
-  authenticator: Authenticator;
+  authenticator?: Authenticator;
 }
 
 interface Props extends MapStateProps {
@@ -34,12 +34,15 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 
   navigate = () => {
     const { navigation, authenticator } = this.props;
+    if (!authenticator) {
+      return;
+    }
     navigation.navigate(Route.CreateAuthenticatorSuccess, { id: authenticator.id });
   };
 
   share = () => {
     const { authenticator } = this.props;
-    Share.open({ message: authenticator.publicKey });
+    Share.open({ message: authenticator?.publicKey });
   };
 
   render() {
@@ -52,6 +55,7 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
     return (
       <ScreenTemplate
         footer={<Button onPress={this.navigate} title={i18n.authenticators.publicKey.okButton} />}
+        // @ts-ignore
         header={<Header navigation={navigation} isBackArrow={false} title={i18n.authenticators.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.authenticators.publicKey.title}</Text>
@@ -66,7 +70,6 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: Props): MapStateProps => {
   const { id } = props.route.params;
   return {
-    // @ts-ignore
     authenticator: selectors.getById(state, id),
   };
 };

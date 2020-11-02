@@ -1,4 +1,4 @@
-import { VaultTxType, Transaction as BtcTransaction } from 'bitcoinjs-lib';
+import { VaultTxType, Transaction as BtcTransaction, ECPair } from 'bitcoinjs-lib';
 import { Dayjs } from 'dayjs';
 import React from 'react';
 import { KeyboardType, StyleProp, ViewStyle, Platform } from 'react-native';
@@ -399,7 +399,7 @@ export type MainCardStackNavigatorParams = {
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {
-  privateKey: Buffer | undefined;
+  keyPair: ECPair.ECPairInterface | null;
   publicKey: string;
   name: string;
   QRCode: string;

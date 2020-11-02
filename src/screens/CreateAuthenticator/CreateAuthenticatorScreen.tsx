@@ -13,6 +13,7 @@ import {
 } from 'app/consts';
 import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { matchAlphanumericCharacters } from 'app/helpers/string';
 import { ApplicationState } from 'app/state';
 import { selectors, actions } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
@@ -48,6 +49,10 @@ class CreateAuthenticatorScreen extends Component<Props> {
     const { authenticators } = this.props;
     const { label } = this.state;
     const authenticatorsLabels = authenticators.map(a => a.name);
+    if (matchAlphanumericCharacters(label)) {
+      return i18n.contactCreate.nameCannotContainSpecialCharactersError;
+    }
+
     if (authenticatorsLabels.includes(label)) {
       return i18n.authenticators.import.inUseValidationError;
     }
@@ -84,7 +89,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
   createAuthenticator = () => {
     const { navigation, createAuthenticator } = this.props;
     createAuthenticator(
-      { name: this.state.label },
+      { name: this.state.label.trim() },
       {
         onSuccess: (authenticator: IAuthenticator) => {
           navigation.navigate(Route.CreateAuthenticatorPublicKey, { id: authenticator.id });
