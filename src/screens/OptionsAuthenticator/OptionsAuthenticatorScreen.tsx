@@ -122,6 +122,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
           <View style={styles.optionsContainer}>
             <InputItem
               onSubmitEditing={this.saveNameAuthenticator}
+              onEndEditing={this.saveNameAuthenticator}
               value={this.state.name}
               error={this.validationError}
               setValue={this.setName}

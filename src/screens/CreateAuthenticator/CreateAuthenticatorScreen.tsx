@@ -84,7 +84,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
   createAuthenticator = () => {
     const { navigation, createAuthenticator } = this.props;
     createAuthenticator(
-      { name: this.state.label, mnemonic: '' },
+      { name: this.state.label },
       {
         onSuccess: (authenticator: IAuthenticator) => {
           navigation.navigate(Route.CreateAuthenticatorPublicKey, { id: authenticator.id });

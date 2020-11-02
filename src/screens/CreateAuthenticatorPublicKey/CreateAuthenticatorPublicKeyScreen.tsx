@@ -39,7 +39,7 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 
   share = () => {
     const { authenticator } = this.props;
-    Share.open({ message: authenticator?.publicKey });
+    Share.open({ message: authenticator.publicKey });
   };
 
   render() {
@@ -66,6 +66,7 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: Props): MapStateProps => {
   const { id } = props.route.params;
   return {
+    // @ts-ignore
     authenticator: selectors.getById(state, id),
   };
 };

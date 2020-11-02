@@ -399,7 +399,7 @@ export type MainCardStackNavigatorParams = {
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {
-  privateKey: Buffer | null;
+  privateKey: Buffer | undefined;
   publicKey: string;
   name: string;
   QRCode: string;

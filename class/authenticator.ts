@@ -8,7 +8,7 @@ const { RNRandomBytes } = NativeModules;
 import { Authenticator as IAuthenticator, FinalizedPSBT } from 'app/consts';
 
 import config from '../config';
-import { bytesToMnemonic, mnemonicToKeyPair, privateKeyToPublicKey, generatePrivateKey } from '../utils/crypto';
+import { bytesToMnemonic, mnemonicToKeyPair, privateKeyToPublicKey } from '../utils/crypto';
 
 const i18n = require('../loc');
 const signer = require('../models/signer');
@@ -18,7 +18,7 @@ const PIN_LENGTH = 4;
 
 export class Authenticator implements IAuthenticator {
   static randomBytesSize = 16;
-  privateKey: Buffer | null;
+  privateKey: Buffer | undefined;
   publicKey: string;
   secret: string;
   keyPair: ECPair.ECPairInterface | null;
@@ -27,7 +27,7 @@ export class Authenticator implements IAuthenticator {
 
   constructor(readonly name: string) {
     this.id = uuidv4();
-    this.privateKey = null;
+    this.privateKey;
     this.publicKey = '';
     this.secret = '';
     this.keyPair = null;
@@ -57,23 +57,30 @@ export class Authenticator implements IAuthenticator {
     return authenticator;
   }
 
-  async init({ mnemonic }: { mnemonic?: string }) {
-    try {
-      if (mnemonic) {
-        this.secret = mnemonic;
-        this.keyPair = await mnemonicToKeyPair(this.secret);
-        this.publicKey = await privateKeyToPublicKey(this.keyPair.privateKey);
-      } else {
-        RNRandomBytes.randomBytes(Authenticator.randomBytesSize, async (err: string, bytes: any) => {
-          const buffer = Buffer.from(bytes, 'base64');
-          this.secret = bytesToMnemonic(buffer);
-          this.keyPair = await mnemonicToKeyPair(this.secret);
-          this.publicKey = await privateKeyToPublicKey(this.keyPair.privateKey);
-        });
+  randomBytes(mnemonic: string | undefined) {
+    return new Promise((resolve, reject) => {
+      try {
+        if (mnemonic) {
+          this.secret = mnemonic;
+          resolve();
+        } else {
+          RNRandomBytes.randomBytes(Authenticator.randomBytesSize, (err: string, bytes: any) => {
+            const buffer = Buffer.from(bytes, 'base64');
+            this.secret = bytesToMnemonic(buffer);
+            resolve();
+          });
+        }
+      } catch (_) {
+        throw new Error(i18n.wallets.errors.invalidPrivateKey);
       }
-    } catch (_) {
-      throw new Error(i18n.wallets.errors.invalidPrivateKey);
-    }
+    });
+  }
+
+  async init({ mnemonic }: { mnemonic?: string }) {
+    this.randomBytes(mnemonic).then(async () => {
+      this.keyPair = await mnemonicToKeyPair(this.secret);
+      this.publicKey = await privateKeyToPublicKey(this.keyPair?.privateKey);
+    });
   }
 
   async signAndFinalizePSBT(encodedPSBT: string): Promise<FinalizedPSBT> {
