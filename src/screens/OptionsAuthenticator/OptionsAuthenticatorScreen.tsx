@@ -81,14 +81,15 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
   get validationError(): string | undefined {
     const { authenticators, authenticator } = this.props;
     const { name } = this.state;
+    const trimmedName = name.trim();
     const authenticatorsLabels = authenticators.map(a => a.name);
-    if (name?.length === 0) {
+    if (trimmedName?.length === 0) {
       return i18n.authenticators.errors.noEmpty;
     }
     if (matchAlphanumericCharacters(name)) {
       return i18n.contactCreate.nameCannotContainSpecialCharactersError;
     }
-    if (authenticatorsLabels.includes(name) && name !== authenticator?.name) {
+    if (authenticatorsLabels.includes(trimmedName.trim()) && trimmedName !== authenticator?.name) {
       return i18n.authenticators.import.inUseValidationError;
     }
     return;

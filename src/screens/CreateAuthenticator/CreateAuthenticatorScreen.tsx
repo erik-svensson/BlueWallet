@@ -53,7 +53,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
       return i18n.contactCreate.nameCannotContainSpecialCharactersError;
     }
 
-    if (authenticatorsLabels.includes(label)) {
+    if (authenticatorsLabels.includes(label.trim())) {
       return i18n.authenticators.import.inUseValidationError;
     }
     return;

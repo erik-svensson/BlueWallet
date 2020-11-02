@@ -144,7 +144,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
       return nameError;
     }
     const authenticatorsLabels = authenticators.map(a => a.name);
-    if (authenticatorsLabels.includes(name)) {
+    if (authenticatorsLabels.includes(name.trim())) {
       return i18n.authenticators.import.inUseValidationError;
     }
   }
