@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import JailMonkey from 'jail-monkey';
 import React from 'react';
+import { isEmulator } from 'react-native-device-info';
 import { connect } from 'react-redux';
 
 import { CONST } from 'app/consts';
@@ -67,7 +68,7 @@ class Navigator extends React.Component<Props, State> {
     fetchBlockHeight();
     this.initLanguage();
 
-    if (!__DEV__) {
+    if (!__DEV__ || !isEmulator()) {
       checkDeviceSecurity();
     }
   }
