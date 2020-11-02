@@ -68,8 +68,12 @@ class Navigator extends React.Component<Props, State> {
     fetchBlockHeight();
     this.initLanguage();
 
-    if (!__DEV__ || !isEmulator()) {
-      checkDeviceSecurity();
+    if (!__DEV__) {
+      isEmulator().then(isEmulator => {
+        if (!isEmulator) {
+          checkDeviceSecurity();
+        }
+      });
     }
   }
 
