@@ -102,7 +102,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     });
   };
 
-  createWalletMessage = (wallet: Wallet, onError: Function) => {
+  createWalletMessage = (wallet: any, onError: Function) => {
     CreateMessage({
       title: i18n.message.creatingWallet,
       description: i18n.message.creatingWalletDescription,
