@@ -64,7 +64,7 @@ export class Authenticator implements IAuthenticator {
       }
       this.publicKey = await privateKeyToPublicKey(this.keyPair.privateKey);
     } catch (_) {
-      throw new Error(i18n.wallets.errors.invalidPrivateKey);
+      throw new Error(i18n.message.wrongMnemonic);
     }
   }
 
