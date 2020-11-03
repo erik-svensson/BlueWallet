@@ -301,8 +301,6 @@ PODS:
     - React-Core
   - react-native-slider (2.0.0-rc.1):
     - React
-  - react-native-splash-screen (3.2.0):
-    - React
   - react-native-tcp-socket (4.5.4):
     - CocoaAsyncSocket
     - React-Core
@@ -702,7 +700,6 @@ SPEC CHECKSUMS:
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
   react-native-safe-area-context: 79fea126c6830c85f65947c223a5e3058a666937
   react-native-slider: 884693dd50f84745baa511ecdcde4c16f32182fb
-  react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-tcp-socket: 6ef49f9f0f2c20e35d425aea71b8af0588403855
   React-RCTActionSheet: 53ea72699698b0b47a6421cb1c8b4ab215a774aa
   React-RCTAnimation: 1befece0b5183c22ae01b966f5583f42e69a83c2
