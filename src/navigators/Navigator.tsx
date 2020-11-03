@@ -54,11 +54,13 @@ type Props = MapStateToProps & ActionsDisptach & OwnProps;
 
 interface State {
   isBetaVersionRiskAccepted: boolean;
+  isEmulator: boolean;
 }
 
 class Navigator extends React.Component<Props, State> {
   state = {
     isBetaVersionRiskAccepted: false,
+    isEmulator: false,
   };
 
   componentDidMount() {
@@ -68,13 +70,15 @@ class Navigator extends React.Component<Props, State> {
     fetchBlockHeight();
     this.initLanguage();
 
-    if (!__DEV__) {
-      isEmulator().then(isEmulator => {
-        if (!isEmulator) {
-          checkDeviceSecurity();
-        }
+    isEmulator().then(isEmulator => {
+      this.setState({
+        isEmulator,
       });
-    }
+
+      if (!isEmulator && !__DEV__) {
+        checkDeviceSecurity();
+      }
+    });
   }
 
   initLanguage = async () => {
@@ -133,12 +137,8 @@ class Navigator extends React.Component<Props, State> {
       return null;
     }
 
-    if (!__DEV__ && JailMonkey.isJailBroken()) {
-      return isEmulator().then(isEmulator => {
-        if (!isEmulator) {
-          return this.preventOpenAppWithRootedPhone();
-        }
-      });
+    if (!__DEV__ && JailMonkey.isJailBroken() && !this.state.isEmulator) {
+      return this.preventOpenAppWithRootedPhone();
     }
 
     if (!__DEV__ && config.isBeta && !this.state.isBetaVersionRiskAccepted) {
