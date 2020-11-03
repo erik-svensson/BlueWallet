@@ -134,7 +134,7 @@ class Navigator extends React.Component<Props, State> {
     }
 
     if (!__DEV__ && JailMonkey.isJailBroken()) {
-      isEmulator().then(isEmulator => {
+      return isEmulator().then(isEmulator => {
         if (!isEmulator) {
           return this.preventOpenAppWithRootedPhone();
         }
