@@ -215,7 +215,7 @@
     "./**/*.{ts,tsx,js,jsx}": [
       "yarn lint:fix"
     ],
-    "./**/*.{ts,tsx}": [
+    "./**/*.{ts|tsx}": [
       "yarn typescript:check"
     ]
   },
