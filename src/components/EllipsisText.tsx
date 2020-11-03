@@ -3,8 +3,8 @@ import { TextStyle, StyleProp, Text } from 'react-native';
 
 type EllipsizeMode = 'head' | 'middle' | 'tail' | 'clip';
 
-interface Props extends Text {
-  children: React.ReactNode;
+interface Props {
+  children: React.ReactNode | string;
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;
   ellipsizeMode?: EllipsizeMode;
