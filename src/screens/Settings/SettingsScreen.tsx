@@ -88,8 +88,6 @@ export const SettingsScreen = (props: Props) => {
   return (
     <>
       <AppStateManager handleAppComesToForeground={refreshBiometricsAvailability} />
-      {/*	
-       // @ts-ignore */}
       <Header navigation={props.navigation} title={i18n.settings.header} />
       <ScreenTemplate>
         <Image source={logoSource} style={styles.logo} resizeMode="contain" />

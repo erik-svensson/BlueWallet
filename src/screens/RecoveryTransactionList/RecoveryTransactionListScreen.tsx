@@ -146,8 +146,6 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 
     return (
       <View style={styles.container}>
-        {/**
-         // @ts-ignore */}
         <Header title={i18n.send.recovery.recover} isBackArrow navigation={navigation} />
         <View style={styles.contentContainer}>
           <WalletDropdown

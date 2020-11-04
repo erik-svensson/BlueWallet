@@ -82,7 +82,6 @@ class ConfirmPinScreen extends PureComponent<Props, State> {
         noScroll
         header={
           <Header
-            // @ts-ignore
             navigation={this.props.navigation}
             isBackArrow
             title={
@@ -104,7 +103,6 @@ class ConfirmPinScreen extends PureComponent<Props, State> {
             value={this.state.pin}
             testID="confirm-pin"
             onTextChange={this.updatePin}
-            // @ts-ignore - TODO: fix it later
             navigation={this.props.navigation}
           />
           <Text testID="invalid-pin-message" style={styles.errorText}>

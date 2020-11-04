@@ -1,21 +1,16 @@
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { CodeField } from 'react-native-confirmation-code-field';
 
-import { CONST, MainCardStackNavigatorParams, Route } from 'app/consts';
+import { CONST } from 'app/consts';
 import { noop } from 'app/helpers/helpers';
 import { palette } from 'app/styles';
-
-type NavigationType =
-  | StackNavigationProp<MainCardStackNavigatorParams, Route.CreatePin>
-  | StackNavigationProp<MainCardStackNavigatorParams, Route.CurrentPin>;
 
 interface Props {
   value: string;
   testID?: string;
   onTextChange: (pin: string) => void;
-  navigation: NavigationType;
+  navigation: any;
 }
 
 export class PinInput extends PureComponent<Props> {

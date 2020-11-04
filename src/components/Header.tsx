@@ -18,7 +18,7 @@ export const HEADER_HEIGHT = Platform.select({
 }) as number;
 
 interface Props {
-  navigation?: StackNavigationProp<any, any>;
+  navigation?: any; // TODO
   title?: string;
   isBackArrow?: boolean;
   onBackArrow?: () => void;

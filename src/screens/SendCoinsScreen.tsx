@@ -511,7 +511,6 @@ class SendCoinsScreen extends Component<Props, State> {
             disabled={isLoading}
           />
         }
-        // @ts-ignore
         header={<Header navigation={this.props.navigation} isBackArrow title={i18n.send.header} />}
       >
         <WalletDropdown

@@ -107,7 +107,6 @@ class CreateAuthenticatorScreen extends Component<Props> {
   render() {
     return (
       <ScreenTemplate
-        // @ts-ignore
         header={<Header navigation={this.props.navigation} isBackArrow title={i18n.authenticators.add.title} />}
         footer={
           <>

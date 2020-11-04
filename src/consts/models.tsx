@@ -312,7 +312,6 @@ export type RootStackParams = {
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
   [Route.DeleteContact]: { contact?: Contact };
-  [Route.MainCardStackNavigator]: undefined;
   [Route.SendTransactionDetails]: {
     fee: number;
     recipients: any;
@@ -351,7 +350,7 @@ export type MainCardStackNavigatorParams = {
   [Route.ImportWallet]: { walletType: string };
   [Route.CreateTransactionPassword]: undefined;
   [Route.WalletDetails]: { id: string };
-  [Route.CreateContact]: { address?: string };
+  [Route.CreateContact]: { address?: string } | undefined;
   [Route.ContactDetails]: { contact: Contact };
   [Route.ContactQRCode]: { contact: Contact };
   [Route.TransactionDetails]: { transaction: EnhancedTransaction };

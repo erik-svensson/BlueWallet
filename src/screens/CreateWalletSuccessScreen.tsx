@@ -12,8 +12,11 @@ const i18n = require('../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateWalletSuccess>
+    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateWalletSuccess>,
+    CompositeNavigationProp<
+      StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>,
+      StackNavigationProp<MainCardStackNavigatorParams, Route.CreateWalletSuccess>
+    >
   >;
   route: RouteProp<MainCardStackNavigatorParams, Route.CreateWalletSuccess>;
   secret: string[];
@@ -43,7 +46,6 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
     return (
       <ScreenTemplate
         footer={<Button onPress={this.navigateBack} title={i18n.wallets.addSuccess.okButton} />}
-        // @ts-ignore
         header={<Header isBackArrow navigation={navigation} title={i18n.wallets.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.wallets.addSuccess.subtitle}</Text>

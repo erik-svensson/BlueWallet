@@ -144,7 +144,6 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             />
           </>
         }
-        // @ts-ignore
         header={<Header navigation={this.props.navigation} isBackArrow title={wallet.label} />}
       >
         <View style={styles.walletContainer}>
