@@ -100,7 +100,8 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   onLabelChange = (value: string) => {
     const { wallets } = this.props;
     const walletInUse = wallets.some(w => w.label === value);
-    const allWalletsCheck = value.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase();
+    const allWalletsCheck =
+      value.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase() || this.state.label === 'All wallets';
     const validationError =
       walletInUse || allWalletsCheck
         ? walletInUse
