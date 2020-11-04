@@ -14,11 +14,11 @@ import config from './config';
 
 const i18n = require('./loc');
 
-// if (!__DEV__) {
-Sentry.init({
-  dsn: 'https://dc67fd6d5c2949f2a6853e60eb69d899@o429172.ingest.sentry.io/5375289' || config.sentryDsn,
-});
-// }
+if (!__DEV__) {
+  Sentry.init({
+    dsn: config.sentryDsn,
+  });
+}
 
 const getNewKey = () => new Date().toISOString();
 
