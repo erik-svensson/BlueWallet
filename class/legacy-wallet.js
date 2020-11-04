@@ -246,6 +246,10 @@ export class LegacyWallet extends AbstractWallet {
       }
       tx.height = txs.find(t => t.tx_hash === tx.txid).height;
       tx.tx_type = findLast(txs, t => t.tx_hash === tx.txid).tx_type;
+      if (tx.tx_type === undefined) {
+        logger.error('legacy-wallet', `couldnt find tx_type for transaction: ${JSON.stringify(tx)}`);
+        logger.info('legacy-wallet', `txs: ${JSON.stringify(txs)}`);
+      }
       tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();
       if (tx.time) {
         tx.received = new Date(tx.time * 1000).toISOString();

@@ -31,6 +31,14 @@ async function connectMain() {
       logger.error('BlueElectrum', e.message);
       mainConnected = false;
     };
+
+    mainClient.onConnect = function() {
+      logger.info('BlueElectrum', `Connected ${JSON.stringify(mainClient.electrumConfig)}`);
+    };
+
+    // mainClient.onReconnect = function() {
+    //   logger.info('BlueElectrum', `Reconnected ${JSON.stringify(mainClient.electrumConfig)}`);
+    // };
     const ver = await mainClient.initElectrum({
       client: '2.7.11',
       version: config.electrumXProtocolVersion,
