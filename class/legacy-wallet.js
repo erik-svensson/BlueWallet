@@ -210,6 +210,18 @@ export class LegacyWallet extends AbstractWallet {
   }
 
   async setTransactions(txs) {
+    if (txs[0].tx_type === undefined) {
+      logger.info('legacy-wallet', `txs: ${JSON.stringify(txs)}`);
+      logger.info(
+        'legacy-wallet',
+        `mainClient:
+     status: ${JSON.stringify(mainClient.status)}
+     config: ${JSON.stringify(mainClient.electrumConfig)}`,
+      );
+      const error = `fetched txs with no tx_type`;
+      captureException(error);
+      throw new Error(error);
+    }
     const txid_list = txs.map(t => t.tx_hash);
 
     this.transactions = this.transactions.filter(tx => {
