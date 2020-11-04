@@ -1,6 +1,7 @@
 const zh = {
   _: {
     bad_password: '密码错误，请重试',
+    cancel: '取消',
     click: '点击',
     confirm: '确认',
     continue: '继续',
@@ -18,9 +19,8 @@ const zh = {
     or: '或',
     satoshi: '聪',
     save: '保存',
+    scan: '扫描',
     storage_is_encrypted: '储存空间已加密。需要输入密码进行解密',
-    cancel: 'TRANSLATION NEEDED | ENG: Cancel',
-    scan: 'TRANSLATION NEEDED | ENG: Scan',
   },
   aboutUs: {
     alwaysBackupYourKeys: '时刻备份您的秘钥',
@@ -33,15 +33,17 @@ const zh = {
     title: 'Gold wallet 是免费的开源比特币Vault钱包软件。由麻省理工授权。',
   },
   advancedOptions: {
-    description: '启用高级选项将允许您选择以下钱包类型：\n P2SH，HD P2SH，HD segwit。',
+    description: '启用高级选项将允许您选择以下钱包类型：\n  P2SH，HD P2SH，HD segwit。',
     title: '设置高级选项',
   },
   authenticators: {
     add: {
-      description: '打开 Electrum Vault 桌面应用程序，并新建钱包。执行屏幕上的步骤，直至看到 QR 码。用该应用程序进行扫描，以继续。',
+      description:
+        '打开 Electrum Vault 桌面应用程序，并新建钱包。执行屏幕上的步骤，直至看到 QR 码。用该应用程序进行扫描，以继续。',
       subdescription: '您还可以通过选择以下选项导入验证器。',
       subtitle: '配对验证器',
-      successDescription: '在安全地方写下该助记词。这是您的备份，用于恢复验证器。记住，确认“快速与取消”交易需要使用验证器。',
+      successDescription:
+        '在安全地方写下该助记词。这是您的备份，用于恢复验证器。记住，确认“快速与取消”交易需要使用验证器。',
       successTitle: '您的验证器已就绪！',
       title: '添加新验证器',
     },
@@ -54,12 +56,22 @@ const zh = {
       description: '将该 PIN 输入 Electrum Vault 应用程序中，以完成配对过程。',
       subtitle: '输入 PIN',
     },
+    errors: {
+      noEmpty: '该字段不能为空',
+    },
     export: {
       title: '导出验证器',
     },
     import: {
+      code: '代码：',
       desc1: '写下助记词或扫描想要导入的验证器的 QR 码。',
       desc2: '通过点击下面的“或扫描 QR 码”扫描 RQ 码',
+      inUseValidationError: '名字必须是唯一的。请输入一个有效的名字。',
+      mnemonicLength: '记忆词应该有 12 个字符',
+      multipleQrCodesDescription:
+        '有些交易会产生多个二维（QR）码。请确保从 Electrum Vault 应用程序中扫描所有的二维（QR）码。',
+      multipleQrCodesTitle: '扫描二维（QR）码',
+      scanNext: '扫描下一个',
       subtitle: '导入您的验证器',
       success: '您已成功导入验证器。现在可供使用。',
       textAreaPlaceholder: '助记词',
@@ -68,7 +80,8 @@ const zh = {
       mnemonicLength: 'TRANSLATION NEEDED | ENG: Mnemonic should have 12 words',
       scanNext: 'TRANSLATION NEEDED | ENG: Scan next',
       multipleQrCodesTitle: 'TRANSLATION NEEDED | ENG: Scan another QR code',
-      multipleQrCodesDescription: 'TRANSLATION NEEDED | ENG: Some transactions generate multiple QR codes. Make sure to scan all of them from the Electrum Vault application.',
+      multipleQrCodesDescription:
+        'TRANSLATION NEEDED | ENG: Some transactions generate multiple QR codes. Make sure to scan all of them from the Electrum Vault application.',
       code: 'TRANSLATION NEEDED | ENG: Code: ',
     },
     list: {
@@ -92,44 +105,43 @@ const zh = {
       publicKey: '公钥',
       title: '配对验证器',
     },
-    sign: {
-      error: '验证器都不能进行交易签名',
-    },
     publicKey: {
       okButton: 'TRANSLATION NEEDED | ENG: OK, I understand',
       title: 'TRANSLATION NEEDED | ENG: Public Key',
-      subtitle: 'TRANSLATION NEEDED | ENG: You can use this Public Key to import your authenticator to the Electrum Vault desktop application during the creation of the 2FA wallet.',
+      subtitle:
+        'TRANSLATION NEEDED | ENG: You can use this Public Key to import your authenticator to the Electrum Vault desktop application during the creation of the 2FA wallet.',
     },
-    errors: {
-      noEmpty: 'TRANSLATION NEEDED | ENG: Field can not empty',
+    sign: {
+      error: '验证器都不能进行交易签名',
     },
   },
   betaVersion: {
     button: '我同意承担风险',
-    description: '在正式发布之前，GoldWallet仍在接受最终测试。 该移动应用程序及程序上所有内容均基于“按原样 ”和“可使用”呈现。 使用该程序的风险由用户自行承担。',
+    description:
+      '在正式发布之前，GoldWallet仍在接受最终测试。 该移动应用程序及程序上所有内容均基于“按原样 ”和“可使用”呈现。 使用该程序的风险由用户自行承担。',
     title: '这是GoldWallet钱包的测试版',
   },
   contactCreate: {
     addressLabel: '地址',
     buttonLabel: '添加新的联系人',
     description: '请输入您的新联系人姓名和地址。',
+    nameCannotContainSpecialCharactersError: '名称不能包含特殊字符。',
     nameLabel: '姓名',
+    nameMissingAlphanumericCharacterError: '名称缺少字母数字字符。',
     screenTitle: '添加新的联系人',
     subtitle: '新联系人',
     successButton: '返回地址簿',
     successDescription: '太好了！您已成功添加新联系人。',
     successTitle: '操作成功',
-    nameMissingAlphanumericCharacterError: 'TRANSLATION NEEDED | ENG: Name is missing alphanumeric character.',
-    nameCannotContainSpecialCharactersError: 'TRANSLATION NEEDED | ENG: Name cannot contain special characters.',
   },
   contactDelete: {
     description1: '是否确认删除',
-    description2: '？\n 删除后无法撤销。',
+    description2: '？\n  删除后无法撤销。',
     header: '删除联系人',
     no: '否',
     success: '操作成功',
     successButton: '返回地址簿',
-    successDescription: '您的联系人已成功删除。\n 您现在可以返回地址簿。',
+    successDescription: '您的联系人已成功删除。\n  您现在可以返回地址簿。',
     title: '删除您的联系人',
     yes: '是',
   },
@@ -146,7 +158,7 @@ const zh = {
   contactList: {
     cancel: '取消',
     noContacts: '无联系人',
-    noContactsDesc1: '无联系人显示。 \n 点击',
+    noContactsDesc1: '无联系人显示。 \n  点击',
     noContactsDesc2: '以添加首位联系人。',
     noResults: '无结果',
     screenTitle: '地址簿',
@@ -164,6 +176,7 @@ const zh = {
     useDefault: '使用默认设置',
   },
   filterTransactions: {
+    clearAll: '全部清除',
     clearFilters: '清除筛选设置',
     filter: '筛选设置',
     from: '汇款人',
@@ -175,8 +188,8 @@ const zh = {
     send: '发送',
     sent: '已发送',
     status: {
-      annulled: '无效',
       canceled: '已取消',
+      canceledDone: '取消——已完成',
       done: '完成',
       pending: '待定',
       unblocked: '未锁定',
@@ -191,15 +204,15 @@ const zh = {
   },
   message: {
     allDone: '全部完成！',
-    cancelTxSuccess: '您已成功取消交易。\n 正在出币。',
+    cancelTxSuccess: '您已成功取消交易。\n  正在出币。',
     creatingAuthenticator: '正在创建验证器',
-    creatingAuthenticatorDescription: '创建验证器时请耐心等待。\n 可能需要一些时间。',
+    creatingAuthenticatorDescription: '创建验证器时请耐心等待。\n  可能需要一些时间。',
     creatingWallet: '创建钱包',
     creatingWalletDescription: '创建钱包时请耐心等待。可能需要一些时间。',
     generateAddressesError: '无法生成地址',
     hooray: '太好了！',
     importingAuthenticator: '正在导入您的验证器',
-    importingAuthenticatorDescription: '导入验证器时请耐心等待。\n 可能需要一些时间。',
+    importingAuthenticatorDescription: '导入验证器时请耐心等待。\n  可能需要一些时间。',
     noTransactions: '在钱包中没有找到交易',
     noTransactionsDesc: '您可能正在尝试导入未曾用过的钱包',
     returnToAuthenticators: '返回验证器',
@@ -223,7 +236,8 @@ const zh = {
     confirmPin: '确认PIN',
     createNewPin: '新的PIN',
     createPassword: '创建交易密码',
-    createPasswordDescription: '您的交易密码将用于验证所有交易。\n您之后将无法更改。\n交易密码必须包含至少8位字母数字字符。',
+    createPasswordDescription:
+      '您的交易密码将用于验证所有交易。\n您之后将无法更改。\n交易密码必须包含至少8位字母数字字符。',
     createPin: '创建PIN',
     createPinDescription: '您的PIN将用于登录应用。您之后可在设置一栏更改。',
     currentPin: '现用PIN',
@@ -239,20 +253,22 @@ const zh = {
     seconds: '秒',
     successButton: '前往仪表盘',
     successButtonChangedPin: '返回设置',
-    successDescription: '好极了！\n 您已经成功创建了您的PIN。',
-    successDescriptionChangedPin: '好极了！\n 您已经成功修改了您的PIN。',
+    successDescription: '好极了！\n  您已经成功创建了您的PIN。',
+    successDescriptionChangedPin: '好极了！\n  您已经成功修改了您的PIN。',
     tryAgain: '稍后再试',
   },
   receive: {
     details: {
       amount: '金额',
       receiveWithAmount: '接收金额',
+      receiveWithAmountSubtitle: '输入您想收到的金额。二维（QR）码会相应地更新以包含金额。',
       share: '分享',
       shareWalletAddress: 'TRANSLATION NEEDED | ENG: Share wallet address',
-      receiveWithAmountSubtitle: 'TRANSLATION NEEDED | ENG: Enter the amount which you would like to receive. The QR code will update accordingly to include the amount.',
+      receiveWithAmountSubtitle:
+        'TRANSLATION NEEDED | ENG: Enter the amount which you would like to receive. The QR code will update accordingly to include the amount.',
     },
     header: '接收币',
-    label: 'TRANSLATION NEEDED | ENG: Wallet address',
+    label: '钱包地址',
   },
   scanQrCode: {
     cancel: '取消',
@@ -261,9 +277,11 @@ const zh = {
     permissionTitle: '允许使用相机',
   },
   security: {
-    jailBrokenPhone: '您的设备似乎越狱了。这可能会出现安全问题、死机或其它问题。我们不建议在已越狱的设备上使用 GoldWallet。',
+    jailBrokenPhone:
+      '您的设备似乎越狱了。这可能会出现安全问题、死机或其它问题。我们不建议在已越狱的设备上使用 GoldWallet。',
     noPinOrFingerprintSet: '您的设备未设置PIN 密码或指纹登录。 不建议在不安全的设备上使用GoldWallet。',
-    rootedPhone: '您的设备似乎取得了 root 权限。这可能会出现安全问题、死机或其它问题。我们不建议在取得 root 权限的设备上使用 GoldWallet。',
+    rootedPhone:
+      '您的设备似乎取得了 root 权限。这可能会出现安全问题、死机或其它问题。我们不建议在取得 root 权限的设备上使用 GoldWallet。',
     title: '安全问题',
   },
   selectLanguage: {
@@ -343,7 +361,8 @@ const zh = {
       watchOnlyError: '监视钱包不能发送交易',
     },
     warning: '警告:',
-    warningGeneral: '警告：请注意，在使用安全交易功能的过程中，您钱包中剩余的部分资金可能会被冻结。 这是与UTXO和比特币 Vault钱包的区块链参数的常规过程。 当交易通过验证（大约24小时后）或交易被取消（24小时内）后，资金冻结将被解除。',
+    warningGeneral:
+      '警告：请注意，在使用安全交易功能的过程中，您钱包中剩余的部分资金可能会被冻结。 这是与UTXO和比特币 Vault钱包的区块链参数的常规过程。 当交易通过验证（大约24小时后）或交易被取消（24小时内）后，资金冻结将被解除。',
   },
   settings: {
     about: '关于',
@@ -364,7 +383,6 @@ const zh = {
   tabNavigator: {
     addressBook: '地址簿',
     authenticators: '验证器',
-    dashboard: '仪表盘',
     settings: '设置',
     wallets: '钱包',
   },
@@ -379,6 +397,7 @@ const zh = {
       addNote: '添加备注',
       addToAddressBook: '添加至地址簿',
       amount: '金额',
+      blocked: '锁定',
       bytes: '字节',
       confirmations: '确认',
       copy: '复制',
@@ -390,12 +409,17 @@ const zh = {
       inputs: '输入',
       noLabel: '无标签',
       note: '备注',
+      numberOfCancelTransactions: '取消交易的数量',
       ouputs: '输出',
+      returnedFee: '返还费用：',
       satoshiPerByte: '每字节聪',
       sendCoins: '汇出币',
       timePending: '待定时间',
       title: '交易',
       to: '到',
+      toExternalWallet: '至外部钱包',
+      toInternalWallet: '至内部钱包',
+      totalReturnedFee: '总返还费用：',
       transactioFee: '交易费',
       transactionDetails: '交易详情',
       transactionHex: '十六进制字符串交易标识符',
@@ -403,23 +427,18 @@ const zh = {
       transactionId: '交易 ID',
       transactionType: '交易类型',
       txSize: '交易大小',
+      unblocked: '未锁定',
       verify: '在 coinb.in 上验证',
       viewInBlockRxplorer: '在区块浏览器中查看',
       walletType: '钱包类型',
-      returnedFee: 'TRANSLATION NEEDED | ENG: Returned fee:',
-      numberOfCancelTransactions: 'TRANSLATION NEEDED | ENG: Number of Cancel transactions',
-      toExternalWallet: 'TRANSLATION NEEDED | ENG: To the external wallet',
-      toInternalWallet: 'TRANSLATION NEEDED | ENG: To the internal wallet',
-      totalReturnedFee: 'TRANSLATION NEEDED | ENG: Total returned fee:',
-      unblocked: 'TRANSLATION NEEDED | ENG: Unblocked',
-      blocked: 'TRANSLATION NEEDED | ENG: Blocked',
     },
     errors: {
       notEnoughBalance: '余额不足，请尝试发送较小的金额。',
     },
     label: {
-      annulled: '无效',
+      blocked: '锁定',
       canceled: '已取消',
+      canceledDone: '取消——已完成',
       done: '完成',
       pending: '待定',
       unblocked: '未锁定',
@@ -431,7 +450,6 @@ const zh = {
     },
     transactionTypeLabel: {
       canceled: '已取消',
-      fast: '快速',
       secure: '安全',
       secureFast: '快速安全',
       standard: '标准',
@@ -459,23 +477,24 @@ const zh = {
       importWalletButton: '导入钱包',
       inputLabel: '名称',
       legacy: '执行默认类型的交易。',
-      legacyHDP2SH: '它包含一系列由单一的 12 词种子生成的 P2SH 地址',
+      legacyHDP2SH: '它包含一系列由单一的 24 词种子生成的 P2SH 地址',
       legacyHDP2SHTitle: '旧版 HD P2SH',
-      LegacyHDSegWit: '它包含一系列由单一的 12 词种子生成的 segwit 地址',
+      LegacyHDSegWit: '它包含一系列由单一的 24 词种子生成的 segwit 地址',
       legacyHDSegWitTitle: '旧版 HD SegWit',
       LegacyP2SH: '它包含单个 P2SH 地址',
       legacyP2SHTitle: '旧版 P2SH',
       legacyTitle: '旧版',
       multipleAddresses: '多个地址',
       publicKeyError: '所提供的公钥无效',
-      segwidAddress: '它包含一系列的由单一的12词种子生成的本地segwit地址',
+      segwidAddress: '它包含一系列的由单一的24词种子生成的本地segwit地址',
       singleAddress: '单个地址',
       subtitle: '命名您的钱包',
       title: '添加新的钱包',
       walletType: '钱包类型',
     },
     addSuccess: {
-      description: '您的钱包已创建。请花费一点时间在纸上写下这个助记词。这是您的备份。您可以在其它设备上使用备份来恢复钱包。',
+      description:
+        '您的钱包已创建。请花费一点时间在纸上写下这个助记词。这是您的备份。您可以在其它设备上使用备份来恢复钱包。',
       okButton: '好的，我写完了！',
       subtitle: '操作成功',
       title: '添加新的钱包',
@@ -503,6 +522,7 @@ const zh = {
     },
     details: {
       deleteWallet: '删除钱包',
+      details: '详情',
       edit: '编辑',
       exportWallet: '导出钱包',
       latestTransaction: '最新交易',
@@ -510,7 +530,6 @@ const zh = {
       nameLabel: '名称',
       showWalletXPUB: '显示钱包扩展公钥 (XPUB)',
       typeLabel: '类型',
-      details: 'TRANSLATION NEEDED | ENG: Details',
     },
     errors: {
       duplicatedPublicKey: '该公钥已添加',
@@ -543,6 +562,8 @@ const zh = {
     },
     importWallet: {
       chooseTypeDescription: '选择想要导入的钱包类型。',
+      customWords: '自定义词语',
+      extendWithCustomWords: '用自定义词语扩展这个种子',
       header: '导入钱包',
       import: '导入',
       importARDescription1: '输入助记词',
@@ -564,7 +585,8 @@ const zh = {
     publicKey: {
       instantDescription: '转到另一设备上的 web 密钥生成器，并使用该应用程序扫描公钥 QR二维 码。记得将密钥导出为 PDF！',
       instantSubtitle: '添加快速键',
-      recoveryDescription: '转到另一设备上的 web 密钥生成器，并使用该应用程序扫描公钥 QR 二维码。记得将密钥导出为 PDF！',
+      recoveryDescription:
+        '转到另一设备上的 web 密钥生成器，并使用该应用程序扫描公钥 QR 二维码。记得将密钥导出为 PDF！',
       recoverySubtitle: '添加取消键',
       scan: '扫描',
       webKeyGenerator: 'Web 密钥生成器：',
@@ -594,4 +616,4 @@ const zh = {
       wallets: '钱包',
     },
   },
-}
+};
