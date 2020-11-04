@@ -208,6 +208,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     if (walletsLabels.includes(this.state.label.trim())) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
+    if (this.state.label.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase()) {
+      return i18n.wallets.importWallet.allWalletsValidationError;
+    }
   }
 
   renderAdvancedSection() {
