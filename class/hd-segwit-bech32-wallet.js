@@ -8,6 +8,7 @@ const BlueElectrum = require('../BlueElectrum');
 const HDNode = require('bip32');
 const coinSelectAccumulative = require('coinselect/accumulative');
 const coinSelectSplit = require('coinselect/split');
+const config = require('../config');
 
 const { RNRandomBytes } = NativeModules;
 
@@ -55,7 +56,8 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       if (typeof RNRandomBytes === 'undefined') {
         // CLI/CI environment
         // crypto should be provided globally by test launcher
-        return crypto.randomBytes(32, (err, buf) => { // eslint-disable-line
+        return crypto.randomBytes(32, (err, buf) => {
+          // eslint-disable-line
           if (err) throw err;
           that.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
           resolve();
@@ -83,7 +85,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     if (!this.secret) return false;
     const mnemonic = this.secret;
     const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = HDNode.fromSeed(seed);
+    const root = HDNode.fromSeed(seed, config.network);
     const path = `m/84'/440'/0'/0/${index}`;
     const child = root.derivePath(path);
 
@@ -92,7 +94,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
 
   _getNodeAddressByIndex(index) {
     index = index * 1; // cast to int
-    return this._address[index]
+    return this._address[index];
   }
 
   generateAddresses() {
@@ -140,7 +142,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     // first, getting xpub
     const mnemonic = this.secret;
     const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = HDNode.fromSeed(seed);
+    const root = HDNode.fromSeed(seed, config.network);
 
     const path = "m/84'/440'/0'";
     const child = root.derivePath(path).neutered();
@@ -157,16 +159,16 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
 
   _getDerivationPathByAddress(address) {
     const path = "m/84'/440'/0'/0/";
-    let index =  this._address.indexOf(address);
+    let index = this._address.indexOf(address);
     if (index === -1) return false;
     return path + index;
   }
 
   _getPubkeyByAddress(address) {
-    let index =  this._address.indexOf(address);
+    let index = this._address.indexOf(address);
     if (index === -1) return false;
     return this._getNodePubkeyByIndex(index);
-    }
+  }
 
   /**
    * @deprecated
@@ -200,7 +202,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       throw new Error('Not enough balance. Try sending smaller amount');
     }
 
-    let psbt = new bitcoin.Psbt();
+    let psbt = new bitcoin.Psbt({ network: config.network });
 
     let c = 0;
     let keypairs = {};
@@ -210,7 +212,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       let keyPair;
       if (!skipSigning) {
         // skiping signing related stuff
-        keyPair = bitcoin.ECPair.fromWIF(this._getWifForAddress(input.address));
+        keyPair = bitcoin.ECPair.fromWIF(this._getWifForAddress(input.address), config.network);
         keypairs[c] = keyPair;
       }
       values[c] = input.value;
@@ -224,7 +226,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       // this is not correct fingerprint, as we dont know real fingerprint - we got zpub with 84/0, but fingerpting
       // should be from root. basically, fingerprint should be provided from outside  by user when importing zpub
       let path = this._getDerivationPathByAddress(input.address);
-      const p2wpkh = bitcoin.payments.p2wpkh({ pubkey })
+      const p2wpkh = bitcoin.payments.p2wpkh({ pubkey, network: config.network });
       psbt.addInput({
         hash: input.txid,
         index: input.vout,
@@ -298,8 +300,8 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
    * @returns {Transaction}
    */
   combinePsbt(base64one, base64two) {
-    const final1 = bitcoin.Psbt.fromBase64(base64one);
-    const final2 = bitcoin.Psbt.fromBase64(base64two);
+    const final1 = bitcoin.Psbt.fromBase64(base64one, { network: config.network });
+    const final2 = bitcoin.Psbt.fromBase64(base64two, { network: config.network });
     final1.combine(final2);
     return final1.finalizeAllInputs().extractTransaction();
   }

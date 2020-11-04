@@ -6,6 +6,7 @@ const { RNRandomBytes } = NativeModules;
 const BigNumber = require('bignumber.js');
 const signer = require('../models/signer');
 const BlueElectrum = require('../BlueElectrum');
+const config = require('../config');
 
 /**
  *  Has private key and single address like "1ABCD....."
@@ -36,7 +37,7 @@ export class LegacyWallet extends AbstractWallet {
    */
   timeToRefreshTransaction() {
     if (this.unconfirmed_transactions) {
-        return true;
+      return true;
     }
     return false;
   }
@@ -47,9 +48,11 @@ export class LegacyWallet extends AbstractWallet {
       if (typeof RNRandomBytes === 'undefined') {
         // CLI/CI environment
         // crypto should be provided globally by test launcher
-        return crypto.randomBytes(32, (err, buf) => { // eslint-disable-line
+        return crypto.randomBytes(32, (err, buf) => {
+          // eslint-disable-line
           if (err) throw err;
           that.secret = bitcoin.ECPair.makeRandom({
+            network: config.network,
             rng: function(length) {
               return buf;
             },
@@ -62,6 +65,7 @@ export class LegacyWallet extends AbstractWallet {
       RNRandomBytes.randomBytes(32, (err, bytes) => {
         if (err) throw new Error(err);
         that.secret = bitcoin.ECPair.makeRandom({
+          network: config.network,
           rng: function(length) {
             let b = Buffer.from(bytes, 'base64');
             return b;
@@ -80,9 +84,10 @@ export class LegacyWallet extends AbstractWallet {
     if (this._address) return this._address;
     let address;
     try {
-      let keyPair = bitcoin.ECPair.fromWIF(this.secret);
+      let keyPair = bitcoin.ECPair.fromWIF(this.secret, config.network);
       address = bitcoin.payments.p2pkh({
         pubkey: keyPair.publicKey,
+        network: config.network,
       }).address;
     } catch (err) {
       return false;
@@ -90,7 +95,7 @@ export class LegacyWallet extends AbstractWallet {
     this._address = address;
 
     return this._address;
-  }                                                                                                                                                                                                                  
+  }
 
   /**
    * Fetches balance of the Wallet via API.
@@ -99,7 +104,7 @@ export class LegacyWallet extends AbstractWallet {
    * @returns {Promise.<void>}
    */
   async fetchBalance() {
-    try {  
+    try {
       let balance = await BlueElectrum.getBalanceByAddress(this.getAddress());
       this.balance = balance.confirmed + balance.unconfirmed;
       this.unconfirmed_balance = balance.unconfirmed;
@@ -124,14 +129,14 @@ export class LegacyWallet extends AbstractWallet {
     }
   }
 
-    /**
+  /**
    * Fetches transactions via API. Returns VOID.
    * Use getter to get the actual list.
    *
    * @return {Promise.<void>}
    */
   async fetchTransactions() {
-    let txids_to_update = []
+    let txids_to_update = [];
     try {
       this._lastTxFetch = +new Date();
       let txids = await BlueElectrum.getTransactionsByAddress(this.getAddress());
@@ -165,15 +170,16 @@ export class LegacyWallet extends AbstractWallet {
    * @return string Signed txhex ready for broadcast
    */
   createTx(utxos, amount, fee, toAddress, memo) {
+    const newUtxos = JSON.parse(JSON.stringify(utxos));
     // transforming UTXOs fields to how module expects it
-    for (let u of utxos) {
+    for (let u of newUtxos) {
       u.confirmations = 6; // hack to make module accept 0 confirmation
       u.amount = u.amount.dividedBy(100000000);
       u.amount = u.amount.toString(10);
     }
     // console.log('creating legacy tx ', amount, ' with fee ', fee, 'secret=', this.getSecret(), 'from address', this.getAddress());
     let amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
-    return signer.createTransaction(utxos, toAddress, amountPlusFee, fee, this.getSecret(), this.getAddress());
+    return signer.createTransaction(newUtxos, toAddress, amountPlusFee, fee, this.getSecret(), this.getAddress());
   }
 
   getLatestTransactionTime() {
@@ -206,7 +212,7 @@ export class LegacyWallet extends AbstractWallet {
 
   isAddressValid(address) {
     try {
-      bitcoin.address.toOutputScript(address);
+      bitcoin.address.toOutputScript(address, config.network);
       return true;
     } catch (e) {
       return false;
@@ -225,34 +231,30 @@ export class LegacyWallet extends AbstractWallet {
   }
 
   async _update_unconfirmed_tx(txid_list) {
-    try{
+    try {
       let txs_full = await BlueElectrum.multiGetTransactionsFullByTxid(txid_list);
-      let unconfirmed_transactions = []
-      for (let tx of txs_full) {  
+      let unconfirmed_transactions = [];
+      for (let tx of txs_full) {
         let value = 0;
-          for (let input of tx.inputs) {
-            if (!input.txid) continue; // coinbase 
-            if (this.weOwnAddress(input.addresses[0])) value -= input.value;
-          }
-          for (let output of tx.outputs) {
-            if (!output.addresses) continue; // OP_RETURN
-            if (this.weOwnAddress(output.addresses[0])) value += output.value;
-          }
-          tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();;
-          if (tx.time) 
-            tx.received = new Date(tx.time * 1000).toISOString();
-          else
-            tx.received = new Date().toISOString();
-          tx.walletLabel = this.label
-          if (!tx.confirmations) tx.confirmations = 0;
-          if (tx.confirmations < 6 ) 
-            unconfirmed_transactions.push(tx);
-          else 
-            this.transactions.push(tx);
+        for (let input of tx.inputs) {
+          if (!input.txid) continue; // coinbase
+          if (this.weOwnAddress(input.addresses[0])) value -= input.value;
+        }
+        for (let output of tx.outputs) {
+          if (!output.addresses) continue; // OP_RETURN
+          if (this.weOwnAddress(output.addresses[0])) value += output.value;
+        }
+        tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();
+        if (tx.time) tx.received = new Date(tx.time * 1000).toISOString();
+        else tx.received = new Date().toISOString();
+        tx.walletLabel = this.label;
+        if (!tx.confirmations) tx.confirmations = 0;
+        if (tx.confirmations < 6) unconfirmed_transactions.push(tx);
+        else this.transactions.push(tx);
       }
       this.unconfirmed_transactions = unconfirmed_transactions; // all unconfirmed transactions will be updated
     } catch (err) {
-    console.warn(err.message);
+      console.warn(err.message);
     }
   }
 }

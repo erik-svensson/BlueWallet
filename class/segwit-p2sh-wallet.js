@@ -2,6 +2,7 @@ import { LegacyWallet } from './legacy-wallet';
 const bitcoin = require('bitcoinjs-lib');
 const signer = require('../models/signer');
 const BigNumber = require('bignumber.js');
+const config = require('../config');
 
 /**
  * Creates Segwit P2SH Bitcoin address
@@ -10,7 +11,7 @@ const BigNumber = require('bignumber.js');
  * @returns {String}
  */
 function pubkeyToP2shSegwitAddress(pubkey, network) {
-  network = network || bitcoin.networks.bitcoin;
+  network = network || config.network;
   const { address } = bitcoin.payments.p2sh({
     redeem: bitcoin.payments.p2wpkh({ pubkey, network }),
     network,
@@ -43,7 +44,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
     try {
       ret = bitcoin.payments.p2sh({
         output: scriptPubKey2,
-        network: bitcoin.networks.bitcoin,
+        network: config.network,
       }).address;
     } catch (_) {
       return false;
@@ -55,7 +56,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
     if (this._address) return this._address;
     let address;
     try {
-      let keyPair = bitcoin.ECPair.fromWIF(this.secret);
+      let keyPair = bitcoin.ECPair.fromWIF(this.secret, config.network);
       let pubKey = keyPair.publicKey;
       if (!keyPair.compressed) {
         console.warn('only compressed public keys are good for segwit');
@@ -83,18 +84,20 @@ export class SegwitP2SHWallet extends LegacyWallet {
    * @return string Signed txhex ready for broadcast
    */
   createTx(utxos, amount, fee, address, memo, sequence) {
+    console.log('utxos', utxos);
+    const newUtxos = JSON.parse(JSON.stringify(utxos));
     // TODO: memo is not used here, get rid of it
     if (sequence === undefined) {
       sequence = 0;
     }
     // transforming UTXOs fields to how module expects it
-    for (let u of utxos) {
+    for (let u of newUtxos) {
       u.amount = u.amount.dividedBy(100000000);
       u.amount = u.amount.toString(10);
     }
     // console.log('creating tx ', amount, ' with fee ', fee, 'secret=', this.getSecret(), 'from address', this.getAddress());
     let amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
     // to compensate that module substracts fee from amount
-    return signer.createSegwitTransaction(utxos, address, amountPlusFee, fee, this.getSecret(), this.getAddress(), sequence);
+    return signer.createSegwitTransaction(newUtxos, address, amountPlusFee, fee, this.getSecret(), this.getAddress(), sequence);
   }
 }

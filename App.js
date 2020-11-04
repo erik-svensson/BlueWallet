@@ -115,11 +115,7 @@ export default class App extends React.Component {
         const isAddressFromStoredWallet = BlueApp.getWallets().some(wallet =>
           wallet.chain === Chain.ONCHAIN ? wallet.weOwnAddress(clipboard) : wallet.isInvoiceGeneratedByWallet(clipboard),
         );
-        if (
-          !isAddressFromStoredWallet &&
-          this.state.clipboardContent !== clipboard &&
-          (this.isBitcoinAddress(clipboard))
-        ) {
+        if (!isAddressFromStoredWallet && this.state.clipboardContent !== clipboard && this.isBitcoinAddress(clipboard)) {
           this.setState({ isClipboardContentModalVisible: true });
         }
         this.setState({ clipboardContent: clipboard });
@@ -158,7 +154,7 @@ export default class App extends React.Component {
   }
 
   isSafelloRedirect(event) {
-    let urlObject = url.parse(event.url, true) // eslint-disable-line
+    let urlObject = url.parse(event.url, true); // eslint-disable-line
 
     return !!urlObject.query['safello-state-token'];
   }
@@ -181,7 +177,6 @@ export default class App extends React.Component {
           }),
         );
     } else {
-        return;
     }
   };
 

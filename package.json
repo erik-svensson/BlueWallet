@@ -35,7 +35,8 @@
     "test": "npm run unit && npm run jest && npm run lint",
     "jest": "node node_modules/jest/bin/jest.js tests/integration/*",
     "lint": "./node_modules/.bin/eslint *.js screen/**/*.js screen/ class/ models/ loc/ tests/integration/ --fix",
-    "unit": "./node_modules/.bin/mocha tests/unit/*"
+    "unit": "echo",
+    "test_integration": "echo"
   },
   "jest": {
     "preset": "react-native",
@@ -110,7 +111,7 @@
     "react-native-quick-actions": "0.3.12",
     "react-native-randombytes": "3.5.3",
     "react-native-rate": "1.1.7",
-    "react-native-secure-key-store": "git+https://github.com/marcosrdz/react-native-secure-key-store.git#38332f629f577cdd57c69fc8cc971b3cbad193c9",
+    "react-native-secure-key-store": "^2.0.4",
     "react-native-share": "2.0.0",
     "react-native-snap-carousel": "3.8.4",
     "react-native-sortable-list": "0.0.23",

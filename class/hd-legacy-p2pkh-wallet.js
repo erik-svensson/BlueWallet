@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import signer from '../models/signer';
 const bitcoin = require('bitcoinjs-lib');
 const HDNode = require('bip32');
+const config = require('../config');
 
 /**
  * HD Wallet (BIP39).
@@ -24,7 +25,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
     }
     const mnemonic = this.secret;
     const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = bitcoin.bip32.fromSeed(seed);
+    const root = bitcoin.bip32.fromSeed(seed, config.network);
 
     const path = "m/44'/440'/0'";
     const child = root.derivePath(path).neutered();
@@ -59,10 +60,11 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
   }
 
   generateAddresses() {
-    let node = bitcoin.bip32.fromBase58(this.getXpub());;
-    for (let index = 0; index <this.num_addresses; index++) {
+    let node = bitcoin.bip32.fromBase58(this.getXpub(), config.network);
+    for (let index = 0; index < this.num_addresses; index++) {
       let address = bitcoin.payments.p2pkh({
         pubkey: node.derive(0).derive(index).publicKey,
+        network: config.network,
       }).address;
       this._address.push(address);
       this._address_to_wif_cache[address] = this._getWIFByIndex(index);
@@ -81,12 +83,6 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
     }
 
     let amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
-    return signer.createHDTransaction(
-      utxos,
-      address,
-      amountPlusFee,
-      fee,
-      this.getAddressForTransaction(),
-    );
+    return signer.createHDTransaction(utxos, address, amountPlusFee, fee, this.getAddressForTransaction());
   }
 }

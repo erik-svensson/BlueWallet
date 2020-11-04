@@ -9,6 +9,7 @@ import { BitcoinUnit } from '../models/bitcoinUnits';
 const bitcoin = require('bitcoinjs-lib');
 const HDNode = require('bip32');
 const BlueElectrum = require('../BlueElectrum');
+const config = require('../config');
 
 const { RNRandomBytes } = NativeModules;
 
@@ -33,7 +34,8 @@ function ypubToXpub(ypub) {
  */
 function nodeToP2shSegwitAddress(hdNode) {
   const { address } = bitcoin.payments.p2sh({
-    redeem: bitcoin.payments.p2wpkh({ pubkey: hdNode.publicKey }),
+    redeem: bitcoin.payments.p2wpkh({ pubkey: hdNode.publicKey, network: config.network }),
+    network: config.network,
   });
   return address;
 }
@@ -51,7 +53,7 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
     return true;
   }
 
-  allowSendMax(){
+  allowSendMax() {
     return true;
   }
 
@@ -61,7 +63,8 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
       if (typeof RNRandomBytes === 'undefined') {
         // CLI/CI environment
         // crypto should be provided globally by test launcher
-        return crypto.randomBytes(32, (err, buf) => { // eslint-disable-line
+        return crypto.randomBytes(32, (err, buf) => {
+          // eslint-disable-line
           if (err) throw err;
           that.setSecret(bip39.entropyToMnemonic(buf.toString('hex')));
           resolve();
@@ -87,12 +90,12 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
    */
   _getWIFByIndex(index) {
     const mnemonic = this.secret;
-    const seed = bip39.mnemonicToSeed(mnemonic);
+    const seed = bip39.mnemonicToSeed(mnemonic, config.network);
     const root = bitcoin.bip32.fromSeed(seed);
     const path = `m/49'/440'/0'/0/${index}`;
     const child = root.derivePath(path);
 
-    return bitcoin.ECPair.fromPrivateKey(child.privateKey).toWIF();
+    return bitcoin.ECPair.fromPrivateKey(child.privateKey, { network: config.network }).toWIF();
   }
 
   /**
@@ -108,7 +111,7 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
     // first, getting xpub
     const mnemonic = this.secret;
     const seed = bip39.mnemonicToSeed(mnemonic);
-    const root = HDNode.fromSeed(seed);
+    const root = HDNode.fromSeed(seed, config.network);
 
     const path = "m/49'/440'/0'";
     const child = root.derivePath(path).neutered();
@@ -125,9 +128,9 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
 
   generateAddresses() {
     if (!this._node0) {
-        const xpub = ypubToXpub(this.getXpub());
-        const hdNode = HDNode.fromBase58(xpub);
-        this._node0 = hdNode.derive(0);
+      const xpub = ypubToXpub(this.getXpub());
+      const hdNode = HDNode.fromBase58(xpub);
+      this._node0 = hdNode.derive(0);
     }
     for (let index = 0; index < this.num_addresses; index++) {
       let address = nodeToP2shSegwitAddress(this._node0.derive(index));
@@ -164,12 +167,6 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
       amountPlusFee = amountPlusFee.dividedBy(100000000).toString(10);
     }
 
-    return signer.createHDSegwitTransaction(
-      utxos,
-      address,
-      amountPlusFee,
-      fee,
-      this.getAddressForTransaction(),
-    );
+    return signer.createHDSegwitTransaction(utxos, address, amountPlusFee, fee, this.getAddressForTransaction());
   }
 }
