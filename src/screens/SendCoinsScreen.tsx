@@ -435,7 +435,7 @@ class SendCoinsScreen extends Component<Props, State> {
         value={transaction.address}
         setValue={text => this.processAddressData(text.trim())}
         multiline
-        maxLength={50}
+        maxLength={CONST.maxAddressLength}
       />
     );
   };

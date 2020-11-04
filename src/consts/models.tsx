@@ -23,6 +23,7 @@ export const CONST = {
   transactionPassword: 'transactionPassword',
   pin: 'pin',
   defaultLanguage: 'en',
+  maxAddressLength: 46,
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
