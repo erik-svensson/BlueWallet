@@ -17,7 +17,7 @@ const hardcodedPeers = [
   { host: '157.245.20.66', tcp: '50001' },
 ];
 
-let mainClient = false;
+export let mainClient = false;
 let mainConnected = false;
 let wasConnectedAtLeastOnce = false;
 
@@ -36,9 +36,6 @@ async function connectMain() {
       logger.info('BlueElectrum', `Connected ${JSON.stringify(mainClient.electrumConfig)}`);
     };
 
-    // mainClient.onReconnect = function() {
-    //   logger.info('BlueElectrum', `Reconnected ${JSON.stringify(mainClient.electrumConfig)}`);
-    // };
     const ver = await mainClient.initElectrum({
       client: '2.7.11',
       version: config.electrumXProtocolVersion,
