@@ -5,7 +5,7 @@ import { StyleSheet, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioGroup, RadioButton } from 'app/components';
-import { Route, Wallet, MainCardStackNavigatorParams, ActionMeta } from 'app/consts';
+import { Route, Wallet, MainCardStackNavigatorParams, ActionMeta, CONST } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import {
@@ -210,7 +210,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     }
     if (
       this.state.label.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase() ||
-      this.state.label === 'All wallets'
+      this.state.label === CONST.allWallets
     ) {
       return i18n.wallets.importWallet.allWalletsValidationError;
     }
