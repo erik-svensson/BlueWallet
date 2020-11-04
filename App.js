@@ -15,12 +15,6 @@ import * as Sentry from '@sentry/react-native';
 import OnAppLaunch from './class/onAppLaunch';
 const A = require('./analytics');
 
-if (process.env.NODE_ENV !== 'development') {
-  Sentry.init({
-    dsn: 'https://23377936131848ca8003448a893cb622@sentry.io/1295736',
-  });
-}
-
 const bitcoin = require('bitcoinjs-lib');
 const bitcoinModalString = 'Bitcoin address';
 const loc = require('./loc');
