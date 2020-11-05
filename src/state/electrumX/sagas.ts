@@ -78,6 +78,72 @@ export function* listenScriptHashesSaga() {
   }
 }
 
+function emitOnConnect() {
+  return eventChannel(emitter => {
+    BlueElectrum.subscribeToOnConnect(() => {
+      console.log('Connected');
+      emitter(true);
+    });
+
+    return () => {};
+  });
+}
+
+export function* listenOnConnect() {
+  yield BlueElectrum.waitTillConnected();
+
+  const chan = yield call(emitOnConnect);
+
+  while (true) {
+    const event = yield take(chan);
+    console.log('listenOnConnect', event);
+  }
+}
+
+function emitOnReconnect() {
+  return eventChannel(emitter => {
+    BlueElectrum.subscribeToOnReconnect(() => {
+      console.log('Reconnected');
+      emitter(true);
+    });
+
+    return () => {};
+  });
+}
+
+export function* listenOnReconnect() {
+  yield BlueElectrum.waitTillConnected();
+
+  const chan = yield call(emitOnReconnect);
+
+  while (true) {
+    const event = yield take(chan);
+    console.log('listenOnReconnect', event);
+  }
+}
+
+function emitOnClose() {
+  return eventChannel(emitter => {
+    BlueElectrum.subscribeToOnClose(() => {
+      console.log('Close');
+      emitter(true);
+    });
+
+    return () => {};
+  });
+}
+
+export function* listenOnClose() {
+  yield BlueElectrum.waitTillConnected();
+
+  const chan = yield call(emitOnClose);
+
+  while (true) {
+    const event = yield take(chan);
+    console.log('listenOnClose', event);
+  }
+}
+
 export function* subscribeToScriptHashes() {
   const wallets = yield select(walletsSelectors.wallets);
 
@@ -109,6 +175,9 @@ export default [
     ],
     subscribeToScriptHashes,
   ),
+  takeLatest(ElectrumXAction.StartListeners, listenOnClose),
+  takeLatest(ElectrumXAction.StartListeners, listenOnReconnect),
+  takeLatest(ElectrumXAction.StartListeners, listenOnConnect),
   takeLatest(ElectrumXAction.StartListeners, listenScriptHashesSaga),
   takeLatest(ElectrumXAction.StartListeners, listenBlockchainHeadersSaga),
   takeLatest(ElectrumXAction.FetchBlockHeight, fetchBlockchainHeadersSaga),

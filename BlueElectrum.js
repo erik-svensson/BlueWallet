@@ -32,14 +32,19 @@ async function connectMain() {
       mainConnected = false;
     };
 
-    mainClient.onConnect = function() {
-      logger.info('BlueElectrum', `Connected ${JSON.stringify(mainClient.electrumConfig)}`);
-    };
+    // mainClient.onConnect = function() {
+    //   logger.info('BlueElectrum', `Connected ${JSON.stringify(mainClient.electrumConfig)}`);
+    // };
 
     const ver = await mainClient.initElectrum({
       client: '2.7.11',
       version: config.electrumXProtocolVersion,
     });
+
+    setTimeout(function() {
+      console.log('setTimeout close');
+      mainClient.close();
+    }, 5000);
 
     if (ver && ver[0]) {
       logger.info('BlueElectrum', `connected to, ${ver}`);
@@ -52,6 +57,7 @@ async function connectMain() {
   }
 
   if (!mainConnected) {
+    console.log('CONNECTION CLOSED');
     logger.info('BlueElectrum', 'Reconnect');
     mainClient.keepAlive = () => {}; // dirty hack to make it stop reconnecting
     mainClient.reconnect = () => {}; // dirty hack to make it stop reconnecting
@@ -70,6 +76,18 @@ module.exports.subscribe = function(event, handler) {
 
 module.exports.unsubscribe = function(event) {
   return mainClient.subscribe.off(event);
+};
+
+module.exports.subscribeToOnConnect = function(handler) {
+  mainClient.onConnect = handler;
+};
+
+module.exports.subscribeToOnReconnect = function(handler) {
+  mainClient.onReconnect = handler;
+};
+
+module.exports.subscribeToOnClose = function(handler) {
+  mainClient.onConnectionClose = handler;
 };
 
 connectMain();
