@@ -78,13 +78,6 @@ const es = {
       success: 'Ha importado su autenticador correctamente. Ya está listo para usarse.',
       textAreaPlaceholder: 'Frase mnemotécnica',
       title: 'Importar autenticador',
-      inUseValidationError: 'TRANSLATION NEEDED | ENG: Name must be unique. Please enter a valid name.',
-      mnemonicLength: 'TRANSLATION NEEDED | ENG: Mnemonic should have 12 words',
-      scanNext: 'TRANSLATION NEEDED | ENG: Scan next',
-      multipleQrCodesTitle: 'TRANSLATION NEEDED | ENG: Scan another QR code',
-      multipleQrCodesDescription:
-        'TRANSLATION NEEDED | ENG: Some transactions generate multiple QR codes. Make sure to scan all of them from the Electrum Vault application.',
-      code: 'TRANSLATION NEEDED | ENG: Code: ',
     },
     list: {
       noAuthenticators: 'Aún no hay autenticadores',
@@ -198,15 +191,12 @@ const es = {
       canceledDone: 'Cancelado-hecho',
       done: 'Finalizada',
       pending: 'Pendiente',
-      unblocked: 'Desbloqueado',
-      canceledDone: 'TRANSLATION NEEDED | ENG: Canceled-done',
     },
     to: 'para',
     toAmount: 'monto máximo',
     toDate: 'fecha de finalización',
     transactionStatus: 'Estado de la transacción',
     transactionType: 'Tipo de transacción',
-    clearAll: 'TRANSLATION NEEDED | ENG: Clear all',
   },
   message: {
     allDone: '¡Todo listo!',
@@ -234,8 +224,8 @@ const es = {
     wrongMnemonic: 'Frase mnemotécnica incorrecta',
     wrongMnemonicDesc:
       'Su frase mnemotécnica no coincide con ningún monedero compatible. Está intentado importar una frase mnemotécnica no válida o un monedero que no se ha usado nunca.',
-    processing: 'TRANSLATION NEEDED | ENG: Processing',
     bePatient: 'TRANSLATION NEEDED | ENG: Please be patient, it may take a while.',
+    processing: 'TRANSLATION NEEDED | ENG: Processing',
   },
   onboarding: {
     changePin: 'Cambiar PIN',
@@ -460,8 +450,6 @@ const es = {
       done: 'finalizada',
       pending: 'pendiente',
       unblocked: 'desbloqueado',
-      blocked: 'TRANSLATION NEEDED | ENG: blocked',
-      canceledDone: 'TRANSLATION NEEDED | ENG: canceled - done',
     },
     list: {
       conf: 'Confirmaciones',
@@ -604,8 +592,6 @@ const es = {
       unsupportedElectrumVaultMnemonic:
         'Esta frase mnemotécnica es de Electrum Vault y actualmente no es compatible. Será compatible próximamente.',
       walletInUseValidationError: 'El monedero ya está en uso. Introduzca un monedero válido.',
-      extendWithCustomWords: 'TRANSLATION NEEDED | ENG: Extend this seed with custom words',
-      customWords: 'TRANSLATION NEEDED | ENG: Custom words',
     },
     publicKey: {
       instantDescription:
