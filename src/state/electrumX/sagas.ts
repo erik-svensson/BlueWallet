@@ -1,3 +1,4 @@
+import NetInfo from '@react-native-community/netinfo';
 import { difference } from 'lodash';
 import { flatten, compose, map } from 'lodash/fp';
 import { eventChannel } from 'redux-saga';
@@ -13,6 +14,10 @@ import {
   ElectrumXAction,
   scriptHashChanged,
   setSubscribedScriptHashes,
+  setInternetConnection,
+  setServerConnection,
+  connectionClosed,
+  connectionReconnected,
 } from './actions';
 import { subscribedScriptHashes } from './selectors';
 
@@ -119,6 +124,7 @@ export function* listenOnReconnect() {
   while (true) {
     const event = yield take(chan);
     console.log('listenOnReconnect', event);
+    yield put(connectionReconnected());
   }
 }
 
@@ -139,8 +145,8 @@ export function* listenOnClose() {
   const chan = yield call(emitOnClose);
 
   while (true) {
-    const event = yield take(chan);
-    console.log('listenOnClose', event);
+    yield take(chan);
+    yield put(connectionClosed());
   }
 }
 
@@ -165,6 +171,34 @@ export function* subscribeToScriptHashes() {
   yield put(setSubscribedScriptHashes(walletsScriptHashes));
 }
 
+export function* checkConnection() {
+  const isServerConnected = yield BlueElectrum.ping();
+  yield put(setServerConnection(isServerConnected));
+
+  const { isInternetReachable } = yield NetInfo.fetch();
+  yield put(setInternetConnection(isInternetReachable));
+}
+
+function emitInternetConnectionChange() {
+  return eventChannel(emitter => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      emitter(state);
+    });
+    return () => {
+      unsubscribe();
+    };
+  });
+}
+
+export function* listenToInternetConnection() {
+  const chan = yield call(emitInternetConnectionChange);
+
+  while (true) {
+    const { isInternetReachable } = yield take(chan);
+    yield put(setInternetConnection(isInternetReachable));
+  }
+}
+
 export default [
   takeLatest(
     [
@@ -175,10 +209,11 @@ export default [
     ],
     subscribeToScriptHashes,
   ),
+  takeLatest(ElectrumXAction.StartListeners, listenToInternetConnection),
   takeLatest(ElectrumXAction.StartListeners, listenOnClose),
   takeLatest(ElectrumXAction.StartListeners, listenOnReconnect),
   takeLatest(ElectrumXAction.StartListeners, listenOnConnect),
-  takeLatest(ElectrumXAction.StartListeners, listenScriptHashesSaga),
-  takeLatest(ElectrumXAction.StartListeners, listenBlockchainHeadersSaga),
+  takeLatest([ElectrumXAction.StartListeners, ElectrumXAction.ConnectionReconnected], listenScriptHashesSaga),
+  takeLatest([ElectrumXAction.StartListeners, ElectrumXAction.ConnectionReconnected], listenBlockchainHeadersSaga),
   takeLatest(ElectrumXAction.FetchBlockHeight, fetchBlockchainHeadersSaga),
 ];

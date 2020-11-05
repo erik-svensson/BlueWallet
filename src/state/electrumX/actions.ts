@@ -6,10 +6,32 @@ export enum ElectrumXAction {
   SetBlockHeight = 'SetBlockHeight',
   ScriptHashChanged = 'ScriptHashChanged',
   SetSubscribedScriptHashes = 'SetSubscribedScriptHashes',
+  ConnectionClosed = 'ConnectionClosed',
+  ConnectionReconnected = 'ConnectionReconnected',
+  SetServerConnection = 'SetServerConnection',
+  SetInternetConnection = 'SetInternetConnection',
 }
 
 export interface FetchBlockHeightAction {
   type: ElectrumXAction.FetchBlockHeight;
+}
+
+export interface ConnectionClosedAction {
+  type: ElectrumXAction.ConnectionClosed;
+}
+
+export interface ConnectionReconnectedAction {
+  type: ElectrumXAction.ConnectionReconnected;
+}
+
+export interface SetServerConnectionAction {
+  type: ElectrumXAction.SetServerConnection;
+  isServerConnected: boolean;
+}
+
+export interface SetInternetConnectionAction {
+  type: ElectrumXAction.SetInternetConnection;
+  isInternetReachable: boolean;
 }
 
 export interface FetchBlockHeightSuccessAction {
@@ -47,7 +69,29 @@ export type ElectrymXActionType =
   | SetSubscribedScriptHashesAction
   | FetchBlockHeightAction
   | FetchBlockHeightSuccessAction
-  | FetchBlockHeightFailureAction;
+  | FetchBlockHeightFailureAction
+  | ConnectionClosedAction
+  | ConnectionReconnectedAction
+  | SetServerConnectionAction
+  | SetInternetConnectionAction;
+
+export const connectionClosed = (): ConnectionClosedAction => ({
+  type: ElectrumXAction.ConnectionClosed,
+});
+
+export const connectionReconnected = (): ConnectionReconnectedAction => ({
+  type: ElectrumXAction.ConnectionReconnected,
+});
+
+export const setInternetConnection = (isInternetReachable: boolean): SetInternetConnectionAction => ({
+  type: ElectrumXAction.SetInternetConnection,
+  isInternetReachable,
+});
+
+export const setServerConnection = (isServerConnected: boolean): SetServerConnectionAction => ({
+  type: ElectrumXAction.SetServerConnection,
+  isServerConnected,
+});
 
 export const startListeners = (): StartListenersAction => ({
   type: ElectrumXAction.StartListeners,
