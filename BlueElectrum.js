@@ -9,8 +9,8 @@ const ElectrumClient = require('electrum-client');
 
 const storageKey = 'ELECTRUM_PEERS';
 export const defaultPeer = __DEV__
-  ? { host: '188.166.204.85', port: '50001', protocol: 'tcp' }
-  : { host: '188.166.204.85', port: '443', protocol: 'tls' };
+  ? { host: 'testnet.bitcoinvault.global', port: '50002', protocol: 'tls' }
+  : { host: 'testnet.bitcoinvault.global', port: '50002', protocol: 'tls' };
 const hardcodedPeers = [defaultPeer];
 
 let mainClient = false;
@@ -20,7 +20,7 @@ let wasConnectedAtLeastOnce = false;
 async function connectMain() {
   try {
     console.log('begin connection:', JSON.stringify(defaultPeer));
-    mainClient = new ElectrumClient(defaultPeer.port, defaultPeer.host, defaultPeer.protocol);
+    mainClient = new ElectrumClient('50002', 'testnet.bitcoinvault.global', 'tls');
     mainClient.onError = function(e) {
       console.log('ElectrumClient error: ' + e);
       mainConnected = false;
