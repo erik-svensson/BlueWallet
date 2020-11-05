@@ -41,11 +41,6 @@ async function connectMain() {
       version: config.electrumXProtocolVersion,
     });
 
-    setTimeout(function() {
-      console.log('setTimeout close');
-      mainClient.close();
-    }, 5000);
-
     if (ver && ver[0]) {
       logger.info('BlueElectrum', `connected to, ${ver}`);
       mainConnected = true;
