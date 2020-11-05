@@ -127,7 +127,7 @@ class Navigator extends React.Component<Props, State> {
 
   refresh = () => {
     const { loadWallets, fetchBlockHeight } = this.props;
-    loadWallets();
+    setTimeout(() => loadWallets(), 10000);
     fetchBlockHeight();
   };
 

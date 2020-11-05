@@ -215,12 +215,11 @@ export class LegacyWallet extends AbstractWallet {
       logger.info(
         'legacy-wallet',
         `mainClient:
-     status: ${JSON.stringify(mainClient.status)}
-     config: ${JSON.stringify(mainClient.electrumConfig)}`,
+     status: ${mainClient ? JSON.stringify(mainClient.status) : mainClient}
+     config: ${mainClient ? JSON.stringify(mainClient.electrumConfig) : mainClient}`,
       );
       const error = `fetched txs with no tx_type`;
       captureException(error);
-      throw new Error(error);
     }
     const txid_list = txs.map(t => t.tx_hash);
 
@@ -266,12 +265,11 @@ export class LegacyWallet extends AbstractWallet {
         logger.info(
           'legacy-wallet',
           `mainClient:
-       status: ${JSON.stringify(mainClient.status)}
-       config: ${JSON.stringify(mainClient.electrumConfig)}`,
+       status: ${mainClient ? JSON.stringify(mainClient.status) : mainClient}
+       config: ${mainClient ? JSON.stringify(mainClient.electrumConfig) : mainClient}`,
         );
         const error = `couldnt find tx_type for transaction: ${JSON.stringify(tx)}`;
         captureException(error);
-        throw new Error(error);
       }
       tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();
       if (tx.time) {
