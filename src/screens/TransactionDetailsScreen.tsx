@@ -31,7 +31,7 @@ import {
 import { typography, palette } from 'app/styles';
 
 import config from '../../config';
-import { satoshiToBtc, formatToBtcv, formatToBtcvWithOutUnit } from '../../utils/bitcoin';
+import { satoshiToBtc, formatToBtcv, formatToBtcvWithoutUnit } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
 
@@ -101,9 +101,9 @@ class TransactionDetailsScreen extends Component<Props> {
             transaction.toExternalAddress ? styles.lightGrayText : null,
           ]}
         >
-          {formatToBtcvWithOutUnit(satoshiToBtc(transaction.valueWithoutFee).toNumber())}
+          {formatToBtcvWithoutUnit(satoshiToBtc(transaction.valueWithoutFee).toNumber())}
         </Text>
-        <Text style={styles.unit}> {CONST.preferredBalanceUnit}</Text>
+        <Text style={styles.unit}>{CONST.preferredBalanceUnit}</Text>
         <TranscationLabelStatus status={transaction.status} />
         {transaction.blockedAmount !== undefined && (
           <View style={styles.amountWrapper}>
