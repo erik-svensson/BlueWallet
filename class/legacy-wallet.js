@@ -2,7 +2,7 @@ import { findLast, difference } from 'lodash';
 import { NativeModules } from 'react-native';
 
 import config from '../config';
-import { captureException } from '../error';
+// import { captureException } from '../error';
 import logger from '../logger';
 import { AbstractWallet } from './abstract-wallet';
 
@@ -10,7 +10,7 @@ const { RNRandomBytes } = NativeModules;
 const BigNumber = require('bignumber.js');
 const bitcoin = require('bitcoinjs-lib');
 
-import { mainClient } from '../BlueElectrum';
+// import { mainClient } from '../BlueElectrum';
 
 const BlueElectrum = require('../BlueElectrum');
 const signer = require('../models/signer');
