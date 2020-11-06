@@ -2,7 +2,6 @@ import { findLast, difference } from 'lodash';
 import { NativeModules } from 'react-native';
 
 import config from '../config';
-import { captureException } from '../error';
 import logger from '../logger';
 import { AbstractWallet } from './abstract-wallet';
 
@@ -210,8 +209,7 @@ export class LegacyWallet extends AbstractWallet {
   async setTransactions(txs) {
     if (txs[0].tx_type === undefined) {
       logger.info('legacy-wallet', `txs: ${JSON.stringify(txs)}`);
-      const error = `fetched txs with no tx_type`;
-      captureException(error);
+      logger.error(`fetched txs with no tx_type`);
     }
     const txid_list = txs.map(t => t.tx_hash);
 
