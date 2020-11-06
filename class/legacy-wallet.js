@@ -210,17 +210,11 @@ export class LegacyWallet extends AbstractWallet {
   }
 
   async setTransactions(txs) {
-    if (txs[0].tx_type === undefined) {
-      logger.info('legacy-wallet', `txs: ${JSON.stringify(txs)}`);
-      logger.info(
-        'legacy-wallet',
-        `mainClient:
-     status: ${mainClient ? JSON.stringify(mainClient.status) : mainClient}
-     config: ${mainClient ? JSON.stringify(mainClient.electrumConfig) : mainClient}`,
-      );
-      const error = `fetched txs with no tx_type`;
-      captureException(error);
-    }
+    // if (txs[0].tx_type === undefined) {
+    // logger.info('legacy-wallet', `txs: ${JSON.stringify(txs)}`);
+    // const error = `fetched txs with no tx_type`;
+    // captureException(error);
+    // }
     const txid_list = txs.map(t => t.tx_hash);
 
     this.transactions = this.transactions.filter(tx => {
@@ -260,17 +254,11 @@ export class LegacyWallet extends AbstractWallet {
       tx.height = txs.find(t => t.tx_hash === tx.txid).height;
       tx.tx_type = findLast(txs, t => t.tx_hash === tx.txid).tx_type;
 
-      if (tx.tx_type === undefined) {
-        logger.info('legacy-wallet', `txs: ${JSON.stringify(txs)}`);
-        logger.info(
-          'legacy-wallet',
-          `mainClient:
-       status: ${mainClient ? JSON.stringify(mainClient.status) : mainClient}
-       config: ${mainClient ? JSON.stringify(mainClient.electrumConfig) : mainClient}`,
-        );
-        const error = `couldnt find tx_type for transaction: ${JSON.stringify(tx)}`;
-        captureException(error);
-      }
+      // if (tx.tx_type === undefined) {
+      // logger.info('legacy-wallet', `txs: ${JSON.stringify(txs)}`);
+      // const error = `couldnt find tx_type for transaction: ${JSON.stringify(tx)}`;
+      // captureException(error);
+      // }
       tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();
       if (tx.time) {
         tx.received = new Date(tx.time * 1000).toISOString();
