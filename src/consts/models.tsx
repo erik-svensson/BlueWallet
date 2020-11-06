@@ -353,12 +353,14 @@ export type MainCardStackNavigatorParams = {
   [Route.ContactQRCode]: { contact: Contact };
   [Route.TransactionDetails]: { transaction: EnhancedTransaction };
   [Route.ReceiveCoins]: { id: string };
-  [Route.SendCoins]: {
-    fromSecret?: string;
-    fromAddress?: string;
-    fromWallet?: Wallet;
-    toAddress?: string;
-  };
+  [Route.SendCoins]:
+    | {
+        fromSecret?: string;
+        fromAddress?: string;
+        fromWallet?: Wallet;
+        toAddress?: string;
+      }
+    | undefined;
   [Route.SendCoinsConfirm]: {
     fee: number;
     feeSatoshi?: number;
