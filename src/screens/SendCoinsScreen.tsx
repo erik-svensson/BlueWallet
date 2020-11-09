@@ -58,7 +58,7 @@ class SendCoinsScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     const { route, wallets } = props;
-    const { toAddress, fromWallet } = route.params!;
+    const { toAddress, fromWallet } = route.params;
 
     this.state = {
       isLoading: false,
