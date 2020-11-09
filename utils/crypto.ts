@@ -5,15 +5,18 @@ import CryptoJS from 'crypto-js';
 import hmacSHA512 from 'crypto-js/hmac-sha512';
 import * as ecurve from 'ecurve';
 import { pbkdf2 } from 'pbkdf2';
+import { NativeModules } from 'react-native';
+
+const { RNRandomBytes } = NativeModules;
 
 import config from '../config';
-import { ELECTRUM_VAULT_SEED_PREFIXES, ELECTRUM_VAULT_SEED_KEY } from '../src/consts';
+import { ELECTRUM_VAULT_SEED_KEY } from '../src/consts';
 import { bytesToBits, bitsToBytes } from './buffer';
 
 const i18n = require('../loc');
 
 interface GeneratePrivateKey {
-  password: Buffer;
+  password: Buffer | string;
   salt: Buffer;
   iterations?: number;
   keylen?: number;
@@ -21,6 +24,8 @@ interface GeneratePrivateKey {
 }
 
 const ENCODING = 'hex';
+
+const ELECTRUM_VAULT_SEED_SALT_PREFIX = 'electrum';
 
 export const generatePrivateKey = ({
   password,
@@ -126,8 +131,28 @@ export const mnemonicToKeyPair = async (mnemonic: string) => {
   });
 };
 
-export const isElectrumVaultMnemonic = (mnemonic: string) => {
+export const isElectrumVaultMnemonic = (mnemonic: string, prefix: string): boolean => {
   const hmac = hmacSHA512(mnemonic, ELECTRUM_VAULT_SEED_KEY);
   const hex = hmac.toString(CryptoJS.enc.Hex);
-  return Object.values(ELECTRUM_VAULT_SEED_PREFIXES).some(prefix => hex.startsWith(prefix));
+  return hex.startsWith(prefix);
 };
+
+export const getRandomBytes = (byteSize: number): Promise<Buffer> =>
+  new Promise((resolve, reject) => {
+    RNRandomBytes.randomBytes(byteSize, (err: string, bytes: any) => {
+      if (err) {
+        reject(err);
+      }
+      const buffer = Buffer.from(bytes, 'base64');
+      resolve(buffer);
+    });
+  });
+
+export const electrumVaultMnemonicToSeed = (mnemonic: string, password = '') =>
+  generatePrivateKey({
+    password: mnemonic,
+    salt: Buffer.from(`${ELECTRUM_VAULT_SEED_SALT_PREFIX}${password}`),
+    iterations: 2048,
+    keylen: 64,
+    digest: 'sha512',
+  });

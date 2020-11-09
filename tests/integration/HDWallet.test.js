@@ -43,7 +43,7 @@ it('can convert witness to address', () => {
   assert.strictEqual(address, 'royale1qf46hgcx6tl90snxz9uuy0742zpuwsnm2ldam6n');
 });
 
-it('can create a Segwit HD (BIP49)', async function() {
+xit('can create a Segwit HD (BIP49)', async function() {
   const mnemonic =
     'fiber quiz produce chuckle sort crisp price direct speak recipe adult layer thumb lift tape start peace wave jungle fluid green interest cave learn';
   const hd = new HDSegwitP2SHWallet();
@@ -325,9 +325,9 @@ it('Legacy HD (BIP44) can generate addressess based on xpub', async function() {
   const hd = new HDLegacyP2PKHWallet();
   hd._xpub = xpub;
   await hd.generateAddresses();
-  assert.strictEqual(hd.getAddress()[0], 'YR1SxEKM4F5oEDg8SUQ216vZcYyKHjoubG');
-  assert.strictEqual(hd.getAddress()[1], 'YnaF465GEdDKdyHigKuJWRhZF4f8bdodUy');
-  assert.strictEqual(hd.getAddress()[2], 'Ybybns4oH3xN5asG274kRRSjhK8AoQgC2D');
+  assert.strictEqual(hd.getAddress()[0], 'Yd1tx3ziqNa9G5hoMEKdZ7ep9JxMbFefDW');
+  assert.strictEqual(hd.getAddress()[1], 'YRWK5bPer6ZDfo42uoicrzdtPSPSHHFAzg');
+  assert.strictEqual(hd.getAddress()[2], 'YTeuE3HqGbGKHrtkbZuTqhvmza2drgJaTR');
 });
 
 it('Legacy HD (BIP44) can create TX', async () => {

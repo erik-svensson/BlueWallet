@@ -1,13 +1,19 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import * as bip39 from 'bip39';
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, Text, Keyboard, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Header, TextAreaItem, FlatButton, ScreenTemplate, InputItem } from 'app/components';
+import { Header, TextAreaItem, FlatButton, ScreenTemplate, InputItem, CheckBox } from 'app/components';
 import { Button } from 'app/components/Button';
-import { Route, Wallet, MainCardStackNavigatorParams, ActionMeta } from 'app/consts';
+import {
+  Route,
+  Wallet,
+  MainCardStackNavigatorParams,
+  ActionMeta,
+  ELECTRUM_VAULT_SEED_PREFIXES,
+  CONST,
+} from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
@@ -40,14 +46,22 @@ interface State {
   text: string;
   label: string;
   validationError: string;
+  hasCustomWords: boolean;
+  customWords: string;
 }
 
 export class ImportWalletScreen extends PureComponent<Props, State> {
   state = {
+    hasCustomWords: false,
     text: '',
+    customWords: '',
     label: '',
     validationError: '',
   };
+
+  setCustomWords = (customWords: string) => this.setState({ customWords });
+
+  toggleHasCustomWords = () => this.setState({ hasCustomWords: !this.state.hasCustomWords });
 
   showErrorMessageScreen = ({
     title = i18n.message.somethingWentWrong,
@@ -92,9 +106,15 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
   onLabelChange = (value: string) => {
     const { wallets } = this.props;
-    const validationError = wallets.some(w => w.label === value)
-      ? i18n.wallets.importWallet.walletInUseValidationError
-      : '';
+    const walletInUse = wallets.some(w => w.label === value);
+    const allWalletsCheck =
+      value.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase() || this.state.label === CONST.allWallets;
+    const validationError =
+      walletInUse || allWalletsCheck
+        ? walletInUse
+          ? i18n.wallets.importWallet.walletInUseValidationError
+          : i18n.wallets.importWallet.allWalletsValidationError
+        : '';
     this.setState({
       label: value,
       validationError,
@@ -182,9 +202,11 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       onBarCodeScan: (recoveryPublicKey: string) => {
         try {
           wallet.addPublicKey(recoveryPublicKey);
-          this.addInstantPublicKey(wallet);
-        } catch (e) {
-          this.showAlert(e.message);
+          this.createWalletMessage(() => {
+            this.saveVaultWallet(wallet);
+          });
+        } catch (error) {
+          this.showAlert(error.message);
         }
       },
       headerTitle: i18n.wallets.importWallet.header,
@@ -192,7 +214,8 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       description: i18n.wallets.importWallet.scanPublicKeyDescription,
       withLink: false,
       onBackArrow: () => {
-        this.navigateToImportWallet();
+        wallet.clearPublickKeys();
+        this.addInstantPublicKey(wallet);
       },
     });
   };
@@ -201,24 +224,44 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     try {
       const wallet = new HDSegwitP2SHAirWallet();
       wallet.setMnemonic(mnemonic);
-      this.addRecoveryPublicKey(wallet);
+      this.addInstantPublicKey(wallet);
     } catch (e) {
       this.showAlert(e.message);
     }
   };
 
+  isValidVaultWallet = async (wallet: HDSegwitP2SHArWallet | HDSegwitP2SHAirWallet) => {
+    if (!wallet.validateMnemonic()) {
+      return false;
+    }
+    await wallet.generateAddresses();
+    await wallet.fetchTransactions();
+
+    return wallet.getTransactions().length !== 0;
+  };
+
   saveVaultWallet = async (wallet: HDSegwitP2SHArWallet | HDSegwitP2SHAirWallet) => {
     try {
-      await wallet.generateAddresses();
-      await wallet.fetchTransactions();
-      if (wallet.getTransactions().length !== 0) {
-        this.saveWallet(wallet);
-      } else {
-        this.showErrorMessageScreen({
-          title: i18n.message.noTransactions,
-          description: i18n.message.noTransactionsDesc,
-        });
+      const { customWords, hasCustomWords } = this.state;
+      const trimmedCustomWords = customWords.trim();
+      if (hasCustomWords) {
+        wallet.setPassword(trimmedCustomWords);
       }
+
+      if (await this.isValidVaultWallet(wallet)) {
+        return this.saveWallet(wallet);
+      }
+
+      wallet.resetAddressesGeneration();
+      wallet.setIsElectrumVault(true);
+      if (await this.isValidVaultWallet(wallet)) {
+        return this.saveWallet(wallet);
+      }
+
+      this.showErrorMessageScreen({
+        title: i18n.message.noTransactions,
+        description: i18n.message.noTransactionsDesc,
+      });
     } catch (error) {
       this.showErrorMessageScreen({
         title: i18n.message.generateAddressesError,
@@ -248,11 +291,9 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       onBarCodeScan: (instantPublicKey: string) => {
         try {
           wallet.addPublicKey(instantPublicKey);
-          this.createWalletMessage(() => {
-            this.saveVaultWallet(wallet);
-          });
-        } catch (error) {
-          this.showAlert(error.message);
+          this.addRecoveryPublicKey(wallet);
+        } catch (e) {
+          this.showAlert(e.message);
         }
       },
       withLink: false,
@@ -260,14 +301,28 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       title: i18n.wallets.importWallet.scanFastPubKey,
       description: i18n.wallets.importWallet.scanPublicKeyDescription,
       onBackArrow: () => {
-        wallet.clearPublickKeys();
-        this.addRecoveryPublicKey(wallet);
+        this.navigateToImportWallet();
       },
     });
   };
 
   importLegacyWallet = async (trimmedMnemonic: string) => {
+    const { customWords, hasCustomWords } = this.state;
+    const trimmedCustomWords = customWords.trim();
+
     try {
+      if (isElectrumVaultMnemonic(trimmedMnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SW)) {
+        const electrumHDSegwitBech32Wallet = new HDSegwitBech32Wallet({ isElectrumVault: true });
+        if (hasCustomWords) {
+          electrumHDSegwitBech32Wallet.setPassword(trimmedCustomWords);
+        }
+        await electrumHDSegwitBech32Wallet.setSecret(trimmedMnemonic);
+        await electrumHDSegwitBech32Wallet.fetchTransactions();
+        if (electrumHDSegwitBech32Wallet.getTransactions().length > 0) {
+          return this.saveWallet(electrumHDSegwitBech32Wallet);
+        }
+      }
+
       const segwitWallet = new SegwitP2SHWallet();
       segwitWallet.setSecret(trimmedMnemonic);
       if (segwitWallet.getAddress()) {
@@ -310,11 +365,15 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       }
 
       const hdLegactP2PKH = new HDLegacyP2PKHWallet();
+      if (hasCustomWords) {
+        hdLegactP2PKH.setPassword(trimmedCustomWords);
+      }
       await hdLegactP2PKH.setSecret(trimmedMnemonic);
+
       if (hdLegactP2PKH.validateMnemonic()) {
-        await hdSegwitBech32.fetchTransactions();
-        if (hdSegwitBech32.getTransactions().length !== 0) {
-          return this.saveWallet(hdSegwitBech32);
+        await hdLegactP2PKH.fetchTransactions();
+        if (hdLegactP2PKH.getTransactions().length !== 0) {
+          return this.saveWallet(hdLegactP2PKH);
         }
       }
 
@@ -352,12 +411,6 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
   importMnemonic = (mnemonic: string) => {
     const trimmedMnemonic = mnemonic.trim().replace(/ +/g, ' ');
-
-    if (isElectrumVaultMnemonic(trimmedMnemonic) && !bip39.validateMnemonic(trimmedMnemonic)) {
-      this.showErrorMessageScreen({ description: i18n.wallets.importWallet.unsupportedElectrumVaultMnemonic });
-      return;
-    }
-
     if (this.props?.route.params.walletType === HDSegwitP2SHArWallet.type) {
       return this.createARWallet(trimmedMnemonic);
     }
@@ -368,19 +421,26 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       this.importLegacyWallet(trimmedMnemonic);
     });
   };
+
+  get canScan() {
+    const { validationError, label } = this.state;
+
+    return label.trim() && !!!validationError;
+  }
+
   render() {
-    const { validationError, text, label } = this.state;
+    const { validationError, text, label, hasCustomWords, customWords } = this.state;
     return (
       <ScreenTemplate
         footer={
           <>
             <Button
-              disabled={!text || !!validationError}
+              disabled={!text || !!validationError || !label}
               title={i18n.wallets.importWallet.import}
               onPress={this.onImportButtonPress}
             />
             <FlatButton
-              disabled={!label || !!validationError}
+              disabled={!this.canScan}
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}
               onPress={this.onScanQrCodeButtonPress}
@@ -400,6 +460,23 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
             placeholder={i18n.wallets.importWallet.placeholder}
             style={styles.textArea}
           />
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              onPress={this.toggleHasCustomWords}
+              containerStyle={styles.checkbox}
+              left
+              checked={hasCustomWords}
+              title={<Text style={styles.checkboxText}>{i18n.wallets.importWallet.extendWithCustomWords}</Text>}
+            />
+          </View>
+          {hasCustomWords && (
+            <TextAreaItem
+              value={customWords}
+              onChangeText={this.setCustomWords}
+              placeholder={i18n.wallets.importWallet.customWords}
+              style={styles.textAreaCustomWords}
+            />
+          )}
         </View>
       </ScreenTemplate>
     );
@@ -417,10 +494,30 @@ const mapDispatchToProps = {
 export default connect(mapStateToProps, mapDispatchToProps)(ImportWalletScreen);
 
 const styles = StyleSheet.create({
+  checkboxContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  checkbox: {
+    marginLeft: -12,
+    backgroundColor: palette.white,
+    borderWidth: 0,
+  },
+  checkboxText: {
+    paddingLeft: 20,
+  },
   inputItemContainer: {
     paddingTop: 16,
     width: '100%',
     flexGrow: 1,
+  },
+  textAreaCustomWords: {
+    marginTop: 24,
+    height: 160,
+    marginBottom: 24,
   },
   title: {
     ...typography.headline4,

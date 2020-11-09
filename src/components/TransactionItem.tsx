@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { icons } from 'app/assets';
-import { TranscationLabelStatus, Image, Label } from 'app/components';
+import { TransactionLabelStatus, Image, Label, EllipsisText } from 'app/components';
 import { Transaction, TxType } from 'app/consts';
 import { getConfirmationsText } from 'app/helpers/helpers';
 import { typography, palette } from 'app/styles';
@@ -39,9 +39,7 @@ const Item = ({ item, onPress }: { item: Transaction; onPress: (item: any) => vo
       <View style={styles.walletLabelWrapper}>
         {renderArrowIcon(item.valueWithoutFee)}
         <Image source={icons.wallet} style={styles.wallet} resizeMode="contain" />
-        <Text style={styles.walletLabel} numberOfLines={1} ellipsizeMode="tail">
-          {item.walletLabel}
-        </Text>
+        <EllipsisText style={styles.walletLabel}>{item.walletLabel}</EllipsisText>
       </View>
       {!!item.note && <Text style={typography.caption}>{item.note}</Text>}
       <Text style={styles.label}>
@@ -49,7 +47,7 @@ const Item = ({ item, onPress }: { item: Transaction; onPress: (item: any) => vo
       </Text>
       {renderCofirmations(item.tx_type, item.confirmations)}
       <View style={styles.rowWrapper}>
-        <TranscationLabelStatus type={item.tx_type} confirmations={item.confirmations} />
+        <TransactionLabelStatus status={item.status} />
         <Text
           style={[
             typography.headline5,

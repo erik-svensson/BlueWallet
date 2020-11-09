@@ -45,7 +45,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
     if (!wallet) {
       return;
     }
-    return bip21.encode(wallet.getAddressForTransaction(), { amount }).replace('bitcoin:', '');
+    return bip21.encode(wallet.getAddressForTransaction(), { amount });
   }
 
   updateAmount = (amount: string) => {
@@ -74,10 +74,8 @@ class ReceiveCoinsScreen extends Component<Props, State> {
     if (!wallet) {
       return '';
     }
-    const { amount } = this.state;
 
-    const address = wallet.getAddressForTransaction();
-    return amount ? `${address}?amount=${amount}` : address;
+    return wallet.getAddressForTransaction();
   }
 
   share = () => {

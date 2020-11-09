@@ -5,10 +5,14 @@ import { NativeModules } from 'react-native';
 
 import config from '../config';
 import { BitcoinUnit } from '../models/bitcoinUnits';
+import { ELECTRUM_VAULT_SEED_PREFIXES } from '../src/consts';
+import { electrumVaultMnemonicToSeed, isElectrumVaultMnemonic } from '../utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
 const bitcoin = require('bitcoinjs-lib');
+
+const i18n = require('../loc');
 
 const { RNRandomBytes } = NativeModules;
 
@@ -36,7 +40,49 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
   static type = 'abstract';
   static typeReadable = 'abstract';
   static randomBytesSize = 16;
-  static basePath = "m/49'/440'/0'";
+
+  constructor(basePath) {
+    super();
+    this.basePath = basePath;
+  }
+
+  setIsElectrumVault(isElectrumVault) {
+    this.isElectrumVault = isElectrumVault;
+  }
+
+  setMnemonic(walletMnemonic) {
+    if (
+      !(
+        bip39.validateMnemonic(walletMnemonic) ||
+        isElectrumVaultMnemonic(walletMnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SW)
+      )
+    ) {
+      throw new Error(i18n.wallets.errors.invalidMnemonic);
+    }
+    this.secret = walletMnemonic
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9]/g, ' ')
+      .replace(/\s+/g, ' ');
+  }
+
+  validateMnemonic() {
+    if (this.isElectrumVault) {
+      return isElectrumVaultMnemonic(this.secret, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SW);
+    }
+    return bip39.validateMnemonic(this.secret);
+  }
+
+  getSeed() {
+    if (this.isElectrumVault) {
+      return electrumVaultMnemonicToSeed(this.secret, this.password);
+    }
+    return bip39.mnemonicToSeed(this.secret);
+  }
+
+  setPassword(password) {
+    this.password = password;
+  }
 
   allowSend() {
     return true;
@@ -78,7 +124,7 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
   }
 
   _getPath(path = '') {
-    return `${AbstractHDSegwitP2SHWallet.basePath}${path}`;
+    return `${this.basePath}${path}`;
   }
 
   /**
@@ -90,7 +136,7 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
    */
   async _getWIFByIndex(index) {
     if (!this.seed) {
-      this.seed = await bip39.mnemonicToSeed(this.secret);
+      this.seed = await this.getSeed();
     }
     const root = bitcoin.bip32.fromSeed(this.seed, config.network);
     const path = this._getPath(`/0/${index}`);
@@ -109,8 +155,7 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
       return this._xpub; // cache hit
     }
     // first, getting xpub
-    const mnemonic = this.secret;
-    this.seed = await bip39.mnemonicToSeed(mnemonic);
+    this.seed = await this.getSeed();
     const root = HDNode.fromSeed(this.seed, config.network);
     const path = this._getPath();
     const child = root.derivePath(path).neutered();
@@ -132,6 +177,15 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
       this._node0 = hdNode.derive(0);
     }
     return this._node0;
+  }
+
+  resetAddressesGeneration() {
+    this._address = [];
+    this._address_to_wif_cache = {};
+    this._addr_balances = {};
+    this.seed = undefined;
+    this._xpub = undefined;
+    this._node0 = undefined;
   }
 
   async generateAddresses() {

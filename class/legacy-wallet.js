@@ -11,7 +11,6 @@ const bitcoin = require('bitcoinjs-lib');
 
 const BlueElectrum = require('../BlueElectrum');
 const signer = require('../models/signer');
-
 /**
  *  Has private key and single address like "1ABCD....."
  *  (legacy P2PKH compressed)
@@ -246,6 +245,7 @@ export class LegacyWallet extends AbstractWallet {
       }
       tx.height = txs.find(t => t.tx_hash === tx.txid).height;
       tx.tx_type = findLast(txs, t => t.tx_hash === tx.txid).tx_type;
+
       tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();
       if (tx.time) {
         tx.received = new Date(tx.time * 1000).toISOString();

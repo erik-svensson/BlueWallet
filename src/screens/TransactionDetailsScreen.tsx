@@ -7,9 +7,18 @@ import { View, StyleSheet, Text, Linking, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux';
 
 import { icons } from 'app/assets';
-import { Image, Header, StyledText, Chip, ScreenTemplate, TranscationLabelStatus, Label } from 'app/components';
+import {
+  Image,
+  Header,
+  StyledText,
+  Chip,
+  ScreenTemplate,
+  TranscationLabelStatus,
+  Label,
+  EllipsisText,
+} from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Route, MainCardStackNavigatorParams, RootStackParams, TxType } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, TxType, CONST } from 'app/consts';
 import { getConfirmationsText } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { selectors, reducer } from 'app/state/transactionsNotes';
@@ -22,7 +31,7 @@ import {
 import { typography, palette } from 'app/styles';
 
 import config from '../../config';
-import { satoshiToBtc, formatToBtcv } from '../../utils/bitcoin';
+import { satoshiToBtc, formatToBtcv, formatToBtcvWithoutUnit } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
 
@@ -72,7 +81,7 @@ class TransactionDetailsScreen extends Component<Props> {
               resizeMode="contain"
             />
             <Image source={icons.wallet} style={styles.walletIcon} resizeMode="contain" />
-            <Text style={styles.walletLabel}>{transaction.walletLabel}</Text>
+            <EllipsisText style={styles.walletLabel}>{transaction.walletLabel}</EllipsisText>
           </View>
           {transaction.toExternalAddress !== undefined && (
             <View style={styles.rowWrapper}>
@@ -92,9 +101,10 @@ class TransactionDetailsScreen extends Component<Props> {
             transaction.toExternalAddress ? styles.lightGrayText : null,
           ]}
         >
-          {formatToBtcv(satoshiToBtc(transaction.valueWithoutFee).toNumber())}
+          {formatToBtcvWithoutUnit(satoshiToBtc(transaction.valueWithoutFee).toNumber())}
         </Text>
-        <TranscationLabelStatus type={transaction.tx_type} confirmations={transaction.confirmations} />
+        <Text style={styles.unit}>{CONST.preferredBalanceUnit}</Text>
+        <TranscationLabelStatus status={transaction.status} />
         {transaction.blockedAmount !== undefined && (
           <View style={styles.amountWrapper}>
             <Text style={[styles.value, styles.textRed]}>{formatToBtcv(transaction.blockedAmount)}</Text>
@@ -301,6 +311,7 @@ const styles = StyleSheet.create({
     marginBottom: 13,
   },
   walletLabel: {
+    marginRight: 50,
     ...typography.headline8,
   },
   opacity: {
@@ -333,10 +344,14 @@ const styles = StyleSheet.create({
   value: {
     ...typography.headline5,
     marginTop: 6,
-    width: 85,
     textAlign: 'center',
     lineHeight: 15,
-    height: 45,
+    height: 25,
+  },
+  unit: {
+    ...typography.headline5,
+    lineHeight: 15,
+    height: 25,
   },
   noteContainer: {
     width: '100%',

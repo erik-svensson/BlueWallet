@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { icons } from 'app/assets';
 import { Button, Header, InputItem, ScreenTemplate, Text, Image } from 'app/components';
-import { Contact, Route, MainTabNavigatorParams, MainCardStackNavigatorParams } from 'app/consts';
+import { Contact, Route, MainTabNavigatorParams, MainCardStackNavigatorParams, CONST } from 'app/consts';
 import { checkAddress } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { createContact, CreateContactAction } from 'app/state/contacts/actions';
@@ -17,8 +17,11 @@ const i18n = require('../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateContact>
+    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateContact>,
+    CompositeNavigationProp<
+      StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
+      StackNavigationProp<MainCardStackNavigatorParams, Route.ScanQrCode>
+    >
   >;
   route: RouteProp<MainCardStackNavigatorParams, Route.CreateContact>;
   createContact: (contact: Contact) => CreateContactAction;
@@ -47,9 +50,11 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   };
 
   static getDerivedStateFromProps(props: Props, state: State) {
-    if (props.route.params?.address && !state.address) {
+    if (props.route.params?.address && !state.address.value) {
       return {
-        address: props.route.params.address,
+        address: {
+          value: props.route.params.address,
+        },
       };
     }
     return null;
@@ -59,11 +64,11 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
     return !!this.state.address && !!this.state.name;
   }
 
-  setName = (value: string) => this.setState({ name: { value, error: '' } });
+  setName = (value: string): void => this.setState({ name: { value, error: '' } });
 
-  setAddress = (value: string) => this.setState({ address: { value, error: '' } });
+  setAddress = (value: string): void => this.setState({ address: { value, error: '' } });
 
-  onBarCodeScan = (address: string) => {
+  onBarCodeScan = (address: string): void => {
     this.setAddress(address.split('?')[0].replace('bitcoin:', ''));
   };
 
@@ -145,7 +150,6 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
             title={i18n.contactCreate.buttonLabel}
           />
         }
-        // @ts-ignore
         header={<Header navigation={this.props.navigation} isBackArrow title={i18n.contactCreate.screenTitle} />}
       >
         <Text style={styles.subtitle}>{i18n.contactCreate.subtitle}</Text>
@@ -157,6 +161,7 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
             focused={!!address.value}
             value={address.value}
             multiline
+            maxLength={CONST.maxAddressLength}
             setValue={this.setAddress}
             label={i18n.contactCreate.addressLabel}
           />

@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import JailMonkey from 'jail-monkey';
 import React from 'react';
-import { AppState } from 'react-native';
+import { isEmulator } from 'react-native-device-info';
 import { connect } from 'react-redux';
 
 import { CONST } from 'app/consts';
@@ -23,7 +23,7 @@ import {
   fetchBlockHeight as fetchBlockHeightAction,
   FetchBlockHeightAction,
 } from 'app/state/electrumX/actions';
-import { LoadWalletsAction, loadWallets as loadWalletsAction } from 'app/state/wallets/actions';
+import { RefreshAllWalletsAction, refreshAllWallets as refreshAllWalletsAction } from 'app/state/wallets/actions';
 import { isAndroid, isIos } from 'app/styles';
 
 import config from '../../config';
@@ -41,7 +41,7 @@ interface MapStateToProps {
 interface ActionsDisptach {
   checkCredentials: Function;
   startElectrumXListeners: () => StartListenersAction;
-  loadWallets: () => LoadWalletsAction;
+  refreshAllWallets: () => RefreshAllWalletsAction;
   fetchBlockHeight: () => FetchBlockHeightAction;
   updateSelectedLanguage: Function;
 }
@@ -54,11 +54,13 @@ type Props = MapStateToProps & ActionsDisptach & OwnProps;
 
 interface State {
   isBetaVersionRiskAccepted: boolean;
+  isEmulator: boolean;
 }
 
 class Navigator extends React.Component<Props, State> {
   state = {
     isBetaVersionRiskAccepted: false,
+    isEmulator: false,
   };
 
   componentDidMount() {
@@ -68,9 +70,15 @@ class Navigator extends React.Component<Props, State> {
     fetchBlockHeight();
     this.initLanguage();
 
-    if (!__DEV__) {
-      checkDeviceSecurity();
-    }
+    isEmulator().then(isEmulator => {
+      this.setState({
+        isEmulator,
+      });
+
+      if (!isEmulator && !__DEV__) {
+        checkDeviceSecurity();
+      }
+    });
   }
 
   initLanguage = async () => {
@@ -94,7 +102,7 @@ class Navigator extends React.Component<Props, State> {
     if (__DEV__) {
       return false;
     }
-    return !isAuthenticated && isTxPasswordSet && isPinSet && AppState.currentState === 'active';
+    return !isAuthenticated && isTxPasswordSet && isPinSet;
   };
 
   preventOpenAppWithRootedPhone = () => {
@@ -118,8 +126,8 @@ class Navigator extends React.Component<Props, State> {
   };
 
   refresh = () => {
-    const { loadWallets, fetchBlockHeight } = this.props;
-    loadWallets();
+    const { refreshAllWallets, fetchBlockHeight } = this.props;
+    refreshAllWallets();
     fetchBlockHeight();
   };
 
@@ -129,7 +137,7 @@ class Navigator extends React.Component<Props, State> {
       return null;
     }
 
-    if (!__DEV__ && JailMonkey.isJailBroken()) {
+    if (!__DEV__ && JailMonkey.isJailBroken() && !this.state.isEmulator) {
       return this.preventOpenAppWithRootedPhone();
     }
 
@@ -172,7 +180,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
 const mapDispatchToProps: ActionsDisptach = {
   checkCredentials: checkCredentialsAction,
   startElectrumXListeners: startListeners,
-  loadWallets: loadWalletsAction,
+  refreshAllWallets: refreshAllWalletsAction,
   updateSelectedLanguage: updateSelectedLanguageAction,
   fetchBlockHeight: fetchBlockHeightAction,
 };

@@ -98,7 +98,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
         </View>
         <View style={styles.inputItemContainer}>
           <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisability}>
-            <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
+            <Image style={styles.icon} source={isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem
             value={password}
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     width: '100%',
   },
-  visibilityIcon: { position: 'absolute', right: 0, bottom: 24, zIndex: 3 },
+  visibilityIcon: { position: 'absolute', right: 0, top: 48, zIndex: 3 },
   icon: {
     width: 24,
     height: 24,

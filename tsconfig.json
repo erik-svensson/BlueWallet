@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ES2019",
     "module": "esnext",
     "jsx": "react-native",
     "noEmit": true,
@@ -22,12 +22,13 @@
     "paths": {
       "app/*": [
         "./*"
-      ],
+      ]
     }
   },
   "exclude": [
     "node_modules",
     "babel.config.js",
-    "jest.config.js"
+    "jest.config.js",
+    "scripts"
   ]
 }

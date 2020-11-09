@@ -20,6 +20,7 @@ import {
 } from 'app/components';
 import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadTransactionsFees } from 'app/helpers/fees';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
@@ -317,10 +318,17 @@ class SendCoinsScreen extends Component<Props, State> {
     this.setState({ isLoading: false }, () => this.navigateToConfirm({ fee, txDecoded, actualSatoshiPerByte }));
   };
 
-  navigateToScanInstantPrivateKey = (onBarCodeScan: (privateKey: string) => void) => {
+  navigateToScanInstantPrivateKey = (onBarCodeScanned: (privateKey: string) => void) => {
     const { navigation } = this.props;
     navigation.navigate(Route.IntegrateKey, {
-      onBarCodeScan,
+      onBarCodeScan: scannedKey => {
+        CreateMessage({
+          title: i18n.message.processing,
+          description: i18n.message.bePatient,
+          type: MessageType.processingState,
+          asyncTask: () => onBarCodeScanned(scannedKey),
+        });
+      },
       title: i18n.send.transaction.scanInstantKeyTitle,
       description: i18n.send.transaction.scanInstantKeyDesc,
       withLink: false,
@@ -369,7 +377,15 @@ class SendCoinsScreen extends Component<Props, State> {
                 }),
               );
             } catch (error) {
-              Alert.alert(error.message);
+              CreateMessage({
+                title: i18n.send.error.title,
+                description: error.message,
+                type: MessageType.error,
+                buttonProps: {
+                  title: i18n._.cancel,
+                  onPress: this.confirmTransaction,
+                },
+              });
             }
           });
         }
@@ -422,11 +438,12 @@ class SendCoinsScreen extends Component<Props, State> {
     const { transaction } = this.state;
     return (
       <InputItem
-        multiline
         label={i18n.contactDetails.addressLabel}
         style={styles.addressInput}
         value={transaction.address}
         setValue={text => this.processAddressData(text.trim())}
+        multiline
+        maxLength={CONST.maxAddressLength}
       />
     );
   };
