@@ -92,7 +92,6 @@ export const SettingsScreen = (props: Props) => {
       {/*	
        // @ts-ignore */}
       <Header navigation={props.navigation} title={i18n.settings.header} />
-      <Text>{`Network info: ${config.host}:${config.port}`}</Text>
       <ScreenTemplate>
         <Image source={logoSource} style={styles.logo} resizeMode="contain" />
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
