@@ -73,6 +73,8 @@ config/beta/google-services.json
 config/prod/google-services.json
 config/beta/GoogleService-Info.plist
 config/prod/GoogleService-Info.plist
+app.json
+android/app/src/main/java/io/goldwallet/wallet/MainActivity.java
 
 # Testing
 coverage
