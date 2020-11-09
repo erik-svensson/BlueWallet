@@ -14,7 +14,7 @@ const filterByTransactionType = (transactions: Transaction[], type?: string): Tr
 };
 
 const filterByAddress = (transactions: Transaction[], address: string, type?: string): Transaction[] => {
-  if (type === CONST.send) {
+  if (type === CONST.receive) {
     return transactions.filter(transaction => {
       const inputs: string[] = [];
       transaction.inputs.filter(input => {
