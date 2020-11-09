@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
   },
-  visibilityIcon: { position: 'absolute', right: 0, top: 48, zIndex: 3 },
+  visibilityIcon: { position: 'absolute', right: 0, bottom: 22, zIndex: 3 },
   description: {
     ...typography.caption,
     color: palette.textGrey,
