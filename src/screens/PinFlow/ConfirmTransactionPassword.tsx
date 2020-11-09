@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     width: '100%',
   },
-  visibilityIcon: { position: 'absolute', right: 0, top: 48, zIndex: 3 },
+  visibilityIcon: { position: 'absolute', right: 0, top: 0, zIndex: 3 },
   icon: {
     width: 24,
     height: 24,
