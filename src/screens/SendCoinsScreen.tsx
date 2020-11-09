@@ -383,7 +383,7 @@ class SendCoinsScreen extends Component<Props, State> {
                 type: MessageType.error,
                 buttonProps: {
                   title: i18n._.cancel,
-                  onPress: () => this.props.navigation.navigate(Route.SendCoins),
+                  onPress: this.confirmTransaction,
                 },
               });
             }
