@@ -19,5 +19,5 @@ export default {
   isBeta,
   applicationId: isBeta ? 'io.goldwallet.wallet.testnet' : 'io.goldwallet.wallet',
   applicationName: isBeta ? 'Testnet Gold Wallet' : 'GoldWallet',
-  explorerUrl: EXPLORER_URL || 'http://explorer.bitcoinvault.global',
+  explorerUrl: EXPLORER_URL || 'https://explorer.bitcoinvault.global',
 };
