@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { PureComponent } from 'react';
+import React, { PureComponent, RefObject } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
 import { icons } from 'app/assets';
@@ -30,8 +30,6 @@ export class UnlockTransaction extends PureComponent<Props, State> {
     isVisible: false,
     isLoading: false,
   };
-
-  inputRef: any = React.createRef();
 
   onConfirm = () => {
     const { onSuccess } = this.props.route.params;
@@ -84,7 +82,6 @@ export class UnlockTransaction extends PureComponent<Props, State> {
           </TouchableOpacity>
           <InputItem
             value={password}
-            ref={this.inputRef}
             setValue={this.updatePassword}
             autoFocus={true}
             secureTextEntry={!isVisible}
