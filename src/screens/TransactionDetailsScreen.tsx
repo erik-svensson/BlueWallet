@@ -234,7 +234,7 @@ class TransactionDetailsScreen extends Component<Props> {
           <StyledText
             title={i18n.transactions.details.addToAddressBook}
             onPress={() => {
-              this.addToAddressBook(fromValue);
+              this.addToAddressBook(fromValue.split(',')[0]);
             }}
           />
         </View>
