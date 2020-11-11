@@ -204,7 +204,6 @@ class TransactionDetailsScreen extends Component<Props> {
       <ScreenTemplate
         header={
           <Header
-            navigation={this.props.navigation}
             isBackArrow
             title={
               transaction.time ? dayjs.unix(transaction.time).format('lll') : i18n.transactions.details.timePending

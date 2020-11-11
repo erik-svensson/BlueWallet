@@ -111,7 +111,7 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
             />
           </>
         }
-        header={<Header isBackArrow navigation={this.props.navigation} title={contact.name} />}
+        header={<Header isBackArrow title={contact.name} />}
       >
         <ContactAvatar name={name} />
         <View style={styles.nameInputContainer}>

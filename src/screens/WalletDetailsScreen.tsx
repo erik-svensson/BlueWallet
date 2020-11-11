@@ -144,7 +144,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             />
           </>
         }
-        header={<Header navigation={this.props.navigation} isBackArrow title={wallet.label} />}
+        header={<Header isBackArrow title={wallet.label} />}
       >
         <View style={styles.walletContainer}>
           <WalletCard wallet={wallet} containerStyle={styles.walletContainerInner} />

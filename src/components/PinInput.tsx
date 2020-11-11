@@ -10,7 +10,6 @@ interface Props {
   value: string;
   testID?: string;
   onTextChange: (pin: string) => void;
-  navigation: any;
 }
 
 export class PinInput extends PureComponent<Props> {
@@ -18,16 +17,9 @@ export class PinInput extends PureComponent<Props> {
   unsubscribeFocusListener: Function = noop;
 
   componentDidMount() {
-    // workaround for autoFocus prop issues
-    this.unsubscribeFocusListener = this.props.navigation.addListener('focus', () => {
-      setTimeout(() => {
-        this.focus();
-      }, 500);
+    setTimeout(() => {
+      this.focus();
     });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribeFocusListener();
   }
 
   focus = () => {

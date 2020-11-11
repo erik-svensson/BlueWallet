@@ -511,7 +511,7 @@ class SendCoinsScreen extends Component<Props, State> {
             disabled={isLoading}
           />
         }
-        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.send.header} />}
+        header={<Header isBackArrow title={i18n.send.header} />}
       >
         <WalletDropdown
           onSelectPress={this.showModal}

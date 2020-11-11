@@ -37,7 +37,6 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
 
   render() {
     const {
-      navigation,
       route: {
         params: { secret },
       },
@@ -46,7 +45,7 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
     return (
       <ScreenTemplate
         footer={<Button onPress={this.navigateBack} title={i18n.wallets.addSuccess.okButton} />}
-        header={<Header isBackArrow navigation={navigation} title={i18n.wallets.add.title} />}
+        header={<Header isBackArrow title={i18n.wallets.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.wallets.addSuccess.subtitle}</Text>
         <Text style={styles.description}>{i18n.wallets.addSuccess.description}</Text>

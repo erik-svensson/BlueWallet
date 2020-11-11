@@ -107,7 +107,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
   render() {
     return (
       <ScreenTemplate
-        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.authenticators.add.title} />}
+        header={<Header isBackArrow title={i18n.authenticators.add.title} />}
         footer={
           <>
             <Button onPress={this.confirmCreateAuthenticator} title={i18n._.confirm} disabled={this.canSubmit()} />

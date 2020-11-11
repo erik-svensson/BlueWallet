@@ -74,7 +74,7 @@ export class UnlockTransaction extends PureComponent<Props, State> {
             disabled={isLoading || password.length < CONST.transactionMinPasswordLength}
           />
         }
-        header={<Header navigation={this.props.navigation} title={i18n.unlockTransaction.headerText} isBackArrow />}
+        header={<Header title={i18n.unlockTransaction.headerText} isBackArrow />}
       >
         <Text style={styles.title}>{i18n.unlockTransaction.title}</Text>
         <Text style={styles.description}>{i18n.unlockTransaction.description}</Text>

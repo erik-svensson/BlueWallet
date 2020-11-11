@@ -59,7 +59,7 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
             <Button loading={this.state.isLoading} onPress={this.navigateToImportWallet} title={i18n._.next} />
           </>
         }
-        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.wallets.importWallet.header} />}
+        header={<Header isBackArrow title={i18n.wallets.importWallet.header} />}
       >
         <View style={styles.titleContainer}>
           <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>

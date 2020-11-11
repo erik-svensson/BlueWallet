@@ -456,9 +456,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
             />
           </>
         }
-        header={
-          <Header navigation={this.props.navigation} isBackArrow={true} title={i18n.wallets.importWallet.header} />
-        }
+        header={<Header isBackArrow={true} title={i18n.wallets.importWallet.header} />}
       >
         <View style={styles.inputItemContainer}>
           <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>

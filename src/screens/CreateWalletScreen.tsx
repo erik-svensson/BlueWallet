@@ -304,7 +304,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
             />
           </>
         }
-        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.wallets.add.title} />}
+        header={<Header isBackArrow title={i18n.wallets.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.wallets.add.subtitle}</Text>
         <Text style={styles.description}>{i18n.wallets.add.description}</Text>

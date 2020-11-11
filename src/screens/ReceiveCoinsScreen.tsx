@@ -141,7 +141,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
             containerStyle={styles.buttonContainer}
           />
         }
-        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.receive.header} />}
+        header={<Header isBackArrow title={i18n.receive.header} />}
       >
         <WalletDropdown
           onSelectPress={this.showModal}
