@@ -5,7 +5,7 @@ import { StyleSheet, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioGroup, RadioButton } from 'app/components';
-import { Route, Wallet, MainTabNavigatorParams, MainCardStackNavigatorParams, ActionMeta } from 'app/consts';
+import { Route, Wallet, MainTabNavigatorParams, MainCardStackNavigatorParams, ActionMeta, CONST } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import {
