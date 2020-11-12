@@ -162,6 +162,7 @@ class TransactionDetailsScreen extends Component<Props> {
       onSave: this.updateNote,
       value: note,
       header: this.renderHeader(),
+      emptyValueAllowed: true,
     });
   };
 

@@ -19,6 +19,8 @@ export const EditTextScreen = (props: Props) => {
   const keyboardType = params.keyboardType || defaultKeyboardType;
   const validate = params.validate || null;
   const validateOnSave = params.validateOnSave || null;
+  const emptyValueAllowed = params.emptyValueAllowed || false;
+
   const [value, setValue] = useState(params.value || '');
   const [error, setError] = useState('');
 
@@ -41,7 +43,7 @@ export const EditTextScreen = (props: Props) => {
         <Button
           title={i18n._.save}
           onPress={handlePressOnSaveButton}
-          disabled={!value || (!!validate && !!validate(value))}
+          disabled={emptyValueAllowed || !value || (!!validate && !!validate(value))}
         />
       }
       header={<Header navigation={props.navigation} isBackArrow={true} title={title} />}
