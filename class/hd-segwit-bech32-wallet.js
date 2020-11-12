@@ -315,6 +315,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   static _nodeToBech32SegwitAddress(hdNode) {
     return bitcoin.payments.p2wpkh({
       pubkey: hdNode.publicKey,
+      network: config.network,
     }).address;
   }
 

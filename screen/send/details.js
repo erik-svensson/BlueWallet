@@ -45,6 +45,7 @@ const { width } = Dimensions.get('window');
 /** @type {AppStorage} */
 let BlueApp = require('../../BlueApp');
 let loc = require('../../loc');
+const config = require('../../config');
 
 const btcAddressRx = /^[a-zA-Z0-9]{26,35}$/;
 
@@ -388,7 +389,7 @@ export default class SendDetails extends Component {
 
       if (!error) {
         try {
-          bitcoin.address.toOutputScript(transaction.address);
+          bitcoin.address.toOutputScript(transaction.address, config.network);
         } catch (err) {
           console.log('validation error');
           console.log(err);

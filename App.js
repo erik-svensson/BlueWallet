@@ -14,7 +14,7 @@ import QuickActions from 'react-native-quick-actions';
 import * as Sentry from '@sentry/react-native';
 import OnAppLaunch from './class/onAppLaunch';
 const A = require('./analytics');
-
+const config = require('./config');
 const bitcoin = require('bitcoinjs-lib');
 const bitcoinModalString = 'Bitcoin address';
 const loc = require('./loc');
@@ -132,7 +132,7 @@ export default class App extends React.Component {
   isBitcoinAddress(address) {
     let isValidBitcoinAddress = false;
     try {
-      bitcoin.address.toOutputScript(address);
+      bitcoin.address.toOutputScript(address, config.network);
       isValidBitcoinAddress = true;
       this.setState({ clipboardContentModalAddressType: bitcoinModalString });
     } catch (err) {
