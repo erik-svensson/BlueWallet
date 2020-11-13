@@ -71,7 +71,6 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     const { navigation } = this.props;
     navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (data: string) => {
-        navigation.goBack();
         this.createImportMessage(() => this.createAuthenticatorScan(data));
       },
     });
