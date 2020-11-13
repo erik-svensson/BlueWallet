@@ -61,6 +61,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
             this.onButtonClicked(this.mockedQrCodeData.publicKey1);
           }}
           title={'Public Key 1'}
+          testID="scan-public-key-one-button"
           containerStyle={styles.button}
         />
         <Button
@@ -68,6 +69,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
             this.onButtonClicked(this.mockedQrCodeData.publicKey1);
           }}
           title={'Public Key 2'}
+          testID="scan-public-key-two-button"
           containerStyle={styles.button}
         />
         <Button
@@ -75,6 +77,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
             this.onButtonClicked(this.mockedQrCodeData.privateKey);
           }}
           title={'Private Key'}
+          testID="scan-private-key-button"
           containerStyle={styles.button}
         />
         <Button
@@ -82,6 +85,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
             this.onButtonClicked(this.mockedQrCodeData.seedPhrase);
           }}
           title={'Seed phrase'}
+          testID="scan-phrase-seed-button"
           containerStyle={styles.button}
         />
         <Button
@@ -89,6 +93,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
             this.onButtonClicked(this.mockedQrCodeData.dummy);
           }}
           title={'Dummy QR code'}
+          testID="scan-dummy-button"
           containerStyle={styles.button}
         />
 
@@ -97,9 +102,14 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
             focused={!!this.state.customString}
             multiline
             setValue={this.setCustomString}
+            testID="custom-string-input"
             label={i18n.contactCreate.addressLabel}
           />
-          <TouchableOpacity style={styles.submitCustomStringButton} onPress={this.onSubmitCustomStringButtonClicked}>
+          <TouchableOpacity
+            testID="custom-string-submit-button"
+            style={styles.submitCustomStringButton}
+            onPress={this.onSubmitCustomStringButtonClicked}
+          >
             <Image style={styles.submitCustomStringImage} source={icons.arrowRight} />
           </TouchableOpacity>
         </View>
