@@ -3,10 +3,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Image, View, TouchableOpacity, StatusBar, StyleSheet, Dimensions } from 'react-native';
 
-import { images } from 'app/assets';
-import { Button } from 'app/components';
+import { icons } from 'app/assets';
+import { Button, InputItem, ScreenTemplate } from 'app/components';
 import { MainCardStackNavigatorParams, Route } from 'app/consts';
-import { getStatusBarHeight } from 'app/styles';
 
 const { width } = Dimensions.get('window');
 const i18n = require('../../loc');
@@ -17,6 +16,10 @@ interface Props {
 }
 
 export default class ScanQrCodeScreen extends React.PureComponent<Props> {
+  state = {
+    customString: '',
+  };
+
   goBack = () => this.props.navigation.goBack();
 
   onButtonClicked = (data: string) => {
@@ -32,6 +35,13 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
     }
   };
 
+  setCustomString = (value: string): void => this.setState({ customString: value });
+
+  onSubmitCustomStringButtonClicked = () => {
+    this.onBarCodeScanned(this.state.customString);
+    this.goBack();
+  };
+
   mockedQrCodeData = {
     publicKey1:
       '0442d7724d90fb60bc969f8b0fd46f3f63fe17637d5a0ba2fa9800b3b85946b72c3b81199572cd91bad23c87c3e96dbaa68e1c4b3e47d09276bd63138c584a5a7b',
@@ -44,51 +54,75 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <>
-          <StatusBar hidden />
-          <Button
-            onPress={() => {
-              this.onButtonClicked(this.mockedQrCodeData.publicKey1);
-            }}
-            title={'Public Key 1'}
-            containerStyle={styles.button}
+      <ScreenTemplate contentContainer={styles.container}>
+        <StatusBar hidden />
+        <Button
+          onPress={() => {
+            this.onButtonClicked(this.mockedQrCodeData.publicKey1);
+          }}
+          title={'Public Key 1'}
+          containerStyle={styles.button}
+        />
+        <Button
+          onPress={() => {
+            this.onButtonClicked(this.mockedQrCodeData.publicKey1);
+          }}
+          title={'Public Key 2'}
+          containerStyle={styles.button}
+        />
+        <Button
+          onPress={() => {
+            this.onButtonClicked(this.mockedQrCodeData.privateKey);
+          }}
+          title={'Private Key'}
+          containerStyle={styles.button}
+        />
+        <Button
+          onPress={() => {
+            this.onButtonClicked(this.mockedQrCodeData.seedPhrase);
+          }}
+          title={'Seed phrase'}
+          containerStyle={styles.button}
+        />
+        <Button
+          onPress={() => {
+            this.onButtonClicked(this.mockedQrCodeData.dummy);
+          }}
+          title={'Dummy QR code'}
+          containerStyle={styles.button}
+        />
+
+        <View>
+          <InputItem
+            focused={!!this.state.customString}
+            multiline
+            setValue={this.setCustomString}
+            label={i18n.contactCreate.addressLabel}
           />
-          <Button
-            onPress={() => {
-              this.onButtonClicked(this.mockedQrCodeData.publicKey1);
-            }}
-            title={'Public Key 2'}
-            containerStyle={styles.button}
-          />
-          <Button
-            onPress={() => {
-              this.onButtonClicked(this.mockedQrCodeData.privateKey);
-            }}
-            title={'Private Key'}
-            containerStyle={styles.button}
-          />
-          <Button
-            onPress={() => {
-              this.onButtonClicked(this.mockedQrCodeData.seedPhrase);
-            }}
-            title={'Seed phrase'}
-            containerStyle={styles.button}
-          />
-          <Button
-            onPress={() => {
-              this.onButtonClicked(this.mockedQrCodeData.dummy);
-            }}
-            title={'Dummy QR code'}
-            containerStyle={styles.button}
-          />
-        </>
-      </View>
+          <TouchableOpacity style={styles.submitCustomStringButton} onPress={this.onSubmitCustomStringButtonClicked}>
+            <Image style={styles.submitCustomStringImage} source={icons.arrowRight} />
+          </TouchableOpacity>
+        </View>
+      </ScreenTemplate>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 50,
+  },
+  submitCustomStringButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 20,
+    padding: 8,
+  },
+  submitCustomStringImage: {
+    width: 24,
+    height: 24,
+    padding: 8,
+  },
   button: {
     marginTop: 15,
     marginBottom: 15,
