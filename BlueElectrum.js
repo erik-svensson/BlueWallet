@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { AppStorage } from './class';
-import { network } from './config';
 
 const BigNumber = require('bignumber.js');
 const bitcoin = require('bitcoinjs-lib');
 const reverse = require('buffer-reverse');
 const ElectrumClient = require('electrum-client');
+
+const config = require('./config');
 
 const storageKey = 'ELECTRUM_PEERS';
 export const defaultPeer = { host: 'testnet.bitcoinvault.global', port: '50002', protocol: 'tls' };
