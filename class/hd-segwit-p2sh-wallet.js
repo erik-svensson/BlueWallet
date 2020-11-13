@@ -10,6 +10,8 @@ import { AbstractHDWallet } from './abstract-hd-wallet';
 const HDNode = require('bip32');
 const bitcoin = require('bitcoinjs-lib');
 
+const config = require('../config');
+
 const { RNRandomBytes } = NativeModules;
 
 /**
@@ -33,7 +35,8 @@ function ypubToXpub(ypub) {
  */
 function nodeToP2shSegwitAddress(hdNode) {
   const { address } = bitcoin.payments.p2sh({
-    redeem: bitcoin.payments.p2wpkh({ pubkey: hdNode.publicKey }),
+    redeem: bitcoin.payments.p2wpkh({ pubkey: hdNode.publicKey, network: config.network }),
+    network: config.network,
   });
   return address;
 }
@@ -95,10 +98,10 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
     if (!this.seed) {
       this.seed = await bip39.mnemonicToSeed(this.secret);
     }
-    const root = bitcoin.bip32.fromSeed(this.seed);
+    const root = bitcoin.bip32.fromSeed(this.seed, config.network);
     const path = this._getPath(`/0/${index}`);
     const child = root.derivePath(path);
-    return bitcoin.ECPair.fromPrivateKey(child.privateKey).toWIF();
+    return bitcoin.ECPair.fromPrivateKey(child.privateKey, { network: config.network }).toWIF();
   }
 
   /**
@@ -114,7 +117,7 @@ export class HDSegwitP2SHWallet extends AbstractHDWallet {
     // first, getting xpub
     const mnemonic = this.secret;
     this.seed = await bip39.mnemonicToSeed(mnemonic);
-    const root = HDNode.fromSeed(this.seed);
+    const root = HDNode.fromSeed(this.seed, config.network);
     const path = this._getPath();
     const child = root.derivePath(path).neutered();
     const xpub = child.toBase58();

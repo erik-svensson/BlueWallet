@@ -7,6 +7,7 @@ const BigNumber = require('bignumber.js');
 const bitcoin = require('bitcoinjs-lib');
 
 const BlueElectrum = require('../BlueElectrum');
+const config = require('../config');
 const signer = require('../models/signer');
 
 /**
@@ -53,6 +54,7 @@ export class LegacyWallet extends AbstractWallet {
           // eslint-disable-line
           if (err) throw err;
           that.secret = bitcoin.ECPair.makeRandom({
+            network: config.network,
             rng(length) {
               return buf;
             },
@@ -65,6 +67,7 @@ export class LegacyWallet extends AbstractWallet {
       RNRandomBytes.randomBytes(32, (err, bytes) => {
         if (err) throw new Error(err);
         that.secret = bitcoin.ECPair.makeRandom({
+          network: config.network,
           rng(length) {
             const b = Buffer.from(bytes, 'base64');
             return b;
@@ -79,9 +82,10 @@ export class LegacyWallet extends AbstractWallet {
     if (this._address) return this._address;
     let address;
     try {
-      const keyPair = bitcoin.ECPair.fromWIF(this.secret);
+      const keyPair = bitcoin.ECPair.fromWIF(this.secret, config.network);
       address = bitcoin.payments.p2pkh({
         pubkey: keyPair.publicKey,
+        network: config.network,
       }).address;
     } catch (err) {
       return false;
@@ -206,7 +210,7 @@ export class LegacyWallet extends AbstractWallet {
 
   isAddressValid(address) {
     try {
-      bitcoin.address.toOutputScript(address);
+      bitcoin.address.toOutputScript(address, config.network);
       return true;
     } catch (e) {
       return false;

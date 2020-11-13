@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { AppStorage } from './class';
+import { network } from './config';
 
 const BigNumber = require('bignumber.js');
 const bitcoin = require('bitcoinjs-lib');
@@ -8,9 +9,7 @@ const reverse = require('buffer-reverse');
 const ElectrumClient = require('electrum-client');
 
 const storageKey = 'ELECTRUM_PEERS';
-export const defaultPeer = __DEV__
-  ? { host: 'testnet.bitcoinvault.global', port: '50002', protocol: 'tls' }
-  : { host: 'testnet.bitcoinvault.global', port: '50002', protocol: 'tls' };
+export const defaultPeer = { host: 'testnet.bitcoinvault.global', port: '50002', protocol: 'tls' };
 const hardcodedPeers = [defaultPeer];
 
 let mainClient = false;
@@ -103,7 +102,8 @@ async function getRandomDynamicPeer() {
  */
 module.exports.getBalanceByAddress = async function(address) {
   if (!mainClient) throw new Error('Electrum client is not connected');
-  const script = bitcoin.address.toOutputScript(address);
+
+  const script = bitcoin.address.toOutputScript(address, config.network);
   const hash = bitcoin.crypto.sha256(script);
   const reversedHash = Buffer.from(reverse(hash));
   const balance = await mainClient.blockchainScripthash_getBalance(reversedHash.toString('hex'));
@@ -227,7 +227,7 @@ module.exports.multiGetBalanceByAddress = async function(addresses, batchsize) {
     const scripthashes = [];
     const scripthash2addr = {};
     for (const addr of chunk) {
-      const script = bitcoin.address.toOutputScript(addr);
+      const script = bitcoin.address.toOutputScript(addr, config.network);
       const hash = bitcoin.crypto.sha256(script);
       let reversedHash = Buffer.from(reverse(hash));
       reversedHash = reversedHash.toString('hex');
@@ -258,7 +258,7 @@ module.exports.multiGetUtxoByAddress = async function(addresses, batchsize) {
     const scripthashes = [];
     const scripthash2addr = {};
     for (const addr of chunk) {
-      const script = bitcoin.address.toOutputScript(addr);
+      const script = bitcoin.address.toOutputScript(addr, config.network);
       const hash = bitcoin.crypto.sha256(script);
       let reversedHash = Buffer.from(reverse(hash));
       reversedHash = reversedHash.toString('hex');
@@ -292,7 +292,7 @@ module.exports.multiGetHistoryByAddress = async function(addresses, batchsize) {
     const scripthashes = [];
     const scripthash2addr = {};
     for (const addr of chunk) {
-      const script = bitcoin.address.toOutputScript(addr);
+      const script = bitcoin.address.toOutputScript(addr, config.network);
       const hash = bitcoin.crypto.sha256(script);
       let reversedHash = Buffer.from(reverse(hash));
       reversedHash = reversedHash.toString('hex');

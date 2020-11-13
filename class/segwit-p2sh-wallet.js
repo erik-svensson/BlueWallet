@@ -3,6 +3,7 @@ import { LegacyWallet } from './legacy-wallet';
 const BigNumber = require('bignumber.js');
 const bitcoin = require('bitcoinjs-lib');
 
+const config = require('../config');
 const signer = require('../models/signer');
 
 /**
@@ -12,7 +13,7 @@ const signer = require('../models/signer');
  * @returns {String}
  */
 function pubkeyToP2shSegwitAddress(pubkey, network) {
-  network = network || bitcoin.networks.bitcoin;
+  network = network || config.network;
   const { address } = bitcoin.payments.p2sh({
     redeem: bitcoin.payments.p2wpkh({ pubkey, network }),
     network,
@@ -45,7 +46,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
     try {
       ret = bitcoin.payments.p2sh({
         output: scriptPubKey2,
-        network: bitcoin.networks.bitcoin,
+        network: config.network,
       }).address;
     } catch (_) {
       return false;
@@ -57,7 +58,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
     if (this._address) return this._address;
     let address;
     try {
-      const keyPair = bitcoin.ECPair.fromWIF(this.secret);
+      const keyPair = bitcoin.ECPair.fromWIF(this.secret, config.network);
       const pubKey = keyPair.publicKey;
       if (!keyPair.compressed) {
         console.warn('only compressed public keys are good for segwit');
