@@ -10,6 +10,7 @@ import {
   SendTransactionDetailsScreen,
   MessageScreen,
   EditTextScreen,
+  TermsConditionsScreen,
   UnlockTransaction,
 } from 'app/screens';
 
@@ -28,6 +29,7 @@ export const RootNavigator = () => (
     <Stack.Screen name={Route.ExportWalletXpub} component={ExportWalletXpubScreen} />
     <Stack.Screen name={Route.DeleteContact} component={DeleteContactScreen} />
     <Stack.Screen name={Route.SendTransactionDetails} component={SendTransactionDetailsScreen} />
+    <Stack.Screen name={Route.TermsConditions} component={TermsConditionsScreen} />
   </Stack.Navigator>
 );
 

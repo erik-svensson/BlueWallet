@@ -24,6 +24,8 @@ export const CONST = {
   pin: 'pin',
   defaultLanguage: 'en',
   maxAddressLength: 48,
+  tcVersionRequired: 1,
+  tcValue: 'tcValue',
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
@@ -84,6 +86,7 @@ export enum Route {
   ContactDetails = 'ContactDetails',
   CreateContact = 'CreateContact',
   DeleteContact = 'DeleteContact',
+  TermsConditions = 'TermsConditions',
   ContactQRCode = 'ContactQRCode',
   Settings = 'Settings',
   Message = 'Message',
@@ -284,6 +287,7 @@ export type MainTabNavigatorParams = {
 
 export type RootStackParams = {
   [Route.MainCardStackNavigator]: undefined;
+  [Route.TermsConditions]: undefined;
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
   [Route.UnlockTransaction]: { onSuccess: () => void };
   [Route.PasswordNavigator]: undefined;

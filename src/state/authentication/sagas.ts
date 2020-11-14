@@ -3,7 +3,7 @@ import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 
 import { CONST } from 'app/consts';
 import { BlueApp } from 'app/legacy';
-import { SecureStorageService } from 'app/services';
+import { SecureStorageService, StoreService } from 'app/services';
 
 import {
   createTxPasswordSuccess,
@@ -19,6 +19,7 @@ import {
   CreateTxPasswordAction,
   CheckCredentialsAction,
   AuthenticationAction,
+  setIsTcAccepted,
 } from './actions';
 
 export function* checkCredentialsSaga(action: CheckCredentialsAction | unknown) {
@@ -85,6 +86,24 @@ export function* createPinSaga(action: CreatePinAction | unknown) {
   }
 }
 
+export function* createTermsAccept(action: CreatePinAction | unknown) {
+  const { meta, payload } = action as CreatePinAction;
+  try {
+    yield call(SecureStorageService.setSecuredValue, CONST.pin, payload.pin);
+
+    yield put(createPinSuccess());
+
+    if (meta?.onSuccess) {
+      meta.onSuccess();
+    }
+  } catch (e) {
+    yield put(createPinFailure(e.message));
+    if (meta?.onFailure) {
+      meta.onFailure();
+    }
+  }
+}
+
 export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) {
   const { meta, payload } = action as CreateTxPasswordAction;
   try {
@@ -101,9 +120,24 @@ export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) 
   }
 }
 
+export function* checkTcSaga() {
+  const tc = yield call(StoreService.getStoreValue, CONST.tcValue);
+  if (tc) {
+    yield put(setIsTcAccepted(true));
+  }
+}
+
+export function* createTcSaga() {
+  //@ts-ignore
+  yield call(StoreService.setStoreValue, CONST.tcValue, true);
+  yield put(setIsTcAccepted(true));
+}
+
 export default [
   takeLatest(AuthenticationAction.CheckCredentials, checkCredentialsSaga),
   takeEvery(AuthenticationAction.Authenticate, authenticateSaga),
   takeEvery(AuthenticationAction.CreatePin, createPinSaga),
   takeEvery(AuthenticationAction.CreateTxPassword, createTxPasswordSaga),
+  takeEvery(AuthenticationAction.CheckTc, checkTcSaga),
+  takeEvery(AuthenticationAction.CreateTc, createTcSaga),
 ];
