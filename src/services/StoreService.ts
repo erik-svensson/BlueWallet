@@ -10,7 +10,7 @@ export default class StoreService {
     }
   }
 
-  async setStoreValue(key: string, value: string): Promise<void> {
+  async setStoreValue(key: string, value: string | boolean | number): Promise<void> {
     await AsyncStorage.setItem(key, JSON.stringify(value));
     return;
   }

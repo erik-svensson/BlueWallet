@@ -187,7 +187,6 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
 
 const mapDispatchToProps: ActionsDisptach = {
   checkCredentials: checkCredentialsAction,
-  //@ts-ignore
   checkTc: checkTcAction,
   startElectrumXListeners: startListeners,
   refreshAllWallets: refreshAllWalletsAction,

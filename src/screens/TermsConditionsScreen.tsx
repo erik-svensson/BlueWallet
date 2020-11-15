@@ -46,6 +46,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
       showWarring: !this.state.showWarring,
     });
   };
+
   disagreeAction = () => {
     this.toggleModal();
   };
