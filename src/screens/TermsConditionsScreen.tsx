@@ -7,10 +7,22 @@ import { connect } from 'react-redux';
 
 import { Button, CustomModal, Header, ScreenTemplate } from 'app/components';
 import { Route, RootStackParams, PasswordNavigatorParams } from 'app/consts';
-import { setIsTcAccepted as setIsTcAcceptedAction, SetIsTcAcceptedAction } from 'app/state/authentication/actions';
+import { ApplicationState } from 'app/state';
+import { selectors as authenticationSelectors } from 'app/state/authentication';
+import {
+  setIsTcAccepted as setIsTcAcceptedAction,
+  SetIsTcAcceptedAction,
+  createTc as createTcAction,
+} from 'app/state/authentication/actions';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
+
+interface MapStateToProps {
+  isPinSet: boolean;
+  isAuthenticated: boolean;
+  isTxPasswordSet: boolean;
+}
 
 interface Props {
   navigation: CompositeNavigationProp<
@@ -19,6 +31,11 @@ interface Props {
   >;
   route: RouteProp<RootStackParams, Route.TermsConditions>;
   setIsTcAccepted: (isTcAccepted: boolean) => SetIsTcAcceptedAction;
+  createTc: () => void;
+  isPinSet: boolean;
+  isTcAccepted: boolean;
+  isAuthenticated: boolean;
+  isTxPasswordSet: boolean;
 }
 
 export class TermsConditionsScreen extends React.PureComponent<Props> {
@@ -52,7 +69,13 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   };
 
   agreeAction = () => {
-    this.props.setIsTcAccepted(true);
+    const { isAuthenticated, isTxPasswordSet, isPinSet, setIsTcAccepted, createTc } = this.props;
+
+    if (isAuthenticated && isTxPasswordSet && isPinSet) {
+      createTc();
+    } else {
+      setIsTcAccepted(true);
+    }
   };
 
   isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent) => {
@@ -108,11 +131,18 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   }
 }
 
+const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
+  isPinSet: authenticationSelectors.isPinSet(state),
+  isTxPasswordSet: authenticationSelectors.isTxPasswordSet(state),
+  isAuthenticated: authenticationSelectors.isAuthenticated(state),
+});
+
 const mapDispatchToProps = {
   setIsTcAccepted: setIsTcAcceptedAction,
+  createTc: createTcAction,
 };
 
-export default connect(null, mapDispatchToProps)(TermsConditionsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(TermsConditionsScreen);
 
 const styles = StyleSheet.create({
   title: {
