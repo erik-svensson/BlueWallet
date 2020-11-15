@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { Button, CustomModal, Header, ScreenTemplate } from 'app/components';
 import { Route, RootStackParams, PasswordNavigatorParams } from 'app/consts';
-import { createTc as createTcAction, SetIsTcAcceptedAction } from 'app/state/authentication/actions';
+import { setIsTcAccepted as setIsTcAcceptedAction, SetIsTcAcceptedAction } from 'app/state/authentication/actions';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -18,7 +18,7 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.TermsConditions>
   >;
   route: RouteProp<RootStackParams, Route.TermsConditions>;
-  createTc: () => void;
+  setIsTcAccepted: (isTcAccepted: boolean) => SetIsTcAcceptedAction;
 }
 
 export class TermsConditionsScreen extends React.PureComponent<Props> {
@@ -51,7 +51,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   };
 
   agreeAction = () => {
-    this.props.createTc();
+    this.props.setIsTcAccepted(true);
   };
 
   isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent) => {
@@ -108,7 +108,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
 }
 
 const mapDispatchToProps = {
-  createTc: createTcAction,
+  setIsTcAccepted: setIsTcAcceptedAction,
 };
 
 export default connect(null, mapDispatchToProps)(TermsConditionsScreen);

@@ -121,8 +121,9 @@ export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) 
 }
 
 export function* checkTcSaga() {
-  const tc = yield call(StoreService.getStoreValue, CONST.tcValue);
-  if (tc) {
+  const tcValue = yield call(StoreService.getStoreValue, CONST.tcValue);
+  const tcVersion = yield call(StoreService.getStoreValue, CONST.tcVersion);
+  if (tcValue && tcVersion >= CONST.tcVersionRequired) {
     yield put(setIsTcAccepted(true));
   }
 }
@@ -130,6 +131,8 @@ export function* checkTcSaga() {
 export function* createTcSaga() {
   //@ts-ignore
   yield call(StoreService.setStoreValue, CONST.tcValue, true);
+  //@ts-ignore
+  yield call(StoreService.setStoreValue, CONST.tcVersion, CONST.tcVersionRequired);
   yield put(setIsTcAccepted(true));
 }
 
