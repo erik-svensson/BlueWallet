@@ -20,7 +20,6 @@ const i18n = require('../../loc');
 
 interface MapStateToProps {
   isPinSet: boolean;
-  isAuthenticated: boolean;
   isTxPasswordSet: boolean;
 }
 
@@ -34,7 +33,6 @@ interface Props {
   createTc: () => void;
   isPinSet: boolean;
   isTcAccepted: boolean;
-  isAuthenticated: boolean;
   isTxPasswordSet: boolean;
 }
 
@@ -69,9 +67,9 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   };
 
   agreeAction = () => {
-    const { isAuthenticated, isTxPasswordSet, isPinSet, setIsTcAccepted, createTc } = this.props;
+    const { isTxPasswordSet, isPinSet, setIsTcAccepted, createTc } = this.props;
 
-    if (isAuthenticated && isTxPasswordSet && isPinSet) {
+    if (isTxPasswordSet && isPinSet) {
       createTc();
     } else {
       setIsTcAccepted(true);
@@ -134,7 +132,6 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
 const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isPinSet: authenticationSelectors.isPinSet(state),
   isTxPasswordSet: authenticationSelectors.isTxPasswordSet(state),
-  isAuthenticated: authenticationSelectors.isAuthenticated(state),
 });
 
 const mapDispatchToProps = {
