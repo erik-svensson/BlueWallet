@@ -121,7 +121,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
         }
       >
         <Text style={styles.subtitle}>{i18n.authenticators.add.subtitle}</Text>
-        <Text style={styles.description}>{i18n.authenticators.add.description}</Text>
+        <Text style={styles.description}>{i18n.authenticators.publicKey.subtitle}</Text>
         <InputItem
           error={this.validationError}
           setValue={this.setLabel}
