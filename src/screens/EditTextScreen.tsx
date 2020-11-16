@@ -45,7 +45,7 @@ export const EditTextScreen = (props: Props) => {
     if (validate === undefined) {
       return true;
     }
-    return validate(value);
+    return !!!validate(value);
   };
 
   return (
