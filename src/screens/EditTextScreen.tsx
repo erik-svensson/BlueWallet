@@ -14,14 +14,20 @@ interface Props {
 }
 
 export const EditTextScreen = (props: Props) => {
-  const { params } = props.route;
-  const { label, header, onSave, title, maxLength } = params;
-  const keyboardType = params.keyboardType || defaultKeyboardType;
-  const validate = params.validate;
-  const validateOnSave = params.validateOnSave || null;
-  const emptyValueAllowed = params.emptyValueAllowed || false;
+  const {
+    label,
+    header,
+    onSave,
+    title,
+    maxLength,
+    keyboardType = defaultKeyboardType,
+    validate,
+    validateOnSave = null,
+    emptyValueAllowed = false,
+    value: paramsValue,
+  } = props.route.params;
 
-  const [value, setValue] = useState(params.value || '');
+  const [value, setValue] = useState(paramsValue || '');
   const [error, setError] = useState('');
 
   const handlePressOnSaveButton = () => {
