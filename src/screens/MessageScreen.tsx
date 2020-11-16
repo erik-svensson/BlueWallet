@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 20,
+    backgroundColor: palette.white,
     paddingBottom: ifIphoneX(54, 20),
   },
   title: { ...typography.headline4, marginTop: '30%', textAlign: 'center' },
