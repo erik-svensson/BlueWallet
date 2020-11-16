@@ -68,10 +68,10 @@ export class ScreenTemplate extends React.PureComponent<Props> {
           refreshControl={refreshControl}
           keyboardShouldPersistTaps={keyboardShouldPersistTaps}
           onScroll={({ nativeEvent }) => {
-            if (isCloseToBottom || allowedUserClick) {
-              //@ts-ignore
-              isCloseToBottom(nativeEvent) && allowedUserClick();
+            if (isCloseToBottom === undefined || allowedUserClick === undefined) {
+              return;
             }
+            isCloseToBottom(nativeEvent) && allowedUserClick();
           }}
           scrollEventThrottle={400}
         >

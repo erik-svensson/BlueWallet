@@ -86,24 +86,6 @@ export function* createPinSaga(action: CreatePinAction | unknown) {
   }
 }
 
-export function* createTermsAccept(action: CreatePinAction | unknown) {
-  const { meta, payload } = action as CreatePinAction;
-  try {
-    yield call(SecureStorageService.setSecuredValue, CONST.pin, payload.pin);
-
-    yield put(createPinSuccess());
-
-    if (meta?.onSuccess) {
-      meta.onSuccess();
-    }
-  } catch (e) {
-    yield put(createPinFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure();
-    }
-  }
-}
-
 export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) {
   const { meta, payload } = action as CreateTxPasswordAction;
   try {
