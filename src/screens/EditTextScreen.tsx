@@ -17,7 +17,7 @@ export const EditTextScreen = (props: Props) => {
   const { params } = props.route;
   const { label, header, onSave, title, maxLength } = params;
   const keyboardType = params.keyboardType || defaultKeyboardType;
-  const validate = params.validate || null;
+  const validate = params.validate;
   const validateOnSave = params.validateOnSave || null;
   const emptyValueAllowed = params.emptyValueAllowed || false;
 
@@ -37,15 +37,20 @@ export const EditTextScreen = (props: Props) => {
     props.navigation.pop();
   };
 
+  const canSubmit = () => {
+    if (!value) {
+      return emptyValueAllowed;
+    }
+
+    if (validate === undefined) {
+      return true;
+    }
+    return validate(value);
+  };
+
   return (
     <ScreenTemplate
-      footer={
-        <Button
-          title={i18n._.save}
-          onPress={handlePressOnSaveButton}
-          disabled={emptyValueAllowed || !value || (!!validate && !!validate(value))}
-        />
-      }
+      footer={<Button title={i18n._.save} onPress={handlePressOnSaveButton} disabled={!canSubmit()} />}
       header={<Header navigation={props.navigation} isBackArrow={true} title={title} />}
     >
       {header}

@@ -56,10 +56,11 @@ class TransactionDetailsScreen extends Component<Props> {
     const {
       transaction: { hash },
     } = this.props.route.params;
+    const trimmedNote = note.trim();
     if (!this.props.note) {
-      this.props.createTransactionNoteSuccess(hash, note);
+      this.props.createTransactionNoteSuccess(hash, trimmedNote);
     } else {
-      this.props.updateTransactionNote(hash, note);
+      this.props.updateTransactionNote(hash, trimmedNote);
     }
   };
 
