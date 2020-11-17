@@ -1,3 +1,3 @@
-import { EN } from './EN';
+import { en } from './EN';
 
-export { EN };
+export { en };

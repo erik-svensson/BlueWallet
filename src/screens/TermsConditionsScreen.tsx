@@ -6,10 +6,11 @@ import RNExitApp from 'react-native-exit-app';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 
-import { EN } from 'app/assets/tc/';
+import { en } from 'app/assets/tc/';
 import { Button, CustomModal, Header, ScreenTemplate } from 'app/components';
 import { Route, RootStackParams, PasswordNavigatorParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
+import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import { selectors as authenticationSelectors } from 'app/state/authentication';
 import {
   setIsTcAccepted as setIsTcAcceptedAction,
@@ -23,6 +24,7 @@ const i18n = require('../../loc');
 interface MapStateToProps {
   isPinSet: boolean;
   isTxPasswordSet: boolean;
+  language: string;
 }
 
 interface Props {
@@ -36,6 +38,7 @@ interface Props {
   isPinSet: boolean;
   isTcAccepted: boolean;
   isTxPasswordSet: boolean;
+  language: string;
 }
 
 export class TermsConditionsScreen extends React.PureComponent<Props> {
@@ -84,6 +87,14 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
     return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
   };
 
+  get langVersion() {
+    const { language } = this.props;
+    switch (language) {
+      case 'en':
+        return en;
+    }
+  }
+
   renderContent = () => {
     return (
       <View style={styles.content}>
@@ -127,7 +138,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
       >
         <Text style={styles.title}>{i18n.termsConditions.title}</Text>
         <WebView
-          source={{ html: EN }}
+          source={{ html: `${this.langVersion}` }}
           style={[styles.text, { height: this.state.height | 0 }]}
           originWhitelist={['*']}
           bounces={false}
@@ -152,6 +163,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
 const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isPinSet: authenticationSelectors.isPinSet(state),
   isTxPasswordSet: authenticationSelectors.isTxPasswordSet(state),
+  language: appSettingsSelectors.language(state),
 });
 
 const mapDispatchToProps = {
