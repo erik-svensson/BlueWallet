@@ -1,7 +1,7 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { Text, View, StyleSheet, NativeScrollEvent, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, NativeScrollEvent, TouchableOpacity, Linking } from 'react-native';
 import RNExitApp from 'react-native-exit-app';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
@@ -145,12 +145,19 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
           scrollEnabled={false}
           automaticallyAdjustContentInsets={true}
           contentInset={{ top: 0, left: 0 }}
-          onNavigationStateChange={title => {
-            if (title.title != undefined) {
+          onNavigationStateChange={event => {
+            if (event.title !== undefined) {
               this.setState({
-                height: parseInt(title.title),
+                height: parseInt(event.title) + 40,
               });
             }
+          }}
+          onShouldStartLoadWithRequest={event => {
+            if (!/^[data:text, about:blank]/.test(event.url)) {
+              Linking.openURL(event.url);
+              return false;
+            }
+            return true;
           }}
         >
           <CustomModal show={showWarring}>{this.renderContent()}</CustomModal>

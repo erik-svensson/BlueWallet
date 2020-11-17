@@ -310,6 +310,12 @@ You must not:
 <p>
     The Terms constitute the sole and entire agreement between you and us with respect to the Website and the Products and supersede all prior and contemporaneous understandings, agreements, representations and warranties, both written and oral, with respect to the Websites.
 </p>
+<p>
+</p>
+<p>
+</p>
+<p>
+</p>
     <script>window.onload=function(){window.location.hash = 1;document.title = document.body.clientHeight;}</script>
 </body>
 </html>`;
