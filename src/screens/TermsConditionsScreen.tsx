@@ -3,8 +3,10 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View, StyleSheet, NativeScrollEvent, TouchableOpacity } from 'react-native';
 import RNExitApp from 'react-native-exit-app';
+import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 
+import { EN } from 'app/assets/tc/';
 import { Button, CustomModal, Header, ScreenTemplate } from 'app/components';
 import { Route, RootStackParams, PasswordNavigatorParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
@@ -40,6 +42,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   state = {
     canGo: false,
     showWarring: false,
+    height: 500,
   };
 
   handleCanGo = () => {
@@ -97,6 +100,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
       </View>
     );
   };
+
   render() {
     const { canGo, showWarring } = this.state;
     return (
@@ -122,8 +126,24 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
         header={<Header navigation={this.props.navigation} title={i18n.termsConditions.header} />}
       >
         <Text style={styles.title}>{i18n.termsConditions.title}</Text>
-        <Text style={styles.text}>{i18n.termsConditions.text}</Text>
-        <CustomModal show={showWarring}>{this.renderContent()}</CustomModal>
+        <WebView
+          source={{ html: EN }}
+          style={[styles.text, { height: this.state.height | 0 }]}
+          originWhitelist={['*']}
+          bounces={false}
+          scrollEnabled={false}
+          automaticallyAdjustContentInsets={true}
+          contentInset={{ top: 0, left: 0 }}
+          onNavigationStateChange={title => {
+            if (title.title != undefined) {
+              this.setState({
+                height: parseInt(title.title),
+              });
+            }
+          }}
+        >
+          <CustomModal show={showWarring}>{this.renderContent()}</CustomModal>
+        </WebView>
       </ScreenTemplate>
     );
   }
@@ -148,13 +168,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   text: {
-    ...typography.caption,
     marginTop: 25,
+    marginBottom: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
     width: '50%',
-    paddingTop: 10,
   },
   disagreeButton: {
     paddingRight: 10,
