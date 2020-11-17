@@ -90,17 +90,13 @@ export class LegacyWallet extends AbstractWallet {
    * @returns {Promise.<void>}
    */
   async fetchBalance() {
-    try {
-      const balance = await BlueElectrum.getBalanceByAddress(this.getAddress());
-      this.balance = balance.confirmed + balance.unconfirmed;
-      this.unconfirmed_balance = balance.unconfirmed;
-      this.confirmed_balance = balance.balance;
-      this.incoming_balance = balance.alert_incoming;
-      this.outgoing_balance = balance.alert_outgoing;
-      this._lastBalanceFetch = +new Date();
-    } catch (err) {
-      logger.error('legacy-wallet', `fetchBalance: ${err.message}`);
-    }
+    const balance = await BlueElectrum.getBalanceByAddress(this.getAddress());
+    this.balance = balance.confirmed + balance.unconfirmed;
+    this.unconfirmed_balance = balance.unconfirmed;
+    this.confirmed_balance = balance.balance;
+    this.incoming_balance = balance.alert_incoming;
+    this.outgoing_balance = balance.alert_outgoing;
+    this._lastBalanceFetch = +new Date();
   }
 
   /**

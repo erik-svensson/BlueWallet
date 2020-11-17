@@ -1,10 +1,13 @@
 import { cloneDeep } from 'lodash';
+import { Alert } from 'react-native';
 import { takeEvery, takeLatest, put, all, call, select, delay, debounce } from 'redux-saga/effects';
 
 import { Wallet } from 'app/consts';
 import { takeLatestPerKey } from 'app/helpers/sagas';
 import { BlueApp } from 'app/legacy';
 
+import config from '../../../config';
+import { checkAddressNetworkName } from '../../../utils/bitcoin';
 import { actions as electrumXActions } from '../electrumX';
 import {
   WalletsAction,
@@ -44,8 +47,13 @@ export function* loadWalletsSaga() {
 
     const wallets = BlueApp.getWallets();
     yield put(loadWalletsSuccess(wallets));
-  } catch (e) {
-    yield put(loadWalletsFailure(e.message));
+  } catch ({ message }) {
+    if (message.includes('has no matching Script')) {
+      const [address] = message.split(' ');
+      const networkName = checkAddressNetworkName(address);
+      Alert.alert(`You have wallet on the network ${networkName} while the app network is ${config.networkName}`);
+    }
+    yield put(loadWalletsFailure(message));
   }
 }
 
