@@ -13,7 +13,7 @@ import {
   StyledText,
   Chip,
   ScreenTemplate,
-  TranscationLabelStatus,
+  TransactionLabelStatus,
   Label,
   EllipsisText,
 } from 'app/components';
@@ -104,7 +104,7 @@ class TransactionDetailsScreen extends Component<Props> {
           {formatToBtcvWithoutUnit(satoshiToBtc(transaction.valueWithoutFee).toNumber())}
         </Text>
         <Text style={styles.unit}>{CONST.preferredBalanceUnit}</Text>
-        <TranscationLabelStatus status={transaction.status} />
+        <TransactionLabelStatus status={transaction.status} />
         {transaction.blockedAmount !== undefined && (
           <View style={styles.amountWrapper}>
             <Text style={[styles.value, styles.textRed]}>{formatToBtcv(transaction.blockedAmount)}</Text>
@@ -251,19 +251,17 @@ class TransactionDetailsScreen extends Component<Props> {
             <CopyButton textToCopy={transaction.txid} />
           </View>
           <Text style={styles.contentRowBody}>{transaction.txid}</Text>
-          {!config.isBeta && (
-            <StyledText
-              title={i18n.transactions.details.viewInBlockRxplorer}
-              onPress={() => {
-                const url = `http://explorer.bitcoinvault.global/tx/${transaction.txid}`;
-                Linking.canOpenURL(url).then(supported => {
-                  if (supported) {
-                    Linking.openURL(url);
-                  }
-                });
-              }}
-            />
-          )}
+          <StyledText
+            title={i18n.transactions.details.viewInBlockRxplorer}
+            onPress={() => {
+              const url = `${config.explorerUrl}/tx/${transaction.txid}`;
+              Linking.canOpenURL(url).then(supported => {
+                if (supported) {
+                  Linking.openURL(url);
+                }
+              });
+            }}
+          />
         </View>
         <View style={styles.contentRowContainer}>
           <Text style={styles.contentRowTitle}>{i18n.transactions.details.transactionType}</Text>
