@@ -146,7 +146,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
       const id = wallet.id;
       return wallet.transactions.map(transaction => {
         const { height } = transaction;
-        const confirmations = max([height > 0 ? blockHeight - height : 0, 0]) || 0;
+        const confirmations = max([height > 0 ? blockHeight + 1 - height : 0, 0]) || 0;
         const inputsAmount = transaction.inputs.reduce((amount, i) => amount + i.value, 0);
         const outputsAmount = transaction.outputs.reduce((amount, o) => amount + o.value, 0);
 
