@@ -159,9 +159,8 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
             }
             return true;
           }}
-        >
-          <CustomModal show={showWarring}>{this.renderContent()}</CustomModal>
-        </WebView>
+        />
+        <CustomModal show={showWarring}>{this.renderContent()}</CustomModal>
       </ScreenTemplate>
     );
   }
