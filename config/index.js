@@ -9,7 +9,9 @@ try {
   isBeta = JSON.parse(IS_BETA);
 } catch (_) {}
 
-const networkName = BTCV_NETWORK || 'bitcoinvault';
+const defaultNetworkName = 'bitcoinvault';
+
+const networkName = BTCV_NETWORK || defaultNetworkName;
 
 export default {
   sentryDsn: SENTRY_DSN || '',
