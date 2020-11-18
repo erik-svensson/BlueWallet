@@ -22,6 +22,22 @@ module.exports = {
     scan: 'Pindai',
     storage_is_encrypted: 'Penyimpanan Anda dienkripsi. Perlu kata sandi untuk mendekripsinya',
   },
+  termsConditions: {
+    header: 'Syarat & Ketentuan',
+    title: 'Persetujuan Syarat',
+    text: '',
+    buttons: {
+      agree: 'Saya setuju',
+      disagree: 'Saya tidak setuju',
+    },
+    modal: {
+      header: 'Apakah Anda yakin?',
+      text:
+        'Mohon dicatat bahwa apabila Anda tidak setuju dengan syarat dan ketentuan kami Anda tidak akan dapat menggunakan aplikasi Gold Wallet. Apakah Anda masih tidak menyetujui?',
+      noButton: 'Tidak, Saya berubah pikiran.',
+      yesButton: 'Ya, Saya tidak setuju.',
+    },
+  },
   aboutUs: {
     alwaysBackupYourKeys: 'Selalu cadangkan kunci Anda',
     buildWithAwesome: 'Bangun dengan hebat:',
@@ -575,7 +591,7 @@ module.exports = {
       import: 'Impor',
       importARDescription1: 'Masukkan frasa benih (seed)',
       importARDescription2: 'pindai kode QR dompet yang ingin Anda impor',
-      placeholder: 'Frasa benih (seed), kunci pribadi, WIF',
+      placeholder: 'Frasa benih (seed)',
       scanCancelPubKey: 'Pindai kode QR Kunci Pembatalan',
       scanFastPubKey: 'Pindai kode QR Kunci Cepat',
       scanPublicKeyDescription:

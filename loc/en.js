@@ -25,12 +25,8 @@ module.exports = {
   termsConditions: {
     header: 'Terms & Conditions',
     title: 'Agreement to Terms',
-    text:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-    buttons: {
-      agree: 'I agree',
-      disagree: ' I disagree',
-    },
+    text: '',
+    buttons: { agree: 'I agree', disagree: 'I disagree' },
     modal: {
       header: 'Are you sure?',
       text:
@@ -74,12 +70,8 @@ module.exports = {
       description: 'Enter this PIN into the Electrum Vault desktop application to finish the pairing process.',
       subtitle: 'Enter PIN',
     },
-    errors: {
-      noEmpty: 'Field can not empty',
-    },
-    export: {
-      title: 'Export authenticator',
-    },
+    errors: { noEmpty: 'Field can not empty' },
+    export: { title: 'Export authenticator' },
     import: {
       code: 'Code:',
       desc1: 'Write down the seed phrase or scan the QR code of the authenticator you want to import.',
@@ -464,9 +456,7 @@ module.exports = {
       pending: 'pending',
       unblocked: 'unblocked',
     },
-    list: {
-      conf: 'Confirmations',
-    },
+    list: { conf: 'Confirmations' },
     transactionTypeLabel: {
       canceled: 'Canceled',
       secure: 'Secure',
@@ -560,16 +550,9 @@ module.exports = {
       invalidSign: "Couldn't sign transaction",
       noIndexForWord: "Couldn't find index for word: {word}",
     },
-    export: {
-      title: 'wallet export',
-    },
-    exportWallet: {
-      header: 'Export wallet',
-      title: 'Seed phrase',
-    },
-    exportWalletXpub: {
-      header: 'Wallet XPUB',
-    },
+    export: { title: 'wallet export' },
+    exportWallet: { header: 'Export wallet', title: 'Seed phrase' },
+    exportWalletXpub: { header: 'Wallet XPUB' },
     import: {
       do_import: 'Import',
       error: 'Failed to import. Please, make sure that the provided data is valid.',
@@ -588,7 +571,7 @@ module.exports = {
       import: 'Import',
       importARDescription1: 'Enter the seed phrase',
       importARDescription2: 'scan the QR code of the wallet you want to import',
-      placeholder: 'Seed phrase, private key, WIF',
+      placeholder: 'Seed phrase',
       scanCancelPubKey: 'Scan the Cancel Key QR code',
       scanFastPubKey: 'Scan the Fast Key QR code',
       scanPublicKeyDescription:
@@ -634,9 +617,6 @@ module.exports = {
       none: 'None',
       pendingBalance: 'Blocked balance',
     },
-    walletModal: {
-      btcv: 'BTCV',
-      wallets: 'Wallets',
-    },
+    walletModal: { btcv: 'BTCV', wallets: 'Wallets' },
   },
 };

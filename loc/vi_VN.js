@@ -22,6 +22,22 @@ module.exports = {
     scan: 'Quét',
     storage_is_encrypted: 'Ví lưu trữ của quý khách đã được mã hóa. Cần có mật khẩu để giải mã',
   },
+  termsConditions: {
+    header: 'Điều khoản và điều kiện',
+    title: 'Đồng ý với các điều khoản',
+    text: '',
+    buttons: {
+      agree: 'Tôi đồng ý',
+      disagree: 'Tôi không đồng ý',
+    },
+    modal: {
+      header: 'Bạn có chắc chắn không?',
+      text:
+        'Lưu ý rằng nếu bạn không đồng ý với Điều khoản & Điều kiện của chúng tôi, bạn sẽ không thể sử dụng ứng dụng Gold Wallet.\nBạn có chắc chắn không đồng ý không?',
+      noButton: 'Không, tôi đã đổi ý',
+      yesButton: 'Vâng, tôi không đồng ý',
+    },
+  },
   aboutUs: {
     alwaysBackupYourKeys: 'Hãy luôn sao lưu mã khóa của quý khách',
     buildWithAwesome: 'Xây dựng với:',
@@ -576,7 +592,7 @@ module.exports = {
       import: 'Nhập',
       importARDescription1: 'Nhập cụm từ khóa hạt giống',
       importARDescription2: 'quét mã QR của ví bạn muốn nhập',
-      placeholder: 'Thông tin ghi nhớ, khóa riêng tư, WIF',
+      placeholder: 'Cụm từ khóa hạt giống',
       scanCancelPubKey: 'Quét mã QR Khóa Hủy',
       scanFastPubKey: 'Quét mã QR Khóa Nhanh',
       scanPublicKeyDescription:

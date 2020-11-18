@@ -22,6 +22,21 @@ module.exports = {
     scan: '扫描',
     storage_is_encrypted: '储存空间已加密。需要输入密码进行解密',
   },
+  termsConditions: {
+    header: '条款及细则',
+    title: '协议条款',
+    text: '',
+    buttons: {
+      agree: '我同意',
+      disagree: '我不同意',
+    },
+    modal: {
+      header: '您确定吗？',
+      text: '请注意，如果您不同意我们的条款及细则，将无法使用Gold Wallet应用程序。\n您确定不同意吗？',
+      noButton: '不，我改变了主意。',
+      yesButton: '是的，我不同意。',
+    },
+  },
   aboutUs: {
     alwaysBackupYourKeys: '时刻备份您的秘钥',
     buildWithAwesome: '绝妙的架构：',
@@ -553,7 +568,7 @@ module.exports = {
       import: '导入',
       importARDescription1: '输入助记词',
       importARDescription2: '扫描想要导入的钱包二维（QR）码',
-      placeholder: '助记词、私钥、WIF',
+      placeholder: '助记词',
       scanCancelPubKey: '扫描取消键二维（QR）码',
       scanFastPubKey: '扫描快速键二维（QR）码',
       scanPublicKeyDescription: '打开创建想要导入的钱包时生成的首个 PDF 文件，并使用该应用程序扫描公钥二维（QR）码。',
