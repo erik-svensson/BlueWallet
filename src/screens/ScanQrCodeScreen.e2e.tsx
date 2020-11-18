@@ -43,12 +43,12 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
   };
 
   mockedQrCodeData = {
-    publicKey1:
+    keyGeneratorPublicKey1:
       '0442d7724d90fb60bc969f8b0fd46f3f63fe17637d5a0ba2fa9800b3b85946b72c3b81199572cd91bad23c87c3e96dbaa68e1c4b3e47d09276bd63138c584a5a7b',
-    publicKey2:
+    keyGeneratorPublicKey2:
       '04e8bc5e2428dcebe434306adaa944cb5eb7df80ec2e544f94ab2cea9bc5a70b5b1af42a83a936cd9d277413a8c5303001beaa268724270e4f2ce4d62010421960',
-    privateKey: 'a5fc88ad7dcb502d9598f2907f76233aa98c0f53b58d7729ae0c8e0c48fb86d7',
-    seedPhrase: 'puppy cook east baby pond gasp blouse achieve cloud impose broken lunar',
+    keyGeneratorPrivateKey: 'a5fc88ad7dcb502d9598f2907f76233aa98c0f53b58d7729ae0c8e0c48fb86d7',
+    keyGeneratorSeedPhrase: 'puppy cook east baby pond gasp blouse achieve cloud impose broken lunar',
     dummy: 'foo bar baz',
   };
 
@@ -58,7 +58,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
         <StatusBar hidden />
         <Button
           onPress={() => {
-            this.onButtonClicked(this.mockedQrCodeData.publicKey1);
+            this.onButtonClicked(this.mockedQrCodeData.keyGeneratorPublicKey1);
           }}
           title={'Public Key 1'}
           testID="scan-public-key-one-button"
@@ -66,7 +66,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
         />
         <Button
           onPress={() => {
-            this.onButtonClicked(this.mockedQrCodeData.publicKey1);
+            this.onButtonClicked(this.mockedQrCodeData.keyGeneratorPublicKey2);
           }}
           title={'Public Key 2'}
           testID="scan-public-key-two-button"
@@ -74,7 +74,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
         />
         <Button
           onPress={() => {
-            this.onButtonClicked(this.mockedQrCodeData.privateKey);
+            this.onButtonClicked(this.mockedQrCodeData.keyGeneratorPrivateKey);
           }}
           title={'Private Key'}
           testID="scan-private-key-button"
@@ -82,7 +82,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
         />
         <Button
           onPress={() => {
-            this.onButtonClicked(this.mockedQrCodeData.seedPhrase);
+            this.onButtonClicked(this.mockedQrCodeData.keyGeneratorSeedPhrase);
           }}
           title={'Seed phrase'}
           testID="scan-phrase-seed-button"
