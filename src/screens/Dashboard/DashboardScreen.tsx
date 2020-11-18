@@ -158,7 +158,6 @@ class DashboardScreen extends Component<Props, State> {
     const { wallets } = this.props;
     const activeWallet = this.getActiveWallet();
 
-    console.log('activeWallet', activeWallet);
     return (
       <View
         onLayout={event => {
