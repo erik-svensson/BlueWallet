@@ -7,6 +7,7 @@ import { takeLatestPerKey } from 'app/helpers/sagas';
 import { BlueApp } from 'app/legacy';
 
 import config from '../../../config';
+import { messages } from '../../../error';
 import { checkAddressNetworkName } from '../../../utils/bitcoin';
 import { actions as electrumXActions } from '../electrumX';
 import {
@@ -37,6 +38,7 @@ import {
 import { getById as getByIdWallet, wallets as walletsSelector } from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
+const i18n = require('../../../loc');
 
 export function* loadWalletsSaga() {
   try {
@@ -48,10 +50,15 @@ export function* loadWalletsSaga() {
     const wallets = BlueApp.getWallets();
     yield put(loadWalletsSuccess(wallets));
   } catch ({ message }) {
-    if (message.includes('has no matching Script')) {
+    if (message.includes(messages.noMatchingScript)) {
       const [address] = message.split(' ');
-      const networkName = checkAddressNetworkName(address);
-      Alert.alert(`You have wallet on the network ${networkName} while the app network is ${config.networkName}`);
+      const walletNetworkName = checkAddressNetworkName(address);
+      Alert.alert(
+        i18n.formatString(i18n.wallets.errors.wrongNetwork, {
+          walletNetworkName,
+          appNetworkName: config.networkName,
+        }),
+      );
     }
     yield put(loadWalletsFailure(message));
   }
