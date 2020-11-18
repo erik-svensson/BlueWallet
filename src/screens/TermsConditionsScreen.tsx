@@ -90,7 +90,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   get langVersion() {
     const { language } = this.props;
     switch (language) {
-      case 'en':
+      default:
         return en;
     }
   }
@@ -102,10 +102,10 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
         <Text style={styles.modalText}>{i18n.termsConditions.modal.text}</Text>
         <View style={styles.buttonWrapper}>
           <TouchableOpacity onPress={this.handleNoButton}>
-            <Text style={styles.modalButton}>{i18n.termsConditions.modal.noButton}</Text>
+            <Text style={styles.modalButton}>{`${i18n.termsConditions.modal.noButton}`.toUpperCase()}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={this.handleYesButton}>
-            <Text style={styles.modalButton}>{i18n.termsConditions.modal.yesButton}</Text>
+            <Text style={styles.modalButton}>{`${i18n.termsConditions.modal.yesButton}`.toUpperCase()}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -192,6 +192,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     width: '50%',
+    paddingTop: 13,
   },
   disagreeButton: {
     paddingRight: 10,
