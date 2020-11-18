@@ -240,6 +240,8 @@ export class LegacyWallet extends AbstractWallet {
 
     const transactions = [];
 
+    logger.info('legacy-wallet', `transactions history: ${JSON.stringify(txs)}`);
+
     for (const tx of txs_full) {
       let value = 0;
       for (const input of tx.inputs) {
