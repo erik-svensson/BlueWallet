@@ -386,7 +386,7 @@ module.exports = {
     },
     warning: 'Aviso:',
     warningGeneral:
-      'Aviso: Tenga en cuenta que en el proceso de utilizar la función de Transacción Segura, una parte de los fondos dejados en su monedero puede quedarse bloqueada. Es un procedimiento normal vinculado con UTXO y con los parámetros de la Blockchain del monedero de Bitcoin Vault. Sus fondos serán desbloqueados una vez la transacción se haya verificado (después de unas 24 horas) o cancelado (dentro de las 24 horas).',
+      'Tenga en cuenta que en el proceso de utilizar la función de Transacción Segura, una parte de los fondos dejados en su monedero puede quedarse bloqueada. Es un procedimiento normal vinculado con UTXO y con los parámetros de la Blockchain del monedero de Bitcoin Vault. Sus fondos serán desbloqueados una vez la transacción se haya verificado (después de unas 24 horas) o cancelado (dentro de las 24 horas).',
   },
   settings: {
     about: 'Sobre',
