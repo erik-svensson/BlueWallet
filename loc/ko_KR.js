@@ -22,6 +22,21 @@ module.exports = {
     scan: '스캔',
     storage_is_encrypted: '저장 공간이 암호화되었습니다. 암호를 해제하려면 패스워드가 필요합니다',
   },
+  termsConditions: {
+    header: '이용 약관',
+    title: '약관 동의',
+    text: '',
+    buttons: {
+      agree: '동의합니다',
+      disagree: '동의하지 않습니다',
+    },
+    modal: {
+      header: '확실합니까?',
+      text: '이용 약관에 동의하지 않는 경우 Gold Wallet 애플리케이션을 사용할 수 없습니다. 동의하지 않으시겠습니까?',
+      noButton: '아니오, 생각이 바뀌었습니다',
+      yesButton: '네, 동의하지 않습니다',
+    },
+  },
   aboutUs: {
     alwaysBackupYourKeys: '항상 키를 백업하십시오',
     buildWithAwesome: '멋진 빌드:',
@@ -357,9 +372,9 @@ module.exports = {
       type: '거래 유형',
       watchOnlyError: '거래를 보낼 수 없는 지갑만 표시',
     },
-    warning: '경고: ',
+    warning: '경고:',
     warningGeneral:
-      '안전한 거래 기능 사용 과정에서 귀하의 지갑의 일부 자금이 블록화될 수 있습니다. 이것은 UTXO와 비트코인 볼트 지갑 블록체인 범위에 관련된 일반적인 과정입니다. 거래가 검증되거나 (약 24시간 후) 취소되면 (24시간 이내) 자금이 비블록화됩니다.',
+      '경고: 안전한 거래 기능 사용 과정에서 귀하의 지갑의 일부 자금이 블록화될 수 있습니다. 이것은 UTXO와 비트코인 볼트 지갑 블록체인 범위에 관련된 일반적인 과정입니다. 거래가 검증되거나 (약 24시간 후) 취소되면 (24시간 이내) 자금이 비블록화됩니다.',
   },
   settings: {
     about: '소개',
@@ -504,6 +519,7 @@ module.exports = {
       recover: '취소',
       send: '코인 보내기',
       title: '지갑',
+      wallet: '지갑',
     },
     deleteWallet: {
       description1: '정말로 삭제하시겠습니까',
@@ -562,7 +578,7 @@ module.exports = {
       import: '가져오기',
       importARDescription1: '시드 문구 입력',
       importARDescription2: '가져올 지갑 QR 코드를 스캔하십시오',
-      placeholder: '시드 문구, 개인 키, WIF',
+      placeholder: '시드 문구',
       scanCancelPubKey: '취소 키 QR 코드 스캔',
       scanFastPubKey: '고속 거래 키 QR 코드 스캔',
       scanPublicKeyDescription:
