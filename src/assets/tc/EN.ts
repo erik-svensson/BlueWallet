@@ -208,9 +208,9 @@ You must not:
 <p>
     You release us from all liability related to any losses, damages, or claims arising from:
     <ol type="a">
-        <l>
+        <li>
             user error such as forgotten passwords, incorrectly constructed transactions, or mistyped BTCV addresses; 
-        </l>
+        </li>
         <li>
             server failure or data loss; 
         </li>

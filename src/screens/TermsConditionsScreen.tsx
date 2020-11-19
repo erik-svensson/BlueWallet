@@ -4,7 +4,7 @@ import RNExitApp from 'react-native-exit-app';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 
-import { en } from 'app/assets/tc/';
+import { en, zh, es, id, pt, jp, ko, tr, vi } from 'app/assets/tc/';
 import { Button, CustomModal, Header, ScreenTemplate } from 'app/components';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
@@ -82,6 +82,22 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   get langVersion() {
     const { language } = this.props;
     switch (language) {
+      case 'zh':
+        return zh;
+      case 'es':
+        return es;
+      case 'pt':
+        return pt;
+      case 'ja':
+        return jp;
+      case 'id':
+        return id;
+      case 'tr':
+        return tr;
+      case 'vi':
+        return vi;
+      case 'ko':
+        return ko;
       default:
         return en;
     }
