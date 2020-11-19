@@ -1,5 +1,3 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View, StyleSheet, NativeScrollEvent, TouchableOpacity, Linking } from 'react-native';
 import RNExitApp from 'react-native-exit-app';
@@ -8,7 +6,6 @@ import { connect } from 'react-redux';
 
 import { en } from 'app/assets/tc/';
 import { Button, CustomModal, Header, ScreenTemplate } from 'app/components';
-import { Route, RootStackParams, PasswordNavigatorParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import { selectors as authenticationSelectors } from 'app/state/authentication';
@@ -28,15 +25,10 @@ interface MapStateToProps {
 }
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<PasswordNavigatorParams, Route.CreatePin>,
-    StackNavigationProp<RootStackParams, Route.TermsConditions>
-  >;
-  route: RouteProp<RootStackParams, Route.TermsConditions>;
   setIsTcAccepted: (isTcAccepted: boolean) => SetIsTcAcceptedAction;
   createTc: () => void;
   isPinSet: boolean;
-  isTcAccepted: boolean;
+  isTcAccepted?: boolean;
   isTxPasswordSet: boolean;
   language: string;
 }
@@ -134,7 +126,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
             />
           </View>
         }
-        header={<Header navigation={this.props.navigation} title={i18n.termsConditions.header} />}
+        header={<Header title={i18n.termsConditions.header} />}
       >
         <Text style={styles.title}>{i18n.termsConditions.title}</Text>
         <WebView

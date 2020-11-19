@@ -141,7 +141,6 @@ class Navigator extends React.Component<Props, State> {
     }
 
     if (!isTcAccepted) {
-      //@ts-ignore
       return <TermsConditionsScreen />;
     }
 

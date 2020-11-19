@@ -288,7 +288,6 @@ export type MainTabNavigatorParams = {
 
 export type RootStackParams = {
   [Route.MainCardStackNavigator]: undefined;
-  [Route.TermsConditions]: undefined;
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
   [Route.UnlockTransaction]: { onSuccess: () => void };
   [Route.PasswordNavigator]: undefined;
