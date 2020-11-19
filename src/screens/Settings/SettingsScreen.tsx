@@ -67,17 +67,21 @@ export const SettingsScreen = (props: Props) => {
         iconHeight={20}
         onPress={goToChangePin}
       />
-      <ListItem
-        disabled={!biometryTypeAvailable}
-        title={
-          biometryTypeAvailable ? i18n.settings[BiometricService.biometryType!] : i18n.settings.notSupportedFingerPrint
-        }
-        source={icons.fingerprintIcon}
-        switchValue={isBiometricsEnabled}
-        onSwitchValueChange={onFingerprintLoginChange}
-        iconWidth={17}
-        iconHeight={19}
-      />
+      {biometryTypeAvailable && (
+        <ListItem
+          disabled={!biometryTypeAvailable}
+          title={
+            biometryTypeAvailable
+              ? i18n.settings[BiometricService.biometryType!]
+              : i18n.settings.notSupportedFingerPrint
+          }
+          source={icons.fingerprintIcon}
+          switchValue={isBiometricsEnabled}
+          onSwitchValueChange={onFingerprintLoginChange}
+          iconWidth={17}
+          iconHeight={19}
+        />
+      )}
     </>
   );
 
