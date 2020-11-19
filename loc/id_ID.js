@@ -382,7 +382,7 @@ module.exports = {
       type: 'Tipe transaksi',
       watchOnlyError: 'Dompet lihat saja/watch only tidak dapat mengirim transaksi',
     },
-    warning: 'Peringatan:',
+    warning: 'Peringatan: ',
     warningGeneral:
       'Mohon diingat bahwa dalam proses menggunakan fitur Transaksi Aman, sebagian dari saldo yang tersisa di saldo dompet Anda memilki kemungkinan untuk diblokir secara sementara. Hal ini merupakan bagian dari prosedur umum yang berkaitan dengan UTXO dan parameter blockchain dari dompet Bitcoin Vault. Saldo Anda akan kembali dibuka ketika transaksi Anda diverifikasi (kurang lebih setelah sekitar 24 jam) atau dibatalkan (dalam waktu 24 jam).',
   },
@@ -499,7 +499,7 @@ module.exports = {
       inputLabel: 'Nama',
       legacy: 'Membuat tipe transaksi default.',
       legacyHDP2SH: 'Berisi pohon alamat P2SH yang dibuat dari satu benih 12 kata',
-      legacyHDP2SHTitle: 'HD P2SH Legasi',
+      legacyHDP2SHTitle: 'HD P2SH Standar',
       LegacyHDSegWit: 'Berisi pohon alamat segwit asal, dibuat satu benih 12 kata',
       legacyHDSegWitTitle: 'HD Segwit Standar',
       LegacyP2SH: 'Berisi satu alamat P2SH',

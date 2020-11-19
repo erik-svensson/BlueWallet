@@ -301,6 +301,7 @@ export type RootStackParams = {
     validateOnSave?: (value: string) => void;
     keyboardType?: KeyboardType;
     maxLength?: number;
+    emptyValueAllowed?: boolean;
   };
   [Route.Message]: {
     title: string;

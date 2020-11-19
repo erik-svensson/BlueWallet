@@ -128,7 +128,7 @@ android {
         resValue "string", "build_config_package", "io.goldwallet.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode 4
         versionName "6.0.1"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
