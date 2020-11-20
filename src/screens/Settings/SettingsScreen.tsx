@@ -69,12 +69,7 @@ export const SettingsScreen = (props: Props) => {
       />
       {biometryTypeAvailable && (
         <ListItem
-          disabled={!biometryTypeAvailable}
-          title={
-            biometryTypeAvailable
-              ? i18n.settings[BiometricService.biometryType!]
-              : i18n.settings.notSupportedFingerPrint
-          }
+          title={i18n.settings[BiometricService.biometryType!]}
           source={icons.fingerprintIcon}
           switchValue={isBiometricsEnabled}
           onSwitchValueChange={onFingerprintLoginChange}
