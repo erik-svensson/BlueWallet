@@ -1,7 +1,7 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import dayjs from 'dayjs';
 import { map, compose, uniq, flatten, join } from 'lodash/fp';
-import moment from 'moment';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Linking, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
@@ -56,10 +56,11 @@ class TransactionDetailsScreen extends Component<Props> {
     const {
       transaction: { hash },
     } = this.props.route.params;
+    const trimmedNote = note.trim();
     if (!this.props.note) {
-      this.props.createTransactionNoteSuccess(hash, note);
+      this.props.createTransactionNoteSuccess(hash, trimmedNote);
     } else {
-      this.props.updateTransactionNote(hash, note);
+      this.props.updateTransactionNote(hash, trimmedNote);
     }
   };
 
@@ -157,11 +158,12 @@ class TransactionDetailsScreen extends Component<Props> {
     const { transaction } = this.props.route.params;
     const { note } = this.props;
     this.props.navigation.navigate(Route.EditText, {
-      title: transaction.time ? moment.unix(transaction.time).format('lll') : '',
+      title: transaction.time ? dayjs.unix(transaction.time).format('lll') : '',
       label: i18n.transactions.details.note,
       onSave: this.updateNote,
       value: note,
       header: this.renderHeader(),
+      emptyValueAllowed: true,
     });
   };
 
@@ -197,6 +199,7 @@ class TransactionDetailsScreen extends Component<Props> {
     const { transaction } = this.props.route.params;
     const fromValue = this.getAddresses('inputs');
     const toValue = this.getAddresses('outputs');
+    const splitForm = fromValue.split(',')[0];
     return (
       <ScreenTemplate
         header={
@@ -205,7 +208,7 @@ class TransactionDetailsScreen extends Component<Props> {
             navigation={this.props.navigation}
             isBackArrow
             title={
-              transaction.time ? moment.unix(transaction.time).format('lll') : i18n.transactions.details.timePending
+              transaction.time ? dayjs.unix(transaction.time).format('lll') : i18n.transactions.details.timePending
             }
           />
         }
@@ -228,13 +231,13 @@ class TransactionDetailsScreen extends Component<Props> {
         <View style={styles.contentRowContainer}>
           <View style={styles.row}>
             <Text style={styles.contentRowTitle}>{i18n.transactions.details.from}</Text>
-            <CopyButton textToCopy={fromValue.split(',')[0]} />
+            <CopyButton textToCopy={splitForm} />
           </View>
           <Text style={styles.contentRowBody}>{fromValue}</Text>
           <StyledText
             title={i18n.transactions.details.addToAddressBook}
             onPress={() => {
-              this.addToAddressBook(fromValue);
+              this.addToAddressBook(splitForm);
             }}
           />
         </View>
@@ -309,7 +312,6 @@ const styles = StyleSheet.create({
     marginBottom: 13,
   },
   walletLabel: {
-    marginRight: 50,
     ...typography.headline8,
   },
   opacity: {

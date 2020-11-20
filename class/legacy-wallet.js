@@ -203,6 +203,9 @@ export class LegacyWallet extends AbstractWallet {
   }
 
   async setTransactions(txs) {
+    logger.info('legacy-wallet', `wallet current transactions: ${JSON.stringify(this.transactions)}`);
+    logger.info('legacy-wallet', `transactions history: ${JSON.stringify(txs)}`);
+
     const txid_list = txs.map(t => t.tx_hash);
 
     this.transactions = this.transactions.filter(tx => {
@@ -214,6 +217,13 @@ export class LegacyWallet extends AbstractWallet {
       if (!transaction) {
         return false;
       }
+
+      if (tx.tx_type === undefined) {
+        logger.warning('legacy-wallet', `outdated tx: ${JSON.stringify(tx)}`);
+
+        logger.info('legacy-wallet', `fetched transaction from electrum x: ${JSON.stringify(transaction)}`);
+      }
+
       return transaction.tx_type === tx.tx_type;
     });
 
@@ -241,6 +251,10 @@ export class LegacyWallet extends AbstractWallet {
       }
       tx.height = txs.find(t => t.tx_hash === tx.txid).height;
       tx.tx_type = findLast(txs, t => t.tx_hash === tx.txid).tx_type;
+
+      if (tx.tx_type === undefined) {
+        logger.warning('legacy-wallet', `couldn't find tx_type for new tx: ${JSON.stringify(tx)}`);
+      }
 
       tx.value = new BigNumber(value).multipliedBy(100000000).toNumber();
       if (tx.time) {
