@@ -86,7 +86,6 @@ export enum Route {
   ContactDetails = 'ContactDetails',
   CreateContact = 'CreateContact',
   DeleteContact = 'DeleteContact',
-  TermsConditions = 'TermsConditions',
   ContactQRCode = 'ContactQRCode',
   Settings = 'Settings',
   Message = 'Message',
