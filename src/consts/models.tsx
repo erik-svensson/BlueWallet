@@ -92,7 +92,6 @@ export enum Route {
   CreateWallet = 'CreateWallet',
   ImportWallet = 'ImportWallet',
   ExportWallet = 'ExportWallet',
-  DeleteWallet = 'DeleteWallet',
   ExportWalletXpub = 'ExportWalletXub',
   TransactionDetails = 'TransactionDetails',
   ReceiveCoins = 'ReceiveCoins',
@@ -101,7 +100,6 @@ export enum Route {
   EditText = 'EditText',
   AboutUs = 'AboutUs',
   SelectLanguage = 'SelectLanguage',
-  ReleaseNotes = 'ReleaseNotes',
   ActionSheet = 'ActionSheet',
   SendTransactionDetails = 'SendTransactionDetailsScreen',
   ScanQrCode = 'ScanQrCode',
@@ -115,7 +113,6 @@ export enum Route {
   AdvancedOptions = 'AdvancedOptions',
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
-  Unlock = 'Unlock',
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
@@ -214,7 +211,7 @@ export interface EnhancedTransaction extends Transaction {
   walletPreferredBalanceUnit: string;
   walletId: string;
   walletLabel: string;
-  walletTypeReadable: string;
+  walletTypeReadable?: string;
 }
 
 export interface AppSettings {
@@ -435,7 +432,7 @@ export interface Authenticator {
   createdAt: Dayjs;
 }
 
-export interface ActionMeta {
-  onSuccess?: Function;
-  onFailure?: Function;
-}
+export type GlobalParams = MainCardStackNavigatorParams &
+  PasswordNavigatorParams &
+  RootStackParams &
+  MainTabNavigatorParams;

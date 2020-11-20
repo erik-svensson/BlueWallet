@@ -1,13 +1,15 @@
 import { NavigationContainerRef, NavigationAction, NavigationState } from '@react-navigation/native';
 import { createRef } from 'react';
 
+import { GlobalParams, Route } from 'app/consts';
+
 export const navigationRef = createRef<NavigationContainerRef>();
 
 export default class NavigationService {
   goBack() {
     navigationRef.current?.goBack();
   }
-  navigate(routeName: string, params?: Record<string, any>) {
+  navigate(routeName: string, params?: GlobalParams[Route]) {
     navigationRef.current?.navigate(routeName, params);
   }
   dispatch<State extends NavigationState = NavigationState>(
