@@ -103,9 +103,8 @@ export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) 
 }
 
 export function* checkTcSaga() {
-  const tcValue = yield call(StoreService.getStoreValue, CONST.tcValue);
   const tcVersion = yield call(StoreService.getStoreValue, CONST.tcVersion);
-  if (tcValue && Number(tcVersion) >= CONST.tcVersionRequired) {
+  if (tcVersion && Number(tcVersion) >= CONST.tcVersionRequired) {
     yield put(setIsTcAccepted(true));
   }
 }
