@@ -25,7 +25,6 @@ export const CONST = {
   defaultLanguage: 'en',
   maxAddressLength: 48,
   tcVersionRequired: 1,
-  tcValue: 'tcValue',
   tcVersion: 'tcVersion',
 };
 

@@ -110,7 +110,6 @@ export function* checkTcSaga() {
 }
 
 export function* createTcSaga() {
-  yield call(StoreService.setStoreValue, CONST.tcValue, true);
   yield call(StoreService.setStoreValue, CONST.tcVersion, CONST.tcVersionRequired);
   yield put(setIsTcAccepted(true));
 }
