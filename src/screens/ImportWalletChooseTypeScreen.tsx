@@ -1,52 +1,42 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NavigationInjectedProps } from 'react-navigation';
 
-import { ScreenTemplate, Text, Header, Button, RadioGroup, RadioButton } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
+import { ScreenTemplate, Text, Header, Button, RadioButton } from 'app/components';
+import { Route, MainCardStackNavigatorParams, RootStackParams, WalletType } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
-import { AppSettingsState } from 'app/state/appSettings/reducer';
-import { WalletsActionType } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
-
-const WalletTypes = [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type, 'legacy'];
 
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     StackNavigationProp<MainCardStackNavigatorParams, Route.ImportWalletChooseType>
   >;
-  appSettings: AppSettingsState;
-  loadWallets: () => Promise<WalletsActionType>;
 }
 
 interface State {
   label: string;
   isLoading: boolean;
-  selectedIndex: number;
+  selectedWalletType: WalletType;
 }
 
 export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, State> {
   state: State = {
     label: '',
     isLoading: false,
-    selectedIndex: 0,
+    selectedWalletType: '2-Key Vault',
   };
 
   navigateToImportWallet = () => {
     this.props.navigation.navigate(Route.ImportWallet, {
-      walletType: WalletTypes[this.state.selectedIndex],
+      walletType: this.state.selectedWalletType,
     });
   };
 
-  onSelect = (selectedIndex: number) =>
-    this.setState({
-      selectedIndex,
-    });
+  onSelect = (selectedType: WalletType) => this.setState({ selectedWalletType: selectedType });
 
   render() {
     return (
@@ -65,26 +55,35 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
           <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>
           <Text style={styles.subtitle}>{i18n.wallets.importWallet.chooseTypeDescription}</Text>
         </View>
-        <RadioGroup color={palette.secondary} onSelect={this.onSelect} selectedIndex={this.state.selectedIndex}>
-          <RadioButton style={styles.radioButton} value={WalletTypes[0]}>
-            <View style={styles.radioButtonContent}>
-              <Text style={styles.radioButtonTitle}>{HDSegwitP2SHArWallet.typeReadable}</Text>
-              <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.ar}</Text>
-            </View>
-          </RadioButton>
-          <RadioButton style={styles.radioButton} value={WalletTypes[1]}>
-            <View style={styles.radioButtonContent}>
-              <Text style={styles.radioButtonTitle}>{HDSegwitP2SHAirWallet.typeReadable}</Text>
-              <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.air}</Text>
-            </View>
-          </RadioButton>
-          <RadioButton style={styles.radioButton} value={WalletTypes[2]}>
-            <View style={styles.radioButtonContent}>
-              <Text style={styles.radioButtonTitle}>{i18n.wallets.add.legacyTitle}</Text>
-              <Text style={styles.radioButtonSubtitle}>{i18n.wallets.add.legacy}</Text>
-            </View>
-          </RadioButton>
-        </RadioGroup>
+        <>
+          <RadioButton
+            title={HDSegwitP2SHArWallet.typeReadable}
+            subtitle={i18n.wallets.add.ar}
+            value={'2-Key Vault'}
+            selectedValue={this.state.selectedWalletType}
+            onPress={value => {
+              this.onSelect(value);
+            }}
+          />
+          <RadioButton
+            title={HDSegwitP2SHAirWallet.typeReadable}
+            subtitle={i18n.wallets.add.air}
+            value={'3-Key Vault'}
+            selectedValue={this.state.selectedWalletType}
+            onPress={value => {
+              this.onSelect(value);
+            }}
+          />
+          <RadioButton
+            title={i18n.wallets.add.legacyTitle}
+            subtitle={i18n.wallets.add.legacy}
+            value={'Standard HD P2SH'}
+            selectedValue={this.state.selectedWalletType}
+            onPress={value => {
+              this.onSelect(value);
+            }}
+          />
+        </>
       </ScreenTemplate>
     );
   }

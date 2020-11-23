@@ -118,6 +118,8 @@ export enum Route {
   ChunkedQrCode = 'ChunkedQrCode',
 }
 
+export type WalletType = '3-Key Vault' | '2-Key Vault' | 'Standard HD P2SH' | 'Standard P2SH' | 'Standard HD SegWit';
+
 export interface Wallet {
   balance: number;
   hideBalance: boolean;
@@ -343,7 +345,7 @@ export type MainCardStackNavigatorParams = {
   [Route.Dashboard]: { activeWallet?: Wallet } | undefined;
   [Route.MainCardStackNavigator]: undefined;
   [Route.CreateWallet]: undefined;
-  [Route.ImportWallet]: { walletType: string };
+  [Route.ImportWallet]: { walletType: WalletType };
   [Route.CreateTransactionPassword]: undefined;
   [Route.WalletDetails]: { id: string };
   [Route.CreateContact]: { address?: string } | undefined;
