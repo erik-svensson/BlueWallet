@@ -14,7 +14,7 @@ import {
   SetIsTcAcceptedAction,
   createTc as createTcAction,
 } from 'app/state/authentication/actions';
-import { palette, typography } from 'app/styles';
+import { fonts, palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
@@ -220,15 +220,18 @@ const styles = StyleSheet.create({
     borderColor: palette.textBlack,
   },
   modalTitle: {
-    ...typography.headline4,
+    fontSize: 18,
+    fontFamily: fonts.ubuntu.bold,
     marginTop: 16,
     marginHorizontal: 23,
   },
   modalText: {
-    ...typography.caption,
+    fontFamily: fonts.ubuntu.regular,
+    fontSize: 14,
+    lineHeight: 21,
+    color: palette.textGrey,
     marginHorizontal: 23,
     marginTop: 10,
-    lineHeight: 24,
   },
   buttonWrapper: {
     paddingTop: 15,
@@ -237,6 +240,7 @@ const styles = StyleSheet.create({
   modalButton: {
     ...typography.button,
     paddingVertical: 10,
+    textAlign: 'right',
     color: palette.secondary,
     marginHorizontal: 23,
   },
