@@ -10,10 +10,12 @@ export const zh = `<!DOCTYPE html>
             font-family: 'Ubuntu';
             font-weight: 300;
             text-align: justify;
+            font-size: 15px
         },
         h3 {
             font-family: 'Ubuntu';
             font-weight: 700;
+            font-size: 16px
         }
     </style>
 </head>
