@@ -65,8 +65,13 @@ const fileterByToAmount = (transactions: Transaction[], toAmount: string): Trans
   });
 };
 
-export const filterBySearch = (search: string, transactions: Transaction[]): Transaction[] =>
-  transactions.filter(transaction => {
+export const filterBySearch = (
+  search: string,
+  transactionNotes: Transaction[],
+  transactions: Transaction[],
+): Transaction[] => {
+  const transactionsWithNote = transactions.map((tx: Transaction) => ({ ...tx, note: transactionNotes[tx.hash] }));
+  return transactionsWithNote.filter(transaction => {
     const inputs: string[] = [];
     const outputs: string[] = [];
     transaction.inputs.filter(input => {
@@ -84,6 +89,7 @@ export const filterBySearch = (search: string, transactions: Transaction[]): Tra
         .includes(search)
     );
   });
+};
 
 export const filterByTags = (transactions: Transaction[], tags: TagsType[]): Transaction[] => {
   return transactions.filter(transaction => transaction.tags.some(t => tags.includes(t)));

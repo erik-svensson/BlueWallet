@@ -19,7 +19,7 @@ interface Props {
   search: string;
   filters: Filters;
   transactions: Transaction[];
-  transactionNotes: Record<string, string>;
+  transactionNotes: Transaction[];
   headerHeight: number;
   ListHeaderComponent: React.ReactElement;
   refreshing: boolean;
@@ -54,7 +54,7 @@ class TransactionList extends PureComponent<Props> {
     return getGroupedTransactions(
       transactions,
       map((tx: Transaction) => ({ ...tx, note: transactionNotes[tx.hash] })),
-      curry(filterBySearch)(search),
+      curry(filterBySearch)(search)(transactionNotes),
       curry(filterTransaction)(filters),
     );
   };
