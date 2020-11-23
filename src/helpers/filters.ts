@@ -67,7 +67,7 @@ const fileterByToAmount = (transactions: Transaction[], toAmount: string): Trans
 
 export const filterBySearch = (
   search: string,
-  transactionNotes: Transaction[],
+  transactionNotes: Record<string, string>,
   transactions: Transaction[],
 ): Transaction[] => {
   const transactionsWithNote = transactions.map((tx: Transaction) => ({ ...tx, note: transactionNotes[tx.hash] }));

@@ -19,7 +19,7 @@ interface Props {
   search: string;
   filters: Filters;
   transactions: Transaction[];
-  transactionNotes: Transaction[];
+  transactionNotes: Record<string, string>;
   headerHeight: number;
   ListHeaderComponent: React.ReactElement;
   refreshing: boolean;
