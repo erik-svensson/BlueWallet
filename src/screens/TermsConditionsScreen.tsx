@@ -156,7 +156,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
           onNavigationStateChange={event => {
             if (event.title !== undefined) {
               this.setState({
-                height: parseInt(event.title) + 40,
+                height: parseInt(event.title) + 60,
               });
             }
           }}
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginTop: 25,
-    marginBottom: 10,
+    paddingBottom: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
