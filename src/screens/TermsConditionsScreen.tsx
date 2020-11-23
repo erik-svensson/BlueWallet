@@ -227,8 +227,8 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontFamily: fonts.ubuntu.regular,
-    fontSize: 14,
-    lineHeight: 21,
+    fontSize: 15,
+    lineHeight: 22.5,
     color: palette.textGrey,
     marginHorizontal: 23,
     marginTop: 10,
