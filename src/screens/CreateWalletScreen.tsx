@@ -221,6 +221,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               title={HDSegwitP2SHArWallet.typeReadable}
               subtitle={i18n.wallets.add.ar}
               value={HDSegwitP2SHArWallet}
+              testID="2-key-wallet-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHArWallet}
               onPress={this.onSelect}
             />
@@ -228,6 +229,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               title={HDSegwitP2SHAirWallet.typeReadable}
               subtitle={i18n.wallets.add.air}
               value={HDSegwitP2SHAirWallet}
+              testID="3-key-wallet-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
               onPress={this.onSelect}
             />
@@ -235,6 +237,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               title={i18n.wallets.add.legacyTitle}
               subtitle={i18n.wallets.add.legacy}
               value={HDSegwitP2SHWallet}
+              testID="hd-p2sh-wallet-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHWallet}
               onPress={this.onSelect}
             />
@@ -245,6 +248,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               title={HDSegwitP2SHArWallet.typeReadable}
               subtitle={i18n.wallets.add.ar}
               value={HDSegwitP2SHArWallet}
+              testID="2-key-wallet-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHArWallet}
               onPress={this.onSelect}
             />
@@ -252,6 +256,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               title={HDSegwitP2SHAirWallet.typeReadable}
               subtitle={i18n.wallets.add.air}
               value={HDSegwitP2SHAirWallet}
+              testID="3-key-wallet-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
               onPress={this.onSelect}
             />
@@ -259,6 +264,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               title={i18n.wallets.add.legacyHDP2SHTitle}
               subtitle={i18n.wallets.add.legacyHDP2SH}
               value={HDSegwitP2SHWallet}
+              testID="hd-p2sh-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHWallet}
               onPress={this.onSelect}
             />
@@ -266,6 +272,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               title={i18n.wallets.add.legacyP2SHTitle}
               subtitle={i18n.wallets.add.LegacyP2SH}
               value={SegwitP2SHWallet}
+              testID="segwit-p2sh-checkbox"
               checked={this.state.WalletClass === SegwitP2SHWallet}
               onPress={this.onSelect}
             />
@@ -273,6 +280,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               title={i18n.wallets.add.legacyHDSegWitTitle}
               subtitle={i18n.wallets.add.LegacyHDSegWit}
               value={HDSegwitBech32Wallet}
+              testID="hd-segwit-p2sh-checkbox"
               checked={this.state.WalletClass === HDSegwitBech32Wallet}
               onPress={this.onSelect}
             />

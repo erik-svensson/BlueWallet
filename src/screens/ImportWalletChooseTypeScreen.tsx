@@ -61,21 +61,24 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
           <RadioButton
             title={HDSegwitP2SHArWallet.typeReadable}
             subtitle={i18n.wallets.add.ar}
-            value={'2-Key Vault'}
+            value="2-Key Vault"
+            testID="2-key-wallet-checkbox"
             checked={this.state.selectedWallet === '2-Key Vault'}
             onPress={this.onSelect}
           />
           <RadioButton
             title={HDSegwitP2SHAirWallet.typeReadable}
             subtitle={i18n.wallets.add.air}
-            value={'3-Key Vault'}
+            value="3-Key Vault"
+            testID="3-key-wallet-checkbox"
             checked={this.state.selectedWallet === '3-Key Vault'}
             onPress={this.onSelect}
           />
           <RadioButton
             title={i18n.wallets.add.legacyTitle}
             subtitle={i18n.wallets.add.legacy}
-            value={'Standard'}
+            value="Standard"
+            testID="standard-wallet-checkbox"
             checked={this.state.selectedWallet === 'Standard'}
             onPress={this.onSelect}
           />

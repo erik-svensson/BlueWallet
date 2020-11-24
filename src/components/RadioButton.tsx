@@ -44,11 +44,8 @@ export const RadioButton = <T extends unknown>(props: Props<T>) => {
       checked={props.checked}
       containerStyle={styles.containerStyle}
       wrapperStyle={styles.wrapperStyle}
-      iconType="material"
       checkedIcon={RadioButtonCheckedIcon()}
-      checkedColor={palette.secondary}
       uncheckedIcon={RadioButtonUncheckedIcon()}
-      uncheckedColor={palette.border}
       onPress={onPressHandler}
       // @ts-ignore - It works but testID is missing in type definitions of CheckBoxNative component
       testID={props.testID}
