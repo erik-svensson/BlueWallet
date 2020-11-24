@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 import { CheckBox as CheckBoxNative, Text } from 'react-native-elements';
 
-import { WalletType } from 'app/consts';
+import { icons } from 'app/assets';
 import { palette, typography } from 'app/styles';
 
 interface Props<T> {
@@ -13,6 +13,18 @@ interface Props<T> {
   onPress?: (value: T) => void;
   testID?: string;
 }
+
+const RadioButtonCheckedIcon = () => (
+  <View>
+    <Image source={icons.radioButtonChecked} style={styles.radioButtonIcon} resizeMode="contain" />
+  </View>
+);
+
+const RadioButtonUncheckedIcon = () => (
+  <View>
+    <Image source={icons.radioButtonUnchecked} style={styles.radioButtonIcon} resizeMode="contain" />
+  </View>
+);
 
 export const RadioButton = <T extends unknown>(props: Props<T>) => {
   const onPressHandler = () => {
@@ -33,9 +45,9 @@ export const RadioButton = <T extends unknown>(props: Props<T>) => {
       containerStyle={styles.containerStyle}
       wrapperStyle={styles.wrapperStyle}
       iconType="material"
-      checkedIcon="radio-button-checked"
+      checkedIcon={RadioButtonCheckedIcon()}
       checkedColor={palette.secondary}
-      uncheckedIcon="radio-button-unchecked"
+      uncheckedIcon={RadioButtonUncheckedIcon()}
       uncheckedColor={palette.border}
       onPress={onPressHandler}
       // @ts-ignore - It works but testID is missing in type definitions of CheckBoxNative component
@@ -68,6 +80,10 @@ const styles = StyleSheet.create({
     ...typography.overline,
     color: palette.textGrey,
     fontSize: 13,
+  },
+  radioButtonIcon: {
+    width: 20,
+    height: 20,
   },
 });
 
