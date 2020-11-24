@@ -37,20 +37,18 @@ interface Props {
   walletsLabels: string[];
 }
 
-type CreateWalletType = '3-Key Vault' | '2-Key Vault' | 'HD P2SH' | 'P2SH' | 'HD SegWit';
-
 interface State {
   label: string;
-  selectedWallet: CreateWalletType;
+  WalletClass: WalletType;
 }
 
 export class CreateWalletScreen extends React.PureComponent<Props, State> {
   state: State = {
     label: '',
-    selectedWallet: '2-Key Vault',
+    WalletClass: HDSegwitP2SHAirWallet,
   };
 
-  onSelect = (selectedWallet: CreateWalletType) => this.setState({ selectedWallet });
+  onSelect = (selectedWallet: WalletType) => this.setState({ WalletClass: selectedWallet });
 
   setLabel = (label: string) => this.setState({ label: label.trim() });
 
@@ -167,13 +165,13 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   };
 
   setupWallet = () => {
-    const { selectedWallet } = this.state;
+    const { WalletClass } = this.state;
 
-    if (selectedWallet === '3-Key Vault') {
+    if (WalletClass === HDSegwitP2SHAirWallet) {
       return this.navigateToIntegrateInstantPublicKeyForAIR();
     }
 
-    if (selectedWallet === '2-Key Vault') {
+    if (WalletClass === HDSegwitP2SHArWallet) {
       return this.navigateToIntegrateRecoveryPublicKeyForAR();
     }
 
@@ -182,17 +180,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   createWallet = async () => {
     const { navigation } = this.props;
-    const { selectedWallet } = this.state;
+    const { WalletClass } = this.state;
 
-    const WalletClass: { [key in CreateWalletType]: WalletType } = {
-      '3-Key Vault': HDSegwitP2SHArWallet,
-      '2-Key Vault': HDSegwitP2SHArWallet,
-      'HD P2SH': HDSegwitP2SHWallet,
-      P2SH: SegwitP2SHWallet,
-      'HD SegWit': HDSegwitBech32Wallet,
-    };
-
-    const wallet = new WalletClass[selectedWallet]();
+    const wallet = new WalletClass();
 
     const onError = () =>
       this.showAlert(() => {
@@ -230,22 +220,22 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
             <RadioButton
               title={HDSegwitP2SHArWallet.typeReadable}
               subtitle={i18n.wallets.add.ar}
-              value={'2-Key Vault'}
-              checked={this.state.selectedWallet === '2-Key Vault'}
+              value={HDSegwitP2SHArWallet}
+              checked={this.state.WalletClass === HDSegwitP2SHArWallet}
               onPress={this.onSelect}
             />
             <RadioButton
               title={HDSegwitP2SHAirWallet.typeReadable}
               subtitle={i18n.wallets.add.air}
-              value={'3-Key Vault'}
-              checked={this.state.selectedWallet === '3-Key Vault'}
+              value={HDSegwitP2SHAirWallet}
+              checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
               onPress={this.onSelect}
             />
             <RadioButton
               title={i18n.wallets.add.legacyTitle}
               subtitle={i18n.wallets.add.legacy}
-              value={'HD P2SH'}
-              checked={this.state.selectedWallet === 'HD P2SH'}
+              value={HDSegwitP2SHWallet}
+              checked={this.state.WalletClass === HDSegwitP2SHWallet}
               onPress={this.onSelect}
             />
           </>
@@ -254,36 +244,36 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
             <RadioButton
               title={HDSegwitP2SHArWallet.typeReadable}
               subtitle={i18n.wallets.add.ar}
-              value={'2-Key Vault'}
-              checked={this.state.selectedWallet === '2-Key Vault'}
+              value={HDSegwitP2SHArWallet}
+              checked={this.state.WalletClass === HDSegwitP2SHArWallet}
               onPress={this.onSelect}
             />
             <RadioButton
               title={HDSegwitP2SHAirWallet.typeReadable}
               subtitle={i18n.wallets.add.air}
-              value={'3-Key Vault'}
-              checked={this.state.selectedWallet === '3-Key Vault'}
+              value={HDSegwitP2SHAirWallet}
+              checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
               onPress={this.onSelect}
             />
             <RadioButton
               title={i18n.wallets.add.legacyHDP2SHTitle}
               subtitle={i18n.wallets.add.legacyHDP2SH}
-              value={'HD P2SH'}
-              checked={this.state.selectedWallet === 'HD P2SH'}
+              value={HDSegwitP2SHWallet}
+              checked={this.state.WalletClass === HDSegwitP2SHWallet}
               onPress={this.onSelect}
             />
             <RadioButton
               title={i18n.wallets.add.legacyP2SHTitle}
               subtitle={i18n.wallets.add.LegacyP2SH}
-              value={'P2SH'}
-              checked={this.state.selectedWallet === 'P2SH'}
+              value={SegwitP2SHWallet}
+              checked={this.state.WalletClass === SegwitP2SHWallet}
               onPress={this.onSelect}
             />
             <RadioButton
               title={i18n.wallets.add.legacyHDSegWitTitle}
               subtitle={i18n.wallets.add.LegacyHDSegWit}
-              value={'HD SegWit'}
-              checked={this.state.selectedWallet === 'HD SegWit'}
+              value={HDSegwitBech32Wallet}
+              checked={this.state.WalletClass === HDSegwitBech32Wallet}
               onPress={this.onSelect}
             />
           </>

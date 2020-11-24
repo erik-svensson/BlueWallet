@@ -128,7 +128,7 @@ export enum Route {
 
 export type WalletType = typeof HDSegwitP2SHAirWallet | typeof HDSegwitP2SHArWallet | StandardWalletType;
 
-export type StandardWalletType = typeof HDSegwitBech32Wallet | typeof SegwitP2SHWallet | typeof HDSegwitP2SHWallet;
+export type StandardWalletType = typeof HDSegwitP2SHWallet | typeof SegwitP2SHWallet | typeof HDSegwitBech32Wallet;
 
 export interface Wallet {
   balance: number;
