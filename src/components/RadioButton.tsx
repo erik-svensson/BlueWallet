@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { CheckBox as CheckBoxNative, Text } from 'react-native-elements';
 
-import { WalletType } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 interface Props<T> {
@@ -15,10 +14,10 @@ interface Props<T> {
 }
 
 export const RadioButton = <T extends unknown>(props: Props<T>) => {
-  const [value] = useState(props.value);
+  // const [value] = useState();
 
   const onPressHandler = () => {
-    props.onPress && props.onPress(value);
+    props.onPress && props.onPress(props.value);
   };
 
   const renderTitle = (title: string, subtitle: string) => (
