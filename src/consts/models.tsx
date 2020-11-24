@@ -12,6 +12,7 @@ import {
   SegwitP2SHWallet,
   HDSegwitP2SHWallet,
 } from 'app/legacy';
+import { ImportWalletType } from 'app/screens/ImportWalletChooseTypeScreen';
 
 export const CONST = {
   pinCodeLength: 4,
@@ -354,7 +355,7 @@ export type MainCardStackNavigatorParams = {
   [Route.Dashboard]: { activeWallet?: Wallet } | undefined;
   [Route.MainCardStackNavigator]: undefined;
   [Route.CreateWallet]: undefined;
-  [Route.ImportWallet]: { walletType: WalletType };
+  [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
   [Route.WalletDetails]: { id: string };
   [Route.CreateContact]: { address?: string } | undefined;

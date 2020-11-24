@@ -17,28 +17,28 @@ interface Props {
   >;
 }
 
-type ImportWalletOption = '3-Key Vault' | '2-Key Vault' | 'Standard';
+export type ImportWalletType = '3-Key Vault' | '2-Key Vault' | 'Standard';
 
 interface State {
   label: string;
   isLoading: boolean;
-  selectedWalletType: ImportWalletOption;
+  selectedWallet: ImportWalletType;
 }
 
 export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, State> {
   state: State = {
     label: '',
     isLoading: false,
-    selectedWalletType: '2-Key Vault',
+    selectedWallet: '2-Key Vault',
   };
 
   navigateToImportWallet = () => {
     this.props.navigation.navigate(Route.ImportWallet, {
-      walletType: this.state.selectedWalletType,
+      walletType: this.state.selectedWallet,
     });
   };
 
-  onSelect = (selectedType: ImportWalletOption) => this.setState({ selectedWalletType: selectedType });
+  onSelect = (selectedWallet: ImportWalletType) => this.setState({ selectedWallet });
 
   render() {
     return (
@@ -62,28 +62,22 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
             title={HDSegwitP2SHArWallet.typeReadable}
             subtitle={i18n.wallets.add.ar}
             value={'2-Key Vault'}
-            selectedValue={this.state.selectedWalletType}
-            onPress={value => {
-              this.onSelect(value);
-            }}
+            checked={this.state.selectedWallet === '2-Key Vault'}
+            onPress={this.onSelect}
           />
           <RadioButton
             title={HDSegwitP2SHAirWallet.typeReadable}
             subtitle={i18n.wallets.add.air}
             value={'3-Key Vault'}
-            selectedValue={this.state.selectedWalletType}
-            onPress={value => {
-              this.onSelect(value);
-            }}
+            checked={this.state.selectedWallet === '3-Key Vault'}
+            onPress={this.onSelect}
           />
           <RadioButton
             title={i18n.wallets.add.legacyTitle}
             subtitle={i18n.wallets.add.legacy}
             value={'Standard'}
-            selectedValue={this.state.selectedWalletType}
-            onPress={value => {
-              this.onSelect(value);
-            }}
+            checked={this.state.selectedWallet === 'Standard'}
+            onPress={this.onSelect}
           />
         </>
       </ScreenTemplate>

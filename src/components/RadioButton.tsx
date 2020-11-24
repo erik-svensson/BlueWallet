@@ -14,7 +14,7 @@ interface Props<T> {
   testID?: string;
 }
 
-export const RadioButton = <T extends WalletType>(props: Props<T>) => {
+export const RadioButton = <T extends string>(props: Props<T>) => {
   const [value] = useState(props.value);
 
   const onPressHandler = () => {
