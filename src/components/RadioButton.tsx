@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { CheckBox as CheckBoxNative, Text } from 'react-native-elements';
 
+import { WalletType } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 interface Props<T> {
@@ -14,8 +15,6 @@ interface Props<T> {
 }
 
 export const RadioButton = <T extends unknown>(props: Props<T>) => {
-  // const [value] = useState();
-
   const onPressHandler = () => {
     props.onPress && props.onPress(props.value);
   };
@@ -37,7 +36,7 @@ export const RadioButton = <T extends unknown>(props: Props<T>) => {
       checkedIcon="radio-button-checked"
       checkedColor={palette.secondary}
       uncheckedIcon="radio-button-unchecked"
-      uncheckedColor={palette.secondary}
+      uncheckedColor={palette.border}
       onPress={onPressHandler}
       // @ts-ignore - It works but testID is missing in type definitions of CheckBoxNative component
       testID={props.testID}

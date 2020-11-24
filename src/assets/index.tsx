@@ -55,6 +55,8 @@ export const icons = {
   github: require('./images/github.png'),
   star: require('./images/star.png'),
   success: require('./images/success.png'),
+  radioButtonChecked: require('./images/radiobutton-checked.png'),
+  radioButtonUnchecked: require('./images/radiobutton-unchecked.png'),
   visibilityOn: require('./images/visibilityOn.png'),
   visibilityOff: require('./images/visibilityOff.png'),
   delete: require('./images/icon_delete.png'),
