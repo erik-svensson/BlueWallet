@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { CheckBox as CheckBoxNative, CheckBoxProps, Text } from 'react-native-elements';
+import { CheckBox as CheckBoxNative, Text } from 'react-native-elements';
 
+import { WalletType } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 interface Props<T> {
   title: string;
   subtitle: string;
   value: T;
-  selectedValue: T;
+  checked: boolean;
   onPress?: (value: T) => void;
   testID?: string;
 }
 
-export const RadioButton = <T extends string>(props: Props<T>) => {
+export const RadioButton = <T extends WalletType>(props: Props<T>) => {
   const [value] = useState(props.value);
 
   const onPressHandler = () => {
     props.onPress && props.onPress(value);
   };
-
-  const isValueSelected = (value: T, selectedValue: T) => value === selectedValue;
 
   const renderTitle = (title: string, subtitle: string) => (
     <View style={styles.radioButtonContent}>
@@ -32,7 +31,7 @@ export const RadioButton = <T extends string>(props: Props<T>) => {
   return (
     <CheckBoxNative
       title={renderTitle(props.title, props.subtitle)}
-      checked={isValueSelected(value, props.selectedValue)}
+      checked={props.checked}
       containerStyle={styles.containerStyle}
       wrapperStyle={styles.wrapperStyle}
       iconType="material"

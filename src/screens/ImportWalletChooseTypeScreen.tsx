@@ -4,7 +4,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ScreenTemplate, Text, Header, Button, RadioButton } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, WalletType } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { palette, typography } from 'app/styles';
 
@@ -17,10 +17,12 @@ interface Props {
   >;
 }
 
+type ImportWalletOption = '3-Key Vault' | '2-Key Vault' | 'Standard';
+
 interface State {
   label: string;
   isLoading: boolean;
-  selectedWalletType: WalletType;
+  selectedWalletType: ImportWalletOption;
 }
 
 export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, State> {
@@ -36,7 +38,7 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
     });
   };
 
-  onSelect = (selectedType: WalletType) => this.setState({ selectedWalletType: selectedType });
+  onSelect = (selectedType: ImportWalletOption) => this.setState({ selectedWalletType: selectedType });
 
   render() {
     return (
@@ -77,7 +79,7 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
           <RadioButton
             title={i18n.wallets.add.legacyTitle}
             subtitle={i18n.wallets.add.legacy}
-            value={'Standard HD P2SH'}
+            value={'Standard'}
             selectedValue={this.state.selectedWalletType}
             onPress={value => {
               this.onSelect(value);

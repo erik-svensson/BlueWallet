@@ -5,6 +5,13 @@ import { KeyboardType, StyleProp, ViewStyle, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 
 import { FastImageSource } from 'app/components';
+import {
+  HDSegwitP2SHAirWallet,
+  HDSegwitP2SHArWallet,
+  HDSegwitBech32Wallet,
+  SegwitP2SHWallet,
+  HDSegwitP2SHWallet,
+} from 'app/legacy';
 
 export const CONST = {
   pinCodeLength: 4,
@@ -118,7 +125,9 @@ export enum Route {
   ChunkedQrCode = 'ChunkedQrCode',
 }
 
-export type WalletType = '3-Key Vault' | '2-Key Vault' | 'Standard HD P2SH' | 'Standard P2SH' | 'Standard HD SegWit';
+export type WalletType = typeof HDSegwitP2SHAirWallet | typeof HDSegwitP2SHArWallet | StandardWalletType;
+
+export type StandardWalletType = typeof HDSegwitBech32Wallet | typeof SegwitP2SHWallet | typeof HDSegwitP2SHWallet;
 
 export interface Wallet {
   balance: number;
