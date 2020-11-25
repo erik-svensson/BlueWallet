@@ -9,7 +9,7 @@ export default class NavigationService {
   goBack() {
     navigationRef.current?.goBack();
   }
-  navigate(routeName: string, params?: GlobalParams[Route]) {
+  navigate(routeName: Route, params?: GlobalParams[Route]) {
     navigationRef.current?.navigate(routeName, params);
   }
   dispatch<State extends NavigationState = NavigationState>(
