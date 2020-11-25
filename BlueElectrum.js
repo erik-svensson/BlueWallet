@@ -358,21 +358,16 @@ module.exports.broadcast = async function(hex) {
     return await mainClient.blockchainTransaction_broadcast(hex);
   } catch (error) {
     if (error?.code === 1) {
-      const message = error.message.split('\n');
-      const generalMsg = message[0];
-      const detailedMsg = message[2];
-      const errorMsg = `${generalMsg}: ${detailedMsg}`;
-
-      if (detailedMsg.includes(messages.txnMempoolConflictCode18)) {
+      if (error.message.includes(messages.txnMempoolConflictCode18)) {
         throw new AppErrors.DoubleSpentFundsError();
       }
-      if (detailedMsg.includes(messages.missingInputs)) {
+      if (error.message.includes(messages.missingInputs)) {
         throw new AppErrors.NotExistingFundsError();
       }
-      if (detailedMsg.includes(messages.dustCode64)) {
+      if (error.message.includes(messages.dustCode64)) {
         throw new AppErrors.DustError();
       }
-      throw new Error(errorMsg);
+      throw new AppErrors.BroadcastError(error.message);
     }
     throw error;
   }
