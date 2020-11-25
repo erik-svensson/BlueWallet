@@ -45,11 +45,7 @@ export function* loadWalletsSaga() {
     yield BlueElectrum.ping();
     yield BlueElectrum.waitTillConnected();
 
-    yield all([
-      call(() => BlueApp.fetchWalletBalances()),
-      call(() => BlueApp.fetchWalletTransactions()),
-      call(() => BlueApp.fetchWalletUtxos()),
-    ]);
+    yield all([call(() => BlueApp.fetchWalletBalances()), call(() => BlueApp.fetchWalletTransactions())]);
 
     const wallets = BlueApp.getWallets();
     yield put(loadWalletsSuccess(wallets));
