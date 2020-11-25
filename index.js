@@ -1,13 +1,15 @@
-import 'react-native-gesture-handler';
+// import 'react-native-gesture-handler';
 
-import 'intl';
-import 'intl/locale-data/jsonp/en';
-import './shim.js';
+// import 'intl';
+// import 'intl/locale-data/jsonp/en';
+// import './shim.js';
+
 import React from 'react';
-import { AppRegistry, StatusBar, YellowBox } from 'react-native';
+import { AppRegistry, StatusBar, YellowBox, View } from 'react-native';
+import RNBootSplash from 'react-native-bootsplash';
 
 import App from './App';
-import config from './config';
+// import config from './config';
 
 YellowBox.ignoreWarnings(['Non-serializable values were found in the navigation state']);
 
@@ -17,13 +19,21 @@ if (!Error.captureStackTrace) {
   Error.captureStackTrace = () => {};
 }
 
-const BlueAppComponent = () => {
-  return (
-    <>
-      <StatusBar backgroundColor="rgba(0,0,0,0)" translucent />
-      <App />
-    </>
-  );
-};
+class TestApp extends React.Component {
+  render() {
+    RNBootSplash.hide({ duration: 250 });
 
-AppRegistry.registerComponent(config.applicationName, () => BlueAppComponent);
+    return <View style={{ width: 30, height: 30, backgroundColor: 'red' }} />;
+  }
+}
+
+// const BlueAppComponent = () => {
+//   return (
+//     <>
+//       <StatusBar backgroundColor="rgba(0,0,0,0)" translucent />
+//       <App />
+//     </>
+//   );
+// };
+
+AppRegistry.registerComponent('GoldWallet', () => TestApp);
