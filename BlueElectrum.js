@@ -3,6 +3,7 @@ import { difference } from 'lodash';
 import { compose, map, mapValues, values, flatten, uniq } from 'lodash/fp';
 
 import config from './config';
+import { messages, AppErrors } from './error';
 import logger from './logger';
 import { btcToSatoshi } from './utils/bitcoin';
 
@@ -354,10 +355,26 @@ module.exports.getDustValue = async () => {
 module.exports.broadcast = async function(hex) {
   if (!mainClient) throw new Error('Electrum client is not connected');
   try {
-    const broadcast = await mainClient.blockchainTransaction_broadcast(hex);
-    return broadcast;
+    return await mainClient.blockchainTransaction_broadcast(hex);
   } catch (error) {
-    return error;
+    if (error?.code === 1) {
+      const message = error.message.split('\n');
+      const generalMsg = message[0];
+      const detailedMsg = message[2];
+      const errorMsg = `${generalMsg}: ${detailedMsg}`;
+
+      if (detailedMsg.includes(messages.txnMempoolConflictCode18)) {
+        throw new AppErrors.DoubleSpentFundsError();
+      }
+      if (detailedMsg.includes(messages.missingInputs)) {
+        throw new AppErrors.NotExistingFundsError();
+      }
+      if (detailedMsg.includes(messages.dustCode64)) {
+        throw new AppErrors.DustError();
+      }
+      throw new Error(errorMsg);
+    }
+    throw error;
   }
 };
 

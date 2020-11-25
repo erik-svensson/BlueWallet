@@ -176,22 +176,6 @@ export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
     yield BlueElectrum.waitTillConnected();
     const result = yield BlueElectrum.broadcast(txDecoded.toHex());
 
-    if (result?.code === 1) {
-      const message = result.message.split('\n');
-      const generalMsg = message[0];
-      const detailedMsg = message[2];
-      let errorMsg = `${generalMsg}: ${detailedMsg}`;
-
-      if (detailedMsg.includes(messages.txnMempoolConflictCode18)) {
-        errorMsg = i18n.send.error.doubleSpentFunds;
-      }
-      if (detailedMsg.includes(messages.missingInputs)) {
-        errorMsg = i18n.send.error.notExistingFunds;
-      }
-
-      throw new Error(errorMsg);
-    }
-
     yield put(sendTransactionSuccess());
     if (meta?.onSuccess) {
       meta.onSuccess(result);

@@ -336,6 +336,7 @@ module.exports = {
     error: {
       doubleSpentFunds: 'You are trying to spend funds that have been already spent.',
       notExistingFunds: `You are trying to spend funds that don't exists.`,
+      dust: 'You are trying to send for a small amount',
       description: 'Before creating a transaction, you must first add a Bitcoin Vault wallet.',
       title: 'Error',
     },
