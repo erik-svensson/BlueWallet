@@ -45,7 +45,11 @@ export function* loadWalletsSaga() {
     yield BlueElectrum.ping();
     yield BlueElectrum.waitTillConnected();
 
-    yield all([call(() => BlueApp.fetchWalletBalances()), call(() => BlueApp.fetchWalletTransactions())]);
+    yield all([
+      call(() => BlueApp.fetchWalletBalances()),
+      call(() => BlueApp.fetchWalletTransactions()),
+      call(() => BlueApp.fetchWalletUtxos()),
+    ]);
 
     const wallets = BlueApp.getWallets();
     yield put(loadWalletsSuccess(wallets));
@@ -178,7 +182,18 @@ export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
 
     if (result?.code === 1) {
       const message = result.message.split('\n');
-      throw new Error(`${message[0]}: ${message[2]}`);
+      const generalMsg = message[0];
+      const detailedMsg = message[2];
+      let errorMsg = `${generalMsg}: ${detailedMsg}`;
+
+      if (detailedMsg.includes(messages.txnMempoolConflictCode18)) {
+        errorMsg = i18n.send.error.doubleSpentFunds;
+      }
+      if (detailedMsg.includes(messages.missingInputs)) {
+        errorMsg = i18n.send.error.notExistingFunds;
+      }
+
+      throw new Error(errorMsg);
     }
 
     yield put(sendTransactionSuccess());
