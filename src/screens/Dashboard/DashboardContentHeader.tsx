@@ -24,7 +24,7 @@ interface Props {
 
 const shouldRenderRecover = (type: string) => [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type].includes(type);
 
-export const DashboarContentdHeader = ({
+export const DashboardContentHeader = ({
   balance,
   unit,
   label,
@@ -61,9 +61,7 @@ export const DashboarContentdHeader = ({
         )}
         {typeReadable && (
           <View style={styles.typeReadableContainer}>
-            <Text style={styles.buttonDescription}>
-              {typeReadable} {i18n.wallets.dashboard.wallet}
-            </Text>
+            <Text style={styles.buttonDescription}>{typeReadable}</Text>
             <Image source={images.coin} style={styles.coinIcon} />
           </View>
         )}

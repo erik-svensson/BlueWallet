@@ -22,6 +22,22 @@ module.exports = {
     scan: 'Escanear',
     storage_is_encrypted: 'Su almacenamiento está cifrado. Se requiere contraseña para descifrarlo',
   },
+  termsConditions: {
+    header: 'Términos y Condiciones',
+    title: 'Acuerdo de los Términos',
+    text: '',
+    buttons: {
+      agree: 'Estoy de acuerdo',
+      disagree: 'No estoy de acuerdo',
+    },
+    modal: {
+      header: '¿Está seguro?',
+      text:
+        'Tenga en cuenta que si no está de acuerdo con nuestros Términos y Condiciones, no podrá utilizar la aplicación Gold Wallet.¿Está seguro de que no está de acuerdo?',
+      noButton: 'No, cambié de opinión.',
+      yesButton: 'Sí, no estoy de acuerdo.',
+    },
+  },
   aboutUs: {
     alwaysBackupYourKeys: 'Siempre guarde una copia de seguridad de sus claves',
     buildWithAwesome: 'Construido con genialidad:',
@@ -368,9 +384,9 @@ module.exports = {
       type: 'Tipo de transacción',
       watchOnlyError: 'Los monederos que sean solo de lectura no pueden enviar transacciones',
     },
-    warning: 'Aviso:',
+    warning: 'Aviso: ',
     warningGeneral:
-      'Aviso: Tenga en cuenta que en el proceso de utilizar la función de Transacción Segura, una parte de los fondos dejados en su monedero puede quedarse bloqueada. Es un procedimiento normal vinculado con UTXO y con los parámetros de la Blockchain del monedero de Bitcoin Vault. Sus fondos serán desbloqueados una vez la transacción se haya verificado (después de unas 24 horas) o cancelado (dentro de las 24 horas).',
+      'Tenga en cuenta que en el proceso de utilizar la función de Transacción Segura, una parte de los fondos dejados en su monedero puede quedarse bloqueada. Es un procedimiento normal vinculado con UTXO y con los parámetros de la Blockchain del monedero de Bitcoin Vault. Sus fondos serán desbloqueados una vez la transacción se haya verificado (después de unas 24 horas) o cancelado (dentro de las 24 horas).',
   },
   settings: {
     about: 'Sobre',
@@ -552,6 +568,7 @@ module.exports = {
       invalidQrCode: 'Código QR no válido',
       invalidSign: 'No se ha podido firmar la transacción',
       noIndexForWord: 'No se ha podido encontrar el índice para la palabra: {word}',
+      wrongNetwork: `Tiene un monedero en la red {walletNetworkName}, mientras que la red de la aplicación es {appNetworkName}. Por favor, póngase en contacto con nuestro soporte a través de Telegram.`,
     },
     export: {
       title: 'exportar monedero',
@@ -581,7 +598,7 @@ module.exports = {
       import: 'Importar',
       importARDescription1: 'Introduzca la frase mnemotécnica',
       importARDescription2: 'Escanee el código QR del monedero que desea importar',
-      placeholder: 'Frase mnemotécnica, clave privada, WIF',
+      placeholder: 'Frase mnemotécnica',
       scanCancelPubKey: 'Escanee el código QR de la clave de Cancelación',
       scanFastPubKey: 'Escanee el código QR de la Clave Rápida',
       scanPublicKeyDescription:

@@ -8,6 +8,7 @@ import { Route, CONST, MainCardStackNavigatorParams, Authenticator as IAuthentic
 import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { matchAlphanumericCharacters } from 'app/helpers/string';
+import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
 import { actions, selectors } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
@@ -42,6 +43,14 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     mnemonicError: '',
   };
 
+  componentDidMount() {
+    preventScreenshots();
+  }
+
+  componentWillUnmount() {
+    allowScreenshots();
+  }
+
   setMnemonic = (mnemonic: string) => {
     const trimmedMnemonic = mnemonic.trim();
 
@@ -71,7 +80,6 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     const { navigation } = this.props;
     navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (data: string) => {
-        navigation.goBack();
         this.createImportMessage(() => this.createAuthenticatorScan(data));
       },
     });

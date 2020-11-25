@@ -22,6 +22,22 @@ module.exports = {
     scan: 'Pindai',
     storage_is_encrypted: 'Penyimpanan Anda dienkripsi. Perlu kata sandi untuk mendekripsinya',
   },
+  termsConditions: {
+    header: 'Syarat & Ketentuan',
+    title: 'Persetujuan Syarat',
+    text: '',
+    buttons: {
+      agree: 'Saya setuju',
+      disagree: 'Saya tidak setuju',
+    },
+    modal: {
+      header: 'Apakah Anda yakin?',
+      text:
+        'Mohon dicatat bahwa apabila Anda tidak setuju dengan syarat dan ketentuan kami Anda tidak akan dapat menggunakan aplikasi Gold Wallet. Apakah Anda masih tidak menyetujui?',
+      noButton: 'Tidak, Saya berubah pikiran.',
+      yesButton: 'Ya, Saya tidak setuju.',
+    },
+  },
   aboutUs: {
     alwaysBackupYourKeys: 'Selalu cadangkan kunci Anda',
     buildWithAwesome: 'Bangun dengan hebat:',
@@ -366,9 +382,9 @@ module.exports = {
       type: 'Tipe transaksi',
       watchOnlyError: 'Dompet lihat saja/watch only tidak dapat mengirim transaksi',
     },
-    warning: 'Peringatan:',
+    warning: 'Peringatan: ',
     warningGeneral:
-      'Peringatan: Mohon diingat bahwa dalam proses menggunakan fitur Transaksi Aman, sebagian dari saldo yang tersisa di saldo dompet Anda memilki kemungkinan untuk diblokir secara sementara. Hal ini merupakan bagian dari prosedur umum yang berkaitan dengan UTXO dan parameter blockchain dari dompet Bitcoin Vault. Saldo Anda akan kembali dibuka ketika transaksi Anda diverifikasi (kurang lebih setelah sekitar 24 jam) atau dibatalkan (dalam waktu 24 jam).',
+      'Mohon diingat bahwa dalam proses menggunakan fitur Transaksi Aman, sebagian dari saldo yang tersisa di saldo dompet Anda memilki kemungkinan untuk diblokir secara sementara. Hal ini merupakan bagian dari prosedur umum yang berkaitan dengan UTXO dan parameter blockchain dari dompet Bitcoin Vault. Saldo Anda akan kembali dibuka ketika transaksi Anda diverifikasi (kurang lebih setelah sekitar 24 jam) atau dibatalkan (dalam waktu 24 jam).',
   },
   settings: {
     about: 'Tentang',
@@ -448,7 +464,7 @@ module.exports = {
       canceledDone: 'Dibatalkan - selesai',
       done: 'selesai',
       pending: 'tertunda',
-      unblocked: 'Dibuka',
+      unblocked: 'unblocked',
     },
     list: {
       conf: 'Konfirmasi',
@@ -483,7 +499,7 @@ module.exports = {
       inputLabel: 'Nama',
       legacy: 'Membuat tipe transaksi default.',
       legacyHDP2SH: 'Berisi pohon alamat P2SH yang dibuat dari satu benih 12 kata',
-      legacyHDP2SHTitle: 'HD P2SH Legasi',
+      legacyHDP2SHTitle: 'HD P2SH Standar',
       LegacyHDSegWit: 'Berisi pohon alamat segwit asal, dibuat satu benih 12 kata',
       legacyHDSegWitTitle: 'HD Segwit Standar',
       LegacyP2SH: 'Berisi satu alamat P2SH',
@@ -546,6 +562,7 @@ module.exports = {
       invalidQrCode: 'Kode QR tidak valid',
       invalidSign: 'Tidak bisa menandatangani transaksi',
       noIndexForWord: 'Tidak bisa menemukan indeks untuk kata: {word}',
+      wrongNetwork: `Anda memiliki dompet dalam jaringan {walletNetworkName} sedangkan aplikasi Anda berada dalam jaringan {appNetworkName}. Mohon hubungi tim bantuan kami di Telegram`,
     },
     export: {
       title: 'ekspor dompet',
@@ -575,7 +592,7 @@ module.exports = {
       import: 'Impor',
       importARDescription1: 'Masukkan frasa benih (seed)',
       importARDescription2: 'pindai kode QR dompet yang ingin Anda impor',
-      placeholder: 'Frasa benih (seed), kunci pribadi, WIF',
+      placeholder: 'Frasa benih (seed)',
       scanCancelPubKey: 'Pindai kode QR Kunci Pembatalan',
       scanFastPubKey: 'Pindai kode QR Kunci Cepat',
       scanPublicKeyDescription:

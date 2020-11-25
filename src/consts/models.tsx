@@ -24,6 +24,8 @@ export const CONST = {
   pin: 'pin',
   defaultLanguage: 'en',
   maxAddressLength: 48,
+  tcVersionRequired: 1,
+  tcVersion: 'tcVersion',
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
@@ -297,6 +299,7 @@ export type RootStackParams = {
     validateOnSave?: (value: string) => void;
     keyboardType?: KeyboardType;
     maxLength?: number;
+    emptyValueAllowed?: boolean;
   };
   [Route.Message]: {
     title: string;
@@ -357,7 +360,7 @@ export type MainCardStackNavigatorParams = {
   [Route.SendCoinsConfirm]: {
     fee: number;
     feeSatoshi?: number;
-    memo: string;
+    memo?: string;
     recipients: any;
     size?: number;
     txDecoded: BtcTransaction;

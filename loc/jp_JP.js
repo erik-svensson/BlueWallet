@@ -22,6 +22,22 @@ module.exports = {
     scan: 'スキャン',
     storage_is_encrypted: 'ストレージは暗号化されています。復号するためにはパスワードが必要です。',
   },
+  termsConditions: {
+    header: '利用規約',
+    title: '規約への同意',
+    text: '',
+    buttons: {
+      agree: '同意する',
+      disagree: '同意しない',
+    },
+    modal: {
+      header: '本当によろしですか？',
+      text:
+        '利用規約に同意しない場合、Gold Walletアプリケーションを使用できないことに注意してください。\n本当に同意しなくてよろしいですか？',
+      noButton: 'いいえ、同意します',
+      yesButton: 'はい、同意しません',
+    },
+  },
   aboutUs: {
     alwaysBackupYourKeys: '常にキーをバックアップしてください。',
     buildWithAwesome: '以下でビルド：',
@@ -362,9 +378,9 @@ module.exports = {
       type: '取引タイプ',
       watchOnlyError: '送金できないウォレットだけを表示する',
     },
-    warning: '警告:',
+    warning: '警告: ',
     warningGeneral:
-      '警告：保安取引機能を使用する過程で、ウォレットに残っている資金の一部がブロックされる可能性があることに注意してください。 これは、UTXOとBitcoin Vaultウォレットのブロックチェーンパラメータにリンクされた通常の手順です。 取引が確認（約24時間後）、またはキャンセルされると（24時間以内）、資金のブロックが解除されます。',
+      '保安取引機能を使用する過程で、ウォレットに残っている資金の一部がブロックされる可能性があることに注意してください。 これは、UTXOとBitcoin Vaultウォレットのブロックチェーンパラメータにリンクされた通常の手順です。 取引が確認（約24時間後）、またはキャンセルされると（24時間以内）、資金のブロックが解除されます。',
   },
   settings: {
     about: '紹介',
@@ -542,6 +558,7 @@ module.exports = {
       invalidQrCode: '無効なQRコード',
       invalidSign: '取引を署名できません。',
       noIndexForWord: '{word}についてのインデックスが見つかりませんでした。',
+      wrongNetwork: `本アプリケーションのネットワークは{appNetworkName}ですが、お客様のウォレットはこちらのネットワーク {walletNetworkName} にあるようです。Telegramにて弊社サポートまでご連絡いただくようお願いいたします。`,
     },
     export: {
       title: 'ウォレットのエクスポート',
@@ -571,7 +588,7 @@ module.exports = {
       import: '登録',
       importARDescription1: 'シードフレーズを入力してください',
       importARDescription2: '登録したいウォレットのQRコードをスキャンしてください',
-      placeholder: 'シードフレーズ、個人キー、WIF',
+      placeholder: 'シードフレーズ',
       scanCancelPubKey: 'キャンセルキーのQRコードをスキャンする',
       scanFastPubKey: 'クイックキーのQRコードをスキャンする',
       scanPublicKeyDescription:

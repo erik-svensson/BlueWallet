@@ -6,6 +6,7 @@ import { Text, StyleSheet, View, Alert } from 'react-native';
 
 import { Header, ScreenTemplate, Button, FlatButton, InputItem } from 'app/components';
 import { MainCardStackNavigatorParams, Route, RootStackParams, CONST } from 'app/consts';
+import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { palette, typography } from 'app/styles';
 
 import { mnemonicToKeyPair, privateKeyToKeyPair } from '../../../utils/crypto';
@@ -34,6 +35,14 @@ export class RecoverySeedScreen extends Component<Props, State> {
     isLoading: false,
   };
 
+  componentDidMount() {
+    preventScreenshots();
+  }
+
+  componentWillUnmount() {
+    allowScreenshots();
+  }
+
   setWordInMnemonic = (word: string, index: number) => {
     const { mnemonic } = this.state;
     const newMnemonic = [...mnemonic];
@@ -54,7 +63,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
     return compose(
       map((index: number) => (
         <InputItem
-          key={index}
+          key={index.toString()}
           label={`${index}.`}
           value={mnemonic[index - 1]}
           setValue={word => this.setWordInMnemonic(word, index)}
