@@ -351,23 +351,6 @@ const styles = StyleSheet.create({
     color: palette.textGrey,
     marginBottom: 12,
   },
-  radioButton: {
-    paddingStart: 0,
-    paddingVertical: 8,
-  },
-  radioButtonContent: {
-    paddingStart: 10,
-    top: -3,
-  },
-  radioButtonTitle: {
-    ...typography.caption,
-    marginBottom: 2,
-  },
-  radioButtonSubtitle: {
-    ...typography.overline,
-    color: palette.textGrey,
-    fontSize: 13,
-  },
   importButtonContainer: {
     marginTop: 12,
   },

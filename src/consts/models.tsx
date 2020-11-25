@@ -12,7 +12,6 @@ import {
   SegwitP2SHWallet,
   HDSegwitP2SHWallet,
 } from 'app/legacy';
-import { ImportWalletType } from 'app/screens/ImportWalletChooseTypeScreen';
 
 export const CONST = {
   pinCodeLength: 4,
@@ -125,6 +124,9 @@ export enum Route {
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
 }
+
+/** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
+export type ImportWalletType = '3-Key Vault' | '2-Key Vault' | 'Standard';
 
 export type WalletType = typeof HDSegwitP2SHAirWallet | typeof HDSegwitP2SHArWallet | StandardWalletType;
 

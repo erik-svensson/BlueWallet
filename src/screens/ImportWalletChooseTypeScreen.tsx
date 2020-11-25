@@ -4,7 +4,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ScreenTemplate, Text, Header, Button, RadioButton } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, ImportWalletType } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { palette, typography } from 'app/styles';
 
@@ -16,8 +16,6 @@ interface Props {
     StackNavigationProp<MainCardStackNavigatorParams, Route.ImportWalletChooseType>
   >;
 }
-
-export type ImportWalletType = '3-Key Vault' | '2-Key Vault' | 'Standard';
 
 interface State {
   label: string;
@@ -109,21 +107,5 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     flexGrow: 1,
     marginVertical: 10,
-  },
-  radioButton: {
-    paddingStart: 0,
-    paddingVertical: 8,
-  },
-  radioButtonContent: {
-    paddingStart: 10,
-    top: -3,
-  },
-  radioButtonTitle: {
-    ...typography.caption,
-    marginBottom: 2,
-  },
-  radioButtonSubtitle: {
-    ...typography.overline,
-    color: palette.textGrey,
   },
 });

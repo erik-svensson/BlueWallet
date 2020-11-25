@@ -594,22 +594,6 @@ const styles = StyleSheet.create({
   addressInput: {
     paddingEnd: 100,
   },
-  radioButton: {
-    paddingStart: 0,
-    paddingVertical: 8,
-  },
-  radioButtonContent: {
-    paddingStart: 10,
-    top: -3,
-  },
-  radioButtonTitle: {
-    ...typography.caption,
-    marginBottom: 2,
-  },
-  radioButtonSubtitle: {
-    ...typography.overline,
-    color: palette.textGrey,
-  },
   radioButtonsTitle: {
     ...typography.overline,
     color: palette.textGrey,
