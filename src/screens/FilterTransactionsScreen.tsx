@@ -134,7 +134,6 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
 
   renderCommonCardContent = () => {
     const { fromDate, toDate, fromAmount, toAmount } = this.props.filters;
-
     return (
       <>
         <View style={styles.spacing10}>
@@ -183,6 +182,12 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
                 label={i18n.filterTransactions.fromAmount}
                 suffix="BTCV"
                 keyboardType="numeric"
+                onBlur={() => {
+                  !this.validateAmount(fromAmount) &&
+                    this.props.updateFromAmount(
+                      i18n.formatBalanceWithoutSuffix(Number(fromAmount), '', true).toString(),
+                    );
+                }}
               />,
               <InputItem
                 key={Index.To}
@@ -192,6 +197,10 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
                 label={i18n.filterTransactions.toAmount}
                 suffix="BTCV"
                 keyboardType="numeric"
+                onBlur={() => {
+                  !this.validateAmount(toAmount) &&
+                    this.props.updateToAmount(i18n.formatBalanceWithoutSuffix(Number(toAmount), '', true).toString());
+                }}
               />,
             ]}
           />
