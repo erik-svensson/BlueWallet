@@ -10,7 +10,7 @@ import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator, PasswordNavigator } from 'app/navigators';
 import { UnlockScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
-import { navigationRef, AppStateManager } from 'app/services';
+import { navigationRef, AppStateManager, ToastManager } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
@@ -132,7 +132,7 @@ class Navigator extends React.Component<Props, State> {
   };
 
   renderRoutes = () => {
-    const { isLoading, unlockKey } = this.props;
+    const { isLoading, unlockKey, isAuthenticated } = this.props;
     if (isLoading) {
       return null;
     }
@@ -152,6 +152,7 @@ class Navigator extends React.Component<Props, State> {
     return (
       <>
         <RootNavigator />
+        {isAuthenticated && <ToastManager />}
         {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
       </>
     );

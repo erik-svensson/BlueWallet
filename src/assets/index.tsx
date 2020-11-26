@@ -39,6 +39,7 @@ export const images = {
   cancelSmall: require('./images/cancelSmall.png'),
   portraitLogo: require('./images/portraitLogo.png'),
   noAuthenticators: require('./images/shield3x.png'),
+  loader: require('./images/loader.png'),
 };
 
 export const icons = {
@@ -66,4 +67,5 @@ export const icons = {
   wallet: require('./images/wallet.png'),
   pair: require('./images/pair3x.png'),
   export: require('./images/export3x.png'),
+  warning: require('./images/warning.png'),
 };
