@@ -5,7 +5,15 @@ import { StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioButton } from 'app/components';
-import { Route, Wallet, MainTabNavigatorParams, MainCardStackNavigatorParams, ActionMeta, CONST, WalletType } from 'app/consts';
+import {
+  Route,
+  Wallet,
+  MainTabNavigatorParams,
+  MainCardStackNavigatorParams,
+  ActionMeta,
+  CONST,
+  WalletType,
+} from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import {
