@@ -1,4 +1,4 @@
-import RNBootSplash from 'react-native-bootsplash';
+// import RNBootSplash from 'react-native-bootsplash';
 import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 
 import { CONST } from 'app/consts';
@@ -28,7 +28,7 @@ export function* checkCredentialsSaga(action: CheckCredentialsAction | unknown) 
     yield BlueApp.startAndDecrypt();
     const pin = yield call(SecureStorageService.getSecuredValue, CONST.pin);
     const transactionPassword = yield call(SecureStorageService.getSecuredValue, CONST.transactionPassword);
-    RNBootSplash.hide({ duration: 250 });
+    // RNBootSplash.hide({ duration: 250 });
     const credentials = {
       isPinSet: !!pin,
       isTxPasswordSet: !!transactionPassword,

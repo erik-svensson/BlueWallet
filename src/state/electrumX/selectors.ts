@@ -13,3 +13,9 @@ export const subscribedScriptHashes = createSelector(local, state => state.subsc
 export const isInternetReachable = createSelector(local, state => state.isInternetReachable);
 
 export const isServerConnected = createSelector(local, state => state.isServerConnected);
+
+export const hasConnectionIssues = createSelector(
+  isServerConnected,
+  isInternetReachable,
+  (serverConnection, internetReachable) => !(serverConnection && internetReachable),
+);

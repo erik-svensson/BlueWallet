@@ -1,6 +1,7 @@
 import NetInfo from '@react-native-community/netinfo';
 import { difference } from 'lodash';
 import { flatten, compose, map } from 'lodash/fp';
+import RNBootSplash from 'react-native-bootsplash';
 import { eventChannel } from 'redux-saga';
 import { takeLatest, put, take, call, select } from 'redux-saga/effects';
 
@@ -172,11 +173,12 @@ export function* subscribeToScriptHashes() {
 }
 
 export function* checkConnection() {
-  const isServerConnected = yield BlueElectrum.ping();
-  yield put(setServerConnection(isServerConnected));
-
   const { isInternetReachable } = yield NetInfo.fetch();
   yield put(setInternetConnection(isInternetReachable));
+
+  const isServerConnected = yield BlueElectrum.ping();
+  yield put(setServerConnection(isServerConnected));
+  RNBootSplash.hide({ duration: 250 });
 }
 
 function emitInternetConnectionChange() {
@@ -195,7 +197,7 @@ export function* listenToInternetConnection() {
 
   while (true) {
     const { isInternetReachable } = yield take(chan);
-    yield put(setInternetConnection(isInternetReachable));
+    yield put(setInternetConnection(!!isInternetReachable));
   }
 }
 
@@ -210,6 +212,7 @@ export default [
     subscribeToScriptHashes,
   ),
   takeLatest(ElectrumXAction.StartListeners, listenToInternetConnection),
+  takeLatest(ElectrumXAction.StartListeners, checkConnection),
   takeLatest(ElectrumXAction.StartListeners, listenOnClose),
   takeLatest(ElectrumXAction.StartListeners, listenOnReconnect),
   takeLatest(ElectrumXAction.StartListeners, listenOnConnect),

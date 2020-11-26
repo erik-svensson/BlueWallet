@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { CONST } from 'app/consts';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator, PasswordNavigator } from 'app/navigators';
-import { UnlockScreen } from 'app/screens';
+import { UnlockScreen, ConnectionIssuesScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
 import { navigationRef, AppStateManager, ToastManager } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
@@ -17,12 +17,14 @@ import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import { updateSelectedLanguage as updateSelectedLanguageAction } from 'app/state/appSettings/actions';
 import { selectors as authenticationSelectors } from 'app/state/authentication';
 import { checkCredentials as checkCredentialsAction } from 'app/state/authentication/actions';
+import { selectors as electrumXSelectors } from 'app/state/electrumX';
 import {
   startListeners,
   StartListenersAction,
   fetchBlockHeight as fetchBlockHeightAction,
   FetchBlockHeightAction,
 } from 'app/state/electrumX/actions';
+import { selectors as walletsSelectors } from 'app/state/wallets';
 import { LoadWalletsAction, loadWallets as loadWalletsAction } from 'app/state/wallets/actions';
 import { isAndroid, isIos } from 'app/styles';
 
@@ -36,10 +38,13 @@ interface MapStateToProps {
   isTxPasswordSet: boolean;
   isLoading: boolean;
   language: string;
+  isInitialized: boolean;
+  hasConnectionIssues: boolean;
 }
 
 interface ActionsDisptach {
   checkCredentials: Function;
+  checkConnection: Function;
   startElectrumXListeners: () => StartListenersAction;
   loadWallets: () => LoadWalletsAction;
   fetchBlockHeight: () => FetchBlockHeightAction;
@@ -132,7 +137,7 @@ class Navigator extends React.Component<Props, State> {
   };
 
   renderRoutes = () => {
-    const { isLoading, unlockKey, isAuthenticated } = this.props;
+    const { isLoading, unlockKey, isAuthenticated, isInitialized, hasConnectionIssues } = this.props;
     if (isLoading) {
       return null;
     }
@@ -147,6 +152,10 @@ class Navigator extends React.Component<Props, State> {
 
     if (this.shouldRenderOnBoarding()) {
       return <PasswordNavigator />;
+    }
+
+    if (!isInitialized && hasConnectionIssues) {
+      return <ConnectionIssuesScreen />;
     }
 
     return (
@@ -176,6 +185,8 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isTxPasswordSet: authenticationSelectors.isTxPasswordSet(state),
   isAuthenticated: authenticationSelectors.isAuthenticated(state),
   language: appSettingsSelectors.language(state),
+  isInitialized: walletsSelectors.isInitialized(state),
+  hasConnectionIssues: electrumXSelectors.hasConnectionIssues(state),
 });
 
 const mapDispatchToProps: ActionsDisptach = {
