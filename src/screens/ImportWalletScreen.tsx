@@ -1,5 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { compose } from 'lodash/fp';
 import React, { PureComponent } from 'react';
 import { View, StyleSheet, Text, Keyboard, Alert } from 'react-native';
 import { connect } from 'react-redux';
@@ -16,6 +17,7 @@ import {
 } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { withCheckNetworkConnection } from 'app/hocs';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
 import { importWallet as importWalletAction, ImportWalletAction } from 'app/state/wallets/actions';
@@ -40,6 +42,7 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.ImportWallet>;
   importWallet: (wallet: Wallet, meta?: ActionMeta) => ImportWalletAction;
   wallets: Wallet[];
+  checkNetworkConnection: checkNetworkConnectionArgs;
 }
 
 interface State {
@@ -421,6 +424,12 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       this.importLegacyWallet(trimmedMnemonic);
     });
   };
+
+  executeWithNetworkConnectionCheck = (func: () => void) => () => {
+    const { checkNetworkConnection } = this.props;
+    checkNetworkConnection(() => func());
+  };
+
   render() {
     const { validationError, text, label, hasCustomWords, customWords } = this.state;
     return (
@@ -430,13 +439,13 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
             <Button
               disabled={!text || !!validationError || !label}
               title={i18n.wallets.importWallet.import}
-              onPress={this.onImportButtonPress}
+              onPress={this.executeWithNetworkConnectionCheck(this.onImportButtonPress)}
             />
             <FlatButton
               disabled={!label || !!validationError}
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}
-              onPress={this.onScanQrCodeButtonPress}
+              onPress={this.executeWithNetworkConnectionCheck(this.onScanQrCodeButtonPress)}
               disabledTitleStyle={{ color: palette.grey }}
             />
           </>
@@ -485,7 +494,7 @@ const mapDispatchToProps = {
   importWallet: importWalletAction,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImportWalletScreen);
+export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(ImportWalletScreen);
 
 const styles = StyleSheet.create({
   checkboxContainer: {

@@ -6,6 +6,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { icons } from 'app/assets';
 import { Header, InputItem, ScreenTemplate, Button } from 'app/components';
 import { CONST, RootStackParams, Route } from 'app/consts';
+import { withCheckNetworkConnection } from 'app/hocs';
 import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
@@ -14,6 +15,7 @@ const i18n = require('../../loc');
 type Props = {
   navigation: StackNavigationProp<RootStackParams, Route.UnlockTransaction>;
   route: RouteProp<RootStackParams, Route.UnlockTransaction>;
+  checkNetworkConnection: any;
 };
 
 interface State {
@@ -23,7 +25,7 @@ interface State {
   isLoading: boolean;
 }
 
-export class UnlockTransaction extends PureComponent<Props, State> {
+class UnlockTransaction extends PureComponent<Props, State> {
   state = {
     password: '',
     error: '',
@@ -32,6 +34,11 @@ export class UnlockTransaction extends PureComponent<Props, State> {
   };
 
   inputRef: any = React.createRef();
+
+  onConfirmWithNetworkConnectionCheck = () => {
+    const { checkNetworkConnection } = this.props;
+    checkNetworkConnection(this.onConfirm);
+  };
 
   onConfirm = () => {
     const { onSuccess } = this.props.route.params;
@@ -70,7 +77,7 @@ export class UnlockTransaction extends PureComponent<Props, State> {
           <Button
             title={i18n._.confirm}
             loading={isLoading}
-            onPress={this.onConfirm}
+            onPress={this.onConfirmWithNetworkConnectionCheck}
             disabled={isLoading || password.length < CONST.transactionMinPasswordLength}
           />
         }
@@ -95,6 +102,8 @@ export class UnlockTransaction extends PureComponent<Props, State> {
     );
   }
 }
+
+export default withCheckNetworkConnection(UnlockTransaction);
 
 const styles = StyleSheet.create({
   title: {
