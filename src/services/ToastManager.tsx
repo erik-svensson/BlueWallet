@@ -1,17 +1,18 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Toast as ToastComponent } from 'app/components/Toast';
-import { selectors } from 'app/state/toastMessages';
+import { selectors, actions } from 'app/state/toastMessages';
 
 export const ToastManager = () => {
   const toastMessages = useSelector(selectors.toastMessages);
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.outerContainer}>
       {toastMessages.map(toast => (
-        <ToastComponent key={toast.id} {...toast} />
+        <ToastComponent key={toast.id} toast={toast} onClose={() => dispatch(actions.hideToastMessage(toast))} />
       ))}
     </View>
   );

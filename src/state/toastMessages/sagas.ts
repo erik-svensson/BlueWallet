@@ -1,11 +1,24 @@
-import { takeEvery, put, delay } from 'redux-saga/effects';
+import { takeEvery, put, delay, race, take } from 'redux-saga/effects';
 
-import { ToastMessageAction, AddToastMessageAction, hideToastMessage } from './actions';
+import { ToastMessageAction, AddToastMessageAction, HideToastMessageAction, hideToastMessage } from './actions';
 
 export function* addToastMessageSaga(action: AddToastMessageAction | unknown) {
   const { payload } = action as AddToastMessageAction;
 
-  yield delay(payload.milisecondsAfterHide);
+  const { cancelled } = yield race({
+    timeout: delay(payload.milisecondsAfterHide),
+    cancelled: take((action: unknown) => {
+      const { payload: cancelPayload, type } = action as HideToastMessageAction;
+      if (type === ToastMessageAction.HideToastMessage) {
+        return cancelPayload.id === payload.id;
+      }
+      return false;
+    }),
+  });
+
+  if (cancelled) {
+    return;
+  }
 
   yield put(hideToastMessage(payload));
 }

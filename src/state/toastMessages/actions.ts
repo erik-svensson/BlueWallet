@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { Toast } from 'app/consts';
 
 export enum ToastMessageAction {
@@ -17,9 +19,17 @@ export interface HideToastMessageAction {
 
 export type ToastMessageActionType = AddToastMessageAction | HideToastMessageAction;
 
-export const addToastMessage = (payload: Toast): AddToastMessageAction => ({
+export const addToastMessage = ({
+  title,
+  description,
+  milisecondsAfterHide = 5000,
+}: {
+  title: string;
+  description: string;
+  milisecondsAfterHide?: number;
+}): AddToastMessageAction => ({
   type: ToastMessageAction.AddToastMessage,
-  payload,
+  payload: { title, description, milisecondsAfterHide, id: uuidv4() },
 });
 
 export const hideToastMessage = (payload: Toast): HideToastMessageAction => ({

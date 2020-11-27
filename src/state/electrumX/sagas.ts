@@ -3,10 +3,11 @@ import { difference } from 'lodash';
 import { flatten, compose, map } from 'lodash/fp';
 import RNBootSplash from 'react-native-bootsplash';
 import { eventChannel } from 'redux-saga';
-import { takeLatest, put, take, call, select } from 'redux-saga/effects';
+import { takeLatest, put, take, all, call, select } from 'redux-saga/effects';
 
 import { Wallet } from 'app/consts';
 
+import { addToastMessage } from '../toastMessages/actions';
 import { actions as walletsActions, selectors as walletsSelectors } from '../wallets';
 import {
   setBlockHeight,
@@ -20,9 +21,14 @@ import {
   connectionClosed,
   connectionReconnected,
 } from './actions';
-import { subscribedScriptHashes } from './selectors';
+import {
+  subscribedScriptHashes,
+  isInternetReachable as isInternetReachableSelector,
+  isServerConnected as isServerConnectedSelector,
+} from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
+// const i18n = require('../../loc');
 
 function emitBlockchainHeaders() {
   return eventChannel(emitter => {
@@ -87,7 +93,7 @@ export function* listenScriptHashesSaga() {
 function emitOnConnect() {
   return eventChannel(emitter => {
     BlueElectrum.subscribeToOnConnect(() => {
-      console.log('Connected');
+      console.log('BLUE ELECTRUM CONNECTED');
       emitter(true);
     });
 
@@ -109,7 +115,7 @@ export function* listenOnConnect() {
 function emitOnReconnect() {
   return eventChannel(emitter => {
     BlueElectrum.subscribeToOnReconnect(() => {
-      console.log('Reconnected');
+      console.log('BlueElectrum RECONNECTED');
       emitter(true);
     });
 
@@ -132,7 +138,7 @@ export function* listenOnReconnect() {
 function emitOnClose() {
   return eventChannel(emitter => {
     BlueElectrum.subscribeToOnClose(() => {
-      console.log('Close');
+      console.log('CLOSED BLUE ELECTRUM');
       emitter(true);
     });
 
@@ -147,6 +153,16 @@ export function* listenOnClose() {
 
   while (true) {
     yield take(chan);
+    const isInternetReachableS = yield select(isInternetReachableSelector);
+    if (isInternetReachableS) {
+      yield put(
+        addToastMessage({
+          title: 'Server lost connection',
+          description: 'Server lost connection desc',
+        }),
+      );
+    }
+
     yield put(connectionClosed());
   }
 }
@@ -173,10 +189,38 @@ export function* subscribeToScriptHashes() {
 }
 
 export function* checkConnection() {
-  const { isInternetReachable } = yield NetInfo.fetch();
-  yield put(setInternetConnection(isInternetReachable));
+  const currentIsInternetReachable = yield select(isInternetReachableSelector);
+  const currentIsServerConnectedSelector = yield select(isServerConnectedSelector);
 
-  const isServerConnected = yield BlueElectrum.ping();
+  const { isInternetReachable, isServerConnected } = yield all({
+    isInternetReachable: call(NetInfo.fetch),
+    isServerConnected: call(BlueElectrum.ping),
+  });
+  yield put(
+    addToastMessage({
+      title: 'Internet lost connection',
+      description: 'Internet lost connection desc',
+    }),
+  );
+  if (currentIsInternetReachable && !isInternetReachable) {
+    yield put(
+      addToastMessage({
+        title: 'Internet lost connection',
+        description: 'Internet lost connection desc',
+      }),
+    );
+  }
+
+  if (isInternetReachable && !isServerConnected && currentIsServerConnectedSelector) {
+    yield put(
+      addToastMessage({
+        title: 'Server lost connection',
+        description: 'Server lost connection desc',
+      }),
+    );
+  }
+
+  yield put(setInternetConnection(!!isInternetReachable));
   yield put(setServerConnection(isServerConnected));
   RNBootSplash.hide({ duration: 250 });
 }
@@ -197,6 +241,16 @@ export function* listenToInternetConnection() {
 
   while (true) {
     const { isInternetReachable } = yield take(chan);
+    const currentIsInternetReachable = yield select(isInternetReachableSelector);
+
+    if (currentIsInternetReachable && !isInternetReachable) {
+      yield put(
+        addToastMessage({
+          title: 'Internet lost connection',
+          description: 'Internet lost connection desc',
+        }),
+      );
+    }
     yield put(setInternetConnection(!!isInternetReachable));
   }
 }
@@ -218,5 +272,5 @@ export default [
   takeLatest(ElectrumXAction.StartListeners, listenOnConnect),
   takeLatest([ElectrumXAction.StartListeners, ElectrumXAction.ConnectionReconnected], listenScriptHashesSaga),
   takeLatest([ElectrumXAction.StartListeners, ElectrumXAction.ConnectionReconnected], listenBlockchainHeadersSaga),
-  takeLatest(ElectrumXAction.FetchBlockHeight, fetchBlockchainHeadersSaga),
+  takeLatest([ElectrumXAction.FetchBlockHeight, ElectrumXAction.ConnectionReconnected], fetchBlockchainHeadersSaga),
 ];

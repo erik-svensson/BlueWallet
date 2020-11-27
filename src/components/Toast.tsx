@@ -1,49 +1,55 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Text, StyleSheet, View, TouchableHighlight, Animated } from 'react-native';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
+import { Text, StyleSheet, View, TouchableOpacity, Animated } from 'react-native';
 
 import { images, icons } from 'app/assets';
 import { Image } from 'app/components';
 import { Toast as IToast } from 'app/consts';
-import { useInterval } from 'app/helpers/useInterval';
 import { typography, palette } from 'app/styles';
 
-export const Toast = ({ title, description, milisecondsAfterHide }: IToast) => {
-  const [seconds, setSeconds] = useState(milisecondsAfterHide);
+const animationDuration = 500;
+
+interface Props {
+  toast: IToast;
+  onClose: () => void;
+}
+
+export const Toast = ({ toast: { title, description, milisecondsAfterHide }, onClose }: Props) => {
+  const [closedClicked, setClosedClicked] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  useEffect(() => {
-    if (seconds === milisecondsAfterHide) {
-      fadeIn();
-    } else if (seconds === 0) {
-      fadeOut();
-    }
-  });
-
-  useInterval(
-    () => {
-      setSeconds(seconds - 1000);
-    },
-    seconds > 0 ? 1000 : null,
-  );
-
-  const fadeIn = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const fadeOut = () => {
+  const fadeOut = useCallback(() => {
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 500,
+      duration: animationDuration,
       useNativeDriver: true,
     }).start();
-  };
+  }, [fadeAnim]);
 
-  const onClose = () => {
+  const fadeIn = useCallback(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: animationDuration,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
+  useEffect(() => {
+    fadeIn();
+
+    setTimeout(() => {
+      fadeOut();
+    }, milisecondsAfterHide - animationDuration);
+  }, [fadeAnim, fadeIn, milisecondsAfterHide, fadeOut]);
+
+  const close = () => {
+    if (closedClicked) {
+      return;
+    }
+    setClosedClicked(true);
     fadeOut();
+    setTimeout(() => {
+      onClose();
+    }, animationDuration);
   };
 
   return (
@@ -53,17 +59,21 @@ export const Toast = ({ title, description, milisecondsAfterHide }: IToast) => {
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
       </View>
-      <TouchableHighlight onPress={onClose} style={styles.closeImage}>
+      <TouchableOpacity onPress={close} style={styles.closeImageWrapper}>
         <Image source={images.closeInverted} style={styles.closeImage} />
-      </TouchableHighlight>
+      </TouchableOpacity>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   closeImage: {
-    height: 24,
-    width: 24,
+    height: 36,
+    width: 36,
+  },
+  closeImageWrapper: {
+    position: 'absolute',
+    right: 5,
   },
   warningIcon: {
     width: 32,
@@ -76,6 +86,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   container: {
+    position: 'relative',
     backgroundColor: palette.background,
     flex: 1,
     flexDirection: 'row',
@@ -83,5 +94,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     elevation: 5,
     padding: 10,
+    marginBottom: 10,
+    shadowColor: palette.textBlack,
+    shadowOpacity: 0.12,
   },
 });

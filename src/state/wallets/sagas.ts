@@ -193,7 +193,7 @@ export default [
   takeLatestPerKey(WalletsAction.RefreshWallet, refreshWalletSaga, ({ id }: { id: string }) => id),
   takeEvery(electrumXActions.ElectrumXAction.ScriptHashChanged, scripHashHasChangedSaga),
   takeEvery(WalletsAction.DeleteWallet, deleteWalletSaga),
-  takeLatest(WalletsAction.LoadWallets, loadWalletsSaga),
+  takeLatest([WalletsAction.LoadWallets, electrumXActions.ElectrumXAction.ConnectionReconnected], loadWalletsSaga),
   takeEvery(WalletsAction.CreateWallet, createWalletSaga),
   takeEvery(WalletsAction.ImportWallet, importWalletSaga),
   takeEvery(WalletsAction.UpdateWallet, updateWalletSaga),

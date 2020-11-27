@@ -39,12 +39,11 @@ interface MapStateToProps {
   isLoading: boolean;
   language: string;
   isInitialized: boolean;
-  hasConnectionIssues: boolean;
+  hasConnectedToServerAtLeaseOnce: boolean;
 }
 
 interface ActionsDisptach {
   checkCredentials: Function;
-  checkConnection: Function;
   startElectrumXListeners: () => StartListenersAction;
   loadWallets: () => LoadWalletsAction;
   fetchBlockHeight: () => FetchBlockHeightAction;
@@ -137,7 +136,7 @@ class Navigator extends React.Component<Props, State> {
   };
 
   renderRoutes = () => {
-    const { isLoading, unlockKey, isAuthenticated, isInitialized, hasConnectionIssues } = this.props;
+    const { isLoading, unlockKey, isAuthenticated, hasConnectedToServerAtLeaseOnce } = this.props;
     if (isLoading) {
       return null;
     }
@@ -154,7 +153,7 @@ class Navigator extends React.Component<Props, State> {
       return <PasswordNavigator />;
     }
 
-    if (!isInitialized && hasConnectionIssues) {
+    if (!hasConnectedToServerAtLeaseOnce) {
       return <ConnectionIssuesScreen />;
     }
 
@@ -186,7 +185,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isAuthenticated: authenticationSelectors.isAuthenticated(state),
   language: appSettingsSelectors.language(state),
   isInitialized: walletsSelectors.isInitialized(state),
-  hasConnectionIssues: electrumXSelectors.hasConnectionIssues(state),
+  hasConnectedToServerAtLeaseOnce: electrumXSelectors.hasConnectedToServerAtLeaseOnce(state),
 });
 
 const mapDispatchToProps: ActionsDisptach = {

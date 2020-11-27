@@ -5,6 +5,7 @@ export interface ElectrumXState {
   subscribedScriptHashes: string[];
   isServerConnected: boolean;
   isInternetReachable: boolean;
+  hasConnectedToServerAtLeaseOnce: boolean;
   error: string;
 }
 
@@ -13,6 +14,7 @@ const initialState: ElectrumXState = {
   subscribedScriptHashes: [],
   isServerConnected: false,
   isInternetReachable: false,
+  hasConnectedToServerAtLeaseOnce: false,
   error: '',
 };
 
@@ -54,6 +56,7 @@ export const electrumXReducer = (state = initialState, action: ElectrymXActionTy
       return {
         ...state,
         isServerConnected: action.isServerConnected,
+        hasConnectedToServerAtLeaseOnce: state.hasConnectedToServerAtLeaseOnce || action.isServerConnected,
       };
     default:
       return state;

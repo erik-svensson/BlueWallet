@@ -19,3 +19,5 @@ export const hasConnectionIssues = createSelector(
   isInternetReachable,
   (serverConnection, internetReachable) => !(serverConnection && internetReachable),
 );
+
+export const hasConnectedToServerAtLeaseOnce = createSelector(local, state => state.hasConnectedToServerAtLeaseOnce);
