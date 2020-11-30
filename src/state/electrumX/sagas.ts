@@ -7,8 +7,9 @@ import { takeLatest, put, take, all, call, select } from 'redux-saga/effects';
 
 import { Wallet } from 'app/consts';
 
+import logger from '../../../logger';
 import { addToastMessage } from '../toastMessages/actions';
-import { actions as walletsActions, selectors as walletsSelectors } from '../wallets';
+import * as walletsActions from '../wallets/actions';
 import {
   setBlockHeight,
   fetchBlockHeightFailure,
@@ -19,7 +20,7 @@ import {
   setInternetConnection,
   setServerConnection,
   connectionClosed,
-  connectionReconnected,
+  connectionConnected,
 } from './actions';
 import {
   subscribedScriptHashes,
@@ -93,11 +94,14 @@ export function* listenScriptHashesSaga() {
 function emitOnConnect() {
   return eventChannel(emitter => {
     BlueElectrum.subscribeToOnConnect(() => {
-      console.log('BLUE ELECTRUM CONNECTED');
       emitter(true);
     });
 
-    return () => {};
+    return () => {
+      return () => {
+        logger.info('electrmumX sagas', 'unsubscribed from BlueElectrum.subscribeToOnConnect');
+      };
+    };
   });
 }
 
@@ -107,43 +111,20 @@ export function* listenOnConnect() {
   const chan = yield call(emitOnConnect);
 
   while (true) {
-    const event = yield take(chan);
-    console.log('listenOnConnect', event);
-    // yield put(connectionConnected());
-  }
-}
-
-function emitOnReconnect() {
-  return eventChannel(emitter => {
-    BlueElectrum.subscribeToOnReconnect(() => {
-      console.log('BlueElectrum RECONNECTED');
-      emitter(true);
-    });
-
-    return () => {};
-  });
-}
-
-export function* listenOnReconnect() {
-  yield BlueElectrum.waitTillConnected();
-
-  const chan = yield call(emitOnReconnect);
-
-  while (true) {
-    const event = yield take(chan);
-    console.log('listenOnReconnect', event);
-    yield put(connectionReconnected());
+    yield take(chan);
+    yield put(connectionConnected());
   }
 }
 
 function emitOnClose() {
   return eventChannel(emitter => {
     BlueElectrum.subscribeToOnClose(() => {
-      console.log('CLOSED BLUE ELECTRUM');
       emitter(true);
     });
 
-    return () => {};
+    return () => {
+      logger.info('electrmumX sagas', 'unsubscribed from BlueElectrum.subscribeToOnClose');
+    };
   });
 }
 
@@ -154,8 +135,8 @@ export function* listenOnClose() {
 
   while (true) {
     yield take(chan);
-    const isInternetReachableS = yield select(isInternetReachableSelector);
-    if (isInternetReachableS) {
+    const isInternetReachable = yield select(isInternetReachableSelector);
+    if (isInternetReachable) {
       yield put(
         addToastMessage({
           title: 'Server lost connection',
@@ -169,7 +150,7 @@ export function* listenOnClose() {
 }
 
 export function* subscribeToScriptHashes() {
-  const wallets = yield select(walletsSelectors.wallets);
+  const { wallets } = (yield select()).wallets;
 
   const walletsScriptHashes = compose(
     flatten,
@@ -197,12 +178,6 @@ export function* checkConnection() {
     isInternetReachable: call(NetInfo.fetch),
     isServerConnected: call(BlueElectrum.ping),
   });
-  yield put(
-    addToastMessage({
-      title: 'Internet lost connection',
-      description: 'Internet lost connection desc',
-    }),
-  );
   if (currentIsInternetReachable && !isInternetReachable) {
     yield put(
       addToastMessage({
@@ -269,9 +244,8 @@ export default [
   takeLatest(ElectrumXAction.StartListeners, listenToInternetConnection),
   takeLatest(ElectrumXAction.StartListeners, checkConnection),
   takeLatest(ElectrumXAction.StartListeners, listenOnClose),
-  takeLatest(ElectrumXAction.StartListeners, listenOnReconnect),
   takeLatest(ElectrumXAction.StartListeners, listenOnConnect),
-  takeLatest([ElectrumXAction.StartListeners, ElectrumXAction.ConnectionReconnected], listenScriptHashesSaga),
-  takeLatest([ElectrumXAction.StartListeners, ElectrumXAction.ConnectionReconnected], listenBlockchainHeadersSaga),
-  takeLatest([ElectrumXAction.FetchBlockHeight, ElectrumXAction.ConnectionReconnected], fetchBlockchainHeadersSaga),
+  takeLatest([ElectrumXAction.ConnectionConnected], listenScriptHashesSaga),
+  takeLatest([ElectrumXAction.ConnectionConnected], listenBlockchainHeadersSaga),
+  takeLatest([ElectrumXAction.FetchBlockHeight, ElectrumXAction.ConnectionConnected], fetchBlockchainHeadersSaga),
 ];

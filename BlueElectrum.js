@@ -65,7 +65,6 @@ async function connectMain() {
   }
 
   if (!mainConnected) {
-    console.log('CONNECTION CLOSED');
     logger.info('BlueElectrum', 'Reconnect');
     mainClient.keepAlive = () => {}; // dirty hack to make it stop reconnecting
     mainClient.reconnect = () => {}; // dirty hack to make it stop reconnecting
@@ -89,10 +88,6 @@ module.exports.unsubscribe = function(event) {
 module.exports.subscribeToOnConnect = function(handler) {
   mainClient.onConnect = handler;
 };
-
-// module.exports.subscribeToOnReconnect = function(handler) {
-//   mainClient.onReconnect = handler;
-// };
 
 module.exports.subscribeToOnClose = function(handler) {
   mainClient.onConnectionClose = handler;

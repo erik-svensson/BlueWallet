@@ -41,7 +41,6 @@ const i18n = require('../../../loc');
 
 export function* loadWalletsSaga() {
   try {
-    yield BlueElectrum.ping();
     yield BlueElectrum.waitTillConnected();
 
     yield all([call(() => BlueApp.fetchWalletBalances()), call(() => BlueApp.fetchWalletTransactions())]);
@@ -153,7 +152,6 @@ export function* refreshWalletSaga(action: RefreshWalletAction | unknown) {
     if (!walletToRefresh) {
       throw new Error(`No wallet to refresh`);
     }
-    yield BlueElectrum.ping();
     yield BlueElectrum.waitTillConnected();
 
     yield all([call(() => walletToRefresh.fetchBalance()), call(() => walletToRefresh.fetchTransactions())]);
@@ -171,7 +169,6 @@ export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
   } = action as SendTransactionAction;
 
   try {
-    yield BlueElectrum.ping();
     yield BlueElectrum.waitTillConnected();
     const result = yield BlueElectrum.broadcast(txDecoded.toHex());
 
@@ -203,7 +200,7 @@ export default [
   takeLatestPerKey(WalletsAction.RefreshWallet, refreshWalletSaga, ({ id }: { id: string }) => id),
   takeEvery(electrumXActions.ElectrumXAction.ScriptHashChanged, scripHashHasChangedSaga),
   takeEvery(WalletsAction.DeleteWallet, deleteWalletSaga),
-  takeLatest([WalletsAction.LoadWallets, electrumXActions.ElectrumXAction.ConnectionReconnected], loadWalletsSaga),
+  takeLatest([WalletsAction.LoadWallets, electrumXActions.ElectrumXAction.ConnectionConnected], loadWalletsSaga),
   takeEvery(WalletsAction.CreateWallet, createWalletSaga),
   takeEvery(WalletsAction.ImportWallet, importWalletSaga),
   takeEvery(WalletsAction.UpdateWallet, updateWalletSaga),

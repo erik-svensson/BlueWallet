@@ -37,7 +37,7 @@ export const electrumXReducer = (state = initialState, action: ElectrymXActionTy
         subscribedScriptHashes: [],
         isServerConnected: false,
       };
-    case ElectrumXAction.ConnectionReconnected:
+    case ElectrumXAction.ConnectionConnected:
       return {
         ...state,
         isServerConnected: true,
