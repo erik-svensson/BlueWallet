@@ -132,20 +132,6 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
       : this.transactionTagsSent;
   }
 
-  formatFromAmount = () => {
-    const { fromAmount } = this.props.filters;
-
-    !this.validateAmount(fromAmount) &&
-      this.props.updateFromAmount(i18n.formatBalanceWithoutSuffix(Number(fromAmount), '', true).toString());
-  };
-
-  formatToAmount = () => {
-    const { toAmount } = this.props.filters;
-
-    !this.validateAmount(toAmount) &&
-      this.props.updateToAmount(i18n.formatBalanceWithoutSuffix(Number(toAmount), '', true).toString());
-  };
-
   formatAmount = (amount: string, update: 'updateFromAmount' | 'updateToAmount') => {
     !this.validateAmount(amount) &&
       this.props[update](i18n.formatBalanceWithoutSuffix(Number(amount), '', true).toString());
