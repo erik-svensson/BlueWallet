@@ -15,7 +15,7 @@ import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
 import * as walletsSelectors from 'app/state/wallets/selectors';
 import { palette } from 'app/styles';
 
-import { DashboarContentdHeader } from './DashboarContentdHeader';
+import { DashboardContentHeader } from './DashboardContentHeader';
 import { DashboardHeader } from './DashboardHeader';
 import TransactionList from './TransactionList';
 import { WalletsCarousel } from './WalletsCarousel';
@@ -70,18 +70,11 @@ class DashboardScreen extends Component<Props, State> {
   getActiveWallet = () => {
     const { lastSnappedTo } = this.state;
     const { wallets } = this.props;
-    return wallets[lastSnappedTo] || wallets[0];
-  };
-
-  getActionWallet = () => {
-    const { lastSnappedTo } = this.state;
-
-    const { wallets } = this.props;
-    return wallets[lastSnappedTo];
+    return wallets[lastSnappedTo] || wallets[wallets.length - 1];
   };
 
   sendCoins = () => {
-    const actionWallet = this.getActionWallet();
+    const actionWallet = this.getActiveWallet();
     this.props.navigation.navigate(Route.SendCoins, {
       fromAddress: actionWallet.getAddress(),
       fromSecret: actionWallet.getSecret(),
@@ -90,14 +83,14 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   receiveCoins = () => {
-    const actionWallet = this.getActionWallet();
+    const actionWallet = this.getActiveWallet();
     this.props.navigation.navigate(Route.ReceiveCoins, {
       id: actionWallet.id,
     });
   };
 
   recoverCoins = () => {
-    const actionWallet = this.getActionWallet();
+    const actionWallet = this.getActiveWallet();
     this.props.navigation.navigate(Route.RecoveryTransactionList, {
       wallet: actionWallet,
     });
@@ -177,7 +170,7 @@ class DashboardScreen extends Component<Props, State> {
           });
         }}
       >
-        <DashboarContentdHeader
+        <DashboardContentHeader
           onSelectPress={this.showModal}
           balance={activeWallet.balance}
           isAllWallets={isAllWallets(activeWallet)}

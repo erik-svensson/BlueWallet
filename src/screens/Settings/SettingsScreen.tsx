@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { icons } from 'app/assets';
@@ -11,7 +11,6 @@ import { BiometricService, AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { updateBiometricSetting } from 'app/state/appSettings/actions';
 
-import config from '../../../config/';
 import { LabeledSettingsRow } from './LabeledSettingsRow';
 
 const i18n = require('../../../loc');
@@ -68,17 +67,16 @@ export const SettingsScreen = (props: Props) => {
         iconHeight={20}
         onPress={goToChangePin}
       />
-      <ListItem
-        disabled={!biometryTypeAvailable}
-        title={
-          biometryTypeAvailable ? i18n.settings[BiometricService.biometryType!] : i18n.settings.notSupportedFingerPrint
-        }
-        source={icons.fingerprintIcon}
-        switchValue={isBiometricsEnabled}
-        onSwitchValueChange={onFingerprintLoginChange}
-        iconWidth={17}
-        iconHeight={19}
-      />
+      {biometryTypeAvailable && (
+        <ListItem
+          title={i18n.settings[BiometricService.biometryType!]}
+          source={icons.fingerprintIcon}
+          switchValue={isBiometricsEnabled}
+          onSwitchValueChange={onFingerprintLoginChange}
+          iconWidth={17}
+          iconHeight={19}
+        />
+      )}
     </>
   );
 
@@ -89,10 +87,7 @@ export const SettingsScreen = (props: Props) => {
   return (
     <>
       <AppStateManager handleAppComesToForeground={refreshBiometricsAvailability} />
-      {/*	
-       // @ts-ignore */}
-      <Header navigation={props.navigation} title={i18n.settings.header} />
-      <Text>{`Network info: ${config.host}:${config.port}`}</Text>
+      <Header title={i18n.settings.header} />
       <ScreenTemplate>
         <Image source={logoSource} style={styles.logo} resizeMode="contain" />
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>

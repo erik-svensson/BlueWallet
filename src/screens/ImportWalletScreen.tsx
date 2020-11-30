@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { compose } from 'lodash/fp';
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Text, Keyboard, Alert } from 'react-native';
+import { View, StyleSheet, Text, Keyboard, Alert, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, TextAreaItem, FlatButton, ScreenTemplate, InputItem, CheckBox } from 'app/components';
@@ -18,6 +18,7 @@ import {
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { withCheckNetworkConnection } from 'app/hocs';
+import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
 import { importWallet as importWalletAction, ImportWalletAction } from 'app/state/wallets/actions';
@@ -61,6 +62,14 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     label: '',
     validationError: '',
   };
+
+  componentDidMount() {
+    preventScreenshots();
+  }
+
+  componentWillUnmount() {
+    allowScreenshots();
+  }
 
   setCustomWords = (customWords: string) => this.setState({ customWords });
 
@@ -414,12 +423,15 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
   importMnemonic = (mnemonic: string) => {
     const trimmedMnemonic = mnemonic.trim().replace(/ +/g, ' ');
-    if (this.props?.route.params.walletType === HDSegwitP2SHArWallet.type) {
+
+    if (this.props?.route.params.walletType === '2-Key Vault') {
       return this.createARWallet(trimmedMnemonic);
     }
-    if (this.props?.route.params.walletType === HDSegwitP2SHAirWallet.type) {
+
+    if (this.props?.route.params.walletType === '3-Key Vault') {
       return this.createAIRWallet(trimmedMnemonic);
     }
+
     this.createWalletMessage(() => {
       this.importLegacyWallet(trimmedMnemonic);
     });
@@ -429,6 +441,12 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     const { checkNetworkConnection } = this.props;
     checkNetworkConnection(() => func());
   };
+
+  get canScan() {
+    const { validationError, label } = this.state;
+
+    return label.trim() && !!!validationError;
+  }
 
   render() {
     const { validationError, text, label, hasCustomWords, customWords } = this.state;
@@ -450,15 +468,14 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
             />
           </>
         }
-        header={
-          <Header navigation={this.props.navigation} isBackArrow={true} title={i18n.wallets.importWallet.header} />
-        }
+        header={<Header isBackArrow={true} title={i18n.wallets.importWallet.header} />}
       >
         <View style={styles.inputItemContainer}>
           <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>
           {this.renderSubtitle()}
           <TextAreaItem
             error={validationError}
+            autoCapitalize="none"
             onChangeText={this.onChangeText}
             placeholder={i18n.wallets.importWallet.placeholder}
             style={styles.textArea}
@@ -475,6 +492,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
           {hasCustomWords && (
             <TextAreaItem
               value={customWords}
+              autoCapitalize="none"
               onChangeText={this.setCustomWords}
               placeholder={i18n.wallets.importWallet.customWords}
               style={styles.textAreaCustomWords}

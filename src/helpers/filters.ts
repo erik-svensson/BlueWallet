@@ -1,10 +1,15 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 
 import { CONST, Transaction, Filters, TagsType } from 'app/consts';
 
 import { satoshiToBtc } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 const filterByTransactionType = (transactions: Transaction[], type?: string): Transaction[] => {
   if (type === CONST.send) {
@@ -13,32 +18,18 @@ const filterByTransactionType = (transactions: Transaction[], type?: string): Tr
   return transactions.filter(transaction => Number(transaction.value) > 0);
 };
 
-const filterByAddress = (transactions: Transaction[], address: string, type?: string): Transaction[] => {
-  if (type === CONST.send) {
-    return transactions.filter(transaction => {
-      const inputs: string[] = [];
-      transaction.inputs.filter(input => {
-        inputs.push(...input.addresses);
-      });
-      if (inputs.includes(address)) return transaction;
-    });
-  } else {
-    return transactions.filter(transaction => {
-      const outputs: string[] = [];
-      transaction.outputs.filter(output => {
-        outputs.push(...output.addresses);
-      });
-      if (outputs.includes(address)) return transaction;
-    });
-  }
-};
+const filterByAddress = (transactions: Transaction[], address: string, type?: string): Transaction[] =>
+  type === CONST.receive
+    ? transactions.filter(transaction => transaction.inputs.some(input => input.addresses.includes(address)))
+    : transactions.filter(transaction => transaction.outputs.some(output => output.addresses.includes(address)));
 
 const filterByFromDate = (transactions: Transaction[], fromDate: string): Transaction[] => {
   return transactions.filter(transaction => {
     if (!transaction.received) {
       return;
     }
-    return moment(fromDate).isSameOrBefore(transaction.received, 'day');
+
+    return dayjs(fromDate).isSameOrBefore(transaction.received, 'day');
   });
 };
 
@@ -47,7 +38,8 @@ const filterByToDate = (transactions: Transaction[], toDate: string): Transactio
     if (!transaction.received) {
       return;
     }
-    return moment(toDate).isSameOrAfter(transaction.received, 'day');
+
+    return dayjs(toDate).isSameOrAfter(transaction.received, 'day');
   });
 };
 

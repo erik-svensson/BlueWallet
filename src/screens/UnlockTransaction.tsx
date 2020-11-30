@@ -33,8 +33,6 @@ class UnlockTransaction extends PureComponent<Props, State> {
     isLoading: false,
   };
 
-  inputRef: any = React.createRef();
-
   onConfirmWithNetworkConnectionCheck = () => {
     const { checkNetworkConnection } = this.props;
     checkNetworkConnection(this.onConfirm);
@@ -48,7 +46,11 @@ class UnlockTransaction extends PureComponent<Props, State> {
       },
       async () => {
         if (await SecureStorageService.checkSecuredPassword(CONST.transactionPassword, this.state.password)) {
-          onSuccess();
+          try {
+            await onSuccess();
+          } catch (_) {
+            this.setState({ isLoading: false });
+          }
         } else {
           this.setState({
             isLoading: false,
@@ -81,7 +83,7 @@ class UnlockTransaction extends PureComponent<Props, State> {
             disabled={isLoading || password.length < CONST.transactionMinPasswordLength}
           />
         }
-        header={<Header navigation={this.props.navigation} title={i18n.unlockTransaction.headerText} isBackArrow />}
+        header={<Header title={i18n.unlockTransaction.headerText} isBackArrow />}
       >
         <Text style={styles.title}>{i18n.unlockTransaction.title}</Text>
         <Text style={styles.description}>{i18n.unlockTransaction.description}</Text>
@@ -91,7 +93,6 @@ class UnlockTransaction extends PureComponent<Props, State> {
           </TouchableOpacity>
           <InputItem
             value={password}
-            ref={this.inputRef}
             setValue={this.updatePassword}
             autoFocus={true}
             secureTextEntry={!isVisible}
@@ -113,8 +114,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '100%',
+    height: 80,
   },
-  visibilityIcon: { position: 'absolute', right: 0, top: 28, zIndex: 3 },
+  visibilityIcon: { position: 'absolute', right: 0, top: 30, zIndex: 3 },
   description: {
     ...typography.caption,
     color: palette.textGrey,

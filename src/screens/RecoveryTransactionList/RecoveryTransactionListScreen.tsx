@@ -28,7 +28,6 @@ interface MapStateProps {
   wallets: Wallet[];
   transactions: Transaction[];
 }
-
 interface State {
   selectedTransactions: Transaction[];
 }
@@ -147,9 +146,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 
     return (
       <View style={styles.container}>
-        {/**
-         // @ts-ignore */}
-        <Header title={i18n.send.recovery.recover} isBackArrow navigation={navigation} />
+        <Header title={i18n.send.recovery.recover} isBackArrow />
         <View style={styles.contentContainer}>
           <WalletDropdown
             onSelectPress={this.showModal}
@@ -157,19 +154,13 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
             label={wallet.label}
             unit={wallet.preferredBalanceUnit}
           />
+          {!this.isEmptyList() && (
+            <TouchableOpacity onPress={toggleAll} style={styles.toggleAllWrapper}>
+              <CheckBox onPress={toggleAll} right checked={areAllTransactionsSelected} />
+            </TouchableOpacity>
+          )}
           <SectionList
             style={styles.listViewWrapper}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            ListHeaderComponent={
-              <>
-                {!this.isEmptyList() && (
-                  <TouchableOpacity onPress={toggleAll} style={styles.toggleAllWrapper}>
-                    <CheckBox onPress={toggleAll} right checked={areAllTransactionsSelected} />
-                  </TouchableOpacity>
-                )}
-              </>
-            }
             sections={getGroupedTransactions(transactions)}
             keyExtractor={item => item.txid}
             renderItem={this.renderItem}
@@ -190,7 +181,6 @@ const mapStateToProps = (state: ApplicationState & WalletsState, props: Props): 
   const { wallet } = props.route.params;
   return {
     wallets: selectors.walletsWithRecoveryTransaction(state),
-    // @ts-ignore - TODO: resolve it later.
     transactions: selectors.getTransactionsToRecoverByWalletId(state, wallet.id),
   };
 };
@@ -224,7 +214,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginTop: -40,
-    top: 55,
     right: -9,
     display: 'flex',
     alignSelf: 'flex-end',

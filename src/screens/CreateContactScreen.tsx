@@ -150,12 +150,12 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
             title={i18n.contactCreate.buttonLabel}
           />
         }
-        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.contactCreate.screenTitle} />}
+        header={<Header isBackArrow title={i18n.contactCreate.screenTitle} />}
       >
         <Text style={styles.subtitle}>{i18n.contactCreate.subtitle}</Text>
         <Text style={styles.description}>{i18n.contactCreate.description}</Text>
         <InputItem setValue={this.setName} label={i18n.contactCreate.nameLabel} error={name.error} />
-        <View>
+        <View style={styles.inputContainer}>
           <InputItem
             error={address.error}
             focused={!!address.value}
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   description: {
-    marginBottom: 52,
+    marginBottom: 40,
     color: palette.textGrey,
     ...typography.caption,
     textAlign: 'center',
@@ -195,7 +195,11 @@ const styles = StyleSheet.create({
   scanQRCodeButton: {
     position: 'absolute',
     right: 0,
-    bottom: 36,
+    top: 20,
+    padding: 8,
+  },
+  inputContainer: {
+    height: 100,
   },
   qrCodeImage: {
     width: 24,

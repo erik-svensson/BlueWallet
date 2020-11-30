@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { difference } from 'lodash';
+import { difference, random } from 'lodash';
 import { compose, map, mapValues, values, flatten, uniq } from 'lodash/fp';
 
 import config from './config';
+import { messages, AppErrors } from './error';
 import logger from './logger';
 import { btcToSatoshi } from './utils/bitcoin';
 
@@ -11,21 +12,37 @@ const bitcoin = require('bitcoinjs-lib');
 const reverse = require('buffer-reverse');
 const ElectrumClient = require('electrum-client');
 
-export const defaultPeer = { host: 'e1.electrumx.bitcoinvault.global', tcp: '50001' };
 const hardcodedPeers = [
   { host: 'e1.electrumx.bitcoinvault.global', tcp: '50001' },
   { host: '157.245.20.66', tcp: '50001' },
 ];
 
-export let mainClient = false;
+let mainClient = false;
 let mainConnected = false;
 let wasConnectedAtLeastOnce = false;
+let currentHost = '';
+
+const getHost = () => {
+  const hosts = config.hosts;
+  const hostsLength = hosts.length;
+
+  if (hostsLength === 1) {
+    return hosts[0];
+  }
+  while (true) {
+    const selectedHost = hosts[random(0, hostsLength - 1)];
+    if (currentHost !== selectedHost) {
+      currentHost = selectedHost;
+      return currentHost;
+    }
+  }
+};
 
 async function connectMain() {
-  const usingPeer = { host: config.host, tcp: config.port, protocol: config.protocol };
+  const usingPeer = { host: getHost(), port: config.port, protocol: config.protocol };
   try {
     logger.info('BlueElectrum', `begin connection: ${JSON.stringify(usingPeer)}`);
-    mainClient = new ElectrumClient(usingPeer.tcp, usingPeer.host, usingPeer.protocol);
+    mainClient = new ElectrumClient(usingPeer.port, usingPeer.host, usingPeer.protocol);
 
     mainClient.onError = function(e) {
       logger.error('BlueElectrum', e.message);
@@ -73,9 +90,9 @@ module.exports.subscribeToOnConnect = function(handler) {
   mainClient.onConnect = handler;
 };
 
-module.exports.subscribeToOnReconnect = function(handler) {
-  mainClient.onReconnect = handler;
-};
+// module.exports.subscribeToOnReconnect = function(handler) {
+//   mainClient.onReconnect = handler;
+// };
 
 module.exports.subscribeToOnClose = function(handler) {
   mainClient.onConnectionClose = handler;
@@ -367,10 +384,21 @@ module.exports.getDustValue = async () => {
 module.exports.broadcast = async function(hex) {
   if (!mainClient) throw new Error('Electrum client is not connected');
   try {
-    const broadcast = await mainClient.blockchainTransaction_broadcast(hex);
-    return broadcast;
+    return await mainClient.blockchainTransaction_broadcast(hex);
   } catch (error) {
-    return error;
+    if (error?.code === 1) {
+      if (error.message.includes(messages.txnMempoolConflictCode18)) {
+        throw new AppErrors.DoubleSpentFundsError();
+      }
+      if (error.message.includes(messages.missingInputs)) {
+        throw new AppErrors.NotExistingFundsError();
+      }
+      if (error.message.includes(messages.dustCode64)) {
+        throw new AppErrors.DustError();
+      }
+      throw new AppErrors.BroadcastError(error.message);
+    }
+    throw error;
   }
 };
 

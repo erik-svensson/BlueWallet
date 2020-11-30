@@ -77,8 +77,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
             disabled={password.length < CONST.transactionMinPasswordLength}
           />
         }
-        // @ts-ignore
-        header={<Header navigation={this.props.navigation} title={i18n.onboarding.onboarding} />}
+        header={<Header title={i18n.onboarding.onboarding} />}
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.onboarding.createPassword}</Text>
@@ -86,7 +85,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
         </View>
         <View style={styles.inputItemContainer}>
           <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisability}>
-            <Image style={styles.icon} source={isVisible ? icons.visibilityOn : icons.visibilityOff} />
+            <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem
             value={password}
@@ -115,6 +114,7 @@ const styles = StyleSheet.create({
   inputItemContainer: {
     paddingTop: 20,
     width: '100%',
+    height: 100,
   },
   visibilityIcon: { position: 'absolute', right: 0, top: 48, zIndex: 3 },
   icon: {

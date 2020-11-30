@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { Text, StyleSheet, Alert, View } from 'react-native';
+import { Text, StyleSheet, Alert, View, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, TextAreaItem, FlatButton, Button, InputItem } from 'app/components';
@@ -8,6 +8,7 @@ import { Route, CONST, MainCardStackNavigatorParams, Authenticator as IAuthentic
 import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { matchAlphanumericCharacters } from 'app/helpers/string';
+import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
 import { actions, selectors } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
@@ -42,6 +43,14 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     mnemonicError: '',
   };
 
+  componentDidMount() {
+    preventScreenshots();
+  }
+
+  componentWillUnmount() {
+    allowScreenshots();
+  }
+
   setMnemonic = (mnemonic: string) => {
     const trimmedMnemonic = mnemonic.trim();
 
@@ -71,7 +80,6 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     const { navigation } = this.props;
     navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (data: string) => {
-        navigation.goBack();
         this.createImportMessage(() => this.createAuthenticatorScan(data));
       },
     });
@@ -159,28 +167,37 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
     return !!(name && mnemonic && !this.hasErrors());
   };
 
+  sendFeedback = () => {
+    const { name } = this.state;
+    if (!!!name.trim()) {
+      this.setState({ nameError: i18n.authenticators.errors.noEmpty });
+    }
+  };
+
   render() {
     const { mnemonicError, name } = this.state;
-
     return (
       <ScreenTemplate
         footer={
           <>
-            <Button
-              disabled={!this.canSubmit()}
-              title={i18n.wallets.importWallet.import}
-              onPress={this.createAuthenticatorForm}
-            />
-            <FlatButton
-              containerStyle={styles.scanQRCodeButtonContainer}
-              title={i18n.wallets.importWallet.scanQrCode}
-              onPress={this.scanQRCode}
-              disabled={!name || !!this.validationError}
-            />
+            <TouchableHighlight onPress={this.sendFeedback} activeOpacity={0} underlayColor={'transparent'}>
+              <Button
+                disabled={!this.canSubmit()}
+                title={i18n.wallets.importWallet.import}
+                onPress={this.createAuthenticatorForm}
+              />
+            </TouchableHighlight>
+            <TouchableHighlight onPress={this.sendFeedback} activeOpacity={0} underlayColor={'transparent'}>
+              <FlatButton
+                containerStyle={styles.scanQRCodeButtonContainer}
+                title={i18n.wallets.importWallet.scanQrCode}
+                onPress={this.scanQRCode}
+                disabled={!name || !!this.validationError}
+              />
+            </TouchableHighlight>
           </>
         }
-        // @ts-ignore
-        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.authenticators.import.title} />}
+        header={<Header isBackArrow title={i18n.authenticators.import.title} />}
       >
         <View style={styles.inputItemContainer}>
           <Text style={styles.title}>{i18n.authenticators.import.subtitle}</Text>

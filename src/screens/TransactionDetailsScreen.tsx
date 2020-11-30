@@ -1,7 +1,7 @@
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import dayjs from 'dayjs';
 import { map, compose, uniq, flatten, join } from 'lodash/fp';
-import moment from 'moment';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Linking, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
@@ -13,31 +13,31 @@ import {
   StyledText,
   Chip,
   ScreenTemplate,
-  TranscationLabelStatus,
+  TransactionLabelStatus,
   Label,
   EllipsisText,
 } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Route, MainCardStackNavigatorParams, RootStackParams, TxType } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, TxType, CONST } from 'app/consts';
 import { getConfirmationsText } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { selectors, reducer } from 'app/state/transactionsNotes';
 import {
   createTransactionNoteSuccess,
   updateTransactionNote,
-  CreateTransactionNoteAction,
+  CreateTransactionNoteSuccessAction,
   UpdateTransactionNoteAction,
 } from 'app/state/transactionsNotes/actions';
 import { typography, palette } from 'app/styles';
 
 import config from '../../config';
-import { satoshiToBtc, formatToBtcv } from '../../utils/bitcoin';
+import { satoshiToBtc, formatToBtcv, formatToBtcvWithoutUnit } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
 
 interface Props {
   transactionNotes: Record<string, string>;
-  createTransactionNoteSuccess: (transactionID: string, note: string) => CreateTransactionNoteAction;
+  createTransactionNoteSuccess: (txHash: string, note: string) => CreateTransactionNoteSuccessAction;
   updateTransactionNote: (transactionID: string, note: string) => UpdateTransactionNoteAction;
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
@@ -56,10 +56,11 @@ class TransactionDetailsScreen extends Component<Props> {
     const {
       transaction: { hash },
     } = this.props.route.params;
+    const trimmedNote = note.trim();
     if (!this.props.note) {
-      this.props.createTransactionNoteSuccess(hash, note);
+      this.props.createTransactionNoteSuccess(hash, trimmedNote);
     } else {
-      this.props.updateTransactionNote(hash, note);
+      this.props.updateTransactionNote(hash, trimmedNote);
     }
   };
 
@@ -101,9 +102,10 @@ class TransactionDetailsScreen extends Component<Props> {
             transaction.toExternalAddress ? styles.lightGrayText : null,
           ]}
         >
-          {formatToBtcv(satoshiToBtc(transaction.valueWithoutFee).toNumber())}
+          {formatToBtcvWithoutUnit(satoshiToBtc(transaction.valueWithoutFee).toNumber())}
         </Text>
-        <TranscationLabelStatus status={transaction.status} />
+        <Text style={styles.unit}>{CONST.preferredBalanceUnit}</Text>
+        <TransactionLabelStatus status={transaction.status} />
         {transaction.blockedAmount !== undefined && (
           <View style={styles.amountWrapper}>
             <Text style={[styles.value, styles.textRed]}>{formatToBtcv(transaction.blockedAmount)}</Text>
@@ -156,11 +158,12 @@ class TransactionDetailsScreen extends Component<Props> {
     const { transaction } = this.props.route.params;
     const { note } = this.props;
     this.props.navigation.navigate(Route.EditText, {
-      title: transaction.time ? moment.unix(transaction.time).format('lll') : '',
+      title: transaction.time ? dayjs.unix(transaction.time).format('lll') : '',
       label: i18n.transactions.details.note,
       onSave: this.updateNote,
       value: note,
       header: this.renderHeader(),
+      emptyValueAllowed: true,
     });
   };
 
@@ -196,15 +199,14 @@ class TransactionDetailsScreen extends Component<Props> {
     const { transaction } = this.props.route.params;
     const fromValue = this.getAddresses('inputs');
     const toValue = this.getAddresses('outputs');
+    const splitForm = fromValue.split(',')[0];
     return (
       <ScreenTemplate
         header={
           <Header
-            // @ts-ignore
-            navigation={this.props.navigation}
             isBackArrow
             title={
-              transaction.time ? moment.unix(transaction.time).format('lll') : i18n.transactions.details.timePending
+              transaction.time ? dayjs.unix(transaction.time).format('lll') : i18n.transactions.details.timePending
             }
           />
         }
@@ -227,13 +229,13 @@ class TransactionDetailsScreen extends Component<Props> {
         <View style={styles.contentRowContainer}>
           <View style={styles.row}>
             <Text style={styles.contentRowTitle}>{i18n.transactions.details.from}</Text>
-            <CopyButton textToCopy={fromValue.split(',')[0]} />
+            <CopyButton textToCopy={splitForm} />
           </View>
           <Text style={styles.contentRowBody}>{fromValue}</Text>
           <StyledText
             title={i18n.transactions.details.addToAddressBook}
             onPress={() => {
-              this.addToAddressBook(fromValue);
+              this.addToAddressBook(splitForm);
             }}
           />
         </View>
@@ -250,19 +252,17 @@ class TransactionDetailsScreen extends Component<Props> {
             <CopyButton textToCopy={transaction.txid} />
           </View>
           <Text style={styles.contentRowBody}>{transaction.txid}</Text>
-          {!config.isBeta && (
-            <StyledText
-              title={i18n.transactions.details.viewInBlockRxplorer}
-              onPress={() => {
-                const url = `http://explorer.bitcoinvault.global/tx/${transaction.txid}`;
-                Linking.canOpenURL(url).then(supported => {
-                  if (supported) {
-                    Linking.openURL(url);
-                  }
-                });
-              }}
-            />
-          )}
+          <StyledText
+            title={i18n.transactions.details.viewInBlockRxplorer}
+            onPress={() => {
+              const url = `${config.explorerUrl}/tx/${transaction.txid}`;
+              Linking.canOpenURL(url).then(supported => {
+                if (supported) {
+                  Linking.openURL(url);
+                }
+              });
+            }}
+          />
         </View>
         <View style={styles.contentRowContainer}>
           <Text style={styles.contentRowTitle}>{i18n.transactions.details.transactionType}</Text>
@@ -301,7 +301,6 @@ const mapDispatchToProps = {
   updateTransactionNote,
 };
 
-// @ts-ignore - TODO: fix it later
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionDetailsScreen);
 
 const styles = StyleSheet.create({
@@ -310,7 +309,6 @@ const styles = StyleSheet.create({
     marginBottom: 13,
   },
   walletLabel: {
-    marginRight: 50,
     ...typography.headline8,
   },
   opacity: {
@@ -343,10 +341,14 @@ const styles = StyleSheet.create({
   value: {
     ...typography.headline5,
     marginTop: 6,
-    width: 85,
     textAlign: 'center',
     lineHeight: 15,
-    height: 45,
+    height: 25,
+  },
+  unit: {
+    ...typography.headline5,
+    lineHeight: 15,
+    height: 25,
   },
   noteContainer: {
     width: '100%',

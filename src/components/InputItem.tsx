@@ -107,7 +107,7 @@ export class InputItem extends PureComponent<Props, State> {
 
     const top = this.state.isAnimatedFocused.interpolate({
       inputRange: [0, 1],
-      outputRange: [12, -8],
+      outputRange: [18, -8],
     });
 
     const fontSize = isAnimatedFocused.interpolate({
@@ -130,7 +130,7 @@ export class InputItem extends PureComponent<Props, State> {
             !!suffix && styles.isSuffix,
             isActive && styles.isActiveInput,
             !!error && styles.isError,
-            { height: Math.max(27, height) },
+            { height: Math.max(40, height) },
             this.props.style,
           ]}
           selectionColor={palette.textSecondary}
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   suffix: {
     position: 'absolute',
     right: 0,
-    top: 12,
+    top: 18,
     ...typography.caption,
     lineHeight: 19,
   },

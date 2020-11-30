@@ -7,15 +7,14 @@ import { connect } from 'react-redux';
 import { icons, images } from 'app/assets';
 import { Header, Image, ListEmptyState, ScreenTemplate, EllipsisText } from 'app/components';
 import { Route, Authenticator, FinalizedPSBT, CONST } from 'app/consts';
+import { formatDate } from 'app/helpers/date';
 import { isCodeChunked } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { selectors, actions } from 'app/state/authenticators';
 import { palette, typography } from 'app/styles';
-import { formatDate } from 'app/utils/date';
 
 const BigNumber = require('bignumber.js');
 
-const BlueElectrum = require('../../../BlueElectrum');
 const i18n = require('../../../loc');
 
 interface MapStateProps {
@@ -50,7 +49,6 @@ class AuthenticatorListScreen extends Component<Props, State> {
     const { navigation } = this.props;
     navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (psbt: string) => {
-        navigation.goBack();
         if (isCodeChunked(psbt)) {
           const [chunkNo, chunksQuantity, codeValue] = psbt.split(';');
           const newCodeValue = this.state.codeValue.concat(codeValue);
@@ -92,7 +90,6 @@ class AuthenticatorListScreen extends Component<Props, State> {
           fromWallet: {
             label: authenticator.name,
             preferredBalanceUnit: CONST.preferredBalanceUnit,
-            broadcastTx: BlueElectrum.broadcast,
           },
           txDecoded: tx,
           recipients,
@@ -162,8 +159,6 @@ class AuthenticatorListScreen extends Component<Props, State> {
         noScroll={true}
         header={
           <Header
-            // @ts-ignore
-            navigation={navigation}
             isBackArrow={false}
             title={i18n.tabNavigator.authenticators}
             addFunction={() => navigation.navigate(Route.CreateAuthenticator)}

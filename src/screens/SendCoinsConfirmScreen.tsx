@@ -90,45 +90,52 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
   navgitateToMainCard = () => this.props.navigation.navigate(Route.MainCardStackNavigator);
 
-  broadcast = () => {
-    const {
-      createTransactionNote,
-      sendTransaction,
-      route: {
-        params: { txDecoded, successMsgDesc, memo },
-      },
-      navigation,
-    } = this.props;
-
-    sendTransaction(
-      { txDecoded },
-      {
-        onSuccess: (txid: string) => {
-          if (memo) {
-            createTransactionNote(txid, memo);
-          }
-
-          CreateMessage({
-            title: i18n.message.hooray,
-            description: successMsgDesc || i18n.send.success.description,
-            type: MessageType.success,
-            buttonProps: {
-              title: i18n.message.returnToDashboard,
-              onPress: this.navgitateToMainCard,
-            },
-          });
+  broadcast = () =>
+    new Promise((resolve, reject) => {
+      const {
+        createTransactionNote,
+        sendTransaction,
+        route: {
+          params: { txDecoded, successMsgDesc, memo },
         },
-        onFailure: (error: string) => {
-          Alert.alert('ERROR', error, [
-            {
-              text: 'OK',
-              onPress: () => navigation.goBack(),
-            },
-          ]);
+        navigation,
+      } = this.props;
+
+      sendTransaction(
+        { txDecoded },
+        {
+          onSuccess: (txid: string) => {
+            const trimmedMemo = memo?.trim();
+
+            if (trimmedMemo) {
+              createTransactionNote(txid, trimmedMemo);
+            }
+
+            CreateMessage({
+              title: i18n.message.hooray,
+              description: successMsgDesc || i18n.send.success.description,
+              type: MessageType.success,
+              buttonProps: {
+                title: i18n.message.returnToDashboard,
+                onPress: () => {
+                  this.navgitateToMainCard();
+                  resolve();
+                },
+              },
+            });
+          },
+          onFailure: (error: string) => {
+            Alert.alert(i18n.send.error.title, error, [
+              {
+                text: 'OK',
+                onPress: () => navigation.goBack(),
+              },
+            ]);
+            reject(error);
+          },
         },
-      },
-    );
-  };
+      );
+    });
 
   goToDetails = () => {
     const { fee, recipients, txDecoded, satoshiPerByte, fromWallet } = this.props.route.params;
@@ -196,8 +203,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     return (
       <ScreenTemplate
         footer={ScreenFooter(this.goToUnlockScreen, this.goToDetails, buttonTitle)}
-        // @ts-ignore
-        header={<Header navigation={navigation} isBackArrow title={headerTitle || i18n.send.header} />}
+        header={<Header isBackArrow title={headerTitle || i18n.send.header} />}
       >
         <View style={styles.container}>
           <View>

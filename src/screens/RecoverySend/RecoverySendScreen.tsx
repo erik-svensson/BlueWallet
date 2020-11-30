@@ -15,6 +15,7 @@ import {
   RootStackParams,
   TransactionInput,
 } from 'app/consts';
+import { processAddressData } from 'app/helpers/DataProcessing';
 import { loadTransactionsFees } from 'app/helpers/fees';
 import { typography, palette } from 'app/styles';
 
@@ -295,6 +296,11 @@ export class RecoverySendScreen extends Component<Props, State> {
       />
     );
   };
+  processAddressData = (data: string) => {
+    const { address } = processAddressData(data);
+
+    this.setAddress(address);
+  };
 
   setAddress = (address: string) => this.setState({ address: address.trim() });
 
@@ -335,8 +341,7 @@ export class RecoverySendScreen extends Component<Props, State> {
             containerStyle={styles.buttonContainer}
           />
         }
-        // @ts-ignore
-        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.send.recovery.recover} />}
+        header={<Header isBackArrow title={i18n.send.recovery.recover} />}
       >
         <WalletDropdown balance={wallet.balance} label={wallet.label} unit={wallet.preferredBalanceUnit} />
         <View style={styles.inputsContainer}>
@@ -358,7 +363,7 @@ export class RecoverySendScreen extends Component<Props, State> {
               style={styles.qrCodeIcon}
               onPress={() =>
                 this.props.navigation.navigate(Route.ScanQrCode, {
-                  onBarCodeScan: this.setAddress,
+                  onBarCodeScan: this.processAddressData,
                 })
               }
             >

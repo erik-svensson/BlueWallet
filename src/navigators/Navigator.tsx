@@ -8,24 +8,18 @@ import { connect } from 'react-redux';
 import { CONST } from 'app/consts';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator, PasswordNavigator } from 'app/navigators';
-import { UnlockScreen, ConnectionIssuesScreen } from 'app/screens';
+import { UnlockScreen, TermsConditionsScreen, ConnectionIssuesScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
-import { navigationRef, AppStateManager, ToastManager } from 'app/services';
+import { navigationRef, ToastManager } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import { updateSelectedLanguage as updateSelectedLanguageAction } from 'app/state/appSettings/actions';
 import { selectors as authenticationSelectors } from 'app/state/authentication';
-import { checkCredentials as checkCredentialsAction } from 'app/state/authentication/actions';
+import { checkCredentials as checkCredentialsAction, checkTc as checkTcAction } from 'app/state/authentication/actions';
 import { selectors as electrumXSelectors } from 'app/state/electrumX';
-import {
-  startListeners,
-  StartListenersAction,
-  fetchBlockHeight as fetchBlockHeightAction,
-  FetchBlockHeightAction,
-} from 'app/state/electrumX/actions';
+import { startListeners, StartListenersAction } from 'app/state/electrumX/actions';
 import { selectors as walletsSelectors } from 'app/state/wallets';
-import { LoadWalletsAction, loadWallets as loadWalletsAction } from 'app/state/wallets/actions';
 import { isAndroid, isIos } from 'app/styles';
 
 import config from '../../config';
@@ -34,6 +28,7 @@ const i18n = require('../../loc');
 
 interface MapStateToProps {
   isPinSet: boolean;
+  isTcAccepted: boolean;
   isAuthenticated: boolean;
   isTxPasswordSet: boolean;
   isLoading: boolean;
@@ -45,9 +40,8 @@ interface MapStateToProps {
 interface ActionsDisptach {
   checkCredentials: Function;
   startElectrumXListeners: () => StartListenersAction;
-  loadWallets: () => LoadWalletsAction;
-  fetchBlockHeight: () => FetchBlockHeightAction;
   updateSelectedLanguage: Function;
+  checkTc: Function;
 }
 
 interface OwnProps {
@@ -68,10 +62,10 @@ class Navigator extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    const { checkCredentials, startElectrumXListeners, fetchBlockHeight } = this.props;
+    const { checkCredentials, startElectrumXListeners, checkTc } = this.props;
+    checkTc();
     checkCredentials();
     startElectrumXListeners();
-    fetchBlockHeight();
     this.initLanguage();
 
     isEmulator().then(isEmulator => {
@@ -129,16 +123,14 @@ class Navigator extends React.Component<Props, State> {
     this.setState({ isBetaVersionRiskAccepted: true });
   };
 
-  refresh = () => {
-    const { loadWallets, fetchBlockHeight } = this.props;
-    loadWallets();
-    fetchBlockHeight();
-  };
-
   renderRoutes = () => {
-    const { isLoading, unlockKey, isAuthenticated, hasConnectedToServerAtLeaseOnce } = this.props;
+    const { isLoading, unlockKey, isAuthenticated, hasConnectedToServerAtLeaseOnce, isTcAccepted } = this.props;
     if (isLoading) {
       return null;
+    }
+
+    if (!isTcAccepted) {
+      return <TermsConditionsScreen />;
     }
 
     if (!__DEV__ && JailMonkey.isJailBroken() && !this.state.isEmulator) {
@@ -168,17 +160,15 @@ class Navigator extends React.Component<Props, State> {
 
   render() {
     return (
-      <>
-        <AppStateManager handleAppComesToForeground={this.refresh} />
-        <NavigationContainer key={this.props.language} ref={navigationRef}>
-          {this.renderRoutes()}
-        </NavigationContainer>
-      </>
+      <NavigationContainer key={this.props.language} ref={navigationRef}>
+        {this.renderRoutes()}
+      </NavigationContainer>
     );
   }
 }
 
 const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
+  isTcAccepted: authenticationSelectors.isTcAccepted(state),
   isLoading: authenticationSelectors.isLoading(state),
   isPinSet: authenticationSelectors.isPinSet(state),
   isTxPasswordSet: authenticationSelectors.isTxPasswordSet(state),
@@ -190,10 +180,9 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
 
 const mapDispatchToProps: ActionsDisptach = {
   checkCredentials: checkCredentialsAction,
+  checkTc: checkTcAction,
   startElectrumXListeners: startListeners,
-  loadWallets: loadWalletsAction,
   updateSelectedLanguage: updateSelectedLanguageAction,
-  fetchBlockHeight: fetchBlockHeightAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigator);

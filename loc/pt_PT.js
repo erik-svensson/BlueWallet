@@ -22,6 +22,19 @@ module.exports = {
     scan: 'Digitalizar',
     storage_is_encrypted: 'O seu armazenamento está encriptado. A palavra-passe é necessária para desencriptá-lo',
   },
+  termsConditions: {
+    header: 'Termos e Condições',
+    title: 'Acordo dos Termos',
+    text: '',
+    buttons: { agree: 'Eu concordo', disagree: 'Eu discordo' },
+    modal: {
+      header: 'Tem a certeza?',
+      text:
+        'Observe que se discordar com os nossos Termos e Condições, não poderá utilizar a aplicação Gold Wallet.\nTem a certeza de que deseja discordar?',
+      noButton: 'Não, eu mudei de ideias',
+      yesButton: 'Sim, eu discordo',
+    },
+  },
   aboutUs: {
     alwaysBackupYourKeys: 'Realizar sempre uma cópia de segurança nas suas chaves',
     buildWithAwesome: 'Construir com Awesome:',
@@ -57,12 +70,8 @@ module.exports = {
         'Introduzir este PIN na aplicação de ambiente de trabalho Electrum Vault para terminar o processo de emparelhamento.',
       subtitle: 'Introduzir PIN',
     },
-    errors: {
-      noEmpty: 'O campo não pode ficar vazio',
-    },
-    export: {
-      title: 'Exportar autenticador',
-    },
+    errors: { noEmpty: 'O campo não pode ficar vazio' },
+    export: { title: 'Exportar autenticador' },
     import: {
       code: 'Código:',
       desc1: 'Escreva a frase semente ou leia o código QR do autenticador que pretende importar.',
@@ -82,7 +91,7 @@ module.exports = {
       noAuthenticators: 'Ainda sem Autenticadores',
       noAuthenticatorsDesc1: 'Toque',
       noAuthenticatorsDesc2: 'para adicionar o seu primeiro autenticador.',
-      scan: 'Ler',
+      scan: 'Digitalizar',
       title: 'Autenticadores da Bitcoin Vault',
     },
     options: {
@@ -107,9 +116,7 @@ module.exports = {
         'Pode usar esta chave pública para importar o seu autenticador para o aplicativo de desktop Electrum Vault durante a criação da carteira 2FA.',
       title: 'Chave Pública',
     },
-    sign: {
-      error: 'Nenhum dos autenticadores pôde assinafr a transação',
-    },
+    sign: { error: 'Nenhum dos autenticadores pôde assinafr a transação' },
   },
   betaVersion: {
     button: 'Eu aceito o risco',
@@ -199,6 +206,7 @@ module.exports = {
   },
   message: {
     allDone: 'Tudo feito!',
+    bePatient: 'Por favor, seja paciente',
     cancelTxSuccess: 'Cancelou a sua transação com sucesso.',
     creatingAuthenticator: 'A criar o seu autenticador',
     creatingAuthenticatorDescription: 'Por favor, seja paciente enquanto criamos o seu autenticador.',
@@ -211,6 +219,7 @@ module.exports = {
     importingAuthenticatorDescription: 'Por favor, seja paciente enquanto importamos o seu autenticador.',
     noTransactions: 'Não foram encontradas transações na carteira',
     noTransactionsDesc: 'Provavelmente, está a tentar importar uma carteira que nunca foi utilizada',
+    processing: 'Em processamento',
     returnToAuthenticators: 'Voltar aos Autenticadores',
     returnToDashboard: 'Voltar ao Painel',
     returnToWalletChoose: 'Voltar à seleção do tipo de carteira',
@@ -301,7 +310,7 @@ module.exports = {
       amount: 'Montante',
       fee: 'Taxa',
       headerText:
-        'Quando existe um grande número de transacções pendentes na rede (>1500), a taxa mais alta irá resultar no processamento mais rápido da sua transacção. Os valores normais são 1-500 sat/b',
+        'Quando existe um grande número de transações pendentes na rede (>1500), a taxa mais alta irá resultar no processamento mais rápido da sua transação. Os valores normais são 1-500 sat/b',
       setTransactionFee: 'Configurar uma taxa de transacção',
     },
     details: {
@@ -311,7 +320,7 @@ module.exports = {
       amount_placeholder: 'montante a enviar (em BTCV)',
       cancel: 'Cancelar',
       create: 'Criar fatura',
-      create_tx_error: 'Houve um erro na criação da transacção. Assegure-se que o endereço é válido.',
+      create_tx_error: 'Houve um erro na criação da transação. Assegure-se que o endereço é válido.',
       fee: 'Taxa:',
       fee_field_is_not_valid: 'O campo da taxa não é válido',
       fee_placeholder: 'mais taxa da transacção (em BTCV)',
@@ -365,9 +374,9 @@ module.exports = {
       type: 'Tipo de transação',
       watchOnlyError: 'Carteiras apenas de observação não podem enviar transações',
     },
-    warning: 'Aviso:',
+    warning: 'Aviso: ',
     warningGeneral:
-      'Aviso: Esteja ciente de que no processo de uso do recurso Transação segura, uma parte dos fundos deixados na sua carteira pode ser bloqueada. Este é um procedimento normal vinculado ao UTXO e aos parâmetros de blockchain da carteira Bitcoin Vault. Os seus fundos serão desbloqueados assim que a transação for verificada (após aproximadamente 24 horas) ou cancelada (dentro de 24 horas).',
+      'Esteja ciente de que no processo de uso do recurso Transação segura, uma parte dos fundos deixados na sua carteira pode ser bloqueada. Este é um procedimento normal vinculado ao UTXO e aos parâmetros de blockchain da carteira Bitcoin Vault. Os seus fundos serão desbloqueados assim que a transação for verificada (após aproximadamente 24 horas) ou cancelada (dentro de 24 horas).',
   },
   settings: {
     about: 'Sobre',
@@ -409,7 +418,7 @@ module.exports = {
       copy: 'Copiar',
       copyAndBoriadcast: 'Copiar e transmitir mais tarde',
       details: 'Detalhes',
-      detailTitle: 'Detalhes da transacção',
+      detailTitle: 'Detalhes da transação',
       fee: 'Taxa',
       from: 'De',
       inputs: 'Entradas',
@@ -428,7 +437,7 @@ module.exports = {
       totalReturnedFee: 'Total de taxa devolvida:',
       transactioFee: 'Taxa de transação',
       transactionDetails: 'Detalhes da transação',
-      transactionHex: 'Transacção hexagonal',
+      transactionHex: 'Transação hexagonal',
       transactionHexDescription: 'Esta é uma transacção hexagonal, assinada e preparada para transmitir à rede',
       transactionId: 'ID da Transação',
       transactionType: 'Tipo de transação',
@@ -449,9 +458,7 @@ module.exports = {
       pending: 'pendente',
       unblocked: 'desbloqueado',
     },
-    list: {
-      conf: 'Confirmações',
-    },
+    list: { conf: 'Confirmações' },
     transactionTypeLabel: {
       canceled: 'Cancelado',
       secure: 'Seguro',
@@ -467,28 +474,28 @@ module.exports = {
   },
   unlockTransaction: {
     description: 'Confirme a palavra-passe de transacção para proceder com a transacção',
-    headerText: 'Confirmar transacção',
-    title: 'Confirmar palavra-passe de transacção',
+    headerText: 'Confirmar transação',
+    title: 'Confirmar palavra-passe de transação',
   },
   wallets: {
     add: {
       addWalletButton: 'Adicionar nova carteira',
       advancedOptions: 'Opções avançadas',
-      air: 'Faz transações Padrão, de Cancelamento e Rápidas.',
-      ar: 'Faz transações Padrão e de Cancelamento.',
+      air: 'Faz transações Seguras, de Cancelamento e de Segurança Rápida.',
+      ar: 'Faz transações Seguras e de Cancelamento.',
       description: 'Introduza um nome para a sua nova carteira.',
       failed: 'Falhou ao criar carteira',
       importWalletButton: 'Importar carteira',
       inputLabel: 'Nome',
       legacy: 'Faz tipos padrão de transações.',
       legacyHDP2SH: 'Contém uma árvore de endereços P2SH gerados a partir de uma única semente de 24 palavras',
-      legacyHDP2SHTitle: 'Herança HD P2SH',
+      legacyHDP2SHTitle: 'Padrão HD P2SH',
       LegacyHDSegWit:
         'Contém uma árvore de endereços segwit nativos, gerados a partir de uma única semente de 24 palavras',
-      legacyHDSegWitTitle: 'Herança HD SegWit',
+      legacyHDSegWitTitle: 'Padrão HD SegWit',
       LegacyP2SH: 'Contém um único endereço P2SH',
-      legacyP2SHTitle: 'Herança P2SH',
-      legacyTitle: 'Herança',
+      legacyP2SHTitle: 'Padrão P2SH',
+      legacyTitle: 'Padrão',
       multipleAddresses: 'Múltiplos endereços',
       publicKeyError: 'Chave pública apresentada é inválida',
       segwidAddress:
@@ -500,7 +507,7 @@ module.exports = {
     },
     addSuccess: {
       description:
-        'A sua carteira foi criada. Tire um momento para anotar esta frase da mnemónica num papel. É a sua cópia de segurança. Pode usá-la para repor a carteira noutros dispositivos.',
+        'A sua carteira foi criada. Tire um momento para anotar esta frase semente num papel. É a sua cópia de segurança. Pode usá-la para repor a carteira noutros dispositivos.',
       okButton: 'OK, anotei-a!',
       subtitle: 'Sucesso',
       title: 'Adicionar nova carteira',
@@ -508,7 +515,7 @@ module.exports = {
     dashboard: {
       allWallets: 'Todas as Carteiras',
       availableBalance: 'Saldo disponível',
-      noTransactions: 'Nenhuma transacção para apresentar.',
+      noTransactions: 'Nenhuma transação para apresentar.',
       noWallets: 'Sem carteiras',
       noWalletsDesc1: 'Nenhuma carteira para apresentar.',
       noWalletsDesc2: 'adicionar a sua primeira carteira.',
@@ -531,32 +538,26 @@ module.exports = {
       details: 'Detalhes',
       edit: 'Editar',
       exportWallet: 'Exportar carteira',
-      latestTransaction: 'Transacção mais recente',
+      latestTransaction: 'Última Transacão',
       nameEdit: 'Editar nome',
       nameLabel: 'Nome',
       showWalletXPUB: 'Apresentar carteira XPUB',
       typeLabel: 'Tipo',
     },
     errors: {
-      duplicatedPublicKey: 'A chave pública já foi acrescentada',
+      duplicatedPublicKey: 'A chave pública já foi adicionada',
       invalidMnemonic: 'Mnemónica inválida',
-      invalidMnemonicWordsNumber: 'Palavras {NúmeroPalavrasrecebidas} apresentadas esperadas {NúmeroPalavrasesperadas}',
+      invalidMnemonicWordsNumber: 'Palavras {NúmeroPalavrasrecebidas} palavras esperadas {NúmeroPalavrasesperadas}',
       invalidPrivateKey: 'Chave privada inválida',
       invalidPublicKey: 'Chave pública inválida',
       invalidQrCode: 'Código QR inválido',
       invalidSign: 'Não foi possível assinar transação',
       noIndexForWord: 'Não foi possível encontrar índice da palavra: {palavra}',
+      wrongNetwork: `Você tem a carteira na rede {walletNetworkName} enquanto a rede de aplicativos é {appNetworkName}. Por favor, entre em contato com o nosso suporte através do Telegram`,
     },
-    export: {
-      title: 'exportar carteira',
-    },
-    exportWallet: {
-      header: 'Exportar carteira',
-      title: 'Frase da mnemónica',
-    },
-    exportWalletXpub: {
-      header: 'Carteira XPUB',
-    },
+    export: { title: 'exportar carteira' },
+    exportWallet: { header: 'Exportar carteira', title: 'Frase Semente' },
+    exportWalletXpub: { header: 'Carteira XPUB' },
     import: {
       do_import: 'Importar',
       error: 'Falha na importação. Garanta que os dados fornecidos são válidos.',
@@ -575,7 +576,7 @@ module.exports = {
       import: 'Importar',
       importARDescription1: 'Introduza a frase semente',
       importARDescription2: 'leia o código QR do tipo de carteira que quer importar',
-      placeholder: 'Mnemónica, chave privada, WIF',
+      placeholder: 'Mnemónica',
       scanCancelPubKey: 'Leia o código QR da Chave Cancelar',
       scanFastPubKey: 'Leia o código QR da Chave Rápida',
       scanPublicKeyDescription:
@@ -589,6 +590,7 @@ module.exports = {
       unsupportedElectrumVaultMnemonic:
         'Esta semente é da Electrum Vault e não é atualmente suportada. Será suportada num futuro próximo.',
       walletInUseValidationError: 'Essa carteira já está a ser usada. Introduza uma carteira válida.',
+      allWalletsValidationError: 'Não pode inserir o nome "Todas as carteiras"',
     },
     publicKey: {
       instantDescription:
@@ -616,13 +618,10 @@ module.exports = {
       with_address: 'com endereço',
     },
     wallet: {
-      latest: 'Transacção mais recente',
+      latest: 'Transação mais recente',
       none: 'Nenhum',
       pendingBalance: 'Saldo pendente',
     },
-    walletModal: {
-      btcv: 'BTCV',
-      wallets: 'Carteiras',
-    },
+    walletModal: { btcv: 'BTCV', wallets: 'Carteiras' },
   },
 };

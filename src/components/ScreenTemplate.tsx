@@ -4,14 +4,13 @@ import {
   StatusBar,
   StyleSheet,
   KeyboardAvoidingView,
-  Platform,
   StyleProp,
   ViewStyle,
   View,
+  NativeScrollEvent,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { CONST } from 'app/consts';
 import { palette } from 'app/styles';
 import { ifIphoneX, isIos } from 'app/styles/helpers';
 
@@ -28,6 +27,8 @@ interface Props {
   contentContainer?: StyleProp<ViewStyle>;
   refreshControl?: React.ReactElement;
   noScroll?: boolean;
+  isCloseToBottom?: (nativeElement: NativeScrollEvent) => boolean;
+  allowedUserClick?: () => void;
   keyboardShouldPersistTaps?: 'always' | 'never' | 'handled';
 }
 
@@ -49,6 +50,8 @@ export class ScreenTemplate extends React.PureComponent<Props> {
       contentContainer,
       refreshControl,
       noScroll,
+      isCloseToBottom,
+      allowedUserClick,
       keyboardShouldPersistTaps,
     } = this.props;
     const Container = noScroll ? View : ScrollView;
@@ -62,6 +65,12 @@ export class ScreenTemplate extends React.PureComponent<Props> {
           contentContainerStyle={[styles.contentContainer, contentContainer]}
           refreshControl={refreshControl}
           keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+          onScroll={({ nativeEvent }) => {
+            if (isCloseToBottom !== undefined && allowedUserClick !== undefined) {
+              isCloseToBottom(nativeEvent) && allowedUserClick();
+            }
+          }}
+          scrollEventThrottle={400}
         >
           {children}
         </Container>

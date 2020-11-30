@@ -109,6 +109,7 @@ export function* listenOnConnect() {
   while (true) {
     const event = yield take(chan);
     console.log('listenOnConnect', event);
+    // yield put(connectionConnected());
   }
 }
 

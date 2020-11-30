@@ -22,6 +22,19 @@ module.exports = {
     scan: 'Scan',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
   },
+  termsConditions: {
+    header: 'Terms & Conditions',
+    title: 'Agreement to Terms',
+    text: '',
+    buttons: { agree: 'I agree', disagree: 'I disagree' },
+    modal: {
+      header: 'Are you sure?',
+      text:
+        'Note that if you disagree to our Terms & Conditions you won’t be able to use the Gold Wallet application.\nAre you sure you want to disagree?',
+      noButton: 'No, I changed my mind',
+      yesButton: 'Yes, I disagree',
+    },
+  },
   aboutUs: {
     alwaysBackupYourKeys: 'Always backup your keys',
     buildWithAwesome: 'Build with awesome:',
@@ -57,12 +70,8 @@ module.exports = {
       description: 'Enter this PIN into the Electrum Vault desktop application to finish the pairing process.',
       subtitle: 'Enter PIN',
     },
-    errors: {
-      noEmpty: 'Field can not empty',
-    },
-    export: {
-      title: 'Export authenticator',
-    },
+    errors: { noEmpty: 'Field can not empty' },
+    export: { title: 'Export authenticator' },
     import: {
       code: 'Code:',
       desc1: 'Write down the seed phrase or scan the QR code of the authenticator you want to import.',
@@ -325,6 +334,9 @@ module.exports = {
       total_exceeds_balance: 'The sending amount exceeds the available balance.',
     },
     error: {
+      doubleSpentFunds: 'You are trying to spend funds that have been already spent.',
+      notExistingFunds: `You are trying to spend funds that don't exists.`,
+      dust: 'You are trying to send for a small amount',
       description: 'Before creating a transaction, you must first add a Bitcoin Vault wallet.',
       title: 'Error',
     },
@@ -363,9 +375,9 @@ module.exports = {
       type: 'Transaction type',
       watchOnlyError: 'Watch only wallets cannot send transactions',
     },
-    warning: 'Warning:',
+    warning: 'Warning: ',
     warningGeneral:
-      'Warning: Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
+      'Please be aware that in the process of using the Secure Transaction feature, a part of the funds left in your wallet might be blocked. This is a normal procedure linked to UTXO and the blockchain parameters of the Bitcoin Vault wallet. Your funds will be unblocked once the transaction is verified (after approximately 24 hrs) or canceled (within 24 hrs).',
   },
   settings: {
     about: 'About',
@@ -447,9 +459,7 @@ module.exports = {
       pending: 'pending',
       unblocked: 'unblocked',
     },
-    list: {
-      conf: 'Confirmations',
-    },
+    list: { conf: 'Confirmations' },
     transactionTypeLabel: {
       canceled: 'Canceled',
       secure: 'Secure',
@@ -479,11 +489,11 @@ module.exports = {
       importWalletButton: 'Import wallet',
       inputLabel: 'Name',
       legacy: 'Makes default types of transactions.',
-      legacyHDP2SH: 'It contains a tree of P2SH addresses generated from a single 12-word seed',
+      legacyHDP2SH: 'Contains a tree of P2SH addresses generated from a single 12-word seed',
       legacyHDP2SHTitle: 'Standard HD P2SH',
-      LegacyHDSegWit: 'It contains a tree of native segwit addresses, generated from a single 12-word seed',
+      LegacyHDSegWit: 'Contains a tree of native segwit addresses, generated from a single 12-word seed',
       legacyHDSegWitTitle: 'Standard HD SegWit',
-      LegacyP2SH: 'It contains a single P2SH address',
+      LegacyP2SH: 'Contains a single P2SH address',
       legacyP2SHTitle: 'Standard P2SH',
       legacyTitle: 'Standard',
       multipleAddresses: 'It contains a tree of P2SH addresses generated from a single 12-word seed',
@@ -542,17 +552,11 @@ module.exports = {
       invalidQrCode: 'Invalid QR code',
       invalidSign: "Couldn't sign transaction",
       noIndexForWord: "Couldn't find index for word: {word}",
+      wrongNetwork: `You have wallet on the network {walletNetworkName} while the app network is {appNetworkName}. Please contact our support on the Telegram.`,
     },
-    export: {
-      title: 'wallet export',
-    },
-    exportWallet: {
-      header: 'Export wallet',
-      title: 'Seed phrase',
-    },
-    exportWalletXpub: {
-      header: 'Wallet XPUB',
-    },
+    export: { title: 'wallet export' },
+    exportWallet: { header: 'Export wallet', title: 'Seed phrase' },
+    exportWalletXpub: { header: 'Wallet XPUB' },
     import: {
       do_import: 'Import',
       error: 'Failed to import. Please, make sure that the provided data is valid.',
@@ -571,7 +575,7 @@ module.exports = {
       import: 'Import',
       importARDescription1: 'Enter the seed phrase',
       importARDescription2: 'scan the QR code of the wallet you want to import',
-      placeholder: 'Seed phrase, private key, WIF',
+      placeholder: 'Seed phrase',
       scanCancelPubKey: 'Scan the Cancel Key QR code',
       scanFastPubKey: 'Scan the Fast Key QR code',
       scanPublicKeyDescription:
@@ -585,6 +589,7 @@ module.exports = {
       unsupportedElectrumVaultMnemonic:
         'This seed is from Electrum Vault and is currently not supported. Will be supported in the near future.',
       walletInUseValidationError: 'Wallet is already in use. Please enter a valid wallet.',
+      allWalletsValidationError: 'You cannot enter the name "All wallets"',
     },
     publicKey: {
       instantDescription:
@@ -616,10 +621,7 @@ module.exports = {
       none: 'None',
       pendingBalance: 'Blocked balance',
     },
-    walletModal: {
-      btcv: 'BTCV',
-      wallets: 'Wallets',
-    },
+    walletModal: { btcv: 'BTCV', wallets: 'Wallets' },
   },
   connectionIssue: {
     noInternetTitle: 'No internet connection',

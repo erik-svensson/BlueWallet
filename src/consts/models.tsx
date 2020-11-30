@@ -5,6 +5,13 @@ import { KeyboardType, StyleProp, ViewStyle, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 
 import { FastImageSource } from 'app/components';
+import {
+  HDSegwitP2SHAirWallet,
+  HDSegwitP2SHArWallet,
+  HDSegwitBech32Wallet,
+  SegwitP2SHWallet,
+  HDSegwitP2SHWallet,
+} from 'app/legacy';
 
 export const CONST = {
   pinCodeLength: 4,
@@ -24,6 +31,8 @@ export const CONST = {
   pin: 'pin',
   defaultLanguage: 'en',
   maxAddressLength: 48,
+  tcVersionRequired: 1,
+  tcVersion: 'tcVersion',
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
@@ -97,7 +106,6 @@ export enum Route {
   CreateWallet = 'CreateWallet',
   ImportWallet = 'ImportWallet',
   ExportWallet = 'ExportWallet',
-  DeleteWallet = 'DeleteWallet',
   ExportWalletXpub = 'ExportWalletXub',
   TransactionDetails = 'TransactionDetails',
   ReceiveCoins = 'ReceiveCoins',
@@ -106,7 +114,6 @@ export enum Route {
   EditText = 'EditText',
   AboutUs = 'AboutUs',
   SelectLanguage = 'SelectLanguage',
-  ReleaseNotes = 'ReleaseNotes',
   ActionSheet = 'ActionSheet',
   SendTransactionDetails = 'SendTransactionDetailsScreen',
   ScanQrCode = 'ScanQrCode',
@@ -120,11 +127,17 @@ export enum Route {
   AdvancedOptions = 'AdvancedOptions',
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
-  Unlock = 'Unlock',
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
 }
+
+/** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
+export type ImportWalletType = '3-Key Vault' | '2-Key Vault' | 'Standard';
+
+export type WalletType = typeof HDSegwitP2SHAirWallet | typeof HDSegwitP2SHArWallet | StandardWalletType;
+
+export type StandardWalletType = typeof HDSegwitP2SHWallet | typeof SegwitP2SHWallet | typeof HDSegwitBech32Wallet;
 
 export interface Wallet {
   balance: number;
@@ -156,7 +169,6 @@ export interface Wallet {
   isInvoiceGeneratedByWallet?: (clipboard: string) => void;
   getPreferredBalanceUnit: () => string;
   isOutputScriptMine: (script: Uint8Array) => boolean;
-  broadcastTx: (txHex: string) => { code: number; message: string } | string;
   setMnemonic: (mnemonic: string) => void;
   generate: () => void;
   fetchBalance: () => void;
@@ -219,7 +231,7 @@ export interface EnhancedTransaction extends Transaction {
   walletPreferredBalanceUnit: string;
   walletId: string;
   walletLabel: string;
-  walletTypeReadable: string;
+  walletTypeReadable?: string;
 }
 
 export interface AppSettings {
@@ -304,6 +316,7 @@ export type RootStackParams = {
     validateOnSave?: (value: string) => void;
     keyboardType?: KeyboardType;
     maxLength?: number;
+    emptyValueAllowed?: boolean;
   };
   [Route.Message]: {
     title: string;
@@ -316,7 +329,6 @@ export type RootStackParams = {
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
   [Route.DeleteContact]: { contact?: Contact };
-  [Route.MainCardStackNavigator]: undefined;
   [Route.SendTransactionDetails]: {
     fee: number;
     recipients: any;
@@ -352,24 +364,19 @@ export type MainCardStackNavigatorParams = {
   [Route.Dashboard]: { activeWallet?: Wallet } | undefined;
   [Route.MainCardStackNavigator]: undefined;
   [Route.CreateWallet]: undefined;
-  [Route.ImportWallet]: { walletType: string };
+  [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
   [Route.WalletDetails]: { id: string };
-  [Route.CreateContact]: { address?: string };
+  [Route.CreateContact]: { address?: string } | undefined;
   [Route.ContactDetails]: { contact: Contact };
   [Route.ContactQRCode]: { contact: Contact };
   [Route.TransactionDetails]: { transaction: EnhancedTransaction };
   [Route.ReceiveCoins]: { id: string };
-  [Route.SendCoins]: {
-    fromSecret?: string;
-    fromAddress?: string;
-    fromWallet?: Wallet;
-    toAddress?: string;
-  };
+  [Route.SendCoins]: { fromSecret?: string; fromAddress?: string; fromWallet?: Wallet; toAddress?: string };
   [Route.SendCoinsConfirm]: {
     fee: number;
     feeSatoshi?: number;
-    memo: string;
+    memo?: string;
     recipients: any;
     size?: number;
     txDecoded: BtcTransaction;
@@ -445,7 +452,7 @@ export interface Authenticator {
   createdAt: Dayjs;
 }
 
-export interface ActionMeta {
-  onSuccess?: Function;
-  onFailure?: Function;
-}
+export type GlobalParams = MainCardStackNavigatorParams &
+  PasswordNavigatorParams &
+  RootStackParams &
+  MainTabNavigatorParams;

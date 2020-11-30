@@ -1,16 +1,13 @@
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Platform, StyleSheet, TouchableOpacity, BackHandler, NativeEventSubscription } from 'react-native';
 
 import { images, icons } from 'app/assets';
+import { NavigationService } from 'app/services';
 import { getStatusBarHeight, palette, typography } from 'app/styles';
 
 import { EllipsisText } from './EllipsisText';
-import { FlatButton } from './FlatButton';
 import { GradientView } from './GradientView';
 import { Image } from './Image';
-
-const i18n = require('../../loc');
 
 export const HEADER_HEIGHT = Platform.select({
   ios: 44,
@@ -18,40 +15,16 @@ export const HEADER_HEIGHT = Platform.select({
 }) as number;
 
 interface Props {
-  navigation?: StackNavigationProp<any, any>;
   title?: string;
   isBackArrow?: boolean;
   onBackArrow?: () => void;
-  isCancelButton?: boolean;
   addFunction?: () => void;
 }
 
-interface State {
-  cancelButtonWidth: number;
-}
-
-export class Header extends PureComponent<Props, State> {
-  state = {
-    cancelButtonWidth: 0,
-  };
-
+export class Header extends PureComponent<Props> {
   backHandler?: NativeEventSubscription;
 
-  onLeftItemPress = () => (this.props.onBackArrow ? this.props.onBackArrow() : this.props.navigation!.pop());
-  renderBackArrow = () => <Image style={styles.image} source={images.backArrow} />;
-  renderCancelButton = () => (
-    <FlatButton
-      onLayout={event => {
-        const { width } = event.nativeEvent.layout;
-        this.setState({
-          cancelButtonWidth: width,
-        });
-      }}
-      onPress={this.onLeftItemPress}
-      titleStyle={typography.headline4}
-      title={i18n.send.details.cancel}
-    />
-  );
+  onLeftItemPress = () => (this.props.onBackArrow ? this.props.onBackArrow() : NavigationService.goBack());
 
   componentDidMount() {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.backAction);
@@ -67,31 +40,24 @@ export class Header extends PureComponent<Props, State> {
   };
 
   renderLeftItem = () => {
-    const { isBackArrow, isCancelButton } = this.props;
-    const leftItem = isBackArrow ? this.renderBackArrow() : isCancelButton ? this.renderCancelButton() : undefined;
+    const { isBackArrow } = this.props;
 
-    if (leftItem) {
+    if (isBackArrow) {
       return (
-        <TouchableOpacity
-          style={isBackArrow ? styles.backArrowContainer : styles.cancelButtonContainer}
-          onPress={this.onLeftItemPress}
-        >
-          {leftItem}
+        <TouchableOpacity style={styles.backArrowContainer} onPress={this.onLeftItemPress}>
+          <Image style={styles.image} source={images.backArrow} />
         </TouchableOpacity>
       );
     }
   };
   render() {
-    const { cancelButtonWidth } = this.state;
     const { title, addFunction } = this.props;
 
     return (
       <GradientView variant={GradientView.Variant.Primary} style={styles.container}>
         <>
           {this.renderLeftItem()}
-          <EllipsisText style={[styles.title, { marginLeft: (cancelButtonWidth && cancelButtonWidth / 2) || 0 }]}>
-            {title}
-          </EllipsisText>
+          <EllipsisText style={styles.title}>{title}</EllipsisText>
           {!!addFunction && (
             <TouchableOpacity style={styles.rightElement} onPress={addFunction}>
               <Image source={icons.addIcon} style={styles.addIcon} />
@@ -124,15 +90,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     top: getStatusBarHeight(),
     left: 10,
-    zIndex: 10,
-  },
-  cancelButtonContainer: {
-    position: 'absolute',
-    height: HEADER_HEIGHT,
-    justifyContent: 'center',
-    alignItems: 'center',
-    top: getStatusBarHeight(),
-    left: 16,
     zIndex: 10,
   },
   image: {

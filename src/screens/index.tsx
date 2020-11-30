@@ -46,3 +46,4 @@ export { default as RecoverySeedScreen } from './RecoverySeed';
 export { ImportWalletChooseTypeScreen } from './ImportWalletChooseTypeScreen';
 export { ChunkedQrCode } from './ChunkedQrCode';
 export { default as ConnectionIssuesScreen } from './ConnectionIssues';
+export { default as TermsConditionsScreen } from './TermsConditionsScreen';
