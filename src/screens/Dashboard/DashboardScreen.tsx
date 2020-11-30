@@ -32,7 +32,7 @@ interface Props {
   loadWallets: () => LoadWalletsAction;
   clearFilters: () => ClearFiltersAction;
   isFilteringOn?: boolean;
-  checkNetworkConnection: any;
+  checkNetworkConnection: (func: (...args: any[]) => void) => void;
 }
 
 interface State {

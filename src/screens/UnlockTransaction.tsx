@@ -15,7 +15,7 @@ const i18n = require('../../loc');
 type Props = {
   navigation: StackNavigationProp<RootStackParams, Route.UnlockTransaction>;
   route: RouteProp<RootStackParams, Route.UnlockTransaction>;
-  checkNetworkConnection: any;
+  checkNetworkConnection: (func: (...args: any[]) => void) => void;
 };
 
 interface State {

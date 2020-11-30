@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import { selectors } from 'app/state/electrumX';
 
-export type checkNetworkConnectionArgs = (...args: any[]) => void;
+type checkNetworkConnectionArgs = (...args: any[]) => void;
 
 const withCheckNetworkConnection = <P extends Record<string, any>>(Component: React.ComponentType<P>) => (props: P) => {
   const isInternetReachable = useSelector(selectors.isInternetReachable);

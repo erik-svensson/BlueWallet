@@ -42,7 +42,7 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.ImportWallet>;
   importWallet: (wallet: Wallet, meta?: ActionMeta) => ImportWalletAction;
   wallets: Wallet[];
-  checkNetworkConnection: checkNetworkConnectionArgs;
+  checkNetworkConnection: (func: (...args: any[]) => void) => void;
 }
 
 interface State {

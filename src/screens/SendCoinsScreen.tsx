@@ -24,7 +24,6 @@ import { processAddressData } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadTransactionsFees } from 'app/helpers/fees';
 import { withCheckNetworkConnection } from 'app/hocs';
-import { checkNetworkConnectionArgs } from 'app/hocs/withCheckNetworkConnection/withCheckNetworkConnection';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
@@ -45,7 +44,7 @@ interface Props {
   >;
   wallets: Wallet[];
   route: RouteProp<MainCardStackNavigatorParams, Route.SendCoins>;
-  checkNetworkConnection: checkNetworkConnectionArgs;
+  checkNetworkConnection: (func: (...args: any[]) => void) => void;
 }
 
 interface State {
