@@ -18,7 +18,12 @@ import { updateSelectedLanguage as updateSelectedLanguageAction } from 'app/stat
 import { selectors as authenticationSelectors } from 'app/state/authentication';
 import { checkCredentials as checkCredentialsAction, checkTc as checkTcAction } from 'app/state/authentication/actions';
 import { selectors as electrumXSelectors } from 'app/state/electrumX';
-import { startListeners, StartListenersAction } from 'app/state/electrumX/actions';
+import {
+  startListeners,
+  StartListenersAction,
+  checkConnection as checkConnectionAction,
+  CheckConnectionAction,
+} from 'app/state/electrumX/actions';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { isAndroid, isIos } from 'app/styles';
 
@@ -42,6 +47,7 @@ interface ActionsDisptach {
   startElectrumXListeners: () => StartListenersAction;
   updateSelectedLanguage: Function;
   checkTc: Function;
+  checkConnection: () => CheckConnectionAction;
 }
 
 interface OwnProps {
@@ -62,10 +68,11 @@ class Navigator extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    const { checkCredentials, startElectrumXListeners, checkTc } = this.props;
+    const { checkCredentials, startElectrumXListeners, checkTc, checkConnection } = this.props;
     checkTc();
     checkCredentials();
     startElectrumXListeners();
+    checkConnection();
     this.initLanguage();
 
     isEmulator().then(isEmulator => {
@@ -183,6 +190,7 @@ const mapDispatchToProps: ActionsDisptach = {
   checkTc: checkTcAction,
   startElectrumXListeners: startListeners,
   updateSelectedLanguage: updateSelectedLanguageAction,
+  checkConnection: checkConnectionAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigator);

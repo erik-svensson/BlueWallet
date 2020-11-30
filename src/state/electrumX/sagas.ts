@@ -242,7 +242,7 @@ export default [
     subscribeToScriptHashes,
   ),
   takeLatest(ElectrumXAction.StartListeners, listenToInternetConnection),
-  takeLatest(ElectrumXAction.StartListeners, checkConnection),
+  takeLatest(ElectrumXAction.CheckConnection, checkConnection),
   takeLatest(ElectrumXAction.StartListeners, listenOnClose),
   takeLatest(ElectrumXAction.StartListeners, listenOnConnect),
   takeLatest([ElectrumXAction.ConnectionConnected], listenScriptHashesSaga),

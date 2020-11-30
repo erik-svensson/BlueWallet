@@ -10,6 +10,11 @@ export enum ElectrumXAction {
   ConnectionConnected = 'ConnectionConnected',
   SetServerConnection = 'SetServerConnection',
   SetInternetConnection = 'SetInternetConnection',
+  CheckConnection = 'CheckConnection',
+}
+
+export interface CheckConnectionAction {
+  type: ElectrumXAction.CheckConnection;
 }
 
 export interface FetchBlockHeightAction {
@@ -124,4 +129,8 @@ export const fetchBlockHeightSuccess = (blockHeight: number): FetchBlockHeightSu
 export const fetchBlockHeightFailure = (error: string): FetchBlockHeightFailureAction => ({
   type: ElectrumXAction.FetchBlockHeightFailure,
   error,
+});
+
+export const checkConnection = (): CheckConnectionAction => ({
+  type: ElectrumXAction.CheckConnection,
 });
