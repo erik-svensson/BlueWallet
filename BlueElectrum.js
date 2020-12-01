@@ -366,8 +366,6 @@ module.exports.estimateFee = async function(numberOfBlocks) {
 };
 
 module.exports.getDustValue = async () => {
-  if (!mainConnected) throw new Error('Electrum client is not connected');
-
   const relayFee = await mainClient.blockchain_relayfee();
   // magic numbers from electrum vault
   return btcToSatoshi((183 * 3 * relayFee) / 1000, 0);
