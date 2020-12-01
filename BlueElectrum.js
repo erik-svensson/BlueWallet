@@ -44,6 +44,14 @@ async function connectMain() {
     logger.info('BlueElectrum', `begin connection: ${JSON.stringify(usingPeer)}`);
     mainClient = new ElectrumClient(usingPeer.port, usingPeer.host, usingPeer.protocol);
 
+    mainClient.onConnect = function() {
+      logger.info('BlueElectrum', 'connected to server');
+      mainConnected = true;
+      wasConnectedAtLeastOnce = true;
+
+      // console.log('mainConnected', mainConnected);
+    };
+
     mainClient.onError = function(e) {
       logger.error('BlueElectrum', e.message);
       mainConnected = false;
@@ -64,13 +72,14 @@ async function connectMain() {
     logger.error('BlueElectrum', `bad connection: ${JSON.stringify(usingPeer)}, Error: ${e.message}`);
   }
 
-  if (!mainConnected) {
-    logger.info('BlueElectrum', 'Reconnect');
-    mainClient.keepAlive = () => {}; // dirty hack to make it stop reconnecting
-    mainClient.reconnect = () => {}; // dirty hack to make it stop reconnecting
-    mainClient.close();
-    setTimeout(connectMain, 500);
-  }
+  // if (!mainConnected) {
+  //   console.log('NOT CONNECTED');
+  //   logger.info('BlueElectrum', 'Reconnect');
+  //   mainClient.keepAlive = () => {}; // dirty hack to make it stop reconnecting
+  //   mainClient.reconnect = () => {}; // dirty hack to make it stop reconnecting
+  //   mainClient.close();
+  //   setTimeout(connectMain, 500);
+  // }
 }
 
 module.exports.getBlockchainHeaders = function() {
@@ -86,7 +95,7 @@ module.exports.unsubscribe = function(event) {
 };
 
 module.exports.subscribeToOnConnect = function(handler) {
-  mainClient.onConnect = handler;
+  mainClient.onConnectionConnect = handler;
 };
 
 module.exports.subscribeToOnClose = function(handler) {
@@ -309,6 +318,10 @@ module.exports.multiGetTransactionByTxid = async function(txids, batchsize, verb
   return ret;
 };
 
+const wait = (time = 1000) =>
+  new Promise(resolve => {
+    setTimeout(() => resolve(), time);
+  });
 /**
  * Simple waiter till `mainConnected` becomes true (which means
  * it Electrum was connected in other function), or timeout 30 sec.
@@ -317,27 +330,20 @@ module.exports.multiGetTransactionByTxid = async function(txids, batchsize, verb
  * @returns {Promise<Promise<*> | Promise<*>>}
  */
 module.exports.waitTillConnected = async function() {
-  let waitTillConnectedInterval = false;
-  let retriesCounter = 0;
-  return new Promise(function(resolve, reject) {
-    waitTillConnectedInterval = setInterval(() => {
-      if (mainConnected) {
-        clearInterval(waitTillConnectedInterval);
-        resolve(true);
-      }
+  const retriesMax = 30;
+  for (let i = 0; i < retriesMax; i++) {
+    if (mainConnected) {
+      return true;
+    }
 
-      if (wasConnectedAtLeastOnce && mainClient.status === 1) {
-        clearInterval(waitTillConnectedInterval);
-        mainConnected = true;
-        resolve(true);
-      }
+    if (wasConnectedAtLeastOnce && mainClient.status === 1) {
+      mainConnected = true;
+      return true;
+    }
 
-      if (retriesCounter++ >= 30) {
-        clearInterval(waitTillConnectedInterval);
-        reject(new Error('Waiting for Electrum connection timeout'));
-      }
-    }, 1000);
-  });
+    await wait();
+  }
+  throw new Error('Waiting for Electrum connection timeout');
 };
 
 module.exports.estimateFees = async function() {

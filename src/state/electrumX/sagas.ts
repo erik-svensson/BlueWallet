@@ -57,6 +57,7 @@ export function* listenBlockchainHeadersSaga() {
 export function* fetchBlockchainHeadersSaga() {
   try {
     yield BlueElectrum.waitTillConnected();
+
     const { height: blockHeight } = yield BlueElectrum.getBlockchainHeaders();
     yield put(fetchBlockHeightSuccess(blockHeight));
   } catch (err) {
@@ -79,7 +80,7 @@ function emitScriptHashesChange() {
 }
 
 export function* listenScriptHashesSaga() {
-  yield BlueElectrum.waitTillConnected();
+  // yield BlueElectrum.waitTillConnected();
 
   const chan = yield call(emitScriptHashesChange);
 
@@ -106,8 +107,6 @@ function emitOnConnect() {
 }
 
 export function* listenOnConnect() {
-  yield BlueElectrum.waitTillConnected();
-
   const chan = yield call(emitOnConnect);
 
   while (true) {
@@ -129,7 +128,7 @@ function emitOnClose() {
 }
 
 export function* listenOnClose() {
-  yield BlueElectrum.waitTillConnected();
+  // yield BlueElectrum.waitTillConnected();
 
   const chan = yield call(emitOnClose);
 
@@ -175,10 +174,11 @@ export function* checkConnection() {
   const currentIsInternetReachable = yield select(isInternetReachableSelector);
   const currentIsServerConnectedSelector = yield select(isServerConnectedSelector);
 
-  const { isInternetReachable, isServerConnected } = yield all({
-    isInternetReachable: call(() => NetInfo.fetch()),
+  const { internetState, isServerConnected } = yield all({
+    internetState: call(() => NetInfo.fetch()),
     isServerConnected: call(BlueElectrum.ping),
   });
+  const { isInternetReachable } = internetState;
   const { isInitialized } = (yield select()).wallets;
 
   if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
@@ -219,7 +219,8 @@ export function* listenToInternetConnection() {
   const chan = yield call(emitInternetConnectionChange);
 
   while (true) {
-    const { isInternetReachable } = yield take(chan);
+    const state = yield take(chan);
+    const { isInternetReachable } = state;
     const currentIsInternetReachable = yield select(isInternetReachableSelector);
     const { isInitialized } = (yield select()).wallets;
 
@@ -251,5 +252,8 @@ export default [
   takeLatest(ElectrumXAction.StartListeners, listenOnConnect),
   takeLatest([ElectrumXAction.ConnectionConnected], listenScriptHashesSaga),
   takeLatest([ElectrumXAction.ConnectionConnected], listenBlockchainHeadersSaga),
-  takeLatest([ElectrumXAction.FetchBlockHeight, ElectrumXAction.ConnectionConnected], fetchBlockchainHeadersSaga),
+  takeLatest(
+    [ElectrumXAction.StartListeners, ElectrumXAction.FetchBlockHeight, ElectrumXAction.ConnectionConnected],
+    fetchBlockchainHeadersSaga,
+  ),
 ];
