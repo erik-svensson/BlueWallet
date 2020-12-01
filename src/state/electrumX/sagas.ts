@@ -171,36 +171,40 @@ export function* subscribeToScriptHashes() {
 }
 
 export function* checkConnection() {
-  const currentIsInternetReachable = yield select(isInternetReachableSelector);
-  const currentIsServerConnectedSelector = yield select(isServerConnectedSelector);
+  try {
+    const currentIsInternetReachable = yield select(isInternetReachableSelector);
+    const currentIsServerConnectedSelector = yield select(isServerConnectedSelector);
 
-  const { internetState, isServerConnected } = yield all({
-    internetState: call(() => NetInfo.fetch()),
-    isServerConnected: call(BlueElectrum.ping),
-  });
-  const { isInternetReachable } = internetState;
-  const { isInitialized } = (yield select()).wallets;
+    const { internetState, isServerConnected } = yield all({
+      internetState: call(() => NetInfo.fetch()),
+      isServerConnected: call(() => BlueElectrum.ping()),
+    });
+    const { isInternetReachable } = internetState;
+    const { isInitialized } = (yield select()).wallets;
 
-  if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
-    yield put(
-      addToastMessage({
-        title: 'Internet lost connection',
-        description: 'Internet lost connection desc',
-      }),
-    );
+    if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
+      yield put(
+        addToastMessage({
+          title: 'Internet lost connection',
+          description: 'Internet lost connection desc',
+        }),
+      );
+    }
+
+    if (isInitialized && isInternetReachable && !isServerConnected && currentIsServerConnectedSelector) {
+      yield put(
+        addToastMessage({
+          title: 'Server lost connection',
+          description: 'Server lost connection desc',
+        }),
+      );
+    }
+
+    yield put(setInternetConnection(!!isInternetReachable));
+    yield put(setServerConnection(isServerConnected));
+  } catch (e) {
+    logger.error('electrumX sagas', `checkConnection error: ${e}`);
   }
-
-  if (isInitialized && isInternetReachable && !isServerConnected && currentIsServerConnectedSelector) {
-    yield put(
-      addToastMessage({
-        title: 'Server lost connection',
-        description: 'Server lost connection desc',
-      }),
-    );
-  }
-
-  yield put(setInternetConnection(!!isInternetReachable));
-  yield put(setServerConnection(isServerConnected));
   RNBootSplash.hide({ duration: 250 });
 }
 

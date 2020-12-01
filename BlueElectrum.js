@@ -6,6 +6,7 @@ import config from './config';
 import { messages, AppErrors } from './error';
 import logger from './logger';
 import { btcToSatoshi } from './utils/bitcoin';
+import { wait } from './utils/time';
 
 const BigNumber = require('bignumber.js');
 const bitcoin = require('bitcoinjs-lib');
@@ -311,11 +312,6 @@ module.exports.multiGetTransactionByTxid = async function(txids, batchsize, verb
 
   return ret;
 };
-
-const wait = (time = 1000) =>
-  new Promise(resolve => {
-    setTimeout(() => resolve(), time);
-  });
 /**
  * Simple waiter till `mainConnected` becomes true (which means
  * it Electrum was connected in other function), or timeout 30 sec.
@@ -330,7 +326,7 @@ module.exports.waitTillConnected = async function() {
       return true;
     }
 
-    await wait();
+    await wait(1000);
   }
   throw new Error('Waiting for Electrum connection timeout');
 };
