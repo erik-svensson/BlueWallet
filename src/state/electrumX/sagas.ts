@@ -203,7 +203,7 @@ export function* checkConnection() {
     yield put(setInternetConnection(!!isInternetReachable));
     yield put(setServerConnection(isServerConnected));
   } catch (e) {
-    logger.error('electrumX sagas', `checkConnection error: ${e}`);
+    logger.error('electrumX sagas', `checkConnection error: ${e.message}`);
   }
   RNBootSplash.hide({ duration: 250 });
 }
