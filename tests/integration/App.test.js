@@ -1,11 +1,14 @@
 /* global describe, it, expect, jest, jasmine */
-import React from 'react';
 
 import { LegacyWallet, SegwitP2SHWallet } from '../../class';
 
 global.net = require('net');
 global.crypto = require('crypto'); // shall be used by tests under nodejs CLI, but not in RN environment
 const assert = require('assert');
+
+const BlueElectrum = require('../../BlueElectrum');
+
+jest.setTimeout(300000);
 
 jest.mock('react-native-qrcode-svg', () => 'Video');
 jest.useFakeTimers();
@@ -18,6 +21,17 @@ jest.mock('amplitude-js', () => ({
     };
   },
 }));
+
+beforeAll(async () => {
+  // awaiting for Electrum to be connected. For RN Electrum would naturally connect
+  // while app starts up, but for tests we need to wait for it
+  try {
+    await BlueElectrum.waitTillConnected();
+  } catch (Err) {
+    console.log('failed to connect to Electrum:', Err);
+    process.exit(2);
+  }
+});
 
 describe('unit - LegacyWallet', function() {
   it('serialize and unserialize work correctly', () => {
