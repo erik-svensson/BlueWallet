@@ -4436,7 +4436,7 @@ electron-to-chromium@^1.3.571:
 
 "electrum-client@git+https://github.com/bitcoinvault/rn-electrum-client.git#add-on-connection-close-handler":
   version "1.3.0"
-  resolved "git+https://github.com/bitcoinvault/rn-electrum-client.git#49b9633b7ce1514e2a973e130bf2dcace8fa0572"
+  resolved "git+https://github.com/bitcoinvault/rn-electrum-client.git#bba0f61c762243662344b070e724979ba05a8911"
 
 elliptic@^6.4.0, elliptic@^6.5.3:
   version "6.5.3"

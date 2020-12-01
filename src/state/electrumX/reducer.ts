@@ -41,6 +41,7 @@ export const electrumXReducer = (state = initialState, action: ElectrymXActionTy
       return {
         ...state,
         isServerConnected: true,
+        hasConnectedToServerAtLeaseOnce: true,
       };
     case ElectrumXAction.FetchBlockHeightFailure:
       return {

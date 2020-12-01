@@ -80,8 +80,6 @@ function emitScriptHashesChange() {
 }
 
 export function* listenScriptHashesSaga() {
-  // yield BlueElectrum.waitTillConnected();
-
   const chan = yield call(emitScriptHashesChange);
 
   while (true) {
@@ -128,8 +126,6 @@ function emitOnClose() {
 }
 
 export function* listenOnClose() {
-  // yield BlueElectrum.waitTillConnected();
-
   const chan = yield call(emitOnClose);
 
   while (true) {
@@ -150,24 +146,28 @@ export function* listenOnClose() {
 }
 
 export function* subscribeToScriptHashes() {
-  const { wallets } = (yield select()).wallets;
+  try {
+    const { wallets } = (yield select()).wallets;
 
-  const walletsScriptHashes = compose(
-    flatten,
-    map((wallet: Wallet) => wallet.getScriptHashes()),
-  )(wallets);
+    const walletsScriptHashes = compose(
+      flatten,
+      map((wallet: Wallet) => wallet.getScriptHashes()),
+    )(wallets);
 
-  const subScriptHashes: string[] = yield select(subscribedScriptHashes);
+    const subScriptHashes: string[] = yield select(subscribedScriptHashes);
 
-  const scriptHashesToSub = difference(walletsScriptHashes, subScriptHashes);
+    const scriptHashesToSub = difference(walletsScriptHashes, subScriptHashes);
 
-  yield BlueElectrum.subscribeToSriptHashes(scriptHashesToSub);
+    yield BlueElectrum.subscribeToSriptHashes(scriptHashesToSub);
 
-  const scriptHashesToUnsub = difference(subScriptHashes, walletsScriptHashes);
+    const scriptHashesToUnsub = difference(subScriptHashes, walletsScriptHashes);
 
-  yield BlueElectrum.unsubscribeFromSriptHashes(scriptHashesToUnsub);
+    yield BlueElectrum.unsubscribeFromSriptHashes(scriptHashesToUnsub);
 
-  yield put(setSubscribedScriptHashes(walletsScriptHashes));
+    yield put(setSubscribedScriptHashes(walletsScriptHashes));
+  } catch (e) {
+    logger.error('electrumX sagas', `subscribeToScriptHashes error: ${e.message}`);
+  }
 }
 
 export function* checkConnection() {
@@ -217,7 +217,6 @@ function emitInternetConnectionChange() {
 
 export function* listenToInternetConnection() {
   const chan = yield call(emitInternetConnectionChange);
-
   while (true) {
     const state = yield take(chan);
     const { isInternetReachable } = state;
