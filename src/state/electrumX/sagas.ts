@@ -136,7 +136,8 @@ export function* listenOnClose() {
   while (true) {
     yield take(chan);
     const isInternetReachable = yield select(isInternetReachableSelector);
-    if (isInternetReachable) {
+    const { isInitialized } = (yield select()).wallets;
+    if (isInternetReachable && isInitialized) {
       yield put(
         addToastMessage({
           title: 'Server lost connection',
@@ -175,10 +176,12 @@ export function* checkConnection() {
   const currentIsServerConnectedSelector = yield select(isServerConnectedSelector);
 
   const { isInternetReachable, isServerConnected } = yield all({
-    isInternetReachable: call(NetInfo.fetch),
+    isInternetReachable: call(() => NetInfo.fetch()),
     isServerConnected: call(BlueElectrum.ping),
   });
-  if (currentIsInternetReachable && !isInternetReachable) {
+  const { isInitialized } = (yield select()).wallets;
+
+  if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
     yield put(
       addToastMessage({
         title: 'Internet lost connection',
@@ -187,7 +190,7 @@ export function* checkConnection() {
     );
   }
 
-  if (isInternetReachable && !isServerConnected && currentIsServerConnectedSelector) {
+  if (isInitialized && isInternetReachable && !isServerConnected && currentIsServerConnectedSelector) {
     yield put(
       addToastMessage({
         title: 'Server lost connection',
@@ -218,8 +221,9 @@ export function* listenToInternetConnection() {
   while (true) {
     const { isInternetReachable } = yield take(chan);
     const currentIsInternetReachable = yield select(isInternetReachableSelector);
+    const { isInitialized } = (yield select()).wallets;
 
-    if (currentIsInternetReachable && !isInternetReachable) {
+    if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
       yield put(
         addToastMessage({
           title: 'Internet lost connection',

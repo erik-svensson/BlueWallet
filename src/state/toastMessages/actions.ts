@@ -22,7 +22,7 @@ export type ToastMessageActionType = AddToastMessageAction | HideToastMessageAct
 export const addToastMessage = ({
   title,
   description,
-  milisecondsAfterHide = 5000,
+  milisecondsAfterHide = 5500,
 }: {
   title: string;
   description: string;
