@@ -222,8 +222,7 @@ function emitInternetConnectionChange() {
 export function* listenToInternetConnection() {
   const chan = yield call(emitInternetConnectionChange);
   while (true) {
-    const state = yield take(chan);
-    const { isInternetReachable } = state;
+    const { isInternetReachable } = yield take(chan);
     const currentIsInternetReachable = yield select(isInternetReachableSelector);
     const { isInitialized } = (yield select()).wallets;
 

@@ -41,13 +41,18 @@ const setNewHost = () => {
   mainClient.setHost(getHost());
 };
 
+const onClose = () => {
+  setNewHost();
+  mainConnected = false;
+};
+
 async function connectMain() {
   const usingPeer = { host: getHost(), port: config.port, protocol: config.protocol };
   try {
     logger.info('BlueElectrum', `begin connection: ${JSON.stringify(usingPeer)}`);
     mainClient = new ElectrumClient(usingPeer.port, usingPeer.host, usingPeer.protocol);
 
-    mainClient.onConnectionClose = () => setNewHost();
+    mainClient.onConnectionClose = () => onClose();
 
     mainClient.onConnect = function() {
       logger.info('BlueElectrum', 'connected to server');
@@ -56,7 +61,6 @@ async function connectMain() {
 
     mainClient.onError = function(e) {
       logger.error('BlueElectrum', e.message);
-      mainConnected = false;
     };
 
     const ver = await mainClient.initElectrum({
@@ -92,7 +96,7 @@ module.exports.subscribeToOnConnect = function(handler) {
 
 module.exports.subscribeToOnClose = function(handler) {
   mainClient.onConnectionClose = () => {
-    setNewHost();
+    onClose();
     handler();
   };
 };
@@ -362,6 +366,8 @@ module.exports.estimateFee = async function(numberOfBlocks) {
 };
 
 module.exports.getDustValue = async () => {
+  if (!mainConnected) throw new Error('Electrum client is not connected');
+
   const relayFee = await mainClient.blockchain_relayfee();
   // magic numbers from electrum vault
   return btcToSatoshi((183 * 3 * relayFee) / 1000, 0);
