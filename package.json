@@ -211,9 +211,6 @@
   "lint-staged": {
     "./**/*.{ts,tsx,js,jsx}": [
       "yarn lint:fix"
-    ],
-    "./**/*.{ts|tsx}": [
-      "yarn typescript:check"
     ]
   },
   "husky": {
