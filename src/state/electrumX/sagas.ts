@@ -1,5 +1,5 @@
 import NetInfo from '@react-native-community/netinfo';
-import { difference } from 'lodash';
+import { difference, noop } from 'lodash';
 import { flatten, compose, map } from 'lodash/fp';
 import RNBootSplash from 'react-native-bootsplash';
 import { eventChannel } from 'redux-saga';
@@ -97,9 +97,8 @@ function emitOnConnect() {
     });
 
     return () => {
-      return () => {
-        logger.info('electrmumX sagas', 'unsubscribed from BlueElectrum.subscribeToOnConnect');
-      };
+      logger.info('electrmumX sagas', 'unsubscribed from BlueElectrum.subscribeToOnConnect');
+      BlueElectrum.subscribeToOnConnect(noop);
     };
   });
 }
@@ -121,6 +120,7 @@ function emitOnClose() {
 
     return () => {
       logger.info('electrmumX sagas', 'unsubscribed from BlueElectrum.subscribeToOnClose');
+      BlueElectrum.subscribeToOnClose(noop);
     };
   });
 }
@@ -221,6 +221,7 @@ function emitInternetConnectionChange() {
 
 export function* listenToInternetConnection() {
   const chan = yield call(emitInternetConnectionChange);
+
   while (true) {
     const { isInternetReachable } = yield take(chan);
     const currentIsInternetReachable = yield select(isInternetReachableSelector);

@@ -43,7 +43,13 @@ const setNewHost = () => {
 
 const onClose = () => {
   setNewHost();
+  logger.info('BlueElectrum', 'closed connection to server');
   mainConnected = false;
+};
+
+const onConnect = () => {
+  logger.info('BlueElectrum', 'connected to server');
+  mainConnected = true;
 };
 
 async function connectMain() {
@@ -54,10 +60,7 @@ async function connectMain() {
 
     mainClient.onConnectionClose = () => onClose();
 
-    mainClient.onConnect = function() {
-      logger.info('BlueElectrum', 'connected to server');
-      mainConnected = true;
-    };
+    mainClient.onConnect = () => onConnect();
 
     mainClient.onError = function(e) {
       logger.error('BlueElectrum', e.message);
@@ -91,7 +94,10 @@ module.exports.unsubscribe = function(event) {
 };
 
 module.exports.subscribeToOnConnect = function(handler) {
-  mainClient.onConnectionConnect = handler;
+  mainClient.onConnectionConnect = () => {
+    onConnect();
+    handler();
+  };
 };
 
 module.exports.subscribeToOnClose = function(handler) {
@@ -109,7 +115,7 @@ connectMain();
  * @returns {Promise<Object>}
  */
 module.exports.getBalanceByAddress = async function(address) {
-  if (!mainConnected) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   const script = bitcoin.address.toOutputScript(address, config.network);
   const hash = bitcoin.crypto.sha256(script);
   const reversedHash = Buffer.from(reverse(hash));
@@ -119,7 +125,7 @@ module.exports.getBalanceByAddress = async function(address) {
 };
 
 module.exports.getConfig = async function() {
-  if (!mainConnected) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   return {
     host: mainClient.host,
     port: mainClient.port,
@@ -133,7 +139,7 @@ module.exports.getConfig = async function() {
  * @returns {Promise<Array>}
  */
 module.exports.getTransactionsByAddress = async function(address) {
-  if (!mainConnected) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   const script = bitcoin.address.toOutputScript(address, config.network);
   const hash = bitcoin.crypto.sha256(script);
   const reversedHash = Buffer.from(reverse(hash));
@@ -204,7 +210,7 @@ module.exports.unsubscribeFromSriptHashes = scriptHashes => {
  */
 module.exports.multiGetBalanceByAddress = async function(addresses, batchsize) {
   batchsize = batchsize || 100;
-  if (!mainConnected) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   const ret = { balance: 0, unconfirmed_balance: 0, incoming_balance: 0, outgoing_balance: 0, addresses: {} };
 
   const chunks = splitIntoChunks(addresses, batchsize);
@@ -236,7 +242,7 @@ module.exports.multiGetBalanceByAddress = async function(addresses, batchsize) {
 
 module.exports.multiGetUtxoByAddress = async function(addresses, batchsize) {
   batchsize = batchsize || 100;
-  if (!mainConnected) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   const ret = {};
   const res = [];
   const chunks = splitIntoChunks(addresses, batchsize);
@@ -271,7 +277,7 @@ module.exports.multiGetUtxoByAddress = async function(addresses, batchsize) {
 
 module.exports.multiGetHistoryByAddress = async function(addresses, batchsize) {
   batchsize = batchsize || 100;
-  if (!mainConnected) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   const ret = {};
 
   const chunks = splitIntoChunks(addresses, batchsize);
@@ -303,7 +309,7 @@ module.exports.multiGetHistoryByAddress = async function(addresses, batchsize) {
 module.exports.multiGetTransactionByTxid = async function(txids, batchsize, verbose) {
   batchsize = batchsize || 100;
   verbose = verbose !== false;
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   const ret = {};
 
   const chunks = splitIntoChunks(txids, batchsize);
@@ -332,11 +338,11 @@ module.exports.waitTillConnected = async function() {
 
     await wait(1000);
   }
-  throw new Error('Waiting for Electrum connection timeout');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError('Waiting for Electrum connection timeout');
 };
 
 module.exports.estimateFees = async function() {
-  if (!mainConnected) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   let fast = await mainClient.blockchainEstimatefee(1);
   let medium = await mainClient.blockchainEstimatefee(5);
   let slow = await mainClient.blockchainEstimatefee(10);
@@ -353,7 +359,7 @@ module.exports.estimateFees = async function() {
  * @returns {Promise<number>} Satoshis per byte
  */
 module.exports.estimateFee = async function(numberOfBlocks) {
-  if (!mainConnected) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   numberOfBlocks = numberOfBlocks || 1;
   const coinUnitsPerKilobyte = await mainClient.blockchainEstimatefee(numberOfBlocks);
   if (coinUnitsPerKilobyte < 1) return 1;
@@ -372,7 +378,7 @@ module.exports.getDustValue = async () => {
 };
 
 module.exports.broadcast = async function(hex) {
-  if (!mainClient) throw new Error('Electrum client is not connected');
+  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   try {
     return await mainClient.blockchainTransaction_broadcast(hex);
   } catch (error) {

@@ -632,5 +632,6 @@ module.exports = {
     noNetworkTitle: 'No network',
     noNetworkDescription:
       'Your internet works, but you are not connected to the network. Please wait a couple of minutes and try again.',
+    electrumXNotConnected: 'Electrum client is not connected',
   },
 };
