@@ -11,7 +11,7 @@ try {
 
 const defaultNetworkName = 'bitcoinvault';
 
-const networkName = defaultNetworkName || BTCV_NETWORK || defaultNetworkName;
+const networkName = BTCV_NETWORK || defaultNetworkName;
 
 const hosts = (HOSTS || 'electrumx-mainnet1.bitcoinvault.global,electrumx-mainnet2.bitcoinvault.global').split(',');
 
