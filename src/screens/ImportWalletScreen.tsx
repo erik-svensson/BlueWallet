@@ -17,7 +17,7 @@ import {
 } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { withCheckNetworkConnection } from 'app/hocs';
+import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
@@ -43,7 +43,7 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.ImportWallet>;
   importWallet: (wallet: Wallet, meta?: ActionMeta) => ImportWalletAction;
   wallets: Wallet[];
-  checkNetworkConnection: (callback: (...args: unknown[]) => void) => void;
+  checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
 }
 
 interface State {

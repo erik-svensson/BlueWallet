@@ -19,7 +19,13 @@ export interface HideToastMessageAction {
 
 export type ToastMessageActionType = AddToastMessageAction | HideToastMessageAction;
 
-export const addToastMessage = ({ title, description, duration = 5500 }: Omit<Toast, 'id'>): AddToastMessageAction => ({
+interface AddToastMessage {
+  title: string;
+  description: string;
+  duration?: number;
+}
+
+export const addToastMessage = ({ title, description, duration = 5500 }: AddToastMessage): AddToastMessageAction => ({
   type: ToastMessageAction.AddToastMessage,
   payload: { title, description, duration, id: uuidv4() },
 });

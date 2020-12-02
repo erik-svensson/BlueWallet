@@ -22,7 +22,7 @@ import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, Utxo, Wall
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadTransactionsFees } from 'app/helpers/fees';
-import { withCheckNetworkConnection } from 'app/hocs';
+import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
@@ -43,7 +43,7 @@ interface Props {
   >;
   wallets: Wallet[];
   route: RouteProp<MainCardStackNavigatorParams, Route.SendCoins>;
-  checkNetworkConnection: (callback: (...args: unknown[]) => void) => void;
+  checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
 }
 
 interface State {

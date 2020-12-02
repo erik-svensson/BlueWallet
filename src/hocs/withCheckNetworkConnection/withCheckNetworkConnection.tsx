@@ -4,13 +4,13 @@ import { useSelector } from 'react-redux';
 
 import { selectors } from 'app/state/electrumX';
 
-type CheckNetworkConnectionArgs = (...args: unknown[]) => void;
+export type CheckNetworkConnectionCallback = (...args: unknown[]) => void;
 
 const withCheckNetworkConnection = <P extends Record<string, any>>(Component: React.ComponentType<P>) => (props: P) => {
   const isInternetReachable = useSelector(selectors.isInternetReachable);
   const isServerConnected = useSelector(selectors.isServerConnected);
 
-  const checkNetworkConnection = (callback: CheckNetworkConnectionArgs) => {
+  const checkNetworkConnection = (callback: CheckNetworkConnectionCallback) => {
     if (!isInternetReachable) {
       Alert.alert('Nie ma neta');
       return;

@@ -6,7 +6,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { icons } from 'app/assets';
 import { Header, InputItem, ScreenTemplate, Button } from 'app/components';
 import { CONST, RootStackParams, Route } from 'app/consts';
-import { withCheckNetworkConnection } from 'app/hocs';
+import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
@@ -15,7 +15,7 @@ const i18n = require('../../loc');
 type Props = {
   navigation: StackNavigationProp<RootStackParams, Route.UnlockTransaction>;
   route: RouteProp<RootStackParams, Route.UnlockTransaction>;
-  checkNetworkConnection: (callback: (...args: unknown[]) => void) => void;
+  checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
 };
 
 interface State {

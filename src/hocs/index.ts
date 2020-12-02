@@ -1,1 +1,1 @@
-export { default as withCheckNetworkConnection } from './withCheckNetworkConnection';
+export { default as withCheckNetworkConnection, CheckNetworkConnectionCallback } from './withCheckNetworkConnection';
