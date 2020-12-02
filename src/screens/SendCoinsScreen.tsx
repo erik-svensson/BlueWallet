@@ -43,7 +43,7 @@ interface Props {
   >;
   wallets: Wallet[];
   route: RouteProp<MainCardStackNavigatorParams, Route.SendCoins>;
-  checkNetworkConnection: (func: (...args: any[]) => void) => void;
+  checkNetworkConnection: (callback: (...args: unknown[]) => void) => void;
 }
 
 interface State {

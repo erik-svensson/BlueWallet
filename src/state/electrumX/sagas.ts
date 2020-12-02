@@ -56,8 +56,6 @@ export function* listenBlockchainHeadersSaga() {
 
 export function* fetchBlockchainHeadersSaga() {
   try {
-    yield BlueElectrum.waitTillConnected();
-
     const { height: blockHeight } = yield BlueElectrum.getBlockchainHeaders();
     yield put(fetchBlockHeightSuccess(blockHeight));
   } catch (err) {

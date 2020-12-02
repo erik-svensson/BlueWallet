@@ -3,17 +3,17 @@ import { Text, StyleSheet, View, TouchableOpacity, Animated } from 'react-native
 
 import { images, icons } from 'app/assets';
 import { Image } from 'app/components';
-import { Toast as IToast } from 'app/consts';
+import { Toast } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const animationDuration = 500;
 
 interface Props {
-  toast: IToast;
+  toast: Toast;
   onClose: () => void;
 }
 
-export const Toast = ({ toast: { title, description, milisecondsAfterHide }, onClose }: Props) => {
+export const CustomToast = ({ toast: { title, description, duration }, onClose }: Props) => {
   const [closedClicked, setClosedClicked] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -38,8 +38,8 @@ export const Toast = ({ toast: { title, description, milisecondsAfterHide }, onC
 
     setTimeout(() => {
       fadeOut();
-    }, milisecondsAfterHide - animationDuration);
-  }, [fadeAnim, fadeIn, milisecondsAfterHide, fadeOut]);
+    }, duration - animationDuration);
+  }, [fadeAnim, fadeIn, duration, fadeOut]);
 
   const close = () => {
     if (closedClicked) {

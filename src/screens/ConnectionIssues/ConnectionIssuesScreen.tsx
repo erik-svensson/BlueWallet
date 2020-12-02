@@ -21,7 +21,7 @@ export const ConnectionIssuesScreen = () => {
     }
   };
 
-  const getDesc = () => {
+  const getDescription = () => {
     if (!isInternetReachable) {
       return i18n.connectionIssue.noInternetDescription;
     }
@@ -35,7 +35,7 @@ export const ConnectionIssuesScreen = () => {
       <View style={styles.container}>
         <Text style={styles.title}>{getTitle()}</Text>
         <Loader size={137} />
-        <Text style={styles.description}>{getDesc()}</Text>
+        <Text style={styles.description}>{getDescription()}</Text>
       </View>
     </ScreenTemplate>
   );

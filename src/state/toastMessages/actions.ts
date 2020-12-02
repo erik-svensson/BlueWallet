@@ -19,17 +19,9 @@ export interface HideToastMessageAction {
 
 export type ToastMessageActionType = AddToastMessageAction | HideToastMessageAction;
 
-export const addToastMessage = ({
-  title,
-  description,
-  milisecondsAfterHide = 5500,
-}: {
-  title: string;
-  description: string;
-  milisecondsAfterHide?: number;
-}): AddToastMessageAction => ({
+export const addToastMessage = ({ title, description, duration = 5500 }: Omit<Toast, 'id'>): AddToastMessageAction => ({
   type: ToastMessageAction.AddToastMessage,
-  payload: { title, description, milisecondsAfterHide, id: uuidv4() },
+  payload: { title, description, duration, id: uuidv4() },
 });
 
 export const hideToastMessage = (payload: Toast): HideToastMessageAction => ({

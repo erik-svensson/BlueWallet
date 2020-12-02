@@ -6,7 +6,7 @@ export function* addToastMessageSaga(action: AddToastMessageAction | unknown) {
   const { payload } = action as AddToastMessageAction;
 
   const { cancelled } = yield race({
-    timeout: delay(payload.milisecondsAfterHide),
+    timeout: delay(payload.duration),
     cancelled: take((action: unknown) => {
       const { payload: cancelPayload, type } = action as HideToastMessageAction;
       if (type === ToastMessageAction.HideToastMessage) {

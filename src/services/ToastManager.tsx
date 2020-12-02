@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Toast as ToastComponent } from 'app/components/Toast';
+import { CustomToast } from 'app/components';
 import { selectors, actions } from 'app/state/toastMessages';
 
 export const ToastManager = () => {
@@ -12,7 +12,7 @@ export const ToastManager = () => {
   return (
     <View style={styles.outerContainer}>
       {toastMessages.map(toast => (
-        <ToastComponent key={toast.id} toast={toast} onClose={() => dispatch(actions.hideToastMessage(toast))} />
+        <CustomToast key={toast.id} toast={toast} onClose={() => dispatch(actions.hideToastMessage(toast))} />
       ))}
     </View>
   );

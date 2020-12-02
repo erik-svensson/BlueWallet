@@ -54,7 +54,7 @@ export const ELECTRUM_VAULT_SEED_PREFIXES = {
 export interface Toast {
   title: string;
   description: string;
-  milisecondsAfterHide: number;
+  duration: number;
   id: string;
 }
 
