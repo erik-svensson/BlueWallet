@@ -437,9 +437,9 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     });
   };
 
-  executeWithNetworkConnectionCheck = (func: () => void) => () => {
+  executeWithNetworkConnectionCheck = (callback: () => void) => () => {
     const { checkNetworkConnection } = this.props;
-    checkNetworkConnection(() => func());
+    checkNetworkConnection(() => callback());
   };
 
   get canScan() {
