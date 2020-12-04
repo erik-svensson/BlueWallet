@@ -9,4 +9,3 @@ export const SecureStorageService = new _SecureStorageService();
 export const StoreService = new _StoreService();
 export { default as AppStateManager } from './AppStateManager';
 export * from './NavigationService';
-export { default as ToastManager } from './ToastManager';

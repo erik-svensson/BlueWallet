@@ -29,7 +29,7 @@ import {
 } from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
-const i18n = require('../../loc');
+const i18n = require('../../../loc');
 
 function emitBlockchainHeaders() {
   return eventChannel(emitter => {
@@ -56,6 +56,7 @@ export function* listenBlockchainHeadersSaga() {
 
 export function* fetchBlockchainHeadersSaga() {
   try {
+    yield BlueElectrum.waitTillConnected();
     const { height: blockHeight } = yield BlueElectrum.getBlockchainHeaders();
     yield put(fetchBlockHeightSuccess(blockHeight));
   } catch (err) {

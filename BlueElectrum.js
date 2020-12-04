@@ -94,7 +94,7 @@ module.exports.unsubscribe = function(event) {
 };
 
 module.exports.subscribeToOnConnect = function(handler) {
-  mainClient.onConnectionConnect = () => {
+  mainClient.onConnect = () => {
     onConnect();
     handler();
   };

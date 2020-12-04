@@ -41,6 +41,8 @@ const i18n = require('../../../loc');
 
 export function* loadWalletsSaga() {
   try {
+    yield BlueElectrum.waitTillConnected();
+
     yield all([call(() => BlueApp.fetchWalletBalances()), call(() => BlueApp.fetchWalletTransactions())]);
 
     const wallets = BlueApp.getWallets();
@@ -150,6 +152,7 @@ export function* refreshWalletSaga(action: RefreshWalletAction | unknown) {
     if (!walletToRefresh) {
       throw new Error(`No wallet to refresh`);
     }
+    yield BlueElectrum.waitTillConnected();
 
     yield all([call(() => walletToRefresh.fetchBalance()), call(() => walletToRefresh.fetchTransactions())]);
 
@@ -166,6 +169,8 @@ export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
   } = action as SendTransactionAction;
 
   try {
+    yield BlueElectrum.waitTillConnected();
+
     const result = yield BlueElectrum.broadcast(txDecoded.toHex());
 
     yield put(sendTransactionSuccess());
