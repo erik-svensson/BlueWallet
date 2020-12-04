@@ -55,7 +55,7 @@ export function* loadWalletsSaga() {
         i18n.send.error.title,
         i18n.formatString(i18n.wallets.errors.wrongNetwork, {
           walletNetworkName,
-          appNetworkName: config.networkName,
+          appNetworkName: config.network,
         }),
       );
     }
