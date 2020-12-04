@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CustomToast } from 'app/components';
 import { selectors, actions } from 'app/state/toastMessages';
 
-export const ToastManager = () => {
+export const Toasts = () => {
   const toastMessages = useSelector(selectors.toastMessages);
   const dispatch = useDispatch();
 
@@ -18,7 +18,7 @@ export const ToastManager = () => {
   );
 };
 
-export default ToastManager;
+export default Toasts;
 
 const styles = StyleSheet.create({
   outerContainer: {

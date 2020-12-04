@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { compose } from 'lodash/fp';
 import React, { PureComponent } from 'react';
-import { View, StyleSheet, Text, Keyboard, Alert, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, Keyboard, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, TextAreaItem, FlatButton, ScreenTemplate, InputItem, CheckBox } from 'app/components';

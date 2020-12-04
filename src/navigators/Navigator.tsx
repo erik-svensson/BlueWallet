@@ -6,11 +6,12 @@ import { isEmulator } from 'react-native-device-info';
 import { connect } from 'react-redux';
 
 import { CONST } from 'app/consts';
+import { Toasts } from 'app/containers';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator, PasswordNavigator } from 'app/navigators';
 import { UnlockScreen, TermsConditionsScreen, ConnectionIssuesScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
-import { navigationRef, ToastManager } from 'app/services';
+import { navigationRef } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
@@ -159,7 +160,7 @@ class Navigator extends React.Component<Props, State> {
     return (
       <>
         <RootNavigator />
-        {isAuthenticated && <ToastManager />}
+        {isAuthenticated && <Toasts />}
         {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
       </>
     );

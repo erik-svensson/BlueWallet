@@ -29,7 +29,7 @@ import {
 } from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
-// const i18n = require('../../loc');
+const i18n = require('../../loc');
 
 function emitBlockchainHeaders() {
   return eventChannel(emitter => {
@@ -133,8 +133,8 @@ export function* listenOnClose() {
     if (isInternetReachable && isInitialized) {
       yield put(
         addToastMessage({
-          title: 'Server lost connection',
-          description: 'Server lost connection desc',
+          title: i18n.connectionIssue.noNetworkTitle,
+          description: i18n.connectionIssue.noNetworkDescription,
         }),
       );
     }
@@ -183,8 +183,8 @@ export function* checkConnection() {
     if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
       yield put(
         addToastMessage({
-          title: 'Internet lost connection',
-          description: 'Internet lost connection desc',
+          title: i18n.connectionIssue.offlineMessageTitle,
+          description: i18n.connectionIssue.offlineMessageDescription,
         }),
       );
     }
@@ -192,8 +192,8 @@ export function* checkConnection() {
     if (isInitialized && isInternetReachable && !isServerConnected && currentIsServerConnectedSelector) {
       yield put(
         addToastMessage({
-          title: 'Server lost connection',
-          description: 'Server lost connection desc',
+          title: i18n.connectionIssue.noNetworkTitle,
+          description: i18n.connectionIssue.noNetworkDescription,
         }),
       );
     }
@@ -228,8 +228,8 @@ export function* listenToInternetConnection() {
     if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
       yield put(
         addToastMessage({
-          title: 'Internet lost connection',
-          description: 'Internet lost connection desc',
+          title: i18n.connectionIssue.offlineMessageTitle,
+          description: i18n.connectionIssue.offlineMessageDescription,
         }),
       );
     }
