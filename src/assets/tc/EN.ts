@@ -17,6 +17,52 @@ export const en = `<!DOCTYPE html>
             font-weight: 700;
             font-size: 16px
         }
+        .styled-checkbox {
+    position: absolute;
+    opacity: 0;
+    }
+    .styled-checkbox + label {
+    position: relative;
+    padding: 0;
+    font-family: 'Ubuntu';
+    font-weight: 700;
+    }
+    .styled-checkbox + label:before {
+    content: '';
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: text-top;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid #ccc;
+    }
+    .styled-checkbox:checked + label:before {
+    background: #ebc15c;
+        border: 2px solid transparent
+    }
+    .styled-checkbox:checked + label:after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 11px;
+    background: white;
+    width: 2px;
+    height: 2px;
+    box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white, 4px -8px 0 white;
+    -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+    }
+
+    .unstyled {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    }
+
+    li {
+    margin: 20px 0;
+    }
     </style>
 </head>
 <body>
@@ -324,8 +370,30 @@ You must not:
 </p>
 <p>
 </p>
+    <ul class="unstyled">
+    <li>
+        <input class="styled-checkbox" id="terms" type="checkbox" value="terms" onclick="checkIt()">
+        <label for="terms">I’ve read Terms & Conditions</label>
+    </li>
+    <li>
+        <input class="styled-checkbox" id="policy" type="checkbox" value="policy" onclick="checkIt()">
+        <label for="policy">I’ve read Privacy Policy</label>
+    </li>
+    </ul>
+
 <p>
 </p>
+    <script>
+        function checkIt() {
+            let terms = document.getElementById("terms");
+            let policy = document.getElementById("policy");
+            if (terms.checked && policy.checked){
+                window.ReactNativeWebView.postMessage("checked")
+            } else {
+                window.ReactNativeWebView.postMessage("unchecked")
+            }
+        } 
+    </script>
     <script>window.onload=function(){window.location.hash = 1;document.title = document.body.clientHeight;}</script>
 </body>
 </html>`;

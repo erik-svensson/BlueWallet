@@ -40,12 +40,6 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
     height: 500,
   };
 
-  handleCanGo = () => {
-    this.setState({
-      canGo: true,
-    });
-  };
-
   handleNoButton = () => {
     this.toggleModal();
   };
@@ -72,11 +66,6 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
     } else {
       setIsTcAccepted(true);
     }
-  };
-
-  isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent) => {
-    const paddingToBottom = 20;
-    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
   };
 
   get langVersion() {
@@ -124,8 +113,6 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
     const { canGo, showWarring } = this.state;
     return (
       <ScreenTemplate
-        isCloseToBottom={this.isCloseToBottom}
-        allowedUserClick={this.handleCanGo}
         footer={
           <View style={styles.buttonContainer}>
             <Button
@@ -166,6 +153,11 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
               return false;
             }
             return true;
+          }}
+          onMessage={event => {
+            this.setState({
+              canGo: event.nativeEvent.data === 'checked' ? true : false,
+            });
           }}
         />
         <CustomModal show={showWarring}>{this.renderContent()}</CustomModal>

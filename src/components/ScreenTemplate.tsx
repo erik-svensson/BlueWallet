@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  KeyboardAvoidingView,
-  StyleProp,
-  ViewStyle,
-  View,
-  NativeScrollEvent,
-} from 'react-native';
+import { ScrollView, StatusBar, StyleSheet, KeyboardAvoidingView, StyleProp, ViewStyle, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { palette } from 'app/styles';
@@ -27,8 +18,6 @@ interface Props {
   contentContainer?: StyleProp<ViewStyle>;
   refreshControl?: React.ReactElement;
   noScroll?: boolean;
-  isCloseToBottom?: (nativeElement: NativeScrollEvent) => boolean;
-  allowedUserClick?: () => void;
   keyboardShouldPersistTaps?: 'always' | 'never' | 'handled';
 }
 
@@ -50,8 +39,6 @@ export class ScreenTemplate extends React.PureComponent<Props> {
       contentContainer,
       refreshControl,
       noScroll,
-      isCloseToBottom,
-      allowedUserClick,
       keyboardShouldPersistTaps,
     } = this.props;
     const Container = noScroll ? View : ScrollView;
@@ -65,11 +52,6 @@ export class ScreenTemplate extends React.PureComponent<Props> {
           contentContainerStyle={[styles.contentContainer, contentContainer]}
           refreshControl={refreshControl}
           keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-          onScroll={({ nativeEvent }) => {
-            if (isCloseToBottom !== undefined && allowedUserClick !== undefined) {
-              isCloseToBottom(nativeEvent) && allowedUserClick();
-            }
-          }}
           scrollEventThrottle={400}
         >
           {children}
