@@ -165,7 +165,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       },
       title: i18n.wallets.publicKey.instantSubtitle,
       headerTitle: i18n.wallets.add.title,
-      description: i18n.wallets.publicKey.recoveryDescription, //instantDescription
+      description: i18n.wallets.publicKey.recoveryDescription,
       onBackArrow: () => {
         navigation.navigate(Route.CreateWallet);
       },
