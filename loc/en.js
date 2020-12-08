@@ -237,6 +237,11 @@ module.exports = {
     wrongMnemonicDesc:
       'Your mnemonic does not match any supported wallet. You are trying to import an invalid mnemonic or wallet that has never been used',
   },
+  notifications: {
+    title: 'Configure your notifications',
+    description:
+      'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
+  },
   onboarding: {
     changePin: 'Change PIN',
     confirmNewPin: 'Confirm new PIN',
@@ -403,6 +408,7 @@ module.exports = {
     general: 'General',
     header: 'Settings',
     language: 'Language',
+    notifications: 'Notifications',
     notSupportedFingerPrint: 'Your device does not support fingerprint',
     security: 'Security',
     TouchID: 'Allow fingerprint',

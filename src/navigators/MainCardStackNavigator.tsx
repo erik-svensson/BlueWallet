@@ -37,6 +37,7 @@ import {
   ImportWalletChooseTypeScreen,
   OptionsAuthenticatorScreen,
   ChunkedQrCode,
+  NotificationScreen,
 } from 'app/screens';
 
 const Stack = createStackNavigator<MainCardStackNavigatorParams>();
@@ -85,5 +86,6 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.ImportWalletChooseType} component={ImportWalletChooseTypeScreen} />
     <Stack.Screen name={Route.OptionsAuthenticator} component={OptionsAuthenticatorScreen} />
     <Stack.Screen name={Route.ChunkedQrCode} component={ChunkedQrCode} />
+    <Stack.Screen name={Route.Notifications} component={NotificationScreen} />
   </Stack.Navigator>
 );
