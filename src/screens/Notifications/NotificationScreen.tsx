@@ -9,6 +9,7 @@ import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image } from 'a
 import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
+import { AppSettingsState } from 'app/state/appSettings/reducer';
 import { deleteNotificationEmail, DeleteNotificationEmailAction } from 'app/state/notifications/actions';
 import * as walletsSelectors from 'app/state/wallets/selectors';
 import { typography, palette } from 'app/styles';
