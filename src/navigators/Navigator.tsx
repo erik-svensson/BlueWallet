@@ -98,8 +98,9 @@ class Navigator extends React.Component<Props, State> {
 
   shouldRenderOnBoarding = () => {
     const { isPinSet, isTxPasswordSet } = this.props;
-
-    return !isPinSet || !isTxPasswordSet;
+    //TODO: replace for redux
+    const isNotificationEmailSet = false;
+    return !isPinSet || !isTxPasswordSet || !isNotificationEmailSet;
   };
 
   shouldRenderUnlockScreen = () => {

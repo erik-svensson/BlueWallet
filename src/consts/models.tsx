@@ -15,6 +15,7 @@ import {
 
 export const CONST = {
   pinCodeLength: 4,
+  codeLength: 4,
   transactionMinPasswordLength: 8,
   allWallets: 'All wallets',
   receive: 'receive',
@@ -122,6 +123,8 @@ export enum Route {
   CurrentPin = 'CurrentPin',
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
+  ConfirmNotificationCode = 'ConfirmNotificationCode',
+  AddNotificationEmail = 'AddNotificationEmail',
   CreateTransactionPassword = 'CreateTransactionPassword',
   ConfirmTransactionPassword = 'ConfirmTransactionPassword',
   AdvancedOptions = 'AdvancedOptions',
@@ -358,6 +361,8 @@ export type PasswordNavigatorParams = {
   };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
+  [Route.ConfirmNotificationCode]: undefined;
+  [Route.AddNotificationEmail]: undefined;
 };
 
 export type MainCardStackNavigatorParams = {

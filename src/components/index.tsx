@@ -36,3 +36,4 @@ export { EllipsisText } from './EllipsisText';
 export { Loader } from './Loader';
 export { CustomModal } from './CustomModal';
 export { CustomToast } from './CustomToast';
+export { CodeInput } from './CodeInput';
