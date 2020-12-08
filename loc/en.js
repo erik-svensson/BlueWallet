@@ -291,6 +291,11 @@ module.exports = {
     noteFirst: 'Note: ',
     noteSecond: 'If you want to change your email address you can do it later in Settings.',
   },
+  notifications: {
+    title: 'Configure your notifications',
+    description:
+      'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
+  },
   onboarding: {
     changePin: 'Change PIN',
     confirmNewPin: 'Confirm new PIN',
