@@ -10,7 +10,6 @@ import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams } from 'a
 import {
   createTxPassword as createTxPasswordAction,
   setIsAuthenticated as setIsAuthenticatedAction,
-  createTc as createTcAction,
   SetIsAuthenticatedAction,
 } from 'app/state/authentication/actions';
 import { typography, palette } from 'app/styles';
@@ -25,7 +24,6 @@ interface Props {
   createTxPassword: Function;
   setIsAuthenticated: (isAuthenticated: boolean) => SetIsAuthenticatedAction;
   route: RouteProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>;
-  createTc: () => void;
 }
 
 type State = {
@@ -42,10 +40,9 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
   };
 
   onSave = async () => {
-    const { createTxPassword, navigation, createTc } = this.props;
+    const { createTxPassword, navigation } = this.props;
     const { setPassword } = this.props.route.params;
     if (setPassword === this.state.password) {
-      createTc();
       createTxPassword(setPassword, {
         onSuccess: () => {
           navigation.navigate(Route.AddNotificationEmail);
@@ -108,7 +105,6 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
 
 const mapDispatchToProps = {
   createTxPassword: createTxPasswordAction,
-  createTc: createTcAction,
   setIsAuthenticated: setIsAuthenticatedAction,
 };
 

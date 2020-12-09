@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import { images } from 'app/assets';
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
 import { Route, PasswordNavigatorParams } from 'app/consts';
+import { createTc as createTcAction } from 'app/state/authentication/actions';
+import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -14,6 +16,8 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: StackNavigationProp<PasswordNavigatorParams, Route.AddNotificationEmail>;
   route: RouteProp<PasswordNavigatorParams, Route.AddNotificationEmail>;
+  createTc: () => void;
+  createNotificationEmail: Function;
 }
 
 type State = {
@@ -34,20 +38,26 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   };
 
   onSave = () => {
+    //TODO:
     this.props.navigation.navigate(Route.ConfirmNotificationCode);
   };
 
   skipAddEmail = () => {
-    this.props.navigation.navigate(Route.Message, {
-      title: i18n.contactCreate.successTitle,
-      description: i18n.onboarding.successCompletedDescription,
-      source: images.success,
-      buttonProps: {
-        title: i18n.onboarding.successCompletedButton,
-        onPress: () => {
-          //TODO: till no logic finish
-          // this.props.navigation.pop();
-        },
+    const { createTc, createNotificationEmail, navigation } = this.props;
+    createTc();
+    createNotificationEmail('', {
+      onSuccess: () => {
+        navigation.navigate(Route.Message, {
+          title: i18n.contactCreate.successTitle,
+          description: i18n.onboarding.successCompletedDescription,
+          source: images.success,
+          buttonProps: {
+            title: i18n.onboarding.successCompletedButton,
+            onPress: () => {
+              navigation.pop();
+            },
+          },
+        });
       },
     });
   };
@@ -56,6 +66,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { email, error } = this.state;
     return (
       <ScreenTemplate
+        noScroll
         keyboardShouldPersistTaps="always"
         footer={
           <>
@@ -95,7 +106,10 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   }
 }
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  createTc: createTcAction,
+  createNotificationEmail: createNotificationEmailAction,
+};
 
 export default connect(null, mapDispatchToProps)(AddNotificationEmailScreen);
 
