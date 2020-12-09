@@ -81,6 +81,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         <View style={styles.inputItemContainer}>
           <InputItem
             value={email}
+            label={i18n._.email}
             testID="confirm-notification-email"
             setValue={this.setEmail}
             autoFocus={true}

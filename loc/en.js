@@ -23,6 +23,7 @@ module.exports = {
     scan: 'Scan',
     skipStep: 'Skip this step',
     resendCode: 'Resend code',
+    email: 'Email',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
   },
   termsConditions: {
