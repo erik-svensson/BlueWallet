@@ -467,6 +467,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}
               onPress={this.executeWithNetworkConnectionCheck(this.onScanQrCodeButtonPress)}
+              disabledTitleStyle={{ color: palette.grey }}
             />
           </>
         }

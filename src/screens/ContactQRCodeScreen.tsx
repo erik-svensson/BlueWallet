@@ -47,7 +47,7 @@ export class ContactQRCodeScreen extends React.PureComponent<Props> {
             title={i18n.contactDetails.share}
           />
         }
-        header={<Header navigation={this.props.navigation} isBackArrow title={contact.name} />}
+        header={<Header isBackArrow title={contact.name} />}
       >
         <ContactAvatar name={contact.name} />
         <View testID="share-contact-qr-code" style={styles.qrCodeContainer}>
