@@ -322,6 +322,7 @@ export type RootStackParams = {
     title: string;
     source: FastImageSource;
     description: string;
+    testID?: string;
     buttonProps?: ButtonProps;
     imageStyle?: StyleProp<ViewStyle>;
     asyncTask?: () => void;
@@ -352,6 +353,7 @@ export type PasswordNavigatorParams = {
     title: string;
     source: FastImageSource;
     description: string;
+    testID?: string;
     buttonProps?: ButtonProps;
     imageStyle?: StyleProp<ViewStyle>;
     asyncTask?: () => void;

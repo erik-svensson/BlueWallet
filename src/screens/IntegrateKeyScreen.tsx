@@ -50,8 +50,10 @@ export class IntegrateKeyScreen extends React.PureComponent<Props> {
 
     return (
       <ScreenTemplate
-        footer={<Button onPress={this.scanKey} title={i18n.wallets.publicKey.scan} />}
-        header={<Header onBackArrow={onBackArrow} isBackArrow title={headerTitle} />}
+        footer={
+          <Button testID="scan-public-key-code-button" onPress={this.scanKey} title={i18n.wallets.publicKey.scan} />
+        }
+        header={<Header navigation={navigation} onBackArrow={onBackArrow} isBackArrow title={headerTitle} />}
       >
         <Text style={styles.subtitle}>{title}</Text>
         <Text style={styles.description}>{description}</Text>

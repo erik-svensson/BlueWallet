@@ -290,6 +290,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         <Text style={styles.subtitle}>{i18n.wallets.importWallet.importARDescription2}</Text>
       </View>
       <InputItem
+        testID="import-wallet-name"
         error={this.state.validationError}
         setValue={this.onLabelChange}
         label={i18n.wallets.add.inputLabel}
@@ -455,16 +456,17 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         footer={
           <>
             <Button
+              testID="submit-import-wallet-button"
               disabled={!text || !!validationError || !label}
               title={i18n.wallets.importWallet.import}
               onPress={this.executeWithNetworkConnectionCheck(this.onImportButtonPress)}
             />
             <FlatButton
+              testID="scan-import-wallet-qr-code-button"
               disabled={!label || !!validationError}
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}
               onPress={this.executeWithNetworkConnectionCheck(this.onScanQrCodeButtonPress)}
-              disabledTitleStyle={{ color: palette.grey }}
             />
           </>
         }
@@ -474,6 +476,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
           <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>
           {this.renderSubtitle()}
           <TextAreaItem
+            testID="import-wallet-seed-phrase-input"
             error={validationError}
             autoCapitalize="none"
             onChangeText={this.onChangeText}
