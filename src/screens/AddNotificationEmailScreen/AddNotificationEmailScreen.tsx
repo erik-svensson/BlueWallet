@@ -43,9 +43,10 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
       description: i18n.onboarding.successCompletedDescription,
       source: images.success,
       buttonProps: {
-        title: i18n.onboarding.successButton,
+        title: i18n.onboarding.successCompletedButton,
         onPress: () => {
-          this.props.navigation.pop();
+          //TODO: till no logic finish
+          // this.props.navigation.pop();
         },
       },
     });
