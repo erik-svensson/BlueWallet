@@ -26,6 +26,7 @@ interface Props {
 export class WalletCard extends React.Component<Props> {
   goToWalletDetails = () => {
     const { wallet } = this.props;
+    console.log('wallet.id ', wallet.id);
     NavigationService.navigate(Route.WalletDetails, { id: wallet.id });
   };
 
