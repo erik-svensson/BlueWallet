@@ -48,7 +48,7 @@ export const SettingsScreen = (props: Props) => {
     <>
       <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} />
       <ListItem title={i18n.settings.advancedOptions} source={icons.buildIcon} onPress={onAdvancedOptionsChange} />
-      <ListItem title={i18n.settings.notifications} source={icons.buildIcon} onPress={onNotificationsOptionsChange} />
+      <ListItem title={i18n.settings.notifications} source={icons.bell} onPress={onNotificationsOptionsChange} />
     </>
   );
 

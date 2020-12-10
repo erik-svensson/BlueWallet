@@ -134,6 +134,8 @@ export enum Route {
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
   Notifications = 'Notifications',
+  AddEmail = 'AddEmail',
+  ConfirmEmail = 'ConfirmEmail',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -445,6 +447,10 @@ export type MainCardStackNavigatorParams = {
     onScanned: () => void;
   };
   [Route.Notifications]: undefined;
+  [Route.AddEmail]: undefined;
+  [Route.ConfirmEmail]: {
+    address: string;
+  };
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {
