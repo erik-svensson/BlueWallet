@@ -1,9 +1,14 @@
-import { expect } from 'detox';
+import { expect, waitFor } from 'detox';
 
 import { isBeta } from '../helpers';
 import app from '../pageObjects';
 
-xdescribe('Onboarding', () => {
+describe('Onboarding', () => {
+  beforeEach(async () => {
+    await app.termsConditionsScreen.scrollDown();
+    await app.termsConditionsScreen.tapOnAgreeButton();
+  });
+
   describe('@android @ios @smoke', () => {
     it('should pass onboarding successfully if typed credentials are correct', async () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());

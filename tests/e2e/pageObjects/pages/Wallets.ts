@@ -1,6 +1,6 @@
 import { by, element } from 'detox';
 
-import actions from '../actions';
+import actions from '../../actions';
 import MessageScreen from '../common/MessageScreen';
 import ScanQrCodeScreen from '../common/ScanQrCodeScreen';
 
@@ -44,9 +44,9 @@ const Wallets = () => {
       walletTypeRadios: {
         '3-Key Vault': element(by.id('3-key-vault-radio')),
         '2-Key Vault': element(by.id('2-key-vault-radio')),
-        'Standard HD P2SH': element(by.id('standard-hd-p2sh-radio')),
-        'Standard P2SH': element(by.id('standard-p2sh-radio')),
-        'Standard HD SegWit': element(by.id('standard-hd-segwit-radio')),
+        'Standard HD P2SH': element(by.id('hd-p2sh-radio')),
+        'Standard P2SH': element(by.id('segwit-p2sh-radio')),
+        'Standard HD SegWit': element(by.id('hd-segwit-p2sh-radio')),
       },
 
       createWalletButton: element(by.id('create-wallet-button')),
@@ -86,7 +86,7 @@ const Wallets = () => {
     });
 
     const SuccessScreen = () => ({
-      closeButton: element(by.id('')),
+      closeButton: element(by.id('close-button')),
 
       async tapOnCloseButton() {
         await actions.tap(this.closeButton);
@@ -108,7 +108,8 @@ const Wallets = () => {
       walletTypeRadios: {
         '3-Key Vault': element(by.id('3-key-vault-radio')),
         '2-Key Vault': element(by.id('2-key-vault-radio')),
-        'Standard HD P2SH': element(by.id('standard-hd-p2sh-radio')),
+        // eslint-disable-next-line prettier/prettier
+        'Standard': element(by.id('standard-wallet-radio')),
       },
       proceedButton: element(by.id('confirm-import-button')),
 

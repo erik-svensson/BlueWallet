@@ -1,12 +1,12 @@
 import { by, element } from 'detox';
 
-import actions from '../actions';
+import actions from '../../actions';
 import DeleteScreen from '../common/DeleteScreen';
 import MessageScreen from '../common/MessageScreen';
 
 const Authenticators = () => {
   const DashboardScreen = () => ({
-    noAuthenticatorsMessage: element(by.id('authenticators-description')),
+    noAuthenticatorsIcon: element(by.id('no-authenticators-icon')),
     addButton: element(by.id('create-authenticator-button')),
 
     async tapOnAddButton() {

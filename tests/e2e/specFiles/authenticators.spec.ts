@@ -3,9 +3,11 @@ import { expect } from 'detox';
 import { isBeta } from '../helpers';
 import app from '../pageObjects';
 
-xdescribe('Authenticators', () => {
+describe('Authenticators', () => {
   beforeEach(async () => {
     isBeta() && (await app.onboarding.betaVersionScreen.close());
+    await app.termsConditionsScreen.scrollDown();
+    await app.termsConditionsScreen.tapOnAgreeButton();
     await app.onboarding.passThrough('1111', 'qwertyui');
     await app.navigationBar.changeTab('authenticators');
   });
@@ -13,7 +15,7 @@ xdescribe('Authenticators', () => {
   describe('Dashboard', () => {
     describe('@android @ios @smoke', () => {
       it('should display empty list if there is no authenticators added', async () => {
-        await expect(app.authenticators.dashboardScreen.noAuthenticatorsMessage).toBeVisible();
+        await expect(app.authenticators.dashboardScreen.noAuthenticatorsIcon).toBeVisible();
       });
     });
 
@@ -110,7 +112,7 @@ xdescribe('Authenticators', () => {
         await app.authenticators.details.detailsScreen.tapOnDeleteButton();
         await app.authenticators.details.deleteScreen.confirm();
         await app.authenticators.details.deleteSuccessScreen.close();
-        await expect(app.authenticators.dashboardScreen.noAuthenticatorsMessage).toBeVisible();
+        await expect(app.authenticators.dashboardScreen.noAuthenticatorsIcon).toBeVisible();
       });
     });
   });

@@ -3,9 +3,11 @@ import { expect } from 'detox';
 import { isBeta, WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers';
 import app from '../pageObjects';
 
-xdescribe('Address book', () => {
+describe('Address book', () => {
   beforeEach(async () => {
     isBeta() && (await app.onboarding.betaVersionScreen.close());
+    await app.termsConditionsScreen.scrollDown();
+    await app.termsConditionsScreen.tapOnAgreeButton();
     await app.onboarding.passThrough('1111', 'qwertyui');
     await app.navigationBar.changeTab('address book');
   });

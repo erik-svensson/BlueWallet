@@ -1,6 +1,6 @@
 import { by, element } from 'detox';
 
-import actions from '../actions';
+import actions from '../../actions';
 import DeleteScreen from '../common/DeleteScreen';
 import MessageScreen from '../common/MessageScreen';
 

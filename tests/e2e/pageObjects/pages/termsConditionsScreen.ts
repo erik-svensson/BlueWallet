@@ -1,34 +1,25 @@
-import { by, element, waitFor } from 'detox';
+import { by, element } from 'detox';
 
-export class TermsConditionsScreen {
-  private terms = element(by.id('terms-conditions-screen'));
+import actions from '../../actions';
 
-  public readonly elements = {
-    disagreeButton: element(by.id('disagree-button')),
-    agreeButton: element(by.id('agree-button')),
-    popup: {
-      noButton: element(by.id('')),
-      yesButton: element(by.id('')),
-    },
-  };
+const TermsConditionsScreen = () => ({
+  termsConditions: element(by.id('terms-conditions-screen')),
 
-  public async scrollDown() {
-    await waitFor(this.terms)
-      .toBeVisible()
-      .withTimeout(10000);
+  disagreeButton: element(by.id('disagree-button')),
+  agreeButton: element(by.id('agree-button')),
+  popup: {
+    noButton: element(by.id('')),
+    yesButton: element(by.id('')),
+  },
 
-    await this.terms.scrollTo('bottom');
-  }
+  async scrollDown() {
+    await actions.waitForElement(this.termsConditions);
+    await this.termsConditions.scrollTo('bottom');
+  },
 
-  public async tapOnAgreeButton() {
-    await waitFor(this.terms)
-      .toBeVisible()
-      .withTimeout(10000);
+  async tapOnAgreeButton() {
+    await actions.tap(this.agreeButton);
+  },
+});
 
-    await this.elements.agreeButton.tap();
-  }
-}
-
-const termsConditionScreen = new TermsConditionsScreen();
-
-export default termsConditionScreen;
+export default TermsConditionsScreen;

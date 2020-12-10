@@ -1,6 +1,6 @@
 import { by, element } from 'detox';
 
-import actions from '../actions';
+import actions from '../../actions';
 
 const ScanQrCodeScreen = () => ({
   customStringInput: element(by.id('custom-string-input')),
@@ -8,7 +8,7 @@ const ScanQrCodeScreen = () => ({
 
   async scanCustomString(data: string) {
     await actions.typeText(this.customStringInput, data);
-    await actions.tap(this.submitButton);
+    await actions.multiTap(this.submitButton, 2); // Note: For some reasons, it requires to be clicked twice
   },
 });
 

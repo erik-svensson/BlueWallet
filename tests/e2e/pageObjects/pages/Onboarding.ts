@@ -1,6 +1,6 @@
 import { by, element } from 'detox';
 
-import actions from '../actions';
+import actions from '../../actions';
 import MessageScreen from '../common/MessageScreen';
 
 const Onboarding = () => {
@@ -13,7 +13,7 @@ const Onboarding = () => {
   });
 
   const CreatePinScreen = () => ({
-    pinInput: element(by.id('create-pin')),
+    pinInput: element(by.id('create-pin-input')),
 
     async typePin(value: string): Promise<void> {
       await actions.typeText(this.pinInput, value);
@@ -21,7 +21,7 @@ const Onboarding = () => {
   });
 
   const ConfirmPinScreen = () => ({
-    pinInput: element(by.id('confirm-pin')),
+    pinInput: element(by.id('confirm-pin-input')),
     pinValidationError: element(by.id('confirm-pin-validation-error')),
 
     async typePin(value: string): Promise<void> {
