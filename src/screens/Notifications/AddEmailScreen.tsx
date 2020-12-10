@@ -5,6 +5,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import { Header, ScreenTemplate, Button, InputItem } from 'app/components';
 import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
+import { isEmail } from 'app/helpers/helpers';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -18,17 +19,25 @@ interface Props {
 
 interface State {
   address: string;
+  error: string;
 }
 
 export class AddEmailScreen extends Component<Props, State> {
   state = {
     address: '',
-  };
-  onConfirm = () => {
-    this.props.navigation.navigate(Route.ConfirmEmail, { address: this.state.address });
+    error: '',
   };
 
-  onChange = (address: string) => this.setState({ address });
+  onConfirm = () => {
+    if (!isEmail(this.state.address)) {
+      return this.setState({
+        error: i18n.notifications.invalidAddressError,
+      });
+    }
+    return this.props.navigation.navigate(Route.ConfirmEmail, { address: this.state.address });
+  };
+
+  onChange = (address: string) => this.setState({ address, error: '' });
 
   render() {
     const { address } = this.state;
@@ -43,7 +52,13 @@ export class AddEmailScreen extends Component<Props, State> {
           <Text style={styles.infoDescription}>{i18n.notifications.addYourEmailForDescription}</Text>
         </View>
         <View style={styles.inputItemContainer}>
-          <InputItem value={address} setValue={this.onChange} autoFocus label={i18n.notifications.yourEmail} />
+          <InputItem
+            value={address}
+            setValue={this.onChange}
+            autoFocus
+            label={i18n.notifications.yourEmail}
+            error={this.state.error}
+          />
         </View>
       </ScreenTemplate>
     );

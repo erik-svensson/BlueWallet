@@ -49,4 +49,4 @@ export { default as ConnectionIssuesScreen } from './ConnectionIssues';
 export { default as TermsConditionsScreen } from './TermsConditionsScreen';
 export { default as ConfirmNotificationCodeScreen } from './ConfirmNotificationCodeScreen';
 export { default as AddNotificationEmailScreen } from './AddNotificationEmailScreen';
-export { NotificationScreen, AddEmailScreen, ConfirmEmail } from './Notifications';
+export { NotificationScreen, AddEmailScreen, ConfirmEmailScreen } from './Notifications';
