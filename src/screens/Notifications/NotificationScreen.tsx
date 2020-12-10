@@ -92,6 +92,7 @@ export class NotificationScreen extends Component<Props> {
   }
 }
 
+// @ts-ignore
 NotificationScreen.defaultProps = {
   wallets: undefined,
   // wallets: [{ id: '1', name: 'sdsadasdasdas', description: 'dsadsadas' }],

@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { Header, ScreenTemplate, Button, FlatButton } from 'app/components';
+import { Header, ScreenTemplate, Button, FlatButton, CodeInput } from 'app/components';
 import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
@@ -18,18 +18,17 @@ interface Props {
 }
 
 interface State {
-  address: string;
+  code: string;
 }
 
 export class ConfirmEmailScreen extends Component<Props, State> {
   state = {
-    address: '',
-  };
-  onConfirm = () => {
-    this.props.navigation.navigate(Route.ConfirmEmail, { address: this.state.address });
+    code: '',
   };
 
-  onChange = (address: string) => this.setState({ address });
+  onConfirm = () => {};
+
+  onChange = (code: string) => this.setState({ code });
 
   onResend = () => {};
 
@@ -57,7 +56,9 @@ export class ConfirmEmailScreen extends Component<Props, State> {
             <Text style={styles.address}>{`\n${address}`}</Text>
           </Text>
         </View>
-        <View style={styles.inputItemContainer}></View>
+        <View style={styles.inputItemContainer}>
+          <CodeInput value={this.state.code} onTextChange={this.onChange} />
+        </View>
       </ScreenTemplate>
     );
   }
@@ -75,8 +76,8 @@ const styles = StyleSheet.create({
   },
   inputItemContainer: {
     paddingTop: 20,
-    width: '100%',
     height: 100,
+    marginHorizontal: 25,
   },
   resendButton: {
     marginTop: 12,
