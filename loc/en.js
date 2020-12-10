@@ -292,9 +292,19 @@ module.exports = {
     noteSecond: 'If you want to change your email address you can do it later in Settings.',
   },
   notifications: {
+    addYourAddress: 'Add your email address',
+    addYourEmailFor: 'Add your email for notifications',
+    addEmail: 'Add email',
+    addYourAddressDescription: 'It is used to send you transaction notifications from chosen wallets.',
+    addYourEmailForDescription:
+      'You can add your email address. It is used to send you transaction notifications from chosen wallets.',
+    change: 'Change your email',
     title: 'Configure your notifications',
+    yourEmail: 'Your email',
     description:
       'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
+    delete: 'Delete email',
+    yourSubscriptions: 'Your subscriptions',
   },
   onboarding: {
     changePin: 'Change PIN',
