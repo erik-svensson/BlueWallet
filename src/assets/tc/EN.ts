@@ -196,6 +196,7 @@ You must not:
 </p>
 <p>
     The Websites and the Products are not in any manner or in any form or part intended to constitute or form the basis of any advice (professional or otherwise) or to be used in, or in relation to, any investment or other decision or transaction. We do not accept any liability (regardless of how it might arise) for any claim or loss arising from:
+</p>    
     <ul>
         <li>
             any advice given;
@@ -207,6 +208,7 @@ You must not:
             any transaction made or effected;
         </li>
     </ul>
+<p>
     in reliance on, or based on, any information on the Websites or in any of the Products, nor do we accept any liability arising from any other use of, or reliance on, the Products.
 </p>
 <p>
