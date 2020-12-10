@@ -304,7 +304,11 @@ module.exports = {
     description:
       'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
     delete: 'Delete email',
+    invalidAddressError: 'Enter valid email address',
     yourSubscriptions: 'Your subscriptions',
+    confirmEmail: 'Confirm your email address',
+    pleaseEnter: 'Please enter the code we sent to: ',
+    resend: 'Resend code',
   },
   onboarding: {
     changePin: 'Change PIN',
