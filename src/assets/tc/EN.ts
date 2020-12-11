@@ -219,6 +219,7 @@ You must not:
 </p>
 <p>
     You release us from all liability related to any losses, damages, or claims arising from:
+</p>
     <ol type="a">
         <li>
             user error such as forgotten passwords, incorrectly constructed transactions, or mistyped BTCV addresses; 
@@ -236,6 +237,7 @@ You must not:
             any unauthorized third party activities, including, but not limited to, the use of viruses, phishing, brute forcing, or other means of attack against the Application. 
         </li>
     </ol>
+<p>
     We make no representations concerning any third party content contained in or accessed through our Products. Any other terms, conditions, warranties, or representations associated with such content, are solely between you and such organizations and/or individuals.
 </p>
 <h3>
