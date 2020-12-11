@@ -3,8 +3,8 @@ import AddressBook from './pages/AddressBook';
 import Authenticators from './pages/Authenticators';
 import BetaVersionScreen from './pages/BetaVersionScreen';
 import Onboarding from './pages/Onboarding';
+import TermsConditionsScreen from './pages/TermsConditionsScreen';
 import Wallets from './pages/Wallets';
-import TermsConditionsScreen from './pages/termsConditionsScreen';
 
 const app = {
   betaVersionScreen: BetaVersionScreen(),
