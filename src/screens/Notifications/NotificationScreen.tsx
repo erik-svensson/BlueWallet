@@ -24,7 +24,11 @@ export class NotificationScreen extends Component<Props> {
     this.props.navigation.navigate(Route.ChangeEmail, {
       address: this.props.storedAddress,
     });
-  onDeletePress = () => {};
+  onDeletePress = () =>
+    this.props.navigation.navigate(Route.DeleteEmail, {
+      hasWallets: !!this.props.wallets,
+      address: this.props.storedAddress,
+    });
 
   onAddEmailPress = () => {
     this.props.navigation.navigate(Route.AddEmail);

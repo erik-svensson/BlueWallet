@@ -69,6 +69,21 @@ export class ConfirmEmailScreen extends Component<Props, State> {
               },
             }),
         };
+      case ConfirmAddressFlowType.DELETE_ADDRESS:
+        return {
+          title: i18n.notifications.verifyAction,
+          description: i18n.notifications.verifyActionDescription,
+          onCodeConfirm: () =>
+            CreateMessage({
+              title: i18n.message.success,
+              description: i18n.notifications.deleteEmailSuccessMessage,
+              type: MessageType.success,
+              buttonProps: {
+                title: i18n.notifications.goToNotifications,
+                onPress: () => this.props.navigation.navigate(Route.Notifications),
+              },
+            }),
+        };
     }
   }
 

@@ -270,6 +270,12 @@ module.exports = {
     confirmNewTitle: 'Confirm your new email address',
     confirmNewDescription: 'Now confirm your new email address. Please enter the code we sent to ',
     emailChangedSuccessMessage: 'Hooray!\n You have successfully updated your email address.',
+    verifyAction: 'Verify this action',
+    verifyActionDescription: 'To confirm the request, please enter the code we sent to ',
+    deleteEmail: 'Delete email address',
+    deleteYourEmail: 'Delete your email',
+    deleteYourEmailDescription: "Are you sure you want to delete your email address? This can't be undone.",
+    deleteEmailSuccessMessage: 'Hooray!\n You have successfully deleted your email address.',
   },
   onboarding: {
     changePin: 'Change PIN',
