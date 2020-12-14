@@ -185,7 +185,11 @@ export function* checkConnection() {
       ),
       isServerConnected: call(() => BlueElectrum.ping()),
     });
-    const { isInternetReachable } = internetState;
+    if (internetState === undefined) {
+      throw new Error('Error');
+    }
+
+    const isInternetReachable = internetState;
     const { isInitialized } = (yield select()).wallets;
 
     if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
