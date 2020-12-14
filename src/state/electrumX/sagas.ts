@@ -1,4 +1,4 @@
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo, { NetInfoState } from '@react-native-community/netinfo';
 import { difference, noop } from 'lodash';
 import { flatten, compose, map } from 'lodash/fp';
 import RNBootSplash from 'react-native-bootsplash';
@@ -175,7 +175,14 @@ export function* checkConnection() {
     const currentIsServerConnectedSelector = yield select(isServerConnectedSelector);
 
     const { internetState, isServerConnected } = yield all({
-      internetState: call(() => NetInfo.fetch()),
+      internetState: call(() =>
+        NetInfo.fetch().then((state: NetInfoState) => {
+          if (state.isInternetReachable === null) return;
+          if (state.isInternetReachable !== isInternetReachable) {
+            return true;
+          }
+        }),
+      ),
       isServerConnected: call(() => BlueElectrum.ping()),
     });
     const { isInternetReachable } = internetState;
