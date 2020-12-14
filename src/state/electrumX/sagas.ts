@@ -178,7 +178,7 @@ export function* checkConnection() {
       internetState: call(() =>
         NetInfo.fetch().then((state: NetInfoState) => {
           if (state.isInternetReachable === null) return;
-          if (state.isInternetReachable !== isInternetReachable) {
+          if (state.isInternetReachable !== undefined) {
             return true;
           }
         }),
