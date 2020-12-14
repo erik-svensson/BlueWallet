@@ -1,26 +1,29 @@
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, Wallet } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
+type Item = any; // TODO will be changed to proper type when implementing logic
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     StackNavigationProp<MainCardStackNavigatorParams, Route.Notifications>
   >;
-  wallets: any;
+  wallets: Item[];
+  storedAddress: string;
 }
 export class NotificationScreen extends Component<Props> {
-  onChangeEmailPress = () => {
-    Alert.alert('dsadasd');
-  };
+  onChangeEmailPress = () =>
+    this.props.navigation.navigate(Route.ChangeEmail, {
+      address: this.props.storedAddress,
+    });
   onDeletePress = () => {};
 
   onAddEmailPress = () => {
@@ -69,8 +72,8 @@ export class NotificationScreen extends Component<Props> {
           <>
             <Text style={styles.title}>{i18n.notifications.title}</Text>
             <Text style={styles.description}>{i18n.notifications.description}</Text>
-            <View style={styles.amountInput}>
-              <Text style={styles.amount}>kamil2912@gmail.com</Text>
+            <View style={styles.amountAddress}>
+              <Text style={styles.address}>{this.props.storedAddress}</Text>
             </View>
             <Text style={styles.listTitle}>{i18n.notifications.yourSubscriptions}</Text>
 
@@ -92,10 +95,11 @@ export class NotificationScreen extends Component<Props> {
   }
 }
 
-// @ts-ignore
+// @ts-ignore TODO will be removed when implementing logic
 NotificationScreen.defaultProps = {
-  wallets: undefined,
-  // wallets: [{ id: '1', name: 'sdsadasdasdas', description: 'dsadsadas' }],
+  storedAddress: 'hardcoded-email-address@gmail.com',
+  wallets: [{ id: '1', name: 'Wallet1', description: 'xxxxxxxxxxxxxxxxxxxxxxx' }],
+  // wallets: undefined,
 };
 
 const styles = StyleSheet.create({
@@ -136,8 +140,8 @@ const styles = StyleSheet.create({
   itemRow: {
     marginVertical: 8,
   },
-  amountInput: { width: '100%', borderBottomColor: palette.grey, borderBottomWidth: 1, paddingBottom: 10 },
-  amount: { ...typography.caption, color: palette.textGrey },
+  amountAddress: { width: '100%', borderBottomColor: palette.grey, borderBottomWidth: 1, paddingBottom: 10 },
+  address: { ...typography.caption, color: palette.textGrey },
   noWalletsContainer: {
     flex: 1,
     alignItems: 'center',

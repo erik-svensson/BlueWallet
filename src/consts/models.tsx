@@ -136,6 +136,8 @@ export enum Route {
   Notifications = 'Notifications',
   AddEmail = 'AddEmail',
   ConfirmEmail = 'ConfirmEmail',
+  ChooseWalletsForNotification = 'ChooseWalletsForNotification',
+  ChangeEmail = 'ChangeEmail',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -205,6 +207,12 @@ export enum TxType {
   ALERT_RECOVERED = 'ALERT_RECOVERED',
   INSTANT = 'INSTANT',
   RECOVERY = 'RECOVERY',
+}
+
+export enum ConfirmAddressFlowType {
+  FIRST_ADDRESS = 'FIRST_ADDRESS',
+  CURRENT_ADDRESS = 'CURRENT_ADDRESS',
+  NEW_ADDRESS = 'NEW_ADDRESS',
 }
 export interface Transaction {
   hash: string;
@@ -449,6 +457,14 @@ export type MainCardStackNavigatorParams = {
   [Route.Notifications]: undefined;
   [Route.AddEmail]: undefined;
   [Route.ConfirmEmail]: {
+    address: string;
+    newAddress?: string;
+    flowType: ConfirmAddressFlowType;
+  };
+  [Route.ChooseWalletsForNotification]: {
+    address: string;
+  };
+  [Route.ChangeEmail]: {
     address: string;
   };
 };

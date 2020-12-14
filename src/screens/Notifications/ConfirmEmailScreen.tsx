@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { Header, ScreenTemplate, Button, FlatButton, CodeInput } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -26,7 +27,50 @@ export class ConfirmEmailScreen extends Component<Props, State> {
     code: '',
   };
 
-  onConfirm = () => {};
+  get infoContainerContent() {
+    const {
+      navigation,
+      route: {
+        params: { address, newAddress },
+      },
+    } = this.props;
+    switch (this.props.route.params.flowType) {
+      case ConfirmAddressFlowType.FIRST_ADDRESS:
+        return {
+          title: i18n.notifications.confirmEmail,
+          description: i18n.notifications.pleaseEnter,
+          onCodeConfirm: () => navigation.navigate(Route.ChooseWalletsForNotification, { address }),
+        };
+      case ConfirmAddressFlowType.CURRENT_ADDRESS:
+        return {
+          title: i18n.notifications.confirmCurrentTitle,
+          description: i18n.notifications.confirmCurrentDescription,
+          onCodeConfirm: () => {
+            this.setState({ code: '' }, () =>
+              navigation.navigate(Route.ConfirmEmail, {
+                address: newAddress!,
+                flowType: ConfirmAddressFlowType.NEW_ADDRESS,
+              }),
+            );
+          },
+        };
+      case ConfirmAddressFlowType.NEW_ADDRESS:
+        return {
+          title: i18n.notifications.confirmNewTitle,
+          description: i18n.notifications.confirmNewDescription,
+          onCodeConfirm: () =>
+            CreateMessage({
+              title: i18n.message.success,
+              description: i18n.notifications.emailChangedSuccessMessage,
+              type: MessageType.success,
+              buttonProps: {
+                title: i18n.notifications.goToNotifications,
+                onPress: () => this.props.navigation.navigate(Route.Notifications),
+              },
+            }),
+        };
+    }
+  }
 
   onChange = (code: string) => this.setState({ code });
 
@@ -40,7 +84,7 @@ export class ConfirmEmailScreen extends Component<Props, State> {
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
         footer={
           <>
-            <Button title={i18n._.confirm} onPress={this.onConfirm} />
+            <Button title={i18n._.confirm} onPress={this.infoContainerContent.onCodeConfirm} />
             <FlatButton
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
@@ -50,9 +94,9 @@ export class ConfirmEmailScreen extends Component<Props, State> {
         }
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+          <Text style={typography.headline4}>{this.infoContainerContent.title}</Text>
           <Text style={styles.infoDescription}>
-            {i18n.notifications.pleaseEnter}
+            {this.infoContainerContent.description}
             <Text style={styles.address}>{`\n${address}`}</Text>
           </Text>
         </View>

@@ -25,6 +25,7 @@ module.exports = {
     resendCode: 'Resend code',
     email: 'Email',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
+    skip: 'Skip this step',
   },
   termsConditions: {
     header: 'Terms & Conditions',
@@ -255,6 +256,20 @@ module.exports = {
     confirmEmail: 'Confirm your email address',
     pleaseEnter: 'Please enter the code we sent to: ',
     resend: 'Resend code',
+    getNotification: 'Get notifications',
+    chooseWalletsDescription: 'Choose wallets from which you’d like to receive transaction notifications',
+    emailAddedSuccessMessage: 'Hooray!\n You have successfully added your email address.',
+    goToNotifications: 'Go to Notifications',
+    changeEmailTitle: 'Change your email',
+    changeEmailDescription:
+      'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
+    yourCurrentEmail: 'Your current email',
+    newEmail: 'New email',
+    confirmCurrentTitle: 'Confirm your current email address',
+    confirmCurrentDescription: 'To confirm the request, please enter the code we sent to ',
+    confirmNewTitle: 'Confirm your new email address',
+    confirmNewDescription: 'Now confirm your new email address. Please enter the code we sent to ',
+    emailChangedSuccessMessage: 'Hooray!\n You have successfully updated your email address.',
   },
   onboarding: {
     changePin: 'Change PIN',
