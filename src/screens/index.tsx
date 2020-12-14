@@ -56,5 +56,6 @@ export {
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
   ChangeEmailScreen,
+  DeleteEmailScreen,
 } from './Notifications';
 export { ReceiveNotificationsConfirmationScreen } from './ReceiveNotificationsConfirmationScreen';

@@ -138,6 +138,7 @@ export enum Route {
   ChunkedQrCode = 'ChunkedQrCode',
   Notifications = 'Notifications',
   AddEmail = 'AddEmail',
+  DeleteEmail = 'DeleteEmail',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
@@ -354,6 +355,10 @@ export type RootStackParams = {
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
   [Route.DeleteContact]: { contact?: Contact };
+  [Route.DeleteEmail]: {
+    hasWallets: boolean;
+    address: string;
+  };
   [Route.SendTransactionDetails]: {
     fee: number;
     recipients: any;
