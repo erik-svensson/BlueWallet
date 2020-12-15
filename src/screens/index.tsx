@@ -55,5 +55,4 @@ export {
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
   ChangeEmailScreen,
-  DeleteEmailScreen,
 } from './Notifications';

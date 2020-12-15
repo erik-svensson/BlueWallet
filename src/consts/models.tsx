@@ -136,7 +136,6 @@ export enum Route {
   ChunkedQrCode = 'ChunkedQrCode',
   Notifications = 'Notifications',
   AddEmail = 'AddEmail',
-  DeleteEmail = 'DeleteEmail',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
@@ -217,6 +216,7 @@ export enum ConfirmAddressFlowType {
   NEW_ADDRESS = 'NEW_ADDRESS',
   DELETE_ADDRESS = 'DELETE_ADDRESS',
 }
+
 export interface Transaction {
   hash: string;
   txid: string;
@@ -346,10 +346,6 @@ export type RootStackParams = {
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
   [Route.DeleteContact]: { contact?: Contact };
-  [Route.DeleteEmail]: {
-    hasWallets: boolean;
-    address: string;
-  };
   [Route.SendTransactionDetails]: {
     fee: number;
     recipients: any;

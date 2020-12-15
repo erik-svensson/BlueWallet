@@ -32,71 +32,89 @@ export class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   get infoContainerContent() {
+    switch (this.props.route.params.flowType) {
+      case ConfirmAddressFlowType.FIRST_ADDRESS:
+        return this.firstAddressFlowContent();
+      case ConfirmAddressFlowType.CURRENT_ADDRESS:
+        return this.currentAddressFlowContent();
+      case ConfirmAddressFlowType.NEW_ADDRESS:
+        return this.newAddressFlowContent();
+      case ConfirmAddressFlowType.DELETE_ADDRESS:
+        return this.deleteAddressFlowContent();
+    }
+  }
+
+  firstAddressFlowContent = () => {
     const {
       navigation,
       route: {
-        params: { address, newAddress },
+        params: { address },
       },
     } = this.props;
-    switch (this.props.route.params.flowType) {
-      case ConfirmAddressFlowType.FIRST_ADDRESS:
-        return {
-          title: i18n.notifications.confirmEmail,
-          description: i18n.notifications.pleaseEnter,
-          onCodeConfirm: () => navigation.navigate(Route.ChooseWalletsForNotification, { address }),
-        };
-      case ConfirmAddressFlowType.CURRENT_ADDRESS:
-        return {
-          title: i18n.notifications.confirmCurrentTitle,
-          description: i18n.notifications.confirmCurrentDescription,
-          onCodeConfirm: () => {
-            this.setState({ code: '' }, () =>
-              navigation.navigate(Route.ConfirmEmail, {
-                address: newAddress!,
-                flowType: ConfirmAddressFlowType.NEW_ADDRESS,
-              }),
-            );
-          },
-        };
-      case ConfirmAddressFlowType.NEW_ADDRESS:
-        return {
-          title: i18n.notifications.confirmNewTitle,
-          description: i18n.notifications.confirmNewDescription,
-          onCodeConfirm: () =>
-            CreateMessage({
-              title: i18n.message.success,
-              description: i18n.notifications.emailChangedSuccessMessage,
-              type: MessageType.success,
-              buttonProps: {
-                title: i18n.notifications.goToNotifications,
-                onPress: () => this.props.navigation.navigate(Route.Notifications),
-              },
-            }),
-        };
-      case ConfirmAddressFlowType.DELETE_ADDRESS:
-        return {
-          title: i18n.notifications.verifyAction,
-          description: i18n.notifications.verifyActionDescription,
-          onCodeConfirm: () =>
-            CreateMessage({
-              title: i18n.message.success,
-              description: i18n.notifications.deleteEmailSuccessMessage,
-              type: MessageType.success,
-              buttonProps: {
-                title: i18n.notifications.goToNotifications,
-                onPress: () => this.props.navigation.navigate(Route.Notifications),
-              },
-            }),
-        };
-    }
-  }
+    return {
+      title: i18n.notifications.confirmEmail,
+      description: i18n.notifications.pleaseEnter,
+      onCodeConfirm: () => navigation.navigate(Route.ChooseWalletsForNotification, { address }),
+    };
+  };
+
+  currentAddressFlowContent = () => {
+    const {
+      navigation,
+      route: {
+        params: { newAddress },
+      },
+    } = this.props;
+    return {
+      title: i18n.notifications.confirmCurrentTitle,
+      description: i18n.notifications.confirmCurrentDescription,
+      onCodeConfirm: () => {
+        this.setState({ code: '' }, () =>
+          navigation.navigate(Route.ConfirmEmail, {
+            address: newAddress!,
+            flowType: ConfirmAddressFlowType.NEW_ADDRESS,
+          }),
+        );
+      },
+    };
+  };
+
+  newAddressFlowContent = () => ({
+    title: i18n.notifications.confirmNewTitle,
+    description: i18n.notifications.confirmNewDescription,
+    onCodeConfirm: () =>
+      CreateMessage({
+        title: i18n.message.success,
+        description: i18n.notifications.emailChangedSuccessMessage,
+        type: MessageType.success,
+        buttonProps: {
+          title: i18n.notifications.goToNotifications,
+          onPress: () => this.props.navigation.navigate(Route.Notifications),
+        },
+      }),
+  });
+
+  deleteAddressFlowContent = () => ({
+    title: i18n.notifications.verifyAction,
+    description: i18n.notifications.verifyActionDescription,
+    onCodeConfirm: () =>
+      CreateMessage({
+        title: i18n.message.success,
+        description: i18n.notifications.deleteEmailSuccessMessage,
+        type: MessageType.success,
+        buttonProps: {
+          title: i18n.notifications.goToNotifications,
+          onPress: () => this.props.navigation.navigate(Route.Notifications),
+        },
+      }),
+  });
 
   onError = () => {
     const newFailNo = this.state.failNo + 1;
     const errorMessage =
       newFailNo < 3
         ? i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - newFailNo })
-        : i18n.notifications.codeFinalError;
+        : i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax });
     return this.setState({
       code: '',
       failNo: newFailNo,

@@ -5,7 +5,8 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -24,11 +25,35 @@ export class NotificationScreen extends Component<Props> {
     this.props.navigation.navigate(Route.ChangeEmail, {
       address: this.props.storedAddress,
     });
+
   onDeletePress = () =>
-    this.props.navigation.navigate(Route.DeleteEmail, {
-      hasWallets: !!this.props.wallets,
-      address: this.props.storedAddress,
+    this.props.navigation.navigate(Route.DeleteEntity, {
+      title: i18n.notifications.deleteEmail,
+      subtitle: i18n.notifications.deleteYourEmail,
+      name: i18n.notifications.deleteYourEmail,
+      onConfirm: this.deleteEmail,
     });
+
+  goToSuccessScreen = () =>
+    CreateMessage({
+      title: i18n.message.success,
+      description: i18n.notifications.deleteEmailSuccessMessage,
+      type: MessageType.success,
+      buttonProps: {
+        title: i18n.notifications.goToNotifications,
+        onPress: () => this.props.navigation.navigate(Route.Notifications),
+      },
+    });
+
+  goToConfirmScreen = () =>
+    this.props.navigation.navigate(Route.ConfirmEmail, {
+      address: this.props.storedAddress,
+      flowType: ConfirmAddressFlowType.DELETE_ADDRESS,
+    });
+
+  deleteEmail = () => {
+    !!this.props.wallets ? this.goToConfirmScreen() : this.goToSuccessScreen();
+  };
 
   onAddEmailPress = () => {
     this.props.navigation.navigate(Route.AddEmail);
