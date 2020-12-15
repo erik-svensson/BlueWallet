@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, BackHandler, StatusBar } from 'react-native';
+import { Text, View, StyleSheet, BackHandler, StatusBar, StyleProp } from 'react-native';
 
 import { Button, Image } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
@@ -34,8 +34,7 @@ export const MessageScreen = (props: Props) => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <Text style={styles.title}>{title}</Text>
-      {/** @ts-ignore: I need a help with that */}
-      <Image source={source} style={[styles.image, imageStyle]} resizeMode="contain" />
+      <Image source={source} style={[styles.image, imageStyle! as StyleProp<any>]} resizeMode="contain" />
       <Text style={styles.description}>{description}</Text>
       {buttonProps && <Button testID="close-button" {...buttonProps} />}
     </View>

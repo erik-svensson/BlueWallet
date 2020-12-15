@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import { Header, ScreenTemplate, Button, FlatButton, CodeInput } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType, CONST } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { typography, palette } from 'app/styles';
 
@@ -20,11 +20,15 @@ interface Props {
 
 interface State {
   code: string;
+  failNo: number;
+  error: string;
 }
 
 export class ConfirmEmailScreen extends Component<Props, State> {
   state = {
     code: '',
+    error: '',
+    failNo: 0,
   };
 
   get infoContainerContent() {
@@ -87,7 +91,29 @@ export class ConfirmEmailScreen extends Component<Props, State> {
     }
   }
 
-  onChange = (code: string) => this.setState({ code });
+  onError = () => {
+    const newFailNo = this.state.failNo + 1;
+    const errorMessage =
+      newFailNo < 3
+        ? i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - newFailNo })
+        : i18n.notifications.codeFinalError;
+    return this.setState({
+      code: '',
+      failNo: newFailNo,
+      error: errorMessage,
+    });
+  };
+
+  onConfirm = () => {
+    if (this.state.code.length !== CONST.pinCodeLength) {
+      //TODO or any other error received from backend
+      return this.onError();
+    }
+    return this.infoContainerContent.onCodeConfirm;
+  };
+
+  onChange = (code: string) =>
+    this.setState({ code, error: '', failNo: this.state.failNo >= CONST.emailCodeErrorMax ? 0 : this.state.failNo });
 
   onResend = () => {};
 
@@ -99,7 +125,7 @@ export class ConfirmEmailScreen extends Component<Props, State> {
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
         footer={
           <>
-            <Button title={i18n._.confirm} onPress={this.infoContainerContent.onCodeConfirm} />
+            <Button title={i18n._.confirm} onPress={this.onConfirm} />
             <FlatButton
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
@@ -116,7 +142,8 @@ export class ConfirmEmailScreen extends Component<Props, State> {
           </Text>
         </View>
         <View style={styles.inputItemContainer}>
-          <CodeInput value={this.state.code} onTextChange={this.onChange} />
+          <CodeInput value={this.state.code} onTextChange={this.onChange} isError={!!this.state.error} />
+          <Text style={styles.error}>{this.state.error}</Text>
         </View>
       </ScreenTemplate>
     );
@@ -144,5 +171,10 @@ const styles = StyleSheet.create({
   address: {
     ...typography.subtitle6,
     color: palette.textBlack,
+  },
+  error: {
+    ...typography.subtitle2,
+    color: palette.textRed,
+    textAlign: 'center',
   },
 });

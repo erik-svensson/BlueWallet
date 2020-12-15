@@ -34,6 +34,7 @@ export const CONST = {
   maxAddressLength: 48,
   tcVersionRequired: 1,
   tcVersion: 'tcVersion',
+  emailCodeErrorMax: 3,
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;

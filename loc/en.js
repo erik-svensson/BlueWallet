@@ -276,6 +276,8 @@ module.exports = {
     deleteYourEmail: 'Delete your email',
     deleteYourEmailDescription: "Are you sure you want to delete your email address? This can't be undone.",
     deleteEmailSuccessMessage: 'Hooray!\n You have successfully deleted your email address.',
+    codeError: 'Please enter a valid code.\n You have {attemptsLeft} more attempts.',
+    codeFinalError: 'You have entered an invalid code 3 times.\n We have sent a new code to your email address.',
   },
   onboarding: {
     changePin: 'Change PIN',
