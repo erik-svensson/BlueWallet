@@ -11,7 +11,6 @@ import {
   MessageScreen,
   EditTextScreen,
   UnlockTransaction,
-  DeleteEmailScreen,
 } from 'app/screens';
 
 import { MainCardStackNavigator } from './MainCardStackNavigator';
@@ -29,7 +28,6 @@ export const RootNavigator = () => (
     <Stack.Screen name={Route.ExportWalletXpub} component={ExportWalletXpubScreen} />
     <Stack.Screen name={Route.DeleteContact} component={DeleteContactScreen} />
     <Stack.Screen name={Route.SendTransactionDetails} component={SendTransactionDetailsScreen} />
-    <Stack.Screen name={Route.DeleteEmail} component={DeleteEmailScreen} />
   </Stack.Navigator>
 );
 
