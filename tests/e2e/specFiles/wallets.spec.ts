@@ -1,6 +1,7 @@
-import { expect } from 'detox';
+import { expect, waitFor } from 'detox';
 
-import { isBeta, WALLET } from '../helpers';
+import { expectToBeDisabled } from '../assertions';
+import { isBeta, ECDSA_KEYS, WALLETS } from '../helpers';
 import app from '../pageObjects';
 
 describe('Wallets', () => {
@@ -35,74 +36,296 @@ describe('Wallets', () => {
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
           await app.wallets.addNewWallet.addFastKeyScreen.tapScanOnQrCode();
-          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(WALLET.FAST_PUBLIC_KEY); // TODO: Use valid string here
+          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.FAST_KEY.PUBLIC_KEY);
 
           await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
-          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(WALLET.CANCEL_PUBLIC_KEY); // TODO: Use valid string here
+          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY);
 
           await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+          await waitFor(app.wallets.addNewWallet.successScreen.mnemonic)
+            .toBeVisible()
+            .withTimeout(20000);
         });
       });
 
-      xdescribe('@android @ios @regression', () => {
+      describe('@android @ios @regression', () => {
+        // TODO: Unskip it once BTCV2-1279 is solved
         xit('should be possible to import an existing 3-Key Vault wallet by using seed phrase', async () => {
           await app.wallets.dashboardScreen.tapOnAddButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
           await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('3-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
+
           await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
-          await app.wallets.importWallet.importScreen.typeSeedPhrase(''); // TODO: Use valid string here
-          await app.wallets.importWallet.importScreen.submit(); // TODO: Use valid string here
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['3-Keys Vault'].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.addFastKeyScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(''); // TODO: Use valid string here
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['3-Keys Vault'].FAST_KEY.PUBLIC_KEY);
 
           await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(''); // TODO: Use valid string here
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
+            WALLETS['3-Keys Vault'].CANCEL_KEY.PUBLIC_KEY,
+          );
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
+          await waitFor(app.wallets.importWallet.successScreen.icon)
+            .toBeVisible()
+            .withTimeout(20000);
         });
 
-        xit('should be possible to import an existing 3-Key Vault wallet by scaning QR code', async () => {});
+        // TODO: Unskip it once BTCV2-1279 is solved
+        xit('should be possible to import an existing 3-Key Vault wallet by scaning QR code', async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
 
-        it("shouldn't be possible to import a 3-Key Vault wallet with non-unique name", async () => {});
+          await app.wallets.addNewWallet.createScreen.tapOnImportButton();
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('2-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
+
+          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
+          await app.wallets.importWallet.importScreen.tapScanOnQrCode();
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['3-Keys Vault'].SEED_PHRASE);
+
+          await app.wallets.importWallet.addFastKeyScreen.tapScanOnQrCode();
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['3-Keys Vault'].FAST_KEY.PUBLIC_KEY);
+
+          await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
+            WALLETS['3-Keys Vault'].CANCEL_KEY.PUBLIC_KEY,
+          );
+
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
+          await waitFor(app.wallets.importWallet.successScreen.icon)
+            .toBeVisible()
+            .withTimeout(20000);
+        });
       });
     });
 
-    xdescribe('2-Key Vault', () => {
+    describe('2-Key Vault', () => {
       describe('@android @ios @regression', () => {
-        xit('should be possible to create a new 2-Key Vault wallet', async () => {});
+        it('should be possible to create a new 2-Key Vault wallet', async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
 
-        xit('should be possible to import an existing 2-Key Vault wallet by using seed phrase', async () => {});
+          await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
+          await app.wallets.addNewWallet.createScreen.chooseType('2-Key Vault');
+          await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
-        xit('should be possible to import an existing 2-Key Vault wallet by scaning QR code', async () => {});
+          await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
+          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY);
+
+          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await waitFor(app.wallets.addNewWallet.successScreen.mnemonic)
+            .toBeVisible()
+            .withTimeout(20000);
+        });
+
+        // TODO: Unskip it once BTCV2-1279 is solved
+        xit('should be possible to import an existing 2-Key Vault wallet by using seed phrase', async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
+
+          await app.wallets.addNewWallet.createScreen.tapOnImportButton();
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('2-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
+
+          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['2-Keys Vault'].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.submit();
+
+          await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
+            WALLETS['2-Keys Vault'].CANCEL_KEY.PUBLIC_KEY,
+          );
+
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
+          await waitFor(app.wallets.importWallet.successScreen.icon)
+            .toBeVisible()
+            .withTimeout(20000);
+        });
+
+        // TODO: Unskip it once BTCV2-1279 is solved
+        xit('should be possible to import an existing 2-Key Vault wallet by scaning QR code', async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
+
+          await app.wallets.addNewWallet.createScreen.tapOnImportButton();
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('2-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
+
+          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
+          await app.wallets.importWallet.importScreen.tapScanOnQrCode();
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['2-Keys Vault'].SEED_PHRASE);
+
+          await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
+            WALLETS['2-Keys Vault'].CANCEL_KEY.PUBLIC_KEY,
+          );
+
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
+          await waitFor(app.wallets.importWallet.successScreen.icon)
+            .toBeVisible()
+            .withTimeout(20000);
+        });
       });
     });
 
-    xdescribe('Standard HD P2SH', () => {
+    describe('Standard HD P2SH', () => {
       describe('@android @ios @regression', () => {
-        it('should be possible to create a new Standard HD P2SH wallet', async () => {});
+        it('should be possible to create a new Standard HD P2SH wallet', async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
 
-        it('should be possible to import an existing Standard wallet by using seed phrase', async () => {});
+          await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
+          await app.wallets.addNewWallet.createScreen.chooseType('Standard HD P2SH');
+          await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
-        it('should be possible to import an existing Standard wallet by scaning QR code', async () => {});
+          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await waitFor(app.wallets.addNewWallet.successScreen.mnemonic)
+            .toBeVisible()
+            .withTimeout(20000);
+        });
+
+        it('should be possible to import an existing Standard wallet by using seed phrase', async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
+
+          await app.wallets.addNewWallet.createScreen.tapOnImportButton();
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('Standard HD P2SH');
+          await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
+
+          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['Standard HD P2SH'].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.submit();
+
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
+          await waitFor(app.wallets.importWallet.successScreen.icon)
+            .toBeVisible()
+            .withTimeout(20000);
+        });
+
+        it('should be possible to import an existing Standard wallet by scaning QR code', async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
+
+          await app.wallets.addNewWallet.createScreen.tapOnImportButton();
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('Standard HD P2SH');
+          await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
+
+          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
+          await app.wallets.importWallet.importScreen.tapScanOnQrCode();
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['Standard HD P2SH'].SEED_PHRASE);
+
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
+          await waitFor(app.wallets.importWallet.successScreen.icon)
+            .toBeVisible()
+            .withTimeout(20000);
+        });
       });
     });
 
-    xdescribe('Advanced wallets', () => {
-      it('should be possible to create a new Standard P2SH wallet', async () => {});
+    describe('Advanced wallets', () => {
+      beforeEach(async () => {
+        await app.navigationBar.changeTab('settings');
+        await app.settings.tapOnAdvancedOptions();
+        await app.settings.tapOnAdvancedOptionsSwitch();
+        await app.header.tapOnBackButton();
+        await app.navigationBar.changeTab('wallets');
+      });
 
-      it('should be possible to create a new Standard HD SegWit wallet', async () => {});
+      it('should be possible to create a new Standard P2SH wallet', async () => {
+        await app.wallets.dashboardScreen.tapOnAddButton();
+
+        await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
+        await app.wallets.addNewWallet.createScreen.chooseType('Standard P2SH');
+        await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
+
+        await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+        await waitFor(app.wallets.addNewWallet.successScreen.mnemonic)
+          .toBeVisible()
+          .withTimeout(20000);
+      });
+
+      it('should be possible to create a new Standard HD SegWit wallet', async () => {
+        await app.wallets.dashboardScreen.tapOnAddButton();
+
+        await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
+        await app.wallets.addNewWallet.createScreen.chooseType('Standard HD SegWit');
+        await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
+
+        await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+        await waitFor(app.wallets.addNewWallet.successScreen.mnemonic)
+          .toBeVisible()
+          .withTimeout(20000);
+      });
     });
 
-    xdescribe('@android @ios @regression', () => {
-      it("shouldn't be possible to create a new wallet with non-unique name", async () => {});
+    describe('General', () => {
+      describe('@android @ios @regression', () => {
+        it("shouldn't be possible to create a new wallet with empty name", async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
 
-      it("shouldn't be possible to create a new wallet with empty name", async () => {});
+          await expectToBeDisabled(app.wallets.addNewWallet.createScreen.createWalletButton);
+        });
 
-      it("shouldn't be possible to create a new wallet with name including special characters", async () => {});
+        it("shouldn't be possible to import an existing wallet with empty name", async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
+
+          await app.wallets.addNewWallet.createScreen.tapOnImportButton();
+          await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
+
+          await expectToBeDisabled(app.wallets.addNewWallet.createScreen.createWalletButton);
+        });
+
+        it("shouldn't be possible to create a new wallet with name including special characters", async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
+
+          await app.wallets.addNewWallet.createScreen.typeName('My-Wallet!');
+          await waitFor(app.wallets.addNewWallet.createScreen.nameValidationError)
+            .toBeVisible()
+            .withTimeout(20000);
+        });
+
+        it("shouldn't be possible to import an existing wallet with name including special characters", async () => {
+          await app.wallets.dashboardScreen.tapOnAddButton();
+
+          await app.wallets.addNewWallet.createScreen.tapOnImportButton();
+          await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
+
+          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
+          await waitFor(app.wallets.importWallet.importScreen.nameValidationError)
+            .toBeVisible()
+            .withTimeout(20000);
+        });
+
+        describe('', () => {
+          const walletName = 'My Wallet';
+
+          beforeEach(async () => {
+            await app.wallets.createWallet({
+              type: 'Standard HD P2SH',
+              name: walletName,
+            });
+          });
+
+          it("shouldn't be possible to create a new wallet with non-unique name", async () => {
+            await app.wallets.dashboardScreen.tapOnAddButton();
+
+            await app.wallets.addNewWallet.createScreen.typeName(walletName);
+            await waitFor(app.wallets.addNewWallet.createScreen.nameValidationError)
+              .toBeVisible()
+              .withTimeout(20000);
+          });
+
+          it("shouldn't be possible to import an existing wallet with non-unique name", async () => {
+            await app.wallets.dashboardScreen.tapOnAddButton();
+
+            await app.wallets.addNewWallet.createScreen.tapOnImportButton();
+            await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
+
+            await app.wallets.importWallet.importScreen.typeName(walletName);
+            await waitFor(app.wallets.importWallet.importScreen.nameValidationError)
+              .toBeVisible()
+              .withTimeout(20000);
+          });
+        });
+      });
     });
   });
 
