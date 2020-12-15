@@ -8,6 +8,7 @@ import { images } from 'app/assets';
 import { CodeInput, Header, ScreenTemplate, Button, FlatButton } from 'app/components';
 import { Route, PasswordNavigatorParams, CONST } from 'app/consts';
 import { createTc as createTcAction } from 'app/state/authentication/actions';
+import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -19,7 +20,7 @@ type State = {
 
 interface Props {
   navigation: StackNavigationProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>;
-
+  createNotificationEmail: Function;
   route: RouteProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>;
   createTc: () => void;
 }
@@ -43,16 +44,22 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   resendCode = () => {};
 
   onSave = () => {
-    this.props.navigation.navigate(Route.Message, {
-      title: i18n.contactCreate.successTitle,
-      description: i18n.onboarding.successCompletedDescription,
-      source: images.success,
-      buttonProps: {
-        title: i18n.onboarding.successCompletedButton,
-        onPress: () => {
-          //TODO: till no logic finish
-          // this.props.navigation.pop();
-        },
+    //TODO: during mockup test simple skip to dashboard
+    const { createTc, createNotificationEmail, navigation } = this.props;
+    createTc();
+    createNotificationEmail('', {
+      onSuccess: () => {
+        navigation.navigate(Route.Message, {
+          title: i18n.contactCreate.successTitle,
+          description: i18n.onboarding.successCompletedDescription,
+          source: images.success,
+          buttonProps: {
+            title: i18n.onboarding.successCompletedButton,
+            onPress: () => {
+              navigation.pop();
+            },
+          },
+        });
       },
     });
   };
@@ -98,6 +105,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 
 const mapDispatchToProps = {
   createTc: createTcAction,
+  createNotificationEmail: createNotificationEmailAction,
 };
 
 export default connect(null, mapDispatchToProps)(ConfirmNotificationCodeScreen);
