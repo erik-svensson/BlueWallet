@@ -174,22 +174,19 @@ export function* checkConnection() {
     const currentIsInternetReachable = yield select(isInternetReachableSelector);
     const currentIsServerConnectedSelector = yield select(isServerConnectedSelector);
 
-    const { internetState, isServerConnected } = yield all({
-      internetState: call(() =>
-        NetInfo.fetch().then((state: NetInfoState) => {
-          if (state.isInternetReachable === null) return;
-          if (state.isInternetReachable !== undefined) {
-            return true;
-          }
-        }),
+    const { isInternetReachable, isServerConnected } = yield all({
+      isInternetReachable: call(
+        async () =>
+          await NetInfo.fetch().then((state: NetInfoState) => {
+            if (state.isInternetReachable === null) return;
+            if (state.isInternetReachable !== undefined) {
+              return true;
+            }
+          }),
       ),
       isServerConnected: call(() => BlueElectrum.ping()),
     });
-    if (internetState === undefined) {
-      throw new Error('Error');
-    }
 
-    const isInternetReachable = internetState;
     const { isInitialized } = (yield select()).wallets;
 
     if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
