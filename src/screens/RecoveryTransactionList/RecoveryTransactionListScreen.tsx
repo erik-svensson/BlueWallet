@@ -139,7 +139,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
   isEmptyList = () => !!!this.props.transactions.length;
 
   render() {
-    const { navigation, route, transactions } = this.props;
+    const { route, transactions } = this.props;
     const { wallet } = route.params;
     const areAllTransactionsSelected = this.areAllTransactionsSelected();
     const toggleAll = this.toggleAllTransactions(areAllTransactionsSelected);
