@@ -4,13 +4,12 @@ import React, { PureComponent } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { icons, images } from 'app/assets';
+import { icons } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
 import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams } from 'app/consts';
 import {
   createTxPassword as createTxPasswordAction,
   setIsAuthenticated as setIsAuthenticatedAction,
-  createTc as createTcAction,
   SetIsAuthenticatedAction,
 } from 'app/state/authentication/actions';
 import { typography, palette } from 'app/styles';
@@ -25,7 +24,6 @@ interface Props {
   createTxPassword: Function;
   setIsAuthenticated: (isAuthenticated: boolean) => SetIsAuthenticatedAction;
   route: RouteProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>;
-  createTc: () => void;
 }
 
 type State = {
@@ -42,23 +40,12 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
   };
 
   onSave = async () => {
-    const { createTxPassword, navigation, createTc } = this.props;
+    const { createTxPassword, navigation } = this.props;
     const { setPassword } = this.props.route.params;
     if (setPassword === this.state.password) {
-      createTc();
       createTxPassword(setPassword, {
         onSuccess: () => {
-          navigation.navigate(Route.Message, {
-            title: i18n.contactCreate.successTitle,
-            description: i18n.onboarding.successDescription,
-            source: images.success,
-            buttonProps: {
-              title: i18n.onboarding.successButton,
-              onPress: () => {
-                navigation.pop();
-              },
-            },
-          });
+          navigation.navigate(Route.AddNotificationEmail);
         },
       });
     } else {
@@ -118,7 +105,6 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
 
 const mapDispatchToProps = {
   createTxPassword: createTxPasswordAction,
-  createTc: createTcAction,
   setIsAuthenticated: setIsAuthenticatedAction,
 };
 

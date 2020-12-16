@@ -25,6 +25,7 @@ import {
   checkConnection as checkConnectionAction,
   CheckConnectionAction,
 } from 'app/state/electrumX/actions';
+import { selectors as notificationSelectors } from 'app/state/notifications';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { isAndroid, isIos } from 'app/styles';
 
@@ -37,6 +38,7 @@ interface MapStateToProps {
   isTcAccepted: boolean;
   isAuthenticated: boolean;
   isTxPasswordSet: boolean;
+  isNotificationEmailSet: boolean;
   isLoading: boolean;
   language: string;
   isInitialized: boolean;
@@ -97,9 +99,9 @@ class Navigator extends React.Component<Props, State> {
   };
 
   shouldRenderOnBoarding = () => {
-    const { isPinSet, isTxPasswordSet } = this.props;
+    const { isPinSet, isTxPasswordSet, isNotificationEmailSet } = this.props;
 
-    return !isPinSet || !isTxPasswordSet;
+    return !isPinSet || !isTxPasswordSet || !isNotificationEmailSet;
   };
 
   shouldRenderUnlockScreen = () => {
@@ -180,6 +182,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isLoading: authenticationSelectors.isLoading(state),
   isPinSet: authenticationSelectors.isPinSet(state),
   isTxPasswordSet: authenticationSelectors.isTxPasswordSet(state),
+  isNotificationEmailSet: notificationSelectors.isNotificationEmailSet(state),
   isAuthenticated: authenticationSelectors.isAuthenticated(state),
   language: appSettingsSelectors.language(state),
   isInitialized: walletsSelectors.isInitialized(state),
