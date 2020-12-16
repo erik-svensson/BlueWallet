@@ -66,6 +66,8 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 
   render() {
     const { error, code } = this.state;
+    const { email } = this.props.route.params;
+
     return (
       <ScreenTemplate
         noScroll
@@ -90,7 +92,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.onboarding.confirmEmail}</Text>
-          <Text style={styles.codeDescription}>{i18n.onboarding.confirmEmailDescription}</Text>
+          <Text style={styles.codeDescription}>{`${i18n.onboarding.confirmEmailDescription} ${email}`}</Text>
         </View>
         <View style={styles.codeContainer}>
           <CodeInput value={this.state.code} testID="confirm-code" onTextChange={this.checkCode} />

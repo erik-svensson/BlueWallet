@@ -361,7 +361,7 @@ export type PasswordNavigatorParams = {
   };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
-  [Route.ConfirmNotificationCode]: undefined;
+  [Route.ConfirmNotificationCode]: { email?: string };
   [Route.AddNotificationEmail]: undefined;
 };
 

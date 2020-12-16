@@ -245,7 +245,7 @@ module.exports = {
     confirmPin: 'Confirm PIN',
     createNewPin: 'New PIN',
     confirmEmail: 'Confirm your email address',
-    confirmEmailDescription: 'Please enter the code that we sent to : verylongname@email.com',
+    confirmEmailDescription: 'Please enter the code that we sent to :',
     createPassword: 'Create transaction password',
     addNotificationEmailDescription:
       'If you want to receive email notifications, please enter your email address. We will send you information about your transaction statuses. You can always change it later.',

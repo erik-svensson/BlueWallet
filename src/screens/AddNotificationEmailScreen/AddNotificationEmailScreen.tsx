@@ -38,8 +38,10 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   };
 
   onSave = () => {
+    const { email } = this.state;
+    // TODO: validation email
     //TODO: pass email and connect with api
-    this.props.navigation.navigate(Route.ConfirmNotificationCode);
+    this.props.navigation.navigate(Route.ConfirmNotificationCode, { email });
   };
 
   skipAddEmail = () => {
