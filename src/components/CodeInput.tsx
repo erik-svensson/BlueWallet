@@ -9,9 +9,10 @@ interface Props {
   value: string;
   testID?: string;
   onTextChange: (pin: string) => void;
+  isError?: boolean;
 }
 
-export const CodeInput = ({ value, onTextChange, testID }: Props) => {
+export const CodeInput = ({ value, onTextChange, testID, isError = false }: Props) => {
   const [_, setValue] = useState('');
   const ref = useBlurOnFulfill({ value, cellCount: CONST.pinCodeLength });
   const [propsInput, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -40,7 +41,7 @@ export const CodeInput = ({ value, onTextChange, testID }: Props) => {
         <View
           onLayout={getCellOnLayoutHandler(index)}
           key={index}
-          style={[styles.cell, isFocused && styles.cellFocused]}
+          style={[styles.cell, isFocused && styles.cellFocused, isError && styles.error]}
         >
           <Text style={styles.cellText}>{symbol || (isFocused && null)}</Text>
         </View>
@@ -69,5 +70,8 @@ const styles = StyleSheet.create({
     color: palette.textBlack,
     fontSize: 36,
     textAlign: 'center',
+  },
+  error: {
+    borderColor: palette.error,
   },
 });

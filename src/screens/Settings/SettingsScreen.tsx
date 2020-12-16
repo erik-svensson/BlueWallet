@@ -38,24 +38,17 @@ export const SettingsScreen = (props: Props) => {
 
   const onAdvancedOptionsChange = () => navigation.navigate(Route.AdvancedOptions);
 
+  const onNotificationsOptionsChange = () => navigation.navigate(Route.Notifications);
+
   const onFingerprintLoginChange = async (value: boolean) => {
     dispatch(updateBiometricSetting(value));
   };
 
   const renderGeneralSettings = () => (
     <>
-      <ListItem
-        testID="language-settings-item"
-        title={i18n.settings.language}
-        source={icons.languageIcon}
-        onPress={navigateToSelectLanguage}
-      />
-      <ListItem
-        testID="advanced-options-settings-item"
-        title={i18n.settings.advancedOptions}
-        source={icons.buildIcon}
-        onPress={onAdvancedOptionsChange}
-      />
+      <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} />
+      <ListItem title={i18n.settings.advancedOptions} source={icons.buildIcon} onPress={onAdvancedOptionsChange} />
+      <ListItem title={i18n.settings.notifications} source={icons.bell} onPress={onNotificationsOptionsChange} />
     </>
   );
 

@@ -34,6 +34,7 @@ export const CONST = {
   maxAddressLength: 48,
   tcVersionRequired: 1,
   tcVersion: 'tcVersion',
+  emailCodeErrorMax: 3,
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
@@ -131,6 +132,11 @@ export enum Route {
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
+  Notifications = 'Notifications',
+  AddEmail = 'AddEmail',
+  ConfirmEmail = 'ConfirmEmail',
+  ChooseWalletsForNotification = 'ChooseWalletsForNotification',
+  ChangeEmail = 'ChangeEmail',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -201,6 +207,14 @@ export enum TxType {
   INSTANT = 'INSTANT',
   RECOVERY = 'RECOVERY',
 }
+
+export enum ConfirmAddressFlowType {
+  FIRST_ADDRESS = 'FIRST_ADDRESS',
+  CURRENT_ADDRESS = 'CURRENT_ADDRESS',
+  NEW_ADDRESS = 'NEW_ADDRESS',
+  DELETE_ADDRESS = 'DELETE_ADDRESS',
+}
+
 export interface Transaction {
   hash: string;
   txid: string;
@@ -441,6 +455,19 @@ export type MainCardStackNavigatorParams = {
     chunkNo: number;
     chunksQuantity: number;
     onScanned: () => void;
+  };
+  [Route.Notifications]: undefined;
+  [Route.AddEmail]: undefined;
+  [Route.ConfirmEmail]: {
+    address: string;
+    newAddress?: string;
+    flowType: ConfirmAddressFlowType;
+  };
+  [Route.ChooseWalletsForNotification]: {
+    address: string;
+  };
+  [Route.ChangeEmail]: {
+    address: string;
   };
 };
 export type DateType = Date | Dayjs;
