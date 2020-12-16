@@ -42,6 +42,7 @@ import {
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
   ChangeEmailScreen,
+  ReceiveNotificationsConfirmationScreen,
 } from 'app/screens';
 
 const Stack = createStackNavigator<MainCardStackNavigatorParams>();
@@ -95,5 +96,6 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.ConfirmEmail} component={ConfirmEmailScreen} />
     <Stack.Screen name={Route.ChooseWalletsForNotification} component={ChooseWalletsForNotificationScreen} />
     <Stack.Screen name={Route.ChangeEmail} component={ChangeEmailScreen} />
+    <Stack.Screen name={Route.ReceiveNotificationsConfirmation} component={ReceiveNotificationsConfirmationScreen} />
   </Stack.Navigator>
 );

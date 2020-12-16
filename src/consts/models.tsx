@@ -139,6 +139,7 @@ export enum Route {
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
+  ReceiveNotificationsConfirmation = 'ReceiveNotificationsConfirmation',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -477,6 +478,7 @@ export type MainCardStackNavigatorParams = {
   [Route.ChangeEmail]: {
     address: string;
   };
+  [Route.ReceiveNotificationsConfirmation]: undefined;
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {

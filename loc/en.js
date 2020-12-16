@@ -696,4 +696,13 @@ module.exports = {
       'Your internet works, but you are not connected to the network. Please wait a moment and try again.',
     electrumXNotConnected: 'Electrum client is not connected',
   },
+  receiveNotificationsConfirmation: {
+    no: 'No',
+    yes: 'Yes',
+    title: 'Get notifications',
+    header: 'Notifications',
+    description: 'Would you like to receive transaction notifications from this wallet to your email address ',
+    noteFirst: 'Note: ',
+    noteSecound: 'If you want to change your email address you can do it later in Settings.',
+  }
 };
