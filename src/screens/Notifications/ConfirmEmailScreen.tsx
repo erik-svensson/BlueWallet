@@ -43,6 +43,10 @@ export class ConfirmEmailScreen extends Component<Props, State> {
         return this.deleteAddressFlowContent();
       case ConfirmAddressFlowType.ANOTHER_ACTION:
         return this.anotherActionFlowContent();
+      case ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT:
+        return this.receiveNotificationsConfirmationImportFlowContent();
+      case ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE:
+        return this.receiveNotificationsConfirmationCreateFlowContent();
     }
   }
 
@@ -147,6 +151,27 @@ export class ConfirmEmailScreen extends Component<Props, State> {
         }),
     };
   };
+
+  receiveNotificationsConfirmationImportFlowContent = () => ({
+    title: i18n.notifications.verifyAction,
+    description: i18n.notifications.pleaseEnter,
+    onCodeConfirm: () =>
+      CreateMessage({
+        title: i18n.message.hooray,
+        description: i18n.message.successfullWalletImport,
+        type: MessageType.success,
+        buttonProps: {
+          title: i18n.message.returnToDashboard,
+          onPress: () => this.props.navigation.navigate(Route.Dashboard),
+        },
+      }),
+  });
+
+  receiveNotificationsConfirmationCreateFlowContent = () => ({
+    title: i18n.notifications.verifyAction,
+    description: i18n.notifications.pleaseEnter,
+    onCodeConfirm: () => this.props.navigation.navigate(Route.Dashboard),
+  });
 
   onError = () => {
     const newFailNo = this.state.failNo + 1;

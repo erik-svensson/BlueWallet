@@ -31,6 +31,15 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
     allowScreenshots();
   }
 
+  handleOnButtonPress = () => {
+    const {
+      route: {
+        params: { onButtonPress },
+      },
+    } = this.props;
+    onButtonPress ? onButtonPress() : this.props.navigation.navigate(Route.Dashboard);
+  };
+
   navigateBack = () => {
     this.props.navigation.navigate(Route.Dashboard);
   };
@@ -44,7 +53,7 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
 
     return (
       <ScreenTemplate
-        footer={<Button onPress={this.navigateBack} title={i18n.wallets.addSuccess.okButton} />}
+        footer={<Button onPress={this.handleOnButtonPress} title={i18n.wallets.addSuccess.okButton} />}
         header={<Header isBackArrow title={i18n.wallets.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.wallets.addSuccess.subtitle}</Text>
