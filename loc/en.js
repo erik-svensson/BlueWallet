@@ -289,7 +289,7 @@ module.exports = {
     receiveTransactionDescription:
       'Would you like to receive transaction notifications from this wallet to your email address ',
     noteFirst: 'Note: ',
-    noteSecound: 'If you want to change your email address you can do it later in Settings.',
+    noteSecond: 'If you want to change your email address you can do it later in Settings.',
   },
   onboarding: {
     changePin: 'Change PIN',
