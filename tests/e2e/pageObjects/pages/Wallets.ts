@@ -6,13 +6,19 @@ import ScanQrCodeScreen from '../common/ScanQrCodeScreen';
 
 export type WalletType = '3-Key Vault' | '2-Key Vault' | 'Standard HD P2SH' | 'Standard P2SH' | 'Standard HD SegWit';
 
-export interface TwoKeyWalletOptions {
-  cancelPublicKey: string;
+export interface ImportWalletOptions {
+  type: WalletType;
+  name: string;
+  seedPhrase: string;
+  fastPublicKey?: string;
+  cancelPublicKey?: string;
 }
 
-export interface ThreeKeyWalletOptions {
-  fastPublicKey: string;
-  cancelPublicKey: string;
+export interface CreateWalletOptions {
+  type: WalletType;
+  name: string;
+  fastPublicKey?: string;
+  cancelPublicKey?: string;
 }
 
 const Wallets = () => {
@@ -42,11 +48,11 @@ const Wallets = () => {
       nameValidationError: element(by.id('create-wallet-name-input-validation-error')),
 
       walletTypeRadios: {
-        '3-Key Vault': element(by.id('3-key-vault-radio')),
-        '2-Key Vault': element(by.id('2-key-vault-radio')),
-        'Standard HD P2SH': element(by.id('hd-p2sh-radio')),
-        'Standard P2SH': element(by.id('segwit-p2sh-radio')),
-        'Standard HD SegWit': element(by.id('hd-segwit-p2sh-radio')),
+        '3-Key Vault': element(by.id('create-3-key-vault-radio')),
+        '2-Key Vault': element(by.id('create-2-key-vault-radio')),
+        'Standard HD P2SH': element(by.id('create-hd-p2sh-radio')),
+        'Standard P2SH': element(by.id('create-segwit-p2sh-radio')),
+        'Standard HD SegWit': element(by.id('create-hd-segwit-p2sh-radio')),
       },
 
       createWalletButton: element(by.id('create-wallet-button')),
@@ -57,7 +63,8 @@ const Wallets = () => {
       },
 
       async chooseType(type: WalletType) {
-        await actions.tap(this.walletTypeRadios[type]);
+        // Note: For some reasons it's required to tap multiple times, it seems keyboard is "opened in headless" or whatever
+        await actions.multiTap(this.walletTypeRadios[type], 5);
       },
 
       async tapOnCreateButton() {
@@ -86,7 +93,8 @@ const Wallets = () => {
     });
 
     const SuccessScreen = () => ({
-      closeButton: element(by.id('close-button')),
+      closeButton: element(by.id('create-wallet-close-button')),
+      mnemonic: element(by.id('create-wallet-mnemonic')),
 
       async tapOnCloseButton() {
         await actions.tap(this.closeButton);
@@ -106,15 +114,15 @@ const Wallets = () => {
   const ImportWallet = () => {
     const ChooseWalletTypeScreen = () => ({
       walletTypeRadios: {
-        '3-Key Vault': element(by.id('3-key-vault-radio')),
-        '2-Key Vault': element(by.id('2-key-vault-radio')),
+        '3-Key Vault': element(by.id('import-3-key-vault-radio')),
+        '2-Key Vault': element(by.id('import-2-key-vault-radio')),
         // eslint-disable-next-line prettier/prettier
-        'Standard': element(by.id('standard-wallet-radio')),
+        'Standard HD P2SH': element(by.id('import-standard-wallet-radio')),
       },
       proceedButton: element(by.id('confirm-import-button')),
 
       async chooseType(type: WalletType) {
-        await actions.tap(this.walletTypeRadios[type]);
+        await actions.multiTap(this.walletTypeRadios[type], 2);
       },
 
       async tapOnProceedButton() {
@@ -125,13 +133,13 @@ const Wallets = () => {
     const ImportScreen = () => ({
       nameInput: element(by.id('import-wallet-name')),
       nameValidationError: element(by.id('import-wallet-name-validation-error')),
-      seedPhraseInput: element(by.id('import-wallet-seed-phrase')),
-      seedPhraseValidationError: element(by.id('import-wallet-seed-phrase-validation-error')),
+      seedPhraseInput: element(by.id('import-wallet-seed-phrase-input')),
+      seedPhraseValidationError: element(by.id('import-wallet-seed-phrase-input-validation-error')),
       submitButton: element(by.id('submit-import-wallet-button')),
       scanQrButton: element(by.id('scan-import-wallet-qr-code-button')),
 
       async typeName(value: string) {
-        await actions.typeText(this.nameInput, value);
+        await actions.typeText(this.nameInput, value, { closeKeyboard: true });
       },
 
       async typeSeedPhrase(value: string) {
@@ -179,23 +187,53 @@ const Wallets = () => {
   const importWallet = ImportWallet();
   const scanQrCodeScreen = ScanQrCodeScreen();
 
-  async function createWallet(
-    type: 'Standard HD P2SH' | 'Standard P2SH' | 'Standard HD SegWit',
-    name: string,
-    options: undefined,
-  ): Promise<void>;
-  async function createWallet(type: '2-Key Vault', name: string, options: TwoKeyWalletOptions): Promise<void>;
-  async function createWallet(type: '3-Key Vault', name: string, options: ThreeKeyWalletOptions): Promise<void>;
-  async function createWallet(type: WalletType, name: string, options: unknown): Promise<void> {}
+  async function createWallet(options: CreateWalletOptions): Promise<void> {
+    const { type, name, fastPublicKey, cancelPublicKey } = options;
 
-  async function importExistingWallet(
-    type: 'Standard HD P2SH' | 'Standard P2SH' | 'Standard HD SegWit',
-    name: string,
-    options: undefined,
-  ): Promise<void>;
-  async function importExistingWallet(type: '2-Key Vault', name: string, options: TwoKeyWalletOptions): Promise<void>;
-  async function importExistingWallet(type: '3-Key Vault', name: string, options: ThreeKeyWalletOptions): Promise<void>;
-  async function importExistingWallet(type: WalletType, name: string, options: unknown): Promise<void> {}
+    await dashboardScreen.tapOnAddButton();
+    await addNewWallet.createScreen.typeName(name);
+    await addNewWallet.createScreen.chooseType(type);
+    await addNewWallet.createScreen.tapOnCreateButton();
+
+    if (type === '3-Key Vault') {
+      await addNewWallet.addFastKeyScreen.tapScanOnQrCode();
+      await addNewWallet.scanQrCodeScreen.scanCustomString(fastPublicKey!);
+    }
+
+    if (type === '3-Key Vault' || type === '2-Key Vault') {
+      await addNewWallet.addFastKeyScreen.tapScanOnQrCode();
+      await addNewWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
+    }
+
+    await addNewWallet.loadingScreen.waitUntilEnded();
+    await addNewWallet.successScreen.tapOnCloseButton();
+  }
+
+  async function importExistingWallet(options: ImportWalletOptions): Promise<void> {
+    const { type, name, seedPhrase, fastPublicKey, cancelPublicKey } = options;
+
+    await dashboardScreen.tapOnAddButton();
+    await addNewWallet.createScreen.tapOnImportButton();
+    await importWallet.chooseWalletTypeScreen.chooseType(type);
+    await importWallet.chooseWalletTypeScreen.tapOnProceedButton();
+
+    await importWallet.importScreen.typeName(name);
+    await importWallet.importScreen.typeSeedPhrase(seedPhrase);
+    await importWallet.importScreen.submit();
+
+    if (type === '3-Key Vault') {
+      await addNewWallet.addFastKeyScreen.tapScanOnQrCode();
+      await addNewWallet.scanQrCodeScreen.scanCustomString(fastPublicKey!);
+    }
+
+    if (type === '3-Key Vault' || type === '2-Key Vault') {
+      await addNewWallet.addFastKeyScreen.tapScanOnQrCode();
+      await addNewWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
+    }
+
+    await importWallet.loadingScreen.waitUntilEnded();
+    await importWallet.successScreen.close();
+  }
 
   return { dashboardScreen, addNewWallet, importWallet, scanQrCodeScreen, createWallet, importExistingWallet };
 };
