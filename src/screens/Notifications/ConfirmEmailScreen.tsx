@@ -41,6 +41,8 @@ export class ConfirmEmailScreen extends Component<Props, State> {
         return this.newAddressFlowContent();
       case ConfirmAddressFlowType.DELETE_ADDRESS:
         return this.deleteAddressFlowContent();
+      case ConfirmAddressFlowType.ANOTHER_ACTION:
+        return this.anotherActionFlowContent();
     }
   }
 
@@ -48,13 +50,27 @@ export class ConfirmEmailScreen extends Component<Props, State> {
     const {
       navigation,
       route: {
-        params: { address },
+        params: { address, walletToSubscribe },
       },
     } = this.props;
     return {
       title: i18n.notifications.confirmEmail,
       description: i18n.notifications.pleaseEnter,
-      onCodeConfirm: () => navigation.navigate(Route.ChooseWalletsForNotification, { address }),
+      onCodeConfirm: () => {
+        if (walletToSubscribe) {
+          // verify code and subscribe certain wallet to email address
+          return CreateMessage({
+            title: i18n.message.success,
+            description: i18n.notifications.walletSubscribedSuccessMessage,
+            type: MessageType.success,
+            buttonProps: {
+              title: i18n.notifications.goToNotifications,
+              onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
+            },
+          });
+        }
+        navigation.navigate(Route.ChooseWalletsForNotification, { address });
+      },
     };
   };
 
@@ -89,7 +105,7 @@ export class ConfirmEmailScreen extends Component<Props, State> {
         type: MessageType.success,
         buttonProps: {
           title: i18n.notifications.goToNotifications,
-          onPress: () => this.props.navigation.navigate(Route.Notifications),
+          onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
         },
       }),
   });
@@ -104,10 +120,33 @@ export class ConfirmEmailScreen extends Component<Props, State> {
         type: MessageType.success,
         buttonProps: {
           title: i18n.notifications.goToNotifications,
-          onPress: () => this.props.navigation.navigate(Route.Notifications),
+          onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
         },
       }),
   });
+
+  anotherActionFlowContent = () => {
+    const {
+      navigation,
+      route: {
+        params: { onBack },
+      },
+    } = this.props;
+    return {
+      title: i18n.notifications.verifyAction,
+      description: i18n.notifications.verifyActionDescription,
+      onCodeConfirm: () =>
+        CreateMessage({
+          title: i18n.message.success,
+          description: i18n.notifications.updateNotificationPreferences,
+          type: MessageType.success,
+          buttonProps: {
+            title: i18n.message.goToWalletDetails,
+            onPress: () => (onBack ? onBack() : navigation.popToTop()),
+          },
+        }),
+    };
+  };
 
   onError = () => {
     const newFailNo = this.state.failNo + 1;
@@ -127,7 +166,7 @@ export class ConfirmEmailScreen extends Component<Props, State> {
       //TODO or any other error received from backend
       return this.onError();
     }
-    return this.infoContainerContent.onCodeConfirm;
+    this.infoContainerContent.onCodeConfirm();
   };
 
   onChange = (code: string) =>
@@ -143,7 +182,7 @@ export class ConfirmEmailScreen extends Component<Props, State> {
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
         footer={
           <>
-            <Button title={i18n._.confirm} onPress={this.onConfirm} />
+            <Button title={i18n._.confirm} onPress={this.onConfirm} disabled={this.state.code.length !== 4} />
             <FlatButton
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
