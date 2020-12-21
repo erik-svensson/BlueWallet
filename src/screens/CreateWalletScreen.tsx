@@ -13,6 +13,7 @@ import {
   ActionMeta,
   CONST,
   WalletType,
+  ConfirmAddressFlowType,
 } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
@@ -25,7 +26,8 @@ import {
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
-import { selectors } from 'app/state/wallets';
+import { selectors as notificationSelectors } from 'app/state/notifications';
+import { selectors as walletsSelector } from 'app/state/wallets';
 import { createWallet as createWalletAction, CreateWalletAction } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
 
@@ -43,6 +45,8 @@ interface Props {
   appSettings: AppSettingsState;
   createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
   walletsLabels: string[];
+  isNotificationEmailSet: boolean;
+  email: string;
 }
 
 interface State {
@@ -86,12 +90,19 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
-    const { navigation, createWallet } = this.props;
+    const { navigation, createWallet, isNotificationEmailSet, email } = this.props;
     wallet.setLabel(label || i18n.wallets.details.title);
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
           secret: w.getSecret(),
+          onButtonPress: isNotificationEmailSet
+            ? () =>
+                this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
+                  address: email,
+                  flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
+                })
+            : undefined,
         });
       },
       onFailure: () => onError(),
@@ -333,7 +344,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   appSettings: state.appSettings,
-  walletsLabels: selectors.getWalletsLabels(state),
+  walletsLabels: walletsSelector.getWalletsLabels(state),
+  isNotificationEmailSet: notificationSelectors.isNotificationEmailSet(state),
+  email: notificationSelectors.email(state),
 });
 
 const mapDispatchToProps = {

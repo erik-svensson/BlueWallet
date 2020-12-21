@@ -139,6 +139,7 @@ export enum Route {
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
+  ReceiveNotificationsConfirmation = 'ReceiveNotificationsConfirmation',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -216,6 +217,8 @@ export enum ConfirmAddressFlowType {
   NEW_ADDRESS = 'NEW_ADDRESS',
   DELETE_ADDRESS = 'DELETE_ADDRESS',
   ANOTHER_ACTION = 'ANOTHER_ACTION',
+  RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT',
+  RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE',
 }
 
 export interface Transaction {
@@ -443,7 +446,7 @@ export type MainCardStackNavigatorParams = {
   [Route.DeleteEntity]: { onConfirm: () => void; name: string | undefined; subtitle: string; title: string };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
-  [Route.CreateWalletSuccess]: { secret: string };
+  [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: () => void };
   [Route.IntegrateKey]: {
     onBarCodeScan: (text: string) => void;
     title: string;
@@ -476,6 +479,10 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.ChangeEmail]: {
     address: string;
+  };
+  [Route.ReceiveNotificationsConfirmation]: {
+    address: string;
+    flowType: ConfirmAddressFlowType;
   };
 };
 export type DateType = Date | Dayjs;
