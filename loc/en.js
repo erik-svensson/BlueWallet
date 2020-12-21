@@ -703,5 +703,4 @@ module.exports = {
       'Your internet works, but you are not connected to the network. Please wait a moment and try again.',
     electrumXNotConnected: 'Electrum client is not connected',
   },
-  receiveNotificationsConfirmation: {},
 };

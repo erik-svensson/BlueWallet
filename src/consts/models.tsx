@@ -446,7 +446,7 @@ export type MainCardStackNavigatorParams = {
   [Route.DeleteEntity]: { onConfirm: () => void; name: string | undefined; subtitle: string; title: string };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
-  [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: Function };
+  [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: () => void };
   [Route.IntegrateKey]: {
     onBarCodeScan: (text: string) => void;
     title: string;
