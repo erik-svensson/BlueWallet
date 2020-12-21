@@ -182,7 +182,11 @@ export class ConfirmEmailScreen extends Component<Props, State> {
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
         footer={
           <>
-            <Button title={i18n._.confirm} onPress={this.onConfirm} disabled={this.state.code.length !== 4} />
+            <Button
+              title={i18n._.confirm}
+              onPress={this.onConfirm}
+              disabled={this.state.code.length !== CONST.codeLength}
+            />
             <FlatButton
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
