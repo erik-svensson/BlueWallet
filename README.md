@@ -16,7 +16,7 @@ The first ever Bitcoin Vault wallet.
     * Xcode
     * [CocoaPods](https://cocoapods.org/)
 
-There are a few more steps you need to follow, to learn more check [Setting up the development environment · React Native](https://reactnative.dev/docs/environment-setup)
+**If you haven't launched any React Native projects before, you should check [Setting up the development environment · React Native](https://reactnative.dev/docs/environment-setup) to set up your local development environment correctly.**
 
 ## Installation
 
