@@ -19,6 +19,7 @@ import {
   SettingsScreen,
   SelectLanguageScreen,
   AboutUsScreen,
+  TermsConditionsSettingsScreen,
   AdvancedOptionsScreen,
   CreatePinScreen,
   CurrentPinScreen,
@@ -65,6 +66,7 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.Settings} component={SettingsScreen} />
     <Stack.Screen name={Route.SelectLanguage} component={SelectLanguageScreen} />
     <Stack.Screen name={Route.AboutUs} component={AboutUsScreen} />
+    <Stack.Screen name={Route.TermsConditions} component={TermsConditionsSettingsScreen} />
     <Stack.Screen name={Route.AdvancedOptions} component={AdvancedOptionsScreen} />
     <Stack.Screen name={Route.CreatePin} component={CreatePinScreen} />
     <Stack.Screen name={Route.CurrentPin} component={CurrentPinScreen} options={{ gestureEnabled: false }} />

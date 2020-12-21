@@ -45,6 +45,7 @@ export const images = {
 
 export const icons = {
   iconDropdown: require('./images/iconDropdown.png'),
+  termsIcon: require('./images/terms.png'),
   search: require('./images/iconSearch.png'),
   addIcon: require('./images/addIcon.png'),
   buildIcon: require('./images/buildIcon.png'),
