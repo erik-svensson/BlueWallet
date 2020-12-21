@@ -1,4 +1,4 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
@@ -17,13 +17,15 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     StackNavigationProp<MainCardStackNavigatorParams, Route.Notifications>
   >;
+  route: RouteProp<MainCardStackNavigatorParams, Route.Notifications>;
+
   wallets: Item[];
-  storedAddress: string;
+  storedAddress?: string;
 }
 export class NotificationScreen extends Component<Props> {
   onChangeEmailPress = () =>
     this.props.navigation.navigate(Route.ChangeEmail, {
-      address: this.props.storedAddress,
+      address: this.props.storedAddress!,
     });
 
   onDeletePress = () =>
@@ -41,14 +43,14 @@ export class NotificationScreen extends Component<Props> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.notifications.goToNotifications,
-        onPress: () => this.props.navigation.navigate(Route.Notifications),
+        onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
       },
     });
 
   goToConfirmScreen = () =>
     this.props.navigation.navigate(Route.ConfirmEmail, {
-      address: this.props.storedAddress,
-      flowType: ConfirmAddressFlowType.DELETE_ADDRESS,
+      address: this.props.storedAddress!,
+      flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
     });
 
   deleteEmail = () => {
@@ -56,7 +58,7 @@ export class NotificationScreen extends Component<Props> {
   };
 
   onAddEmailPress = () => {
-    this.props.navigation.navigate(Route.AddEmail);
+    this.props.navigation.navigate(Route.AddEmail, { walletToSubscribe: this.props.route.params.walletToSubscribe });
   };
 
   renderItem = (item: any) => {
@@ -76,7 +78,7 @@ export class NotificationScreen extends Component<Props> {
   };
 
   renderFooter = () =>
-    this.props.wallets ? (
+    this.props.storedAddress ? (
       <>
         <Button title={i18n.notifications.change} onPress={this.onChangeEmailPress} />
         <FlatButton
@@ -97,7 +99,7 @@ export class NotificationScreen extends Component<Props> {
         noScroll
         footer={this.renderFooter()}
       >
-        {this.props.wallets ? (
+        {this.props.storedAddress ? (
           <>
             <Text style={styles.title}>{i18n.notifications.title}</Text>
             <Text style={styles.description}>{i18n.notifications.description}</Text>
@@ -126,9 +128,8 @@ export class NotificationScreen extends Component<Props> {
 
 // @ts-ignore TODO will be removed when implementing logic
 NotificationScreen.defaultProps = {
-  storedAddress: 'hardcoded-email-address@gmail.com',
+  //   storedAddress: 'hardcoded-email-address@gmail.com',
   wallets: [{ id: '1', name: 'Wallet1', description: 'xxxxxxxxxxxxxxxxxxxxxxx' }],
-  // wallets: undefined,
 };
 
 const styles = StyleSheet.create({

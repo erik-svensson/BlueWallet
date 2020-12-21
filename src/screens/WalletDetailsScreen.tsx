@@ -6,7 +6,15 @@ import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, FlatButton, Header, ScreenTemplate, WalletCard, ButtonType, Text } from 'app/components';
-import { Wallet, Route, MainCardStackNavigatorParams, RootStackParams, ActionMeta, CONST } from 'app/consts';
+import {
+  Wallet,
+  Route,
+  MainCardStackNavigatorParams,
+  RootStackParams,
+  ActionMeta,
+  CONST,
+  ConfirmAddressFlowType,
+} from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
@@ -33,6 +41,8 @@ interface Props {
   deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
   route: RouteProp<MainCardStackNavigatorParams, Route.WalletDetails>;
   walletsLabels: string[];
+  isWalletSubscribed: boolean;
+  storedAddress?: string;
 }
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
@@ -120,8 +130,35 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     });
   };
 
+  onSubscribeButtonPress = () => {
+    const { storedAddress, isWalletSubscribed = true, navigation, wallet } = this.props;
+    if (!isWalletSubscribed) {
+      if (!storedAddress) {
+        // add email and subscribe only certain wallet
+        return navigation.navigate(Route.Notifications, {
+          walletToSubscribe: wallet,
+        });
+      }
+      return navigation.navigate(Route.ConfirmEmail, {
+        // subscribe by confirming code
+        address: storedAddress!,
+        flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+      });
+    } else {
+      navigation.navigate(Route.ConfirmEmail, {
+        //unsubscribe
+        address: storedAddress!,
+        flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+        onBack: () =>
+          navigation.navigate(Route.WalletDetails, {
+            id: this.props.wallet!.id,
+          }),
+      });
+    }
+  };
+
   render() {
-    const { wallet } = this.props;
+    const { wallet, isWalletSubscribed } = this.props;
     if (!wallet) {
       return null;
     }
@@ -134,7 +171,12 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             <Button
               onPress={this.navigateToWalletXpub}
               title={i18n.wallets.details.showWalletXPUB}
-              containerStyle={styles.showWalletXPUBContainer}
+              containerStyle={styles.button}
+            />
+            <Button
+              onPress={this.onSubscribeButtonPress}
+              title={isWalletSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
+              containerStyle={styles.button}
             />
             <FlatButton
               onPress={this.navigateToDeleteWallet}
@@ -182,7 +224,7 @@ const mapDispatchToProps = {
 export default connect(mapStateToProps, mapDispatchToProps)(WalletDetailsScreen);
 
 const styles = StyleSheet.create({
-  showWalletXPUBContainer: {
+  button: {
     marginTop: 20,
   },
   deleteWalletButtonContainer: {

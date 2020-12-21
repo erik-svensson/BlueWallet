@@ -83,7 +83,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
       type: MessageType.success,
       buttonProps: {
         title: i18n.notifications.goToNotifications,
-        onPress: () => this.props.navigation.navigate(Route.Notifications),
+        onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
       },
     });
   };
