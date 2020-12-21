@@ -115,6 +115,7 @@ export enum Route {
   SendCoinsConfirm = 'SendCoinsConfirm',
   EditText = 'EditText',
   AboutUs = 'AboutUs',
+  TermsConditions = 'TermsConditions',
   SelectLanguage = 'SelectLanguage',
   ActionSheet = 'ActionSheet',
   SendTransactionDetails = 'SendTransactionDetailsScreen',
@@ -428,6 +429,7 @@ export type MainCardStackNavigatorParams = {
   [Route.Settings]: undefined;
   [Route.SelectLanguage]: undefined;
   [Route.AboutUs]: undefined;
+  [Route.TermsConditions]: undefined;
   [Route.AdvancedOptions]: undefined;
   [Route.CreatePin]: {
     flowType: string;

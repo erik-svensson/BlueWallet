@@ -436,6 +436,7 @@ module.exports = {
   },
   settings: {
     about: 'About',
+    terms: 'Terms & Privacy',
     aboutUs: 'About us',
     advancedOptions: 'Advanced options',
     Biometrics: 'Allow biometrics',
