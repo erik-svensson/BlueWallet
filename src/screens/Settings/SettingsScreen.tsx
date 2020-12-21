@@ -34,6 +34,8 @@ export const SettingsScreen = (props: Props) => {
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
 
+  const navigateToTermsConditions = () => navigation.navigate(Route.TermsConditions);
+
   const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
 
   const onAdvancedOptionsChange = () => navigation.navigate(Route.AdvancedOptions);
@@ -84,7 +86,10 @@ export const SettingsScreen = (props: Props) => {
   );
 
   const renderAboutSettings = () => (
-    <ListItem onPress={navigateToAboutUs} title={i18n.settings.aboutUs} source={icons.infoIcon} />
+    <>
+      <ListItem onPress={navigateToAboutUs} title={i18n.settings.aboutUs} source={icons.infoIcon} />
+      <ListItem onPress={navigateToTermsConditions} title={i18n.settings.terms} source={icons.termsIcon} />
+    </>
   );
 
   return (
