@@ -7,7 +7,7 @@ import { Header, ScreenTemplate, Button } from 'app/components';
 import { MainCardStackNavigatorParams, MainTabNavigatorParams, Route } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
-const i18n = require('../../../loc');
+const i18n = require('../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
