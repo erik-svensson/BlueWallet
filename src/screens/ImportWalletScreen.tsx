@@ -14,13 +14,15 @@ import {
   ActionMeta,
   ELECTRUM_VAULT_SEED_PREFIXES,
   CONST,
+  ConfirmAddressFlowType,
 } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
-import { selectors } from 'app/state/wallets';
+import { selectors as notificationSelectors } from 'app/state/notifications';
+import { selectors as walletsSelectors } from 'app/state/wallets';
 import { importWallet as importWalletAction, ImportWalletAction } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
 
@@ -43,6 +45,8 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.ImportWallet>;
   importWallet: (wallet: Wallet, meta?: ActionMeta) => ImportWalletAction;
   wallets: Wallet[];
+  isNotificationEmailSet: boolean;
+  email: string;
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
 }
 
@@ -140,7 +144,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
   };
 
   saveWallet = async (newWallet: any) => {
-    const { importWallet, wallets } = this.props;
+    const { importWallet, wallets, isNotificationEmailSet, email } = this.props;
     if (wallets.some(wallet => wallet.secret === newWallet.secret)) {
       this.showErrorMessageScreen({
         title: i18n.wallets.importWallet.walletInUseValidationError,
@@ -152,7 +156,12 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
       importWallet(newWallet, {
         onSuccess: () => {
-          this.showSuccessImportMessageScreen();
+          isNotificationEmailSet
+            ? this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
+                address: email,
+                flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
+              })
+            : this.showSuccessImportMessageScreen();
         },
         onFailure: (error: string) =>
           this.showErrorMessageScreen({
@@ -509,7 +518,9 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  wallets: selectors.wallets(state),
+  wallets: walletsSelectors.wallets(state),
+  isNotificationEmailSet: notificationSelectors.isNotificationEmailSet(state),
+  email: notificationSelectors.email(state),
 });
 
 const mapDispatchToProps = {

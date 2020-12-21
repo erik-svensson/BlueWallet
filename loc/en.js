@@ -280,6 +280,13 @@ module.exports = {
       'You have entered an invalid code {attemptsNo} times.\n We have sent a new code to your email address.',
     walletSubscribedSuccessMessage:
       'Hooray!\n You have successfully added your email address and subscribed to the notifications.',
+    no: 'No',
+    yes: 'Yes',
+    notifications: 'Notifications',
+    receiveTransactionDescription:
+      'Would you like to receive transaction notifications from this wallet to your email address ',
+    noteFirst: 'Note: ',
+    noteSecond: 'If you want to change your email address you can do it later in Settings.',
   },
   onboarding: {
     changePin: 'Change PIN',
