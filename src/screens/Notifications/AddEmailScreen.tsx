@@ -1,4 +1,4 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
@@ -15,6 +15,7 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     StackNavigationProp<MainCardStackNavigatorParams, Route.AddEmail>
   >;
+  route: RouteProp<MainCardStackNavigatorParams, Route.AddEmail>;
 }
 
 interface State {
@@ -34,21 +35,22 @@ export class AddEmailScreen extends Component<Props, State> {
         error: i18n.notifications.invalidAddressError,
       });
     }
-    return this.props.navigation.navigate(Route.ConfirmEmail, {
+    this.props.navigation.navigate(Route.ConfirmEmail, {
       address: this.state.address,
       flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
+      walletToSubscribe: this.props.route.params.walletToSubscribe,
     });
   };
 
   onChange = (address: string) => this.setState({ address, error: '' });
 
   render() {
-    const { address } = this.state;
+    const { address, error } = this.state;
     return (
       <ScreenTemplate
         noScroll
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
-        footer={<Button title={i18n._.confirm} onPress={this.onConfirm} />}
+        footer={<Button title={i18n._.confirm} disabled={!address} onPress={this.onConfirm} />}
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.notifications.addYourEmailFor}</Text>
@@ -60,7 +62,7 @@ export class AddEmailScreen extends Component<Props, State> {
             setValue={this.onChange}
             autoFocus
             label={i18n.notifications.yourEmail}
-            error={this.state.error}
+            error={error}
           />
         </View>
       </ScreenTemplate>

@@ -234,6 +234,7 @@ module.exports = {
     wrongMnemonic: 'Wrong mnemonic',
     wrongMnemonicDesc:
       'Your mnemonic does not match any supported wallet. You are trying to import an invalid mnemonic or wallet that has never been used',
+    goToWalletDetails: 'Go to Wallet Details',
   },
   notifications: {
     addYourAddress: 'Add your email address',
@@ -267,6 +268,7 @@ module.exports = {
     confirmNewTitle: 'Confirm your new email address',
     confirmNewDescription: 'Now confirm your new email address. Please enter the code we sent to ',
     emailChangedSuccessMessage: 'Hooray!\n You have successfully updated your email address.',
+    updateNotificationPreferences: 'Hooray!\n You have successfully updated your notification preferences.',
     verifyAction: 'Verify this action',
     verifyActionDescription: 'To confirm the request, please enter the code we sent to ',
     deleteEmail: 'Delete email address',
@@ -276,6 +278,8 @@ module.exports = {
     codeError: 'Please enter a valid code.\n You have {attemptsLeft} more attempts.',
     codeFinalError:
       'You have entered an invalid code {attemptsNo} times.\n We have sent a new code to your email address.',
+    walletSubscribedSuccessMessage:
+      'Hooray!\n You have successfully added your email address and subscribed to the notifications.',
   },
   onboarding: {
     changePin: 'Change PIN',
@@ -587,6 +591,8 @@ module.exports = {
       nameLabel: 'Name',
       showWalletXPUB: 'Show wallet XPUB',
       typeLabel: 'Type',
+      subscribeWallet: 'Subscribe to email notifications',
+      unsubscribeWallet: 'Unsubscribe from email notifications',
     },
     errors: {
       duplicatedPublicKey: 'The public key has already been added',

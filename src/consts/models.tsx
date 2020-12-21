@@ -213,6 +213,7 @@ export enum ConfirmAddressFlowType {
   CURRENT_ADDRESS = 'CURRENT_ADDRESS',
   NEW_ADDRESS = 'NEW_ADDRESS',
   DELETE_ADDRESS = 'DELETE_ADDRESS',
+  ANOTHER_ACTION = 'ANOTHER_ACTION',
 }
 
 export interface Transaction {
@@ -456,12 +457,18 @@ export type MainCardStackNavigatorParams = {
     chunksQuantity: number;
     onScanned: () => void;
   };
-  [Route.Notifications]: undefined;
-  [Route.AddEmail]: undefined;
+  [Route.Notifications]: {
+    walletToSubscribe?: Wallet;
+  };
+  [Route.AddEmail]: {
+    walletToSubscribe?: Wallet;
+  };
   [Route.ConfirmEmail]: {
     address: string;
     newAddress?: string;
     flowType: ConfirmAddressFlowType;
+    walletToSubscribe?: Wallet;
+    onBack?: () => void;
   };
   [Route.ChooseWalletsForNotification]: {
     address: string;
