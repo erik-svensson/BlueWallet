@@ -1,8 +1,6 @@
 /* eslint-disable react-native/no-raw-text */
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable react/no-unescaped-entities */
-import { CompositeNavigationProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
@@ -18,7 +16,7 @@ import {
   Text,
 } from 'app/components';
 import { HEADER_HEIGHT } from 'app/components/Header';
-import { RootStackParams, Route, MainCardStackNavigatorParams, ImportWalletType, Wallet } from 'app/consts';
+import { ImportWalletType, Wallet } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { createPin, createTxPassword, setIsTcAccepted } from 'app/state/authentication/actions';
 import { importWallet } from 'app/state/wallets/actions';
@@ -38,19 +36,15 @@ const chamberOfSecretsGradient = {
 };
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.ConfirmPin>
-  >;
-  createPin: (value: string, { onSuccess }: { onSuccess: () => void }) => void;
-  createTxPassword: (value: string, { onSuccess }: { onSuccess: () => void }) => void;
+  createPin: (value: string, { onSuccess }?: { onSuccess?: () => void }) => void;
+  createTxPassword: (value: string, { onSuccess }?: { onSuccess?: () => void }) => void;
   setIsTcAccepted: (value: boolean) => void;
-  importWallet: (wallet: Wallet, { onSuccess }: { onSuccess: () => void }) => void;
+  importWallet: (wallet: Wallet, { onSuccess }?: { onSuccess?: () => void }) => void;
   onButtonPress: () => void;
 }
 
 const ChamberOfSecrets = (props: Props) => {
-  const { navigation, createPin, createTxPassword, setIsTcAccepted, onButtonPress } = props;
+  const { createPin, createTxPassword, setIsTcAccepted, onButtonPress } = props;
 
   const [addWallet, setAddWallet] = useState(false);
   const [walletOptions, setWalletOptions] = useState({
@@ -80,18 +74,8 @@ const ChamberOfSecrets = (props: Props) => {
 
   const onPressSkipOnboardingButton = () => {
     setIsTcAccepted(true);
-
-    createPin(defaultPin, {
-      onSuccess: () => {
-        return;
-      },
-    });
-
-    createTxPassword(defaultTransactionPassword, {
-      onSuccess: () => {
-        navigation.navigate(Route.Dashboard);
-      },
-    });
+    createPin(defaultPin);
+    createTxPassword(defaultTransactionPassword);
 
     handleButtonPress();
   };

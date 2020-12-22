@@ -145,9 +145,6 @@ class Navigator extends React.Component<Props, State> {
       return null;
     }
 
-    console.warn('CHAMBER_OF_SECRETS', process.env.CHAMBER_OF_SECRETS);
-    console.warn('isChamberOfSecretsClosed', this.state.isChamberOfSecretsClosed);
-
     if (process.env.CHAMBER_OF_SECRETS === 'true' && !this.state.isChamberOfSecretsClosed) {
       return <ChamberOfSecrets onButtonPress={this.handleOpenChamberOfSecrets} />;
     }
