@@ -5,8 +5,7 @@ import app from '../pageObjects';
 
 describe('Onboarding', () => {
   beforeEach(async () => {
-    await app.termsConditionsScreen.scrollDown();
-    await app.termsConditionsScreen.tapOnAgreeButton();
+    await app.developerRoom.tapOnSkipTermsConditionsButton();
   });
 
   describe('@android @ios @smoke', () => {

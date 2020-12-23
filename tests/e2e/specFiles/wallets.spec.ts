@@ -7,9 +7,7 @@ import app from '../pageObjects';
 describe('Wallets', () => {
   beforeEach(async () => {
     isBeta() && (await app.onboarding.betaVersionScreen.close());
-    await app.termsConditionsScreen.scrollDown();
-    await app.termsConditionsScreen.tapOnAgreeButton();
-    await app.onboarding.passThrough('1111', 'qwertyui');
+    await app.developerRoom.tapOnSkipOnboardingButton();
     await app.navigationBar.changeTab('wallets');
   });
 

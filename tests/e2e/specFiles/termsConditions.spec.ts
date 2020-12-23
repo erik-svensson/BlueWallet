@@ -1,11 +1,15 @@
 import { expect, waitFor } from 'detox';
 
 import { expectToBeDisabled } from '../assertions';
+import { isBeta } from '../helpers';
 import app from '../pageObjects';
 
 describe('Terms & Conditions', () => {
   describe('@android @ios @smoke', () => {
     it('should be possible to accept Terms & Conditions and proceed', async () => {
+      isBeta() && (await app.onboarding.betaVersionScreen.close());
+
+      await app.developerRoom.tapOnDoNothingButton();
       await app.termsConditionsScreen.scrollDown();
       await app.termsConditionsScreen.tapOnAgreeButton();
     });

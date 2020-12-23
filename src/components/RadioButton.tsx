@@ -7,7 +7,7 @@ import { palette, typography } from 'app/styles';
 
 interface Props<T> {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   value: T;
   checked: boolean;
   onPress?: (value: T) => void;
@@ -31,7 +31,7 @@ export const RadioButton = <T extends unknown>(props: Props<T>) => {
     props.onPress && props.onPress(props.value);
   };
 
-  const renderTitle = (title: string, subtitle: string) => (
+  const renderTitle = (title: string, subtitle?: string) => (
     <View style={styles.radioButtonContent}>
       <Text style={styles.radioButtonTitle}>{title}</Text>
       <Text style={styles.radioButtonSubtitle}>{subtitle}</Text>
