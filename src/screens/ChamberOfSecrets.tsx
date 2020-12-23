@@ -43,7 +43,7 @@ const buttonLinearGradientProps = { colors: [...chamberOfSecretsGradient.colors]
 interface Props {
   createPin: (value: string, { onSuccess }?: { onSuccess?: () => void }) => void;
   createTxPassword: (value: string, { onSuccess }?: { onSuccess?: () => void }) => void;
-  createTc: (value: boolean) => void;
+  createTc: () => void;
   importWallet: (wallet: Wallet, { onSuccess }?: { onSuccess?: () => void }) => void;
   onButtonPress: () => void;
   credentials?: {
@@ -77,13 +77,13 @@ const ChamberOfSecrets = (props: Props) => {
   };
 
   const onPressSkipTermsConditionsButton = () => {
-    createTc(true);
+    createTc();
 
     handleButtonPress();
   };
 
   const onPressSkipOnboardingButton = () => {
-    createTc(true);
+    createTc();
     createPin(credentials.pin);
     createTxPassword(credentials.password);
 
