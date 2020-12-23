@@ -10,6 +10,7 @@ import {
 export function* createNotificationEmailSaga(action: CreateNotificationEmailAction | unknown) {
   const { meta, payload } = action as CreateNotificationEmailAction;
   try {
+    // yield call(StoreService.setStoreValue, 'email', payload.email);
     yield put(createNotificationEmailSuccess(payload.email));
     if (meta?.onSuccess) {
       meta.onSuccess();
