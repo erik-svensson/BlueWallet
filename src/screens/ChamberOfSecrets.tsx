@@ -1,5 +1,4 @@
 /* eslint-disable react-native/no-raw-text */
-/* eslint-disable react-native/no-color-literals */
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -18,8 +17,12 @@ import {
 import { HEADER_HEIGHT } from 'app/components/Header';
 import { ImportWalletType, Wallet } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
-import { createPin, createTxPassword, setIsTcAccepted } from 'app/state/authentication/actions';
-import { importWallet } from 'app/state/wallets/actions';
+import {
+  createPin as createPinAction,
+  createTxPassword as createTxPasswordAction,
+  createTc as createTcAction,
+} from 'app/state/authentication/actions';
+import { importWallet as importWalletAction } from 'app/state/wallets/actions';
 import { getStatusBarHeight, typography, palette } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -35,29 +38,36 @@ const chamberOfSecretsGradient = {
   end: { x: 1, y: 1 },
 };
 
+const buttonLinearGradientProps = { colors: [...chamberOfSecretsGradient.colors].reverse() };
+
 interface Props {
   createPin: (value: string, { onSuccess }?: { onSuccess?: () => void }) => void;
   createTxPassword: (value: string, { onSuccess }?: { onSuccess?: () => void }) => void;
-  setIsTcAccepted: (value: boolean) => void;
+  createTc: (value: boolean) => void;
   importWallet: (wallet: Wallet, { onSuccess }?: { onSuccess?: () => void }) => void;
   onButtonPress: () => void;
+  credentials?: {
+    pin: string;
+    password: string;
+  };
 }
 
 const ChamberOfSecrets = (props: Props) => {
-  const { createPin, createTxPassword, setIsTcAccepted, onButtonPress } = props;
+  const {
+    createPin,
+    createTxPassword,
+    createTc,
+    onButtonPress,
+    credentials = { pin: '1234', password: 'qwertyui' },
+  } = props;
 
-  const [addWallet, setAddWallet] = useState(false);
+  const [isAddWalletChecked, setIsAddWalletChecked] = useState(false);
   const [walletOptions, setWalletOptions] = useState({
     type: 'Standard',
-    name: 'BAD MOTHER FUCKER',
+    name: 'My Wallet',
     seedPhrase:
       'innocent surge canoe iron nasty dinner aspect bar brand couch input embrace piano example panic champion aerobic debris search fly repeat sand nuclear tuition',
   });
-
-  const defaultPin = '1234';
-  const defaultTransactionPassword = 'qwertyui';
-
-  const buttonLinearGradientProps = { colors: [...chamberOfSecretsGradient.colors].reverse() };
 
   const handleButtonPress = () => {
     // TODO: To implement an import feature here the whole logic must be extracted from ImportWalletScreen first.
@@ -67,15 +77,15 @@ const ChamberOfSecrets = (props: Props) => {
   };
 
   const onPressSkipTermsConditionsButton = () => {
-    setIsTcAccepted(true);
+    createTc(true);
 
     handleButtonPress();
   };
 
   const onPressSkipOnboardingButton = () => {
-    setIsTcAccepted(true);
-    createPin(defaultPin);
-    createTxPassword(defaultTransactionPassword);
+    createTc(true);
+    createPin(credentials.pin);
+    createTxPassword(credentials.password);
 
     handleButtonPress();
   };
@@ -130,12 +140,12 @@ const ChamberOfSecrets = (props: Props) => {
 
       <CheckBox
         containerStyle={styles.checkboxContainer}
-        checked={addWallet}
+        checked={isAddWalletChecked}
         title="Create wallet?"
-        onPress={() => setAddWallet(!addWallet)}
+        onPress={() => setIsAddWalletChecked(!isAddWalletChecked)}
       />
 
-      {addWallet && (
+      {isAddWalletChecked && (
         <>
           <RadioButton
             testID="import-2-key-vault-radio"
@@ -219,4 +229,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, { createPin, createTxPassword, setIsTcAccepted, importWallet })(ChamberOfSecrets);
+export default connect(null, {
+  createPin: createPinAction,
+  createTxPassword: createTxPasswordAction,
+  createTc: createTcAction,
+  importWallet: importWalletAction,
+})(ChamberOfSecrets);
