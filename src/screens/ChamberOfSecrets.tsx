@@ -109,7 +109,7 @@ const ChamberOfSecrets = (props: Props) => {
         title="Skip Terms & Conditions"
         onPress={onPressSkipTermsConditionsButton}
         linearGradientProps={buttonLinearGradientProps}
-        style={styles.buttonStyle}
+        buttonStyle={styles.button}
       ></Button>
 
       <Button
@@ -117,7 +117,7 @@ const ChamberOfSecrets = (props: Props) => {
         title="Skip Onboarding"
         onPress={onPressSkipOnboardingButton}
         linearGradientProps={buttonLinearGradientProps}
-        style={styles.buttonStyle}
+        buttonStyle={styles.button}
       ></Button>
 
       <Button
@@ -125,7 +125,7 @@ const ChamberOfSecrets = (props: Props) => {
         title="Do nothing, just close it"
         onPress={() => handleButtonPress()}
         linearGradientProps={buttonLinearGradientProps}
-        style={styles.buttonStyle}
+        buttonStyle={styles.button}
       ></Button>
 
       <CheckBox
@@ -206,8 +206,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingBottom: 20,
   },
-  buttonStyle: {
+  button: {
     height: 43,
+    borderRadius: 21,
     marginBottom: 15,
   },
   checkboxContainer: {
