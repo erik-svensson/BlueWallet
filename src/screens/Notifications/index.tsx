@@ -1,5 +1,5 @@
-export { NotificationScreen } from './NotificationScreen';
+export { default as NotificationScreen } from './NotificationScreen';
 export { AddEmailScreen } from './AddEmailScreen';
-export { ConfirmEmailScreen } from './ConfirmEmailScreen';
+export { default as ConfirmEmailScreen } from './ConfirmEmailScreen';
 export { ChooseWalletsForNotificationScreen } from './ChooseWalletsForNotificationScreen';
-export { ChangeEmailScreen } from './ChangeEmailScreen';
+export { default as ChangeEmailScreen } from './ChangeEmailScreen';

@@ -20,6 +20,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
       return {
         ...state,
         error: '',
+        email: action.payload.email,
         isNotificationEmailSet: true,
         isLoading: false,
       };
@@ -27,6 +28,12 @@ export const notificationReducer = (state = initialState, action: NotificationAc
       return {
         ...state,
         error: action.error,
+      };
+    case NotificationAction.DeleteNotificationEmailAction:
+      return {
+        ...state,
+        email: '',
+        isNotificationEmailSet: false,
       };
     default:
       return state;
