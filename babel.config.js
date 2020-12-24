@@ -1,6 +1,7 @@
 module.exports = {
-  presets: ['@babel/preset-typescript', 'module:metro-react-native-babel-preset'],
+  presets: ['@babel/preset-typescript', '@babel/preset-react', 'module:metro-react-native-babel-preset'],
   plugins: [
+    '@babel/plugin-transform-runtime',
     [
       'module-resolver',
       {
