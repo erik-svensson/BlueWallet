@@ -2,10 +2,12 @@ import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, InputItem } from 'app/components';
 import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType } from 'app/consts';
 import { isEmail } from 'app/helpers/helpers';
+import { ApplicationState } from 'app/state';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -16,7 +18,7 @@ interface Props {
     StackNavigationProp<MainCardStackNavigatorParams, Route.ChangeEmail>
   >;
   route: RouteProp<MainCardStackNavigatorParams, Route.ChangeEmail>;
-  storedAddress: string;
+  email: string;
 }
 
 interface State {
@@ -24,7 +26,7 @@ interface State {
   error: string;
 }
 
-export class ChangeEmailScreen extends Component<Props, State> {
+class ChangeEmailScreen extends Component<Props, State> {
   state = {
     address: '',
     error: '',
@@ -37,7 +39,7 @@ export class ChangeEmailScreen extends Component<Props, State> {
       });
     }
     return this.props.navigation.navigate(Route.ConfirmEmail, {
-      address: this.props.storedAddress,
+      address: this.props.email,
       newAddress: this.state.address,
       flowType: ConfirmAddressFlowType.CURRENT_ADDRESS,
     });
@@ -59,7 +61,7 @@ export class ChangeEmailScreen extends Component<Props, State> {
         </View>
         <View style={styles.amountAddress}>
           <Text style={styles.inputLabel}>{i18n.notifications.yourCurrentEmail}</Text>
-          <Text style={styles.address}>{this.props.storedAddress}</Text>
+          <Text style={styles.address}>{this.props.email}</Text>
         </View>
         <View style={styles.inputItemContainer}>
           <InputItem
@@ -75,10 +77,11 @@ export class ChangeEmailScreen extends Component<Props, State> {
   }
 }
 
-// @ts-ignore TODO will be removed when implementing logic
-ChangeEmailScreen.defaultProps = {
-  storedAddress: 'hardcoded-email-address@gmail.com',
-};
+const mapStateToProps = (state: ApplicationState) => ({
+  email: state.notifications.email,
+});
+
+export default connect(mapStateToProps)(ChangeEmailScreen);
 
 const styles = StyleSheet.create({
   infoContainer: {

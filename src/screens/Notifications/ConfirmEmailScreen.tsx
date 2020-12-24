@@ -1,11 +1,20 @@
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CodeInput } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType, CONST } from 'app/consts';
+import {
+  Route,
+  MainCardStackNavigatorParams,
+  RootStackParams,
+  ConfirmAddressFlowType,
+  CONST,
+  ActionMeta,
+} from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { createNotificationEmail, CreateNotificationEmailAction } from 'app/state/notifications/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -16,6 +25,7 @@ interface Props {
     StackNavigationProp<MainCardStackNavigatorParams, Route.ConfirmEmail>
   >;
   route: RouteProp<MainCardStackNavigatorParams, Route.ConfirmEmail>;
+  createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 }
 
 interface State {
@@ -24,7 +34,7 @@ interface State {
   error: string;
 }
 
-export class ConfirmEmailScreen extends Component<Props, State> {
+class ConfirmEmailScreen extends Component<Props, State> {
   state = {
     code: '',
     error: '',
@@ -187,11 +197,13 @@ export class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onConfirm = () => {
-    if (this.state.code.length !== CONST.pinCodeLength) {
-      //TODO or any other error received from backend
-      return this.onError();
-    }
-    this.infoContainerContent.onCodeConfirm();
+    // authenticate, then:
+    return this.props.createNotificationEmail(this.props.route.params.address, {
+      onFailure: () => Alert.alert('error'),
+      onSuccess: () => {
+        this.infoContainerContent.onCodeConfirm();
+      },
+    });
   };
 
   onChange = (code: string) =>
@@ -235,6 +247,12 @@ export class ConfirmEmailScreen extends Component<Props, State> {
     );
   }
 }
+
+const mapDispatchToProps = {
+  createNotificationEmail,
+};
+
+export default connect(null, mapDispatchToProps)(ConfirmEmailScreen);
 
 const styles = StyleSheet.create({
   infoContainer: {

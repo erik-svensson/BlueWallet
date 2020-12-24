@@ -1,6 +1,4 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
-
-import { StoreService } from 'app/services';
+import { takeEvery, put } from 'redux-saga/effects';
 
 import {
   createNotificationEmailFailure,
@@ -12,8 +10,7 @@ import {
 export function* createNotificationEmailSaga(action: CreateNotificationEmailAction | unknown) {
   const { meta, payload } = action as CreateNotificationEmailAction;
   try {
-    yield call(StoreService.setStoreValue, 'email', payload.email);
-    yield put(createNotificationEmailSuccess());
+    yield put(createNotificationEmailSuccess(payload.email));
     if (meta?.onSuccess) {
       meta.onSuccess();
     }
