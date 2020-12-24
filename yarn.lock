@@ -2827,6 +2827,7 @@ aws4@^1.8.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
+<<<<<<< HEAD
 
 axios@^0.21.0:
   version "0.21.0"
@@ -2834,6 +2835,8 @@ axios@^0.21.0:
   integrity sha512-fmkJBknJKoZwem3/IKSSLpkdNXZeBu5Q7GA/aRsr2btgrptmSCxi2oFjZHqGdK9DoTil9PIHlPIZw2EcRJXRvw==
   dependencies:
     follow-redirects "^1.10.0"
+=======
+>>>>>>> develop
 
 babel-eslint@10.1.0, babel-eslint@^10.0.2:
   version "10.1.0"
@@ -4297,10 +4300,17 @@ detect-newline@^3.0.0:
   resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-3.1.0.tgz#576f5dfc63ae1a192ff192d8ad3af6308991b651"
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
+<<<<<<< HEAD
 detox@^17.10.3:
   version "17.11.0"
   resolved "https://registry.yarnpkg.com/detox/-/detox-17.11.0.tgz#2392a5e6b33fb1252609015f6c9b1f8a04ef9209"
   integrity sha512-Jr9L1fU/DrSLMu/EWNsd6fF2BDGJZrEvYcYY8Cc/tWkBianxlsBUbA713ZfLio4vaAYVWKqrhO1zjnc5+gl2vw==
+=======
+detox@^17.14.4:
+  version "17.14.4"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-17.14.4.tgz#492d13a9b0e14d1ef9cf6b0636c6f50c1215b9c5"
+  integrity sha512-VfAPw6GemF/GPmc0VkoUiUlDn8yo7kxh332iflV7s/EcAxLSu5y5kg4kBMVHudHvxmQKyIwNXqUty/3yFh8G8w==
+>>>>>>> develop
   dependencies:
     bunyan "^1.8.12"
     bunyan-debug-stream "^1.1.0"
@@ -6385,6 +6395,7 @@ jest-circus@^26.6.1:
   version "26.6.3"
   resolved "https://registry.yarnpkg.com/jest-circus/-/jest-circus-26.6.3.tgz#3cc7ef2a6a3787e5d7bfbe2c72d83262154053e7"
   integrity sha512-ACrpWZGcQMpbv13XbzRzpytEJlilP/Su0JtNCi5r/xLpOUhnaIJr8leYYpLEMgPFURZISEHrnnpmB54Q/UziPw==
+<<<<<<< HEAD
   dependencies:
     "@babel/traverse" "^7.1.0"
     "@jest/environment" "^26.6.2"
@@ -6413,6 +6424,36 @@ jest-cli@^26.6.3:
   resolved "https://registry.yarnpkg.com/jest-cli/-/jest-cli-26.6.3.tgz#43117cfef24bc4cd691a174a8796a532e135e92a"
   integrity sha512-GF9noBSa9t08pSyl3CY4frMrqp+aQXFGFkf5hEPbh/pIUFYWMK6ZLTfbmadxJVcJrdRoChlWQsA2VkJcDFK8hg==
   dependencies:
+=======
+  dependencies:
+    "@babel/traverse" "^7.1.0"
+    "@jest/environment" "^26.6.2"
+    "@jest/test-result" "^26.6.2"
+    "@jest/types" "^26.6.2"
+    "@types/babel__traverse" "^7.0.4"
+    "@types/node" "*"
+    chalk "^4.0.0"
+    co "^4.6.0"
+    dedent "^0.7.0"
+    expect "^26.6.2"
+    is-generator-fn "^2.0.0"
+    jest-each "^26.6.2"
+    jest-matcher-utils "^26.6.2"
+    jest-message-util "^26.6.2"
+    jest-runner "^26.6.3"
+    jest-runtime "^26.6.3"
+    jest-snapshot "^26.6.2"
+    jest-util "^26.6.2"
+    pretty-format "^26.6.2"
+    stack-utils "^2.0.2"
+    throat "^5.0.0"
+
+jest-cli@^26.6.3:
+  version "26.6.3"
+  resolved "https://registry.yarnpkg.com/jest-cli/-/jest-cli-26.6.3.tgz#43117cfef24bc4cd691a174a8796a532e135e92a"
+  integrity sha512-GF9noBSa9t08pSyl3CY4frMrqp+aQXFGFkf5hEPbh/pIUFYWMK6ZLTfbmadxJVcJrdRoChlWQsA2VkJcDFK8hg==
+  dependencies:
+>>>>>>> develop
     "@jest/core" "^26.6.3"
     "@jest/test-result" "^26.6.2"
     "@jest/types" "^26.6.2"

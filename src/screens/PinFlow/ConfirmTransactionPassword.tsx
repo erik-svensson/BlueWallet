@@ -73,8 +73,8 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
         keyboardShouldPersistTaps="always"
         footer={
           <Button
-            title={i18n._.save}
             testID="submit-transaction-password-confirmation"
+            title={i18n._.save}
             onPress={this.onSave}
             disabled={password.length < CONST.transactionMinPasswordLength}
           />
@@ -90,8 +90,8 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
             <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem
-            value={password}
             testID="confirm-transaction-password"
+            value={password}
             setValue={this.updatePassword}
             autoFocus={true}
             error={error}

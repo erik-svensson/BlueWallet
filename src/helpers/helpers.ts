@@ -24,3 +24,12 @@ export const isEmail = (address: string): boolean => {
   const reg = new RegExp(rEmail);
   return reg.test(address);
 };
+
+export const checkZero = (amount: string) => {
+  if (amount.charAt(0) === '.' || amount.charAt(0) === ',') {
+    const newAmount = `0.${amount.substring(1)}`;
+    return newAmount;
+  } else {
+    return amount;
+  }
+};

@@ -64,6 +64,7 @@ ios/Pods/
 
 # Testing
 coverage
+artifacts
 
 # Sentry
 sentry.properties

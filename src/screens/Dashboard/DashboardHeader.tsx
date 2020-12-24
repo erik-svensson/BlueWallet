@@ -20,11 +20,11 @@ export class DashboardHeader extends React.PureComponent<Props> {
     return (
       <GradientView variant={GradientView.Variant.Primary} style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.leftElement} onPress={onFilterPress}>
+          <TouchableOpacity testID="filter-transactions-button" style={styles.leftElement} onPress={onFilterPress}>
             <Image style={styles.icon} source={icons.filter} />
           </TouchableOpacity>
           <Text style={styles.title}>{i18n.wallets.dashboard.title}</Text>
-          <TouchableOpacity style={styles.rightElement} onPress={onAddPress}>
+          <TouchableOpacity testID="add-wallet-button" style={styles.rightElement} onPress={onAddPress}>
             <Image source={icons.addIcon} style={styles.icon} />
           </TouchableOpacity>
         </View>

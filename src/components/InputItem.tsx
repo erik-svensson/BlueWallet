@@ -148,7 +148,7 @@ export class InputItem extends Component<Props, State> {
           }}
         />
         {!!error && (
-          <Text testID="validation-error-message" style={styles.error}>
+          <Text testID={`${this.props.testID}-validation-error`} style={styles.error}>
             {error}
           </Text>
         )}
