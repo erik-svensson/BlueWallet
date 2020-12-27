@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { CodeInput, Header, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, PasswordNavigatorParams, CONST } from 'app/consts';
+import { Route, PasswordNavigatorParams, CONST, RootStackParams } from 'app/consts';
 import { createTc as createTcAction } from 'app/state/authentication/actions';
 import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
@@ -19,7 +19,11 @@ type State = {
 };
 
 interface Props {
-  navigation: StackNavigationProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>
+  >;
+
   createNotificationEmail: Function;
   route: RouteProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>;
   createTc: () => void;
@@ -56,7 +60,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
           buttonProps: {
             title: i18n.onboarding.successCompletedButton,
             onPress: () => {
-              navigation.pop();
+              navigation.navigate(Route.MainCardStackNavigator);
             },
           },
         });
