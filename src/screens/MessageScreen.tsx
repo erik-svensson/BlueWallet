@@ -34,7 +34,12 @@ export const MessageScreen = (props: Props) => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <Text style={styles.title}>{title}</Text>
-      <Image source={source} style={[styles.image, imageStyle! as StyleProp<any>]} resizeMode="contain" testID={testID} />
+      <Image
+        source={source}
+        style={[styles.image, imageStyle! as StyleProp<any>]}
+        resizeMode="contain"
+        testID={testID}
+      />
       <Text style={styles.description}>{description}</Text>
       {buttonProps && <Button testID="message-close-button" {...buttonProps} />}
     </View>
