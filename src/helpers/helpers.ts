@@ -33,3 +33,12 @@ export const checkZero = (amount: string) => {
     return amount;
   }
 };
+
+export const agreedCode = (code: string) => {
+  //TODO: till we not connect backend hard code this code
+  const tempCode = '1111';
+  if (tempCode !== code) {
+    return false;
+  }
+  return true;
+};

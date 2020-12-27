@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { images } from 'app/assets';
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
 import { Route, PasswordNavigatorParams, RootStackParams } from 'app/consts';
+import { isEmail } from 'app/helpers/helpers';
 import { createTc as createTcAction } from 'app/state/authentication/actions';
 import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
 import { typography, palette } from 'app/styles';
@@ -42,7 +43,11 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   onSave = () => {
     const { email } = this.state;
-    // TODO: validation email
+    if (!isEmail(email)) {
+      return this.setState({
+        error: i18n.onboarding.emailValidation,
+      });
+    }
     //TODO: pass email and connect with api
     this.props.navigation.navigate(Route.ConfirmNotificationCode, { email });
   };
