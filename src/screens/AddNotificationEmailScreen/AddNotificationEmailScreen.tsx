@@ -86,7 +86,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             />
           </>
         }
-        header={<Header isBackArrow title={i18n.onboarding.onboarding} />}
+        header={<Header title={i18n.onboarding.onboarding} />}
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.onboarding.notification}</Text>
@@ -101,6 +101,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             autoFocus={true}
             error={error}
             secureTextEntry={false}
+            autoCapitalize="none"
           />
         </View>
       </ScreenTemplate>

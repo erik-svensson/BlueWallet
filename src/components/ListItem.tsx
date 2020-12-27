@@ -16,6 +16,8 @@ interface Props {
   iconHeight?: number;
   disabled?: boolean;
   containerStyle?: ViewStyle;
+  testID?: string;
+  switchTestID?: string;
 }
 
 export const ListItem = ({
@@ -28,6 +30,8 @@ export const ListItem = ({
   onPress,
   disabled,
   containerStyle,
+  testID,
+  switchTestID,
 }: Props) => {
   const [switchValueState, setSwitchValueState] = useState(false);
 
@@ -51,6 +55,7 @@ export const ListItem = ({
   return (
     <View style={[styles.container, containerStyle]}>
       <TouchableOpacity
+        testID={testID}
         style={styles.touchableOpacityContainer}
         onPress={handleOnItemPress}
         activeOpacity={disabled ? 1 : 0.2}
@@ -73,7 +78,12 @@ export const ListItem = ({
       </TouchableOpacity>
       {isSwitch() && (
         <View>
-          <StyledSwitch onValueChange={onSwitchPress} value={switchValueState} disabled={disabled || false} />
+          <StyledSwitch
+            testID={switchTestID}
+            onValueChange={onSwitchPress}
+            value={switchValueState}
+            disabled={disabled || false}
+          />
         </View>
       )}
     </View>

@@ -3,6 +3,7 @@ import { Dayjs } from 'dayjs';
 import React from 'react';
 import { KeyboardType, StyleProp, ViewStyle, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
+import { ImageStyle } from 'react-native-fast-image';
 
 import { FastImageSource } from 'app/components';
 import {
@@ -339,13 +340,15 @@ export type RootStackParams = {
     keyboardType?: KeyboardType;
     maxLength?: number;
     emptyValueAllowed?: boolean;
+    checkZero?: (value: string) => string | undefined;
   };
   [Route.Message]: {
     title: string;
     source: FastImageSource;
     description: string;
+    testID?: string;
     buttonProps?: ButtonProps;
-    imageStyle?: StyleProp<ViewStyle>;
+    imageStyle?: StyleProp<ImageStyle>;
     asyncTask?: () => void;
   };
   [Route.ExportWallet]: { wallet: Wallet };
@@ -374,6 +377,7 @@ export type PasswordNavigatorParams = {
     title: string;
     source: FastImageSource;
     description: string;
+    testID?: string;
     buttonProps?: ButtonProps;
     imageStyle?: StyleProp<ViewStyle>;
     asyncTask?: () => void;

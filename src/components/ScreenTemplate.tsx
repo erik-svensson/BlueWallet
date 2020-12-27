@@ -64,6 +64,7 @@ export class ScreenTemplate extends React.PureComponent<Props> {
         <Container
           testID={testID}
           ref={this.scrollRef}
+          testID={testID}
           style={[noScroll && styles.contentContainer, noScroll && contentContainer]}
           contentContainerStyle={[styles.contentContainer, contentContainer]}
           refreshControl={refreshControl}

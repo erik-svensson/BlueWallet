@@ -302,7 +302,7 @@ module.exports = {
     confirmEmailDescription: 'Please enter the code that we sent to :',
     createPassword: 'Create transaction password',
     addNotificationEmailDescription:
-      'If you want to receive email notifications, please enter your email address. We will send you information about your transaction statuses. You can always change it later.',
+      'If you want to receive email notifications, please enter your email address. We will send you information about your transaction statuses. You can always change it later in Settings.',
     createPasswordDescription:
       'Your Transaction Password will be used to verify all of the transactions. You cannot change it later. Transaction Password must contain at least 8 alphanumerical characters.',
     createPin: 'Create PIN',

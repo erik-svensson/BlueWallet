@@ -30,6 +30,7 @@ class AdvancedOptionsScreen extends PureComponent<Props> {
         <Text style={styles.description}>{i18n.advancedOptions.description}</Text>
         <View style={styles.divider} />
         <ListItem
+          switchTestID="advanced-options-switch"
           containerStyle={styles.listItemContainer}
           title={i18n.settings.advancedOptions}
           onSwitchValueChange={this.onSwitch}

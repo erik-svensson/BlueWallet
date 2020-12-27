@@ -237,26 +237,26 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
         {!isAdvancedOptionsEnabled ? (
           <>
             <RadioButton
+              testID="create-2-key-vault-radio"
               title={HDSegwitP2SHArWallet.typeReadable}
               subtitle={i18n.wallets.add.ar}
               value={HDSegwitP2SHArWallet}
-              testID="2-key-wallet-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHArWallet}
               onPress={this.onSelect}
             />
             <RadioButton
+              testID="create-3-key-vault-radio"
               title={HDSegwitP2SHAirWallet.typeReadable}
               subtitle={i18n.wallets.add.air}
               value={HDSegwitP2SHAirWallet}
-              testID="3-key-wallet-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
               onPress={this.onSelect}
             />
             <RadioButton
+              testID="create-hd-p2sh-radio"
               title={i18n.wallets.add.legacyTitle}
               subtitle={i18n.wallets.add.legacy}
               value={HDSegwitP2SHWallet}
-              testID="hd-p2sh-wallet-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHWallet}
               onPress={this.onSelect}
             />
@@ -264,42 +264,42 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
         ) : (
           <>
             <RadioButton
+              testID="create-2-key-vault-radio"
               title={HDSegwitP2SHArWallet.typeReadable}
               subtitle={i18n.wallets.add.ar}
               value={HDSegwitP2SHArWallet}
-              testID="2-key-wallet-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHArWallet}
               onPress={this.onSelect}
             />
             <RadioButton
+              testID="create-3-key-vault-radio"
               title={HDSegwitP2SHAirWallet.typeReadable}
               subtitle={i18n.wallets.add.air}
               value={HDSegwitP2SHAirWallet}
-              testID="3-key-wallet-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
               onPress={this.onSelect}
             />
             <RadioButton
+              testID="create-hd-p2sh-radio"
               title={i18n.wallets.add.legacyHDP2SHTitle}
               subtitle={i18n.wallets.add.legacyHDP2SH}
               value={HDSegwitP2SHWallet}
-              testID="hd-p2sh-checkbox"
               checked={this.state.WalletClass === HDSegwitP2SHWallet}
               onPress={this.onSelect}
             />
             <RadioButton
+              testID="create-segwit-p2sh-radio"
               title={i18n.wallets.add.legacyP2SHTitle}
               subtitle={i18n.wallets.add.LegacyP2SH}
               value={SegwitP2SHWallet}
-              testID="segwit-p2sh-checkbox"
               checked={this.state.WalletClass === SegwitP2SHWallet}
               onPress={this.onSelect}
             />
             <RadioButton
+              testID="create-hd-segwit-p2sh-radio"
               title={i18n.wallets.add.legacyHDSegWitTitle}
               subtitle={i18n.wallets.add.LegacyHDSegWit}
               value={HDSegwitBech32Wallet}
-              testID="hd-segwit-p2sh-checkbox"
               checked={this.state.WalletClass === HDSegwitBech32Wallet}
               onPress={this.onSelect}
             />
@@ -318,11 +318,13 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               disabled={!this.canCreateWallet}
               onPress={this.setupWallet}
               title={i18n.wallets.add.addWalletButton}
+              testID="create-wallet-button"
             />
             <FlatButton
               onPress={this.navigateToImportWallet}
               containerStyle={styles.importButtonContainer}
               title={i18n.wallets.add.importWalletButton}
+              testID="import-wallet-button"
             />
           </>
         }
@@ -335,6 +337,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           setValue={this.setLabel}
           label={i18n.wallets.add.inputLabel}
           maxLength={maxWalletNameLength}
+          testID="create-wallet-name-input"
         />
         {this.renderAdvancedSection()}
       </ScreenTemplate>

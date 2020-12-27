@@ -11,6 +11,7 @@ import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator, PasswordNavigator } from 'app/navigators';
 import { UnlockScreen, TermsConditionsScreen, ConnectionIssuesScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
+import ChamberOfSecrets from 'app/screens/ChamberOfSecrets';
 import { navigationRef } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
@@ -62,12 +63,14 @@ type Props = MapStateToProps & ActionsDisptach & OwnProps;
 interface State {
   isBetaVersionRiskAccepted: boolean;
   isEmulator: boolean;
+  isChamberOfSecretsClosed: boolean;
 }
 
 class Navigator extends React.Component<Props, State> {
   state = {
     isBetaVersionRiskAccepted: false,
     isEmulator: false,
+    isChamberOfSecretsClosed: false,
   };
 
   componentDidMount() {
@@ -133,10 +136,19 @@ class Navigator extends React.Component<Props, State> {
     this.setState({ isBetaVersionRiskAccepted: true });
   };
 
+  handleOpenChamberOfSecrets = () => {
+    this.setState({ isChamberOfSecretsClosed: true });
+  };
+
   renderRoutes = () => {
     const { isLoading, unlockKey, isAuthenticated, hasConnectedToServerAtLeaseOnce, isTcAccepted } = this.props;
+
     if (isLoading) {
       return null;
+    }
+
+    if (process.env.CHAMBER_OF_SECRETS === 'true' && !this.state.isChamberOfSecretsClosed) {
+      return <ChamberOfSecrets onButtonPress={this.handleOpenChamberOfSecrets} />;
     }
 
     if (!isTcAccepted) {

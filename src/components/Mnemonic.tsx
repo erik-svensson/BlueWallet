@@ -5,10 +5,11 @@ import { Chip } from 'app/components';
 
 interface Props {
   mnemonic: string;
+  testID?: string;
 }
 
-export const Mnemonic = ({ mnemonic }: Props) => (
-  <View style={styles.mnemonicPhraseContainer}>
+export const Mnemonic = ({ mnemonic, testID }: Props) => (
+  <View testID={testID} style={styles.mnemonicPhraseContainer}>
     {mnemonic.split(' ').map((word, index) => (
       <View style={styles.chipContainer} key={index + word}>
         <Chip label={`${index + 1}. ${word}`} />
