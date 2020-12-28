@@ -109,7 +109,7 @@ export class InputItem extends Component<Props, State> {
 
   render() {
     const { isAnimatedFocused, isActive, height } = this.state;
-    const { label, suffix, error, secureTextEntry } = this.props;
+    const { label, suffix, error, secureTextEntry, autoCapitalize } = this.props;
     const keyboardType = secureTextEntry ? 'default' : defaultKeyboardType;
 
     const top = this.state.isAnimatedFocused.interpolate({
@@ -148,7 +148,7 @@ export class InputItem extends Component<Props, State> {
           }}
         />
         {!!error && (
-          <Text testID="validation-error-message" style={styles.error}>
+          <Text testID={`${this.props.testID}-validation-error`} style={styles.error}>
             {error}
           </Text>
         )}

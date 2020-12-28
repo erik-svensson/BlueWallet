@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, PasswordNavigatorParams } from 'app/consts';
+import { Route, PasswordNavigatorParams, RootStackParams } from 'app/consts';
+import { isEmail } from 'app/helpers/helpers';
 import { createTc as createTcAction } from 'app/state/authentication/actions';
 import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
 import { typography, palette } from 'app/styles';
@@ -14,7 +15,10 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<PasswordNavigatorParams, Route.AddNotificationEmail>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<PasswordNavigatorParams, Route.AddNotificationEmail>
+  >;
   route: RouteProp<PasswordNavigatorParams, Route.AddNotificationEmail>;
   createTc: () => void;
   createNotificationEmail: Function;
@@ -39,7 +43,11 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   onSave = () => {
     const { email } = this.state;
-    // TODO: validation email
+    if (!isEmail(email)) {
+      return this.setState({
+        error: i18n.onboarding.emailValidation,
+      });
+    }
     //TODO: pass email and connect with api
     this.props.navigation.navigate(Route.ConfirmNotificationCode, { email });
   };
@@ -56,7 +64,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           buttonProps: {
             title: i18n.onboarding.successCompletedButton,
             onPress: () => {
-              navigation.pop();
+              navigation.navigate(Route.MainCardStackNavigator);
             },
           },
         });
@@ -86,7 +94,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             />
           </>
         }
-        header={<Header isBackArrow title={i18n.onboarding.onboarding} />}
+        header={<Header title={i18n.onboarding.onboarding} />}
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.onboarding.notification}</Text>
@@ -101,6 +109,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             autoFocus={true}
             error={error}
             secureTextEntry={false}
+            autoCapitalize="none"
           />
         </View>
       </ScreenTemplate>

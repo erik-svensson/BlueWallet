@@ -7,6 +7,7 @@ interface Props {
   onValueChange?: (value: boolean) => void;
   value?: boolean;
   disabled?: boolean;
+  testID?: string;
 }
 
 const trackColor = {
@@ -14,8 +15,9 @@ const trackColor = {
   true: palette.secondary,
 };
 
-export const StyledSwitch = ({ onValueChange, value, disabled }: Props) => (
+export const StyledSwitch = ({ onValueChange, value, disabled, testID }: Props) => (
   <Switch
+    testID={testID}
     thumbColor={palette.background}
     ios_backgroundColor={palette.white}
     trackColor={trackColor}

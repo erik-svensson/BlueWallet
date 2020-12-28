@@ -9,6 +9,7 @@ export enum GradientVariant {
   Primary = 'Primary',
   Secondary = 'Secondary',
 }
+
 interface Props {
   children?: React.ReactNode;
   variant: GradientVariant;

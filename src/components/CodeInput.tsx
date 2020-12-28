@@ -30,6 +30,7 @@ export const CodeInput = ({ value, onTextChange, testID, isError = false }: Prop
       ref={ref}
       {...propsInput}
       autoFocus
+      autoCapitalize="none"
       testID={testID}
       value={value}
       rootStyle={styles.container}

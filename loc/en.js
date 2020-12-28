@@ -302,7 +302,7 @@ module.exports = {
     confirmEmailDescription: 'Please enter the code that we sent to :',
     createPassword: 'Create transaction password',
     addNotificationEmailDescription:
-      'If you want to receive email notifications, please enter your email address. We will send you information about your transaction statuses. You can always change it later.',
+      'If you want to receive email notifications, please enter your email address. We will send you information about your transaction statuses. You can always change it later in Settings.',
     createPasswordDescription:
       'Your Transaction Password will be used to verify all of the transactions. You cannot change it later. Transaction Password must contain at least 8 alphanumerical characters.',
     createPin: 'Create PIN',
@@ -327,6 +327,9 @@ module.exports = {
     successDescription: 'Hooray! \n  You have successfully created your PIN.',
     successDescriptionChangedPin: 'Hooray! \n  You have successfully changed your PIN.',
     tryAgain: 'Try again after',
+    emailValidation: 'Enter valid email address',
+    validationCodeError: 'Please enter a valid code. You have {numberAttempt} more attempts.',
+    resendCodeError: 'You have entered an invalid code 3 times. \n We have sent a new code to your email address.',
   },
   receive: {
     details: {
