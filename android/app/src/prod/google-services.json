@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:977756931798:android:38c869140727d8c7d3eb77",
         "android_client_info": {
-          "package_name": "io.goldwallet.wallet.beta"
+          "package_name": "io.goldwallet.wallet"
         }
       },
       "oauth_client": [
