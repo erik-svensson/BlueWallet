@@ -32,7 +32,7 @@ export const CONST = {
   pin: 'pin',
   defaultLanguage: 'en',
   maxAddressLength: 48,
-  tcVersionRequired: 1,
+  tcVersionRequired: 2,
   tcVersion: 'tcVersion',
   emailCodeErrorMax: 3,
 };
@@ -477,6 +477,7 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.ChooseWalletsForNotification]: {
     address: string;
+    onboarding?: boolean;
   };
   [Route.ChangeEmail]: {
     address: string;
