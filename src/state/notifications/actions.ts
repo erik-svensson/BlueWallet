@@ -1,10 +1,13 @@
-import { ActionMeta } from 'app/consts';
+import { SubscribePayload, AuthenticatePayload } from 'app/api';
+import { ActionMeta, Wallet } from 'app/consts';
 
 export enum NotificationAction {
   CreateNotificationEmail = 'CreateNotificationEmail',
   CreateNotificationEmailSuccess = 'CreateNotificationEmailSuccess',
   CreateNotificationEmailFailure = 'CreateNotificationEmailFailure',
   DeleteNotificationEmailAction = 'DeleteNotificationEmailAction',
+  SubscribeWalletAction = 'SubscribeWalletAction',
+  AuthenticateEmailAction = 'AuthenticateEmailAction',
 }
 
 export interface CreateNotificationEmailAction {
@@ -31,11 +34,23 @@ export interface DeleteNotificationEmailAction {
   type: NotificationAction.DeleteNotificationEmailAction;
 }
 
+export interface SubscribeWalletAction {
+  type: NotificationAction.SubscribeWalletAction;
+  payload: SubscribePayload;
+}
+
+export interface AuthenticateEmailAction {
+  type: NotificationAction.AuthenticateEmailAction;
+  payload: AuthenticatePayload;
+}
+
 export type NotificationActionType =
   | CreateNotificationEmailAction
   | CreateNotificationEmailSuccessAction
   | CreateNotificationEmailFailureAction
-  | DeleteNotificationEmailAction;
+  | DeleteNotificationEmailAction
+  | SubscribeWalletAction
+  | AuthenticateEmailAction;
 
 export const createNotificationEmail = (email: string, meta?: ActionMeta): CreateNotificationEmailAction => ({
   type: NotificationAction.CreateNotificationEmail,
@@ -55,4 +70,14 @@ export const createNotificationEmailFailure = (error: string): CreateNotificatio
 
 export const deleteNotificationEmail = (): DeleteNotificationEmailAction => ({
   type: NotificationAction.DeleteNotificationEmailAction,
+});
+
+export const subscribeWallet = (wallets: Wallet[], mail: string, lang: string): SubscribeWalletAction => ({
+  type: NotificationAction.SubscribeWalletAction,
+  payload: { wallets, mail, lang },
+});
+
+export const authenticateEmail = (session_token: string, pin: number): AuthenticateEmailAction => ({
+  type: NotificationAction.AuthenticateEmailAction,
+  payload: { session_token, pin },
 });

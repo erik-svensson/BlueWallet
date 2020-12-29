@@ -38,7 +38,7 @@ export class AddEmailScreen extends Component<Props, State> {
     this.props.navigation.navigate(Route.ConfirmEmail, {
       address: this.state.address,
       flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
-      walletToSubscribe: this.props.route.params.walletToSubscribe,
+      walletsToSubscribe: this.props.route.params.walletsToSubscribe,
     });
   };
 

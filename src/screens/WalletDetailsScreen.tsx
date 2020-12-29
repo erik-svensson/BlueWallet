@@ -41,8 +41,7 @@ interface Props {
   deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
   route: RouteProp<MainCardStackNavigatorParams, Route.WalletDetails>;
   walletsLabels: string[];
-  isWalletSubscribed: boolean;
-  storedAddress?: string;
+  email: string;
 }
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
@@ -131,23 +130,23 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   };
 
   onSubscribeButtonPress = () => {
-    const { storedAddress, isWalletSubscribed = true, navigation, wallet } = this.props;
-    if (!isWalletSubscribed) {
-      if (!storedAddress) {
+    const { email, navigation, wallet } = this.props;
+    if (!wallet.isSubscribed) {
+      if (!email) {
         // add email and subscribe only certain wallet
         return navigation.navigate(Route.Notifications, {
-          walletToSubscribe: wallet,
+          walletsToSubscribe: [wallet],
         });
       }
       return navigation.navigate(Route.ConfirmEmail, {
         // subscribe by confirming code
-        address: storedAddress!,
+        address: email!,
         flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
       });
     } else {
       navigation.navigate(Route.ConfirmEmail, {
         //unsubscribe
-        address: storedAddress!,
+        address: email!,
         flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
         onBack: () =>
           navigation.navigate(Route.WalletDetails, {
@@ -158,7 +157,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   };
 
   render() {
-    const { wallet, isWalletSubscribed } = this.props;
+    const { wallet } = this.props;
     if (!wallet) {
       return null;
     }
@@ -175,7 +174,9 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             />
             <Button
               onPress={this.onSubscribeButtonPress}
-              title={isWalletSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
+              title={
+                wallet.isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet
+              }
               containerStyle={styles.button}
             />
             <FlatButton
@@ -211,8 +212,9 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 const mapStateToProps = (state: ApplicationState & reducer.WalletsState, props: Props) => {
   const { id } = props.route.params;
   return {
-    wallet: selectors.getById(state, id),
+    wallet: selectors.getByIdWithNotificationInfo(state, id),
     walletsLabels: selectors.getWalletsLabels(state),
+    email: state.notifications.email,
   };
 };
 

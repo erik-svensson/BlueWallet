@@ -8,19 +8,20 @@ import {
 } from './types';
 
 export const subscribeEmail = (data: SubscribePayload) => {
-  api.post(`subscribe`, {
+  console.log('subscribeEmail', data);
+  return api.post(`/subscribe`, {
     data,
   });
 };
 
-export const unsubscribeEmail = (data: UnsubscribePayload) => {
+export const unsubscribeEmail = (data: UnsubscribePayload) =>
   api.post(`unsubscribe`, {
     data,
   });
-};
 
 export const authenticateEmail = (data: AuthenticatePayload) => {
-  api.post(`authenticate`, {
+  console.log('authenticateEmail', data);
+  return api.post(`authenticate`, {
     data,
   });
 };

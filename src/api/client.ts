@@ -2,11 +2,13 @@ import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 
 import { config } from './config';
 
-export const createApiInstance = () =>
-  axios.create({
-    baseURL: config.baseURL,
+export const createApiInstance = () => {
+  console.log('created', config.baseURL);
+  return axios.create({
+    baseURL: 'https://api.mocki.io/v1',
     headers: { Accept: 'application/json' },
   });
+};
 
 const api = createApiInstance();
 
