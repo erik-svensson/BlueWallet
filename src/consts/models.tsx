@@ -490,16 +490,16 @@ export type MainCardStackNavigatorParams = {
     onScanned: () => void;
   };
   [Route.Notifications]: {
-    walletToSubscribe?: Wallet;
+    walletsToSubscribe?: Wallet[];
   };
   [Route.AddEmail]: {
-    walletToSubscribe?: Wallet;
+    walletsToSubscribe?: Wallet[];
   };
   [Route.ConfirmEmail]: {
     address: string;
     newAddress?: string;
     flowType: ConfirmAddressFlowType;
-    walletToSubscribe?: Wallet;
+    walletsToSubscribe?: Wallet[];
     onBack?: () => void;
   };
   [Route.ChooseWalletsForNotification]: {

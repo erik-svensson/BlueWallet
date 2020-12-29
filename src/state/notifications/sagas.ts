@@ -1,6 +1,7 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
+import { subscribeEmail } from 'app/api/emailApi';
 import { decryptCode } from 'app/helpers/decode';
 import { StoreService } from 'app/services';
 
@@ -14,6 +15,9 @@ import {
   verifyNotificationEmail,
   skipNotificationEmail,
   SetNotificationEmailAction,
+  SubscribeWalletAction,
+  AuthenticateEmailAction,
+  authenticateEmail,
 } from './actions';
 
 enum Result {
@@ -68,7 +72,29 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
   }
 }
 
+export function* subscribeWalletSaga(action: SubscribeWalletAction) {
+  const { payload } = action as SubscribeWalletAction;
+  try {
+    yield call(() => subscribeEmail(payload));
+  } catch (error) {
+    console.log({ error });
+  }
+}
+
+export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
+  console.log({ action });
+  const { payload } = action as AuthenticateEmailAction;
+  try {
+    const response = yield call(authenticateEmail);
+    console.log({ response });
+  } catch (error) {
+    console.log({ error });
+  }
+}
+
 export default [
   takeEvery(NotificationAction.CreateNotificationEmail, createNotificationEmailSaga),
   takeEvery(NotificationAction.SetNotificationEmail, setNotificationEmailSaga),
+  takeEvery(NotificationAction.SubscribeWalletAction, subscribeWalletSaga),
+  takeEvery(NotificationAction.AuthenticateEmailAction, authenticateEmailSaga),
 ];

@@ -68,6 +68,8 @@ export const getById = createSelector(
   (data, id) => data.find(w => w.id === id),
 );
 
+export const getByIdWithNotificationInfo = getById;
+
 export const getWalletsLabels = createSelector(wallets, walletsList => walletsList.map(w => w.label));
 
 export const walletsWithRecoveryTransaction = createSelector(wallets, walletsList =>

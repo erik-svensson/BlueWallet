@@ -68,7 +68,7 @@ export class NotificationScreen extends Component<Props> {
   };
 
   onAddEmailPress = () => {
-    this.props.navigation.navigate(Route.AddEmail, { walletToSubscribe: this.props.route.params.walletToSubscribe });
+    this.props.navigation.navigate(Route.AddEmail, { walletsToSubscribe: this.props.route.params.walletsToSubscribe });
   };
 
   renderItem = (item: any) => {

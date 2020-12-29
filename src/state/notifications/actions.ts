@@ -1,4 +1,5 @@
-import { ActionMeta } from 'app/consts';
+import { SubscribePayload, AuthenticatePayload } from 'app/api';
+import { ActionMeta, Wallet } from 'app/consts';
 
 export enum NotificationAction {
   CreateNotificationEmail = 'CreateNotificationEmail',
@@ -10,6 +11,8 @@ export enum NotificationAction {
   DeleteNotificationEmailAction = 'DeleteNotificationEmailAction',
   SkipNotificationEmailAction = 'SkipNotificationEmailAction',
   VerifyNotificationEmailAction = 'VerifyNotificationEmailAction',
+  SubscribeWalletAction = 'SubscribeWalletAction',
+  AuthenticateEmailAction = 'AuthenticateEmailAction',
 }
 
 export interface CreateNotificationEmailAction {
@@ -65,6 +68,15 @@ export interface VerifyNotificationEmailAction {
     pin: string;
   };
 }
+export interface SubscribeWalletAction {
+  type: NotificationAction.SubscribeWalletAction;
+  payload: SubscribePayload;
+}
+
+export interface AuthenticateEmailAction {
+  type: NotificationAction.AuthenticateEmailAction;
+  payload: AuthenticatePayload;
+}
 
 export type NotificationActionType =
   | CreateNotificationEmailAction
@@ -75,7 +87,9 @@ export type NotificationActionType =
   | SetNotificationEmailFailureAction
   | DeleteNotificationEmailAction
   | SkipNotificationEmailAction
-  | VerifyNotificationEmailAction;
+  | VerifyNotificationEmailAction
+  | SubscribeWalletAction
+  | AuthenticateEmailAction;
 
 export const createNotificationEmail = (email: string, meta?: ActionMeta): CreateNotificationEmailAction => ({
   type: NotificationAction.CreateNotificationEmail,
@@ -120,4 +134,14 @@ export const skipNotificationEmail = (): SkipNotificationEmailAction => ({
 export const verifyNotificationEmail = (pin: string): VerifyNotificationEmailAction => ({
   type: NotificationAction.VerifyNotificationEmailAction,
   payload: { pin },
+});
+
+export const subscribeWallet = (wallets: Wallet[], mail: string, lang: string): SubscribeWalletAction => ({
+  type: NotificationAction.SubscribeWalletAction,
+  payload: { wallets, mail, lang },
+});
+
+export const authenticateEmail = (session_token: string, pin: number): AuthenticateEmailAction => ({
+  type: NotificationAction.AuthenticateEmailAction,
+  payload: { session_token, pin },
 });

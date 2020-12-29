@@ -12,9 +12,17 @@ import {
   ConfirmAddressFlowType,
   CONST,
   ActionMeta,
+  Wallet,
 } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { createNotificationEmail, CreateNotificationEmailAction } from 'app/state/notifications/actions';
+import {
+  authenticateEmail,
+  AuthenticateEmailAction,
+  createNotificationEmail,
+  CreateNotificationEmailAction,
+  subscribeWallet,
+  SubscribeWalletAction,
+} from 'app/state/notifications/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -26,6 +34,8 @@ interface Props {
   >;
   route: RouteProp<MainCardStackNavigatorParams, Route.ConfirmEmail>;
   createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
+  subscribe: (wallets: Wallet[], mail: string, lang: string) => SubscribeWalletAction;
+  authenticate: (session_token: string, pin: number) => AuthenticateEmailAction;
 }
 
 interface State {
@@ -40,6 +50,10 @@ class ConfirmEmailScreen extends Component<Props, State> {
     error: '',
     failNo: 0,
   };
+
+  componentDidMount() {
+    this.props.subscribe('wallet', 'email@com.pl', 'en');
+  }
 
   get infoContainerContent() {
     switch (this.props.route.params.flowType) {
@@ -64,14 +78,14 @@ class ConfirmEmailScreen extends Component<Props, State> {
     const {
       navigation,
       route: {
-        params: { address, walletToSubscribe },
+        params: { address, walletsToSubscribe },
       },
     } = this.props;
     return {
       title: i18n.notifications.confirmEmail,
       description: i18n.notifications.pleaseEnter,
       onCodeConfirm: () => {
-        if (walletToSubscribe) {
+        if (walletsToSubscribe) {
           // verify code and subscribe certain wallet to email address
           return CreateMessage({
             title: i18n.message.success,
@@ -197,13 +211,16 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onConfirm = () => {
-    // authenticate, then:
-    return this.props.createNotificationEmail(this.props.route.params.address, {
-      onFailure: () => Alert.alert('error'),
-      onSuccess: () => {
-        this.infoContainerContent.onCodeConfirm();
-      },
-    });
+    const { walletsToSubscribe } = this.props.route.params;
+    if (walletsToSubscribe?.length) {
+      this.props.authenticate(this.props.route.params.walletsToSubscribe, parseInt(this.state.code));
+    }
+    // return this.props.createNotificationEmail(this.props.route.params.address, {
+    //   onFailure: () => Alert.alert('error'),
+    //   onSuccess: () => {
+    //     this.infoContainerContent.onCodeConfirm();
+    //   },
+    // });
   };
 
   onChange = (code: string) =>
@@ -212,7 +229,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
   onResend = () => {};
 
   render() {
-    const { address } = this.props.route.params;
+    const { address, walletsToSubscribe } = this.props.route.params;
     return (
       <ScreenTemplate
         noScroll
@@ -250,6 +267,8 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
 const mapDispatchToProps = {
   createNotificationEmail,
+  subscribe: subscribeWallet,
+  authenticate: authenticateEmail,
 };
 
 export default connect(null, mapDispatchToProps)(ConfirmEmailScreen);
