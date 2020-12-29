@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, PasswordNavigatorParams, RootStackParams } from 'app/consts';
+import { Route, PasswordNavigatorParams, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
 import { isEmail } from 'app/helpers/helpers';
 import { createTc as createTcAction } from 'app/state/authentication/actions';
 import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
@@ -17,7 +17,10 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<PasswordNavigatorParams, Route.AddNotificationEmail>
+    CompositeNavigationProp<
+      StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>,
+      StackNavigationProp<PasswordNavigatorParams, Route.AddNotificationEmail>
+    >
   >;
   route: RouteProp<PasswordNavigatorParams, Route.AddNotificationEmail>;
   createTc: () => void;
@@ -49,7 +52,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
       });
     }
     //TODO: pass email and connect with api
-    this.props.navigation.navigate(Route.ConfirmNotificationCode, { email });
+    this.props.navigation.navigate(Route.ChooseWalletsForNotification, { address: email, onboarding: true });
   };
 
   skipAddEmail = () => {
