@@ -98,6 +98,11 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
+
+project.ext.sentryCli = [
+    logLevel: "debug"
+]
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -141,7 +146,7 @@ android {
         resValue "string", "build_config_package", "io.goldwallet.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4
+        versionCode 10
         versionName "6.0.2"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
@@ -217,6 +222,7 @@ dependencies {
     implementation project(':react-native-config')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation project(path: ":@react-native-firebase_analytics")
+    implementation project(':@sentry_react-native')
     androidTestImplementation('com.wix:detox:+')
     // JSC from node_modules
     if (useIntlJsc) {
