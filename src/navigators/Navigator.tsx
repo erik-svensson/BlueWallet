@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { CONST } from 'app/consts';
 import { Toasts } from 'app/containers';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
-import { RootNavigator, PasswordNavigator } from 'app/navigators';
+import { RootNavigator, PasswordNavigator, NotificationNavigator } from 'app/navigators';
 import { UnlockScreen, TermsConditionsScreen, ConnectionIssuesScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
 import ChamberOfSecrets from 'app/screens/ChamberOfSecrets';
@@ -102,9 +102,15 @@ class Navigator extends React.Component<Props, State> {
   };
 
   shouldRenderOnBoarding = () => {
-    const { isPinSet, isTxPasswordSet, isNotificationEmailSet } = this.props;
+    const { isPinSet, isTxPasswordSet } = this.props;
 
-    return !isPinSet || !isTxPasswordSet || !isNotificationEmailSet;
+    return !isPinSet || !isTxPasswordSet;
+  };
+
+  shouldRenderNotification = () => {
+    const { isNotificationEmailSet } = this.props;
+
+    return !isNotificationEmailSet;
   };
 
   shouldRenderUnlockScreen = () => {
@@ -165,6 +171,10 @@ class Navigator extends React.Component<Props, State> {
 
     if (this.shouldRenderOnBoarding()) {
       return <PasswordNavigator />;
+    }
+
+    if (this.shouldRenderNotification()) {
+      return <NotificationNavigator />;
     }
 
     if (!hasConnectedToServerAtLeaseOnce) {

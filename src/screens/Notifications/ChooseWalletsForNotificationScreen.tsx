@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 
 import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, PasswordNavigatorParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { typography, palette } from 'app/styles';
 
@@ -15,7 +15,10 @@ type Item = any; // TODO will be changed to proper type when implementing logic
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>
+    CompositeNavigationProp<
+      StackNavigationProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>,
+      StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>
+    >
   >;
   wallets: Item;
   route: RouteProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>;
@@ -77,15 +80,20 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
   );
 
   proceed = () => {
-    CreateMessage({
-      title: i18n.message.success,
-      description: i18n.notifications.emailAddedSuccessMessage,
-      type: MessageType.success,
-      buttonProps: {
-        title: i18n.notifications.goToNotifications,
-        onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
-      },
-    });
+    const { address } = this.props.route.params;
+    if (this.props?.route.params.onboarding) {
+      this.props.navigation.navigate(Route.ConfirmNotificationCode, { email: address });
+    } else {
+      CreateMessage({
+        title: i18n.message.success,
+        description: i18n.notifications.emailAddedSuccessMessage,
+        type: MessageType.success,
+        buttonProps: {
+          title: i18n.notifications.goToNotifications,
+          onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
+        },
+      });
+    }
   };
   render() {
     const { address } = this.props.route.params;
