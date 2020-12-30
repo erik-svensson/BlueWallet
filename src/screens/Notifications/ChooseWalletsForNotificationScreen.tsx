@@ -72,6 +72,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
       </View>
     );
   };
+
   renderListHeader = () => (
     <View style={styles.listHeader}>
       <Text style={styles.listHeaderTitle}> {i18n.tabNavigator.wallets}</Text>

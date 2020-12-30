@@ -3,9 +3,8 @@ import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { config } from './config';
 
 export const createApiInstance = () => {
-  console.log('created', config.baseURL);
   return axios.create({
-    baseURL: 'https://api.mocki.io/v1',
+    baseURL: config.baseURL,
     headers: { Accept: 'application/json' },
   });
 };
