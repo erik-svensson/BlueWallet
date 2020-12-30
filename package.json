@@ -3,7 +3,9 @@
   "version": "6.0.2",
   "devDependencies": {
     "@babel/core": "^7.8.4",
+    "@babel/plugin-transform-react-jsx": "^7.12.12",
     "@babel/preset-flow": "^7.9.0",
+    "@babel/preset-react": "^7.12.10",
     "@babel/preset-typescript": "^7.9.0",
     "@babel/runtime": "^7.8.4",
     "@react-native-community/eslint-config": "^1.1.0",
@@ -27,7 +29,8 @@
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "babel-eslint": "^10.0.2",
-    "babel-jest": "^25.1.0",
+    "babel-jest": "^26.6.3",
+    "babel-plugin-istanbul": "^6.0.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "babel-plugin-transform-remove-console": "^6.9.4",
@@ -65,9 +68,9 @@
     "ios:prod": "react-native run-ios --scheme='GoldWallet (Debug)'",
     "ios:beta": "react-native run-ios --scheme='GoldWallet Beta (Debug)'",
     "build:detox": "detox build",
-    "test": "CI=true yarn jest --forceExit",
+    "test": "yarn jest --forceExit",
+    "test:ci": "CI=true yarn jest --forceExit --collectCoverage",
     "test:detox": "detox test",
-    "test:local": "yarn jest --forceExit",
     "jest": "node node_modules/jest/bin/jest.js tests/*",
     "lint": "eslint '**/*.{js,ts,tsx}'",
     "lint:fix": "yarn lint --fix",
@@ -76,15 +79,6 @@
     "precommit": "yarn lint-staged && yarn typescript:check",
     "shake": "adb shell input keyevent 82",
     "translate:check-missing": "node --experimental-modules -r @std/esm scripts/checkTranslation.mjs"
-  },
-  "jest": {
-    "preset": "react-native",
-    "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
-    },
-    "setupFiles": [
-      "./tests/setup.js"
-    ]
   },
   "dependencies": {
     "@babel/cli": "^7.8.4",
@@ -139,7 +133,7 @@
     "react-native-bootsplash": "^2.2.7",
     "react-native-calendars": "^1.265.0",
     "react-native-camera": "^3.33.0",
-    "react-native-config": "^1.3.3",
+    "react-native-config": "1.4.0",
     "react-native-confirmation-code-field": "6.5.1",
     "react-native-default-preference": "1.4.1",
     "react-native-device-info": "^6.0.2",
@@ -218,7 +212,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "yarn precommit",
-      "pre-push": "yarn test:local"
+      "pre-push": "yarn test"
     }
   }
 }

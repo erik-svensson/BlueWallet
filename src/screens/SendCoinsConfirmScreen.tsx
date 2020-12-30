@@ -91,7 +91,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
   navgitateToMainCard = () => this.props.navigation.navigate(Route.MainCardStackNavigator);
 
   broadcast = () =>
-    new Promise((resolve, reject) => {
+    new Promise<void>((resolve, reject) => {
       const {
         createTransactionNote,
         sendTransaction,
