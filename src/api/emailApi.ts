@@ -27,17 +27,15 @@ export const authenticateEmail = (data: AuthenticatePayload) => {
   });
 };
 
-export const modifyEmail = (data: ModifyPayload) => {
+export const modifyEmail = (data: ModifyPayload) =>
   api.put(`modify`, {
     data,
   });
-};
 
-export const checkSubscriptionEmail = (data: CheckSubscriptionPayload) => {
+export const checkSubscriptionEmail = (data: CheckSubscriptionPayload) =>
   api.get(`check_subscription`, {
     data,
   });
-};
 
 export const verifyEmail = (data: VerifyEmailPayload) =>
   api.post(`/verify_email/`, {
