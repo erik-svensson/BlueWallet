@@ -68,3 +68,7 @@ artifacts
 
 # Sentry
 sentry.properties
+
+# Source map
+sourcemap.ios.js
+sourcemap.android.js

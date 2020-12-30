@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
+# Creates "sentry.properties" file in the root, /ios/, and /android/.
 
-# Create "sentry.properties" file
-echo "defaults.org=goldwallet
+content="defaults.url=https://sentry.io/
+defaults.org=cloudbest
 defaults.project=goldwallet
-auth.token=${SENTRY_AUTH_TOKEN}
-cli.executable=node_modules/@sentry/cli/bin/sentry-cli
-" > sentry.properties
+auth.token=$SENTRY_AUTH_TOKEN"
+
+echo "$content" > sentry.properties
+echo "$content" > ios/sentry.properties
+echo "$content" > android/sentry.properties
