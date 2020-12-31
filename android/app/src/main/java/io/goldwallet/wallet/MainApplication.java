@@ -11,8 +11,6 @@ import com.facebook.soloader.SoLoader;
 import io.goldwallet.PreventScreenshotPackage;
 import java.util.List;
 
-import io.sentry.react.RNSentryPackage;
-
 public class MainApplication extends Application implements ReactApplication {  
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -27,7 +25,6 @@ public class MainApplication extends Application implements ReactApplication {
       // Packages that cannot be autolinked yet can be added manually here, for example:
       // packages.add(new MyReactNativePackage());
       packages.add(new PreventScreenshotPackage());
-      packages.add(new RNSentryPackage());
       
       return packages;
     }
