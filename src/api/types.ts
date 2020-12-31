@@ -24,13 +24,13 @@ export interface Wallet {
 
 export interface SubscribePayload {
   wallets: Wallet[];
-  mail: string;
+  email: string;
   lang: string;
 }
 
 export interface UnsubscribePayload {
   hashes: string[];
-  mail: string;
+  email: string;
 }
 
 export interface AuthenticatePayload {
@@ -40,11 +40,15 @@ export interface AuthenticatePayload {
 
 export interface ModifyPayload {
   hashes: string[];
-  old_mail: string;
-  new_mail: string;
+  old_email: string;
+  new_email: string;
 }
 
 export interface CheckSubscriptionPayload {
   hashes: string[];
-  mail: string;
+  email: string;
+}
+
+export interface VerifyEmailPayload {
+  email: string;
 }

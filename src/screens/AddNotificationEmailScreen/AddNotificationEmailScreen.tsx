@@ -46,13 +46,19 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   onSave = () => {
     const { email } = this.state;
+    const { createNotificationEmail, navigation } = this.props;
     if (!isEmail(email)) {
       return this.setState({
         error: i18n.onboarding.emailValidation,
       });
     }
     //TODO: pass email and connect with api
-    this.props.navigation.navigate(Route.ChooseWalletsForNotification, { address: email, onboarding: true });
+    createNotificationEmail(email, {
+      onSuccess: () => {
+        //TODO: we can remove from that params address
+        navigation.navigate(Route.ChooseWalletsForNotification, { address: email, onboarding: true });
+      },
+    });
   };
 
   skipAddEmail = () => {

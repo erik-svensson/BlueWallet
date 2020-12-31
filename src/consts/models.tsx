@@ -388,6 +388,24 @@ export type PasswordNavigatorParams = {
   [Route.AddNotificationEmail]: undefined;
 };
 
+export type NotificationNavigatorParams = {
+  [Route.Message]: {
+    title: string;
+    source: FastImageSource;
+    description: string;
+    testID?: string;
+    buttonProps?: ButtonProps;
+    imageStyle?: StyleProp<ViewStyle>;
+    asyncTask?: () => void;
+  };
+  [Route.ConfirmNotificationCode]: { email?: string };
+  [Route.AddNotificationEmail]: undefined;
+  [Route.ChooseWalletsForNotification]: {
+    address: string;
+    onboarding?: boolean;
+  };
+};
+
 export type MainCardStackNavigatorParams = {
   [Route.Dashboard]: { activeWallet?: Wallet } | undefined;
   [Route.MainCardStackNavigator]: undefined;

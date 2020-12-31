@@ -5,6 +5,7 @@ import {
   AuthenticatePayload,
   ModifyPayload,
   CheckSubscriptionPayload,
+  VerifyEmailPayload,
 } from './types';
 
 export const subscribeEmail = (data: SubscribePayload) => {
@@ -33,6 +34,12 @@ export const modifyEmail = (data: ModifyPayload) => {
 
 export const checkSubscriptionEmail = (data: CheckSubscriptionPayload) => {
   api.get(`check_subscription`, {
+    data,
+  });
+};
+
+export const verifyEmail = (data: VerifyEmailPayload) => {
+  api.get(`verify_email`, {
     data,
   });
 };

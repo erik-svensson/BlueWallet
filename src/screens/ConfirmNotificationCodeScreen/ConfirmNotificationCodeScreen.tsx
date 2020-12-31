@@ -8,6 +8,7 @@ import { images } from 'app/assets';
 import { CodeInput, Header, ScreenTemplate, Button, FlatButton } from 'app/components';
 import { Route, PasswordNavigatorParams, CONST, RootStackParams } from 'app/consts';
 import { agreedCode } from 'app/helpers/helpers';
+import { ApplicationState } from 'app/state';
 import { createTc as createTcAction } from 'app/state/authentication/actions';
 import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
@@ -29,6 +30,7 @@ interface Props {
   createNotificationEmail: Function;
   route: RouteProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>;
   createTc: () => void;
+  pin: string;
 }
 
 class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
@@ -105,6 +107,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     const { error, code, numberAttempt } = this.state;
     const { email } = this.props.route.params;
     const allowReSend = numberAttempt < CONST.emailCodeErrorMax;
+    console.log(this.props.pin, '>>>>>>>>>>>>>');
     return (
       <ScreenTemplate
         noScroll
@@ -149,7 +152,11 @@ const mapDispatchToProps = {
   createNotificationEmail: createNotificationEmailAction,
 };
 
-export default connect(null, mapDispatchToProps)(ConfirmNotificationCodeScreen);
+const mapStateToProps = (state: ApplicationState) => ({
+  pin: state.notifications.pin,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmNotificationCodeScreen);
 
 const styles = StyleSheet.create({
   codeContainer: {

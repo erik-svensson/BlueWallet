@@ -3,6 +3,7 @@ import { NotificationAction, NotificationActionType } from './actions';
 export interface NotificationState {
   email: string;
   error: string;
+  pin: string;
   isNotificationEmailSet: boolean;
   isLoading: boolean;
 }
@@ -10,6 +11,7 @@ export interface NotificationState {
 const initialState: NotificationState = {
   error: '',
   email: '',
+  pin: '',
   isNotificationEmailSet: false,
   isLoading: true,
 };
@@ -34,6 +36,11 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         ...state,
         email: '',
         isNotificationEmailSet: false,
+      };
+    case NotificationAction.VerifyNotificationEmailAction:
+      return {
+        ...state,
+        pin: action.payload.pin,
       };
     default:
       return state;
