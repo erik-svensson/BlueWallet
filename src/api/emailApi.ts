@@ -1,3 +1,5 @@
+import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
+
 import api from './client';
 import {
   SubscribePayload,
@@ -38,8 +40,7 @@ export const checkSubscriptionEmail = (data: CheckSubscriptionPayload) => {
   });
 };
 
-export const verifyEmail = (data: VerifyEmailPayload) => {
-  api.get(`verify_email`, {
-    data,
+export const verifyEmail = (data: VerifyEmailPayload) =>
+  api.post(`/verify_email/`, {
+    ...data,
   });
-};

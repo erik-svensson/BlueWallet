@@ -2,13 +2,10 @@ import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 
 import { config } from './config';
 
-export const createApiInstance = () =>
-  axios.create({
-    baseURL: config.baseURL,
-    headers: { Accept: 'application/json' },
-  });
-
-const api = createApiInstance();
+const api = axios.create({
+  baseURL: config.baseURL,
+  headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+});
 
 export const setRequestInterceptor = (appInstance: AxiosInstance) =>
   appInstance.interceptors.request.use(
@@ -24,8 +21,7 @@ export const setResponseInterceptor = (appInstance: AxiosInstance) =>
   appInstance.interceptors.response.use(
     response => {
       //TODO: do something with the response data
-
-      return response;
+      return response.data;
     },
     error => Promise.reject(error),
   );
