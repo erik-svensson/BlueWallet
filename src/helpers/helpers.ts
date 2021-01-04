@@ -1,5 +1,7 @@
 import { CONST, Wallet, TxType } from 'app/consts';
 
+import { decryptCode } from './decode';
+
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const isAllWallets = (wallet: Wallet): boolean => wallet.label === CONST.allWallets;
@@ -34,10 +36,10 @@ export const checkZero = (amount: string) => {
   }
 };
 
-export const agreedCode = (code: string) => {
-  //TODO: till we not connect backend hard code this code
-  const tempCode = '1111';
-  if (tempCode !== code) {
+export const agreedCode = (userCode: string, email: string, pin: string) => {
+  const tempCode = decryptCode(email, pin);
+
+  if (tempCode !== userCode) {
     return false;
   }
   return true;

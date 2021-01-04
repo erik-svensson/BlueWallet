@@ -8,3 +8,5 @@ const local = (state: ApplicationState): NotificationState => state.notification
 
 export const email = createSelector(local, state => state.email);
 export const isNotificationEmailSet = createSelector(local, state => state.isNotificationEmailSet);
+export const isNotificationEmailSkip = createSelector(local, state => state.isNotificationEmailSkip);
+export const pin = createSelector(local, state => state.pin);

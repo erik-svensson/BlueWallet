@@ -40,6 +40,7 @@ interface MapStateToProps {
   isAuthenticated: boolean;
   isTxPasswordSet: boolean;
   isNotificationEmailSet: boolean;
+  isNotificationEmailSkip: boolean;
   isLoading: boolean;
   language: string;
   isInitialized: boolean;
@@ -108,9 +109,9 @@ class Navigator extends React.Component<Props, State> {
   };
 
   shouldRenderNotification = () => {
-    const { isNotificationEmailSet } = this.props;
+    const { isNotificationEmailSet, isNotificationEmailSkip } = this.props;
 
-    return !isNotificationEmailSet;
+    return !isNotificationEmailSet || !isNotificationEmailSkip;
   };
 
   shouldRenderUnlockScreen = () => {
@@ -205,6 +206,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isPinSet: authenticationSelectors.isPinSet(state),
   isTxPasswordSet: authenticationSelectors.isTxPasswordSet(state),
   isNotificationEmailSet: notificationSelectors.isNotificationEmailSet(state),
+  isNotificationEmailSkip: notificationSelectors.isNotificationEmailSkip(state),
   isAuthenticated: authenticationSelectors.isAuthenticated(state),
   language: appSettingsSelectors.language(state),
   isInitialized: walletsSelectors.isInitialized(state),

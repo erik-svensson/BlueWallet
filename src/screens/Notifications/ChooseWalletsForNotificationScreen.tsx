@@ -80,9 +80,13 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
   );
 
   proceed = () => {
-    const { address } = this.props.route.params;
-    if (this.props?.route.params.onboarding) {
-      this.props.navigation.navigate(Route.ConfirmNotificationCode, { email: address });
+    const {
+      navigation,
+      route: { params },
+    } = this.props;
+
+    if (params.isOnboarding) {
+      navigation.navigate(Route.ConfirmNotificationCode, { email: params.address });
     } else {
       CreateMessage({
         title: i18n.message.success,
@@ -90,7 +94,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         type: MessageType.success,
         buttonProps: {
           title: i18n.notifications.goToNotifications,
-          onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
+          onPress: () => navigation.navigate(Route.Notifications, {}),
         },
       });
     }

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
-import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams, NotificationNavigatorParams } from 'app/consts';
+import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams } from 'app/consts';
 import {
   createTxPassword as createTxPasswordAction,
   setIsAuthenticated as setIsAuthenticatedAction,
@@ -20,7 +20,7 @@ interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
     CompositeNavigationProp<
-      StackNavigationProp<NotificationNavigatorParams, Route.AddNotificationEmail>,
+      StackNavigationProp<PasswordNavigatorParams, Route.AddNotificationEmail>,
       StackNavigationProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>
     >
   >;
@@ -48,7 +48,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
     if (setPassword === this.state.password) {
       createTxPassword(setPassword, {
         onSuccess: () => {
-          navigation.navigate(Route.AddNotificationEmail);
+          navigation.pop();
         },
       });
     } else {

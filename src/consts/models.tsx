@@ -33,7 +33,7 @@ export const CONST = {
   pin: 'pin',
   defaultLanguage: 'en',
   maxAddressLength: 48,
-  tcVersionRequired: 2,
+  tcVersionRequired: 4,
   tcVersion: 'tcVersion',
   emailCodeErrorMax: 3,
 };
@@ -385,10 +385,20 @@ export type PasswordNavigatorParams = {
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
   [Route.ConfirmNotificationCode]: { email?: string };
+  [Route.ChooseWalletsForNotification]: {
+    address: string;
+    isOnboarding?: boolean;
+  };
   [Route.AddNotificationEmail]: undefined;
 };
 
 export type NotificationNavigatorParams = {
+  [Route.AddNotificationEmail]: undefined;
+  [Route.ChooseWalletsForNotification]: {
+    address: string;
+    onboarding?: boolean;
+  };
+  [Route.ConfirmNotificationCode]: { email?: string };
   [Route.Message]: {
     title: string;
     source: FastImageSource;
@@ -397,12 +407,6 @@ export type NotificationNavigatorParams = {
     buttonProps?: ButtonProps;
     imageStyle?: StyleProp<ViewStyle>;
     asyncTask?: () => void;
-  };
-  [Route.ConfirmNotificationCode]: { email?: string };
-  [Route.AddNotificationEmail]: undefined;
-  [Route.ChooseWalletsForNotification]: {
-    address: string;
-    onboarding?: boolean;
   };
 };
 
@@ -500,7 +504,7 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.ChooseWalletsForNotification]: {
     address: string;
-    onboarding?: boolean;
+    isOnboarding?: boolean;
   };
   [Route.ChangeEmail]: {
     address: string;
