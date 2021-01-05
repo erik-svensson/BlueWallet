@@ -11,6 +11,7 @@ import {
   HDSegwitP2SHAirWallet,
   SegwitP2SHWallet,
   Authenticator,
+  HDLegacyP2PKHWallet,
 } from '../class';
 import Biometric from '../class/biometrics';
 
@@ -27,6 +28,7 @@ export {
   HDSegwitP2SHAirWallet,
   SegwitP2SHWallet,
   Authenticator,
+  HDLegacyP2PKHWallet,
   EV,
   Biometric,
 };
