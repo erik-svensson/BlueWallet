@@ -5,6 +5,7 @@ export interface NotificationState {
   error: string;
   isNotificationEmailSet: boolean;
   isLoading: boolean;
+  sessionToken: string;
 }
 
 const initialState: NotificationState = {
@@ -12,6 +13,7 @@ const initialState: NotificationState = {
   email: '',
   isNotificationEmailSet: false,
   isLoading: true,
+  sessionToken: '',
 };
 
 export const notificationReducer = (state = initialState, action: NotificationActionType): NotificationState => {
@@ -34,6 +36,16 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         ...state,
         email: '',
         isNotificationEmailSet: false,
+      };
+    case NotificationAction.SubscribeWalletSuccessAction:
+      return {
+        ...state,
+        sessionToken: action.payload.sessionToken,
+      };
+    case NotificationAction.AuthenticateEmailSuccessAction:
+      return {
+        ...state,
+        sessionToken: '',
       };
     default:
       return state;

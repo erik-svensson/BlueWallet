@@ -15,6 +15,8 @@ import {
   Wallet,
 } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { ApplicationState } from 'app/state';
+import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import {
   authenticateEmail,
   AuthenticateEmailAction,
@@ -34,8 +36,10 @@ interface Props {
   >;
   route: RouteProp<MainCardStackNavigatorParams, Route.ConfirmEmail>;
   createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
-  subscribe: (wallets: Wallet[], mail: string, lang: string) => SubscribeWalletAction;
+  subscribe: (wallets: Wallet[], email: string, lang: string) => SubscribeWalletAction;
   authenticate: (session_token: string, pin: number) => AuthenticateEmailAction;
+  language: string;
+  sessionToken: string;
 }
 
 interface State {
@@ -52,7 +56,25 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   componentDidMount() {
-    this.props.subscribe('wallet', 'email@com.pl', 'en');
+    const {
+      route: {
+        params: { walletsToSubscribe, address },
+      },
+      language,
+    } = this.props;
+    const testingWallet = [
+      {
+        name: 'wallet test1ds2025',
+        xpub:
+          'zpub6n6UcSMKtH26Rk5Tjiww61iyJH2F3fdkJrsnvM1Fyyo5PLd18EEkgB89h5uMSTmWDQfFDdbGwhSbUoPQXLdj8yn43XLjdX5G85BhUZz3hhF',
+        derivation_path: ["m/0'"],
+        gap_limit: 20,
+        address_type: 'p2sh',
+        recovery_public_key: '038617eced2b2a429d1c30c42917eb1aae30e0302d30ecc85c74cd30ce12384469',
+        instant_public_key: '0389ce37c28f2909d691827e0a166f95342a7e5eddf69d95552d1bce7256e63cdc',
+      },
+    ];
+    this.props.subscribe(testingWallet || [], address, language);
   }
 
   get infoContainerContent() {
@@ -211,16 +233,21 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onConfirm = () => {
-    const { walletsToSubscribe } = this.props.route.params;
+    const {
+      sessionToken,
+      route: {
+        params: { walletsToSubscribe },
+      },
+    } = this.props;
     if (walletsToSubscribe?.length) {
-      this.props.authenticate(this.props.route.params.walletsToSubscribe, parseInt(this.state.code));
+      this.props.authenticate(sessionToken, parseInt(this.state.code));
     }
-    // return this.props.createNotificationEmail(this.props.route.params.address, {
-    //   onFailure: () => Alert.alert('error'),
-    //   onSuccess: () => {
-    //     this.infoContainerContent.onCodeConfirm();
-    //   },
-    // });
+    return this.props.createNotificationEmail(this.props.route.params.address, {
+      onFailure: () => Alert.alert('error'),
+      onSuccess: () => {
+        this.infoContainerContent.onCodeConfirm();
+      },
+    });
   };
 
   onChange = (code: string) =>
@@ -265,13 +292,18 @@ class ConfirmEmailScreen extends Component<Props, State> {
   }
 }
 
+const mapStateToProps = (state: ApplicationState) => ({
+  language: appSettingsSelectors.language(state),
+  sessionToken: state.notifications.sessionToken,
+});
+
 const mapDispatchToProps = {
   createNotificationEmail,
   subscribe: subscribeWallet,
   authenticate: authenticateEmail,
 };
 
-export default connect(null, mapDispatchToProps)(ConfirmEmailScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmailScreen);
 
 const styles = StyleSheet.create({
   infoContainer: {

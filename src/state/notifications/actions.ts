@@ -1,4 +1,9 @@
-import { SubscribePayload, AuthenticatePayload } from 'app/api';
+import {
+  SubscribePayload,
+  AuthenticatePayload,
+  SubscribeWalletSuccessPayload,
+  CheckSubscriptionPayload,
+} from 'app/api';
 import { ActionMeta, Wallet } from 'app/consts';
 
 export enum NotificationAction {
@@ -8,6 +13,9 @@ export enum NotificationAction {
   DeleteNotificationEmailAction = 'DeleteNotificationEmailAction',
   SubscribeWalletAction = 'SubscribeWalletAction',
   AuthenticateEmailAction = 'AuthenticateEmailAction',
+  AuthenticateEmailSuccessAction = 'AuthenticateEmailSuccessAction',
+  SubscribeWalletSuccessAction = 'SubscribeWalletSuccessAction',
+  CheckSubscriptionAction = 'CheckSubscriptionAction',
 }
 
 export interface CreateNotificationEmailAction {
@@ -44,13 +52,29 @@ export interface AuthenticateEmailAction {
   payload: AuthenticatePayload;
 }
 
+export interface AuthenticateEmailSuccessAction {
+  type: NotificationAction.AuthenticateEmailSuccessAction;
+}
+
+export interface SubscribeWalletSuccessAction {
+  type: NotificationAction.SubscribeWalletSuccessAction;
+  payload: SubscribeWalletSuccessPayload;
+}
+
+export interface CheckSubscriptionAction {
+  type: NotificationAction.CheckSubscriptionAction;
+  payload: CheckSubscriptionPayload;
+}
+
 export type NotificationActionType =
   | CreateNotificationEmailAction
   | CreateNotificationEmailSuccessAction
   | CreateNotificationEmailFailureAction
   | DeleteNotificationEmailAction
   | SubscribeWalletAction
-  | AuthenticateEmailAction;
+  | AuthenticateEmailAction
+  | SubscribeWalletSuccessAction
+  | CheckSubscriptionAction;
 
 export const createNotificationEmail = (email: string, meta?: ActionMeta): CreateNotificationEmailAction => ({
   type: NotificationAction.CreateNotificationEmail,
@@ -72,12 +96,29 @@ export const deleteNotificationEmail = (): DeleteNotificationEmailAction => ({
   type: NotificationAction.DeleteNotificationEmailAction,
 });
 
-export const subscribeWallet = (wallets: Wallet[], mail: string, lang: string): SubscribeWalletAction => ({
+export const subscribeWallet = (wallets: Wallet[], email: string, lang: string): SubscribeWalletAction => ({
   type: NotificationAction.SubscribeWalletAction,
-  payload: { wallets, mail, lang },
+  payload: { wallets, email, lang },
 });
 
 export const authenticateEmail = (session_token: string, pin: number): AuthenticateEmailAction => ({
   type: NotificationAction.AuthenticateEmailAction,
   payload: { session_token, pin },
+});
+
+export const authenticateEmailSuccess = (): AuthenticateEmailSuccessAction => ({
+  type: NotificationAction.AuthenticateEmailSuccessAction,
+});
+
+export const subscribeWalletSuccess = (sessionToken: string): SubscribeWalletSuccessAction => ({
+  type: NotificationAction.SubscribeWalletSuccessAction,
+  payload: { sessionToken },
+});
+
+export const checkSubscription = (hashes: string[], email: string): CheckSubscriptionAction => ({
+  type: NotificationAction.CheckSubscriptionAction,
+  payload: {
+    hashes,
+    email,
+  },
 });

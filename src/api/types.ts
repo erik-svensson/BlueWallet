@@ -24,7 +24,7 @@ export interface Wallet {
 
 export interface SubscribePayload {
   wallets: Wallet[];
-  mail: string;
+  email: string;
   lang: string;
 }
 
@@ -46,5 +46,9 @@ export interface ModifyPayload {
 
 export interface CheckSubscriptionPayload {
   hashes: string[];
-  mail: string;
+  email: string;
+}
+
+export interface SubscribeWalletSuccessPayload {
+  sessionToken: string;
 }
