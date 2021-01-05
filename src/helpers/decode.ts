@@ -1,4 +1,13 @@
 import CryptoJS from 'crypto-js';
+/**
+ *
+ * Provide faster and secure way to decrypt some number used for confirm email notification
+ *
+ *
+ * @param  {string} email - user email provided from input text field
+ * @param  {string} pin - string provided from /verify_email api
+ * @return {string} decryptedCode - 4 digi mixedCase letter or number
+ */
 
 export const decryptCode = (email: string, pin: string) => {
   const secret = CryptoJS.enc.Hex.parse(CryptoJS.SHA256(email).toString());

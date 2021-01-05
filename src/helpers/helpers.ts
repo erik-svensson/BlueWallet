@@ -37,9 +37,9 @@ export const checkZero = (amount: string) => {
 };
 
 export const agreedCode = (userCode: string, email: string, pin: string) => {
-  const tempCode = decryptCode(email, pin);
+  const tempDecryptedCode = decryptCode(email, pin);
 
-  if (tempCode !== userCode) {
+  if (tempDecryptedCode !== userCode) {
     return false;
   }
   return true;
