@@ -33,7 +33,7 @@ export const CONST = {
   pin: 'pin',
   defaultLanguage: 'en',
   maxAddressLength: 48,
-  tcVersionRequired: 4,
+  tcVersionRequired: 3,
   tcVersion: 'tcVersion',
   emailCodeErrorMax: 3,
 };

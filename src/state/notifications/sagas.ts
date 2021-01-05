@@ -51,7 +51,7 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
     const verifyCode = yield call(() => verifyEmail({ email }));
     if (verifyCode.result === Result.success) {
       const decryptedCode = yield call(() => decryptCode(email, verifyCode.pin));
-      //Temporaly
+      //Temporaly till we dont have email services run we need know correct pin from backend, remove after
       console.log(decryptedCode, '>>>>');
       yield put(verifyNotificationEmail(decryptedCode));
     }

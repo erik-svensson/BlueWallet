@@ -1,11 +1,11 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, PasswordNavigatorParams, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, NotificationNavigatorParams, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
@@ -24,10 +24,10 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     CompositeNavigationProp<
       StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>,
-      StackNavigationProp<PasswordNavigatorParams, Route.AddNotificationEmail>
+      StackNavigationProp<NotificationNavigatorParams, Route.AddNotificationEmail>
     >
   >;
-  route: RouteProp<PasswordNavigatorParams, Route.AddNotificationEmail>;
+
   createTc: () => void;
   createNotificationEmail: Function;
   setNotificationEmail: Function;

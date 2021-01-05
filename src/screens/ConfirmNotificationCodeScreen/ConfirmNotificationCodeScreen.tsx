@@ -5,9 +5,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { CodeInput, Header, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, PasswordNavigatorParams, CONST, RootStackParams } from 'app/consts';
+import { Route, NotificationNavigatorParams, CONST, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { agreedCode } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { createTc as createTcAction } from 'app/state/authentication/actions';
 import { selectors as notificationSelectors } from 'app/state/notifications';
@@ -25,11 +24,11 @@ type State = {
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>
+    StackNavigationProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>
   >;
 
   createNotificationEmail: Function;
-  route: RouteProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>;
+  route: RouteProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>;
   createTc: () => void;
   email: string;
   pin: string;

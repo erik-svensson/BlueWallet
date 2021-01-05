@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 
 import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, PasswordNavigatorParams } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, NotificationNavigatorParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { typography, palette } from 'app/styles';
 
@@ -16,7 +16,7 @@ interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     CompositeNavigationProp<
-      StackNavigationProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>,
+      StackNavigationProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>,
       StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>
     >
   >;
