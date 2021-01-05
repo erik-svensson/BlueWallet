@@ -33,7 +33,13 @@ $ cd ios
 $ pod install
 ```
 
-To build a release version of the app, you must execute `create-sentry-properties.sh` script with valid Sentry Auth token. But for local development, this step isn't required.
+To build a binary of any variant, you must have `sentry.properties` files created in root, `./ios`, and `./android`. You can create them by executing `create-sentry-properties.sh` script with the valid Sentry Auth token:
+
+```sh
+$ SENTRY_AUTH_TOKEN=${TOKEN} bash ./create-sentry-properties.sh  
+```
+
+But to run the app with Metro server, this step isn't required.
 
 ## Running the app
 
