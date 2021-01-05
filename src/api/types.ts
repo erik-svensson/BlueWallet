@@ -52,3 +52,6 @@ export interface CheckSubscriptionPayload {
 export interface VerifyEmailPayload {
   email: string;
 }
+export interface SubscribeWalletSuccessPayload {
+  sessionToken: string;
+}

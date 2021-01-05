@@ -7,6 +7,7 @@ export interface NotificationState {
   isNotificationEmailSet: boolean;
   isNotificationEmailSkip: boolean;
   isLoading: boolean;
+  sessionToken: string;
 }
 
 const initialState: NotificationState = {
@@ -16,6 +17,7 @@ const initialState: NotificationState = {
   isNotificationEmailSet: false,
   isNotificationEmailSkip: false,
   isLoading: true,
+  sessionToken: '',
 };
 
 export const notificationReducer = (state = initialState, action: NotificationActionType): NotificationState => {
@@ -57,6 +59,16 @@ export const notificationReducer = (state = initialState, action: NotificationAc
       return {
         ...state,
         pin: action.payload.pin,
+      };
+    case NotificationAction.SubscribeWalletSuccessAction:
+      return {
+        ...state,
+        sessionToken: action.payload.sessionToken,
+      };
+    case NotificationAction.AuthenticateEmailSuccessAction:
+      return {
+        ...state,
+        sessionToken: '',
       };
     default:
       return state;

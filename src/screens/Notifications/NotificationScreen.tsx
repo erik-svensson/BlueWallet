@@ -11,7 +11,7 @@ import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
 import { deleteNotificationEmail, DeleteNotificationEmailAction } from 'app/state/notifications/actions';
-import * as walletsSelectors from 'app/state/wallets/selectors';
+import * as notificationSelectors from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -138,7 +138,7 @@ export class NotificationScreen extends Component<Props> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   email: state.notifications.email,
-  wallets: walletsSelectors.allWallets(state),
+  wallets: notificationSelectors.subscribedWallets(state),
 });
 
 const mapDispatchToProps = {

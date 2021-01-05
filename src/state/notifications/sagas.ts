@@ -1,7 +1,8 @@
+import { Alert } from 'react-native';
 import { takeEvery, put, call } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
-import { subscribeEmail } from 'app/api/emailApi';
+import { subscribeEmail, authenticateEmail, checkSubscriptionEmail } from 'app/api/emailApi';
 import { decryptCode } from 'app/helpers/decode';
 import { StoreService } from 'app/services';
 
@@ -17,7 +18,10 @@ import {
   SetNotificationEmailAction,
   SubscribeWalletAction,
   AuthenticateEmailAction,
-  authenticateEmail,
+  authenticateEmailSuccess,
+  subscribeWalletSuccess,
+  CheckSubscriptionAction,
+  checkSubscription,
 } from './actions';
 
 enum Result {
@@ -75,20 +79,35 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
 export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   const { payload } = action as SubscribeWalletAction;
   try {
-    yield call(() => subscribeEmail(payload));
+    const response: { session_token: string; result: 'success' | 'error' } = yield call(subscribeEmail, payload);
+    if (response.session_token) {
+      yield put(subscribeWalletSuccess(response.session_token));
+    }
   } catch (error) {
-    console.log({ error });
+    Alert.alert('Something went wrong');
+    console.log('subscribeWalletSaga', error);
   }
 }
 
 export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
-  console.log({ action });
   const { payload } = action as AuthenticateEmailAction;
   try {
-    const response = yield call(authenticateEmail);
-    console.log({ response });
+    const response = yield call(authenticateEmail, payload);
+    if (response.result === 'success') {
+      yield put(authenticateEmailSuccess());
+    }
+    console.log('authenticateEmail', { response });
   } catch (error) {
-    console.log({ error });
+    console.log('authenticateEmail', { error });
+  }
+}
+
+export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
+  const { payload } = action as CheckSubscriptionAction;
+  try {
+    const response = yield call(checkSubscriptionEmail, payload);
+  } catch (error) {
+    console.log('checkSubscriptionSaga error', error);
   }
 }
 

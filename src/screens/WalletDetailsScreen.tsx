@@ -142,6 +142,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
         // subscribe by confirming code
         address: email!,
         flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+        walletsToSubscribe: [wallet],
       });
     } else {
       navigation.navigate(Route.ConfirmEmail, {
