@@ -123,8 +123,12 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
     });
   }
 
+  getDerivationPath() {
+    return this.basePath;
+  }
+
   _getPath(path = '') {
-    return `${this.basePath}${path}`;
+    return `${this.getDerivationPath()}${path}`;
   }
 
   /**

@@ -173,6 +173,10 @@ export class AbstractWallet {
     throw Error('not implemented');
   }
 
+  getDerivationPath() {
+    throw Error('not implemented');
+  }
+
   getAddressAsync() {
     return new Promise(resolve => resolve(this.getAddress()));
   }
