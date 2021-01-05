@@ -1,3 +1,6 @@
+import b58 from 'bs58check';
+import sha256 from 'crypto-js/sha256';
+
 import { Wallet, CONST, WALLETS_ADDRESSES_TYPES } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 
@@ -25,4 +28,12 @@ export const walletToAddressesGenerationBase = async (wallet: Wallet) => {
     ...(instant_public_key && { instant_public_key }),
     ...(recovery_public_key && { recovery_public_key }),
   };
+};
+
+export const getWalletHashedPublicKeys = async (wallet: Wallet) => {
+  const encodedPubKeys = wallet.pubKeys?.map(pk => b58.encode(pk)).join('') || '';
+
+  const encodedXpub = b58.encode(Buffer.from(await wallet.getXpub()));
+
+  return sha256(`${encodedXpub}${encodedPubKeys}`).toString();
 };
