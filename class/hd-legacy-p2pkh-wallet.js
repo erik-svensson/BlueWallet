@@ -19,6 +19,7 @@ const bitcoin = require('bitcoinjs-lib');
 export class HDLegacyP2PKHWallet extends AbstractHDWallet {
   static type = 'HDlegacyP2PKH';
   static typeReadable = 'HD P2PKH';
+  static derivationPath = 'm/0';
 
   allowSend() {
     return true;
@@ -32,6 +33,9 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
     return electrumVaultMnemonicToSeed(this.secret, this.password);
   }
 
+  getDerivationPath() {
+    return HDLegacyP2PKHWallet.derivationPath;
+  }
   async getXpub() {
     if (this._xpub) {
       return this._xpub; // cache hit
@@ -39,7 +43,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
     this.seed = await this.getSeed();
     const root = bitcoin.bip32.fromSeed(this.seed, config.network);
 
-    const path = 'm/0';
+    const path = this.getDerivationPath();
     const child = root.derivePath(path).neutered();
     this._xpub = child.toBase58();
     return this._xpub;
@@ -70,7 +74,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
     }
 
     const root = HDNode.fromSeed(this.seed, config.network);
-    const path = `m/0/${index}`;
+    const path = `${this.getDerivationPath()}/${index}`;
     const child = root.derivePath(path);
 
     return child.toWIF();

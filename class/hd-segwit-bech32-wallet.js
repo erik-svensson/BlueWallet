@@ -87,9 +87,12 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     });
   }
 
+  getDerivationPath() {
+    return this.isElectrumVault ? "m/0'" : "m/84'/440'/0'";
+  }
+
   _getPath(path = '') {
-    const basePath = this.isElectrumVault ? "m/0'" : "m/84'/440'/0'";
-    return `${basePath}${path}`;
+    return `${this.getDerivationPath()}${path}`;
   }
 
   /**

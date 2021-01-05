@@ -6,13 +6,15 @@ import { ButtonProps } from 'react-native-elements';
 import { ImageStyle } from 'react-native-fast-image';
 
 import { FastImageSource } from 'app/components';
+
 import {
   HDSegwitP2SHAirWallet,
   HDSegwitP2SHArWallet,
   HDSegwitBech32Wallet,
   SegwitP2SHWallet,
   HDSegwitP2SHWallet,
-} from 'app/legacy';
+  HDLegacyP2PKHWallet,
+} from '../../class';
 
 export const CONST = {
   pinCodeLength: 4,
@@ -36,6 +38,23 @@ export const CONST = {
   tcVersionRequired: 2,
   tcVersion: 'tcVersion',
   emailCodeErrorMax: 3,
+  walletsDefaultGapLimit: 20,
+};
+
+export const ADDRESSES_TYPES = {
+  p2wsh_p2sh: 'p2wsh-p2sh',
+  p2pkh: 'p2pkh',
+  p2wpkh: 'p2wpkh',
+  p2wpkh_p2sh: 'p2wpkh-p2sh',
+};
+
+export const WALLETS_ADDRESSES_TYPES = {
+  [HDSegwitP2SHArWallet?.type]: ADDRESSES_TYPES.p2wsh_p2sh,
+  [HDSegwitP2SHAirWallet?.type]: ADDRESSES_TYPES.p2wsh_p2sh,
+  [HDLegacyP2PKHWallet?.type]: ADDRESSES_TYPES.p2pkh,
+  [HDSegwitBech32Wallet?.type]: ADDRESSES_TYPES.p2wpkh,
+  [HDSegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
+  [SegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
@@ -191,6 +210,8 @@ export interface Wallet {
   getScriptHashes: () => string[];
   getAddressForTransaction: () => string;
   password?: string;
+  pubKeys?: Buffer[];
+  getDerivationPath: () => string;
 }
 
 export interface ActionMeta {
