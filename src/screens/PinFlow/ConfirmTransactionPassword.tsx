@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { icons, images } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
-import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams } from 'app/consts';
+import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams, NotificationNavigatorParams } from 'app/consts';
 import {
   createTxPassword as createTxPasswordAction,
   setIsAuthenticated as setIsAuthenticatedAction,
@@ -20,7 +20,10 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
-    StackNavigationProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>
+    CompositeNavigationProp<
+      StackNavigationProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>,
+      StackNavigationProp<NotificationNavigatorParams, Route.AddNotificationEmail>
+    >
   >;
   createTxPassword: Function;
   setIsAuthenticated: (isAuthenticated: boolean) => SetIsAuthenticatedAction;

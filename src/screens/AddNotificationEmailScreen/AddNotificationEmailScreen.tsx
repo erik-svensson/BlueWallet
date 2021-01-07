@@ -1,15 +1,20 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { images } from 'app/assets';
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, PasswordNavigatorParams, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, NotificationNavigatorParams, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isEmail } from 'app/helpers/helpers';
+import { ApplicationState } from 'app/state';
 import { createTc as createTcAction } from 'app/state/authentication/actions';
-import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
+import {
+  createNotificationEmail as createNotificationEmailAction,
+  setNotificationEmail as setNotificationEmailAction,
+} from 'app/state/notifications/actions';
+import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -19,12 +24,14 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     CompositeNavigationProp<
       StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>,
-      StackNavigationProp<PasswordNavigatorParams, Route.AddNotificationEmail>
+      StackNavigationProp<NotificationNavigatorParams, Route.AddNotificationEmail>
     >
   >;
-  route: RouteProp<PasswordNavigatorParams, Route.AddNotificationEmail>;
+
   createTc: () => void;
   createNotificationEmail: Function;
+  setNotificationEmail: Function;
+  hasWallets: boolean;
 }
 
 type State = {
@@ -46,13 +53,19 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   onSave = () => {
     const { email } = this.state;
+    const { setNotificationEmail, navigation, hasWallets } = this.props;
     if (!isEmail(email)) {
       return this.setState({
         error: i18n.onboarding.emailValidation,
       });
     }
-    //TODO: pass email and connect with api
-    this.props.navigation.navigate(Route.ChooseWalletsForNotification, { address: email, onboarding: true });
+    if (!hasWallets) {
+      setNotificationEmail(email, {
+        onSuccess: () => navigation.navigate(Route.ConfirmNotificationCode, { email }),
+      });
+    } else {
+      navigation.navigate(Route.ChooseWalletsForNotification, { address: email, isOnboarding: true });
+    }
   };
 
   skipAddEmail = () => {
@@ -60,14 +73,14 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     createTc();
     createNotificationEmail('', {
       onSuccess: () => {
-        navigation.navigate(Route.Message, {
+        CreateMessage({
           title: i18n.contactCreate.successTitle,
           description: i18n.onboarding.successCompletedDescription,
-          source: images.success,
+          type: MessageType.success,
           buttonProps: {
             title: i18n.onboarding.successCompletedButton,
             onPress: () => {
-              navigation.navigate(Route.MainCardStackNavigator);
+              navigation.pop();
             },
           },
         });
@@ -123,9 +136,14 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 const mapDispatchToProps = {
   createTc: createTcAction,
   createNotificationEmail: createNotificationEmailAction,
+  setNotificationEmail: setNotificationEmailAction,
 };
 
-export default connect(null, mapDispatchToProps)(AddNotificationEmailScreen);
+const mapStateToProps = (state: ApplicationState) => ({
+  hasWallets: walletsSelectors.hasWallets(state),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);
 
 const styles = StyleSheet.create({
   infoContainer: {
