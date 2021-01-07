@@ -46,14 +46,16 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
   const { meta, payload } = action as SetNotificationEmailAction;
   const email = payload.email;
   try {
-    yield put(setNotificationEmailSuccess(email));
     const verifyCode = yield call(() => verifyEmail({ email }));
     if (verifyCode.result === Result.success) {
       const decryptedCode = yield call(() => decryptCode(email, verifyCode.pin));
+      yield put(setNotificationEmailSuccess(email));
       yield StoreService.setStoreValue('email', email);
       //Temporaly till we dont have email services run we need know correct pin from backend, remove after
       console.log(decryptedCode, '>>>>');
       yield put(verifyNotificationEmail(decryptedCode));
+    } else {
+      yield put(setNotificationEmailFailure('Your email cannot be verified'));
     }
     if (meta?.onSuccess) {
       meta.onSuccess();

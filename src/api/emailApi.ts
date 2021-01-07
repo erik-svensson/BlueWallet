@@ -1,5 +1,3 @@
-import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
-
 import api from './client';
 import {
   SubscribePayload,
