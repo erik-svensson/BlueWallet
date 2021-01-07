@@ -385,7 +385,29 @@ export type PasswordNavigatorParams = {
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
   [Route.ConfirmNotificationCode]: { email?: string };
+  [Route.ChooseWalletsForNotification]: {
+    address: string;
+    isOnboarding?: boolean;
+  };
   [Route.AddNotificationEmail]: undefined;
+};
+
+export type NotificationNavigatorParams = {
+  [Route.AddNotificationEmail]: undefined;
+  [Route.ChooseWalletsForNotification]: {
+    address: string;
+    onboarding?: boolean;
+  };
+  [Route.ConfirmNotificationCode]: { email?: string };
+  [Route.Message]: {
+    title: string;
+    source: FastImageSource;
+    description: string;
+    testID?: string;
+    buttonProps?: ButtonProps;
+    imageStyle?: StyleProp<ViewStyle>;
+    asyncTask?: () => void;
+  };
 };
 
 export type MainCardStackNavigatorParams = {
@@ -482,7 +504,7 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.ChooseWalletsForNotification]: {
     address: string;
-    onboarding?: boolean;
+    isOnboarding?: boolean;
   };
   [Route.ChangeEmail]: {
     address: string;

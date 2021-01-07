@@ -4,18 +4,19 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { images } from 'app/assets';
 import { CodeInput, Header, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, PasswordNavigatorParams, CONST, RootStackParams } from 'app/consts';
-import { agreedCode } from 'app/helpers/helpers';
+import { Route, NotificationNavigatorParams, CONST, RootStackParams } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { ApplicationState } from 'app/state';
 import { createTc as createTcAction } from 'app/state/authentication/actions';
+import { selectors as notificationSelectors } from 'app/state/notifications';
 import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 type State = {
-  code: string;
+  userCode: string;
   numberAttempt: number;
   error: string;
 };
@@ -23,17 +24,19 @@ type State = {
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>
+    StackNavigationProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>
   >;
 
   createNotificationEmail: Function;
-  route: RouteProp<PasswordNavigatorParams, Route.ConfirmNotificationCode>;
+  route: RouteProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>;
   createTc: () => void;
+  email: string;
+  pin: string;
 }
 
 class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   state = {
-    code: '',
+    userCode: '',
     numberAttempt: 0,
     error: '',
   };
@@ -44,14 +47,14 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     });
   }
 
-  checkCode = (code: string) => {
-    this.setState({ code });
+  checkCode = (userCode: string) => {
+    this.setState({ userCode });
   };
 
   resendCode = () => {
     this.setState({
       error: '',
-      code: '',
+      userCode: '',
       numberAttempt: 0,
     });
   };
@@ -70,27 +73,29 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
         error: i18n.formatString(i18n.onboarding.validationCodeError, {
           numberAttempt: CONST.emailCodeErrorMax - numberFail,
         }),
-        code: '',
+        userCode: '',
       });
     }
   };
 
   onConfirm = () => {
-    const { createTc, createNotificationEmail, navigation } = this.props;
-    const { email } = this.props.route.params;
-    const { code } = this.state;
-    if (agreedCode(code)) {
+    const { createTc, createNotificationEmail, navigation, email, pin } = this.props;
+    const { userCode } = this.state;
+
+    const passedCode = pin === userCode;
+
+    if (passedCode) {
       createNotificationEmail(email, {
         onSuccess: () => {
-          createTc();
-          navigation.navigate(Route.Message, {
+          CreateMessage({
             title: i18n.contactCreate.successTitle,
             description: i18n.onboarding.successCompletedDescription,
-            source: images.success,
+            type: MessageType.success,
             buttonProps: {
               title: i18n.onboarding.successCompletedButton,
               onPress: () => {
-                navigation.navigate(Route.MainCardStackNavigator);
+                createTc();
+                navigation.pop();
               },
             },
           });
@@ -102,9 +107,10 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   };
 
   render() {
-    const { error, code, numberAttempt } = this.state;
+    const { error, userCode, numberAttempt } = this.state;
     const { email } = this.props.route.params;
     const allowReSend = numberAttempt < CONST.emailCodeErrorMax;
+
     return (
       <ScreenTemplate
         noScroll
@@ -116,7 +122,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
               title={i18n.onboarding.confirmNotification}
               testID="confirm-code-email"
               onPress={this.onConfirm}
-              disabled={code.length < CONST.codeLength}
+              disabled={userCode.length < CONST.codeLength}
             />
             <FlatButton
               testID="resend-code-email"
@@ -134,7 +140,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
           <Text style={typography.headline5}>{email}</Text>
         </View>
         <View style={styles.codeContainer}>
-          <CodeInput value={this.state.code} testID="confirm-code" onTextChange={this.checkCode} />
+          <CodeInput value={this.state.userCode} testID="confirm-code" onTextChange={this.checkCode} />
           <Text testID="invalid-code-message" style={styles.errorText}>
             {error}
           </Text>
@@ -149,7 +155,12 @@ const mapDispatchToProps = {
   createNotificationEmail: createNotificationEmailAction,
 };
 
-export default connect(null, mapDispatchToProps)(ConfirmNotificationCodeScreen);
+const mapStateToProps = (state: ApplicationState) => ({
+  pin: notificationSelectors.pin(state),
+  email: notificationSelectors.email(state),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmNotificationCodeScreen);
 
 const styles = StyleSheet.create({
   codeContainer: {
