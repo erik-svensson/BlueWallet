@@ -23,6 +23,15 @@ module.exports = {
     scan: 'Scan',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
   },
+  airdrop: {
+    title: 'Airdrop',
+    itIsAlive: {
+      subtitle: 'Airdrop is live! Check it out!',
+      description: 'We are happy to announce our first Bitcoin Vault Airdrop for Gold Wallet.',
+      iDontCare: "I don't care",
+      learnMore: 'Learn more',
+    },
+  },
   termsConditions: {
     header: 'Terms & Conditions',
     title: 'Agreement to Terms',
