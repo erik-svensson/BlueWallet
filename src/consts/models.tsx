@@ -131,7 +131,8 @@ export enum Route {
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
-  AirdropIsLive = 'AirdropIsLive',
+  AirdropThankYou = 'AirdropThankYou',
+  AirdropRequirements = 'AirdropRequirements',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */

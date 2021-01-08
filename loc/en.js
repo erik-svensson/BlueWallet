@@ -31,6 +31,12 @@ module.exports = {
       iDontCare: "I don't care",
       learnMore: 'Learn more',
     },
+    requirements: {
+      soundsGreat: 'Sounds great!',
+      subtitle: 'Thank you for creating the Bitcoin Vault community.',
+      description:
+        'We are glad that you are a part of it! We want to share $250.000 in BTCV as a reward for being a supportive community.',
+    },
   },
   termsConditions: {
     header: 'Terms & Conditions',

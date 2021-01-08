@@ -2,17 +2,17 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { BackHandler, Text, StyleSheet, NativeEventSubscription, View } from 'react-native';
 
-import { ScreenTemplate, FlatButton, Button, Header } from 'app/components';
+import { ScreenTemplate, Button, Header } from 'app/components';
 import { Route } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<any, Route.AirdropIsLive>;
+  navigation: StackNavigationProp<any, Route.AirdropThankYou>;
 }
 
-class ThankYouScreen extends Component<Props, {}> {
+export class AirdropThankYouScreen extends Component<Props, {}> {
   backHandler?: NativeEventSubscription;
 
   componentDidMount() {
@@ -23,10 +23,10 @@ class ThankYouScreen extends Component<Props, {}> {
     this.backHandler && this.backHandler.remove();
   }
 
-  navigateBack = () => this.props.navigation.navigate(Route.AuthenticatorList);
+  navigateBack = () => this.props.navigation.navigate(Route.Dashboard);
 
   goToLearnMore = () => {
-    this.props.navigation.navigate(Route.Dashboard); // placeholder
+    this.props.navigation.navigate(Route.AirdropRequirements);
   };
 
   render() {
@@ -57,8 +57,6 @@ class ThankYouScreen extends Component<Props, {}> {
     );
   }
 }
-
-export default ThankYouScreen;
 
 const styles = StyleSheet.create({
   subtitle: {
