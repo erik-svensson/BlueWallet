@@ -66,6 +66,7 @@ export interface SocketOptions {
 }
 
 export type SocketCallback = (address: string) => void;
+
 export const ELECTRUM_VAULT_SEED_PREFIXES = {
   SEED_PREFIX: '01', // Standard wallet
   SEED_PREFIX_SW: '100', // Segwit wallet
@@ -212,6 +213,16 @@ export interface Wallet {
   password?: string;
   pubKeys?: Buffer[];
   getDerivationPath: () => string;
+}
+
+export interface WalletPayload {
+  name: string;
+  gap_limit: number;
+  derivation_path: string[];
+  xpub: Promise<string>;
+  address_type: string;
+  instant_public_key: string;
+  recovery_public_key: string;
 }
 
 export interface ActionMeta {

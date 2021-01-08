@@ -1,4 +1,4 @@
-import { Transaction } from 'app/consts';
+import { Transaction, WalletPayload } from 'app/consts';
 
 export interface Wallet {
   balance: number;
@@ -23,7 +23,7 @@ export interface Wallet {
 }
 
 export interface SubscribePayload {
-  wallets: Wallet[];
+  wallets: WalletPayload[];
   email: string;
   lang: string;
 }

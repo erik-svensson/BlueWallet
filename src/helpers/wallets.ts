@@ -30,8 +30,12 @@ export const walletToAddressesGenerationBase = async (wallet: Wallet) => {
   };
 };
 
-export const getWalletHashedPublicKeys = async (wallet: Wallet) => {
-  const encodedPubKeys = wallet.pubKeys?.map(pk => b58.encode(pk)).join('') || '';
+export const getWalletHashedPublicKeys = async (wallet: Wallet): Promise<string | undefined> => {
+  const encodedPubKeys =
+    wallet.pubKeys
+      ?.map(pk => b58.encode(pk))
+      .reverse()
+      .join('') || '';
 
   const encodedXpub = b58.encode(Buffer.from(await wallet.getXpub()));
 

@@ -25,10 +25,7 @@ export const modifyEmail = (data: ModifyPayload) =>
     data,
   });
 
-export const checkSubscriptionEmail = (data: CheckSubscriptionPayload) =>
-  api.get(`check_subscription`, {
-    data,
-  });
+export const checkSubscriptionEmail = (data: CheckSubscriptionPayload) => api.post(`/check_subscription`, { ...data });
 
 export const verifyEmail = (data: VerifyEmailPayload) =>
   api.post(`/verify_email/`, {

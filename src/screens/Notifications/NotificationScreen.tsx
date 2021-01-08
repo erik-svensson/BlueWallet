@@ -9,7 +9,6 @@ import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image } from 'a
 import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
-import { AppSettingsState } from 'app/state/appSettings/reducer';
 import { deleteNotificationEmail, DeleteNotificationEmailAction } from 'app/state/notifications/actions';
 import * as notificationSelectors from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
@@ -71,20 +70,18 @@ export class NotificationScreen extends Component<Props> {
     this.props.navigation.navigate(Route.AddEmail, { walletsToSubscribe: this.props.route.params.walletsToSubscribe });
   };
 
-  renderItem = (item: any) => {
-    return (
-      <TouchableOpacity style={styles.itemRow} onPress={() => this.goToWalletDetails(item.walletId)}>
-        <View style={styles.row}>
-          <Text style={styles.walletName}>{item.name}</Text>
-          <Image source={images.backArrow} style={styles.arrow} resizeMode="contain" />
-        </View>
-        <Text style={styles.caption}>{item.description}</Text>
-      </TouchableOpacity>
-    );
-  };
+  renderItem = (item: Wallet) => (
+    <TouchableOpacity style={styles.itemRow} onPress={() => this.goToWalletDetails(item.id)}>
+      <View style={styles.row}>
+        <Text style={styles.walletName}>{item.label}</Text>
+        <Image source={images.backArrow} style={styles.arrow} resizeMode="contain" />
+      </View>
+      <Text style={styles.caption}>{item.id}</Text>
+    </TouchableOpacity>
+  );
 
-  goToWalletDetails = (walletId: string) => {
-    this.props.navigation.navigate(Route.WalletDetails, { id: walletId });
+  goToWalletDetails = (id: string) => {
+    this.props.navigation.navigate(Route.WalletDetails, { id });
   };
 
   renderFooter = () =>
@@ -103,6 +100,7 @@ export class NotificationScreen extends Component<Props> {
     );
 
   render() {
+    console.log('wallets', this.props.wallets);
     return (
       <ScreenTemplate
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}

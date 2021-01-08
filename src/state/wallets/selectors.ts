@@ -76,6 +76,9 @@ export const walletsWithRecoveryTransaction = createSelector(wallets, walletsLis
   walletsList.filter(wallet => [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type].includes(wallet.type)),
 );
 
+export const isWalletRecovery = (type: string) =>
+  [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type].includes(type);
+
 export const allWallet = createSelector(wallets, walletsList => {
   const { incoming_balance, balance } = walletsList.reduce(
     (acc, wallet) => ({

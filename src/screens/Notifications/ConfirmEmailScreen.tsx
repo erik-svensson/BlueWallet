@@ -12,9 +12,10 @@ import {
   ConfirmAddressFlowType,
   CONST,
   ActionMeta,
-  Wallet,
+  WalletPayload,
 } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { walletToAddressesGenerationBase } from 'app/helpers/wallets';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import {
@@ -36,7 +37,7 @@ interface Props {
   >;
   route: RouteProp<MainCardStackNavigatorParams, Route.ConfirmEmail>;
   createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
-  subscribe: (wallets: Wallet[], email: string, lang: string) => SubscribeWalletAction;
+  subscribe: (wallets: WalletPayload[], email: string, lang: string) => SubscribeWalletAction;
   authenticate: (session_token: string, pin: number) => AuthenticateEmailAction;
   language: string;
   sessionToken: string;
@@ -55,26 +56,19 @@ class ConfirmEmailScreen extends Component<Props, State> {
     failNo: 0,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const {
       route: {
         params: { walletsToSubscribe, address },
       },
       language,
     } = this.props;
-    const testingWallet = [
-      {
-        name: 'wallet test1ds2025',
-        xpub:
-          'zpub6n6UcSMKtH26Rk5Tjiww61iyJH2F3fdkJrsnvM1Fyyo5PLd18EEkgB89h5uMSTmWDQfFDdbGwhSbUoPQXLdj8yn43XLjdX5G85BhUZz3hhF',
-        derivation_path: ["m/0'"],
-        gap_limit: 20,
-        address_type: 'p2sh',
-        recovery_public_key: '038617eced2b2a429d1c30c42917eb1aae30e0302d30ecc85c74cd30ce12384469',
-        instant_public_key: '0389ce37c28f2909d691827e0a166f95342a7e5eddf69d95552d1bce7256e63cdc',
-      },
-    ];
-    this.props.subscribe(testingWallet || [], address, language);
+
+    const walletsToSubscribePayload = await Promise.all(
+      walletsToSubscribe!.map(async wallet => await walletToAddressesGenerationBase(wallet)),
+    );
+
+    this.props.subscribe(walletsToSubscribePayload as any, address, language);
   }
 
   get infoContainerContent() {

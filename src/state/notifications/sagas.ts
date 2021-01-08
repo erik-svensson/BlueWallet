@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import { takeEvery, put, call } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
@@ -21,7 +20,8 @@ import {
   authenticateEmailSuccess,
   subscribeWalletSuccess,
   CheckSubscriptionAction,
-  checkSubscription,
+  checkSubscriptionSuccess,
+  checkSubscriptionFailure,
 } from './actions';
 
 enum Result {
@@ -84,7 +84,6 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
       yield put(subscribeWalletSuccess(response.session_token));
     }
   } catch (error) {
-    Alert.alert('Something went wrong');
     console.log('subscribeWalletSaga', error);
   }
 }
@@ -96,7 +95,6 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
     if (response.result === 'success') {
       yield put(authenticateEmailSuccess());
     }
-    console.log('authenticateEmail', { response });
   } catch (error) {
     console.log('authenticateEmail', { error });
   }
@@ -106,12 +104,14 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   const { payload } = action as CheckSubscriptionAction;
   try {
     const response = yield call(checkSubscriptionEmail, payload);
+    yield put(checkSubscriptionSuccess(response.result));
   } catch (error) {
-    console.log('checkSubscriptionSaga error', error);
+    yield put(checkSubscriptionFailure(error.msg));
   }
 }
 
 export default [
+  takeEvery(NotificationAction.CheckSubscriptionAction, checkSubscriptionSaga),
   takeEvery(NotificationAction.CreateNotificationEmail, createNotificationEmailSaga),
   takeEvery(NotificationAction.SetNotificationEmail, setNotificationEmailSaga),
   takeEvery(NotificationAction.SubscribeWalletAction, subscribeWalletSaga),

@@ -17,14 +17,18 @@ import {
 } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { ApplicationState } from 'app/state';
-import { selectors, reducer } from 'app/state/wallets';
+import { reducer as notificationReducer } from 'app/state/notifications';
+import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
+import { reducer as walletReducer } from 'app/state/wallets';
 import {
   updateWallet as updateWalletAction,
   UpdateWalletAction,
   deleteWallet as deleteWalletAction,
   DeleteWalletAction,
 } from 'app/state/wallets/actions';
+import { isWalletRecovery, getById, getWalletsLabels } from 'app/state/wallets/selectors';
 import { palette, typography } from 'app/styles';
 
 import { WatchOnlyWallet } from '../../class';
@@ -39,12 +43,21 @@ interface Props {
   >;
   wallet?: Wallet;
   deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
+  checkSubscription: (hashes: string[], email: string) => CheckSubscriptionAction;
   route: RouteProp<MainCardStackNavigatorParams, Route.WalletDetails>;
   walletsLabels: string[];
   email: string;
+  isSubscribed: boolean;
 }
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
+  async componentDidMount() {
+    const { wallet, email, checkSubscription } = this.props;
+    if (!email) return;
+    const hash = await getWalletHashedPublicKeys(wallet!);
+    checkSubscription([hash!], email);
+  }
+
   validationError = (value: string): string | undefined => {
     const trimmedValue = value.trim();
     const checkAllWallets =
@@ -130,23 +143,20 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   };
 
   onSubscribeButtonPress = () => {
-    const { email, navigation, wallet } = this.props;
-    if (!wallet.isSubscribed) {
+    const { email, navigation, wallet, isSubscribed } = this.props;
+    if (!isSubscribed) {
       if (!email) {
-        // add email and subscribe only certain wallet
         return navigation.navigate(Route.Notifications, {
-          walletsToSubscribe: [wallet],
+          walletsToSubscribe: [wallet!],
         });
       }
       return navigation.navigate(Route.ConfirmEmail, {
-        // subscribe by confirming code
         address: email!,
         flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
-        walletsToSubscribe: [wallet],
+        walletsToSubscribe: [wallet!],
       });
     } else {
       navigation.navigate(Route.ConfirmEmail, {
-        //unsubscribe
         address: email!,
         flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
         onBack: () =>
@@ -158,11 +168,12 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   };
 
   render() {
-    const { wallet } = this.props;
+    const { wallet, isSubscribed } = this.props;
     if (!wallet) {
       return null;
     }
     const isWatchOnly = wallet.type === WatchOnlyWallet.type;
+    const isRecovery = isWalletRecovery(wallet.type);
     return (
       <ScreenTemplate
         footer={
@@ -173,13 +184,13 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               title={i18n.wallets.details.showWalletXPUB}
               containerStyle={styles.button}
             />
-            <Button
-              onPress={this.onSubscribeButtonPress}
-              title={
-                wallet.isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet
-              }
-              containerStyle={styles.button}
-            />
+            {isRecovery && (
+              <Button
+                onPress={this.onSubscribeButtonPress}
+                title={isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
+                containerStyle={styles.button}
+              />
+            )}
             <FlatButton
               onPress={this.navigateToDeleteWallet}
               title={i18n.wallets.details.deleteWallet}
@@ -210,11 +221,15 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   }
 }
 
-const mapStateToProps = (state: ApplicationState & reducer.WalletsState, props: Props) => {
+const mapStateToProps = (
+  state: ApplicationState & walletReducer.WalletsState & notificationReducer.NotificationState,
+  props: Props,
+) => {
   const { id } = props.route.params;
   return {
-    wallet: selectors.getByIdWithNotificationInfo(state, id),
-    walletsLabels: selectors.getWalletsLabels(state),
+    wallet: getById(state, id),
+    walletsLabels: getWalletsLabels(state),
+    isSubscribed: state.notifications.subscribedResult[0] || false,
     email: state.notifications.email,
   };
 };
@@ -222,6 +237,7 @@ const mapStateToProps = (state: ApplicationState & reducer.WalletsState, props: 
 const mapDispatchToProps = {
   updateWallet: updateWalletAction,
   deleteWallet: deleteWalletAction,
+  checkSubscription,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WalletDetailsScreen);

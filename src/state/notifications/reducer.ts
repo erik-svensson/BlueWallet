@@ -8,6 +8,7 @@ export interface NotificationState {
   isNotificationEmailSkip: boolean;
   isLoading: boolean;
   sessionToken: string;
+  subscribedResult: boolean[];
 }
 
 const initialState: NotificationState = {
@@ -18,6 +19,7 @@ const initialState: NotificationState = {
   isNotificationEmailSkip: false,
   isLoading: true,
   sessionToken: '',
+  subscribedResult: [],
 };
 
 export const notificationReducer = (state = initialState, action: NotificationActionType): NotificationState => {
@@ -69,6 +71,16 @@ export const notificationReducer = (state = initialState, action: NotificationAc
       return {
         ...state,
         sessionToken: '',
+      };
+    case NotificationAction.CheckSubscriptionSuccessAction:
+      return {
+        ...state,
+        subscribedResult: action.payload.result,
+      };
+    case NotificationAction.CheckSubscriptionFailureAction:
+      return {
+        ...state,
+        error: action.error,
       };
     default:
       return state;
