@@ -65,10 +65,8 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   };
 
   agreeAction = () => {
-    const { setIsTcAccepted, createTc } = this.props;
-
+    const { createTc } = this.props;
     createTc();
-    setIsTcAccepted(true);
   };
 
   isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent) => {
