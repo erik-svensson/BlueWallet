@@ -65,13 +65,10 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   };
 
   agreeAction = () => {
-    const { isTxPasswordSet, isPinSet, setIsTcAccepted, createTc } = this.props;
+    const { setIsTcAccepted, createTc } = this.props;
 
-    if (isTxPasswordSet && isPinSet) {
-      createTc();
-    } else {
-      setIsTcAccepted(true);
-    }
+    createTc();
+    setIsTcAccepted(true);
   };
 
   isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent) => {
