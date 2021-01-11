@@ -64,7 +64,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         onSuccess: () => navigation.navigate(Route.ConfirmNotificationCode, { email }),
       });
     } else {
-      navigation.navigate(Route.ChooseWalletsForNotification, { address: email, isOnboarding: true });
+      navigation.navigate(Route.ChooseWalletsForNotification, { email, isOnboarding: true });
     }
   };
 

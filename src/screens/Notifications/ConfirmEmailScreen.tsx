@@ -61,7 +61,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
   async componentDidMount() {
     const {
       route: {
-        params: { walletsToSubscribe, address },
+        params: { walletsToSubscribe, email },
       },
       language,
     } = this.props;
@@ -70,7 +70,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
       walletsToSubscribe!.map(async wallet => await walletToAddressesGenerationBase(wallet)),
     );
 
-    this.props.subscribe(walletsToSubscribePayload, address, language);
+    this.props.subscribe(walletsToSubscribePayload, email, language);
   }
 
   get infoContainerContent() {
@@ -97,7 +97,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
     const {
       navigation,
       route: {
-        params: { address, walletsToSubscribe },
+        params: { walletsToSubscribe },
       },
     } = this.props;
     return {
@@ -132,7 +132,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
       onCodeConfirm: () => {
         this.setState({ code: '' }, () =>
           navigation.navigate(Route.ConfirmEmail, {
-            address: newAddress!,
+            email: newAddress!,
             flowType: ConfirmAddressFlowType.NEW_ADDRESS,
           }),
         );
@@ -234,12 +234,12 @@ class ConfirmEmailScreen extends Component<Props, State> {
       storedEmail,
       createNotificationEmail,
       route: {
-        params: { walletsToSubscribe, address },
+        params: { walletsToSubscribe, email },
       },
     } = this.props;
     if (walletsToSubscribe?.length) {
-      if (!storedEmail && address) {
-        createNotificationEmail(address);
+      if (!storedEmail && email) {
+        createNotificationEmail(email);
       }
       this.props.authenticate(sessionToken, this.state.code, {
         onFailure: () => Alert.alert('error', notificationError),
@@ -257,7 +257,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   render() {
     console.log('notificationError', this.props.notificationError);
-    const { address } = this.props.route.params;
+    const { email } = this.props.route.params;
     return (
       <ScreenTemplate
         noScroll
@@ -281,7 +281,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
           <Text style={typography.headline4}>{this.infoContainerContent.title}</Text>
           <Text style={styles.infoDescription}>
             {this.infoContainerContent.description}
-            <Text style={styles.address}>{`\n${address}`}</Text>
+            <Text style={styles.email}>{`\n${email}`}</Text>
           </Text>
         </View>
         <View style={styles.inputItemContainer}>
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
   resendButton: {
     marginTop: 12,
   },
-  address: {
+  email: {
     ...typography.subtitle6,
     color: palette.textBlack,
   },

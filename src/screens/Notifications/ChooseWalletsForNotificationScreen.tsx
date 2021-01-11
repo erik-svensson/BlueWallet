@@ -57,10 +57,10 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
       wallets,
       checkSubscription,
       route: {
-        params: { address },
+        params: { email },
       },
     } = this.props;
-    checkSubscription(wallets, address);
+    checkSubscription(wallets, email);
   }
 
   onConfirm = () => {
@@ -79,7 +79,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     });
 
   onSkip = () => {
-    this.props.createNotificationEmail(this.props.route.params.address, { onSuccess: this.goToSuccessScreen });
+    this.props.createNotificationEmail(this.props.route.params.email, { onSuccess: this.goToSuccessScreen });
   };
 
   addWallet = (wallet: Item) => this.setState((state: State) => ({ wallets: [...state.wallets, wallet] }));
@@ -129,10 +129,10 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     } = this.props;
 
     if (params.isOnboarding) {
-      navigation.navigate(Route.ConfirmNotificationCode, { email: params.address });
+      navigation.navigate(Route.ConfirmNotificationCode, { email: params.email });
     } else {
       this.props.navigation.navigate(Route.ConfirmEmail, {
-        address: params.address,
+        email: params.email,
         flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
         walletsToSubscribe: this.state.wallets,
       });
@@ -143,7 +143,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     const {
       wallets,
       route: {
-        params: { address },
+        params: { email },
       },
     } = this.props;
     return (
@@ -161,7 +161,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
           <Text style={styles.infoDescription}>{i18n.notifications.chooseWalletsDescription}</Text>
         </View>
         <View style={styles.amountInput}>
-          <Text style={styles.amount}>{address}</Text>
+          <Text style={styles.amount}>{email}</Text>
         </View>
 
         <FlatList

@@ -420,7 +420,7 @@ export type PasswordNavigatorParams = {
   [Route.ConfirmTransactionPassword]: { setPassword: string };
   [Route.ConfirmNotificationCode]: { email?: string };
   [Route.ChooseWalletsForNotification]: {
-    address: string;
+    email: string;
     isOnboarding?: boolean;
   };
   [Route.AddNotificationEmail]: undefined;
@@ -429,7 +429,7 @@ export type PasswordNavigatorParams = {
 export type NotificationNavigatorParams = {
   [Route.AddNotificationEmail]: undefined;
   [Route.ChooseWalletsForNotification]: {
-    address: string;
+    email: string;
     onboarding?: boolean;
   };
   [Route.ConfirmNotificationCode]: { email?: string };
@@ -530,18 +530,18 @@ export type MainCardStackNavigatorParams = {
     walletsToSubscribe?: Wallet[];
   };
   [Route.ConfirmEmail]: {
-    address: string;
+    email: string;
     newAddress?: string;
     flowType: ConfirmAddressFlowType;
     walletsToSubscribe?: Wallet[];
     onBack?: () => void;
   };
   [Route.ChooseWalletsForNotification]: {
-    address: string;
+    email: string;
     isOnboarding?: boolean;
   };
   [Route.ChangeEmail]: {
-    address: string;
+    email: string;
   };
   [Route.ReceiveNotificationsConfirmation]: {
     address: string;

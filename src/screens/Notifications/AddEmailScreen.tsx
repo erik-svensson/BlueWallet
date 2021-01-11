@@ -19,13 +19,13 @@ interface Props {
 }
 
 interface State {
-  address: string;
+  email: string;
   error: string;
 }
 
 export class AddEmailScreen extends Component<Props, State> {
   state = {
-    address: '',
+    email: '',
     error: '',
   };
 
@@ -36,9 +36,9 @@ export class AddEmailScreen extends Component<Props, State> {
         params: { walletsToSubscribe },
       },
     } = this.props;
-    const { address } = this.state;
+    const { email } = this.state;
 
-    if (!isEmail(address)) {
+    if (!isEmail(email)) {
       return this.setState({
         error: i18n.notifications.invalidAddressError,
       });
@@ -46,24 +46,24 @@ export class AddEmailScreen extends Component<Props, State> {
 
     if (walletsToSubscribe) {
       return navigation.navigate(Route.ConfirmEmail, {
-        address,
+        email,
         flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
         walletsToSubscribe,
       });
     }
 
-    navigation.navigate(Route.ChooseWalletsForNotification, { address });
+    navigation.navigate(Route.ChooseWalletsForNotification, { email });
   };
 
-  onChange = (address: string) => this.setState({ address, error: '' });
+  onChange = (email: string) => this.setState({ email, error: '' });
 
   render() {
-    const { address, error } = this.state;
+    const { email, error } = this.state;
     return (
       <ScreenTemplate
         noScroll
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
-        footer={<Button title={i18n._.confirm} disabled={!address} onPress={this.onConfirm} />}
+        footer={<Button title={i18n._.confirm} disabled={!email} onPress={this.onConfirm} />}
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.notifications.addYourEmailFor}</Text>
@@ -71,7 +71,7 @@ export class AddEmailScreen extends Component<Props, State> {
         </View>
         <View style={styles.inputItemContainer}>
           <InputItem
-            value={address}
+            value={email}
             setValue={this.onChange}
             autoFocus
             label={i18n.notifications.yourEmail}

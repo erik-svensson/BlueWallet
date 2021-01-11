@@ -39,7 +39,7 @@ export class NotificationScreen extends Component<Props> {
 
   onChangeEmailPress = () =>
     this.props.navigation.navigate(Route.ChangeEmail, {
-      address: this.props.email,
+      email: this.props.email,
     });
 
   onDeletePress = () =>
@@ -63,7 +63,7 @@ export class NotificationScreen extends Component<Props> {
 
   goToConfirmScreen = () =>
     this.props.navigation.navigate(Route.ConfirmEmail, {
-      address: this.props.email!,
+      email: this.props.email!,
       flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
     });
 
@@ -122,7 +122,7 @@ export class NotificationScreen extends Component<Props> {
             <Text style={styles.title}>{i18n.notifications.title}</Text>
             <Text style={styles.description}>{i18n.notifications.description}</Text>
             <View style={styles.amountAddress}>
-              <Text style={styles.address}>{this.props.email}</Text>
+              <Text style={styles.email}>{this.props.email}</Text>
             </View>
             {!!wallets.length && (
               <>
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   amountAddress: { width: '100%', borderBottomColor: palette.grey, borderBottomWidth: 1, paddingBottom: 10 },
-  address: { ...typography.caption, color: palette.textGrey },
+  email: { ...typography.caption, color: palette.textGrey },
   noWalletsContainer: {
     flex: 1,
     alignItems: 'center',

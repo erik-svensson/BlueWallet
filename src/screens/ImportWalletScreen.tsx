@@ -158,7 +158,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         onSuccess: () => {
           isNotificationEmailSet
             ? this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
-                address: email,
+                address: email, //TODO
                 flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
               })
             : this.showSuccessImportMessageScreen();

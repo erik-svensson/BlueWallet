@@ -22,33 +22,33 @@ interface Props {
 }
 
 interface State {
-  address: string;
+  email: string;
   error: string;
 }
 
 class ChangeEmailScreen extends Component<Props, State> {
   state = {
-    address: '',
+    email: '',
     error: '',
   };
 
   onConfirm = () => {
-    if (!isEmail(this.state.address)) {
+    if (!isEmail(this.state.email)) {
       return this.setState({
         error: i18n.notifications.invalidAddressError,
       });
     }
     return this.props.navigation.navigate(Route.ConfirmEmail, {
-      address: this.props.email,
-      newAddress: this.state.address,
+      email: this.props.email,
+      newAddress: this.state.email,
       flowType: ConfirmAddressFlowType.CURRENT_ADDRESS,
     });
   };
 
-  onChange = (address: string) => this.setState({ address, error: '' });
+  onChange = (email: string) => this.setState({ email, error: '' });
 
   render() {
-    const { address } = this.state;
+    const { email } = this.state;
     return (
       <ScreenTemplate
         noScroll
@@ -61,11 +61,11 @@ class ChangeEmailScreen extends Component<Props, State> {
         </View>
         <View style={styles.amountAddress}>
           <Text style={styles.inputLabel}>{i18n.notifications.yourCurrentEmail}</Text>
-          <Text style={styles.address}>{this.props.email}</Text>
+          <Text style={styles.email}>{this.props.email}</Text>
         </View>
         <View style={styles.inputItemContainer}>
           <InputItem
-            value={address}
+            value={email}
             setValue={this.onChange}
             autoFocus
             label={i18n.notifications.newEmail}
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   amountAddress: { width: '100%', borderBottomColor: palette.grey, borderBottomWidth: 1, paddingBottom: 10 },
-  address: { ...typography.caption, color: palette.textBlack },
+  email: { ...typography.caption, color: palette.textBlack },
   inputLabel: {
     ...typography.overline,
     color: palette.textGrey,
