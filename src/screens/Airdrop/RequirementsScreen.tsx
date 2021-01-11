@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
-import { Route } from 'app/consts';
+import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { CONST } from 'app/consts/models';
 import { ApplicationState } from 'app/state';
 import { actions } from 'app/state/airdrop';
@@ -19,7 +19,7 @@ interface ActionProps {
 }
 
 type Props = {
-  navigation: StackNavigationProp<any, Route.AirdropRequirements>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.AirdropRequirements>;
 } & ActionProps;
 
 class AirdropRequirementsScreen extends Component<Props> {
