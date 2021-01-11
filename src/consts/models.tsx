@@ -131,6 +131,7 @@ export enum Route {
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
+  AirdropDashboard = 'AirdropDashboard',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -442,6 +443,7 @@ export type MainCardStackNavigatorParams = {
     chunksQuantity: number;
     onScanned: () => void;
   };
+  [Route.AirdropDashboard]: undefined;
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {

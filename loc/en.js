@@ -36,6 +36,13 @@ module.exports = {
       yesButton: 'Yes, I disagree',
     },
   },
+  airdrop: {
+    title: 'Airdrop',
+    createNewWallet: 'Create new wallet',
+    dashboard: {
+      desc1: 'Monitor your progress and register more wallets.',
+    },
+  },
   aboutUs: {
     alwaysBackupYourKeys: 'Always backup your keys',
     buildWithAwesome: 'Build with awesome:',

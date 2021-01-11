@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity, SectionList } from 'react-native';
 import { connect } from 'react-redux';
 
-import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
+import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText, Countdown } from 'app/components';
 import { Wallet, Route, EnhancedTransaction, CONST } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
@@ -250,6 +250,7 @@ class DashboardScreen extends Component<Props, State> {
     return (
       <>
         <ScreenTemplate noScroll contentContainer={styles.contentContainer} header={this.renderHeader()}>
+          <Countdown dataEnd={new Date('01/12/2021')} />
           {this.renderContent()}
         </ScreenTemplate>
         {!!this.props.isFilteringOn && (
