@@ -25,11 +25,11 @@ type Props = {
 class AirdropRequirementsScreen extends Component<Props> {
   onSoundsGreatPress = () => {
     this.props.completeThankYouFlow();
-    // this.props.navigation.navigate(Route.Dashboard); WIP
+    // TODO: this.props.navigation.navigate(Route.Dashboard);
   };
 
   onTermsConditionsPress = () => {
-    // this.props.navigation.navigate(Route.AirdropTermsAndConditions); WIP
+    // TODO: this.props.navigation.navigate(Route.AirdropTermsAndConditions);
   };
 
   getRequirementsListItems = () =>
