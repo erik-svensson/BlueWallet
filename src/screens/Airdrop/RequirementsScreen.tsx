@@ -63,7 +63,9 @@ class AirdropRequirementsScreen extends Component<Props> {
       >
         <Text style={styles.subtitle}>{i18n.airdrop.requirements.subtitle}</Text>
         <Text style={styles.description}>
-          {i18n.formatString(i18n.airdrop.requirements.description, CONST.airdropTotalDollarsToShare)}
+          {i18n.formatString(i18n.airdrop.requirements.description, {
+            airdropTotalDollarsToShare: CONST.airdropTotalDollarsToShare,
+          })}
         </Text>
         <View>
           <Text style={styles.listHeader}>{i18n.airdrop.requirements.listHeader}</Text>
@@ -74,7 +76,9 @@ class AirdropRequirementsScreen extends Component<Props> {
           <View style={styles.listItem}>
             <Image source={icons.roundTick} style={styles.image} />
             <Text style={styles.listText}>
-              {i18n.formatString(i18n.airdrop.requirements.points[1], CONST.airdropMinimumBTCVRequired)}
+              {i18n.formatString(i18n.airdrop.requirements.points[1], {
+                airdropMinimumBTCVRequired: CONST.airdropMinimumBTCVRequired,
+              })}
             </Text>
           </View>
         </View>
