@@ -1,26 +1,36 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { BackHandler, Text, StyleSheet, NativeEventSubscription, View } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
+import { connect } from 'react-redux';
 
 import { ScreenTemplate, Button, Header } from 'app/components';
 import { Route } from 'app/consts';
+import { ApplicationState } from 'app/state';
+import { actions } from 'app/state/airdrop';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
-interface Props {
-  navigation: StackNavigationProp<any, Route.AirdropThankYou>;
+interface MapStateProps {
+  thankYouSeen: boolean;
 }
 
-export class AirdropThankYouScreen extends Component<Props, {}> {
-  backHandler?: NativeEventSubscription;
+interface ActionProps {
+  markThankYouSeen: Function;
+}
 
+type Props = {
+  navigation: StackNavigationProp<any, Route.AirdropThankYou>;
+} & MapStateProps &
+  ActionProps;
+
+class AirdropThankYouScreen extends Component<Props, {}> {
   componentDidMount() {
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
-  }
+    const { thankYouSeen, markThankYouSeen } = this.props;
 
-  componentWillUnmount() {
-    this.backHandler && this.backHandler.remove();
+    if (!thankYouSeen) {
+      markThankYouSeen();
+    }
   }
 
   navigateBack = () => this.props.navigation.navigate(Route.Dashboard);
@@ -57,6 +67,16 @@ export class AirdropThankYouScreen extends Component<Props, {}> {
     );
   }
 }
+
+const mapStateToProps = (state: ApplicationState): MapStateProps => ({
+  thankYouSeen: state.airdrop.thankYouSeen,
+});
+
+const mapDispatchToProps: ActionProps = {
+  markThankYouSeen: actions.markThankYouSeen,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AirdropThankYouScreen);
 
 const styles = StyleSheet.create({
   subtitle: {

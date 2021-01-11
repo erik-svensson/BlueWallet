@@ -3,7 +3,7 @@ import React from 'react';
 
 import { BottomTabBarComponent } from 'app/components';
 import { Route, MainTabNavigatorParams } from 'app/consts';
-import { ContactListScreen, AirdropThankYouScreen, SettingsScreen, AuthenticatorListScreen } from 'app/screens';
+import { ContactListScreen, DashboardScreen, SettingsScreen, AuthenticatorListScreen } from 'app/screens';
 
 const i18n = require('../../loc');
 
@@ -18,8 +18,8 @@ export const MainTabNavigator = () => {
       }}
     >
       <Tab.Screen
-        name={Route.AirdropThankYou}
-        component={AirdropThankYouScreen}
+        name={Route.Dashboard}
+        component={DashboardScreen}
         options={() => ({
           tabBarLabel: i18n.tabNavigator.wallets,
         })}

@@ -47,5 +47,5 @@ export { ImportWalletChooseTypeScreen } from './ImportWalletChooseTypeScreen';
 export { ChunkedQrCode } from './ChunkedQrCode';
 export { default as ConnectionIssuesScreen } from './ConnectionIssues';
 export { default as TermsConditionsScreen } from './TermsConditionsScreen';
-export { AirdropThankYouScreen } from './Airdrop/ThankYouScreen';
-export { AirdropRequirementsScreen } from './Airdrop/RequirementsScreen';
+export { default as AirdropThankYouScreen } from './Airdrop/ThankYouScreen';
+export { default as AirdropRequirementsScreen } from './Airdrop/RequirementsScreen';

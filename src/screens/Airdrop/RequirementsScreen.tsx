@@ -1,20 +1,28 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { Image, Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
 import { Route } from 'app/consts';
+import { ApplicationState } from 'app/state';
+import { actions } from 'app/state/airdrop';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
-interface Props {
-  navigation: StackNavigationProp<any, Route.AirdropRequirements>;
+interface ActionProps {
+  completeThankYouFlow: Function;
 }
 
-export class AirdropRequirementsScreen extends Component<Props, {}> {
+type Props = {
+  navigation: StackNavigationProp<any, Route.AirdropRequirements>;
+} & ActionProps;
+
+class AirdropRequirementsScreen extends Component<Props, {}> {
   onSoundsGreatPress = () => {
+    this.props.completeThankYouFlow();
     // this.props.navigation.navigate(Route.Dashboard); WIP
   };
 
@@ -66,6 +74,12 @@ export class AirdropRequirementsScreen extends Component<Props, {}> {
     );
   }
 }
+
+const mapDispatchToProps: ActionProps = {
+  completeThankYouFlow: actions.completeThankYouFlow,
+};
+
+export default connect(null, mapDispatchToProps)(AirdropRequirementsScreen);
 
 const styles = StyleSheet.create({
   subtitle: {
