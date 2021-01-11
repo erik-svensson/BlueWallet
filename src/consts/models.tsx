@@ -34,6 +34,8 @@ export const CONST = {
   maxAddressLength: 48,
   tcVersionRequired: 1,
   tcVersion: 'tcVersion',
+  airdropMinimumBTCVRequired: 5,
+  airdropTotalDollarsToShare: '250.000',
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
@@ -131,6 +133,8 @@ export enum Route {
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
+  AirdropThankYou = 'AirdropThankYou',
+  AirdropRequirements = 'AirdropRequirements',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
