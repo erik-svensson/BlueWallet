@@ -104,6 +104,14 @@ export const allWallets = createSelector(wallets, allWallet, (walletsList, aw) =
   return walletsList;
 });
 
+export const subscribedWallets = createSelector(wallets, walletsList =>
+  walletsList.filter(wallet => !!wallet.isSubscribed),
+);
+
+export const unSubscribedWallets = createSelector(wallets, walletsList =>
+  walletsList.filter(wallet => !wallet.isSubscribed),
+);
+
 type TxEntity = TransactionInput | TransactionOutput;
 const getMyAmount = (wallet: Wallet, entities: TxEntity[]) =>
   entities.reduce((amount: number, entity: TxEntity) => {

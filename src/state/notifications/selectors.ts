@@ -5,7 +5,7 @@ import { Wallet } from 'app/consts';
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { ApplicationState } from 'app/state';
 import { WalletsState } from 'app/state/wallets/reducer';
-import { walletsWithRecoveryTransaction, getById } from 'app/state/wallets/selectors';
+import { wallets, getById } from 'app/state/wallets/selectors';
 
 import { checkSubscription, CheckSubscriptionAction, NotificationAction } from './actions';
 import { NotificationState } from './reducer';
@@ -17,7 +17,7 @@ export const isNotificationEmailSet = createSelector(local, state => state.isNot
 export const isNotificationEmailSkip = createSelector(local, state => state.isNotificationEmailSkip);
 export const pin = createSelector(local, state => state.pin);
 
-export const subscribedWallets = createSelector(walletsWithRecoveryTransaction, local, (walletsList, state) => {
+export const subscribedWallets = createSelector(wallets, local, (walletsList, state) => {
   const email = state.email;
   if (!email) return [];
   // const hashes = walletsList.map(wallet => wallet.id);

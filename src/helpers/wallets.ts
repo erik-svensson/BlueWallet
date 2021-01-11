@@ -22,15 +22,16 @@ export const walletToAddressesGenerationBase = async (wallet: Wallet) => {
   return {
     name: wallet.label,
     gap_limit: CONST.walletsDefaultGapLimit,
-    derivation_path: [wallet.getDerivationPath()],
+    derivation_path: {}, //[wallet.getDerivationPath()],
     xpub: await wallet.getXpub(),
-    address_type: WALLETS_ADDRESSES_TYPES[wallet.type],
+    address_type: 'p2sh', // WALLETS_ADDRESSES_TYPES[wallet.type], TODO change when backend types are completed
+    instant_public_key: 'recovery_public_key',
     ...(instant_public_key && { instant_public_key }),
     ...(recovery_public_key && { recovery_public_key }),
   };
 };
 
-export const getWalletHashedPublicKeys = async (wallet: Wallet): Promise<string | undefined> => {
+export const getWalletHashedPublicKeys = async (wallet: Wallet) => {
   const encodedPubKeys =
     wallet.pubKeys
       ?.map(pk => b58.encode(pk))

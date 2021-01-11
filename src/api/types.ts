@@ -35,7 +35,7 @@ export interface UnsubscribePayload {
 
 export interface AuthenticatePayload {
   session_token: string;
-  pin: number;
+  pin: string;
 }
 
 export interface ModifyPayload {

@@ -72,6 +72,11 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         ...state,
         sessionToken: '',
       };
+    case NotificationAction.AuthenticateEmailFailureAction:
+      return {
+        ...state,
+        error: action.error,
+      };
     case NotificationAction.CheckSubscriptionSuccessAction:
       return {
         ...state,

@@ -6,16 +6,20 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
-import { deleteNotificationEmail, DeleteNotificationEmailAction } from 'app/state/notifications/actions';
-import * as notificationSelectors from 'app/state/notifications/selectors';
+import {
+  deleteNotificationEmail,
+  DeleteNotificationEmailAction,
+  CheckSubscriptionAction,
+  checkSubscription,
+} from 'app/state/notifications/actions';
+import { subscribedWallets } from 'app/state/wallets/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
-type Item = any; // TODO will be changed to proper type when implementing logic
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
@@ -24,9 +28,15 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.Notifications>;
   email: string;
   deleteEmail: () => DeleteNotificationEmailAction;
-  wallets: Item[];
+  checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
+  wallets: Wallet[];
 }
 export class NotificationScreen extends Component<Props> {
+  async componentDidMount() {
+    const { wallets, checkSubscription, email } = this.props;
+    !!email && checkSubscription(wallets, email);
+  }
+
   onChangeEmailPress = () =>
     this.props.navigation.navigate(Route.ChangeEmail, {
       address: this.props.email,
@@ -76,7 +86,7 @@ export class NotificationScreen extends Component<Props> {
         <Text style={styles.walletName}>{item.label}</Text>
         <Image source={images.backArrow} style={styles.arrow} resizeMode="contain" />
       </View>
-      <Text style={styles.caption}>{item.id}</Text>
+      <Text style={styles.caption}>{item.getAddressForTransaction()}</Text>
     </TouchableOpacity>
   );
 
@@ -100,27 +110,30 @@ export class NotificationScreen extends Component<Props> {
     );
 
   render() {
-    console.log('wallets', this.props.wallets);
+    const { wallets, email } = this.props;
     return (
       <ScreenTemplate
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
         noScroll
         footer={this.renderFooter()}
       >
-        {this.props.email ? (
+        {email ? (
           <>
             <Text style={styles.title}>{i18n.notifications.title}</Text>
             <Text style={styles.description}>{i18n.notifications.description}</Text>
             <View style={styles.amountAddress}>
               <Text style={styles.address}>{this.props.email}</Text>
             </View>
-            <Text style={styles.listTitle}>{i18n.notifications.yourSubscriptions}</Text>
-
-            <FlatList
-              data={this.props.wallets}
-              renderItem={item => this.renderItem(item.item)}
-              keyExtractor={item => item.id}
-            />
+            {!!wallets.length && (
+              <>
+                <Text style={styles.listTitle}>{i18n.notifications.yourSubscriptions}</Text>
+                <FlatList
+                  data={wallets}
+                  renderItem={item => this.renderItem(item.item)}
+                  keyExtractor={item => item.id}
+                />
+              </>
+            )}
           </>
         ) : (
           <View style={styles.noWalletsContainer}>
@@ -136,11 +149,12 @@ export class NotificationScreen extends Component<Props> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   email: state.notifications.email,
-  wallets: notificationSelectors.subscribedWallets(state),
+  wallets: subscribedWallets(state),
 });
 
 const mapDispatchToProps = {
   deleteEmail: deleteNotificationEmail,
+  checkSubscription,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationScreen);

@@ -30,16 +30,29 @@ export class AddEmailScreen extends Component<Props, State> {
   };
 
   onConfirm = () => {
-    if (!isEmail(this.state.address)) {
+    const {
+      navigation,
+      route: {
+        params: { walletsToSubscribe },
+      },
+    } = this.props;
+    const { address } = this.state;
+
+    if (!isEmail(address)) {
       return this.setState({
         error: i18n.notifications.invalidAddressError,
       });
     }
-    this.props.navigation.navigate(Route.ConfirmEmail, {
-      address: this.state.address,
-      flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
-      walletsToSubscribe: this.props.route.params.walletsToSubscribe,
-    });
+
+    if (walletsToSubscribe) {
+      return navigation.navigate(Route.ConfirmEmail, {
+        address,
+        flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
+        walletsToSubscribe,
+      });
+    }
+
+    navigation.navigate(Route.ChooseWalletsForNotification, { address });
   };
 
   onChange = (address: string) => this.setState({ address, error: '' });

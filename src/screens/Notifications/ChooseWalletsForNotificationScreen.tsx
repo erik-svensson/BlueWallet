@@ -2,10 +2,27 @@ import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, NotificationNavigatorParams } from 'app/consts';
+import {
+  Route,
+  MainCardStackNavigatorParams,
+  RootStackParams,
+  NotificationNavigatorParams,
+  ConfirmAddressFlowType,
+  Wallet,
+  ActionMeta,
+} from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { ApplicationState } from 'app/state';
+import {
+  checkSubscription,
+  CheckSubscriptionAction,
+  createNotificationEmail,
+  CreateNotificationEmailAction,
+} from 'app/state/notifications/actions';
+import { unSubscribedWallets } from 'app/state/wallets/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -20,8 +37,10 @@ interface Props {
       StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>
     >
   >;
-  wallets: Item;
+  wallets: Wallet[];
   route: RouteProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>;
+  checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
+  createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 }
 
 interface State {
@@ -33,11 +52,34 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     wallets: [],
   };
 
+  async componentDidMount() {
+    const {
+      wallets,
+      checkSubscription,
+      route: {
+        params: { address },
+      },
+    } = this.props;
+    checkSubscription(wallets, address);
+  }
+
   onConfirm = () => {
     this.proceed();
   };
+
+  goToSuccessScreen = () =>
+    CreateMessage({
+      title: i18n.message.success,
+      description: i18n.notifications.emailAddedSuccessMessage,
+      type: MessageType.success,
+      buttonProps: {
+        title: i18n.notifications.goToNotifications,
+        onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
+      },
+    });
+
   onSkip = () => {
-    this.proceed();
+    this.props.createNotificationEmail(this.props.route.params.address, { onSuccess: this.goToSuccessScreen });
   };
 
   addWallet = (wallet: Item) => this.setState((state: State) => ({ wallets: [...state.wallets, wallet] }));
@@ -55,7 +97,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
 
   isWalletChecked = (selectedWallet: any) => this.state.wallets.some((wallet: Item) => wallet.id === selectedWallet.id);
 
-  renderItem = (item: any) => {
+  renderItem = (item: Wallet) => {
     return (
       <View style={styles.itemRow}>
         <View style={styles.row}>
@@ -65,8 +107,8 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
             containerStyle={styles.checkBox}
           />
           <View>
-            <Text style={styles.walletName}>{item.name}</Text>
-            <Text style={styles.caption}>{item.description}</Text>
+            <Text style={styles.walletName}>{item.label}</Text>
+            <Text style={styles.caption}>{item.getAddressForTransaction()}</Text>
           </View>
         </View>
       </View>
@@ -89,25 +131,27 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     if (params.isOnboarding) {
       navigation.navigate(Route.ConfirmNotificationCode, { email: params.address });
     } else {
-      CreateMessage({
-        title: i18n.message.success,
-        description: i18n.notifications.emailAddedSuccessMessage,
-        type: MessageType.success,
-        buttonProps: {
-          title: i18n.notifications.goToNotifications,
-          onPress: () => navigation.navigate(Route.Notifications, {}),
-        },
+      this.props.navigation.navigate(Route.ConfirmEmail, {
+        address: params.address,
+        flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
+        walletsToSubscribe: this.state.wallets,
       });
     }
   };
+
   render() {
-    const { address } = this.props.route.params;
+    const {
+      wallets,
+      route: {
+        params: { address },
+      },
+    } = this.props;
     return (
       <ScreenTemplate
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
         footer={
           <>
-            <Button title={i18n._.confirm} onPress={this.onConfirm} />
+            <Button title={i18n._.confirm} disabled={!this.state.wallets.length} onPress={this.onConfirm} />
             <FlatButton containerStyle={styles.skipButton} title={i18n._.skip} onPress={this.onSkip} />
           </>
         }
@@ -121,7 +165,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         </View>
 
         <FlatList
-          data={this.props.wallets}
+          data={wallets.filter(wallet => !wallet.isSubscribed)}
           renderItem={item => this.renderItem(item.item)}
           keyExtractor={item => item.id}
           ListHeaderComponent={this.renderListHeader()}
@@ -131,24 +175,18 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
   }
 }
 
-// @ts-ignore TODO will be changed to proper type when implementing logic
-ChooseWalletsForNotificationScreen.defaultProps = {
-  wallets: [
-    { id: '1', name: 'ex1@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '2', name: 'ex2@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '3', name: 'ex3@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '4', name: 'ex4@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '5', name: 'ex5@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '6', name: 'ex6@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '7', name: 'ex7@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '8', name: 'ex8@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '9', name: 'ex9@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '10', name: 'ex10@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '11', name: 'ex11@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '12', name: 'ex12@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-    { id: '13', name: 'ex13@example.com.pl', description: 'xxxxxxxxxxxxxxxxxx' },
-  ],
+const mapStateToProps = (state: ApplicationState) => {
+  return {
+    wallets: unSubscribedWallets(state),
+  };
 };
+
+const mapDispatchToProps = {
+  checkSubscription,
+  createNotificationEmail,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChooseWalletsForNotificationScreen);
 
 const styles = StyleSheet.create({
   infoContainer: {
