@@ -90,13 +90,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 12,
     paddingRight: 10,
+    paddingLeft: 8.5,
   },
   listText: {
     ...typography.body,
     color: palette.textGrey,
   },
   image: {
-    width: 17,
+    width: 19,
     height: 19,
     marginRight: 6,
   },
