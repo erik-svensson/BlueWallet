@@ -4,9 +4,10 @@ import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Button, Header } from 'app/components';
-import { Route } from 'app/consts';
+import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
-import { actions } from 'app/state/airdrop';
+import { actions, selectors } from 'app/state/airdrop';
+import { ThankYouSeenAction } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -16,15 +17,15 @@ interface MapStateProps {
 }
 
 interface ActionProps {
-  markThankYouSeen: Function;
+  markThankYouSeen: () => ThankYouSeenAction;
 }
 
 type Props = {
-  navigation: StackNavigationProp<any, Route.AirdropThankYou>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.AirdropThankYou>;
 } & MapStateProps &
   ActionProps;
 
-class AirdropThankYouScreen extends Component<Props, {}> {
+class AirdropThankYouScreen extends Component<Props> {
   componentDidMount() {
     const { thankYouSeen, markThankYouSeen } = this.props;
 
@@ -33,7 +34,7 @@ class AirdropThankYouScreen extends Component<Props, {}> {
     }
   }
 
-  navigateBack = () => this.props.navigation.navigate(Route.Dashboard);
+  navigateBack = () => this.props.navigation.pop();
 
   goToLearnMore = () => {
     this.props.navigation.navigate(Route.AirdropRequirements);
@@ -69,7 +70,7 @@ class AirdropThankYouScreen extends Component<Props, {}> {
 }
 
 const mapStateToProps = (state: ApplicationState): MapStateProps => ({
-  thankYouSeen: state.airdrop.thankYouSeen,
+  thankYouSeen: selectors.thankYouSeen(state),
 });
 
 const mapDispatchToProps: ActionProps = {

@@ -6,21 +6,23 @@ import { connect } from 'react-redux';
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
 import { Route } from 'app/consts';
+import { CONST } from 'app/consts/models';
 import { ApplicationState } from 'app/state';
 import { actions } from 'app/state/airdrop';
+import { ThankYouFlowCompleted } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface ActionProps {
-  completeThankYouFlow: Function;
+  completeThankYouFlow: () => ThankYouFlowCompleted;
 }
 
 type Props = {
   navigation: StackNavigationProp<any, Route.AirdropRequirements>;
 } & ActionProps;
 
-class AirdropRequirementsScreen extends Component<Props, {}> {
+class AirdropRequirementsScreen extends Component<Props> {
   onSoundsGreatPress = () => {
     this.props.completeThankYouFlow();
     // this.props.navigation.navigate(Route.Dashboard); WIP
@@ -60,10 +62,21 @@ class AirdropRequirementsScreen extends Component<Props, {}> {
         }
       >
         <Text style={styles.subtitle}>{i18n.airdrop.requirements.subtitle}</Text>
-        <Text style={styles.description}>{i18n.airdrop.requirements.description}</Text>
+        <Text style={styles.description}>
+          {i18n.formatString(i18n.airdrop.requirements.description, CONST.airdropTotalDollarsToShare)}
+        </Text>
         <View>
           <Text style={styles.listHeader}>{i18n.airdrop.requirements.listHeader}</Text>
-          {this.getRequirementsListItems()}
+          <View style={styles.listItem}>
+            <Image source={icons.roundTick} style={styles.image} />
+            <Text style={styles.listText}>{i18n.airdrop.requirements.points[0]}</Text>
+          </View>
+          <View style={styles.listItem}>
+            <Image source={icons.roundTick} style={styles.image} />
+            <Text style={styles.listText}>
+              {i18n.formatString(i18n.airdrop.requirements.points[1], CONST.airdropMinimumBTCVRequired)}
+            </Text>
+          </View>
         </View>
         <View style={styles.dateInfoContainer}>
           <Text style={styles.description}>{i18n.airdrop.requirements.dateHeader}</Text>

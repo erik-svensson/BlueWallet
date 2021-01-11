@@ -35,11 +35,11 @@ module.exports = {
       soundsGreat: 'Sounds great!',
       subtitle: 'Thank you for creating the Bitcoin Vault community.',
       description:
-        'We are glad that you are a part of it! We want to share $250.000 in BTCV as a reward for being a supportive community.',
+        'We are glad that you are a part of it! We want to share ${0} in BTCV as a reward for being a supportive community.',
       listHeader: 'Requirements for the Airdrop:',
       points: {
         0: '3-Key Vault Wallet',
-        1: 'Minimum amount of BTCV stored in 3-Key Vault Wallet - 5 BTCV*',
+        1: 'Minimum amount of BTCV stored in 3-Key Vault Wallet - {0} BTCV*',
       },
       dateHeader: 'Date of Airdrop:',
       rewardExplanation: '*Reward will be based on the % of your coins in the general pool',
