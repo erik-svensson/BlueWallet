@@ -43,6 +43,9 @@ export const getTimeDuration = (miliseconds: number) => {
   return { days: daysFull, hours: hoursFull, minutes: minutesFull };
 };
 
-const time = getTimeDiff(new Date(), dataEnd);
+export const getUtcDate = (date: DateType | string) => dayjs.utc(date);
 
-console.log('dayjs().toNow()', dayjs('12/12/2021').fromNow());
+export const getTimezone = () => {
+  const offset = -new Date().getTimezoneOffset();
+  return `GMT ${offset < 0 ? '-' : '+'}${dayjs.duration({ minutes: offset }).asHours()}`;
+};

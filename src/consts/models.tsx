@@ -6,6 +6,7 @@ import { ButtonProps } from 'react-native-elements';
 import { ImageStyle } from 'react-native-fast-image';
 
 import { FastImageSource } from 'app/components';
+import { getUtcDate } from 'app/helpers/date';
 import {
   HDSegwitP2SHAirWallet,
   HDSegwitP2SHArWallet,
@@ -34,6 +35,7 @@ export const CONST = {
   maxAddressLength: 48,
   tcVersionRequired: 1,
   tcVersion: 'tcVersion',
+  airdropDate: getUtcDate('2021-03-08 12:00'),
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
