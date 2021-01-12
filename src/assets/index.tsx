@@ -40,6 +40,7 @@ export const images = {
   portraitLogo: require('./images/portraitLogo.png'),
   noAuthenticators: require('./images/shield3x.png'),
   loader: require('./images/loader.png'),
+  airdrop: require('./images/airdrop.png'),
 };
 
 export const icons = {

@@ -37,6 +37,7 @@ import {
   ImportWalletChooseTypeScreen,
   OptionsAuthenticatorScreen,
   ChunkedQrCode,
+  AirdropDashboardScreen,
   AirdropThankYouScreen,
   AirdropRequirementsScreen,
 } from 'app/screens';
@@ -87,6 +88,7 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.ImportWalletChooseType} component={ImportWalletChooseTypeScreen} />
     <Stack.Screen name={Route.OptionsAuthenticator} component={OptionsAuthenticatorScreen} />
     <Stack.Screen name={Route.ChunkedQrCode} component={ChunkedQrCode} />
+    <Stack.Screen name={Route.AirdropDashboard} component={AirdropDashboardScreen} />
     <Stack.Screen name={Route.AirdropThankYou} component={AirdropThankYouScreen} />
     <Stack.Screen name={Route.AirdropRequirements} component={AirdropRequirementsScreen} />
   </Stack.Navigator>

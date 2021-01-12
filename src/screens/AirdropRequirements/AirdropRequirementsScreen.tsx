@@ -7,7 +7,7 @@ import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
 import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { CONST } from 'app/consts/models';
-import { ApplicationState } from 'app/state';
+import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { actions } from 'app/state/airdrop';
 import { ThankYouFlowCompleted } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
@@ -25,20 +25,12 @@ type Props = {
 class AirdropRequirementsScreen extends Component<Props> {
   onSoundsGreatPress = () => {
     this.props.completeThankYouFlow();
-    // TODO: this.props.navigation.navigate(Route.Dashboard);
+    this.props.navigation.navigate(Route.AirdropDashboard);
   };
 
   onTermsConditionsPress = () => {
     // TODO: this.props.navigation.navigate(Route.AirdropTermsAndConditions);
   };
-
-  getRequirementsListItems = () =>
-    Object.values(i18n.airdrop.requirements.points).map((requirement, i) => (
-      <View key={i} style={styles.listItem}>
-        <Image source={icons.roundTick} style={styles.image} />
-        <Text style={styles.listText}>{requirement}</Text>
-      </View>
-    ));
 
   render() {
     return (
@@ -53,7 +45,7 @@ class AirdropRequirementsScreen extends Component<Props> {
               title={i18n.airdrop.requirements.soundsGreat}
             />
             <View style={styles.termsAndConditions}>
-              <Text style={styles.description}>{i18n.airdrop.requirements.termsAndConditions.read}</Text>
+              <Text style={styles.description}>{i18n.airdrop.requirements.termsAndConditions.read}&nbsp;</Text>
               <TouchableOpacity onPress={this.onTermsConditionsPress}>
                 <Text style={styles.termsText}>{i18n.airdrop.requirements.termsAndConditions.termsAndConditions}</Text>
               </TouchableOpacity>
@@ -83,8 +75,8 @@ class AirdropRequirementsScreen extends Component<Props> {
           </View>
         </View>
         <View style={styles.dateInfoContainer}>
-          <Text style={styles.description}>{i18n.airdrop.requirements.dateHeader}</Text>
-          <Text style={styles.date}>19/12/2020 1 P.M GMT +1</Text>
+          <Text style={styles.description}>{i18n.airdrop.dateOfAirdrop}&nbsp;</Text>
+          <Text style={styles.date}>{getFormattedAirdropDate()}</Text>
         </View>
         <Text style={styles.explanation}>{i18n.airdrop.requirements.rewardExplanation}</Text>
       </ScreenTemplate>
