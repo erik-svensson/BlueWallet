@@ -68,7 +68,7 @@
     "ios:prod": "react-native run-ios --scheme='GoldWallet (Debug)'",
     "ios:beta": "react-native run-ios --scheme='GoldWallet Beta (Debug)'",
     "build:detox": "detox build",
-    "test": "yarn jest --forceExit",
+    "test": "yarn jest --forceExit --collectCoverage",
     "test:ci": "CI=true yarn jest --forceExit --collectCoverage",
     "test:detox": "detox test",
     "jest": "node node_modules/jest/bin/jest.js tests/*",
