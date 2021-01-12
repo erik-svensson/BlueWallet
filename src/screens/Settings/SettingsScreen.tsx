@@ -44,9 +44,14 @@ export const SettingsScreen = (props: Props) => {
 
   const renderGeneralSettings = () => (
     <>
-      <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} />
       <ListItem
-        testID="advanced-options"
+        testID="language-settings-item"
+        title={i18n.settings.language}
+        source={icons.languageIcon}
+        onPress={navigateToSelectLanguage}
+      />
+      <ListItem
+        testID="advanced-options-settings-item"
         title={i18n.settings.advancedOptions}
         source={icons.buildIcon}
         onPress={onAdvancedOptionsChange}
@@ -66,6 +71,7 @@ export const SettingsScreen = (props: Props) => {
   const renderSecuritySettings = () => (
     <>
       <ListItem
+        testID="change-pin-settings-item"
         title={i18n.settings.changePin}
         source={icons.lockIcon}
         iconWidth={15}
@@ -74,8 +80,10 @@ export const SettingsScreen = (props: Props) => {
       />
       {biometryTypeAvailable && (
         <ListItem
+          testID="biometry-settings-item"
           title={i18n.settings[BiometricService.biometryType!]}
           source={icons.fingerprintIcon}
+          switchTestID="biometry-switch"
           switchValue={isBiometricsEnabled}
           onSwitchValueChange={onFingerprintLoginChange}
           iconWidth={17}
@@ -86,7 +94,12 @@ export const SettingsScreen = (props: Props) => {
   );
 
   const renderAboutSettings = () => (
-    <ListItem onPress={navigateToAboutUs} title={i18n.settings.aboutUs} source={icons.infoIcon} />
+    <ListItem
+      testID="about-us-settings-item"
+      onPress={navigateToAboutUs}
+      title={i18n.settings.aboutUs}
+      source={icons.infoIcon}
+    />
   );
 
   return (

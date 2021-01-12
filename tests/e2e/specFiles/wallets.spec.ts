@@ -221,7 +221,7 @@ describe('Wallets', () => {
     describe('Advanced wallets', () => {
       beforeEach(async () => {
         await app.navigationBar.changeTab('settings');
-        await app.settings.tapOnAdvancedOptions();
+        await app.settings.tapOnAdvancedOptionsSettingItem();
         await app.settings.tapOnAdvancedOptionsSwitch();
         await app.header.tapOnBackButton();
         await app.navigationBar.changeTab('wallets');
