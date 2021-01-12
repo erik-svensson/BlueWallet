@@ -23,6 +23,11 @@ module.exports = {
     scan: 'Scan',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
   },
+  time: {
+    days: 'Days',
+    hours: 'Hours',
+    minutes: 'Minutes',
+  },
   airdrop: {
     title: 'Airdrop',
     dateOfAirdrop: 'Date of Airdrop: ',

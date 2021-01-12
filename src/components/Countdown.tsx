@@ -6,6 +6,8 @@ import { getTimeDiff, getTimeDuration } from 'app/helpers/date';
 import { useInterval } from 'app/helpers/useInterval';
 import { palette, fonts } from 'app/styles';
 
+const i18n = require('../../loc');
+
 interface CellsProps {
   text: string;
   title: string;
@@ -46,19 +48,19 @@ export const Countdown: FC<Props> = ({ dataEnd }) => {
 
   return (
     <View style={styles.wrapper}>
-      <Cells text={numberToCellString(days)} title="Days" />
-      <View style={styles.commaWrapper} />
-      <Cells text={numberToCellString(hours)} title="Hours" />
-      <View style={styles.commaWrapper}>
+      <Cells text={numberToCellString(days)} title={i18n.time.days} />
+      <View style={styles.separator} />
+      <Cells text={numberToCellString(hours)} title={i18n.time.hours} />
+      <View style={styles.separator}>
         <Text style={styles.cellText}>:</Text>
       </View>
-      <Cells text={numberToCellString(minutes)} title="Minutes" />
+      <Cells text={numberToCellString(minutes)} title={i18n.time.minutes} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  commaWrapper: { marginTop: 4, width: 12 },
+  separator: { marginTop: 4, width: 12 },
   wrapper: { display: 'flex', flexDirection: 'row' },
   cellsWrapper: {
     display: 'flex',
