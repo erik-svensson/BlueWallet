@@ -11,7 +11,6 @@ type Props = {
   // thankYouSeen: boolean;
   thankYouFlowCompleted: boolean;
   navigation: StackNavigationProp<any, Route.Dashboard>;
-  // TODO: airdropFinished: boolean;
 };
 
 export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, navigation }: Props) => {
