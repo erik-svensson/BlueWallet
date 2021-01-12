@@ -1,7 +1,7 @@
 import { takeEvery, put, call, all } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
-import { subscribeEmail, authenticateEmail, checkSubscriptionEmail } from 'app/api/emailApi';
+import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
 import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
@@ -25,6 +25,10 @@ import {
   CheckSubscriptionAction,
   checkSubscriptionSuccess,
   checkSubscriptionFailure,
+  UnsubscribeWalletAction,
+  unsubscribeWalletFailure,
+  unsubscribeWalletSuccess,
+  subscribeWalletFailure,
 } from './actions';
 
 enum Result {
@@ -87,7 +91,19 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
       yield put(subscribeWalletSuccess(response.session_token));
     }
   } catch (error) {
-    // TODO
+    yield put(subscribeWalletFailure('something went wrong'));
+  }
+}
+
+export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
+  const { payload } = action as UnsubscribeWalletAction;
+  try {
+    const response: { session_token: string; result: 'success' | 'error' } = yield call(unsubscribeEmail, payload);
+    if (response.session_token) {
+      yield put(unsubscribeWalletSuccess(response.session_token));
+    }
+  } catch (error) {
+    yield put(unsubscribeWalletFailure('something went wrong'));
   }
 }
 
@@ -117,8 +133,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     );
     const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
     const response = yield call(checkSubscriptionEmail, { hashes, email });
-
-    if (response.result === 'success') {
+    if (response.result) {
       const calls: any[] = [];
       walletWithHashes.map((wallet: Wallet, index: number) => {
         if (response.result[index]) {
@@ -138,4 +153,5 @@ export default [
   takeEvery(NotificationAction.SetNotificationEmail, setNotificationEmailSaga),
   takeEvery(NotificationAction.SubscribeWalletAction, subscribeWalletSaga),
   takeEvery(NotificationAction.AuthenticateEmailAction, authenticateEmailSaga),
+  takeEvery(NotificationAction.UnsubscribeWalletAction, unsubscribeWalletSaga),
 ];

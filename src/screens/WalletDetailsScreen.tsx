@@ -148,21 +148,22 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     if (!isSubscribed) {
       if (!email) {
         return navigation.navigate(Route.Notifications, {
-          walletsToSubscribe: [wallet!],
+          walletsToSubscribe: [wallet],
         });
       }
       return navigation.navigate(Route.ConfirmEmail, {
-        email: email!,
+        email,
         flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
-        walletsToSubscribe: [wallet!],
+        walletsToSubscribe: [wallet],
       });
     } else {
       navigation.navigate(Route.ConfirmEmail, {
-        email: email!,
-        flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+        email,
+        flowType: ConfirmAddressFlowType.UNSUBSCRIBE,
+        walletsToSubscribe: [wallet],
         onBack: () =>
           navigation.navigate(Route.WalletDetails, {
-            id: this.props.wallet!.id,
+            id: wallet.id,
           }),
       });
     }

@@ -132,14 +132,12 @@ export function* importWalletSaga(action: ImportWalletAction | unknown) {
 
 export function* updateWalletSaga(action: UpdateWalletAction | unknown) {
   const { wallet } = action as UpdateWalletAction;
-  console.log('updateWalletSaga', { wallet });
   try {
     const updatedWallet = cloneDeep(BlueApp.updateWallet(wallet));
     yield BlueApp.saveToDisk();
 
     yield put(updateWalletSuccess(updatedWallet));
   } catch (e) {
-    console.log('updateWalletFailure', e);
     yield put(updateWalletFailure(e.message));
   }
 }

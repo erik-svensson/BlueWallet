@@ -219,8 +219,8 @@ export interface Wallet {
 export interface WalletPayload {
   name: string;
   gap_limit: number;
-  derivation_path: string[];
-  xpub: Promise<string>;
+  derivation_path?: {};
+  xpub: string;
   address_type: string;
   instant_public_key: string;
   recovery_public_key: string;
@@ -252,6 +252,7 @@ export enum ConfirmAddressFlowType {
   NEW_ADDRESS = 'NEW_ADDRESS',
   DELETE_ADDRESS = 'DELETE_ADDRESS',
   ANOTHER_ACTION = 'ANOTHER_ACTION',
+  UNSUBSCRIBE = 'UNSUBSCRIBE',
   RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT',
   RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE',
 }

@@ -14,6 +14,7 @@ const {
   APP_ID,
   APPLICATION_NAME,
   EXPLORER_URL,
+  NOTIFICATION_EMAIL_URL,
 } = Config;
 
 const defaultNetworkName = 'bitcoinvault';

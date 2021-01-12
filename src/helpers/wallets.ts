@@ -1,12 +1,12 @@
 import b58 from 'bs58check';
 import sha256 from 'crypto-js/sha256';
 
-import { Wallet, CONST, WALLETS_ADDRESSES_TYPES } from 'app/consts';
+import { Wallet, CONST, WALLETS_ADDRESSES_TYPES, WalletPayload } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 
 const ENCODING = 'hex';
 
-export const walletToAddressesGenerationBase = async (wallet: Wallet) => {
+export const walletToAddressesGenerationBase = async (wallet: Wallet): PromiseWalletPayload => {
   let instant_public_key = undefined;
   let recovery_public_key = undefined;
 
@@ -24,14 +24,13 @@ export const walletToAddressesGenerationBase = async (wallet: Wallet) => {
     gap_limit: CONST.walletsDefaultGapLimit,
     derivation_path: {}, //[wallet.getDerivationPath()],
     xpub: await wallet.getXpub(),
-    address_type: 'p2sh', // WALLETS_ADDRESSES_TYPES[wallet.type], TODO change when backend types are completed
-    instant_public_key: 'recovery_public_key',
+    address_type: WALLETS_ADDRESSES_TYPES[wallet.type],
     ...(instant_public_key && { instant_public_key }),
     ...(recovery_public_key && { recovery_public_key }),
   };
 };
 
-export const getWalletHashedPublicKeys = async (wallet: Wallet): Promise<string | undefined> => {
+export const getWalletHashedPublicKeys = async (wallet: Wallet): Promise<string> => {
   const encodedPubKeys =
     wallet.pubKeys
       ?.map(pk => pk.toString(ENCODING))

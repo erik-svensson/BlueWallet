@@ -15,7 +15,7 @@ import {
   WalletPayload,
 } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { walletToAddressesGenerationBase } from 'app/helpers/wallets';
+import { walletToAddressesGenerationBase, getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import {
@@ -25,6 +25,8 @@ import {
   CreateNotificationEmailAction,
   subscribeWallet,
   SubscribeWalletAction,
+  unsubscribeWallet,
+  UnsubscribeWalletAction,
 } from 'app/state/notifications/actions';
 import { typography, palette } from 'app/styles';
 
@@ -38,6 +40,7 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.ConfirmEmail>;
   createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
   subscribe: (wallets: WalletPayload[], email: string, lang: string) => SubscribeWalletAction;
+  unsubscribe: (hashes: string[], email: string) => UnsubscribeWalletAction;
   authenticate: (session_token: string, pin: string, meta: ActionMeta) => AuthenticateEmailAction;
   language: string;
   sessionToken: string;
@@ -61,20 +64,24 @@ class ConfirmEmailScreen extends Component<Props, State> {
   async componentDidMount() {
     const {
       route: {
-        params: { walletsToSubscribe, email },
+        params: { walletsToSubscribe, email, flowType },
       },
       language,
     } = this.props;
-
-    const walletsToSubscribePayload = await Promise.all(
-      walletsToSubscribe!.map(async wallet => await walletToAddressesGenerationBase(wallet)),
-    );
-
-    this.props.subscribe(walletsToSubscribePayload, email, language);
+    if (!!walletsToSubscribe) {
+      if (flowType === ConfirmAddressFlowType.UNSUBSCRIBE) {
+        const hashes = await Promise.all(walletsToSubscribe.map(wallet => getWalletHashedPublicKeys(wallet)));
+        this.props.unsubscribe(hashes, email);
+      } else {
+        const walletsToSubscribePayload = await Promise.all(
+          walletsToSubscribe!.map(wallet => walletToAddressesGenerationBase(wallet)),
+        );
+        this.props.subscribe(walletsToSubscribePayload, email, language);
+      }
+    }
   }
 
   get infoContainerContent() {
-    console.log('type flow', this.props.route.params.flowType);
     switch (this.props.route.params.flowType) {
       case ConfirmAddressFlowType.FIRST_ADDRESS:
         return this.firstAddressFlowContent();
@@ -85,6 +92,8 @@ class ConfirmEmailScreen extends Component<Props, State> {
       case ConfirmAddressFlowType.DELETE_ADDRESS:
         return this.deleteAddressFlowContent();
       case ConfirmAddressFlowType.ANOTHER_ACTION:
+        return this.anotherActionFlowContent();
+      case ConfirmAddressFlowType.UNSUBSCRIBE:
         return this.anotherActionFlowContent();
       case ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT:
         return this.receiveNotificationsConfirmationImportFlowContent();
@@ -126,13 +135,14 @@ class ConfirmEmailScreen extends Component<Props, State> {
         params: { newAddress },
       },
     } = this.props;
+    if (!newAddress) return;
     return {
       title: i18n.notifications.confirmCurrentTitle,
       description: i18n.notifications.confirmCurrentDescription,
       onCodeConfirm: () => {
         this.setState({ code: '' }, () =>
           navigation.navigate(Route.ConfirmEmail, {
-            email: newAddress!,
+            email: newAddress,
             flowType: ConfirmAddressFlowType.NEW_ADDRESS,
           }),
         );
@@ -256,7 +266,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
   onResend = () => {};
 
   render() {
-    console.log('notificationError', this.props.notificationError);
     const { email } = this.props.route.params;
     return (
       <ScreenTemplate
@@ -303,6 +312,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   createNotificationEmail,
   subscribe: subscribeWallet,
+  unsubscribe: unsubscribeWallet,
   authenticate: authenticateEmail,
 };
 

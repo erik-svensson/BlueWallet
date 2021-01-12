@@ -52,7 +52,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     wallets: [],
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const {
       wallets,
       checkSubscription,
@@ -60,7 +60,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         params: { email },
       },
     } = this.props;
-    checkSubscription(wallets, email); // handle errors
+    checkSubscription(wallets, email); // errors to handle
   }
 
   onConfirm = () => {
