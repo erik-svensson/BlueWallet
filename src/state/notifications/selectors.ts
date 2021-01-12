@@ -16,11 +16,16 @@ export const email = createSelector(local, state => state.email);
 export const isNotificationEmailSet = createSelector(local, state => state.isNotificationEmailSet);
 export const isNotificationEmailSkip = createSelector(local, state => state.isNotificationEmailSkip);
 export const pin = createSelector(local, state => state.pin);
+export const subscribedIds = createSelector(local, state => state.subscribedIds);
 
-export const subscribedWallets = createSelector(wallets, local, (walletsList, state) => {
-  const email = state.email;
-  if (!email) return [];
-  // const hashes = walletsList.map(wallet => wallet.id);
-  const isSubscribedList = [true]; //checkSubscription(hashes, email);
-  return walletsList.filter((wallet, index) => !!isSubscribedList[index] && wallet);
-});
+export const isWalletSubscribed = createSelector(
+  subscribedIds,
+  getById,
+  (_: WalletsState, id: string) => id,
+  (ids, wallet) => {
+    if (wallet) {
+      return ids.some(id => id === wallet.id);
+    }
+    return false;
+  },
+);

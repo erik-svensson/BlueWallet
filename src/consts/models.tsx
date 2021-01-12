@@ -186,10 +186,10 @@ export interface Wallet {
   getAddress: () => any;
   getSecret: () => string;
   getXpub: () => Promise<string>;
-  hash?: string;
   address?: string;
   secret: string;
   type: string;
+  hash?: string;
   typeReadable: string;
   unconfirmed_balance: number;
   confirmed_balance: number;
@@ -200,7 +200,6 @@ export interface Wallet {
   getID: () => string;
   weOwnAddress: (clipboard: string) => boolean;
   isInvoiceGeneratedByWallet?: (clipboard: string) => void;
-  isSubscribed?: string;
   getPreferredBalanceUnit: () => string;
   isOutputScriptMine: (script: Uint8Array) => boolean;
   setMnemonic: (mnemonic: string) => void;

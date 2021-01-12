@@ -13,6 +13,7 @@ import {
   TagsType,
   Tags,
 } from 'app/consts';
+import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 
@@ -22,6 +23,7 @@ import { selectors as electrumXSelectors } from '../electrumX';
 import { WalletsState } from './reducer';
 
 const local = (state: ApplicationState): WalletsState => state.wallets;
+const store = (state): ApplicationState => state;
 
 export const wallets = createSelector(local, state => {
   return state.wallets.map(wallet => {
@@ -68,8 +70,6 @@ export const getById = createSelector(
   (data, id) => data.find(w => w.id === id),
 );
 
-export const getByIdWithNotificationInfo = getById;
-
 export const getWalletsLabels = createSelector(wallets, walletsList => walletsList.map(w => w.label));
 
 export const walletsWithRecoveryTransaction = createSelector(wallets, walletsList =>
@@ -104,12 +104,15 @@ export const allWallets = createSelector(wallets, allWallet, (walletsList, aw) =
   return walletsList;
 });
 
-export const subscribedWallets = createSelector(wallets, walletsList =>
-  walletsList.filter(wallet => !!wallet.isSubscribed),
+export const subscribedWallets = createSelector(store, wallets, (state, walletsList) =>
+  walletsList.filter(wallet => state.notifications.subscribedIds.some(id => id === wallet.id)),
 );
 
-export const unSubscribedWallets = createSelector(wallets, walletsList =>
-  walletsList.filter(wallet => !wallet.isSubscribed),
+export const unSubscribedWallets = createSelector(store, wallets, (state, walletsList) =>
+  walletsList.filter(
+    wallet =>
+      !state.notifications.subscribedIds.some(id => id === wallet.id) && wallet.type === HDSegwitP2SHAirWallet.type, //till all wallets are possible to subscribe
+  ),
 );
 
 type TxEntity = TransactionInput | TransactionOutput;

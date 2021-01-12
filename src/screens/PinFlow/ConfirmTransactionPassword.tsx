@@ -63,7 +63,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
     this.setState({ password });
   };
 
-  changeVisability = () => {
+  changeVisibility = () => {
     this.setState({
       isVisible: !this.state.isVisible,
     });
@@ -89,7 +89,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
           <Text style={styles.pinDescription}>{i18n.onboarding.createPasswordDescription}</Text>
         </View>
         <View style={styles.inputItemContainer}>
-          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisability}>
+          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisibility}>
             <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem

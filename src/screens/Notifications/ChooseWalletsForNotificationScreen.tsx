@@ -60,7 +60,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         params: { email },
       },
     } = this.props;
-    checkSubscription(wallets, email);
+    checkSubscription(wallets, email); // handle errors
   }
 
   onConfirm = () => {
@@ -78,9 +78,8 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
       },
     });
 
-  onSkip = () => {
+  onSkip = () =>
     this.props.createNotificationEmail(this.props.route.params.email, { onSuccess: this.goToSuccessScreen });
-  };
 
   addWallet = (wallet: Item) => this.setState((state: State) => ({ wallets: [...state.wallets, wallet] }));
 

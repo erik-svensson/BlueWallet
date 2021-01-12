@@ -105,7 +105,7 @@ export interface CheckSubscriptionAction {
 export interface CheckSubscriptionSuccessAction {
   type: NotificationAction.CheckSubscriptionSuccessAction;
   payload: {
-    result: boolean[];
+    result: string;
   };
 }
 export interface CheckSubscriptionFailureAction {
@@ -210,7 +210,7 @@ export const checkSubscription = (wallets: Wallet[], email: string): CheckSubscr
   },
 });
 
-export const checkSubscriptionSuccess = (result: string[]): CheckSubscriptionSuccessAction => ({
+export const checkSubscriptionSuccess = (result: string): CheckSubscriptionSuccessAction => ({
   type: NotificationAction.CheckSubscriptionSuccessAction,
   payload: {
     result,

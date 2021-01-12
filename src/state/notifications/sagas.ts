@@ -1,4 +1,4 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, put, call, all } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail } from 'app/api/emailApi';
@@ -6,7 +6,6 @@ import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { StoreService } from 'app/services';
-import { updateWalletSuccess } from 'app/state/wallets/actions';
 
 import {
   createNotificationEmailFailure,
@@ -83,13 +82,12 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
 export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   const { payload } = action as SubscribeWalletAction;
   try {
-    console.log('subscribeWalletSaga', { payload });
     const response: { session_token: string; result: 'success' | 'error' } = yield call(subscribeEmail, payload);
     if (response.session_token) {
       yield put(subscribeWalletSuccess(response.session_token));
     }
   } catch (error) {
-    console.log('subscribeWalletSaga', error);
+    // TODO
   }
 }
 
@@ -118,14 +116,16 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
     );
     const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
-
     const response = yield call(checkSubscriptionEmail, { hashes, email });
-    if (response.result) {
-      const walletWithSubscriptionInfo = walletWithHashes.map((wallet: Wallet, index: number) => ({
-        ...wallet,
-        isSubscribed: response.result[index],
-      }));
-      yield walletWithSubscriptionInfo.map((wallet: Wallet) => put(updateWalletSuccess(wallet)));
+
+    if (response.result === 'success') {
+      const calls: any[] = [];
+      walletWithHashes.map((wallet: Wallet, index: number) => {
+        if (response.result[index]) {
+          calls.push(put(checkSubscriptionSuccess(wallet.id)));
+        }
+      });
+      if (calls.length) yield all(calls);
     }
   } catch (error) {
     yield put(checkSubscriptionFailure(error.msg));

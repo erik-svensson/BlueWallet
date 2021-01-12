@@ -96,13 +96,13 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
           secret: w.getSecret(),
-          onButtonPress: isNotificationEmailSet
-            ? () =>
-                this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
-                  address: email, // TODO
-                  flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
-                })
-            : undefined,
+          // onButtonPress: isNotificationEmailSet
+          //   ? () =>
+          //       this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
+          //         address: email, // TODO
+          //         flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
+          //       })
+          //   : undefined, // TODO in create wallet logic
         });
       },
       onFailure: () => onError(),

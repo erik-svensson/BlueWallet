@@ -17,9 +17,11 @@ import {
 } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { reducer as notificationReducer } from 'app/state/notifications';
 import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
+import { isWalletSubscribed } from 'app/state/notifications/selectors';
 import { reducer as walletReducer } from 'app/state/wallets';
 import {
   updateWallet as updateWalletAction,
@@ -46,6 +48,7 @@ interface Props {
   route: RouteProp<MainCardStackNavigatorParams, Route.WalletDetails>;
   walletsLabels: string[];
   email: string;
+  isSubscribed: boolean;
 }
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
@@ -140,22 +143,22 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   };
 
   onSubscribeButtonPress = () => {
-    const { email, navigation, wallet } = this.props;
+    const { email, navigation, wallet, isSubscribed } = this.props;
     if (!wallet) return;
-    if (!wallet.isSubscribed) {
+    if (!isSubscribed) {
       if (!email) {
         return navigation.navigate(Route.Notifications, {
           walletsToSubscribe: [wallet!],
         });
       }
       return navigation.navigate(Route.ConfirmEmail, {
-        address: email!,
+        email: email!,
         flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
         walletsToSubscribe: [wallet!],
       });
     } else {
       navigation.navigate(Route.ConfirmEmail, {
-        address: email!,
+        email: email!,
         flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
         onBack: () =>
           navigation.navigate(Route.WalletDetails, {
@@ -166,12 +169,12 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   };
 
   render() {
-    const { wallet } = this.props;
+    const { wallet, isSubscribed } = this.props;
     if (!wallet) {
       return null;
     }
     const isWatchOnly = wallet.type === WatchOnlyWallet.type;
-    const isRecovery = isWalletRecovery(wallet.type);
+    const isToSubscribe = wallet.type === HDSegwitP2SHAirWallet.type;
     return (
       <ScreenTemplate
         footer={
@@ -182,12 +185,10 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               title={i18n.wallets.details.showWalletXPUB}
               containerStyle={styles.button}
             />
-            {isRecovery && (
+            {isToSubscribe && (
               <Button
                 onPress={this.onSubscribeButtonPress}
-                title={
-                  wallet.isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet
-                }
+                title={isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
                 containerStyle={styles.button}
               />
             )}
@@ -230,6 +231,7 @@ const mapStateToProps = (
     wallet: getById(state, id),
     walletsLabels: getWalletsLabels(state),
     email: state.notifications.email,
+    isSubscribed: isWalletSubscribed(state, id),
   };
 };
 

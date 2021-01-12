@@ -2,10 +2,22 @@ import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, InputItem } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType } from 'app/consts';
+import {
+  Route,
+  MainCardStackNavigatorParams,
+  RootStackParams,
+  ConfirmAddressFlowType,
+  Wallet,
+  ActionMeta,
+} from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isEmail } from 'app/helpers/helpers';
+import { ApplicationState } from 'app/state';
+import { createNotificationEmail, CreateNotificationEmailAction } from 'app/state/notifications/actions';
+import { unSubscribedWallets } from 'app/state/wallets/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -16,6 +28,8 @@ interface Props {
     StackNavigationProp<MainCardStackNavigatorParams, Route.AddEmail>
   >;
   route: RouteProp<MainCardStackNavigatorParams, Route.AddEmail>;
+  wallets: Wallet[];
+  createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 }
 
 interface State {
@@ -29,9 +43,21 @@ export class AddEmailScreen extends Component<Props, State> {
     error: '',
   };
 
+  goToSuccessScreen = () =>
+    CreateMessage({
+      title: i18n.message.success,
+      description: i18n.notifications.emailAddedSuccessMessage,
+      type: MessageType.success,
+      buttonProps: {
+        title: i18n.notifications.goToNotifications,
+        onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
+      },
+    });
+
   onConfirm = () => {
     const {
       navigation,
+      wallets,
       route: {
         params: { walletsToSubscribe },
       },
@@ -51,8 +77,10 @@ export class AddEmailScreen extends Component<Props, State> {
         walletsToSubscribe,
       });
     }
-
-    navigation.navigate(Route.ChooseWalletsForNotification, { email });
+    if (wallets.length) {
+      return navigation.navigate(Route.ChooseWalletsForNotification, { email });
+    }
+    this.props.createNotificationEmail(email, { onSuccess: this.goToSuccessScreen });
   };
 
   onChange = (email: string) => this.setState({ email, error: '' });
@@ -82,6 +110,17 @@ export class AddEmailScreen extends Component<Props, State> {
     );
   }
 }
+const mapStateToProps = (state: ApplicationState) => {
+  return {
+    wallets: unSubscribedWallets(state),
+  };
+};
+
+const mapDispatchToProps = {
+  createNotificationEmail,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddEmailScreen);
 
 const styles = StyleSheet.create({
   infoContainer: {

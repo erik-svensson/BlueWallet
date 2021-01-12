@@ -8,7 +8,7 @@ export interface NotificationState {
   isNotificationEmailSkip: boolean;
   isLoading: boolean;
   sessionToken: string;
-  subscribedResult: boolean[];
+  subscribedIds: string[];
 }
 
 const initialState: NotificationState = {
@@ -19,7 +19,7 @@ const initialState: NotificationState = {
   isNotificationEmailSkip: false,
   isLoading: true,
   sessionToken: '',
-  subscribedResult: [],
+  subscribedIds: [],
 };
 
 export const notificationReducer = (state = initialState, action: NotificationActionType): NotificationState => {
@@ -77,11 +77,15 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         ...state,
         error: action.error,
       };
-    case NotificationAction.CheckSubscriptionSuccessAction:
+    case NotificationAction.CheckSubscriptionSuccessAction: {
       return {
         ...state,
-        subscribedResult: action.payload.result,
+        // subscribedHashes: [],
+        subscribedIds: state.subscribedIds.some(id => id === action.payload.result)
+          ? [...state.subscribedIds]
+          : [...state.subscribedIds, action.payload.result],
       };
+    }
     case NotificationAction.CheckSubscriptionFailureAction:
       return {
         ...state,

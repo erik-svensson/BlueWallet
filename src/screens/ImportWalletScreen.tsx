@@ -156,12 +156,13 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
       importWallet(newWallet, {
         onSuccess: () => {
-          isNotificationEmailSet
-            ? this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
-                address: email, //TODO
-                flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
-              })
-            : this.showSuccessImportMessageScreen();
+          // isNotificationEmailSet
+          //   ? this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
+          //       address: email,
+          //       flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
+          //     })
+          //   : // TODO in import wallet logic
+          this.showSuccessImportMessageScreen();
         },
         onFailure: (error: string) =>
           this.showErrorMessageScreen({
