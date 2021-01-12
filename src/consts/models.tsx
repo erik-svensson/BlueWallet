@@ -36,6 +36,8 @@ export const CONST = {
   tcVersionRequired: 1,
   tcVersion: 'tcVersion',
   airdropDate: getUtcDate('2021-03-08 12:00'),
+  airdropMinimumBTCVRequired: 5,
+  airdropTotalDollarsToShare: '250.000',
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
@@ -134,6 +136,8 @@ export enum Route {
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
   AirdropDashboard = 'AirdropDashboard',
+  AirdropThankYou = 'AirdropThankYou',
+  AirdropRequirements = 'AirdropRequirements',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -446,6 +450,8 @@ export type MainCardStackNavigatorParams = {
     onScanned: () => void;
   };
   [Route.AirdropDashboard]: undefined;
+  [Route.AirdropThankYou]: undefined;
+  [Route.AirdropRequirements]: undefined;
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {

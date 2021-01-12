@@ -1,1 +1,1 @@
-export { default } from './AirdropDashboard';
+export { default } from './AirdropDashboardScreen';

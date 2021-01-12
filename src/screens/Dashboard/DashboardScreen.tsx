@@ -52,7 +52,6 @@ class DashboardScreen extends Component<Props, State> {
   transactionListRef = React.createRef<SectionList>();
   componentDidMount() {
     this.props.loadWallets();
-    setTimeout(() => this.props.navigation.navigate(Route.AirdropDashboard), 1000);
   }
 
   refreshTransactions = () => {

@@ -45,7 +45,7 @@ export const getTimeDuration = (miliseconds: number) => {
 
 export const getUtcDate = (date: DateType | string) => dayjs.utc(date);
 
-export const getTimezone = () => {
+export const getTimezoneOffset = () => {
   const offset = -new Date().getTimezoneOffset();
   return `GMT ${offset < 0 ? '-' : '+'}${dayjs.duration({ minutes: offset }).asHours()}`;
 };

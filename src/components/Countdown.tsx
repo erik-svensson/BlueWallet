@@ -6,7 +6,12 @@ import { getTimeDiff, getTimeDuration } from 'app/helpers/date';
 import { useInterval } from 'app/helpers/useInterval';
 import { palette, fonts } from 'app/styles';
 
-const Cells = ({ text, title }: { text: string; title: string }) => (
+interface CellsProps {
+  text: string;
+  title: string;
+}
+
+const Cells: FC<CellsProps> = ({ text, title }) => (
   <View style={styles.cellsWrapper}>
     <View style={styles.lettersWrapper}>
       {text.split('').map((letter, index) => (
@@ -18,6 +23,7 @@ const Cells = ({ text, title }: { text: string; title: string }) => (
     <Text style={styles.cellsTitle}>{title}</Text>
   </View>
 );
+
 interface Props {
   dataEnd: DateType;
 }

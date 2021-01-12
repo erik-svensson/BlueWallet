@@ -23,6 +23,38 @@ module.exports = {
     scan: 'Scan',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
   },
+  airdrop: {
+    title: 'Airdrop',
+    dateOfAirdrop: 'Date of Airdrop: ',
+    dashboard: {
+      createNewWallet: 'Create new wallet',
+      desc1: 'Monitor your progress and register more wallets.',
+      desc2: 'Create new wallet to take part in the Airdrop.',
+    },
+    itIsAlive: {
+      subtitle: 'Airdrop is live! Check it out!',
+      description: 'We are happy to announce our first Bitcoin Vault Airdrop for Gold Wallet.',
+      iDontCare: "I don't care",
+      learnMore: 'Learn more',
+    },
+    requirements: {
+      soundsGreat: 'Sounds great!',
+      subtitle: 'Thank you for creating the Bitcoin Vault community.',
+      description:
+        'We are glad that you are a part of it! We want to share ${airdropTotalDollarsToShare} in BTCV as a reward for being a supportive community.',
+      listHeader: 'Requirements for the Airdrop:',
+      points: {
+        0: '3-Key Vault Wallet',
+        1: 'Minimum amount of BTCV stored in 3-Key Vault Wallet - {airdropMinimumBTCVRequired} BTCV*',
+      },
+      rewardExplanation: '*Reward will be based on the % of your coins in the general pool',
+      soundsGreat: 'Sounds great!',
+      termsAndConditions: {
+        read: 'Read',
+        termsAndConditions: 'Terms and Conditions',
+      },
+    },
+  },
   termsConditions: {
     header: 'Terms & Conditions',
     title: 'Agreement to Terms',
@@ -34,13 +66,6 @@ module.exports = {
         'Note that if you disagree to our Terms & Conditions you won’t be able to use the Gold Wallet application.\nAre you sure you want to disagree?',
       noButton: 'No, I changed my mind',
       yesButton: 'Yes, I disagree',
-    },
-  },
-  airdrop: {
-    title: 'Airdrop',
-    createNewWallet: 'Create new wallet',
-    dashboard: {
-      desc1: 'Monitor your progress and register more wallets.',
     },
   },
   aboutUs: {

@@ -1,7 +1,7 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { FC } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, Image, Countdown } from 'app/components';
@@ -14,24 +14,31 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.RecoverySend>
+    StackNavigationProp<MainCardStackNavigatorParams, Route.AirdropDashboard>
   >;
-
-  route: RouteProp<MainCardStackNavigatorParams, Route.RecoverySend>;
 }
 
-export const AirdropDashboard = ({ navigation }: Props) => (
+export const AirdropDashboard: FC<Props> = ({ navigation }) => (
   <ScreenTemplate
     footer={
       <>
         <Button
-          title={i18n.airdrop.createNewWallet}
+          title={i18n.airdrop.dashboard.createNewWallet}
           onPress={() => {
             navigation.navigate(Route.CreateWallet);
           }}
           containerStyle={styles.buttonContainer}
         />
-        <Text>Read Terms and Conditions</Text>
+        <View style={styles.termsAndConditions}>
+          <Text style={styles.description}>{i18n.airdrop.requirements.termsAndConditions.read}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              //TODO: navigate TC
+            }}
+          >
+            <Text style={styles.termsText}>{i18n.airdrop.requirements.termsAndConditions.termsAndConditions}</Text>
+          </TouchableOpacity>
+        </View>
       </>
     }
     header={<Header isBackArrow title={i18n.airdrop.title} />}
@@ -40,12 +47,15 @@ export const AirdropDashboard = ({ navigation }: Props) => (
       <View style={styles.infoContainer}>
         <Text style={typography.headline4}>{i18n.airdrop.title}</Text>
         <Text style={[styles.description, styles.spaceTop]}>{i18n.airdrop.dashboard.desc1}</Text>
-        <Text style={styles.description}>Date of Airdrop: {getFormattedAirdropDate()}</Text>
+        <Text style={styles.description}>
+          {i18n.airdrop.dateOfAirdrop}
+          {getFormattedAirdropDate()}
+        </Text>
       </View>
       <Countdown dataEnd={CONST.airdropDate} />
 
       <Image source={images.airdrop} style={styles.airdropImage} />
-      <Text style={styles.description}>Create new wallet to take part in the Airdrop.</Text>
+      <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
     </View>
   </ScreenTemplate>
 );
@@ -79,5 +89,15 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginBottom: 20,
+  },
+  termsAndConditions: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  termsText: {
+    ...typography.headline5,
+    color: palette.secondary,
+    marginLeft: 1,
   },
 });
