@@ -75,8 +75,8 @@ class AirdropRequirementsScreen extends Component<Props> {
           </View>
         </View>
         <View style={styles.dateInfoContainer}>
-          <Text style={styles.description}>{i18n.airdrop.dateOfAirdrop}</Text>
-          <Text style={styles.date}> {getFormattedAirdropDate()}</Text>
+          <Text style={styles.description}>{i18n.airdrop.dateOfAirdrop}&nbsp;</Text>
+          <Text style={styles.date}>{getFormattedAirdropDate()}</Text>
         </View>
         <Text style={styles.explanation}>{i18n.airdrop.requirements.rewardExplanation}</Text>
       </ScreenTemplate>

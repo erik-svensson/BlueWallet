@@ -30,7 +30,7 @@ module.exports = {
   },
   airdrop: {
     title: 'Airdrop',
-    dateOfAirdrop: 'Date of Airdrop: ',
+    dateOfAirdrop: 'Date of Airdrop:',
     dashboard: {
       createNewWallet: 'Create new wallet',
       desc1: 'Monitor your progress and register more wallets.',
