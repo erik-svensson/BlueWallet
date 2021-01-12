@@ -6,6 +6,7 @@ import { ButtonProps } from 'react-native-elements';
 import { ImageStyle } from 'react-native-fast-image';
 
 import { FastImageSource } from 'app/components';
+import { getUtcDate } from 'app/helpers/date';
 import {
   HDSegwitP2SHAirWallet,
   HDSegwitP2SHArWallet,
@@ -34,6 +35,7 @@ export const CONST = {
   maxAddressLength: 48,
   tcVersionRequired: 1,
   tcVersion: 'tcVersion',
+  airdropDate: getUtcDate('2021-03-08 12:00'),
   airdropMinimumBTCVRequired: 5,
   airdropTotalDollarsToShare: '250.000',
 };
@@ -133,6 +135,7 @@ export enum Route {
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
+  AirdropDashboard = 'AirdropDashboard',
   AirdropThankYou = 'AirdropThankYou',
   AirdropRequirements = 'AirdropRequirements',
 }
@@ -446,6 +449,9 @@ export type MainCardStackNavigatorParams = {
     chunksQuantity: number;
     onScanned: () => void;
   };
+  [Route.AirdropDashboard]: undefined;
+  [Route.AirdropThankYou]: undefined;
+  [Route.AirdropRequirements]: undefined;
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {

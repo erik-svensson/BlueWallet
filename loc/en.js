@@ -23,8 +23,19 @@ module.exports = {
     scan: 'Scan',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
   },
+  time: {
+    days: 'Days',
+    hours: 'Hours',
+    minutes: 'Minutes',
+  },
   airdrop: {
     title: 'Airdrop',
+    dateOfAirdrop: 'Date of Airdrop:',
+    dashboard: {
+      createNewWallet: 'Create new wallet',
+      desc1: 'Monitor your progress and register more wallets.',
+      desc2: 'Create new wallet to take part in the Airdrop.',
+    },
     itIsAlive: {
       subtitle: 'Airdrop is live! Check it out!',
       description: 'We are happy to announce our first Bitcoin Vault Airdrop for Gold Wallet.',
@@ -41,7 +52,6 @@ module.exports = {
         0: '3-Key Vault Wallet',
         1: 'Minimum amount of BTCV stored in 3-Key Vault Wallet - {airdropMinimumBTCVRequired} BTCV*',
       },
-      dateHeader: 'Date of Airdrop:',
       rewardExplanation: '*Reward will be based on the % of your coins in the general pool',
       soundsGreat: 'Sounds great!',
       termsAndConditions: {
