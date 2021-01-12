@@ -4,7 +4,15 @@ import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity, SectionList } from 'react-native';
 import { connect } from 'react-redux';
 
-import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
+import {
+  ListEmptyState,
+  WalletCard,
+  ScreenTemplate,
+  Header,
+  SearchBar,
+  StyledText,
+  AirdropFloatingButton,
+} from 'app/components';
 import { Wallet, Route, EnhancedTransaction, CONST } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
@@ -213,22 +221,19 @@ class DashboardScreen extends Component<Props, State> {
     const { isLoading } = this.props;
     const activeWallet = this.getActiveWallet();
 
-    if (this.hasWallets()) {
-      return (
-        <TransactionList
-          reference={this.transactionListRef}
-          refreshing={isLoading}
-          onRefresh={this.refreshTransactions}
-          ListHeaderComponent={<>{this.renderWallets()}</>}
-          search={query}
-          transactions={this.getTransactions()}
-          transactionNotes={this.props.transactionNotes}
-          label={activeWallet.label}
-          headerHeight={this.state.contentdHeaderHeight}
-        />
-      );
-    }
-    return (
+    return this.hasWallets() ? (
+      <TransactionList
+        reference={this.transactionListRef}
+        refreshing={isLoading}
+        onRefresh={this.refreshTransactions}
+        ListHeaderComponent={<>{this.renderWallets()}</>}
+        search={query}
+        transactions={this.getTransactions()}
+        transactionNotes={this.props.transactionNotes}
+        label={activeWallet.label}
+        headerHeight={this.state.contentdHeaderHeight}
+      />
+    ) : (
       <ListEmptyState
         testID="no-wallets-icon"
         variant={ListEmptyState.Variant.Dashboard}
@@ -259,6 +264,7 @@ class DashboardScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         )}
+        <AirdropFloatingButton />
       </>
     );
   }
