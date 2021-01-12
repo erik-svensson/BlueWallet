@@ -1,10 +1,11 @@
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { StyleSheet, Alert, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioButton } from 'app/components';
+import { icons } from 'app/assets';
+import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioButton, Image } from 'app/components';
 import {
   Route,
   Wallet,
@@ -16,6 +17,7 @@ import {
 } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { isAfterAirdrop } from 'app/helpers/airdrop';
 import {
   HDSegwitBech32Wallet,
   HDSegwitP2SHWallet,
@@ -219,63 +221,40 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   renderAdvancedSection() {
     const { isAdvancedOptionsEnabled } = this.props.appSettings;
 
+    const isNotAfterAirdrop = !isAfterAirdrop();
+
     return (
       <>
         <Text style={styles.advancedOptionsLabel}>{i18n.wallets.add.walletType}</Text>
-
-        {!isAdvancedOptionsEnabled ? (
+        <RadioButton
+          testID="create-2-key-vault-radio"
+          title={HDSegwitP2SHArWallet.typeReadable}
+          subtitle={i18n.wallets.add.ar}
+          value={HDSegwitP2SHArWallet}
+          checked={this.state.WalletClass === HDSegwitP2SHArWallet}
+          onPress={this.onSelect}
+        />
+        <View style={isNotAfterAirdrop && styles.frame}>
+          <RadioButton
+            testID="create-3-key-vault-radio"
+            title={HDSegwitP2SHAirWallet.typeReadable}
+            subtitle={i18n.wallets.add.air}
+            value={HDSegwitP2SHAirWallet}
+            checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
+            onPress={this.onSelect}
+          />
+          {isNotAfterAirdrop && <Image source={icons.airdrop} style={styles.airdropIcon} />}
+        </View>
+        <RadioButton
+          testID="create-hd-p2sh-radio"
+          title={isAdvancedOptionsEnabled ? i18n.wallets.add.legacyHDP2SHTitle : i18n.wallets.add.legacyTitle}
+          subtitle={isAdvancedOptionsEnabled ? i18n.wallets.add.legacyHDP2SH : i18n.wallets.add.legacy}
+          value={HDSegwitP2SHWallet}
+          checked={this.state.WalletClass === HDSegwitP2SHWallet}
+          onPress={this.onSelect}
+        />
+        {isAdvancedOptionsEnabled && (
           <>
-            <RadioButton
-              testID="create-2-key-vault-radio"
-              title={HDSegwitP2SHArWallet.typeReadable}
-              subtitle={i18n.wallets.add.ar}
-              value={HDSegwitP2SHArWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHArWallet}
-              onPress={this.onSelect}
-            />
-            <RadioButton
-              testID="create-3-key-vault-radio"
-              title={HDSegwitP2SHAirWallet.typeReadable}
-              subtitle={i18n.wallets.add.air}
-              value={HDSegwitP2SHAirWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
-              onPress={this.onSelect}
-            />
-            <RadioButton
-              testID="create-hd-p2sh-radio"
-              title={i18n.wallets.add.legacyTitle}
-              subtitle={i18n.wallets.add.legacy}
-              value={HDSegwitP2SHWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHWallet}
-              onPress={this.onSelect}
-            />
-          </>
-        ) : (
-          <>
-            <RadioButton
-              testID="create-2-key-vault-radio"
-              title={HDSegwitP2SHArWallet.typeReadable}
-              subtitle={i18n.wallets.add.ar}
-              value={HDSegwitP2SHArWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHArWallet}
-              onPress={this.onSelect}
-            />
-            <RadioButton
-              testID="create-3-key-vault-radio"
-              title={HDSegwitP2SHAirWallet.typeReadable}
-              subtitle={i18n.wallets.add.air}
-              value={HDSegwitP2SHAirWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
-              onPress={this.onSelect}
-            />
-            <RadioButton
-              testID="create-hd-p2sh-radio"
-              title={i18n.wallets.add.legacyHDP2SHTitle}
-              subtitle={i18n.wallets.add.legacyHDP2SH}
-              value={HDSegwitP2SHWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHWallet}
-              onPress={this.onSelect}
-            />
             <RadioButton
               testID="create-segwit-p2sh-radio"
               title={i18n.wallets.add.legacyP2SHTitle}
@@ -364,5 +343,20 @@ const styles = StyleSheet.create({
   },
   importButtonContainer: {
     marginTop: 12,
+  },
+  frame: {
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 7,
+    paddingHorizontal: 4,
+    borderColor: palette.secondary,
+    position: 'relative',
+  },
+  airdropIcon: {
+    width: 13,
+    height: 12,
+    position: 'absolute',
+    right: 7,
+    top: 7,
   },
 });

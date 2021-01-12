@@ -73,4 +73,5 @@ export const icons = {
   export: require('./images/export3x.png'),
   warning: require('./images/warning.png'),
   airdropFloating: require('./images/airdropFloatingButton.png'),
+  airdrop: require('./images/airdropIcon.png'),
 };

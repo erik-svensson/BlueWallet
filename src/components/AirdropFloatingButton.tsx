@@ -5,6 +5,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { icons } from 'app/assets';
 import { Image } from 'app/components';
 import { Route } from 'app/consts';
+import { isAfterAirdrop } from 'app/helpers/airdrop';
 
 type Props = {
   // thankYouSeen: boolean;
@@ -14,6 +15,8 @@ type Props = {
 };
 
 export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, navigation }: Props) => {
+  // TODO: this implementation doesn't work.
+  // As discussed with Paweł, We have to merge PasswordNavigator with MainStackNavigator, otherwise it fails miserably.
   // useEffect(() => {
   //   if (navigation && !thankYouSeen) {
   //     navigation.navigate(Route.AirdropThankYou);
@@ -21,13 +24,12 @@ export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, naviga
   // }, [navigation, thankYouSeen]);
 
   const onButtonPress = () => {
-    // if (airdropFinished) {
-    //    navigation.navigate(Route.AirdropDashboard);
-    // }
+    if (isAfterAirdrop()) {
+      navigation.navigate(Route.AirdropDashboard);
+    }
     if (!thankYouFlowCompleted) {
       navigation.navigate(Route.AirdropThankYou);
-    }
-    if (thankYouFlowCompleted) {
+    } else {
       navigation.navigate(Route.AirdropDashboard);
     }
   };
