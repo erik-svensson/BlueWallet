@@ -17,6 +17,7 @@ import { Wallet, Route, EnhancedTransaction, CONST } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
+import * as airdropSelectors from 'app/state/airdrop/selectors';
 import { clearFilters, ClearFiltersAction } from 'app/state/filters/actions';
 import * as transactionsNotesSelectors from 'app/state/transactionsNotes/selectors';
 import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
@@ -37,6 +38,8 @@ interface Props {
   allTransactions: EnhancedTransaction[];
   transactionNotes: Record<string, string>;
   isInitialized: boolean;
+  airdropThankYouSeen: boolean;
+  airdropThankYouFlowCompleted: boolean;
   loadWallets: () => LoadWalletsAction;
   clearFilters: () => ClearFiltersAction;
   isFilteringOn?: boolean;
@@ -243,7 +246,7 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   render() {
-    const { isInitialized } = this.props;
+    const { isInitialized, airdropThankYouFlowCompleted, airdropThankYouSeen } = this.props;
 
     if (!isInitialized) {
       return (
@@ -264,7 +267,10 @@ class DashboardScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         )}
-        <AirdropFloatingButton />
+        <AirdropFloatingButton
+          thankYouFlowCompleted={airdropThankYouFlowCompleted}
+          thankYouSeen={airdropThankYouSeen}
+        />
       </>
     );
   }
@@ -277,6 +283,8 @@ const mapStateToProps = (state: ApplicationState) => ({
   allTransactions: walletsSelectors.transactions(state),
   transactionNotes: transactionsNotesSelectors.transactionNotes(state),
   isFilteringOn: state.filters.isFilteringOn,
+  airdropThankYouFlowCompleted: airdropSelectors.thankYouFlowCompleted(state),
+  airdropThankYouSeen: airdropSelectors.thankYouSeen(state),
 });
 
 const mapDispatchToProps = {

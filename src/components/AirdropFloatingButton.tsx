@@ -24,8 +24,7 @@ export const AirdropFloatingButton: FC<Props> = ({ thankYouSeen, thankYouFlowCom
       NavigationService.navigate(Route.AirdropThankYou);
     }
     if (thankYouFlowCompleted) {
-      // TODO: airdrop dashboard
-      // NavigationService.navigate(Route.AirdropDashboard)
+      NavigationService.navigate(Route.AirdropDashboard);
     }
     // if (airdropFinished) {
     // TODO: redirect to airdrop finished screen or dashboard if we decide to implement finished state there
