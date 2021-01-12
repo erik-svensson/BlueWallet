@@ -269,11 +269,11 @@ class ConfirmEmailScreen extends Component<Props, State> {
               onPress={this.onConfirm}
               disabled={this.state.code.length !== CONST.codeLength}
             />
-            <FlatButton
+            {/* <FlatButton // uncomment when api for resend works
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
               onPress={this.onResend}
-            />
+            /> */}
           </>
         }
       >
