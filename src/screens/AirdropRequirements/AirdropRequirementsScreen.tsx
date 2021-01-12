@@ -45,7 +45,7 @@ class AirdropRequirementsScreen extends Component<Props> {
               title={i18n.airdrop.requirements.soundsGreat}
             />
             <View style={styles.termsAndConditions}>
-              <Text style={styles.description}>{i18n.airdrop.requirements.termsAndConditions.read}</Text>
+              <Text style={styles.description}>{i18n.airdrop.requirements.termsAndConditions.read}&nbsp;</Text>
               <TouchableOpacity onPress={this.onTermsConditionsPress}>
                 <Text style={styles.termsText}>{i18n.airdrop.requirements.termsAndConditions.termsAndConditions}</Text>
               </TouchableOpacity>

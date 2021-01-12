@@ -23,9 +23,7 @@ export const getTimeDiff = (startDate: DateType, endDate: DateType) => {
   const startDateDayjs = dayjs(startDate);
   const endDateDayjs = dayjs(endDate);
 
-  const diff = endDateDayjs.diff(startDateDayjs);
-
-  return diff;
+  return endDateDayjs.diff(startDateDayjs);
 };
 
 export const getTimeDuration = (miliseconds: number) => {

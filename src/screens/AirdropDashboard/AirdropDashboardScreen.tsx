@@ -18,7 +18,7 @@ interface Props {
   >;
 }
 
-export const AirdropDashboard: FC<Props> = ({ navigation }) => (
+export const AirdropDashboardScreen: FC<Props> = ({ navigation }) => (
   <ScreenTemplate
     footer={
       <>
@@ -30,7 +30,7 @@ export const AirdropDashboard: FC<Props> = ({ navigation }) => (
           containerStyle={styles.buttonContainer}
         />
         <View style={styles.termsAndConditions}>
-          <Text style={styles.description}>{i18n.airdrop.requirements.termsAndConditions.read}</Text>
+          <Text style={styles.description}>{i18n.airdrop.requirements.termsAndConditions.read}&nbsp;</Text>
           <TouchableOpacity
             onPress={() => {
               //TODO: navigate TC
@@ -60,7 +60,7 @@ export const AirdropDashboard: FC<Props> = ({ navigation }) => (
   </ScreenTemplate>
 );
 
-export default AirdropDashboard;
+export default AirdropDashboardScreen;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -99,5 +99,6 @@ const styles = StyleSheet.create({
     ...typography.headline5,
     color: palette.secondary,
     marginLeft: 1,
+    lineHeight: 19,
   },
 });
