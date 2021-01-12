@@ -1,34 +1,35 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { icons } from 'app/assets';
 import { Image } from 'app/components';
 import { Route } from 'app/consts';
-import { NavigationService } from 'app/services';
 
 type Props = {
-  thankYouSeen: boolean;
+  // thankYouSeen: boolean;
   thankYouFlowCompleted: boolean;
+  navigation: StackNavigationProp<any, Route.Dashboard>;
   // TODO: airdropFinished: boolean;
 };
 
-export const AirdropFloatingButton: FC<Props> = ({ thankYouSeen, thankYouFlowCompleted }: Props) => {
-  useEffect(() => {
-    if (!thankYouSeen) {
-      NavigationService.navigate(Route.AirdropThankYou);
-    }
-  }, [thankYouSeen]);
+export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, navigation }: Props) => {
+  // useEffect(() => {
+  //   if (navigation && !thankYouSeen) {
+  //     navigation.navigate(Route.AirdropThankYou);
+  //   }
+  // }, [navigation, thankYouSeen]);
 
   const onButtonPress = () => {
+    // if (airdropFinished) {
+    //    navigation.navigate(Route.AirdropDashboard);
+    // }
     if (!thankYouFlowCompleted) {
-      NavigationService.navigate(Route.AirdropThankYou);
+      navigation.navigate(Route.AirdropThankYou);
     }
     if (thankYouFlowCompleted) {
-      NavigationService.navigate(Route.AirdropDashboard);
+      navigation.navigate(Route.AirdropDashboard);
     }
-    // if (airdropFinished) {
-    // TODO: redirect to airdrop finished screen or dashboard if we decide to implement finished state there
-    // }
   };
 
   return (

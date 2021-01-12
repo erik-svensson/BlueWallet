@@ -246,7 +246,7 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   render() {
-    const { isInitialized, airdropThankYouFlowCompleted, airdropThankYouSeen } = this.props;
+    const { isInitialized, airdropThankYouFlowCompleted, airdropThankYouSeen, navigation } = this.props;
 
     if (!isInitialized) {
       return (
@@ -269,7 +269,8 @@ class DashboardScreen extends Component<Props, State> {
         )}
         <AirdropFloatingButton
           thankYouFlowCompleted={airdropThankYouFlowCompleted}
-          thankYouSeen={airdropThankYouSeen}
+          // thankYouSeen={airdropThankYouSeen}
+          navigation={navigation}
         />
       </>
     );
