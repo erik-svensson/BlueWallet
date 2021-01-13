@@ -13,7 +13,6 @@ import {
   Wallet,
   ActionMeta,
 } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { createNotificationEmail, CreateNotificationEmailAction } from 'app/state/notifications/actions';
@@ -43,17 +42,6 @@ export class AddEmailScreen extends Component<Props, State> {
     error: '',
   };
 
-  goToSuccessScreen = () =>
-    CreateMessage({
-      title: i18n.message.success,
-      description: i18n.notifications.emailAddedSuccessMessage,
-      type: MessageType.success,
-      buttonProps: {
-        title: i18n.notifications.goToNotifications,
-        onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
-      },
-    });
-
   onConfirm = () => {
     const {
       navigation,
@@ -70,17 +58,15 @@ export class AddEmailScreen extends Component<Props, State> {
       });
     }
 
-    if (walletsToSubscribe) {
+    if (wallets.length) {
+      return navigation.navigate(Route.ChooseWalletsForNotification, { email });
+    } else {
       return navigation.navigate(Route.ConfirmEmail, {
         email,
         flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
         walletsToSubscribe,
       });
     }
-    if (wallets.length) {
-      return navigation.navigate(Route.ChooseWalletsForNotification, { email });
-    }
-    this.props.createNotificationEmail(email, { onSuccess: this.goToSuccessScreen });
   };
 
   onChange = (email: string) => this.setState({ email, error: '' });

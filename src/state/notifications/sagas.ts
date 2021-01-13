@@ -2,7 +2,7 @@ import { takeEvery, put, call, all } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
-import { Wallet } from 'app/consts';
+import { Wallet, CheckSubscriptionVersion } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { StoreService } from 'app/services';
@@ -61,9 +61,9 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
   const { meta, payload } = action as SetNotificationEmailAction;
   const email = payload.email;
   try {
-    const verifyCode = yield call(() => verifyEmail({ email }));
+    const verifyCode = yield call(verifyEmail, { email });
     if (verifyCode.result === Result.success) {
-      const decryptedCode = yield call(() => decryptCode(email, verifyCode.pin));
+      const decryptedCode = yield decryptCode(email, verifyCode.pin);
       yield put(setNotificationEmailSuccess(email));
       yield StoreService.setStoreValue('email', email);
       //Temporaly till we dont have email services run we need know correct pin from backend, remove after
@@ -111,7 +111,7 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
   const { payload, meta } = action as AuthenticateEmailAction;
   try {
     const response = yield call(authenticateEmail, payload);
-    if (response.result === 'success') {
+    if (response.result === Result.success) {
       yield put(authenticateEmailSuccess());
       if (meta?.onSuccess) {
         meta.onSuccess();
@@ -133,15 +133,13 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     );
     const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
     const response = yield call(checkSubscriptionEmail, { hashes, email });
-    if (response.result) {
-      const calls: any[] = [];
-      walletWithHashes.map((wallet: Wallet, index: number) => {
-        if (response.result[index]) {
-          calls.push(put(checkSubscriptionSuccess(wallet.id)));
-        }
-      });
-      if (calls.length) yield all(calls);
-    }
+    const calls: any[] = [];
+    walletWithHashes.map((wallet: Wallet, index: number) => {
+      const resultForWallet = response.result[index];
+      const resultForWalletType = resultForWallet ? CheckSubscriptionVersion.ADD : CheckSubscriptionVersion.REMOVE;
+      calls.push(put(checkSubscriptionSuccess(wallet.id, resultForWalletType)));
+    });
+    if (calls.length) yield all(calls);
   } catch (error) {
     yield put(checkSubscriptionFailure(error.msg));
   }

@@ -1,3 +1,5 @@
+import { CheckSubscriptionVersion } from 'app/consts';
+
 import { NotificationAction, NotificationActionType } from './actions';
 
 export interface NotificationState {
@@ -96,8 +98,12 @@ export const notificationReducer = (state = initialState, action: NotificationAc
       return {
         ...state,
         subscribedIds: state.subscribedIds.some(id => id === action.payload.result)
-          ? [...state.subscribedIds]
-          : [...state.subscribedIds, action.payload.result],
+          ? action.payload.version === CheckSubscriptionVersion.ADD
+            ? [...state.subscribedIds]
+            : [...state.subscribedIds].filter(id => id !== action.payload.result)
+          : action.payload.version === CheckSubscriptionVersion.ADD
+          ? [...state.subscribedIds, action.payload.result]
+          : [...state.subscribedIds],
       };
     }
     case NotificationAction.CheckSubscriptionFailureAction:

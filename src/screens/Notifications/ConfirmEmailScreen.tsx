@@ -27,6 +27,8 @@ import {
   SubscribeWalletAction,
   unsubscribeWallet,
   UnsubscribeWalletAction,
+  setNotificationEmail,
+  SetNotificationEmailAction,
 } from 'app/state/notifications/actions';
 import { typography, palette } from 'app/styles';
 
@@ -42,10 +44,12 @@ interface Props {
   subscribe: (wallets: WalletPayload[], email: string, lang: string) => SubscribeWalletAction;
   unsubscribe: (hashes: string[], email: string) => UnsubscribeWalletAction;
   authenticate: (session_token: string, pin: string, meta: ActionMeta) => AuthenticateEmailAction;
+  setNotificationEmail: (email: string) => SetNotificationEmailAction;
   language: string;
   sessionToken: string;
   notificationError: string;
   storedEmail: string;
+  storedPin: string;
 }
 
 interface State {
@@ -78,6 +82,8 @@ class ConfirmEmailScreen extends Component<Props, State> {
         );
         this.props.subscribe(walletsToSubscribePayload, email, language);
       }
+    } else {
+      this.props.setNotificationEmail(email);
     }
   }
 
@@ -113,17 +119,17 @@ class ConfirmEmailScreen extends Component<Props, State> {
       title: i18n.notifications.confirmEmail,
       description: i18n.notifications.pleaseEnter,
       onCodeConfirm: () => {
-        if (walletsToSubscribe) {
-          return CreateMessage({
-            title: i18n.message.success,
-            description: i18n.notifications.walletSubscribedSuccessMessage,
-            type: MessageType.success,
-            buttonProps: {
-              title: i18n.notifications.goToNotifications,
-              onPress: () => navigation.navigate(Route.Notifications, {}),
-            },
-          });
-        }
+        return CreateMessage({
+          title: i18n.message.success,
+          description: walletsToSubscribe
+            ? i18n.notifications.walletSubscribedSuccessMessage
+            : i18n.notifications.emailAddedSuccessMessage,
+          type: MessageType.success,
+          buttonProps: {
+            title: i18n.notifications.goToNotifications,
+            onPress: () => navigation.navigate(Route.Notifications, {}),
+          },
+        });
       },
     };
   };
@@ -237,6 +243,9 @@ class ConfirmEmailScreen extends Component<Props, State> {
     });
   };
 
+  comparePin = () =>
+    this.state.code === this.props.storedPin ? this.infoContainerContent?.onCodeConfirm() : this.onError();
+
   onConfirm = () => {
     const {
       sessionToken,
@@ -254,9 +263,11 @@ class ConfirmEmailScreen extends Component<Props, State> {
       this.props.authenticate(sessionToken, this.state.code, {
         onFailure: () => Alert.alert('error', notificationError),
         onSuccess: () => {
-          this.infoContainerContent.onCodeConfirm();
+          this.infoContainerContent?.onCodeConfirm();
         },
       });
+    } else {
+      this.comparePin();
     }
   };
 
@@ -287,9 +298,9 @@ class ConfirmEmailScreen extends Component<Props, State> {
         }
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{this.infoContainerContent.title}</Text>
+          <Text style={typography.headline4}>{this.infoContainerContent?.title}</Text>
           <Text style={styles.infoDescription}>
-            {this.infoContainerContent.description}
+            {this.infoContainerContent?.description}
             <Text style={styles.email}>{`\n${email}`}</Text>
           </Text>
         </View>
@@ -307,6 +318,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   sessionToken: state.notifications.sessionToken,
   notificationError: state.notifications.error,
   storedEmail: state.notifications.email,
+  storedPin: state.notifications.pin,
 });
 
 const mapDispatchToProps = {
@@ -314,6 +326,7 @@ const mapDispatchToProps = {
   subscribe: subscribeWallet,
   unsubscribe: unsubscribeWallet,
   authenticate: authenticateEmail,
+  setNotificationEmail,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmailScreen);

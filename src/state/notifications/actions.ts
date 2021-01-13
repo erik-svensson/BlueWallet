@@ -1,5 +1,5 @@
 import { SubscribePayload, AuthenticatePayload, SubscribeWalletSuccessPayload } from 'app/api';
-import { ActionMeta, WalletPayload, Wallet } from 'app/consts';
+import { ActionMeta, WalletPayload, Wallet, CheckSubscriptionVersion } from 'app/consts';
 
 export enum NotificationAction {
   CreateNotificationEmail = 'CreateNotificationEmail',
@@ -130,6 +130,7 @@ export interface CheckSubscriptionSuccessAction {
   type: NotificationAction.CheckSubscriptionSuccessAction;
   payload: {
     result: string;
+    version: CheckSubscriptionVersion;
   };
 }
 export interface CheckSubscriptionFailureAction {
@@ -258,10 +259,14 @@ export const checkSubscription = (wallets: Wallet[], email: string): CheckSubscr
   },
 });
 
-export const checkSubscriptionSuccess = (result: string): CheckSubscriptionSuccessAction => ({
+export const checkSubscriptionSuccess = (
+  result: string,
+  version: CheckSubscriptionVersion,
+): CheckSubscriptionSuccessAction => ({
   type: NotificationAction.CheckSubscriptionSuccessAction,
   payload: {
     result,
+    version,
   },
 });
 
