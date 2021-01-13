@@ -42,6 +42,8 @@ target 'GoldWallet' do
   sharedPods
   pod 'react-native-config', :path => '../node_modules/react-native-config'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
 end
 
 target 'GoldWallet Beta' do

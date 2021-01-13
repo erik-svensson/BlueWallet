@@ -1,1 +1,2 @@
-export { default as Footer } from './Footer';
+export { Footer } from './Footer';
+export { WalletBalanceCircle } from './WalletBalanceCircle';

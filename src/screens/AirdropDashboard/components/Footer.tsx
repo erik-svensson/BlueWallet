@@ -7,7 +7,7 @@ import { Button } from 'app/components';
 import { MainCardStackNavigatorParams, Route, RootStackParams } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
-const i18n = require('../../../../../loc');
+const i18n = require('../../../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
@@ -37,8 +37,6 @@ export const Footer: FC<Props> = ({ navigation }) => (
     </View>
   </>
 );
-
-export default Footer;
 
 const styles = StyleSheet.create({
   description: {

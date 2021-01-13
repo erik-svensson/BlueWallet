@@ -31,6 +31,9 @@ module.exports = {
   airdrop: {
     title: 'Airdrop',
     dateOfAirdrop: 'Date of Airdrop:',
+    circularWalletBalance: {
+      yourBalance: 'Your balance',
+    },
     dashboard: {
       createNewWallet: 'Create new wallet',
       desc1: 'Monitor your progress and register more wallets.',

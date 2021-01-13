@@ -35,7 +35,6 @@ export const AirdropDashboardScreen: FC<Props> = ({ navigation }) => (
         </Text>
       </View>
       <Countdown dataEnd={CONST.airdropDate} />
-
       <Image source={images.airdrop} style={styles.airdropImage} />
       <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
     </View>

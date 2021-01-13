@@ -1,15 +1,19 @@
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { icons } from 'app/assets';
 import { Image } from 'app/components';
-import { Route, MainTabNavigatorParams } from 'app/consts';
+import { Route, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
 
 type Props = {
   thankYouFlowCompleted: boolean;
-  navigation: StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.Dashboard>
+  >;
 };
 
 export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, navigation }: Props) => {
