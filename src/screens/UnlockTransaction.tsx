@@ -77,6 +77,7 @@ class UnlockTransaction extends PureComponent<Props, State> {
         keyboardShouldPersistTaps="always"
         footer={
           <Button
+            testID="confirm-transaction-confirm-button"
             title={i18n._.confirm}
             loading={isLoading}
             onPress={this.onConfirmWithNetworkConnectionCheck}
@@ -92,6 +93,7 @@ class UnlockTransaction extends PureComponent<Props, State> {
             <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem
+            testID="confirm-transaction-password-input"
             value={password}
             setValue={this.updatePassword}
             autoFocus={true}
