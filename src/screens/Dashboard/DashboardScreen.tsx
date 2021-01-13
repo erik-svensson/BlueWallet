@@ -13,7 +13,7 @@ import {
   StyledText,
   AirdropFloatingButton,
 } from 'app/components';
-import { Wallet, Route, EnhancedTransaction, CONST } from 'app/consts';
+import { Wallet, Route, EnhancedTransaction, CONST, MainTabNavigatorParams } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
@@ -32,13 +32,12 @@ import { WalletsCarousel } from './WalletsCarousel';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<any, Route.Dashboard>;
+  navigation: StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>;
   wallets: Wallet[];
   isLoading: boolean;
   allTransactions: EnhancedTransaction[];
   transactionNotes: Record<string, string>;
   isInitialized: boolean;
-  airdropThankYouSeen: boolean;
   airdropThankYouFlowCompleted: boolean;
   loadWallets: () => LoadWalletsAction;
   clearFilters: () => ClearFiltersAction;
@@ -246,7 +245,7 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   render() {
-    const { isInitialized, airdropThankYouFlowCompleted, airdropThankYouSeen, navigation } = this.props;
+    const { isInitialized, airdropThankYouFlowCompleted, navigation } = this.props;
 
     if (!isInitialized) {
       return (
@@ -267,11 +266,7 @@ class DashboardScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         )}
-        <AirdropFloatingButton
-          thankYouFlowCompleted={airdropThankYouFlowCompleted}
-          // thankYouSeen={airdropThankYouSeen}
-          navigation={navigation}
-        />
+        <AirdropFloatingButton thankYouFlowCompleted={airdropThankYouFlowCompleted} navigation={navigation} />
       </>
     );
   }
@@ -285,7 +280,6 @@ const mapStateToProps = (state: ApplicationState) => ({
   transactionNotes: transactionsNotesSelectors.transactionNotes(state),
   isFilteringOn: state.filters.isFilteringOn,
   airdropThankYouFlowCompleted: airdropSelectors.thankYouFlowCompleted(state),
-  airdropThankYouSeen: airdropSelectors.thankYouSeen(state),
 });
 
 const mapDispatchToProps = {

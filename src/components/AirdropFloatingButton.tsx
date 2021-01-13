@@ -1,16 +1,15 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { icons } from 'app/assets';
 import { Image } from 'app/components';
-import { Route } from 'app/consts';
+import { Route, MainTabNavigatorParams } from 'app/consts';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
 
 type Props = {
-  // thankYouSeen: boolean;
   thankYouFlowCompleted: boolean;
-  navigation: StackNavigationProp<any, Route.Dashboard>;
+  navigation: StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>;
 };
 
 export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, navigation }: Props) => {
@@ -24,12 +23,12 @@ export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, naviga
 
   const onButtonPress = () => {
     if (isAfterAirdrop()) {
-      navigation.navigate(Route.AirdropDashboard);
+      return navigation.navigate(Route.AirdropDashboard);
     }
     if (!thankYouFlowCompleted) {
-      navigation.navigate(Route.AirdropThankYou);
+      return navigation.navigate(Route.AirdropThankYou);
     } else {
-      navigation.navigate(Route.AirdropDashboard);
+      return navigation.navigate(Route.AirdropDashboard);
     }
   };
 
