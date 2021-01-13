@@ -74,4 +74,6 @@ export const icons = {
   warning: require('./images/warning.png'),
   airdropFloating: require('./images/airdropFloatingButton.png'),
   airdrop: require('./images/airdropIcon.png'),
+  facebook: require('./images/facebook.png'),
+  twitter: require('./images/twitter.png'),
 };
