@@ -221,7 +221,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   renderAdvancedSection() {
     const { isAdvancedOptionsEnabled } = this.props.appSettings;
 
-    const isBeforeAirdrop = !isAfterAirdrop();
+    const isNotAfterAirdrop = !isAfterAirdrop();
 
     return (
       <>
@@ -234,7 +234,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           checked={this.state.WalletClass === HDSegwitP2SHArWallet}
           onPress={this.onSelect}
         />
-        <View style={isBeforeAirdrop && styles.frame}>
+        <View style={isNotAfterAirdrop && styles.frame}>
           <RadioButton
             testID="create-3-key-vault-radio"
             title={HDSegwitP2SHAirWallet.typeReadable}
@@ -243,7 +243,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
             checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
             onPress={this.onSelect}
           />
-          {isBeforeAirdrop && <Image source={icons.airdrop} style={styles.airdropIcon} />}
+          {isNotAfterAirdrop && <Image source={icons.airdrop} style={styles.airdropIcon} />}
         </View>
         <RadioButton
           testID="create-hd-p2sh-radio"

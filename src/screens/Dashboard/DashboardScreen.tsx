@@ -4,11 +4,20 @@ import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity, SectionList } from 'react-native';
 import { connect } from 'react-redux';
 
-import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
-import { Wallet, Route, EnhancedTransaction, CONST } from 'app/consts';
+import {
+  ListEmptyState,
+  WalletCard,
+  ScreenTemplate,
+  Header,
+  SearchBar,
+  StyledText,
+  AirdropFloatingButton,
+} from 'app/components';
+import { Wallet, Route, EnhancedTransaction, CONST, MainTabNavigatorParams } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
+import * as airdropSelectors from 'app/state/airdrop/selectors';
 import { clearFilters, ClearFiltersAction } from 'app/state/filters/actions';
 import * as transactionsNotesSelectors from 'app/state/transactionsNotes/selectors';
 import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
@@ -23,12 +32,13 @@ import { WalletsCarousel } from './WalletsCarousel';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<any, Route.Dashboard>;
+  navigation: StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>;
   wallets: Wallet[];
   isLoading: boolean;
   allTransactions: EnhancedTransaction[];
   transactionNotes: Record<string, string>;
   isInitialized: boolean;
+  airdropThankYouFlowCompleted: boolean;
   loadWallets: () => LoadWalletsAction;
   clearFilters: () => ClearFiltersAction;
   isFilteringOn?: boolean;
@@ -213,22 +223,19 @@ class DashboardScreen extends Component<Props, State> {
     const { isLoading } = this.props;
     const activeWallet = this.getActiveWallet();
 
-    if (this.hasWallets()) {
-      return (
-        <TransactionList
-          reference={this.transactionListRef}
-          refreshing={isLoading}
-          onRefresh={this.refreshTransactions}
-          ListHeaderComponent={<>{this.renderWallets()}</>}
-          search={query}
-          transactions={this.getTransactions()}
-          transactionNotes={this.props.transactionNotes}
-          label={activeWallet.label}
-          headerHeight={this.state.contentdHeaderHeight}
-        />
-      );
-    }
-    return (
+    return this.hasWallets() ? (
+      <TransactionList
+        reference={this.transactionListRef}
+        refreshing={isLoading}
+        onRefresh={this.refreshTransactions}
+        ListHeaderComponent={<>{this.renderWallets()}</>}
+        search={query}
+        transactions={this.getTransactions()}
+        transactionNotes={this.props.transactionNotes}
+        label={activeWallet.label}
+        headerHeight={this.state.contentdHeaderHeight}
+      />
+    ) : (
       <ListEmptyState
         testID="no-wallets-icon"
         variant={ListEmptyState.Variant.Dashboard}
@@ -238,7 +245,7 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   render() {
-    const { isInitialized } = this.props;
+    const { isInitialized, airdropThankYouFlowCompleted, navigation } = this.props;
 
     if (!isInitialized) {
       return (
@@ -259,6 +266,7 @@ class DashboardScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         )}
+        <AirdropFloatingButton thankYouFlowCompleted={airdropThankYouFlowCompleted} navigation={navigation} />
       </>
     );
   }
@@ -271,6 +279,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   allTransactions: walletsSelectors.transactions(state),
   transactionNotes: transactionsNotesSelectors.transactionNotes(state),
   isFilteringOn: state.filters.isFilteringOn,
+  airdropThankYouFlowCompleted: airdropSelectors.thankYouFlowCompleted(state),
 });
 
 const mapDispatchToProps = {
