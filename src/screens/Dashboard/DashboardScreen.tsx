@@ -1,3 +1,4 @@
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { compose } from 'lodash/fp';
 import React, { Component } from 'react';
@@ -13,7 +14,7 @@ import {
   StyledText,
   AirdropFloatingButton,
 } from 'app/components';
-import { Wallet, Route, EnhancedTransaction, CONST, MainTabNavigatorParams } from 'app/consts';
+import { Wallet, Route, EnhancedTransaction, CONST, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
@@ -32,7 +33,10 @@ import { WalletsCarousel } from './WalletsCarousel';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.Dashboard>
+  >;
   wallets: Wallet[];
   isLoading: boolean;
   allTransactions: EnhancedTransaction[];
