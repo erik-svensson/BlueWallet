@@ -107,7 +107,7 @@ export const SettingsScreen = (props: Props) => {
       <AppStateManager handleAppComesToForeground={refreshBiometricsAvailability} />
       <Header title={i18n.settings.header} />
       <ScreenTemplate>
-        <Image source={logoSource} style={styles.logo} resizeMode="contain" />
+        <Image testID="goldwallet-logo" source={logoSource} style={styles.logo} resizeMode="contain" />
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.security}>{renderSecuritySettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.about}>{renderAboutSettings()}</LabeledSettingsRow>

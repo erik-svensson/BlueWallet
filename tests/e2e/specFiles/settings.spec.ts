@@ -2,6 +2,18 @@ import { expect } from 'detox';
 
 import { isBeta } from '../helpers';
 import app from '../pageObjects';
+import { SupportedLanguage } from '../pageObjects/pages/settings/LanguageScreen';
+
+const languages: SupportedLanguage[] = [
+  'Chinese',
+  'Spanish',
+  'Indonesian',
+  'Japanese',
+  'Korean',
+  'Portuguese',
+  'Vietnamese',
+  'Turkish',
+];
 
 describe('Settings', () => {
   beforeEach(async () => {
@@ -15,8 +27,6 @@ describe('Settings', () => {
   });
 
   describe('@android @ios @regression', () => {
-    const languages = ['Chinese', 'Spanish', 'Indonesian', 'Japanese', 'Korean', 'Portuguese', 'Vietnamese', 'Turkish'];
-
     languages.forEach(language =>
       it(`should be possible to change language from English to ${language}`, async () => {}),
     );
