@@ -13,7 +13,6 @@ import {
   SearchBar,
   StyledText,
   AirdropFloatingButton,
-  SocialShareButton,
 } from 'app/components';
 import { Wallet, Route, EnhancedTransaction, CONST, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
@@ -262,7 +261,6 @@ class DashboardScreen extends Component<Props, State> {
     return (
       <>
         <ScreenTemplate noScroll contentContainer={styles.contentContainer} header={this.renderHeader()}>
-          <SocialShareButton />
           {this.renderContent()}
         </ScreenTemplate>
         {!!this.props.isFilteringOn && (

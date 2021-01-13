@@ -1,31 +1,28 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import Share from 'react-native-share';
+import Share, { Options } from 'react-native-share';
 
-import { icons } from 'app/assets';
 import { Image } from 'app/components';
 
-const shareOptions = {
-  title: 'Share via',
-  message: 'some message',
-  url: 'https://www.google.com/',
-  social: Share.Social.FACEBOOK,
-};
+import { captureException } from '../../error';
 
-export const SocialShareButton = () => {
-  const share = () => {
-    console.log('Clicked');
-    Share.shareSingle(shareOptions)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        err && console.log(err);
-      });
+interface Props {
+  source: number;
+  shareOptions: Options & { social: Share.Social };
+}
+
+export const SocialShareButton: FC<Props> = ({ source, shareOptions }) => {
+  const addPostToSocialMediaApp = async () => {
+    try {
+      await Share.shareSingle(shareOptions);
+    } catch (error) {
+      const errorMsg = `SocialShareButton ${shareOptions.social} error: ${JSON.stringify(error)}`;
+      captureException(errorMsg);
+    }
   };
   return (
-    <TouchableOpacity onPress={() => share()}>
-      <Image style={styles.icon} source={icons.facebook} />
+    <TouchableOpacity style={styles.icon} onPress={addPostToSocialMediaApp}>
+      <Image style={styles.icon} source={source} />
     </TouchableOpacity>
   );
 };
