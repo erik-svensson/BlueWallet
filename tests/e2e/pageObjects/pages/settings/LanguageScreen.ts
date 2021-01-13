@@ -31,6 +31,10 @@ const LanguageScreen = () => ({
 
     await actions.tap(langElement);
   },
+
+  async confirmLanguageChange() {
+    await actions.tap(element(by.text('Confirm')));
+  },
 });
 
 export default LanguageScreen;
