@@ -44,3 +44,4 @@ export { Countdown } from './Countdown';
 export { SocialShareButton } from './SocialShareButton';
 export { SocialShareFacebookButton } from './SocialShareFacebookButton';
 export { SocialShareTwitterButton } from './SocialShareTwitterButton';
+export { WalletBalanceCircle } from './WalletBalanceCircle';

@@ -4,24 +4,27 @@ import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import { typography, palette } from 'app/styles';
 
-const i18n = require('../../../../loc');
+import { formatToBtcvWithoutSign } from '../../utils/bitcoin';
+
+const i18n = require('../../loc');
 
 interface Props {
   balance: number;
   threshold: number;
 }
 
-export const WalletBalanceCircle: FC<Props> = ({ balance = 0, threshold }: Props) => (
+export const WalletBalanceCircle: FC<Props> = ({ balance, threshold }: Props) => (
   <AnimatedCircularProgress
     size={149}
     width={8}
     fill={(balance / threshold) * 100}
     tintColor={palette.textSecondary}
     backgroundColor={palette.lightGrey}
+    lineCap="round"
   >
     {() => (
       <View>
-        <Text style={styles.airdropBTCVBalance}>{balance} BTCV</Text>
+        <Text style={styles.airdropBTCVBalance}>{formatToBtcvWithoutSign(balance)}</Text>
         <Text style={styles.yourBalanceText}>{i18n.airdrop.circularWalletBalance.yourBalance}</Text>
       </View>
     )}
