@@ -13,7 +13,7 @@ interface Props {
   threshold: number;
 }
 
-export const WalletBalanceCircle: FC<Props> = ({ balance, threshold }: Props) => (
+export const AirdropWalletBalanceCircle: FC<Props> = ({ balance, threshold }) => (
   <AnimatedCircularProgress
     size={149}
     width={8}
@@ -21,6 +21,7 @@ export const WalletBalanceCircle: FC<Props> = ({ balance, threshold }: Props) =>
     tintColor={palette.textSecondary}
     backgroundColor={palette.lightGrey}
     lineCap="round"
+    style={styles.circle}
   >
     {() => (
       <View>
@@ -32,6 +33,9 @@ export const WalletBalanceCircle: FC<Props> = ({ balance, threshold }: Props) =>
 );
 
 const styles = StyleSheet.create({
+  circle: {
+    alignSelf: 'center',
+  },
   airdropBTCVBalance: {
     ...typography.headline5,
     textAlign: 'center',
