@@ -41,3 +41,6 @@ export { CardGroup } from './CardGroup';
 export { RowTemplate } from './RowTemplate';
 export { AirdropFloatingButton } from './AirdropFloatingButton';
 export { Countdown } from './Countdown';
+export { SocialShareButton } from './SocialShareButton';
+export { SocialShareFacebookButton } from './SocialShareFacebookButton';
+export { SocialShareTwitterButton } from './SocialShareTwitterButton';
