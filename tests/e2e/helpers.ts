@@ -63,5 +63,3 @@ export const isBeta = (): boolean => {
 
   return argparse.getArgValue('configuration').includes('beta');
 };
-
-export const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
