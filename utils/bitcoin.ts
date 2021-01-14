@@ -40,6 +40,9 @@ export const formatToBtcv = (value: number): string =>
 export const formatToBtcvWithoutUnit = (value: number): string =>
   `${value >= 0 ? '+' : ''}${addMissingZerosToSatoshis(value)}`;
 
+export const formatToBtcvWithoutSign = (value: number): string =>
+  `${addMissingZerosToSatoshis(value)} ${CONST.preferredBalanceUnit}`;
+
 export const checkAddressNetworkName = (address: string): string => {
   for (const networkName in bitcoin.alt_networks) {
     try {
