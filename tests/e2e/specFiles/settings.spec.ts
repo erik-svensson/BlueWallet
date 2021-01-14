@@ -102,8 +102,10 @@ describe('Settings', () => {
       }),
     );
 
-    it('should be possible to enable biometric and unlock the app using biometric method', async () => {});
+    // TODO: For now, it's not possible to test it. Requires changes in the app
+    xit('should be possible to enable biometric and unlock the app using biometric method', async () => {});
 
-    it('should be possible to disable biometric and unlock the app using PIN', async () => {});
+    // TODO: For now, it's not possible to test it. Requires changes in the app
+    xit('should be possible to disable biometric and unlock the app using PIN', async () => {});
   });
 });

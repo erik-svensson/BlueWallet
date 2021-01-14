@@ -6,7 +6,7 @@ import MessageScreen from '../../common/MessageScreen';
 const ChangePin = () => {
   const CurrentPinScreen = () => ({
     pinInput: element(by.id('current-pin-input')),
-    pinValidationError: element(by.id('create-pin-validation-error')),
+    pinValidationError: element(by.id('current-pin-input-validation-error')),
 
     async typePin(pin: string) {
       await actions.typeText(this.pinInput, pin);
@@ -19,7 +19,7 @@ const ChangePin = () => {
 
   const NewPinScreen = () => ({
     pinInput: element(by.id('create-pin-input')),
-    pinValidationError: element(by.id('create-pin-validation-error')),
+    pinValidationError: element(by.id('create-pin-input-validation-error')),
 
     async typePin(pin: string) {
       await actions.typeText(this.pinInput, pin);
@@ -28,7 +28,7 @@ const ChangePin = () => {
 
   const ConfirmPinScreen = () => ({
     pinInput: element(by.id('confirm-pin-input')),
-    pinValidationError: element(by.id('confirm-pin-validation-error')),
+    pinValidationError: element(by.id('confirm-pin-input-validation-error')),
 
     async typePin(pin: string) {
       await actions.typeText(this.pinInput, pin);

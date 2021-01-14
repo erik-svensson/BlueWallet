@@ -6,6 +6,7 @@ import BetaVersionScreen from './pages/BetaVersionScreen';
 import DeveloperRoom from './pages/DeveloperRoom';
 import Onboarding from './pages/Onboarding';
 import TermsConditionsScreen from './pages/TermsConditionsScreen';
+import UnlockScreen from './pages/UnlockScreen';
 import Wallets from './pages/Wallets';
 import AboutUsScreen from './pages/settings/AboutUsScreen';
 import AdvancedOptionsScreen from './pages/settings/AdvancedOptionsScreen';
@@ -30,6 +31,7 @@ const app = {
   navigationBar: NavigationBar(),
   header: Header(),
   termsConditionsScreen: TermsConditionsScreen(),
+  unlockScreen: UnlockScreen(),
 };
 
 export default app;
