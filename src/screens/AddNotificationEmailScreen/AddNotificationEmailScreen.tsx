@@ -9,7 +9,6 @@ import { Route, NotificationNavigatorParams, RootStackParams, MainCardStackNavig
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
-import { createTc as createTcAction } from 'app/state/authentication/actions';
 import {
   createNotificationEmail as createNotificationEmailAction,
   setNotificationEmail as setNotificationEmailAction,
@@ -28,7 +27,6 @@ interface Props {
     >
   >;
 
-  createTc: () => void;
   createNotificationEmail: Function;
   setNotificationEmail: Function;
   hasWallets: boolean;
@@ -69,8 +67,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   };
 
   skipAddEmail = () => {
-    const { createTc, createNotificationEmail, navigation } = this.props;
-    createTc();
+    const { createNotificationEmail, navigation } = this.props;
     createNotificationEmail('', {
       onSuccess: () => {
         CreateMessage({
@@ -134,7 +131,6 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 }
 
 const mapDispatchToProps = {
-  createTc: createTcAction,
   createNotificationEmail: createNotificationEmailAction,
   setNotificationEmail: setNotificationEmailAction,
 };

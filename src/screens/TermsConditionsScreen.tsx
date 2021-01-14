@@ -9,11 +9,7 @@ import { Button, CustomModal, Header, ScreenTemplate } from 'app/components';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import { selectors as authenticationSelectors } from 'app/state/authentication';
-import {
-  setIsTcAccepted as setIsTcAcceptedAction,
-  SetIsTcAcceptedAction,
-  createTc as createTcAction,
-} from 'app/state/authentication/actions';
+import { createTc as createTcAction } from 'app/state/authentication/actions';
 import { fonts, palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -25,7 +21,6 @@ interface MapStateToProps {
 }
 
 interface Props {
-  setIsTcAccepted: (isTcAccepted: boolean) => SetIsTcAcceptedAction;
   createTc: () => void;
   isPinSet: boolean;
   isTcAccepted?: boolean;
@@ -65,13 +60,8 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   };
 
   agreeAction = () => {
-    const { isTxPasswordSet, isPinSet, setIsTcAccepted, createTc } = this.props;
-
-    if (isTxPasswordSet && isPinSet) {
-      createTc();
-    } else {
-      setIsTcAccepted(true);
-    }
+    const { createTc } = this.props;
+    createTc();
   };
 
   isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent) => {
@@ -184,7 +174,6 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
 });
 
 const mapDispatchToProps = {
-  setIsTcAccepted: setIsTcAcceptedAction,
   createTc: createTcAction,
 };
 

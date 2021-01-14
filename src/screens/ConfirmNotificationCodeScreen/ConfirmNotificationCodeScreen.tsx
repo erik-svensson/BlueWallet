@@ -8,7 +8,6 @@ import { CodeInput, Header, ScreenTemplate, Button, FlatButton } from 'app/compo
 import { Route, NotificationNavigatorParams, CONST, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
-import { createTc as createTcAction } from 'app/state/authentication/actions';
 import { selectors as notificationSelectors } from 'app/state/notifications';
 import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
@@ -28,7 +27,6 @@ interface Props {
   >;
   createNotificationEmail: Function;
   route: RouteProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>;
-  createTc: () => void;
   email: string;
   pin: string;
 }
@@ -96,6 +94,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 
   onConfirm = () => {
     const { pin, createNotificationEmail, email } = this.props;
+
     const { userCode } = this.state;
 
     const passedCode = pin === userCode;
@@ -154,7 +153,6 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 }
 
 const mapDispatchToProps = {
-  createTc: createTcAction,
   createNotificationEmail: createNotificationEmailAction,
 };
 
