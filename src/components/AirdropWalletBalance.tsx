@@ -12,7 +12,7 @@ interface Props {
   threshold: number;
 }
 
-export const AirdropWalletBalance: FC<Props> = ({ balance, walletName, footer, threshold }: Props) => (
+export const AirdropWalletBalance: FC<Props> = ({ balance, walletName, footer, threshold }) => (
   <View>
     <Text style={styles.header}>{walletName}</Text>
     <AirdropWalletBalanceCircle balance={balance} threshold={threshold} />
