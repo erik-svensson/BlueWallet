@@ -29,6 +29,7 @@ interface Props {
   route: RouteProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>;
   email: string;
   pin: string;
+  createTc: Function;
 }
 
 class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
