@@ -219,11 +219,11 @@ export interface Wallet {
 export interface WalletPayload {
   name: string;
   gap_limit: number;
-  derivation_path?: {};
+  derivation_path?: unknown;
   xpub: string;
   address_type: string;
-  instant_public_key: string;
-  recovery_public_key: string;
+  instant_public_key?: string;
+  recovery_public_key?: string;
 }
 
 export interface ActionMeta {

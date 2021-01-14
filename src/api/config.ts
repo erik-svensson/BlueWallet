@@ -1,7 +1,5 @@
-import Config from 'react-native-config';
-
-const { NOTIFICATION_EMAIL_URL } = Config;
+import generalConfig from '../../config';
 
 export const config = {
-  baseURL: NOTIFICATION_EMAIL_URL || '',
+  baseURL: generalConfig.emailNotificationsURL,
 };

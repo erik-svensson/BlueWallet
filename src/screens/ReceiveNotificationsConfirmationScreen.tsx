@@ -30,7 +30,7 @@ export const ReceiveNotificationsConfirmationScreen = (props: Props) => {
       navigation,
     } = props;
     navigation.navigate(Route.ConfirmEmail, {
-      address,
+      email: address,
       flowType,
     });
   };

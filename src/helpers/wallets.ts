@@ -6,7 +6,7 @@ import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 
 const ENCODING = 'hex';
 
-export const walletToAddressesGenerationBase = async (wallet: Wallet): PromiseWalletPayload => {
+export const walletToAddressesGenerationBase = async (wallet: Wallet): Promise<WalletPayload> => {
   let instant_public_key = undefined;
   let recovery_public_key = undefined;
 
@@ -22,7 +22,7 @@ export const walletToAddressesGenerationBase = async (wallet: Wallet): PromiseWa
   return {
     name: wallet.label,
     gap_limit: CONST.walletsDefaultGapLimit,
-    derivation_path: {}, //[wallet.getDerivationPath()],
+    derivation_path: {},
     xpub: await wallet.getXpub(),
     address_type: WALLETS_ADDRESSES_TYPES[wallet.type],
     ...(instant_public_key && { instant_public_key }),

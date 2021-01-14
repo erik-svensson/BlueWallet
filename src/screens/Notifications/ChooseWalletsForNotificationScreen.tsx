@@ -79,7 +79,10 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     });
 
   onSkip = () =>
-    this.props.createNotificationEmail(this.props.route.params.email, { onSuccess: this.goToSuccessScreen });
+    this.props.navigation.navigate(Route.ConfirmEmail, {
+      email: this.props.route.params.email,
+      flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
+    });
 
   addWallet = (wallet: Item) => this.setState((state: State) => ({ wallets: [...state.wallets, wallet] }));
 
@@ -164,7 +167,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         </View>
 
         <FlatList
-          data={wallets.filter(wallet => !wallet.isSubscribed)}
+          data={wallets}
           renderItem={item => this.renderItem(item.item)}
           keyExtractor={item => item.id}
           ListHeaderComponent={this.renderListHeader()}

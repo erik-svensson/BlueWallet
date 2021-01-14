@@ -86,24 +86,24 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
 export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   const { payload } = action as SubscribeWalletAction;
   try {
-    const response: { session_token: string; result: 'success' | 'error' } = yield call(subscribeEmail, payload);
+    const response: { session_token: string; result: Result } = yield call(subscribeEmail, payload);
     if (response.session_token) {
       yield put(subscribeWalletSuccess(response.session_token));
     }
   } catch (error) {
-    yield put(subscribeWalletFailure('something went wrong'));
+    yield put(subscribeWalletFailure(error.msg));
   }
 }
 
 export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
   const { payload } = action as UnsubscribeWalletAction;
   try {
-    const response: { session_token: string; result: 'success' | 'error' } = yield call(unsubscribeEmail, payload);
+    const response = yield call(unsubscribeEmail, payload);
     if (response.session_token) {
       yield put(unsubscribeWalletSuccess(response.session_token));
     }
   } catch (error) {
-    yield put(unsubscribeWalletFailure('something went wrong'));
+    yield put(unsubscribeWalletFailure(error.msg));
   }
 }
 

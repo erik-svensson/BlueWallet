@@ -1,4 +1,4 @@
-import { SubscribePayload, AuthenticatePayload, SubscribeWalletSuccessPayload } from 'app/api';
+import { SubscribePayload, UnsubscribePayload, AuthenticatePayload, SubscribeWalletSuccessPayload } from 'app/api';
 import { ActionMeta, WalletPayload, Wallet, CheckSubscriptionVersion } from 'app/consts';
 
 export enum NotificationAction {
@@ -95,7 +95,7 @@ export interface SubscribeWalletFailureAction {
 
 export interface UnsubscribeWalletAction {
   type: NotificationAction.UnsubscribeWalletAction;
-  payload: SubscribePayload;
+  payload: UnsubscribePayload;
 }
 
 export interface UnsubscribeWalletSuccessAction {

@@ -16,6 +16,7 @@ import {
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
+import { subscribedIds } from 'app/state/notifications/selectors';
 
 import logger from '../../../logger';
 import { roundBtcToSatoshis, btcToSatoshi, satoshiToBtc } from '../../../utils/bitcoin';
@@ -23,7 +24,6 @@ import { selectors as electrumXSelectors } from '../electrumX';
 import { WalletsState } from './reducer';
 
 const local = (state: ApplicationState): WalletsState => state.wallets;
-const store = (state): ApplicationState => state;
 
 export const wallets = createSelector(local, state => {
   return state.wallets.map(wallet => {
@@ -104,14 +104,13 @@ export const allWallets = createSelector(wallets, allWallet, (walletsList, aw) =
   return walletsList;
 });
 
-export const subscribedWallets = createSelector(store, wallets, (state, walletsList) =>
-  walletsList.filter(wallet => state.notifications.subscribedIds.some(id => id === wallet.id)),
+export const subscribedWallets = createSelector(subscribedIds, wallets, (ids, walletsList) =>
+  walletsList.filter(wallet => ids.some(id => id === wallet.id)),
 );
 
-export const unSubscribedWallets = createSelector(store, wallets, (state, walletsList) =>
+export const unSubscribedWallets = createSelector(subscribedIds, wallets, (ids, walletsList) =>
   walletsList.filter(
-    wallet =>
-      !state.notifications.subscribedIds.some(id => id === wallet.id) && wallet.type === HDSegwitP2SHAirWallet.type, //till all wallets are possible to subscribe
+    wallet => !ids.some(id => id === wallet.id) && wallet.type === HDSegwitP2SHAirWallet.type, //till all wallets are possible to subscribe
   ),
 );
 

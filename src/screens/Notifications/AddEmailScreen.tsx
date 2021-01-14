@@ -57,7 +57,6 @@ export class AddEmailScreen extends Component<Props, State> {
         error: i18n.notifications.invalidAddressError,
       });
     }
-
     if (wallets.length) {
       return navigation.navigate(Route.ChooseWalletsForNotification, { email });
     } else {
