@@ -1,6 +1,6 @@
 import { expect } from 'detox';
 
-import { isBeta, WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers';
+import { DEFAULT_UNLOCK_PIN, isBeta, WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers';
 import app from '../pageObjects';
 import { SupportedLanguage } from '../pageObjects/pages/settings/LanguageScreen';
 
@@ -35,7 +35,7 @@ describe('Settings', () => {
     it('should be possible change PIN', async () => {
       await app.settings.settingsScreen.tapOnChangePin();
 
-      await app.settings.changePin.currentPinScreen.typePin('1234');
+      await app.settings.changePin.currentPinScreen.typePin(DEFAULT_UNLOCK_PIN);
       await app.settings.changePin.newPinScreen.typePin('1111');
       await app.settings.changePin.confirmPinScreen.typePin('1111');
 
@@ -63,9 +63,9 @@ describe('Settings', () => {
     it('should display an error validation message if typed confirmation PIN is incorrect', async () => {
       await app.settings.settingsScreen.tapOnChangePin();
 
-      await app.settings.changePin.currentPinScreen.typePin('1234');
+      await app.settings.changePin.currentPinScreen.typePin(DEFAULT_UNLOCK_PIN);
       await app.settings.changePin.newPinScreen.typePin('1111');
-      await app.settings.changePin.confirmPinScreen.typePin('1234');
+      await app.settings.changePin.confirmPinScreen.typePin('1000');
 
       await expect(app.settings.changePin.confirmPinScreen.pinValidationError).toBeVisible();
     });
