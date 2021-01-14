@@ -1,11 +1,11 @@
 import React from 'react';
-import { Text, View, StyleSheet, NativeScrollEvent, TouchableOpacity, Linking } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import RNExitApp from 'react-native-exit-app';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 
 import { en, zh, es, id, pt, jp, ko, tr, vi } from 'app/assets/tc/';
-import { Button, CustomModal, Header, ScreenTemplate } from 'app/components';
+import { Button, CustomModal, Header, ScreenTemplate, CheckBox } from 'app/components';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import { selectors as authenticationSelectors } from 'app/state/authentication';
@@ -28,17 +28,29 @@ interface Props {
   language: string;
 }
 
-export class TermsConditionsScreen extends React.PureComponent<Props> {
+interface State {
+  showWarring: boolean;
+  height: number;
+  agreedToTermsAndConditions: boolean;
+  agreedToPrivacyPolicy: boolean;
+}
+
+export class TermsConditionsScreen extends React.PureComponent<Props, State> {
   state = {
-    canGo: false,
     showWarring: false,
     height: 500,
+    agreedToTermsAndConditions: false,
+    agreedToPrivacyPolicy: false,
   };
 
-  handleCanGo = () => {
-    this.setState({
-      canGo: true,
-    });
+  toggleAgreementToTermsAndConditions = () => {
+    const { agreedToTermsAndConditions } = this.state;
+    this.setState({ agreedToTermsAndConditions: !agreedToTermsAndConditions });
+  };
+
+  toggleAgreementToPrivacyPolicy = () => {
+    const { agreedToPrivacyPolicy } = this.state;
+    this.setState({ agreedToPrivacyPolicy: !agreedToPrivacyPolicy });
   };
 
   handleNoButton = () => {
@@ -62,11 +74,6 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
   agreeAction = () => {
     const { createTc } = this.props;
     createTc();
-  };
-
-  isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent) => {
-    const paddingToBottom = 20;
-    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
   };
 
   get langVersion() {
@@ -110,12 +117,18 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
     );
   };
 
+  get canAgree() {
+    const { agreedToTermsAndConditions, agreedToPrivacyPolicy } = this.state;
+    return agreedToTermsAndConditions && agreedToPrivacyPolicy;
+  }
+
   render() {
-    const { canGo, showWarring } = this.state;
+    const { showWarring, agreedToTermsAndConditions, agreedToPrivacyPolicy } = this.state;
+
+    const termsAndConditionsMarginBottom = 32;
+
     return (
       <ScreenTemplate
-        isCloseToBottom={this.isCloseToBottom}
-        allowedUserClick={this.handleCanGo}
         testID={'terms-conditions-screen'}
         footer={
           <View style={styles.buttonContainer}>
@@ -131,7 +144,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
               onPress={this.agreeAction}
               testID="agree-button"
               containerStyle={styles.agreeButton}
-              disabled={!canGo}
+              disabled={!this.canAgree}
             />
           </View>
         }
@@ -149,7 +162,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
           onNavigationStateChange={event => {
             if (event.title !== undefined) {
               this.setState({
-                height: parseInt(event.title) + 60,
+                height: parseInt(event.title) + termsAndConditionsMarginBottom,
               });
             }
           }}
@@ -160,6 +173,20 @@ export class TermsConditionsScreen extends React.PureComponent<Props> {
             }
             return true;
           }}
+        />
+        <CheckBox
+          onPress={this.toggleAgreementToTermsAndConditions}
+          containerStyle={styles.checkbox}
+          left
+          checked={agreedToTermsAndConditions}
+          title={<Text style={styles.checkboxText}>{i18n.termsConditions.readTermsConditions}</Text>}
+        />
+        <CheckBox
+          onPress={this.toggleAgreementToPrivacyPolicy}
+          containerStyle={styles.checkbox}
+          left
+          checked={agreedToPrivacyPolicy}
+          title={<Text style={styles.checkboxText}>{i18n.termsConditions.readPrivacyPolicy}</Text>}
         />
         <CustomModal show={showWarring}>{this.renderContent()}</CustomModal>
       </ScreenTemplate>
@@ -184,6 +211,15 @@ const styles = StyleSheet.create({
     ...typography.headline4,
     marginTop: 16,
     textAlign: 'center',
+  },
+  checkbox: {
+    marginLeft: 0,
+    backgroundColor: palette.white,
+    borderWidth: 0,
+  },
+  checkboxText: {
+    ...typography.headline5,
+    marginLeft: 12,
   },
   text: {
     marginTop: 25,
