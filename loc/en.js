@@ -31,6 +31,8 @@ module.exports = {
     header: 'Terms & Conditions',
     title: 'Agreement to Terms',
     text: '',
+    readTermsConditions: 'I’ve read Terms & Conditions',
+    readPrivacyPolicy: 'I’ve read Privacy Policy',
     buttons: { agree: 'I agree', disagree: 'I disagree' },
     modal: {
       header: 'Are you sure?',
