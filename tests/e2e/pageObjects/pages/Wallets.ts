@@ -23,6 +23,8 @@ export interface CreateWalletOptions {
 
 const Wallets = () => {
   const DashboardScreen = () => ({
+    header: element(by.id('dashboard-header')),
+
     noWalletsIcon: element(by.id('no-wallets-icon')),
     filterTransactionsButton: element(by.id('filter-transactions-button')),
     addButton: element(by.id('add-wallet-button')),

@@ -99,7 +99,7 @@ class ConfirmPinScreen extends PureComponent<Props, State> {
         </View>
         <View style={styles.pinContainer}>
           <PinInput value={this.state.pin} testID="confirm-pin-input" onTextChange={this.updatePin} />
-          <Text testID="confirm-pin-validation-error" style={styles.errorText}>
+          <Text testID="confirm-pin-input-validation-error" style={styles.errorText}>
             {error}
           </Text>
         </View>

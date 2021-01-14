@@ -2,6 +2,8 @@ export const SECOND = 1000;
 
 export const WAIT_FOR_ELEMENT_TIMEOUT = 10 * SECOND;
 
+export const DEFAULT_UNLOCK_PIN = '1234';
+
 interface ECDSA {
   PUBLIC_KEY: string;
   PRIVATE_KEY_PHRASE: string;
