@@ -35,7 +35,6 @@ interface State {
   agreedToPrivacyPolicy: boolean;
 }
 
-const TERMS_AND_CONDITIONS_MARGIN_BOTTOM = 32;
 export class TermsConditionsScreen extends React.PureComponent<Props, State> {
   state = {
     showWarring: false,
@@ -125,6 +124,9 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
 
   render() {
     const { showWarring, agreedToTermsAndConditions, agreedToPrivacyPolicy } = this.state;
+
+    const termsAndConditionsMarginBottom = 32;
+
     return (
       <ScreenTemplate
         testID={'terms-conditions-screen'}
@@ -160,7 +162,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
           onNavigationStateChange={event => {
             if (event.title !== undefined) {
               this.setState({
-                height: parseInt(event.title) + TERMS_AND_CONDITIONS_MARGIN_BOTTOM,
+                height: parseInt(event.title) + termsAndConditionsMarginBottom,
               });
             }
           }}
