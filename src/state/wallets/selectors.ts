@@ -16,7 +16,6 @@ import {
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
-import { subscribedIds } from 'app/state/notifications/selectors';
 
 import logger from '../../../logger';
 import { roundBtcToSatoshis, btcToSatoshi, satoshiToBtc } from '../../../utils/bitcoin';
@@ -24,6 +23,8 @@ import { selectors as electrumXSelectors } from '../electrumX';
 import { WalletsState } from './reducer';
 
 const local = (state: ApplicationState): WalletsState => state.wallets;
+const store = (state: ApplicationState) => state;
+const subscribedIds = createSelector(store, state => state.notifications.subscribedIds);
 
 export const wallets = createSelector(local, state => {
   return state.wallets.map(wallet => {

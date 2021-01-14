@@ -127,7 +127,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
               onPress={this.onConfirm}
               disabled={userCode.length < CONST.codeLength}
             />
-            {/* <FlatButton // uncomment when api for resend works
+            {/* <FlatButton // TODO uncomment when api for resend works
               testID="resend-code-email"
               containerStyle={styles.resendButton}
               title={i18n._.resendCode}

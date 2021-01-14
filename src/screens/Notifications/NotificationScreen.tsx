@@ -32,7 +32,7 @@ interface Props {
   wallets: Wallet[];
 }
 export class NotificationScreen extends Component<Props> {
-  async componentDidMount() {
+  componentDidMount() {
     const { wallets, checkSubscription, email } = this.props;
     !!email && checkSubscription(wallets, email);
   }

@@ -52,7 +52,7 @@ interface Props {
 }
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
-  async componentDidMount() {
+  componentDidMount() {
     const { wallet, email, checkSubscription } = this.props;
     if (!email || !wallet) return;
     checkSubscription([wallet], email);

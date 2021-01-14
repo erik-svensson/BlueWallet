@@ -219,7 +219,7 @@ export interface Wallet {
 export interface WalletPayload {
   name: string;
   gap_limit: number;
-  derivation_path?: unknown;
+  derivation_path?: Record<string, unknown>;
   xpub: string;
   address_type: string;
   instant_public_key?: string;

@@ -17,6 +17,10 @@ export const isNotificationEmailSet = createSelector(local, state => state.isNot
 export const isNotificationEmailSkip = createSelector(local, state => state.isNotificationEmailSkip);
 export const pin = createSelector(local, state => state.pin);
 export const subscribedIds = createSelector(local, state => state.subscribedIds);
+export const sessionToken = createSelector(local, state => state.sessionToken);
+export const notificationError = createSelector(local, state => state.error);
+export const storedEmail = createSelector(local, state => state.email);
+export const storedPin = createSelector(local, state => state.pin);
 
 export const isWalletSubscribed = createSelector(
   subscribedIds,

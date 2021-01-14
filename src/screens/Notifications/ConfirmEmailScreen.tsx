@@ -30,6 +30,7 @@ import {
   setNotificationEmail,
   SetNotificationEmailAction,
 } from 'app/state/notifications/actions';
+import { sessionToken, notificationError, storedEmail, storedPin } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -46,10 +47,10 @@ interface Props {
   authenticate: (session_token: string, pin: string, meta: ActionMeta) => AuthenticateEmailAction;
   setNotificationEmail: (email: string) => SetNotificationEmailAction;
   language: string;
-  sessionToken: string;
-  notificationError: string;
-  storedEmail: string;
-  storedPin: string;
+  sessionToken: any;
+  notificationError: any;
+  storedEmail: any;
+  storedPin: any;
 }
 
 interface State {
@@ -315,10 +316,10 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   language: appSettingsSelectors.language(state),
-  sessionToken: state.notifications.sessionToken,
-  notificationError: state.notifications.error,
-  storedEmail: state.notifications.email,
-  storedPin: state.notifications.pin,
+  sessionToken: sessionToken(state),
+  notificationError: notificationError(state),
+  storedEmail: storedEmail(state),
+  storedPin: storedPin(state),
 });
 
 const mapDispatchToProps = {
