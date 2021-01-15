@@ -21,6 +21,8 @@ export const AirdropWalletBalanceCard: FC<Props> = ({ walletDetails }) => {
     { threshold: 1000, name: i18n.airdrop.walletsCarousel.whale },
   ];
 
+  const _isAfterAirdrop = isAfterAirdrop();
+
   const readableOrder = [i18n.order.first, i18n.order.second, i18n.order.third, i18n.order.fourth];
   const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > walletDetails.balance);
   // TODO: edge case of "all goals reached" not covered by designs. Awaiting UX input. For now returning last one - "whale"
@@ -40,7 +42,7 @@ export const AirdropWalletBalanceCard: FC<Props> = ({ walletDetails }) => {
         footer={
           <>
             <Text style={styles.firstLine}>
-              {isAfterAirdrop()
+              {_isAfterAirdrop
                 ? i18n.airdrop.walletsCarousel.youReachedGoal
                 : i18n.formatString(i18n.airdrop.walletsCarousel.yourNextGoal, {
                     order: readableOrder[nextGoalIndex],
@@ -48,8 +50,8 @@ export const AirdropWalletBalanceCard: FC<Props> = ({ walletDetails }) => {
             </Text>
             <Text style={styles.secondLine}>
               {i18n.formatString(i18n.airdrop.walletsCarousel.avatarTeaser, {
-                goalName: isAfterAirdrop() ? lastGoal.name : nextGoal.name,
-                goalThreshold: isAfterAirdrop() ? lastGoal.threshold : nextGoal.threshold,
+                goalName: _isAfterAirdrop ? lastGoal.name : nextGoal.name,
+                goalThreshold: _isAfterAirdrop ? lastGoal.threshold : nextGoal.threshold,
                 unit: CONST.preferredBalanceUnit,
               })}
             </Text>
