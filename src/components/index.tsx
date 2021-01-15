@@ -47,3 +47,5 @@ export { AirdropFloatingButton } from './AirdropFloatingButton';
 export { AirdropWalletBalanceCircle } from './AirdropWalletBalanceCircle';
 export { AirdropWalletBalance } from './AirdropWalletBalance';
 export { AirdropWalletsCarousel } from './AirdropWalletsCarousel';
+export { AirdropWalletFooter } from './AirdropWalletFooter';
+export { AirdropWalletsCarouselItem } from './AirdropWalletsCarouselItem';

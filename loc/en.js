@@ -23,6 +23,12 @@ module.exports = {
     scan: 'Scan',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
   },
+  order: {
+    first: 'first',
+    second: 'second',
+    third: 'third',
+    fourth: 'fourth',
+  },
   time: {
     days: 'Days',
     hours: 'Hours',
@@ -61,6 +67,14 @@ module.exports = {
         read: 'Read',
         termsAndConditions: 'Terms and Conditions',
       },
+    },
+    walletsCarousel: {
+      shrimp: 'Shrimp',
+      crab: 'Crab',
+      shark: 'Shark',
+      whale: 'Whale',
+      yourNextGoal: 'Your {order} goal:',
+      nextAvatarTeaser: 'Become a {nearestGoalName}: {nearestGoalThreshold} {unit}',
     },
   },
   termsConditions: {
