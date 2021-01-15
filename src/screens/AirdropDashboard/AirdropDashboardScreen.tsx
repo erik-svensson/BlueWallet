@@ -35,15 +35,7 @@ export const AirdropDashboardScreen: FC<Props> = ({ navigation }) => (
         </Text>
       </View>
       <Countdown dataEnd={CONST.airdropDate} />
-      <AirdropWalletsCarousel
-        styles={{ marginTop: 20, marginBottom: 20 }}
-        items={[
-          { balance: 6.25, name: 'AAA' },
-          { balance: 0.5, name: 'BBB' },
-          { balance: 900, name: 'CCC' },
-        ]}
-      />
-      {/* <Image source={images.airdrop} style={styles.airdropImage} /> */}
+      <Image source={images.airdrop} style={styles.airdropImage} />
       <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
     </View>
   </ScreenTemplate>
