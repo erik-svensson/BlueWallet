@@ -40,6 +40,16 @@ export const CONST = {
   airdropTotalDollarsToShare: '250.000',
 };
 
+export interface AirdropWalletDetails {
+  balance: number;
+  name: string;
+}
+
+export interface AirdropGoal {
+  name: string;
+  threshold: number;
+}
+
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
 
 export interface SocketOptions {

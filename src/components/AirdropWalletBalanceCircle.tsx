@@ -15,7 +15,7 @@ interface Props {
 
 export const AirdropWalletBalanceCircle: FC<Props> = ({ balance, threshold }) => (
   <AnimatedCircularProgress
-    size={149}
+    size={155}
     width={8}
     fill={(balance / threshold) * 100}
     tintColor={palette.textSecondary}
