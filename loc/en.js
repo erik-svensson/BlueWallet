@@ -74,7 +74,8 @@ module.exports = {
       shark: 'Shark',
       whale: 'Whale',
       yourNextGoal: 'Your {order} goal:',
-      nextAvatarTeaser: 'Become a {nearestGoalName}: {nearestGoalThreshold} {unit}',
+      avatarTeaser: 'Become a {goalName}: {goalThreshold} {unit}',
+      youReachedGoal: 'You reached goal: ',
     },
   },
   termsConditions: {

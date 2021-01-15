@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
 import { CONST, AirdropWalletDetails, AirdropGoal } from 'app/consts';
+import { isAfterAirdrop } from 'app/helpers/airdrop';
 import { typography, palette } from 'app/styles';
 
 import { AirdropWalletBalance } from './AirdropWalletBalance';
@@ -26,6 +27,10 @@ export const AirdropWalletBalanceCard: FC<Props> = ({ walletDetails }) => {
   const nextGoal = unreachedGoals[0] || airdropGoals[airdropGoals.length - 1];
   const nextGoalIndex = airdropGoals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
 
+  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold < walletDetails.balance);
+  // TODO: edge case of "none goals reached" not covered by designs. Awaiting UX input. For now returning first one - "shrimp"
+  const lastGoal = reachedGoals[reachedGoals.length - 1] || airdropGoals[0];
+
   return (
     <View style={styles.walletCard}>
       <AirdropWalletBalance
@@ -35,14 +40,16 @@ export const AirdropWalletBalanceCard: FC<Props> = ({ walletDetails }) => {
         footer={
           <>
             <Text style={styles.firstLine}>
-              {i18n.formatString(i18n.airdrop.walletsCarousel.nextGoal, {
-                order: readableOrder[nextGoalIndex],
-              })}
+              {isAfterAirdrop()
+                ? i18n.airdrop.walletsCarousel.youReachedGoal
+                : i18n.formatString(i18n.airdrop.walletsCarousel.yourNextGoal, {
+                    order: readableOrder[nextGoalIndex],
+                  })}
             </Text>
             <Text style={styles.secondLine}>
-              {i18n.formatString(i18n.airdrop.walletsCarousel.nextAvatarTeaser, {
-                nearestGoalName: nextGoal.name,
-                nearestGoalThreshold: nextGoal.threshold,
+              {i18n.formatString(i18n.airdrop.walletsCarousel.avatarTeaser, {
+                goalName: isAfterAirdrop() ? lastGoal.name : nextGoal.name,
+                goalThreshold: isAfterAirdrop() ? lastGoal.threshold : nextGoal.threshold,
                 unit: CONST.preferredBalanceUnit,
               })}
             </Text>
