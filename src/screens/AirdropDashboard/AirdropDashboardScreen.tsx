@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
 import { images } from 'app/assets';
-import { Header, ScreenTemplate, Image, Countdown } from 'app/components';
+import { Header, ScreenTemplate, Image, Countdown, AirdropWalletsCarousel } from 'app/components';
 import { CONST, MainCardStackNavigatorParams, Route, RootStackParams } from 'app/consts';
 import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { typography, palette } from 'app/styles';
@@ -35,7 +35,15 @@ export const AirdropDashboardScreen: FC<Props> = ({ navigation }) => (
         </Text>
       </View>
       <Countdown dataEnd={CONST.airdropDate} />
-      <Image source={images.airdrop} style={styles.airdropImage} />
+      <AirdropWalletsCarousel
+        styles={{ marginTop: 20, marginBottom: 20 }}
+        items={[
+          { balance: 6.25, name: 'AAA' },
+          { balance: 0.5, name: 'BBB' },
+          { balance: 900, name: 'CCC' },
+        ]}
+      />
+      {/* <Image source={images.airdrop} style={styles.airdropImage} /> */}
       <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
     </View>
   </ScreenTemplate>
