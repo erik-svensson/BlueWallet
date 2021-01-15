@@ -119,6 +119,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
                 title: i18n.message.returnToDashboard,
                 onPress: () => {
                   this.navgitateToMainCard();
+                  // @ts-ignore
                   resolve();
                 },
               },

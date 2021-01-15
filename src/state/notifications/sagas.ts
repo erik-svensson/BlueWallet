@@ -2,7 +2,7 @@ import { takeEvery, put, call, all } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
-import { Wallet, CheckSubscriptionVersion } from 'app/consts';
+import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { StoreService } from 'app/services';
@@ -133,13 +133,13 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     );
     const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
     const response = yield call(checkSubscriptionEmail, { hashes, email });
-    const calls: any[] = [];
+    const ids: string[] = [];
     walletWithHashes.map((wallet: Wallet, index: number) => {
-      const resultForWallet = response.result[index];
-      const resultForWalletType = resultForWallet ? CheckSubscriptionVersion.ADD : CheckSubscriptionVersion.REMOVE;
-      calls.push(put(checkSubscriptionSuccess(wallet.id, resultForWalletType)));
+      if (response.result[index]) {
+        ids.push(wallet.id);
+      }
     });
-    if (calls.length) yield all(calls);
+    if (ids.length) yield put(checkSubscriptionSuccess(ids));
   } catch (error) {
     yield put(checkSubscriptionFailure(error.msg));
   }

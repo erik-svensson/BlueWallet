@@ -257,11 +257,6 @@ export enum ConfirmAddressFlowType {
   RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE',
 }
 
-export enum CheckSubscriptionVersion {
-  ADD = 'ADD',
-  REMOVE = 'REMOVE',
-}
-
 export interface Transaction {
   hash: string;
   txid: string;
