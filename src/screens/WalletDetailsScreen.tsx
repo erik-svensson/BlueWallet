@@ -29,7 +29,7 @@ import {
   deleteWallet as deleteWalletAction,
   DeleteWalletAction,
 } from 'app/state/wallets/actions';
-import { isWalletRecovery, getById, getWalletsLabels } from 'app/state/wallets/selectors';
+import { getById, getWalletsLabels } from 'app/state/wallets/selectors';
 import { palette, typography } from 'app/styles';
 
 import { WatchOnlyWallet } from '../../class';
@@ -155,16 +155,17 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
         email,
         flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
         walletsToSubscribe: [wallet],
+        onBack: () => navigation.navigate(Route.Dashboard),
       });
     } else {
       navigation.navigate(Route.ConfirmEmail, {
         email,
         flowType: ConfirmAddressFlowType.UNSUBSCRIBE,
         walletsToSubscribe: [wallet],
-        onBack: () =>
-          navigation.navigate(Route.WalletDetails, {
-            id: wallet.id,
-          }),
+        onBack: () => navigation.navigate(Route.Dashboard),
+        //   , {
+        //   id: wallet.id,
+        // }),
       });
     }
   };

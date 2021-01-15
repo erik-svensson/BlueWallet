@@ -131,7 +131,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     const walletWithHashes = yield Promise.all(
       wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
     );
-    const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
+    const hashes = walletWithHashes.forEach((wallet: Wallet) => wallet.hash);
     const response = yield call(checkSubscriptionEmail, { hashes, email });
     const ids: string[] = [];
     walletWithHashes.map((wallet: Wallet, index: number) => {
@@ -139,7 +139,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
         ids.push(wallet.id);
       }
     });
-    if (ids.length) yield put(checkSubscriptionSuccess(ids));
+    yield put(checkSubscriptionSuccess(ids));
   } catch (error) {
     yield put(checkSubscriptionFailure(error.msg));
   }

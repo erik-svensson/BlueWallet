@@ -13,7 +13,6 @@ import {
   TagsType,
   Tags,
 } from 'app/consts';
-import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 
@@ -76,9 +75,6 @@ export const getWalletsLabels = createSelector(wallets, walletsList => walletsLi
 export const walletsWithRecoveryTransaction = createSelector(wallets, walletsList =>
   walletsList.filter(wallet => [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type].includes(wallet.type)),
 );
-
-export const isWalletRecovery = (type: string) =>
-  [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type].includes(type);
 
 export const allWallet = createSelector(wallets, walletsList => {
   const { incoming_balance, balance } = walletsList.reduce(
