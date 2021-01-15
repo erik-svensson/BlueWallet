@@ -78,7 +78,7 @@ describe('Wallets', () => {
           await app.wallets.dashboardScreen.tapOnAddButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('2-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('3-Key Vault');
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
           await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');

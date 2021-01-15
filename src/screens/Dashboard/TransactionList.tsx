@@ -62,7 +62,11 @@ class TransactionList extends PureComponent<Props> {
   renderItem = ({ item: transaction }: { item: Transaction }) => {
     return (
       <View style={styles.itemWrapper}>
-        <TransactionItem item={transaction} onPress={this.onTransactionItemPress} />
+        <TransactionItem
+          testID={transaction.note && `transaction-item-${transaction.note}`}
+          item={transaction}
+          onPress={this.onTransactionItemPress}
+        />
       </View>
     );
   };
@@ -80,6 +84,7 @@ class TransactionList extends PureComponent<Props> {
     } = this.props;
     return (
       <SectionList
+        testID="dashboard-screen"
         ref={reference}
         refreshing={refreshing}
         onRefresh={onRefresh}

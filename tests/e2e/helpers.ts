@@ -3,6 +3,7 @@ export const SECOND = 1000;
 export const WAIT_FOR_ELEMENT_TIMEOUT = 10 * SECOND;
 
 export const DEFAULT_UNLOCK_PIN = '1234';
+export const DEFAULT_TRANSACTION_PASSWORD = 'qwertyui';
 
 interface ECDSA {
   PUBLIC_KEY: string;
@@ -41,6 +42,35 @@ export const WALLETS = {
   },
 };
 
+/** Wallets created for transaction testing. */
+export const WALLETS_WITH_COINS = {
+  '3-Keys Vault': {
+    SEED_PHRASE: 'viable reason stable tongue sibling jazz virus dress despair tunnel truly heart',
+    FAST_KEY:
+      '0442d7724d90fb60bc969f8b0fd46f3f63fe17637d5a0ba2fa9800b3b85946b72c3b81199572cd91bad23c87c3e96dbaa68e1c4b3e47d09276bd63138c584a5a7b',
+    CANCEL_KEY:
+      '04e8bc5e2428dcebe434306adaa944cb5eb7df80ec2e544f94ab2cea9bc5a70b5b1af42a83a936cd9d277413a8c5303001beaa268724270e4f2ce4d62010421960',
+  },
+
+  '2-Keys Vault': {
+    SEED_PHRASE: 'judge void hair leader legal fantasy strong clinic knee child great situate',
+    CANCEL_KEY:
+      '0442d7724d90fb60bc969f8b0fd46f3f63fe17637d5a0ba2fa9800b3b85946b72c3b81199572cd91bad23c87c3e96dbaa68e1c4b3e47d09276bd63138c584a5a7b',
+  },
+
+  'Standard HD P2SH': {
+    SEED_PHRASE: 'roof jump holiday jaguar calm mammal vapor acoustic marine modify hope enemy',
+  },
+
+  'Standard P2SH': {
+    SEED_PHRASE: 'cNVqz3DVCUXUSbFWVuth7CUqmgaqCz7yck2kDjt5zgUxgLkK4WZi',
+  },
+
+  'Standard HD Segwit': {
+    SEED_PHRASE: 'patrol correct rural firm special eight smooth orphan pilot oppose wealth rival',
+  },
+};
+
 /** ECDSA key for testing create new wallet feature. */
 export const ECDSA_KEYS: { FAST_KEY: ECDSA; CANCEL_KEY: ECDSA } = {
   FAST_KEY: {
@@ -65,3 +95,8 @@ export const isBeta = (): boolean => {
 
   return argparse.getArgValue('configuration').includes('beta');
 };
+
+export const createRandomNote = () =>
+  Math.random()
+    .toString(36)
+    .substring(7);

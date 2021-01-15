@@ -426,6 +426,7 @@ class SendCoinsScreen extends Component<Props, State> {
     const { transaction } = this.state;
     return (
       <InputItem
+        testID="send-coins-amount-input"
         label={i18n.transactions.details.amount}
         suffix="BTCV"
         keyboardType="numeric"
@@ -441,6 +442,7 @@ class SendCoinsScreen extends Component<Props, State> {
     const { transaction } = this.state;
     return (
       <InputItem
+        testID="send-coins-wallet-address-input"
         label={i18n.contactDetails.addressLabel}
         style={styles.addressInput}
         value={transaction.address}
@@ -482,6 +484,7 @@ class SendCoinsScreen extends Component<Props, State> {
         <Text style={styles.radioButtonsTitle}>{i18n.send.transaction.type}</Text>
 
         <RadioButton
+          testID="send-coins-secure-transaction-type-radio"
           title={i18n.send.transaction.alert}
           subtitle={i18n.send.transaction.alertDesc}
           value={bitcoin.payments.VaultTxType.Alert}
@@ -489,6 +492,7 @@ class SendCoinsScreen extends Component<Props, State> {
           onPress={this.onVaultTranscationSelect}
         />
         <RadioButton
+          testID="send-coins-secure-fast-transaction-type-radio"
           title={i18n.send.transaction.instant}
           subtitle={i18n.send.transaction.instantDesc}
           value={bitcoin.payments.VaultTxType.Instant}
@@ -510,6 +514,7 @@ class SendCoinsScreen extends Component<Props, State> {
       <ScreenTemplate
         footer={
           <Button
+            testID="send-coins-next-button"
             title={i18n.send.details.next}
             onPress={this.confirmTransactionWithNetworkConnectionCheck}
             containerStyle={styles.buttonContainer}
@@ -556,7 +561,11 @@ class SendCoinsScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
 
-          <InputItem label={i18n.send.details.note} setValue={memo => this.setState({ memo })} />
+          <InputItem
+            testID="send-coins-note-input"
+            label={i18n.send.details.note}
+            setValue={memo => this.setState({ memo })}
+          />
 
           {this.shouldShowVaultTransaction() && this.renderVaultTransactions()}
         </View>

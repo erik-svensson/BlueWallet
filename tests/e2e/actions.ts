@@ -1,10 +1,15 @@
-import Detox, { waitFor } from 'detox';
+import Detox, { waitFor, by } from 'detox';
 
 import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers';
 
 interface TypeTextOptions {
   replace?: boolean;
   closeKeyboard?: boolean;
+}
+
+interface ScrollToElementOptions {
+  pixels: number;
+  direction: Detox.Direction;
 }
 
 const Actions = () => {
@@ -38,7 +43,18 @@ const Actions = () => {
     await element.multiTap(times);
   };
 
-  return { waitForElement, typeText, tap, multiTap };
+  const scrollToElement = async (
+    element: Detox.DetoxAny,
+    scrollableElement: string,
+    options: ScrollToElementOptions = { pixels: 100, direction: 'down' },
+  ) => {
+    await waitFor(element)
+      .toBeVisible()
+      .whileElement(by.id(scrollableElement))
+      .scroll(options.pixels, options.direction);
+  };
+
+  return { waitForElement, typeText, tap, multiTap, scrollToElement };
 };
 
 export default Actions();
