@@ -12,7 +12,7 @@ import { selectors as notificationSelectors } from 'app/state/notifications';
 import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
 
-const i18n = require('../../../loc');
+const i18n = require('../../loc');
 
 type State = {
   userCode: string;

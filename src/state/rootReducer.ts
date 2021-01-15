@@ -8,6 +8,7 @@ import { AuthenticatorsState, authenticatorsReducer } from './authenticators/red
 import { contactsReducer, ContactsState } from './contacts/reducer';
 import { ElectrumXState, electrumXReducer } from './electrumX/reducer';
 import { filtersReducer } from './filters/reducer';
+import { NotificationState, notificationReducer } from './notifications/reducer';
 import { TimeCounterState, timeCounterReducer } from './timeCounter/reducer';
 import { ToastMessagesState, toastMessageReducer } from './toastMessages/reducer';
 import { transactionsNotesReducer, TransactionsNotesState } from './transactionsNotes/reducer';
@@ -25,6 +26,7 @@ export interface ApplicationState {
   authentication: AuthenticationState;
   filters: Filters;
   toastMessages: ToastMessagesState;
+  notifications: NotificationState;
 }
 
 export const rootReducer = combineReducers({
@@ -38,4 +40,5 @@ export const rootReducer = combineReducers({
   authentication: authenticationReducer,
   filters: filtersReducer,
   toastMessages: toastMessageReducer,
+  notifications: notificationReducer,
 });

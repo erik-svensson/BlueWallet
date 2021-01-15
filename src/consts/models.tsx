@@ -18,6 +18,7 @@ import {
 
 export const CONST = {
   pinCodeLength: 4,
+  codeLength: 4,
   transactionMinPasswordLength: 8,
   allWallets: 'All wallets',
   receive: 'receive',
@@ -145,6 +146,8 @@ export enum Route {
   CurrentPin = 'CurrentPin',
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
+  AddNotificationEmail = 'AddNotificationEmail',
+  ConfirmNotificationCode = 'ConfirmNotificationCode',
   CreateTransactionPassword = 'CreateTransactionPassword',
   ConfirmTransactionPassword = 'ConfirmTransactionPassword',
   AdvancedOptions = 'AdvancedOptions',

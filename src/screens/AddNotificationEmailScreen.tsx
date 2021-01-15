@@ -16,7 +16,7 @@ import {
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
-const i18n = require('../../../loc');
+const i18n = require('../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<

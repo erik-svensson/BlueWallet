@@ -26,7 +26,7 @@ import {
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
-import { selectors as notificationSelectors } from 'app/state/notifications';
+import { isNotificationEmailSet, email } from 'app/state/notifications/selectors';
 import { selectors as walletsSelector } from 'app/state/wallets';
 import { createWallet as createWalletAction, CreateWalletAction } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
@@ -348,8 +348,8 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
   appSettings: state.appSettings,
   walletsLabels: walletsSelector.getWalletsLabels(state),
-  isNotificationEmailSet: notificationSelectors.isNotificationEmailSet(state),
-  email: notificationSelectors.email(state),
+  isNotificationEmailSet: isNotificationEmailSet(state),
+  email: email(state),
 });
 
 const mapDispatchToProps = {

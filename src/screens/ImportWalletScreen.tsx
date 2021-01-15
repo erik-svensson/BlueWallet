@@ -21,7 +21,7 @@ import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
-import { selectors as notificationSelectors } from 'app/state/notifications';
+import { isNotificationEmailSet, email } from 'app/state/notifications/selectors';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { importWallet as importWalletAction, ImportWalletAction } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
@@ -520,8 +520,8 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
-  isNotificationEmailSet: notificationSelectors.isNotificationEmailSet(state),
-  email: notificationSelectors.email(state),
+  isNotificationEmailSet: isNotificationEmailSet(state),
+  email: email(state),
 });
 
 const mapDispatchToProps = {

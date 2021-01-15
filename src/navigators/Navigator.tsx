@@ -26,6 +26,7 @@ import {
   checkConnection as checkConnectionAction,
   CheckConnectionAction,
 } from 'app/state/electrumX/actions';
+import { selectors as notificationSelectors } from 'app/state/notifications';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { isAndroid, isIos } from 'app/styles';
 
