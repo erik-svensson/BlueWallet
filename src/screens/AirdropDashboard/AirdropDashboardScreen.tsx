@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
 import { images } from 'app/assets';
-import { Header, ScreenTemplate, Image, Countdown, AirdropWalletsCarousel } from 'app/components';
+import { Header, ScreenTemplate, Image, Countdown } from 'app/components';
 import { CONST, MainCardStackNavigatorParams, Route, RootStackParams } from 'app/consts';
 import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { typography, palette } from 'app/styles';
