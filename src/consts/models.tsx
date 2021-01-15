@@ -6,13 +6,15 @@ import { ButtonProps } from 'react-native-elements';
 import { ImageStyle } from 'react-native-fast-image';
 
 import { FastImageSource } from 'app/components';
+
 import {
   HDSegwitP2SHAirWallet,
   HDSegwitP2SHArWallet,
   HDSegwitBech32Wallet,
   SegwitP2SHWallet,
   HDSegwitP2SHWallet,
-} from 'app/legacy';
+  HDLegacyP2PKHWallet,
+} from '../../class';
 
 export const CONST = {
   pinCodeLength: 4,
@@ -35,6 +37,23 @@ export const CONST = {
   tcVersionRequired: 2,
   tcVersion: 'tcVersion',
   emailCodeErrorMax: 3,
+  walletsDefaultGapLimit: 20,
+};
+
+export const ADDRESSES_TYPES = {
+  p2wsh_p2sh: 'p2wsh-p2sh',
+  p2pkh: 'p2pkh',
+  p2wpkh: 'p2wpkh',
+  p2wpkh_p2sh: 'p2wpkh-p2sh',
+};
+
+export const WALLETS_ADDRESSES_TYPES = {
+  [HDSegwitP2SHArWallet?.type]: ADDRESSES_TYPES.p2wsh_p2sh,
+  [HDSegwitP2SHAirWallet?.type]: ADDRESSES_TYPES.p2wsh_p2sh,
+  [HDLegacyP2PKHWallet?.type]: ADDRESSES_TYPES.p2pkh,
+  [HDSegwitBech32Wallet?.type]: ADDRESSES_TYPES.p2wpkh,
+  [HDSegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
+  [SegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
@@ -46,6 +65,7 @@ export interface SocketOptions {
 }
 
 export type SocketCallback = (address: string) => void;
+
 export const ELECTRUM_VAULT_SEED_PREFIXES = {
   SEED_PREFIX: '01', // Standard wallet
   SEED_PREFIX_SW: '100', // Segwit wallet
@@ -166,6 +186,7 @@ export interface Wallet {
   address?: string;
   secret: string;
   type: string;
+  hash?: string;
   typeReadable: string;
   unconfirmed_balance: number;
   confirmed_balance: number;
@@ -188,6 +209,18 @@ export interface Wallet {
   getScriptHashes: () => string[];
   getAddressForTransaction: () => string;
   password?: string;
+  pubKeys?: Buffer[];
+  getDerivationPath: () => string;
+}
+
+export interface WalletPayload {
+  name: string;
+  gap_limit: number;
+  derivation_path?: Record<string, unknown>;
+  xpub: string;
+  address_type: string;
+  instant_public_key?: string;
+  recovery_public_key?: string;
 }
 
 export interface ActionMeta {
@@ -216,6 +249,7 @@ export enum ConfirmAddressFlowType {
   NEW_ADDRESS = 'NEW_ADDRESS',
   DELETE_ADDRESS = 'DELETE_ADDRESS',
   ANOTHER_ACTION = 'ANOTHER_ACTION',
+  UNSUBSCRIBE = 'UNSUBSCRIBE',
   RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT',
   RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE',
 }
@@ -383,7 +417,7 @@ export type PasswordNavigatorParams = {
   [Route.ConfirmTransactionPassword]: { setPassword: string };
   [Route.ConfirmNotificationCode]: { email?: string };
   [Route.ChooseWalletsForNotification]: {
-    address: string;
+    email: string;
     isOnboarding?: boolean;
   };
   [Route.AddNotificationEmail]: undefined;
@@ -392,7 +426,7 @@ export type PasswordNavigatorParams = {
 export type NotificationNavigatorParams = {
   [Route.AddNotificationEmail]: undefined;
   [Route.ChooseWalletsForNotification]: {
-    address: string;
+    email: string;
     onboarding?: boolean;
   };
   [Route.ConfirmNotificationCode]: { email?: string };
@@ -487,24 +521,24 @@ export type MainCardStackNavigatorParams = {
     onScanned: () => void;
   };
   [Route.Notifications]: {
-    walletToSubscribe?: Wallet;
+    walletsToSubscribe?: Wallet[];
   };
   [Route.AddEmail]: {
-    walletToSubscribe?: Wallet;
+    walletsToSubscribe?: Wallet[];
   };
   [Route.ConfirmEmail]: {
-    address: string;
+    email: string;
     newAddress?: string;
     flowType: ConfirmAddressFlowType;
-    walletToSubscribe?: Wallet;
+    walletsToSubscribe?: Wallet[];
     onBack?: () => void;
   };
   [Route.ChooseWalletsForNotification]: {
-    address: string;
+    email: string;
     isOnboarding?: boolean;
   };
   [Route.ChangeEmail]: {
-    address: string;
+    email: string;
   };
   [Route.ReceiveNotificationsConfirmation]: {
     address: string;

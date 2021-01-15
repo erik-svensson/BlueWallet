@@ -7,6 +7,8 @@ export interface NotificationState {
   isNotificationEmailSet: boolean;
   isNotificationEmailSkip: boolean;
   isLoading: boolean;
+  sessionToken: string;
+  subscribedIds: string[];
 }
 
 const initialState: NotificationState = {
@@ -16,6 +18,8 @@ const initialState: NotificationState = {
   isNotificationEmailSet: false,
   isNotificationEmailSkip: false,
   isLoading: true,
+  sessionToken: '',
+  subscribedIds: [],
 };
 
 export const notificationReducer = (state = initialState, action: NotificationActionType): NotificationState => {
@@ -57,6 +61,47 @@ export const notificationReducer = (state = initialState, action: NotificationAc
       return {
         ...state,
         pin: action.payload.pin,
+      };
+    case NotificationAction.SubscribeWalletSuccessAction:
+      return {
+        ...state,
+        sessionToken: action.payload.sessionToken,
+      };
+    case NotificationAction.SubscribeWalletFailureAction:
+      return {
+        ...state,
+        error: action.error,
+      };
+    case NotificationAction.UnsubscribeWalletSuccessAction:
+      return {
+        ...state,
+        sessionToken: action.payload.sessionToken,
+      };
+    case NotificationAction.UnsubscribeWalletFailureAction:
+      return {
+        ...state,
+        error: action.error,
+      };
+    case NotificationAction.AuthenticateEmailSuccessAction:
+      return {
+        ...state,
+        sessionToken: '',
+      };
+    case NotificationAction.AuthenticateEmailFailureAction:
+      return {
+        ...state,
+        error: action.error,
+      };
+    case NotificationAction.CheckSubscriptionSuccessAction: {
+      return {
+        ...state,
+        subscribedIds: action.payload.subscribedIds,
+      };
+    }
+    case NotificationAction.CheckSubscriptionFailureAction:
+      return {
+        ...state,
+        error: action.error,
       };
     default:
       return state;

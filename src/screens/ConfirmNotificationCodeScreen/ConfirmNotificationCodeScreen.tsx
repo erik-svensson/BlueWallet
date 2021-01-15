@@ -25,11 +25,11 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
     StackNavigationProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>
   >;
-
   createNotificationEmail: Function;
   route: RouteProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>;
   email: string;
   pin: string;
+  createTc: Function;
 }
 
 class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
@@ -57,6 +57,23 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     });
   };
 
+  onSuccess = () => {
+    const { createTc, navigation } = this.props;
+
+    CreateMessage({
+      title: i18n.contactCreate.successTitle,
+      description: i18n.onboarding.successCompletedDescription,
+      type: MessageType.success,
+      buttonProps: {
+        title: i18n.onboarding.successCompletedButton,
+        onPress: () => {
+          createTc();
+          navigation.pop();
+        },
+      },
+    });
+  };
+
   onError = () => {
     const { numberAttempt } = this.state;
     const numberFail = numberAttempt + 1;
@@ -77,26 +94,15 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   };
 
   onConfirm = () => {
-    const { createNotificationEmail, navigation, email, pin } = this.props;
+    const { pin, createNotificationEmail, email } = this.props;
+
     const { userCode } = this.state;
 
     const passedCode = pin === userCode;
 
     if (passedCode) {
       createNotificationEmail(email, {
-        onSuccess: () => {
-          CreateMessage({
-            title: i18n.contactCreate.successTitle,
-            description: i18n.onboarding.successCompletedDescription,
-            type: MessageType.success,
-            buttonProps: {
-              title: i18n.onboarding.successCompletedButton,
-              onPress: () => {
-                navigation.pop();
-              },
-            },
-          });
-        },
+        onSuccess: this.onSuccess,
       });
     } else {
       this.onError();
@@ -121,13 +127,13 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
               onPress={this.onConfirm}
               disabled={userCode.length < CONST.codeLength}
             />
-            <FlatButton
+            {/* <FlatButton // TODO uncomment when api for resend works
               testID="resend-code-email"
               containerStyle={styles.resendButton}
               title={i18n._.resendCode}
               disabled={allowReSend}
               onPress={this.resendCode}
-            />
+            /> */}
           </>
         }
       >

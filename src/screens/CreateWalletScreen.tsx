@@ -99,10 +99,10 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           onButtonPress: isNotificationEmailSet
             ? () =>
                 this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
-                  address: email,
+                  address: email, // TODO
                   flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
                 })
-            : undefined,
+            : undefined, // TODO in create wallet logic
         });
       },
       onFailure: () => onError(),

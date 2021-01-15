@@ -11,12 +11,10 @@ export const setRequestInterceptor = (appInstance: AxiosInstance) =>
   appInstance.interceptors.request.use(
     async (config: AxiosRequestConfig) => {
       //TODO: still no idea what here need improvements
-
       return config;
     },
     error => Promise.reject(error),
   );
-
 export const setResponseInterceptor = (appInstance: AxiosInstance) =>
   appInstance.interceptors.response.use(
     response => {
@@ -25,8 +23,6 @@ export const setResponseInterceptor = (appInstance: AxiosInstance) =>
     },
     error => Promise.reject(error),
   );
-
 setRequestInterceptor(api);
 setResponseInterceptor(api);
-
 export default api;

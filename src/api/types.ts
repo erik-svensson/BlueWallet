@@ -1,29 +1,7 @@
-import { Transaction } from 'app/consts';
-
-export interface Wallet {
-  balance: number;
-  hideBalance: boolean;
-  preferredBalanceUnit: string;
-  label: string;
-  chain: string;
-  num_addresses: number;
-  transactions: Transaction[];
-  address?: string;
-  secret: string;
-  type: string;
-  typeReadable: string;
-  unconfirmed_balance: number;
-  confirmed_balance: number;
-  outgoing_balance: number;
-  incoming_balance: number;
-  utxo: any[];
-  _xpub: string;
-  id: string;
-  password?: string;
-}
+import { WalletPayload } from 'app/consts';
 
 export interface SubscribePayload {
-  wallets: Wallet[];
+  wallets: WalletPayload[];
   email: string;
   lang: string;
 }
@@ -35,7 +13,7 @@ export interface UnsubscribePayload {
 
 export interface AuthenticatePayload {
   session_token: string;
-  pin: number;
+  pin: string;
 }
 
 export interface ModifyPayload {
@@ -51,4 +29,7 @@ export interface CheckSubscriptionPayload {
 
 export interface VerifyEmailPayload {
   email: string;
+}
+export interface SubscribeWalletSuccessPayload {
+  sessionToken: string;
 }

@@ -14,6 +14,7 @@ const {
   APP_ID,
   APPLICATION_NAME,
   EXPLORER_URL,
+  NOTIFICATION_EMAIL_URL,
 } = Config;
 
 const defaultNetworkName = 'bitcoinvault';
@@ -35,4 +36,5 @@ export default {
   electrumXProtocolVersion: ELECTRUM_X_PROTOCOL_VERSION || '2.0',
   explorerUrl: EXPLORER_URL || 'https://explorer.bitcoinvault.global',
   sentryDsn: SENTRY_DSN,
+  emailNotificationsURL: NOTIFICATION_EMAIL_URL,
 };
