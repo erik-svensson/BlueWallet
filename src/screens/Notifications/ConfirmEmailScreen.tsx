@@ -47,10 +47,10 @@ interface Props {
   authenticate: (session_token: string, pin: string, meta: ActionMeta) => AuthenticateEmailAction;
   setNotificationEmail: (email: string) => SetNotificationEmailAction;
   language: string;
-  sessionToken: any;
-  notificationError: any;
-  storedEmail: any;
-  storedPin: any;
+  sessionToken: string;
+  notificationError: string;
+  storedEmail: string;
+  storedPin: string;
 }
 
 interface State {
