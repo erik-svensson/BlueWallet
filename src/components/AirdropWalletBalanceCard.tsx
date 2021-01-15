@@ -29,7 +29,7 @@ export const AirdropWalletBalanceCard: FC<Props> = ({ walletDetails }) => {
   const nextGoal = unreachedGoals[0] || airdropGoals[airdropGoals.length - 1];
   const nextGoalIndex = airdropGoals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
 
-  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold < walletDetails.balance);
+  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= walletDetails.balance);
   // TODO: edge case of "none goals reached" not covered by designs. Awaiting UX input. For now returning first one - "shrimp"
   const lastGoal = reachedGoals[reachedGoals.length - 1] || airdropGoals[0];
 
