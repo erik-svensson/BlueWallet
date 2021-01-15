@@ -46,3 +46,5 @@ export { SocialShareTwitterButton } from './SocialShareTwitterButton';
 export { AirdropFloatingButton } from './AirdropFloatingButton';
 export { AirdropWalletBalanceCircle } from './AirdropWalletBalanceCircle';
 export { AirdropWalletBalance } from './AirdropWalletBalance';
+export { AirdropWalletsCarousel } from './AirdropWalletsCarousel';
+export { AirdropWalletBalanceCard } from './AirdropWalletBalanceCard';
