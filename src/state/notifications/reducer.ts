@@ -95,7 +95,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
     case NotificationAction.CheckSubscriptionSuccessAction: {
       return {
         ...state,
-        subscribedIds: action.payload.result,
+        subscribedIds: action.payload.subscribedIds,
       };
     }
     case NotificationAction.CheckSubscriptionFailureAction:

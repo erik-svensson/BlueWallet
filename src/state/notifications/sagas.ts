@@ -131,10 +131,10 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     const walletWithHashes = yield Promise.all(
       wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
     );
-    const hashes = walletWithHashes.forEach((wallet: Wallet) => wallet.hash);
+    const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
     const response = yield call(checkSubscriptionEmail, { hashes, email });
     const ids: string[] = [];
-    walletWithHashes.map((wallet: Wallet, index: number) => {
+    walletWithHashes.forEach((wallet: Wallet, index: number) => {
       if (response.result[index]) {
         ids.push(wallet.id);
       }
