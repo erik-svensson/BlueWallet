@@ -223,6 +223,8 @@ describe('Wallets', () => {
         await app.navigationBar.changeTab('settings');
         await app.settings.settingsScreen.tapOnAdvancedOptions();
         await app.settings.advancedOptionsScreen.tapOnAdvancedOptionsSwitch();
+        // await app.settings.tapOnAdvancedOptions();
+        // await app.settings.tapOnAdvancedOptionsSwitch();
         await app.header.tapOnBackButton();
         await app.navigationBar.changeTab('wallets');
       });

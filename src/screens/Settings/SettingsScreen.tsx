@@ -34,9 +34,13 @@ export const SettingsScreen = (props: Props) => {
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
 
+  const navigateToTermsConditions = () => navigation.navigate(Route.TermsConditions);
+
   const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
 
   const onAdvancedOptionsChange = () => navigation.navigate(Route.AdvancedOptions);
+
+  const onNotificationsOptionsChange = () => navigation.navigate(Route.Notifications, {});
 
   const onFingerprintLoginChange = async (value: boolean) => {
     dispatch(updateBiometricSetting(value));
@@ -44,18 +48,14 @@ export const SettingsScreen = (props: Props) => {
 
   const renderGeneralSettings = () => (
     <>
+      <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} />
       <ListItem
-        testID="language-settings-item"
-        title={i18n.settings.language}
-        source={icons.languageIcon}
-        onPress={navigateToSelectLanguage}
-      />
-      <ListItem
-        testID="advanced-options-settings-item"
+        testID="advanced-options"
         title={i18n.settings.advancedOptions}
         source={icons.buildIcon}
         onPress={onAdvancedOptionsChange}
       />
+      <ListItem title={i18n.settings.notifications} source={icons.bell} onPress={onNotificationsOptionsChange} />
     </>
   );
 
@@ -94,12 +94,15 @@ export const SettingsScreen = (props: Props) => {
   );
 
   const renderAboutSettings = () => (
-    <ListItem
-      testID="about-us-settings-item"
-      onPress={navigateToAboutUs}
-      title={i18n.settings.aboutUs}
-      source={icons.infoIcon}
-    />
+    <>
+      <ListItem
+        testID="about-us-settings-item"
+        onPress={navigateToAboutUs}
+        title={i18n.settings.aboutUs}
+        source={icons.infoIcon}
+      />
+      <ListItem onPress={navigateToTermsConditions} title={i18n.settings.terms} source={icons.termsIcon} />
+    </>
   );
 
   return (

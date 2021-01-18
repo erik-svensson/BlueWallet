@@ -22,11 +22,14 @@ module.exports = {
     save: 'Save',
     scan: 'Scan',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
+    skip: 'Skip this step',
   },
   termsConditions: {
     header: 'Terms & Conditions',
     title: 'Agreement to Terms',
     text: '',
+    readTermsConditions: 'I’ve read Terms & Conditions',
+    readPrivacyPolicy: 'I’ve read Privacy Policy',
     buttons: { agree: 'I agree', disagree: 'I disagree' },
     modal: {
       header: 'Are you sure?',
@@ -233,6 +236,59 @@ module.exports = {
     wrongMnemonic: 'Wrong mnemonic',
     wrongMnemonicDesc:
       'Your mnemonic does not match any supported wallet. You are trying to import an invalid mnemonic or wallet that has never been used',
+    goToWalletDetails: 'Go to Wallet Details',
+  },
+  notifications: {
+    addYourAddress: 'Add your email address',
+    addYourEmailFor: 'Add your email for notifications',
+    addEmail: 'Add email',
+    addYourAddressDescription: 'It is used to send you transaction notifications from chosen wallets.',
+    addYourEmailForDescription:
+      'You can add your email address. It is used to send you transaction notifications from chosen wallets.',
+    change: 'Change your email',
+    title: 'Configure your notifications',
+    yourEmail: 'Your email',
+    description:
+      'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
+    delete: 'Delete email',
+    invalidAddressError: 'Enter valid email address',
+    yourSubscriptions: 'Your subscriptions',
+    confirmEmail: 'Confirm your email address',
+    pleaseEnter: 'Please enter the code we sent to: ',
+    resend: 'Resend code',
+    getNotification: 'Get notifications',
+    chooseWalletsDescription: 'Choose wallets from which you’d like to receive transaction notifications',
+    emailAddedSuccessMessage: 'Hooray!\n You have successfully added your email address.',
+    goToNotifications: 'Go to Notifications',
+    changeEmailTitle: 'Change your email',
+    changeEmailDescription:
+      'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
+    yourCurrentEmail: 'Your current email',
+    newEmail: 'New email',
+    confirmCurrentTitle: 'Confirm your current email address',
+    confirmCurrentDescription: 'To confirm the request, please enter the code we sent to ',
+    confirmNewTitle: 'Confirm your new email address',
+    confirmNewDescription: 'Now confirm your new email address. Please enter the code we sent to ',
+    emailChangedSuccessMessage: 'Hooray!\n You have successfully updated your email address.',
+    updateNotificationPreferences: 'Hooray!\n You have successfully updated your notification preferences.',
+    verifyAction: 'Verify this action',
+    verifyActionDescription: 'To confirm the request, please enter the code we sent to ',
+    deleteEmail: 'Delete email address',
+    deleteYourEmail: 'Delete your email',
+    deleteYourEmailDescription: 'your email address',
+    deleteEmailSuccessMessage: 'Hooray!\n You have successfully deleted your email address.',
+    codeError: 'Please enter a valid code.\n You have {attemptsLeft} more attempts.',
+    codeFinalError:
+      'You have entered an invalid code {attemptsNo} times.\n We have sent a new code to your email address.',
+    walletSubscribedSuccessMessage:
+      'Hooray!\n You have successfully added your email address and subscribed to the notifications.',
+    no: 'No',
+    yes: 'Yes',
+    notifications: 'Notifications',
+    receiveTransactionDescription:
+      'Would you like to receive transaction notifications from this wallet to your email address ',
+    noteFirst: 'Note: ',
+    noteSecond: 'If you want to change your email address you can do it later in Settings.',
   },
   onboarding: {
     changePin: 'Change PIN',
@@ -241,6 +297,8 @@ module.exports = {
     confirmPin: 'Confirm PIN',
     createNewPin: 'New PIN',
     createPassword: 'Create transaction password',
+    addNotificationEmailDescription:
+      'If you want to receive email notifications, please enter your email address. We will send you information about your transaction statuses. You can always change it later in Settings.',
     createPasswordDescription:
       'Your Transaction Password will be used to verify all of the transactions. You cannot change it later. Transaction Password must contain at least 8 alphanumerical characters.',
     createPin: 'Create PIN',
@@ -262,6 +320,9 @@ module.exports = {
     successDescription: 'Hooray! \n  You have successfully created your PIN.',
     successDescriptionChangedPin: 'Hooray! \n  You have successfully changed your PIN.',
     tryAgain: 'Try again after',
+    emailValidation: 'Enter valid email address',
+    validationCodeError: 'Please enter a valid code. You have {numberAttempt} more attempts.',
+    resendCodeError: 'You have entered an invalid code 3 times. \n We have sent a new code to your email address.',
   },
   receive: {
     details: {
@@ -382,6 +443,7 @@ module.exports = {
   },
   settings: {
     about: 'About',
+    terms: 'Terms & Privacy',
     aboutUs: 'About us',
     advancedOptions: 'Advanced options',
     Biometrics: 'Allow biometrics',
@@ -392,6 +454,7 @@ module.exports = {
     general: 'General',
     header: 'Settings',
     language: 'Language',
+    notifications: 'Notifications',
     notSupportedFingerPrint: 'Your device does not support fingerprint',
     security: 'Security',
     TouchID: 'Allow fingerprint',
@@ -543,6 +606,8 @@ module.exports = {
       nameLabel: 'Name',
       showWalletXPUB: 'Show wallet XPUB',
       typeLabel: 'Type',
+      subscribeWallet: 'Subscribe to email notifications',
+      unsubscribeWallet: 'Unsubscribe from email notifications',
     },
     errors: {
       duplicatedPublicKey: 'The public key has already been added',

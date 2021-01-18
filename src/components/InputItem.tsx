@@ -37,7 +37,7 @@ export class InputItem extends Component<Props, State> {
   }
 
   shouldComponentUpdate(nextProps: Props) {
-    return this.props.value !== nextProps.value;
+    return this.props.value !== nextProps.value || this.props.error !== nextProps.error;
   }
 
   onFocus = () => {
@@ -109,7 +109,7 @@ export class InputItem extends Component<Props, State> {
 
   render() {
     const { isAnimatedFocused, isActive, height } = this.state;
-    const { label, suffix, error, secureTextEntry } = this.props;
+    const { label, suffix, error, secureTextEntry, autoCapitalize } = this.props;
     const keyboardType = secureTextEntry ? 'default' : defaultKeyboardType;
 
     const top = this.state.isAnimatedFocused.interpolate({
@@ -121,7 +121,6 @@ export class InputItem extends Component<Props, State> {
       inputRange: [0, 1],
       outputRange: [14, 12],
     });
-
     return (
       <View style={styles.container}>
         <Animated.Text style={[styles.label, { top, fontSize }]}>{label}</Animated.Text>
