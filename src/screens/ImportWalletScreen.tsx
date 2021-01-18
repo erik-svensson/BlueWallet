@@ -21,7 +21,7 @@ import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
-import { isNotificationEmailSet, email } from 'app/state/notifications/selectors';
+import { isNotificationEmailSet, storedEmail } from 'app/state/notifications/selectors';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { importWallet as importWalletAction, ImportWalletAction } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
@@ -143,8 +143,15 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     });
   };
 
+  getNotificationDescription = () => (
+    <Text style={styles.notificationDescription}>
+      {i18n.notifications.receiveTransactionDescription}
+      <Text style={styles.boldedText}>{this.props.email}</Text>
+    </Text>
+  );
+
   saveWallet = async (newWallet: any) => {
-    const { importWallet, wallets, isNotificationEmailSet, email } = this.props;
+    const { importWallet, wallets, email } = this.props;
     if (wallets.some(wallet => wallet.secret === newWallet.secret)) {
       this.showErrorMessageScreen({
         title: i18n.wallets.importWallet.walletInUseValidationError,
@@ -156,13 +163,29 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
       importWallet(newWallet, {
         onSuccess: () => {
-          // isNotificationEmailSet
-          //   ? this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
-          //       address: email,
-          //       flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
-          //     })
-          //   : // TODO in import wallet logic
-          this.showSuccessImportMessageScreen();
+          this.props.navigation.navigate(Route.CreateWalletSuccess, {
+            secret: newWallet.getSecret(),
+            onButtonPress: !!email
+              ? () =>
+                  this.props.navigation.navigate(Route.Entity, {
+                    title: i18n.notifications.notifications,
+                    subtitle: i18n.notifications.getNotification,
+                    description: this.getNotificationDescription(),
+                    note: i18n.notifications.noteSecond,
+                    onConfirm: () =>
+                      this.props.navigation.navigate(Route.ConfirmEmail, {
+                        email,
+                        flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+                        walletsToSubscribe: [newWallet],
+                        onBack: () =>
+                          this.props.navigation.navigate(Route.WalletDetails, {
+                            id: newWallet.id,
+                          }),
+                      }),
+                    onBack: () => this.props.navigation.navigate(Route.Dashboard),
+                  })
+              : undefined,
+          });
         },
         onFailure: (error: string) =>
           this.showErrorMessageScreen({
@@ -525,7 +548,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isNotificationEmailSet: isNotificationEmailSet(state),
-  email: email(state),
+  email: storedEmail(state),
 });
 
 const mapDispatchToProps = {
@@ -580,5 +603,16 @@ const styles = StyleSheet.create({
   arSubtitleContainer: {
     paddingHorizontal: 30,
     marginBottom: 30,
+  },
+  notificationDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    textAlign: 'center',
+    lineHeight: 19,
+    marginTop: 18,
+  },
+  boldedText: {
+    ...typography.headline9,
+    color: palette.textBlack,
   },
 });

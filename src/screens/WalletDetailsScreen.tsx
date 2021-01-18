@@ -74,8 +74,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       return;
     }
     navigation.navigate(Route.Entity, {
-      description: `${i18n.wallets.deleteWallet.description1} ${wallet.label}
-      ${i18n.wallets.deleteWallet.description2}`,
+      description: `${i18n.wallets.deleteWallet.description1} ${wallet.label}${i18n.wallets.deleteWallet.description2}`,
       title: i18n.wallets.deleteWallet.header,
       subtitle: i18n.wallets.deleteWallet.title,
       onConfirm: () => {

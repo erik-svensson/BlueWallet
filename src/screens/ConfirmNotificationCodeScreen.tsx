@@ -154,7 +154,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: ApplicationState) => ({
   pin: notificationSelectors.pin(state),
-  email: notificationSelectors.email(state),
+  email: notificationSelectors.storedEmail(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmNotificationCodeScreen);
