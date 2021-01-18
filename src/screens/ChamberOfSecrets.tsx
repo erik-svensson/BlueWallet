@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-raw-text */
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
@@ -173,6 +173,9 @@ const ChamberOfSecrets = (props: Props) => {
             testID="add-wallet-name-input"
             value={walletOptions.name}
             setValue={onWalletNameChange}
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+            }}
             label="Wallet name"
           />
           <InputItem
@@ -180,6 +183,9 @@ const ChamberOfSecrets = (props: Props) => {
             multiline
             value={walletOptions.seedPhrase}
             setValue={onSeedPhraseChange}
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+            }}
             label="Seed phrase"
           />
         </>

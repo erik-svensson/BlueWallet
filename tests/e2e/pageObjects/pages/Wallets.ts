@@ -74,7 +74,7 @@ const Wallets = () => {
       importWalletButton: element(by.id('import-wallet-button')),
 
       async typeName(value: string) {
-        await actions.typeText(this.nameInput, value);
+        await actions.typeText(this.nameInput, value, { closeKeyboard: true });
       },
 
       async chooseType(type: WalletType) {
@@ -158,7 +158,7 @@ const Wallets = () => {
       },
 
       async typeSeedPhrase(value: string) {
-        await actions.typeText(this.seedPhraseInput, value);
+        await actions.typeText(this.seedPhraseInput, value, { closeKeyboard: true });
       },
 
       async submit() {

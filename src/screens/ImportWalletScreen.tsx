@@ -293,6 +293,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         testID="import-wallet-name"
         error={this.state.validationError}
         setValue={this.onLabelChange}
+        onSubmitEditing={() => Keyboard.dismiss()}
         label={i18n.wallets.add.inputLabel}
         maxLength={maxWalletNameLength}
       />

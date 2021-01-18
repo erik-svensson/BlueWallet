@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, TextInput as BaseTextInput, StyleProp, ViewStyle, Text } from 'react-native';
+import { StyleSheet, TextInput as BaseTextInput, StyleProp, ViewStyle, Text, Keyboard } from 'react-native';
 
 import { defaultKeyboardType } from 'app/consts';
 import { palette, typography } from 'app/styles';
@@ -42,6 +42,9 @@ export class TextAreaItem extends PureComponent<Props, State> {
           value={value}
           editable={editable}
           multiline={true}
+          onSubmitEditing={() => {
+            Keyboard.dismiss();
+          }}
           testID={testID}
           onFocus={this.onFocus}
           onBlur={this.onBlur}

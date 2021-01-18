@@ -1,7 +1,10 @@
-import 'jest';
+import { device } from 'detox';
 
-afterEach(async () => {
-  await device.launchApp({ newInstance: true, delete: true });
+beforeEach(async () => {
+  await device.launchApp({
+    newInstance: true,
+    delete: true,
+  });
 });
 
 afterAll(async () => {

@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { Keyboard, StatusBar, StyleSheet, View } from 'react-native';
 
 import { Button, InputItem, ScreenTemplate } from 'app/components';
 import { MainCardStackNavigatorParams, Route } from 'app/consts';
@@ -99,6 +99,9 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
           <InputItem
             focused={!!this.state.customString}
             multiline
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+            }}
             setValue={this.setCustomString}
             testID="custom-string-input"
             label={i18n.contactCreate.addressLabel}
