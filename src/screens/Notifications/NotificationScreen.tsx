@@ -15,6 +15,7 @@ import {
   CheckSubscriptionAction,
   checkSubscription,
 } from 'app/state/notifications/actions';
+import { storedEmail } from 'app/state/notifications/selectors';
 import { subscribedWallets } from 'app/state/wallets/selectors';
 import { typography, palette } from 'app/styles';
 
@@ -40,10 +41,10 @@ export class NotificationScreen extends Component<Props> {
     });
 
   onDeletePress = () =>
-    this.props.navigation.navigate(Route.DeleteEntity, {
+    this.props.navigation.navigate(Route.Entity, {
       title: i18n.notifications.deleteEmail,
       subtitle: i18n.notifications.deleteYourEmail,
-      name: i18n.notifications.deleteYourEmail,
+      description: `${i18n.wallets.deleteWallet.description1} ${i18n.notifications.deleteYourEmail}${i18n.wallets.deleteWallet.description2}`,
       onConfirm: this.deleteEmail,
     });
 
@@ -145,7 +146,7 @@ export class NotificationScreen extends Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  email: state.notifications.email,
+  email: storedEmail(state),
   wallets: subscribedWallets(state),
 });
 

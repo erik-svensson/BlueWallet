@@ -113,7 +113,7 @@ export enum Route {
   ImportAuthenticator = 'ImportAuthenticator',
   OptionsAuthenticator = 'OptionsAuthenticator',
   CreateWalletSuccess = 'CreateWalletSuccess',
-  DeleteEntity = 'DeleteEntity',
+  Entity = 'Entity',
   CreateAuthenticatorPublicKey = 'CreateAuthenticatorPublicKey',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticator = 'CreateAuthenticator',
@@ -160,7 +160,6 @@ export enum Route {
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
-  ReceiveNotificationsConfirmation = 'ReceiveNotificationsConfirmation',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -467,7 +466,14 @@ export type RootStackParams = {
   [Route.CreateAuthenticator]: undefined;
   [Route.CreateAuthenticatorPublicKey]: { id: string };
   [Route.CreateAuthenticatorSuccess]: { id: string };
-  [Route.DeleteEntity]: { onConfirm: () => void; name: string | undefined; subtitle: string; title: string };
+  [Route.Entity]: {
+    onConfirm: () => void;
+    description: string | React.ReactNode;
+    subtitle: string;
+    title: string;
+    note?: string;
+    onBack?: () => void;
+  };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
   [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: () => void };
@@ -504,10 +510,6 @@ export type RootStackParams = {
   };
   [Route.ChangeEmail]: {
     email: string;
-  };
-  [Route.ReceiveNotificationsConfirmation]: {
-    address: string;
-    flowType: ConfirmAddressFlowType;
   };
 };
 

@@ -49,8 +49,9 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
   onDelete = () => {
     const { deleteAuthenticator, navigation, authenticator } = this.props;
     authenticator &&
-      navigation.navigate(Route.DeleteEntity, {
-        name: authenticator?.name,
+      navigation.navigate(Route.Entity, {
+        description: `${i18n.wallets.deleteWallet.description1} ${authenticator?.name}
+        ${i18n.wallets.deleteWallet.description2}`,
         title: i18n.authenticators.delete.title,
         subtitle: i18n.authenticators.delete.subtitle,
         onConfirm: () => {

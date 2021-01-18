@@ -1,1 +1,1 @@
-export { default } from './DeleteEntityScreen';
+export { default } from './EntityScreen';

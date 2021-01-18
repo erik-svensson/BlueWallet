@@ -10,20 +10,24 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.DeleteEntity>;
-  route: RouteProp<RootStackParams, Route.DeleteEntity>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.Entity>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.Entity>;
 }
-export const DeleteEntityScreen = ({
+export const EntityScreen = ({
   navigation,
   route: {
-    params: { onConfirm, name, subtitle, title },
+    params: { onConfirm, description, subtitle, title, note, onBack },
   },
 }: Props) => {
   const [clicked, setClicked] = useState(false);
 
-  const onPress = (fn: Function) => {
+  const onYesPress = (callback: () => void) => {
     setClicked(true);
-    fn();
+    callback();
+  };
+
+  const onNoPress = () => {
+    onBack ? onBack() : navigation.goBack();
   };
 
   return (
@@ -33,7 +37,7 @@ export const DeleteEntityScreen = ({
           <Button
             testID="cancel-button"
             title={i18n.wallets.deleteWallet.no}
-            onPress={() => onPress(navigation.goBack)}
+            onPress={onNoPress}
             disabled={clicked}
             type="outline"
             containerStyle={styles.noButton}
@@ -42,7 +46,7 @@ export const DeleteEntityScreen = ({
             testID="confirm-button"
             title={i18n.wallets.deleteWallet.yes}
             disabled={clicked}
-            onPress={() => onPress(onConfirm)}
+            onPress={() => onYesPress(onConfirm)}
             containerStyle={styles.yesButton}
           />
         </View>
@@ -50,15 +54,18 @@ export const DeleteEntityScreen = ({
       header={<Header isBackArrow title={title} />}
     >
       <Text style={styles.title}>{subtitle}</Text>
-      <Text style={styles.description}>
-        {i18n.wallets.deleteWallet.description1} {name}
-        {i18n.wallets.deleteWallet.description2}
-      </Text>
+      {typeof description === 'string' ? <Text style={styles.description}>{description}</Text> : description}
+      {!!note && (
+        <Text style={[styles.description, styles.note]}>
+          <Text style={styles.boldedText}>{i18n.notifications.noteFirst}</Text>
+          {note}
+        </Text>
+      )}
     </ScreenTemplate>
   );
 };
 
-export default DeleteEntityScreen;
+export default EntityScreen;
 
 const styles = StyleSheet.create({
   title: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
@@ -67,6 +74,13 @@ const styles = StyleSheet.create({
     color: palette.textGrey,
     textAlign: 'center',
     marginTop: 18,
+  },
+  note: {
+    marginTop: 42,
+  },
+  boldedText: {
+    ...typography.headline9,
+    color: palette.textBlack,
   },
   buttonContainer: { flexDirection: 'row', width: '50%' },
   noButton: { paddingRight: 10, width: '100%' },

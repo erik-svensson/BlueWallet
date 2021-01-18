@@ -17,7 +17,7 @@ import {
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
-import { isNotificationEmailSet, email } from 'app/state/notifications/selectors';
+import { storedEmail } from 'app/state/notifications/selectors';
 import { selectors as walletsSelector } from 'app/state/wallets';
 import { createWallet as createWalletAction, CreateWalletAction } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
@@ -30,7 +30,6 @@ interface Props {
   appSettings: AppSettingsState;
   createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
   walletsLabels: string[];
-  isNotificationEmailSet: boolean;
   email: string;
 }
 
@@ -73,21 +72,41 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     ]);
   };
 
+  getNotificationDescription = () => (
+    <Text style={styles.notificationDescription}>
+      {i18n.notifications.receiveTransactionDescription}
+      <Text style={styles.boldedText}>{this.props.email}</Text>
+    </Text>
+  );
+
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
-    const { navigation, createWallet, isNotificationEmailSet, email } = this.props;
+    const { navigation, createWallet, email } = this.props;
     wallet.setLabel(label || i18n.wallets.details.title);
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
           secret: w.getSecret(),
-          onButtonPress: isNotificationEmailSet
+          onButtonPress: !!email
             ? () =>
-                this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
-                  address: email, // TODO
-                  flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
+                navigation.navigate(Route.Entity, {
+                  title: i18n.notifications.notifications,
+                  subtitle: i18n.notifications.getNotification,
+                  description: this.getNotificationDescription(),
+                  note: i18n.notifications.noteSecond,
+                  onConfirm: () =>
+                    navigation.navigate(Route.ConfirmEmail, {
+                      email,
+                      flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+                      walletsToSubscribe: [wallet],
+                      onBack: () =>
+                        navigation.navigate(Route.WalletDetails, {
+                          id: wallet.id,
+                        }),
+                    }),
+                  onBack: () => navigation.navigate(Route.Dashboard),
                 })
-            : undefined, // TODO in create wallet logic
+            : undefined,
         });
       },
       onFailure: () => onError(),
@@ -334,8 +353,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
   appSettings: state.appSettings,
   walletsLabels: walletsSelector.getWalletsLabels(state),
-  isNotificationEmailSet: isNotificationEmailSet(state),
-  email: email(state),
+  email: storedEmail(state),
 });
 
 const mapDispatchToProps = {
@@ -363,5 +381,16 @@ const styles = StyleSheet.create({
   },
   importButtonContainer: {
     marginTop: 12,
+  },
+  notificationDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    textAlign: 'center',
+    lineHeight: 19,
+    marginTop: 18,
+  },
+  boldedText: {
+    ...typography.headline9,
+    color: palette.textBlack,
   },
 });
