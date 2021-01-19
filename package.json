@@ -154,6 +154,7 @@
     "react-native-pin-view": "^3.0.0",
     "react-native-popup-menu-android": "1.0.3",
     "react-native-privacy-snapshot": "git+https://github.com/BlueWallet/react-native-privacy-snapshot.git",
+    "react-native-progress": "^4.1.2",
     "react-native-prompt-android": "git+https://github.com/marcosrdz/react-native-prompt-android.git",
     "react-native-qrcode-svg": "^6.0.6",
     "react-native-randombytes": "3.5.3",
