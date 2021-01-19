@@ -86,7 +86,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         footer={
           <>
             <Button
-              title={i18n.onboarding.confirmNotification}
+              title={i18n._.confirm}
               testID="submit-notification-email"
               onPress={this.onSave}
               disabled={email.length === 0}
@@ -94,7 +94,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             <FlatButton
               testID="skip-notification-email"
               containerStyle={styles.skipButton}
-              title={i18n._.skipStep}
+              title={i18n._.skip}
               onPress={this.skipAddEmail}
             />
           </>

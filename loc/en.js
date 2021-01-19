@@ -323,6 +323,8 @@ module.exports = {
     emailValidation: 'Enter valid email address',
     validationCodeError: 'Please enter a valid code. You have {numberAttempt} more attempts.',
     resendCodeError: 'You have entered an invalid code 3 times. \n We have sent a new code to your email address.',
+    successCompletedDescription: 'Hooray! \n You have successfully finished your onboarding proccess.',
+    successCompletedButton: 'Go To Wallets',
   },
   receive: {
     details: {
