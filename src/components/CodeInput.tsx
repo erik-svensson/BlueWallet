@@ -44,7 +44,7 @@ export const CodeInput = ({ value, onTextChange, testID, isError = false }: Prop
           key={index}
           style={[styles.cell, isFocused && styles.cellFocused, isError && styles.error]}
         >
-          <Text style={styles.cellText}>{symbol || (isFocused && null)}</Text>
+          <Text style={styles.cellText}>{symbol}</Text>
         </View>
       )}
     />

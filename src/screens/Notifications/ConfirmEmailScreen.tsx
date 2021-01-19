@@ -288,11 +288,11 @@ class ConfirmEmailScreen extends Component<Props, State> {
   onResend = () => {};
 
   render() {
-    const { email } = this.props.route.params;
+    const { email, onBack } = this.props.route.params;
     return (
       <ScreenTemplate
         noScroll
-        header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
+        header={<Header isBackArrow={true} title={i18n.settings.notifications} onBackArrow={onBack} />}
         footer={
           <>
             <Button
