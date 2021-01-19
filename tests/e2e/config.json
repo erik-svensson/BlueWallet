@@ -6,6 +6,5 @@
     "testRegex": "\\.spec\\.ts$",
     "setupFilesAfterEnv": ["./setupTests.ts"],
     "reporters": ["detox/runners/jest/streamlineReporter"],
-    "verbose": true,
-    "forceExit": true
+    "verbose": true
 }

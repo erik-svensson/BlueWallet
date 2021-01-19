@@ -30,7 +30,9 @@ const Actions = () => {
     await target.typeText(text);
 
     if (options?.closeKeyboard) {
-      await closeKeyboard();
+      await target.typeText('\n');
+      // await target.tapAtPoint({ x: 0, y: -1 });
+      // await closeKeyboard(target);
     }
   };
 
@@ -62,7 +64,7 @@ const Actions = () => {
 
     if (device.getPlatform() === 'ios') {
       try {
-        await element(by.label('return')).tapReturnKey();
+        await element(by.label('return')).tap();
       } catch (error) {
         // TODO: Do it better. Briefly speaking, depending on machine the tests are run on a simulator
         // with or without displayed Software Keyboard. To make it working well it's required programmatically

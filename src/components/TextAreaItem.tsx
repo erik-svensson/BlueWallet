@@ -42,13 +42,14 @@ export class TextAreaItem extends PureComponent<Props, State> {
           value={value}
           editable={editable}
           multiline={true}
-          onSubmitEditing={() => {
-            Keyboard.dismiss();
-          }}
           testID={testID}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChangeText={onChangeText}
+          blurOnSubmit={true}
+          onSubmitEditing={() => {
+            Keyboard.dismiss();
+          }}
           autoCapitalize={autoCapitalize}
         />
         {!!error && (

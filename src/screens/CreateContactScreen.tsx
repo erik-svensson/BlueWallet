@@ -1,7 +1,7 @@
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -168,6 +168,10 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
             focused={!!address.value}
             value={address.value}
             multiline
+            blurOnSubmit={true}
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+            }}
             maxLength={CONST.maxAddressLength}
             setValue={this.setAddress}
             label={i18n.contactCreate.addressLabel}

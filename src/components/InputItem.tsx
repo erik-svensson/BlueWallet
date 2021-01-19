@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, TextInput as BaseTextInput, View, Text, Animated, TextInputProps } from 'react-native';
+import { StyleSheet, TextInput as BaseTextInput, View, Text, Animated, TextInputProps, Keyboard } from 'react-native';
 
 import { defaultKeyboardType } from 'app/consts';
 import { palette, typography, fonts } from 'app/styles';
@@ -144,6 +144,9 @@ export class InputItem extends Component<Props, State> {
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChangeText={this.onChangeText}
+          onSubmitEditing={() => {
+            Keyboard.dismiss();
+          }}
           onContentSizeChange={event => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
