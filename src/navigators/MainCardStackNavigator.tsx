@@ -74,7 +74,6 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.SendCoinsConfirm} component={SendCoinsConfirmScreen} />
     <Stack.Screen name={Route.ScanQrCode} component={ScanQrCodeScreen} />
     <Stack.Screen name={Route.ChooseContactList} component={ContactListScreen} />
-    <Stack.Screen name={Route.Settings} component={SettingsScreen} />
     <Stack.Screen name={Route.SelectLanguage} component={SelectLanguageScreen} />
     <Stack.Screen name={Route.AboutUs} component={AboutUsScreen} />
     <Stack.Screen name={Route.TermsConditions} component={TermsConditionsSettingsScreen} />

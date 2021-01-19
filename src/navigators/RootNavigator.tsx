@@ -1,5 +1,5 @@
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 
 import { Route, RootStackParams } from 'app/consts';
 import {
@@ -23,7 +23,6 @@ import {
   SendCoinsConfirmScreen,
   ScanQrCodeScreen,
   ContactListScreen,
-  SettingsScreen,
   SelectLanguageScreen,
   AboutUsScreen,
   TermsConditionsSettingsScreen,
@@ -118,7 +117,6 @@ export const RootNavigator: FC<Props> = ({ shouldRenderOnBoarding, shouldRenderN
       <Stack.Screen name={Route.SendCoinsConfirm} component={SendCoinsConfirmScreen} />
       <Stack.Screen name={Route.ScanQrCode} component={ScanQrCodeScreen} />
       <Stack.Screen name={Route.ChooseContactList} component={ContactListScreen} />
-      <Stack.Screen name={Route.Settings} component={SettingsScreen} />
       <Stack.Screen name={Route.SelectLanguage} component={SelectLanguageScreen} />
       <Stack.Screen name={Route.AboutUs} component={AboutUsScreen} />
       <Stack.Screen name={Route.TermsConditions} component={TermsConditionsSettingsScreen} />
