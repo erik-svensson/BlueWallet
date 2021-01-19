@@ -170,7 +170,9 @@ class Navigator extends React.Component<Props, State> {
       return <BetaVersionScreen onButtonPress={this.handleAcceptBetaVersionRisk} />;
     }
 
-    if (!hasConnectedToServerAtLeaseOnce) {
+    const _shouldRenderOnBoarding = this.shouldRenderOnBoarding();
+
+    if (!hasConnectedToServerAtLeaseOnce && !_shouldRenderOnBoarding) {
       return <ConnectionIssuesScreen />;
     }
 
