@@ -27,8 +27,10 @@ export const ProgressButton: FC<Props> = ({
   const [intervalID, setIntervalID] = useState(noIntervalID);
 
   useEffect(() => {
-    return clearInterval(intervalID);
-  }, [intervalID]);
+    return () => {
+      clearInterval(intervalID);
+    };
+  });
 
   const onPress = () => {
     setInProgress(true);
