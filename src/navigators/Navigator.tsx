@@ -5,7 +5,7 @@ import React from 'react';
 import { isEmulator } from 'react-native-device-info';
 import { connect } from 'react-redux';
 
-import { CONST } from 'app/consts';
+import { CONST, Route } from 'app/consts';
 import { Toasts } from 'app/containers';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator, PasswordNavigator, NotificationNavigator } from 'app/navigators';
@@ -170,9 +170,9 @@ class Navigator extends React.Component<Props, State> {
       return <BetaVersionScreen onButtonPress={this.handleAcceptBetaVersionRisk} />;
     }
 
-    if (this.shouldRenderOnBoarding()) {
-      return <PasswordNavigator />;
-    }
+    // if (this.shouldRenderOnBoarding()) {
+    //   return <PasswordNavigator />;
+    // }
 
     // if (this.shouldRenderNotification()) {
     //   return <NotificationNavigator />;
@@ -184,7 +184,10 @@ class Navigator extends React.Component<Props, State> {
 
     return (
       <>
-        <RootNavigator />
+        <RootNavigator
+          shouldRenderOnBoarding={this.shouldRenderOnBoarding()}
+          shouldRenderNotification={this.shouldRenderNotification()}
+        />
         {isAuthenticated && <Toasts />}
         {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
       </>

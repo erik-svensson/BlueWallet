@@ -77,7 +77,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           buttonProps: {
             title: i18n.onboarding.successCompletedButton,
             onPress: () => {
-              navigation.pop();
+              navigation.navigate(Route.Dashboard);
             },
           },
         });

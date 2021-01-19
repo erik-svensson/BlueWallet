@@ -51,18 +51,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
       createTc();
       createTxPassword(setPassword, {
         onSuccess: () => {
-          navigation.navigate(Route.Message, {
-            title: i18n.contactCreate.successTitle,
-            description: i18n.onboarding.successDescription,
-            testID: 'success-message',
-            source: images.success,
-            buttonProps: {
-              title: i18n.onboarding.successButton,
-              onPress: () => {
-                navigation.pop();
-              },
-            },
-          });
+          navigation.navigate(Route.AddNotificationEmail);
         },
       });
     } else {

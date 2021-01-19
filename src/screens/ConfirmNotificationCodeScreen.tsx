@@ -29,7 +29,6 @@ interface Props {
   route: RouteProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>;
   email: string;
   pin: string;
-  createTc: Function;
 }
 
 class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
@@ -58,7 +57,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   };
 
   onSuccess = () => {
-    const { createTc, navigation } = this.props;
+    const { navigation } = this.props;
 
     CreateMessage({
       title: i18n.contactCreate.successTitle,
@@ -67,8 +66,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
       buttonProps: {
         title: i18n.onboarding.successCompletedButton,
         onPress: () => {
-          createTc();
-          navigation.pop();
+          navigation.navigate(Route.MainCardStackNavigator);
         },
       },
     });

@@ -44,6 +44,10 @@ import {
   ChooseWalletsForNotificationScreen,
   ChangeEmailScreen,
   ReceiveNotificationsConfirmationScreen,
+  CreateTransactionPassword,
+  ConfirmTransactionPassword,
+  ConfirmNotificationCodeScreen,
+  AddNotificationEmailScreen,
 } from 'app/screens';
 
 const Stack = createStackNavigator<MainCardStackNavigatorParams>();
@@ -51,6 +55,13 @@ const Stack = createStackNavigator<MainCardStackNavigatorParams>();
 export const MainCardStackNavigator = () => (
   <Stack.Navigator headerMode="none">
     <Stack.Screen name={Route.MainCardStackNavigator} component={MainTabNavigator} />
+    <Stack.Screen name={Route.CreatePin} component={CreatePinScreen} />
+    <Stack.Screen name={Route.ConfirmPin} component={ConfirmPinScreen} />
+    <Stack.Screen name={Route.CreateTransactionPassword} component={CreateTransactionPassword} />
+    <Stack.Screen name={Route.ConfirmTransactionPassword} component={ConfirmTransactionPassword} />
+    <Stack.Screen name={Route.AddNotificationEmail} component={AddNotificationEmailScreen} />
+    <Stack.Screen name={Route.ConfirmNotificationCode} component={ConfirmNotificationCodeScreen} />
+    <Stack.Screen name={Route.ChooseWalletsForNotification} component={ChooseWalletsForNotificationScreen} />
     <Stack.Screen name={Route.CreateWallet} component={CreateWalletScreen} />
     <Stack.Screen name={Route.ImportWallet} component={ImportWalletScreen} />
     <Stack.Screen name={Route.WalletDetails} component={WalletDetailsScreen} />

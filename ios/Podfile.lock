@@ -279,13 +279,13 @@ PODS:
     - React
   - react-native-blur (0.8.0):
     - React
-  - react-native-camera (3.40.0):
+  - react-native-camera (3.42.0):
     - React-Core
-    - react-native-camera/RCT (= 3.40.0)
-    - react-native-camera/RN (= 3.40.0)
-  - react-native-camera/RCT (3.40.0):
+    - react-native-camera/RCT (= 3.42.0)
+    - react-native-camera/RN (= 3.42.0)
+  - react-native-camera/RCT (3.42.0):
     - React-Core
-  - react-native-camera/RN (3.40.0):
+  - react-native-camera/RN (3.42.0):
     - React-Core
   - react-native-config (1.4.0):
     - react-native-config/App (= 1.4.0)
@@ -295,7 +295,7 @@ PODS:
     - React
   - react-native-image-picker (1.1.0):
     - React
-  - react-native-netinfo (5.9.9):
+  - react-native-netinfo (5.9.10):
     - React-Core
   - react-native-randombytes (3.5.3):
     - React
@@ -676,7 +676,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
-  DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
+  DoubleConversion: cde416483dac037923206447da6e1454df403714
   FBLazyVector: 878b59e31113e289e275165efbe4b54fa614d43d
   FBReactNativeSpec: 7da9338acfb98d4ef9e5536805a0704572d33c2f
   Firebase: c23a36d9e4cdf7877dfcba8dd0c58add66358999
@@ -686,7 +686,7 @@ SPEC CHECKSUMS:
   FirebaseCrashlytics: 1a747c9cc084a24dc6d9511c991db1cd078154eb
   FirebaseInstallations: 466c7b4d1f58fe16707693091da253726a731ed2
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
-  glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   GoogleAppMeasurement: a6a3a066369828db64eda428cb2856dc1cdc7c4e
   GoogleDataTransport: f56af7caa4ed338dc8e138a5d7c5973e66440833
   GoogleUtilities: 7f2f5a07f888cdb145101d6042bc4422f57e70b3
@@ -708,11 +708,11 @@ SPEC CHECKSUMS:
   React-jsinspector: 8e68ffbfe23880d3ee9bafa8be2777f60b25cbe2
   react-native-biometrics: 9d3306e5d29c3bc4e6a3c912d759a94e76a2f683
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
-  react-native-camera: 35854c4f764a4a6cf61c1c3525888b92f0fe4b31
+  react-native-camera: cf8a153d33138dcc457172fc3c33fdf4e5d288d2
   react-native-config: f309b9ac19456dea12325699af51e0fa0217ce6a
   react-native-haptic-feedback: 22c9dc85fd8059f83bf9edd9212ac4bd4ae6074d
   react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
-  react-native-netinfo: 0212ce8604e88edf686f1481b925b17a42a52449
+  react-native-netinfo: 30fb89fa913c342be82a887b56e96be6d71201dd
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
   react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
   react-native-slider: 884693dd50f84745baa511ecdcde4c16f32182fb
