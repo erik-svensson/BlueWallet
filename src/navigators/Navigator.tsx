@@ -5,10 +5,10 @@ import React from 'react';
 import { isEmulator } from 'react-native-device-info';
 import { connect } from 'react-redux';
 
-import { CONST, Route } from 'app/consts';
+import { CONST } from 'app/consts';
 import { Toasts } from 'app/containers';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
-import { RootNavigator, PasswordNavigator, NotificationNavigator } from 'app/navigators';
+import { RootNavigator } from 'app/navigators';
 import { UnlockScreen, TermsConditionsScreen, ConnectionIssuesScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
 import ChamberOfSecrets from 'app/screens/ChamberOfSecrets';

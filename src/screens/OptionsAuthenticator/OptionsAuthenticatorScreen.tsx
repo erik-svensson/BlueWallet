@@ -8,7 +8,7 @@ import Share from 'react-native-share';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, FlatButton, Separator, TextAreaItem, Mnemonic, InputItem } from 'app/components';
-import { Authenticator, MainCardStackNavigatorParams, Route } from 'app/consts';
+import { Authenticator, RootStackParams, Route } from 'app/consts';
 import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { formatDate } from 'app/helpers/date';
@@ -31,8 +31,8 @@ interface ActionProps {
 }
 
 interface NavigationProps {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.OptionsAuthenticator>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.OptionsAuthenticator>;
+  navigation: StackNavigationProp<RootStackParams, Route.OptionsAuthenticator>;
+  route: RouteProp<RootStackParams, Route.OptionsAuthenticator>;
 }
 
 interface State {
@@ -62,7 +62,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
                 type: MessageType.success,
                 buttonProps: {
                   title: i18n.message.returnToAuthenticators,
-                  onPress: () => navigation.navigate(Route.AuthenticatorList),
+                  onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.AuthenticatorList }),
                 },
               });
             },

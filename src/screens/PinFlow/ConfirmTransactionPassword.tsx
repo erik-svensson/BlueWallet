@@ -1,12 +1,12 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { icons, images } from 'app/assets';
+import { icons } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
-import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams, NotificationNavigatorParams } from 'app/consts';
+import { Route, CONST, RootStackParams } from 'app/consts';
 import {
   createTxPassword as createTxPasswordAction,
   setIsAuthenticated as setIsAuthenticatedAction,
@@ -18,16 +18,10 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
-    CompositeNavigationProp<
-      StackNavigationProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>,
-      StackNavigationProp<NotificationNavigatorParams, Route.AddNotificationEmail>
-    >
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.ConfirmTransactionPassword>;
   createTxPassword: Function;
   setIsAuthenticated: (isAuthenticated: boolean) => SetIsAuthenticatedAction;
-  route: RouteProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>;
+  route: RouteProp<RootStackParams, Route.ConfirmTransactionPassword>;
   createTc: () => void;
 }
 

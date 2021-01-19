@@ -1,4 +1,4 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { cloneDeep } from 'lodash';
 import React from 'react';
@@ -6,15 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, FlatButton, Header, ScreenTemplate, WalletCard, ButtonType, Text } from 'app/components';
-import {
-  Wallet,
-  Route,
-  MainCardStackNavigatorParams,
-  RootStackParams,
-  ActionMeta,
-  CONST,
-  ConfirmAddressFlowType,
-} from 'app/consts';
+import { Wallet, Route, RootStackParams, ActionMeta, CONST, ConfirmAddressFlowType } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { HDSegwitP2SHAirWallet } from 'app/legacy';
@@ -38,14 +30,11 @@ const i18n = require('../../loc');
 
 interface Props {
   updateWallet: (wallet: Wallet) => UpdateWalletAction;
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.WalletDetails>
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.WalletDetails>;
   wallet?: Wallet;
   deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
-  route: RouteProp<MainCardStackNavigatorParams, Route.WalletDetails>;
+  route: RouteProp<RootStackParams, Route.WalletDetails>;
   walletsLabels: string[];
   email: string;
   isSubscribed: boolean;
@@ -97,7 +86,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               type: MessageType.success,
               buttonProps: {
                 title: i18n.message.returnToDashboard,
-                onPress: () => navigation.navigate(Route.Dashboard),
+                onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
               },
             });
           },

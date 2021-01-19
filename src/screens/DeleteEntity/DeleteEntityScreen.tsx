@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
-import { Route, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, RootStackParams } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.DeleteEntity>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.DeleteEntity>;
+  navigation: StackNavigationProp<RootStackParams, Route.DeleteEntity>;
+  route: RouteProp<RootStackParams, Route.DeleteEntity>;
 }
 export const DeleteEntityScreen = ({
   navigation,

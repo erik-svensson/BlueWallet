@@ -1,4 +1,4 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import {
@@ -21,11 +21,8 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.Notifications>
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.Notifications>;
+  navigation: StackNavigationProp<RootStackParams, Route.Notifications>;
+  route: RouteProp<RootStackParams, Route.Notifications>;
   email: string;
   deleteEmail: () => DeleteNotificationEmailAction;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;

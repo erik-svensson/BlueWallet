@@ -1,24 +1,18 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Button, Header, ScreenTemplate, Text, Mnemonic } from 'app/components';
-import { MainCardStackNavigatorParams, Route, MainTabNavigatorParams } from 'app/consts';
+import { Route, RootStackParams } from 'app/consts';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateWalletSuccess>,
-    CompositeNavigationProp<
-      StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>,
-      StackNavigationProp<MainCardStackNavigatorParams, Route.CreateWalletSuccess>
-    >
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.CreateWalletSuccess>;
+  navigation: StackNavigationProp<RootStackParams, Route.CreateWalletSuccess>;
+  route: RouteProp<RootStackParams, Route.CreateWalletSuccess>;
   secret: string[];
 }
 
@@ -38,7 +32,7 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
         params: { onButtonPress },
       },
     } = this.props;
-    onButtonPress ? onButtonPress() : navigation.navigate(Route.MainCardStackNavigator, { screen: Route.Dashboard });
+    onButtonPress ? onButtonPress() : navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
   };
 
   render() {

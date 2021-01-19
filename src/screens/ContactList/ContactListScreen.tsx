@@ -1,11 +1,11 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ListEmptyState, SearchBar, ScreenTemplate } from 'app/components';
-import { Route, Contact, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, Contact, MainTabNavigatorParams, RootStackParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 
 import { ContactList } from './ContactList';
@@ -14,7 +14,10 @@ import { ContactListHeader } from './ContactListHeader';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseContactList>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
+    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
+  >;
   route: RouteProp<MainCardStackNavigatorParams, Route.ChooseContactList>;
   contacts: Contact[];
 }

@@ -74,7 +74,7 @@ export const RootNavigator: FC<Props> = ({ shouldRenderOnBoarding, shouldRenderN
       return Route.AddNotificationEmail;
     }
 
-    return Route.MainCardStackNavigator;
+    return Route.MainTabStackNavigator;
   };
 
   const initialRouteName = getInitialRouteName();
@@ -103,7 +103,7 @@ export const RootNavigator: FC<Props> = ({ shouldRenderOnBoarding, shouldRenderN
       <Stack.Screen name={Route.DeleteContact} component={DeleteContactScreen} />
       <Stack.Screen name={Route.SendTransactionDetails} component={SendTransactionDetailsScreen} />
 
-      <Stack.Screen name={Route.MainCardStackNavigator} component={MainTabNavigator} />
+      <Stack.Screen name={Route.MainTabStackNavigator} component={MainTabNavigator} />
 
       <Stack.Screen name={Route.CreateWallet} component={CreateWalletScreen} />
       <Stack.Screen name={Route.ImportWallet} component={ImportWalletScreen} />

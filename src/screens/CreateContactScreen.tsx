@@ -1,4 +1,4 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { icons } from 'app/assets';
 import { Button, Header, InputItem, ScreenTemplate, Text, Image } from 'app/components';
-import { Contact, Route, MainTabNavigatorParams, MainCardStackNavigatorParams, CONST } from 'app/consts';
+import { Contact, Route, RootStackParams, CONST } from 'app/consts';
 import { checkAddress } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { createContact, CreateContactAction } from 'app/state/contacts/actions';
@@ -16,14 +16,8 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateContact>,
-    CompositeNavigationProp<
-      StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
-      StackNavigationProp<MainCardStackNavigatorParams, Route.ScanQrCode>
-    >
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.CreateContact>;
+  navigation: StackNavigationProp<RootStackParams, Route.CreateContact>;
+  route: RouteProp<RootStackParams, Route.CreateContact>;
   createContact: (contact: Contact) => CreateContactAction;
 }
 
@@ -134,7 +128,7 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
       buttonProps: {
         title: i18n.contactCreate.successButton,
         onPress: () => {
-          this.props.navigation.navigate(Route.ContactList);
+          this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.ContactList });
         },
       },
     });
@@ -208,9 +202,6 @@ const styles = StyleSheet.create({
     right: 0,
     top: 20,
     padding: 8,
-  },
-  inputContainer: {
-    height: 100,
   },
   qrCodeImage: {
     width: 24,

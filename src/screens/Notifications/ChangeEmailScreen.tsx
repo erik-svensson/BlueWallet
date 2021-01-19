@@ -1,11 +1,11 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, InputItem } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType } from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType } from 'app/consts';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { typography, palette } from 'app/styles';
@@ -13,11 +13,8 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.ChangeEmail>
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ChangeEmail>;
+  navigation: StackNavigationProp<RootStackParams, Route.ChangeEmail>;
+  route: RouteProp<RootStackParams, Route.ChangeEmail>;
   email: string;
 }
 

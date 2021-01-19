@@ -1,19 +1,11 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CodeInput } from 'app/components';
-import {
-  Route,
-  MainCardStackNavigatorParams,
-  RootStackParams,
-  ConfirmAddressFlowType,
-  CONST,
-  ActionMeta,
-  WalletPayload,
-} from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, CONST, ActionMeta, WalletPayload } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { walletToAddressesGenerationBase, getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { ApplicationState } from 'app/state';
@@ -36,11 +28,8 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.ConfirmEmail>
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ConfirmEmail>;
+  navigation: StackNavigationProp<RootStackParams, Route.ConfirmEmail>;
+  route: RouteProp<RootStackParams, Route.ConfirmEmail>;
   createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
   subscribe: (wallets: WalletPayload[], email: string, lang: string) => SubscribeWalletAction;
   unsubscribe: (hashes: string[], email: string) => UnsubscribeWalletAction;

@@ -1,4 +1,4 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Transaction } from 'bitcoinjs-lib';
 import { round } from 'lodash';
@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, StyledText, Image, Text, Warning, EllipsisText } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, ActionMeta } from 'app/consts';
+import { Route, RootStackParams, ActionMeta } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import * as txNotesActions from 'app/state/transactionsNotes/actions';
 import * as walletsActions from 'app/state/wallets/actions';
@@ -31,16 +31,13 @@ const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void, butto
 );
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.SendCoinsConfirm>
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.SendCoinsConfirm>;
   createTransactionNote: (txid: string, note: string) => txNotesActions.CreateTransactionNoteAction;
   sendTransaction: (
     { txDecoded }: { txDecoded: Transaction },
     meta?: ActionMeta,
   ) => walletsActions.SendTransactionAction;
-  route: RouteProp<MainCardStackNavigatorParams, Route.SendCoinsConfirm>;
+  route: RouteProp<RootStackParams, Route.SendCoinsConfirm>;
 }
 
 class SendCoinsConfirmScreen extends Component<Props> {
@@ -89,7 +86,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     };
   };
 
-  navgitateToMainCard = () => this.props.navigation.navigate(Route.MainCardStackNavigator);
+  navgitateToMainCard = () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
 
   broadcast = () =>
     new Promise<void>((resolve, reject) => {
@@ -194,7 +191,6 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
   render() {
     const {
-      navigation,
       route: { params },
     } = this.props;
     const { fromWallet, recipients, satoshiPerByte, headerTitle, buttonTitle } = params;

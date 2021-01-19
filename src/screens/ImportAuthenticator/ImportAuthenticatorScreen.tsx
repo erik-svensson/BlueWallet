@@ -4,7 +4,7 @@ import { Text, StyleSheet, Alert, View, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, TextAreaItem, FlatButton, Button, InputItem } from 'app/components';
-import { Route, CONST, MainCardStackNavigatorParams, Authenticator as IAuthenticator } from 'app/consts';
+import { Route, CONST, Authenticator as IAuthenticator, RootStackParams } from 'app/consts';
 import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { matchAlphanumericCharacters } from 'app/helpers/string';
@@ -31,7 +31,7 @@ interface State {
 }
 
 interface Props extends ActionProps {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ImportAuthenticator>;
+  navigation: StackNavigationProp<RootStackParams, Route.ImportAuthenticator>;
   authenticators: IAuthenticator[];
 }
 
@@ -120,7 +120,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
             type: MessageType.success,
             buttonProps: {
               title: i18n.message.returnToAuthenticators,
-              onPress: () => navigation.navigate(Route.AuthenticatorList),
+              onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.AuthenticatorList }),
             },
           });
         },

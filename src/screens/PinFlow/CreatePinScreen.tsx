@@ -4,15 +4,15 @@ import React, { PureComponent } from 'react';
 import { Text, StyleSheet, BackHandler, View, NativeEventSubscription } from 'react-native';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
-import { Route, CONST, FlowType, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, CONST, FlowType, RootStackParams } from 'app/consts';
 import { noop } from 'app/helpers/helpers';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CreatePin>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.CreatePin>;
+  navigation: StackNavigationProp<RootStackParams, Route.CreatePin>;
+  route: RouteProp<RootStackParams, Route.CreatePin>;
   appSettings: {
     isPinSet: boolean;
   };
@@ -52,7 +52,9 @@ export class CreatePinScreen extends PureComponent<Props, State> {
   }
 
   backAction = () => {
-    this.state.flowType === FlowType.newPin ? this.props.navigation.navigate(Route.Settings) : BackHandler.exitApp();
+    this.state.flowType === FlowType.newPin
+      ? this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings })
+      : BackHandler.exitApp();
     return true;
   };
 

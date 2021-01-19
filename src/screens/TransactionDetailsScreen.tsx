@@ -1,4 +1,4 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import dayjs from 'dayjs';
 import { map, compose, uniq, flatten, join } from 'lodash/fp';
@@ -18,7 +18,7 @@ import {
   EllipsisText,
 } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Route, MainCardStackNavigatorParams, RootStackParams, TxType, CONST } from 'app/consts';
+import { Route, RootStackParams, TxType, CONST } from 'app/consts';
 import { getConfirmationsText } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { selectors, reducer } from 'app/state/transactionsNotes';
@@ -39,12 +39,9 @@ interface Props {
   transactionNotes: Record<string, string>;
   createTransactionNoteSuccess: (txHash: string, note: string) => CreateTransactionNoteSuccessAction;
   updateTransactionNote: (transactionID: string, note: string) => UpdateTransactionNoteAction;
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.TransactionDetails>
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.TransactionDetails>;
   note: string;
-  route: RouteProp<MainCardStackNavigatorParams, Route.TransactionDetails>;
+  route: RouteProp<RootStackParams, Route.TransactionDetails>;
 }
 
 class TransactionDetailsScreen extends Component<Props> {

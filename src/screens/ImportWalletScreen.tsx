@@ -10,7 +10,7 @@ import { Button } from 'app/components/Button';
 import {
   Route,
   Wallet,
-  MainCardStackNavigatorParams,
+  RootStackParams,
   ActionMeta,
   ELECTRUM_VAULT_SEED_PREFIXES,
   CONST,
@@ -41,8 +41,8 @@ import { isElectrumVaultMnemonic } from '../../utils/crypto';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ImportWallet>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ImportWallet>;
+  navigation: StackNavigationProp<RootStackParams, Route.ImportWallet>;
+  route: RouteProp<RootStackParams, Route.ImportWallet>;
   importWallet: (wallet: Wallet, meta?: ActionMeta) => ImportWalletAction;
   wallets: Wallet[];
   isNotificationEmailSet: boolean;
@@ -107,7 +107,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => this.props.navigation.navigate(Route.Dashboard),
+        onPress: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
       },
     });
 

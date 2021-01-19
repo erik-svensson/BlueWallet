@@ -1,27 +1,21 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 
 import { Header, ScreenTemplate, Button } from 'app/components';
-import { MainCardStackNavigatorParams, MainTabNavigatorParams, Route } from 'app/consts';
+import { RootStackParams, Route } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainCardStackNavigatorParams, Route.ReceiveNotificationsConfirmation>,
-    CompositeNavigationProp<
-      StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>,
-      StackNavigationProp<MainCardStackNavigatorParams, Route.ReceiveNotificationsConfirmation>
-    >
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ReceiveNotificationsConfirmation>;
+  navigation: StackNavigationProp<RootStackParams, Route.ReceiveNotificationsConfirmation>;
+  route: RouteProp<RootStackParams, Route.ReceiveNotificationsConfirmation>;
 }
 
 export const ReceiveNotificationsConfirmationScreen = (props: Props) => {
-  const handleNoPress = () => props.navigation.navigate(Route.Dashboard);
+  const handleNoPress = () => props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
   const handleYesPress = () => {
     const {
       route: {

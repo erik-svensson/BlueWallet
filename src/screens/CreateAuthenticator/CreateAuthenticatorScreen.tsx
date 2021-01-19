@@ -1,16 +1,10 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { Text, StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, FlatButton, Button, InputItem } from 'app/components';
-import {
-  Route,
-  Authenticator as IAuthenticator,
-  MainTabNavigatorParams,
-  MainCardStackNavigatorParams,
-} from 'app/consts';
+import { Route, Authenticator as IAuthenticator, RootStackParams } from 'app/consts';
 import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { matchAlphanumericCharacters } from 'app/helpers/string';
@@ -24,10 +18,7 @@ interface ActionProps {
   createAuthenticator: Function;
 }
 interface Props extends ActionProps {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParams, Route.AuthenticatorList>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateAuthenticator>
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.CreateAuthenticator>;
   authenticators: IAuthenticator[];
 }
 

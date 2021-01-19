@@ -1,4 +1,4 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -14,7 +14,7 @@ import {
   ContactAvatar,
 } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Contact, Route, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
+import { Contact, Route, RootStackParams } from 'app/consts';
 import { checkAddress } from 'app/helpers/DataProcessing';
 import { ApplicationState } from 'app/state';
 import { UpdateContactAction, updateContact } from 'app/state/contacts/actions';
@@ -24,11 +24,8 @@ const i18n = require('../../loc');
 
 interface Props {
   updateContact: (contact: Contact) => UpdateContactAction;
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.DeleteContact>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.ContactDetails>
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ContactDetails>;
+  navigation: StackNavigationProp<RootStackParams, Route.ContactDetails>;
+  route: RouteProp<RootStackParams, Route.ContactDetails>;
   hasWallets: boolean;
 }
 
