@@ -97,7 +97,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
                   onConfirm: () =>
                     navigation.navigate(Route.ConfirmEmail, {
                       email,
-                      flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+                      flowType: ConfirmAddressFlowType.SUBSCRIBE,
                       walletsToSubscribe: [wallet],
                       onBack: () =>
                         navigation.navigate(Route.WalletDetails, {

@@ -5,15 +5,10 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
-import { Route, RootStackParams, ConfirmAddressFlowType, Wallet, ActionMeta } from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
-import {
-  checkSubscription,
-  CheckSubscriptionAction,
-  createNotificationEmail,
-  CreateNotificationEmailAction,
-} from 'app/state/notifications/actions';
+import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
 import { unSubscribedWallets } from 'app/state/wallets/selectors';
 import { typography, palette } from 'app/styles';
 
@@ -26,7 +21,6 @@ interface Props {
   wallets: Wallet[];
   route: RouteProp<RootStackParams, Route.ChooseWalletsForNotification>;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
-  createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 }
 
 interface State {
@@ -121,7 +115,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     } else {
       this.props.navigation.navigate(Route.ConfirmEmail, {
         email: params.email,
-        flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
+        flowType: ConfirmAddressFlowType.SUBSCRIBE,
         walletsToSubscribe: this.state.wallets,
       });
     }
@@ -171,7 +165,6 @@ const mapStateToProps = (state: ApplicationState) => {
 
 const mapDispatchToProps = {
   checkSubscription,
-  createNotificationEmail,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChooseWalletsForNotificationScreen);

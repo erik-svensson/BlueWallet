@@ -175,7 +175,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
                     onConfirm: () =>
                       this.props.navigation.navigate(Route.ConfirmEmail, {
                         email,
-                        flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+                        flowType: ConfirmAddressFlowType.SUBSCRIBE,
                         walletsToSubscribe: [newWallet],
                         onBack: () =>
                           this.props.navigation.navigate(Route.WalletDetails, {

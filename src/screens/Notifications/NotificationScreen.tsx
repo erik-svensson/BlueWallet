@@ -62,7 +62,7 @@ export class NotificationScreen extends Component<Props> {
   goToConfirmScreen = () =>
     this.props.navigation.navigate(Route.ConfirmEmail, {
       email: this.props.email!,
-      flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+      flowType: ConfirmAddressFlowType.DELETE_ADDRESS,
     });
 
   removeEmail = () => {

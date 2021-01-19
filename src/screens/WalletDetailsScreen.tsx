@@ -86,7 +86,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               type: MessageType.success,
               buttonProps: {
                 title: i18n.message.returnToDashboard,
-                onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+                onPress: this.goToDashboard,
               },
             });
           },
@@ -94,6 +94,8 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       },
     });
   };
+
+  goToDashboard = () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
 
   navigateWithWallet = (route: Route.ExportWalletXpub | Route.ExportWallet) => {
     const { navigation, wallet } = this.props;
@@ -142,7 +144,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       }
       return navigation.navigate(Route.ConfirmEmail, {
         email,
-        flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+        flowType: ConfirmAddressFlowType.SUBSCRIBE,
         walletsToSubscribe: [wallet],
       });
     } else {
@@ -159,7 +161,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   };
 
   render() {
-    const { wallet, isSubscribed } = this.props;
+    const { wallet, isSubscribed, navigation } = this.props;
     if (!wallet) {
       return null;
     }
@@ -190,7 +192,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             />
           </>
         }
-        header={<Header isBackArrow title={wallet.label} />}
+        header={<Header isBackArrow title={wallet.label} onBackArrow={this.goToDashboard} />}
       >
         <View style={styles.walletContainer}>
           <WalletCard wallet={wallet} containerStyle={styles.walletContainerInner} />

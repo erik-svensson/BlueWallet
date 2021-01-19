@@ -1,4 +1,4 @@
-import { takeEvery, put, call, all } from 'redux-saga/effects';
+import { takeEvery, put, call } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
@@ -118,7 +118,8 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
       }
     }
   } catch (error) {
-    yield put(authenticateEmailFailure(error.message));
+    const { msg } = error.response.data;
+    yield put(authenticateEmailFailure(msg));
     if (meta?.onFailure) {
       meta.onFailure();
     }

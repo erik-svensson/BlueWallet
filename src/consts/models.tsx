@@ -249,10 +249,15 @@ export enum ConfirmAddressFlowType {
   CURRENT_ADDRESS = 'CURRENT_ADDRESS',
   NEW_ADDRESS = 'NEW_ADDRESS',
   DELETE_ADDRESS = 'DELETE_ADDRESS',
-  ANOTHER_ACTION = 'ANOTHER_ACTION',
+  SUBSCRIBE = 'SUBSCRIBE',
   UNSUBSCRIBE = 'UNSUBSCRIBE',
-  RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT',
-  RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE',
+}
+
+export interface InfoContainerContent {
+  title?: string;
+  description?: string;
+  onInit?: () => void;
+  onCodeConfirm?: () => void;
 }
 
 export interface Transaction {

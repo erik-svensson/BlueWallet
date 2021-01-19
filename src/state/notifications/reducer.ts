@@ -38,6 +38,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         error: '',
         email: action.payload.email,
         isLoading: false,
+        pin: '',
       };
     case NotificationAction.CreateNotificationEmailFailure:
     case NotificationAction.SetNotificationEmailFailure:
