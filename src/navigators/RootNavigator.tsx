@@ -77,10 +77,8 @@ export const RootNavigator: FC<Props> = ({ shouldRenderOnBoarding, shouldRenderN
     return Route.MainTabStackNavigator;
   };
 
-  const initialRouteName = getInitialRouteName();
-
   return (
-    <Stack.Navigator initialRouteName={initialRouteName} headerMode="none">
+    <Stack.Navigator initialRouteName={getInitialRouteName()} headerMode="none">
       <Stack.Screen name={Route.CreatePin} component={CreatePinScreen} />
       <Stack.Screen name={Route.ConfirmPin} component={ConfirmPinScreen} />
       <Stack.Screen name={Route.CreateTransactionPassword} component={CreateTransactionPassword} />

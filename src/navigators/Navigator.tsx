@@ -170,14 +170,6 @@ class Navigator extends React.Component<Props, State> {
       return <BetaVersionScreen onButtonPress={this.handleAcceptBetaVersionRisk} />;
     }
 
-    // if (this.shouldRenderOnBoarding()) {
-    //   return <PasswordNavigator />;
-    // }
-
-    // if (this.shouldRenderNotification()) {
-    //   return <NotificationNavigator />;
-    // } TODO // till onboarding logic works well with the others
-
     if (!hasConnectedToServerAtLeaseOnce) {
       return <ConnectionIssuesScreen />;
     }
