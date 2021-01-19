@@ -26,7 +26,7 @@ export const ProgressButton: FC<Props> = ({
   const [progress, setProgress] = useState(0);
   const [intervalID, setIntervalID] = useState(noIntervalID);
 
-  const addWallet = () => {
+  const onPress = () => {
     setInProgress(true);
 
     const intervalID = setInterval(() => {
@@ -54,7 +54,7 @@ export const ProgressButton: FC<Props> = ({
   };
 
   return (
-    <TouchableOpacity onPress={addWallet}>
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.progressButtonContainer}>
         {inProgress ? (
           <View style={styles.stack}>
