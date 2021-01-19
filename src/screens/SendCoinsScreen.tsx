@@ -449,7 +449,7 @@ class SendCoinsScreen extends Component<Props, State> {
         setValue={text => this.processAddressData(text.trim())}
         multiline
         onSubmitEditing={() => {
-          Keyboard.dismiss();
+          // Keyboard.dismiss();
         }}
         maxLength={CONST.maxAddressLength}
       />

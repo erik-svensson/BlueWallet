@@ -30,9 +30,13 @@ const Actions = () => {
     await target.typeText(text);
 
     if (options?.closeKeyboard) {
-      await target.typeText('\n');
-      // await target.tapAtPoint({ x: 0, y: -1 });
-      // await closeKeyboard(target);
+      if (device.getPlatform() === 'android') {
+        await device.pressBack();
+      }
+
+      if (device.getPlatform() === 'ios') {
+        await target.tapReturnKey();
+      }
     }
   };
 
