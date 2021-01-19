@@ -8,7 +8,7 @@ const ScanQrCodeScreen = () => ({
 
   async scanCustomString(data: string) {
     await actions.typeText(this.customStringInput, data, { closeKeyboard: true });
-    await actions.multiTap(this.submitButton, 2);
+    await actions.tap(this.submitButton);
   },
 });
 
