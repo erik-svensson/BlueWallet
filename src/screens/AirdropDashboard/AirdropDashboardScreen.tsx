@@ -20,28 +20,26 @@ interface Props {
   >;
 }
 
-export const AirdropDashboardScreen: FC<Props> = ({ navigation }) => {
-  return (
-    <ScreenTemplate
-      footer={<Footer navigation={navigation} />}
-      header={<Header isBackArrow title={i18n.airdrop.title} />}
-    >
-      <View style={styles.wrapper}>
-        <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.airdrop.title}</Text>
-          <Text style={[styles.description, styles.spaceTop]}>{i18n.airdrop.dashboard.desc1}</Text>
-          <Text style={styles.description}>
-            {i18n.airdrop.dateOfAirdrop}&nbsp;
-            {getFormattedAirdropDate()}
-          </Text>
-        </View>
-        <Countdown dataEnd={CONST.airdropDate} />
-        <Image source={images.airdrop} style={styles.airdropImage} />
-        <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
+export const AirdropDashboardScreen: FC<Props> = ({ navigation }) => (
+  <ScreenTemplate
+    footer={<Footer navigation={navigation} />}
+    header={<Header isBackArrow title={i18n.airdrop.title} />}
+  >
+    <View style={styles.wrapper}>
+      <View style={styles.infoContainer}>
+        <Text style={typography.headline4}>{i18n.airdrop.title}</Text>
+        <Text style={[styles.description, styles.spaceTop]}>{i18n.airdrop.dashboard.desc1}</Text>
+        <Text style={styles.description}>
+          {i18n.airdrop.dateOfAirdrop}&nbsp;
+          {getFormattedAirdropDate()}
+        </Text>
       </View>
-    </ScreenTemplate>
-  );
-};
+      <Countdown dataEnd={CONST.airdropDate} />
+      <Image source={images.airdrop} style={styles.airdropImage} />
+      <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
+    </View>
+  </ScreenTemplate>
+);
 
 export default AirdropDashboardScreen;
 
