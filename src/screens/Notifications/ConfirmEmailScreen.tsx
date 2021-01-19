@@ -209,7 +209,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
         type: MessageType.success,
         buttonProps: {
           title: i18n.message.returnToDashboard,
-          onPress: () => this.props.navigation.navigate(Route.Dashboard),
+          onPress: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
         },
       }),
   });
@@ -217,7 +217,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
   receiveNotificationsConfirmationCreateFlowContent = () => ({
     title: i18n.notifications.verifyAction,
     description: i18n.notifications.pleaseEnter,
-    onCodeConfirm: () => this.props.navigation.navigate(Route.Dashboard),
+    onCodeConfirm: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
   });
 
   onError = () => {

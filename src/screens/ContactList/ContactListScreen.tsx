@@ -16,9 +16,9 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
-    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
+    StackNavigationProp<RootStackParams, Route.ChooseContactList>
   >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ChooseContactList>;
+  route: RouteProp<RootStackParams, Route.ChooseContactList>;
   contacts: Contact[];
 }
 

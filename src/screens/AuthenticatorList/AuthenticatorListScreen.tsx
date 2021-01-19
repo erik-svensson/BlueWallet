@@ -1,12 +1,21 @@
+import { CompositeNavigationProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import * as bitcoin from 'bitcoinjs-lib';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, FlatList } from 'react-native';
-import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { icons, images } from 'app/assets';
 import { Header, Image, ListEmptyState, ScreenTemplate, EllipsisText } from 'app/components';
-import { Route, Authenticator, FinalizedPSBT, CONST } from 'app/consts';
+import {
+  Route,
+  Authenticator,
+  FinalizedPSBT,
+  CONST,
+  MainTabNavigatorParams,
+  RootStackParams,
+  Wallet,
+} from 'app/consts';
 import { formatDate } from 'app/helpers/date';
 import { isCodeChunked } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
@@ -31,7 +40,14 @@ interface State {
   codeValue: string;
 }
 
-type Props = NavigationInjectedProps & MapStateProps & ActionProps;
+interface OwnProps {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParams, Route.AuthenticatorList>,
+    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
+  >;
+}
+
+type Props = OwnProps & MapStateProps & ActionProps;
 
 class AuthenticatorListScreen extends Component<Props, State> {
   state = {
@@ -86,11 +102,11 @@ class AuthenticatorListScreen extends Component<Props, State> {
             : i18n.send.transaction.fastSuccess;
         navigation.navigate(Route.SendCoinsConfirm, {
           fee,
-          // pretending that we are sending from real wallet
+          // dirty hack, pretending that we are sending from real wallet
           fromWallet: {
             label: authenticator.name,
             preferredBalanceUnit: CONST.preferredBalanceUnit,
-          },
+          } as Wallet,
           txDecoded: tx,
           recipients,
           successMsgDesc,

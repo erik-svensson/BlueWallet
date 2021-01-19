@@ -1,7 +1,7 @@
 import { VaultTxType, Transaction as BtcTransaction, ECPair } from 'bitcoinjs-lib';
 import { Dayjs } from 'dayjs';
 import React from 'react';
-import { KeyboardType, StyleProp, ViewStyle, Platform } from 'react-native';
+import { KeyboardType, StyleProp, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 import { ImageStyle } from 'react-native-fast-image';
 
@@ -105,7 +105,6 @@ export enum FlowType {
 }
 
 export enum Route {
-  PasswordNavigator = 'PasswordNavigator',
   Dashboard = 'Dashboard',
   RecoverySend = 'RecoverySend',
   RecoverySeed = 'RecoverySeed',
@@ -396,8 +395,6 @@ export type RootStackParams = {
     size: number;
     feeSatoshi: number;
   };
-
-  // PasswordNavigator
   [Route.CreatePin]: {
     flowType: string;
   };
@@ -412,12 +409,8 @@ export type RootStackParams = {
     email: string;
     isOnboarding?: boolean;
   };
-
-  // NotificationNavigator
   [Route.AddNotificationEmail]: undefined;
   [Route.ConfirmNotificationCode]: { email?: string };
-
-  // MainCardStackNavigator
   [Route.CreateWallet]: undefined;
   [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
@@ -488,8 +481,8 @@ export type RootStackParams = {
   };
   [Route.ImportWalletChooseType]: undefined;
   [Route.ChunkedQrCode]: {
-    chunkNo: number;
-    chunksQuantity: number;
+    chunkNo: string;
+    chunksQuantity: string;
     onScanned: () => void;
   };
   [Route.Notifications]: {
@@ -518,155 +511,6 @@ export type RootStackParams = {
   };
 };
 
-// export type PasswordNavigatorParams = {
-//   [Route.CreatePin]: {
-//     flowType: string;
-//   };
-//   [Route.ConfirmPin]: {
-//     flowType: string;
-//     pin: string;
-//   };
-//   [Route.Message]: {
-//     title: string;
-//     source: FastImageSource;
-//     description: string;
-//     testID?: string;
-//     buttonProps?: ButtonProps;
-//     imageStyle?: StyleProp<ViewStyle>;
-//     asyncTask?: () => void;
-//   };
-//   [Route.CreateTransactionPassword]: undefined;
-//   [Route.ConfirmTransactionPassword]: { setPassword: string };
-//   [Route.ConfirmNotificationCode]: { email?: string };
-//   [Route.ChooseWalletsForNotification]: {
-//     email: string;
-//     isOnboarding?: boolean;
-//   };
-//   [Route.AddNotificationEmail]: undefined;
-// };
-
-// export type NotificationNavigatorParams = {
-//   [Route.AddNotificationEmail]: undefined;
-//   [Route.ChooseWalletsForNotification]: {
-//     email: string;
-//     onboarding?: boolean;
-//   };
-//   [Route.ConfirmNotificationCode]: { email?: string };
-//   [Route.Message]: {
-//     title: string;
-//     source: FastImageSource;
-//     description: string;
-//     testID?: string;
-//     buttonProps?: ButtonProps;
-//     imageStyle?: StyleProp<ViewStyle>;
-//     asyncTask?: () => void;
-//   };
-// };
-
-// export type MainCardStackNavigatorParams = {
-//   [Route.Dashboard]: { activeWallet?: Wallet } | undefined;
-//   [Route.MainCardStackNavigator]: undefined;
-//   [Route.CreateWallet]: undefined;
-//   [Route.ImportWallet]: { walletType: ImportWalletType };
-//   [Route.CreateTransactionPassword]: undefined;
-//   [Route.WalletDetails]: { id: string };
-//   [Route.CreateContact]: { address?: string } | undefined;
-//   [Route.ContactDetails]: { contact: Contact };
-//   [Route.ContactQRCode]: { contact: Contact };
-//   [Route.TransactionDetails]: { transaction: EnhancedTransaction };
-//   [Route.ReceiveCoins]: { id: string };
-//   [Route.SendCoins]: { fromSecret?: string; fromAddress?: string; fromWallet?: Wallet; toAddress?: string };
-//   [Route.SendCoinsConfirm]: {
-//     fee: number;
-//     feeSatoshi?: number;
-//     memo?: string;
-//     recipients: any;
-//     size?: number;
-//     txDecoded: BtcTransaction;
-//     isAlert?: boolean;
-//     satoshiPerByte: any;
-//     fromWallet: Wallet;
-//     pendingAmountDecrease?: number;
-//     headerTitle?: string;
-//     buttonTitle?: string;
-//     successMsgDesc?: string;
-//   };
-//   [Route.RecoveryTransactionList]: { wallet: Wallet };
-//   [Route.RecoverySend]: { transactions: Transaction[]; wallet: any };
-//   [Route.RecoverySeed]: {
-//     onSubmit: Function;
-//     subtitle: string;
-//     description: string;
-//     buttonText: string;
-//     onBackArrow?: () => void;
-//     mnemonic?: Array<string>;
-//   };
-//   [Route.ScanQrCode]: { onBarCodeScan: (code: string) => void };
-//   [Route.ChooseContactList]: {
-//     onContactPress?: (data: string) => void;
-//     title?: string;
-//   };
-//   [Route.Settings]: undefined;
-//   [Route.SelectLanguage]: undefined;
-//   [Route.AboutUs]: undefined;
-//   [Route.TermsConditions]: undefined;
-//   [Route.AdvancedOptions]: undefined;
-//   [Route.CreatePin]: {
-//     flowType: string;
-//   };
-//   [Route.CurrentPin]: undefined;
-//   [Route.ConfirmPin]: {
-//     flowType: string;
-//     pin: string;
-//   };
-//   [Route.FilterTransactions]: { onFilterPress: () => void };
-//   [Route.CreateAuthenticator]: undefined;
-//   [Route.AuthenticatorList]: undefined;
-//   [Route.CreateAuthenticatorPublicKey]: { id: string };
-//   [Route.CreateAuthenticatorSuccess]: { id: string };
-//   [Route.DeleteEntity]: { onConfirm: () => void; name: string | undefined; subtitle: string; title: string };
-//   [Route.ImportAuthenticator]: undefined;
-//   [Route.OptionsAuthenticator]: { id: string };
-//   [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: () => void };
-//   [Route.IntegrateKey]: {
-//     onBarCodeScan: (text: string) => void;
-//     title: string;
-//     description: string;
-//     withLink?: boolean;
-//     headerTitle?: string;
-//     onBackArrow?: () => void;
-//   };
-//   [Route.ImportWalletChooseType]: undefined;
-//   [Route.ChunkedQrCode]: {
-//     chunkNo: number;
-//     chunksQuantity: number;
-//     onScanned: () => void;
-//   };
-//   [Route.Notifications]: {
-//     walletsToSubscribe?: Wallet[];
-//   };
-//   [Route.AddEmail]: {
-//     walletsToSubscribe?: Wallet[];
-//   };
-//   [Route.ConfirmEmail]: {
-//     email: string;
-//     newAddress?: string;
-//     flowType: ConfirmAddressFlowType;
-//     walletsToSubscribe?: Wallet[];
-//     onBack?: () => void;
-//   };
-//   [Route.ChooseWalletsForNotification]: {
-//     email: string;
-//     isOnboarding?: boolean;
-//   };
-//   [Route.ChangeEmail]: {
-//     email: string;
-//   };
-//   [Route.ReceiveNotificationsConfirmation]: {
-//     address: string;
-//     flowType: ConfirmAddressFlowType;
-//   };
-// };
 export type DateType = Date | Dayjs;
 export interface Authenticator {
   keyPair: ECPair.ECPairInterface | null;
