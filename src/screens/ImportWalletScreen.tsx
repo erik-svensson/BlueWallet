@@ -293,7 +293,9 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         testID="import-wallet-name"
         error={this.state.validationError}
         setValue={this.onLabelChange}
-        onSubmitEditing={() => Keyboard.dismiss()}
+        onSubmitEditing={() => {
+          Keyboard.dismiss();
+        }}
         label={i18n.wallets.add.inputLabel}
         maxLength={maxWalletNameLength}
       />
@@ -454,6 +456,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     const { validationError, text, label, hasCustomWords, customWords } = this.state;
     return (
       <ScreenTemplate
+        keyboardShouldPersistTaps={'always'}
         footer={
           <>
             <Button

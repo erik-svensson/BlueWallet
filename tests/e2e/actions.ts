@@ -1,6 +1,5 @@
-import Detox, { by, device, element, waitFor } from 'detox';
+import Detox, { by, device, waitFor } from 'detox';
 
-import { wait } from '../../utils/time';
 import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers';
 
 interface TypeTextOptions {
@@ -59,23 +58,6 @@ const Actions = () => {
       .toBeVisible()
       .whileElement(by.id(scrollableElement))
       .scroll(options.pixels, options.direction);
-  };
-
-  const closeKeyboard = async () => {
-    if (device.getPlatform() === 'android') {
-      await device.pressBack();
-    }
-
-    if (device.getPlatform() === 'ios') {
-      try {
-        await element(by.label('return')).tap();
-      } catch (error) {
-        // TODO: Do it better. Briefly speaking, depending on machine the tests are run on a simulator
-        // with or without displayed Software Keyboard. To make it working well it's required programmatically
-        // turn on the keyboard to make sure it's working the same on all configurations.
-        return;
-      }
-    }
   };
 
   return { waitForElement, typeText, tap, multiTap, scrollToElement };

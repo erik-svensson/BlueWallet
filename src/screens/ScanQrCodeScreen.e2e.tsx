@@ -52,7 +52,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
 
   render() {
     return (
-      <ScreenTemplate contentContainer={styles.container}>
+      <ScreenTemplate keyboardShouldPersistTaps="always" contentContainer={styles.container}>
         <StatusBar hidden />
         <Button
           onPress={() => {

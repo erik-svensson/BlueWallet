@@ -46,7 +46,6 @@ export class TextAreaItem extends PureComponent<Props, State> {
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChangeText={onChangeText}
-          blurOnSubmit={true}
           onSubmitEditing={() => {
             Keyboard.dismiss();
           }}

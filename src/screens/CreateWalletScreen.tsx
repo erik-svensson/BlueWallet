@@ -301,6 +301,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   render() {
     return (
       <ScreenTemplate
+        keyboardShouldPersistTaps={'always'}
         footer={
           <>
             <Button

@@ -168,7 +168,6 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
             focused={!!address.value}
             value={address.value}
             multiline
-            blurOnSubmit={true}
             onSubmitEditing={() => {
               Keyboard.dismiss();
             }}
