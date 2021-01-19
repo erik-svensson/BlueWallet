@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import ProgressBar from 'react-native-progress/Bar';
 
@@ -25,6 +25,10 @@ export const ProgressButton: FC<Props> = ({
   const [inProgress, setInProgress] = useState(false);
   const [progress, setProgress] = useState(0);
   const [intervalID, setIntervalID] = useState(noIntervalID);
+
+  useEffect(() => {
+    return clearInterval(intervalID);
+  }, [intervalID]);
 
   const onPress = () => {
     setInProgress(true);
