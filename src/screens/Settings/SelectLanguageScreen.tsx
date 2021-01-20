@@ -1,11 +1,9 @@
-import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Header, Image } from 'app/components';
-import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { selectors } from 'app/state/appSettings';
 import { updateSelectedLanguage } from 'app/state/appSettings/actions';
 import { typography } from 'app/styles';
@@ -22,10 +20,6 @@ interface LanguageItemProps {
   selectedLanguage: Language;
   selectedLanguageValue: string;
   onLanguageSelect: (value: string) => void;
-}
-
-interface SelectLanguageScreenProps {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.SelectLanguage>;
 }
 
 const LanguageItem = (props: LanguageItemProps) => {
@@ -50,7 +44,7 @@ const LanguageItem = (props: LanguageItemProps) => {
   );
 };
 
-export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
+export const SelectLanguageScreen = () => {
   const language = useSelector(selectors.language);
   const dispatch = useDispatch();
 

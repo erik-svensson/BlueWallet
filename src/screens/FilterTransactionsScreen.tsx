@@ -18,7 +18,7 @@ import {
   CardGroup,
   RowTemplate,
 } from 'app/components';
-import { CONST, Route, MainCardStackNavigatorParams, Filters, Tags, TagsType } from 'app/consts';
+import { CONST, Route, Filters, Tags, TagsType, RootStackParams } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { checkZero } from 'app/helpers/helpers';
 import { AppStateManager } from 'app/services';
@@ -35,8 +35,8 @@ enum Index {
 }
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.FilterTransactions>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.FilterTransactions>;
+  navigation: StackNavigationProp<RootStackParams, Route.FilterTransactions>;
+  route: RouteProp<RootStackParams, Route.FilterTransactions>;
   filters: Filters;
   tags: TagsType[];
   activateFilters: () => actions.ActivateFiltersAction;

@@ -1,20 +1,11 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioButton } from 'app/components';
-import {
-  Route,
-  Wallet,
-  MainTabNavigatorParams,
-  MainCardStackNavigatorParams,
-  ActionMeta,
-  CONST,
-  WalletType,
-  ConfirmAddressFlowType,
-} from 'app/consts';
+import { Route, Wallet, RootStackParams, ActionMeta, CONST, WalletType, ConfirmAddressFlowType } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import {
@@ -34,14 +25,8 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateContact>,
-    CompositeNavigationProp<
-      StackNavigationProp<MainTabNavigatorParams, Route.Dashboard>,
-      StackNavigationProp<MainCardStackNavigatorParams, Route.CreateWallet>
-    >
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.CreateWallet>;
+  navigation: StackNavigationProp<RootStackParams, Route.CreateContact>;
+  route: RouteProp<RootStackParams, Route.CreateWallet>;
   appSettings: AppSettingsState;
   createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
   walletsLabels: string[];

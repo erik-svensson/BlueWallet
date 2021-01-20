@@ -1,11 +1,11 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { CodeInput, Header, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, NotificationNavigatorParams, CONST, RootStackParams } from 'app/consts';
+import { Route, CONST, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import { selectors as notificationSelectors } from 'app/state/notifications';
@@ -21,15 +21,11 @@ type State = {
 };
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.ConfirmNotificationCode>;
   createNotificationEmail: Function;
-  route: RouteProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>;
+  route: RouteProp<RootStackParams, Route.ConfirmNotificationCode>;
   email: string;
   pin: string;
-  createTc: Function;
 }
 
 class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
@@ -58,7 +54,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   };
 
   onSuccess = () => {
-    const { createTc, navigation } = this.props;
+    const { navigation } = this.props;
 
     CreateMessage({
       title: i18n.contactCreate.successTitle,
@@ -67,8 +63,7 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
       buttonProps: {
         title: i18n.onboarding.successCompletedButton,
         onPress: () => {
-          createTc();
-          navigation.pop();
+          navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
         },
       },
     });

@@ -1,4 +1,4 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ECPair, address as btcAddress, payments, Transaction } from 'bitcoinjs-lib';
 import { map, compose, flatten } from 'lodash/fp';
@@ -7,14 +7,7 @@ import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, Image, WalletDropdown } from 'app/components';
-import {
-  CONST,
-  Transaction as ITransaction,
-  MainCardStackNavigatorParams,
-  Route,
-  RootStackParams,
-  TransactionInput,
-} from 'app/consts';
+import { CONST, Transaction as ITransaction, Route, RootStackParams, TransactionInput } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { loadTransactionsFees } from 'app/helpers/fees';
 import { typography, palette } from 'app/styles';
@@ -28,12 +21,8 @@ const BigNumber = require('bignumber.js');
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.RecoverySend>
-  >;
-
-  route: RouteProp<MainCardStackNavigatorParams, Route.RecoverySend>;
+  navigation: StackNavigationProp<RootStackParams, Route.RecoverySend>;
+  route: RouteProp<RootStackParams, Route.RecoverySend>;
 }
 
 interface State {

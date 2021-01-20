@@ -1,10 +1,8 @@
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ListItem, ScreenTemplate } from 'app/components';
-import { MainCardStackNavigatorParams, Route } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { updateAdvancedOptions, UpdateAdvancedOptionsAction } from 'app/state/appSettings/actions';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
@@ -13,7 +11,6 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.AdvancedOptions>;
   appSettings: AppSettingsState;
   updateAdvancedOptions: (value: boolean) => UpdateAdvancedOptionsAction;
 }

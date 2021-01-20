@@ -4,13 +4,13 @@ import React from 'react';
 import { Keyboard, StatusBar, StyleSheet, View } from 'react-native';
 
 import { Button, InputItem, ScreenTemplate } from 'app/components';
-import { MainCardStackNavigatorParams, Route } from 'app/consts';
+import { RootStackParams, Route } from 'app/consts';
 
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ScanQrCode>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ScanQrCode>;
+  navigation: StackNavigationProp<RootStackParams, Route.ScanQrCode>;
+  route: RouteProp<RootStackParams, Route.ScanQrCode>;
 }
 
 export default class ScanQrCodeScreen extends React.PureComponent<Props> {

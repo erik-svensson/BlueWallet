@@ -1,5 +1,4 @@
 import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
@@ -13,7 +12,6 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../loc');
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParams, Route.UnlockTransaction>;
   route: RouteProp<RootStackParams, Route.UnlockTransaction>;
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
 };

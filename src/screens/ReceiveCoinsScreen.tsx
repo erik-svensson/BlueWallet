@@ -1,4 +1,4 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import bip21 from 'bip21';
 import React, { Component } from 'react';
@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, WalletDropdown } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Route, MainCardStackNavigatorParams, RootStackParams, Wallet } from 'app/consts';
+import { Route, RootStackParams, Wallet } from 'app/consts';
 import { checkZero } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { selectors, reducer } from 'app/state/wallets';
@@ -21,11 +21,8 @@ import logger from '../../logger';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.ReceiveCoins>
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ReceiveCoins>;
+  navigation: StackNavigationProp<RootStackParams, Route.ReceiveCoins>;
+  route: RouteProp<RootStackParams, Route.ReceiveCoins>;
   wallet?: Wallet;
   wallets: Wallet[];
 }

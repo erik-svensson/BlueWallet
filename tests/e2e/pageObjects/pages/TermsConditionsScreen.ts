@@ -7,6 +7,8 @@ const TermsConditionsScreen = () => ({
 
   disagreeButton: element(by.id('disagree-button')),
   agreeButton: element(by.id('agree-button')),
+  termsConditionsCheckbox: element(by.id('terms-and-conditions-checkbox')),
+  privacyPolicyCheckbox: element(by.id('privacy-policy-checkbox')),
   popup: {
     noButton: element(by.id('')),
     yesButton: element(by.id('')),
@@ -15,6 +17,11 @@ const TermsConditionsScreen = () => ({
   async scrollDown() {
     await actions.waitForElement(this.termsConditions);
     await this.termsConditions.scrollTo('bottom');
+  },
+
+  async tapOnAgreementCheckboxes() {
+    await actions.tap(this.termsConditionsCheckbox);
+    await actions.tap(this.privacyPolicyCheckbox);
   },
 
   async tapOnAgreeButton() {

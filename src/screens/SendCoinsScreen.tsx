@@ -1,4 +1,4 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as bitcoin from 'bitcoinjs-lib';
 import { compose } from 'lodash/fp';
@@ -18,7 +18,7 @@ import {
   WalletDropdown,
   Warning,
 } from 'app/components';
-import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
+import { CONST, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadTransactionsFees } from 'app/helpers/fees';
@@ -38,12 +38,9 @@ const BigNumber = require('bignumber.js');
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.SendCoins>
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.SendCoins>;
   wallets: Wallet[];
-  route: RouteProp<MainCardStackNavigatorParams, Route.SendCoins>;
+  route: RouteProp<RootStackParams, Route.SendCoins>;
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
 }
 

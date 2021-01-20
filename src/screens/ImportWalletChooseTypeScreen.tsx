@@ -1,20 +1,16 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ScreenTemplate, Text, Header, Button, RadioButton } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, ImportWalletType } from 'app/consts';
+import { Route, RootStackParams, ImportWalletType } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.ImportWalletChooseType>
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.ImportWalletChooseType>;
 }
 
 interface State {

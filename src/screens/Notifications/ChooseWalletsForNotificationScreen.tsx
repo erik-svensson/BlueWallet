@@ -1,19 +1,11 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
-import {
-  Route,
-  MainCardStackNavigatorParams,
-  RootStackParams,
-  NotificationNavigatorParams,
-  ConfirmAddressFlowType,
-  Wallet,
-  ActionMeta,
-} from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, Wallet, ActionMeta } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import {
@@ -30,15 +22,9 @@ const i18n = require('../../../loc');
 type Item = any; // TODO will be changed to proper type when implementing logic
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    CompositeNavigationProp<
-      StackNavigationProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>,
-      StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>
-    >
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.ChooseWalletsForNotification>;
   wallets: Wallet[];
-  route: RouteProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>;
+  route: RouteProp<RootStackParams, Route.ChooseWalletsForNotification>;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
   createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 }

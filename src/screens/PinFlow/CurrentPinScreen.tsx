@@ -5,7 +5,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
-import { Route, CONST, FlowType, MainCardStackNavigatorParams, finalAttempt } from 'app/consts';
+import { Route, CONST, FlowType, RootStackParams, finalAttempt } from 'app/consts';
 import { noop } from 'app/helpers/helpers';
 import { TimeCounterScreen } from 'app/screens';
 import { SecureStorageService } from 'app/services';
@@ -17,7 +17,7 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CurrentPin>;
+  navigation: StackNavigationProp<RootStackParams, Route.CurrentPin>;
   appSettings: {
     isPinSet: boolean;
   };

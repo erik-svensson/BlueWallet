@@ -5,7 +5,7 @@ import { Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, Mnemonic } from 'app/components';
-import { Route, Authenticator, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, Authenticator, RootStackParams } from 'app/consts';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
@@ -19,8 +19,8 @@ interface MapStateProps {
 }
 
 interface Props extends MapStateProps {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CreateAuthenticatorSuccess>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.CreateAuthenticatorSuccess>;
+  navigation: StackNavigationProp<RootStackParams, Route.CreateAuthenticatorSuccess>;
+  route: RouteProp<RootStackParams, Route.CreateAuthenticatorSuccess>;
 }
 class CreateAuthenticatorSuccessScreen extends Component<Props> {
   componentDidMount() {
@@ -33,7 +33,7 @@ class CreateAuthenticatorSuccessScreen extends Component<Props> {
 
   navigate = () => {
     const { navigation } = this.props;
-    navigation.navigate(Route.AuthenticatorList);
+    navigation.navigate(Route.MainTabStackNavigator, { screen: Route.AuthenticatorList });
   };
 
   render() {

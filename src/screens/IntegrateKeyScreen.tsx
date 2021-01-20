@@ -1,23 +1,17 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Linking } from 'react-native';
 
 import { ScreenTemplate, Text, Header, Button } from 'app/components';
-import { Route, CONST, MainTabNavigatorParams, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, CONST, RootStackParams } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
-    CompositeNavigationProp<
-      StackNavigationProp<RootStackParams, Route.DeleteContact>,
-      StackNavigationProp<MainCardStackNavigatorParams, Route.IntegrateKey>
-    >
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.IntegrateKey>;
+  navigation: StackNavigationProp<RootStackParams, Route.IntegrateKey>;
+  route: RouteProp<RootStackParams, Route.IntegrateKey>;
 }
 export class IntegrateKeyScreen extends React.PureComponent<Props> {
   scanKey = () => {

@@ -1,4 +1,4 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, SectionList, SectionListData } from 'react-native';
@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, Image, TransactionItem, Button, CheckBox, WalletDropdown } from 'app/components';
-import { MainCardStackNavigatorParams, Route, RootStackParams, Transaction, Wallet } from 'app/consts';
+import { Route, RootStackParams, Transaction, Wallet } from 'app/consts';
 import { getGroupedTransactions } from 'app/helpers/transactions';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
@@ -16,12 +16,8 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface NavigationProps {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.RecoveryTransactionList>
-  >;
-
-  route: RouteProp<MainCardStackNavigatorParams, Route.RecoveryTransactionList>;
+  navigation: StackNavigationProp<RootStackParams, Route.RecoveryTransactionList>;
+  route: RouteProp<RootStackParams, Route.RecoveryTransactionList>;
 }
 
 interface MapStateProps {

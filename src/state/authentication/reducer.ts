@@ -31,7 +31,6 @@ export const authenticationReducer = (state = initialState, action: Authenticati
         isAuthenticated: action.isAuthenticated,
       };
     case AuthenticationAction.CheckCredentials:
-    case AuthenticationAction.CreateTxPassword:
       return {
         ...state,
         isLoading: true,
