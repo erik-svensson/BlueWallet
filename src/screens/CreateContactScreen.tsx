@@ -75,8 +75,11 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   createContact = () => {
     const { name, address } = this.state;
 
-    const nameError = this.validateName(name.value.trim());
-    const addressError = this.validateAddress(address.value.trim());
+    const trimmedName = name.value.trim();
+    const trimmedAddress = address.value.trim();
+
+    const nameError = this.validateName(trimmedName);
+    const addressError = this.validateAddress(trimmedAddress);
 
     if (addressError || nameError) {
       this.setState({
@@ -87,8 +90,8 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
     }
     this.props.createContact({
       id: uuidv4(),
-      name: name.value.trim(),
-      address: address.value.trim(),
+      name: trimmedName,
+      address: trimmedAddress,
     });
     this.setState(
       {
