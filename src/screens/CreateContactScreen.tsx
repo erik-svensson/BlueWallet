@@ -74,8 +74,9 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
 
   createContact = () => {
     const { name, address } = this.state;
-    const nameError = this.validateName();
-    const addressError = this.validateAddress();
+
+    const nameError = this.validateName(name.value.trim());
+    const addressError = this.validateAddress(address.value.trim());
 
     if (addressError || nameError) {
       this.setState({
@@ -98,26 +99,26 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
     );
   };
 
-  validateAddress = () => {
-    let error = '';
+  validateAddress = (value: string) => {
     try {
-      checkAddress(this.state.address.value);
+      checkAddress(value);
     } catch (_) {
-      error = i18n.send.details.address_field_is_not_valid;
+      return i18n.send.details.address_field_is_not_valid;
     }
-    return error;
+
+    return '';
   };
 
-  validateName = () => {
-    const { name } = this.state;
-    let error = '';
-    if (name.value.match(/[!@#$%^&*()\[\]\\\/,.?":{}|<>]/g)?.length) {
-      error = i18n.contactCreate.nameCannotContainSpecialCharactersError;
+  validateName = (value: string) => {
+    if (value.match(/[!@#$%^&*()\[\]\\\/,.?":{}|<>]/g)?.length) {
+      return i18n.contactCreate.nameCannotContainSpecialCharactersError;
     }
-    if (!name.value.match(/\w/)?.length) {
-      error = i18n.contactCreate.nameMissingAlphanumericCharacterError;
+
+    if (!value.match(/\w/)?.length) {
+      return i18n.contactCreate.nameMissingAlphanumericCharacterError;
     }
-    return error;
+
+    return '';
   };
 
   onScanQrCodePress = () => {
