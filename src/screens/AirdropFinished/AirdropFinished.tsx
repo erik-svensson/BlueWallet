@@ -18,7 +18,7 @@ type Props = {
   route: RouteProp<MainCardStackNavigatorParams, Route.AirdropFinished>;
 };
 
-const AirdropFinished: FC<Props> = ({ route }: Props) => (
+export const AirdropFinished: FC<Props> = ({ route }: Props) => (
   <ScreenTemplate header={<Header isBackArrow title={i18n.airdrop.title} />}>
     <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
     <AirdropWalletBalanceCard walletDetails={{ balance: route.params.balance, name: route.params.name }} />
