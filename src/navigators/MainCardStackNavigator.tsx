@@ -19,6 +19,7 @@ import {
   SettingsScreen,
   SelectLanguageScreen,
   AboutUsScreen,
+  TermsConditionsSettingsScreen,
   AdvancedOptionsScreen,
   CreatePinScreen,
   CurrentPinScreen,
@@ -41,6 +42,12 @@ import {
   AirdropThankYouScreen,
   AirdropRequirementsScreen,
   AirdropFinishedScreen,
+  NotificationScreen,
+  AddEmailScreen,
+  ConfirmEmailScreen,
+  ChooseWalletsForNotificationScreen,
+  ChangeEmailScreen,
+  ReceiveNotificationsConfirmationScreen,
 } from 'app/screens';
 
 const Stack = createStackNavigator<MainCardStackNavigatorParams>();
@@ -63,6 +70,7 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.Settings} component={SettingsScreen} />
     <Stack.Screen name={Route.SelectLanguage} component={SelectLanguageScreen} />
     <Stack.Screen name={Route.AboutUs} component={AboutUsScreen} />
+    <Stack.Screen name={Route.TermsConditions} component={TermsConditionsSettingsScreen} />
     <Stack.Screen name={Route.AdvancedOptions} component={AdvancedOptionsScreen} />
     <Stack.Screen name={Route.CreatePin} component={CreatePinScreen} />
     <Stack.Screen name={Route.CurrentPin} component={CurrentPinScreen} options={{ gestureEnabled: false }} />
@@ -93,5 +101,11 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.AirdropThankYou} component={AirdropThankYouScreen} />
     <Stack.Screen name={Route.AirdropFinished} component={AirdropFinishedScreen} />
     <Stack.Screen name={Route.AirdropRequirements} component={AirdropRequirementsScreen} />
+    <Stack.Screen name={Route.Notifications} component={NotificationScreen} />
+    <Stack.Screen name={Route.AddEmail} component={AddEmailScreen} />
+    <Stack.Screen name={Route.ConfirmEmail} component={ConfirmEmailScreen} />
+    <Stack.Screen name={Route.ChooseWalletsForNotification} component={ChooseWalletsForNotificationScreen} />
+    <Stack.Screen name={Route.ChangeEmail} component={ChangeEmailScreen} />
+    <Stack.Screen name={Route.ReceiveNotificationsConfirmation} component={ReceiveNotificationsConfirmationScreen} />
   </Stack.Navigator>
 );

@@ -7,16 +7,19 @@ import { ImageStyle } from 'react-native-fast-image';
 
 import { FastImageSource } from 'app/components';
 import { getUtcDate } from 'app/helpers/date';
+
 import {
   HDSegwitP2SHAirWallet,
   HDSegwitP2SHArWallet,
   HDSegwitBech32Wallet,
   SegwitP2SHWallet,
   HDSegwitP2SHWallet,
-} from 'app/legacy';
+  HDLegacyP2PKHWallet,
+} from '../../class';
 
 export const CONST = {
   pinCodeLength: 4,
+  codeLength: 4,
   transactionMinPasswordLength: 8,
   allWallets: 'All wallets',
   receive: 'receive',
@@ -33,11 +36,29 @@ export const CONST = {
   pin: 'pin',
   defaultLanguage: 'en',
   maxAddressLength: 48,
-  tcVersionRequired: 1,
+  tcVersionRequired: 2,
   tcVersion: 'tcVersion',
   airdropDate: getUtcDate('2021-03-08 12:00'),
   airdropMinimumBTCVRequired: 5,
   airdropTotalDollarsToShare: '250.000',
+  emailCodeErrorMax: 3,
+  walletsDefaultGapLimit: 20,
+};
+
+export const ADDRESSES_TYPES = {
+  p2wsh_p2sh: 'p2wsh-p2sh',
+  p2pkh: 'p2pkh',
+  p2wpkh: 'p2wpkh',
+  p2wpkh_p2sh: 'p2wpkh-p2sh',
+};
+
+export const WALLETS_ADDRESSES_TYPES = {
+  [HDSegwitP2SHArWallet?.type]: ADDRESSES_TYPES.p2wsh_p2sh,
+  [HDSegwitP2SHAirWallet?.type]: ADDRESSES_TYPES.p2wsh_p2sh,
+  [HDLegacyP2PKHWallet?.type]: ADDRESSES_TYPES.p2pkh,
+  [HDSegwitBech32Wallet?.type]: ADDRESSES_TYPES.p2wpkh,
+  [HDSegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
+  [SegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
 };
 
 export interface AirdropWalletDetails {
@@ -59,6 +80,7 @@ export interface SocketOptions {
 }
 
 export type SocketCallback = (address: string) => void;
+
 export const ELECTRUM_VAULT_SEED_PREFIXES = {
   SEED_PREFIX: '01', // Standard wallet
   SEED_PREFIX_SW: '100', // Segwit wallet
@@ -128,6 +150,7 @@ export enum Route {
   SendCoinsConfirm = 'SendCoinsConfirm',
   EditText = 'EditText',
   AboutUs = 'AboutUs',
+  TermsConditions = 'TermsConditions',
   SelectLanguage = 'SelectLanguage',
   ActionSheet = 'ActionSheet',
   SendTransactionDetails = 'SendTransactionDetailsScreen',
@@ -137,6 +160,8 @@ export enum Route {
   CurrentPin = 'CurrentPin',
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
+  AddNotificationEmail = 'AddNotificationEmail',
+  ConfirmNotificationCode = 'ConfirmNotificationCode',
   CreateTransactionPassword = 'CreateTransactionPassword',
   ConfirmTransactionPassword = 'ConfirmTransactionPassword',
   AdvancedOptions = 'AdvancedOptions',
@@ -149,6 +174,12 @@ export enum Route {
   AirdropThankYou = 'AirdropThankYou',
   AirdropRequirements = 'AirdropRequirements',
   AirdropFinished = 'AirdropFinished',
+  Notifications = 'Notifications',
+  AddEmail = 'AddEmail',
+  ConfirmEmail = 'ConfirmEmail',
+  ChooseWalletsForNotification = 'ChooseWalletsForNotification',
+  ChangeEmail = 'ChangeEmail',
+  ReceiveNotificationsConfirmation = 'ReceiveNotificationsConfirmation',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -176,6 +207,7 @@ export interface Wallet {
   address?: string;
   secret: string;
   type: string;
+  hash?: string;
   typeReadable: string;
   unconfirmed_balance: number;
   confirmed_balance: number;
@@ -198,6 +230,18 @@ export interface Wallet {
   getScriptHashes: () => string[];
   getAddressForTransaction: () => string;
   password?: string;
+  pubKeys?: Buffer[];
+  getDerivationPath: () => string;
+}
+
+export interface WalletPayload {
+  name: string;
+  gap_limit: number;
+  derivation_path?: Record<string, unknown>;
+  xpub: string;
+  address_type: string;
+  instant_public_key?: string;
+  recovery_public_key?: string;
 }
 
 export interface ActionMeta {
@@ -219,6 +263,18 @@ export enum TxType {
   INSTANT = 'INSTANT',
   RECOVERY = 'RECOVERY',
 }
+
+export enum ConfirmAddressFlowType {
+  FIRST_ADDRESS = 'FIRST_ADDRESS',
+  CURRENT_ADDRESS = 'CURRENT_ADDRESS',
+  NEW_ADDRESS = 'NEW_ADDRESS',
+  DELETE_ADDRESS = 'DELETE_ADDRESS',
+  ANOTHER_ACTION = 'ANOTHER_ACTION',
+  UNSUBSCRIBE = 'UNSUBSCRIBE',
+  RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT',
+  RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE',
+}
+
 export interface Transaction {
   hash: string;
   txid: string;
@@ -380,6 +436,30 @@ export type PasswordNavigatorParams = {
   };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
+  [Route.ConfirmNotificationCode]: { email?: string };
+  [Route.ChooseWalletsForNotification]: {
+    email: string;
+    isOnboarding?: boolean;
+  };
+  [Route.AddNotificationEmail]: undefined;
+};
+
+export type NotificationNavigatorParams = {
+  [Route.AddNotificationEmail]: undefined;
+  [Route.ChooseWalletsForNotification]: {
+    email: string;
+    onboarding?: boolean;
+  };
+  [Route.ConfirmNotificationCode]: { email?: string };
+  [Route.Message]: {
+    title: string;
+    source: FastImageSource;
+    description: string;
+    testID?: string;
+    buttonProps?: ButtonProps;
+    imageStyle?: StyleProp<ViewStyle>;
+    asyncTask?: () => void;
+  };
 };
 
 export type MainCardStackNavigatorParams = {
@@ -428,6 +508,7 @@ export type MainCardStackNavigatorParams = {
   [Route.Settings]: undefined;
   [Route.SelectLanguage]: undefined;
   [Route.AboutUs]: undefined;
+  [Route.TermsConditions]: undefined;
   [Route.AdvancedOptions]: undefined;
   [Route.CreatePin]: {
     flowType: string;
@@ -445,7 +526,7 @@ export type MainCardStackNavigatorParams = {
   [Route.DeleteEntity]: { onConfirm: () => void; name: string | undefined; subtitle: string; title: string };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
-  [Route.CreateWalletSuccess]: { secret: string };
+  [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: () => void };
   [Route.IntegrateKey]: {
     onBarCodeScan: (text: string) => void;
     title: string;
@@ -467,7 +548,32 @@ export type MainCardStackNavigatorParams = {
     balance: number;
     name: string;
   };
+  [Route.Notifications]: {
+    walletsToSubscribe?: Wallet[];
+  };
+  [Route.AddEmail]: {
+    walletsToSubscribe?: Wallet[];
+  };
+  [Route.ConfirmEmail]: {
+    email: string;
+    newAddress?: string;
+    flowType: ConfirmAddressFlowType;
+    walletsToSubscribe?: Wallet[];
+    onBack?: () => void;
+  };
+  [Route.ChooseWalletsForNotification]: {
+    email: string;
+    isOnboarding?: boolean;
+  };
+  [Route.ChangeEmail]: {
+    email: string;
+  };
+  [Route.ReceiveNotificationsConfirmation]: {
+    address: string;
+    flowType: ConfirmAddressFlowType;
+  };
 };
+
 export type DateType = Date | Dayjs;
 export interface Authenticator {
   keyPair: ECPair.ECPairInterface | null;

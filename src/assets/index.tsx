@@ -41,10 +41,12 @@ export const images = {
   noAuthenticators: require('./images/shield3x.png'),
   loader: require('./images/loader.png'),
   airdrop: require('./images/airdrop.png'),
+  bigBell: require('./images/bigBell.png'),
 };
 
 export const icons = {
   iconDropdown: require('./images/iconDropdown.png'),
+  termsIcon: require('./images/terms.png'),
   search: require('./images/iconSearch.png'),
   addIcon: require('./images/addIcon.png'),
   buildIcon: require('./images/buildIcon.png'),
@@ -76,4 +78,5 @@ export const icons = {
   airdrop: require('./images/airdropIcon.png'),
   facebook: require('./images/facebook.png'),
   twitter: require('./images/twitter.png'),
+  bell: require('./images/bell.png'),
 };

@@ -21,11 +21,18 @@ const renderCofirmations = (txType: TxType, confirmations: number) =>
     <Text style={styles.label}>{`${i18n.transactions.list.conf}: ${getConfirmationsText(txType, confirmations)}`}</Text>
   );
 
-export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress: (item: any) => void }) => {
+interface Props {
+  item: Transaction;
+  onPress: (item: any) => void;
+  testID?: string;
+}
+
+export const TransactionItem = ({ item, onPress, testID }: Props) => {
   const isMinusValue = item.valueWithoutFee < 0;
 
   return (
     <TouchableOpacity
+      testID={testID}
       style={[styles.container, item.isRecoveredAlertToMe ? styles.opacity : null]}
       onPress={() => onPress(item)}
     >

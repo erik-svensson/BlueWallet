@@ -34,9 +34,13 @@ export const SettingsScreen = (props: Props) => {
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
 
+  const navigateToTermsConditions = () => navigation.navigate(Route.TermsConditions);
+
   const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
 
   const onAdvancedOptionsChange = () => navigation.navigate(Route.AdvancedOptions);
+
+  const onNotificationsOptionsChange = () => navigation.navigate(Route.Notifications, {});
 
   const onFingerprintLoginChange = async (value: boolean) => {
     dispatch(updateBiometricSetting(value));
@@ -51,6 +55,7 @@ export const SettingsScreen = (props: Props) => {
         source={icons.buildIcon}
         onPress={onAdvancedOptionsChange}
       />
+      <ListItem title={i18n.settings.notifications} source={icons.bell} onPress={onNotificationsOptionsChange} />
     </>
   );
 
@@ -66,6 +71,7 @@ export const SettingsScreen = (props: Props) => {
   const renderSecuritySettings = () => (
     <>
       <ListItem
+        testID="change-pin-settings-item"
         title={i18n.settings.changePin}
         source={icons.lockIcon}
         iconWidth={15}
@@ -74,8 +80,10 @@ export const SettingsScreen = (props: Props) => {
       />
       {biometryTypeAvailable && (
         <ListItem
+          testID="biometry-settings-item"
           title={i18n.settings[BiometricService.biometryType!]}
           source={icons.fingerprintIcon}
+          switchTestID="biometry-switch"
           switchValue={isBiometricsEnabled}
           onSwitchValueChange={onFingerprintLoginChange}
           iconWidth={17}
@@ -86,7 +94,15 @@ export const SettingsScreen = (props: Props) => {
   );
 
   const renderAboutSettings = () => (
-    <ListItem onPress={navigateToAboutUs} title={i18n.settings.aboutUs} source={icons.infoIcon} />
+    <>
+      <ListItem
+        testID="about-us-settings-item"
+        onPress={navigateToAboutUs}
+        title={i18n.settings.aboutUs}
+        source={icons.infoIcon}
+      />
+      <ListItem onPress={navigateToTermsConditions} title={i18n.settings.terms} source={icons.termsIcon} />
+    </>
   );
 
   return (
@@ -94,7 +110,7 @@ export const SettingsScreen = (props: Props) => {
       <AppStateManager handleAppComesToForeground={refreshBiometricsAvailability} />
       <Header title={i18n.settings.header} />
       <ScreenTemplate>
-        <Image source={logoSource} style={styles.logo} resizeMode="contain" />
+        <Image testID="goldwallet-logo" source={logoSource} style={styles.logo} resizeMode="contain" />
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.security}>{renderSecuritySettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.about}>{renderAboutSettings()}</LabeledSettingsRow>

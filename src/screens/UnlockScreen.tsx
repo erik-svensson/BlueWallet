@@ -150,7 +150,7 @@ class UnlockScreen extends PureComponent<Props, State> {
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
         <View style={styles.imageContainer}>
-          <Image source={images.portraitLogo} style={styles.logo} resizeMode="contain" />
+          <Image testID="unlock-screen-logo" source={images.portraitLogo} style={styles.logo} resizeMode="contain" />
         </View>
         <PinView value={pin} length={CONST.pinCodeLength} />
         <Text style={styles.errorText}>{error}</Text>

@@ -68,7 +68,9 @@ export const TimeCounterScreen = (props: Props) => {
     >
       <AppStateManager handleAppComesToForeground={setCurrentLeftSeconds} />
       <View style={styles.descriptionContainer}>
-        <Text style={styles.title}>{i18n.timeCounter.title}</Text>
+        <Text testID="application-blocked-screen-header" style={styles.title}>
+          {i18n.timeCounter.title}
+        </Text>
         <Text style={styles.description}>{i18n.timeCounter.description}</Text>
       </View>
       <View style={styles.timerContainer}>

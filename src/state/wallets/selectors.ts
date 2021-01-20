@@ -22,6 +22,8 @@ import { selectors as electrumXSelectors } from '../electrumX';
 import { WalletsState } from './reducer';
 
 const local = (state: ApplicationState): WalletsState => state.wallets;
+const store = (state: ApplicationState) => state;
+const subscribedIds = createSelector(store, state => state.notifications.subscribedIds);
 
 export const wallets = createSelector(local, state => {
   return state.wallets.map(wallet => {
@@ -98,6 +100,16 @@ export const allWallets = createSelector(wallets, allWallet, (walletsList, aw) =
   }
   return walletsList;
 });
+
+export const subscribedWallets = createSelector(subscribedIds, wallets, (ids, walletsList) =>
+  walletsList.filter(wallet => ids.some(id => id === wallet.id)),
+);
+
+export const unSubscribedWallets = createSelector(subscribedIds, wallets, (ids, walletsList) =>
+  walletsList.filter(
+    wallet => !ids.some(id => id === wallet.id) && wallet.type === HDSegwitP2SHAirWallet.type, //till all wallets are possible to subscribe
+  ),
+);
 
 type TxEntity = TransactionInput | TransactionOutput;
 const getMyAmount = (wallet: Wallet, entities: TxEntity[]) =>

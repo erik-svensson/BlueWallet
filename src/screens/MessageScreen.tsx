@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, BackHandler, StatusBar } from 'react-native';
+import { Text, View, StyleSheet, BackHandler, StatusBar, StyleProp } from 'react-native';
 
 import { Button, Image } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';

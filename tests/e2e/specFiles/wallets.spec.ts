@@ -78,7 +78,7 @@ describe('Wallets', () => {
           await app.wallets.dashboardScreen.tapOnAddButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('2-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('3-Key Vault');
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
           await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
@@ -221,8 +221,10 @@ describe('Wallets', () => {
     describe('Advanced wallets', () => {
       beforeEach(async () => {
         await app.navigationBar.changeTab('settings');
-        await app.settings.tapOnAdvancedOptions();
-        await app.settings.tapOnAdvancedOptionsSwitch();
+        await app.settings.settingsScreen.tapOnAdvancedOptions();
+        await app.settings.advancedOptionsScreen.tapOnAdvancedOptionsSwitch();
+        // await app.settings.tapOnAdvancedOptions();
+        // await app.settings.tapOnAdvancedOptionsSwitch();
         await app.header.tapOnBackButton();
         await app.navigationBar.changeTab('wallets');
       });

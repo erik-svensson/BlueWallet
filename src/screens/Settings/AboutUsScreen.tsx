@@ -59,12 +59,14 @@ export const AboutUsScreen = (props: Props) => {
       <Text style={styles.title}>{i18n.aboutUs.title}</Text>
       <Text style={styles.description}>{i18n.aboutUs.alwaysBackupYourKeys}</Text>
       <Button
+        testID="go-to-github-button"
         source={icons.github}
         onPress={goToGithub}
         title={i18n.aboutUs.goToOurGithub}
         containerStyle={styles.buttonContainer}
       />
       <Button
+        testID="rate-us-button"
         onPress={handleRateButtonPress}
         source={icons.star}
         title={i18n.aboutUs.rateGoldWallet}

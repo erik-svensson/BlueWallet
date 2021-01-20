@@ -1,4 +1,5 @@
 import { by, element } from 'detox';
+import { act } from 'react-test-renderer';
 
 import actions from '../../actions';
 import MessageScreen from '../common/MessageScreen';
@@ -23,9 +24,15 @@ export interface CreateWalletOptions {
 
 const Wallets = () => {
   const DashboardScreen = () => ({
+    header: element(by.id('dashboard-header')),
+    self: element(by.id('dashboard-screen')),
+
     noWalletsIcon: element(by.id('no-wallets-icon')),
     filterTransactionsButton: element(by.id('filter-transactions-button')),
     addButton: element(by.id('add-wallet-button')),
+    sendButton: element(by.id('send-coins-button')),
+
+    getTransactionElement: (note: string) => element(by.id(`transaction-item-${note}`)),
 
     async tapOnAddButton() {
       await actions.tap(this.addButton);
@@ -39,6 +46,14 @@ const Wallets = () => {
       const wallet = element(by.id(`wallet-${name}`));
 
       await actions.tap(wallet);
+    },
+
+    async tapOnSendButton() {
+      await actions.tap(this.sendButton);
+    },
+
+    async scrollToTheTransactionWithNote(note: string) {
+      await actions.scrollToElement(element(by.id(`transaction-item-${note}`)), 'dashboard-screen');
     },
   });
 
