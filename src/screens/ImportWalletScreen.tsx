@@ -22,7 +22,7 @@ import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
 import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
-import { subscribedIds, isNotificationEmailSet, storedEmail } from 'app/state/notifications/selectors';
+import { isNotificationEmailSet, storedEmail } from 'app/state/notifications/selectors';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { importWallet as importWalletAction, ImportWalletAction } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
@@ -49,8 +49,7 @@ interface Props {
   isNotificationEmailSet: boolean;
   email: string;
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
-  checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
-  subscribedIds: string[];
+  checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
 }
 
 interface State {
@@ -171,35 +170,40 @@ export class ImportWalletScreen extends Component<Props, State> {
       });
     } else {
       newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
-      checkSubscription([newWallet], email);
-      importWallet(newWallet, {
-        onSuccess: () => {
-          this.props.navigation.navigate(Route.CreateWalletSuccess, {
-            secret: newWallet.getSecret(),
-            onButtonPress: !!email
-              ? () =>
-                  this.props.navigation.navigate(Route.Confirm, {
-                    title: i18n.notifications.notifications,
-                    children: this.renderConfirmScreenContent(),
-                    onConfirm: () =>
-                      this.props.navigation.navigate(Route.ConfirmEmail, {
-                        email,
-                        flowType: ConfirmAddressFlowType.SUBSCRIBE,
-                        walletsToSubscribe: [newWallet],
-                        onBack: () =>
-                          this.props.navigation.navigate(Route.WalletDetails, {
-                            id: newWallet.id,
-                          }),
-                      }),
-                    onBack: () => this.props.navigation.navigate(Route.Dashboard),
-                  })
-              : undefined,
+      checkSubscription([newWallet], email, {
+        onSuccess: (ids: string[]) => {
+          const isWalletSubscribed = ids.some(id => id === newWallet.id);
+          importWallet(newWallet, {
+            onSuccess: () => {
+              this.props.navigation.navigate(Route.CreateWalletSuccess, {
+                secret: newWallet.getSecret(),
+                onButtonPress:
+                  !!email && !isWalletSubscribed
+                    ? () =>
+                        this.props.navigation.navigate(Route.Confirm, {
+                          title: i18n.notifications.notifications,
+                          children: this.renderConfirmScreenContent(),
+                          onConfirm: () =>
+                            this.props.navigation.navigate(Route.ConfirmEmail, {
+                              email,
+                              flowType: ConfirmAddressFlowType.SUBSCRIBE,
+                              walletsToSubscribe: [newWallet],
+                              onBack: () =>
+                                this.props.navigation.navigate(Route.WalletDetails, {
+                                  id: newWallet.id,
+                                }),
+                            }),
+                          onBack: () => this.props.navigation.navigate(Route.Dashboard),
+                        })
+                    : undefined,
+              });
+            },
+            onFailure: (error: string) =>
+              this.showErrorMessageScreen({
+                description: error,
+              }),
           });
         },
-        onFailure: (error: string) =>
-          this.showErrorMessageScreen({
-            description: error,
-          }),
       });
     }
   };
@@ -558,7 +562,6 @@ const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isNotificationEmailSet: isNotificationEmailSet(state),
   email: storedEmail(state),
-  subscribedIds: subscribedIds(state),
 });
 
 const mapDispatchToProps = {

@@ -125,6 +125,7 @@ export interface AuthenticateEmailFailureAction {
 export interface CheckSubscriptionAction {
   type: NotificationAction.CheckSubscriptionAction;
   payload: { wallets: Wallet[]; email: string };
+  meta?: ActionMeta;
 }
 export interface CheckSubscriptionSuccessAction {
   type: NotificationAction.CheckSubscriptionSuccessAction;
@@ -250,12 +251,13 @@ export const authenticateEmailFailure = (error: string): AuthenticateEmailFailur
   error,
 });
 
-export const checkSubscription = (wallets: Wallet[], email: string): CheckSubscriptionAction => ({
+export const checkSubscription = (wallets: Wallet[], email: string, meta?: ActionMeta): CheckSubscriptionAction => ({
   type: NotificationAction.CheckSubscriptionAction,
   payload: {
     wallets,
     email,
   },
+  meta,
 });
 
 export const checkSubscriptionSuccess = (subscribedIds: string[]): CheckSubscriptionSuccessAction => ({

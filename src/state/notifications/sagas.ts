@@ -125,7 +125,10 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
 }
 
 export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
-  const { wallets, email } = action.payload;
+  const {
+    meta,
+    payload: { wallets, email },
+  } = action;
   try {
     const walletWithHashes = yield Promise.all(
       wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
@@ -139,6 +142,9 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       }
     });
     yield put(checkSubscriptionSuccess(ids));
+    if (meta?.onSuccess) {
+      meta.onSuccess(ids);
+    }
   } catch (error) {
     yield put(checkSubscriptionFailure(error.msg));
   }
