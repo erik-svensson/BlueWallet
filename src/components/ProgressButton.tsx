@@ -13,6 +13,12 @@ interface Props {
   inProgressTitle: string;
 }
 
+const _styles = {
+  height: 18,
+  width: 53,
+  radius: 9,
+};
+
 const noIntervalID = -1;
 
 export const ProgressButton: FC<Props> = ({
@@ -37,8 +43,9 @@ export const ProgressButton: FC<Props> = ({
 
     const _intervalID = setInterval(() => {
       setIntervalID((_intervalID as unknown) as number);
-
+      console.log('?');
       setProgress(prevProgress => {
+        console.log(prevProgress);
         if (prevProgress < timeoutMilis) {
           return prevProgress + stepIntervalMilis;
         } else {
@@ -49,7 +56,7 @@ export const ProgressButton: FC<Props> = ({
           return 0;
         }
       });
-    }, stepIntervalMilis);
+    }, 100);
   };
 
   const undo = () => {
@@ -74,8 +81,8 @@ export const ProgressButton: FC<Props> = ({
                   color={palette.secondary}
                   progress={progress / timeoutMilis}
                   width={null}
-                  height={43}
-                  borderRadius={32.5}
+                  height={_styles.height}
+                  borderRadius={_styles.radius}
                 />
               </View>
             </View>
@@ -110,25 +117,25 @@ const styles = StyleSheet.create({
     backgroundColor: palette.grey,
   },
   progressButtonContainer: {
-    width: 200,
-    height: 43,
-    borderRadius: 32.5,
-    bottom: 100,
-    left: 100,
+    position: 'relative',
+    height: _styles.height,
+    width: _styles.width,
+    borderRadius: _styles.radius,
   },
   stackItem: {
     position: 'absolute',
   },
   button: {
-    borderRadius: 32.5,
-    height: 43,
-    width: 200,
+    height: _styles.height,
+    width: _styles.width,
+    borderRadius: _styles.radius,
     display: 'flex',
     justifyContent: 'center',
   },
   titleStyle: {
     alignSelf: 'center',
     ...typography.button,
+    fontSize: 12,
     color: palette.white,
   },
 });
