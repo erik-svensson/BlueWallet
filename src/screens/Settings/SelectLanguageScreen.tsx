@@ -18,6 +18,7 @@ export interface Language {
 }
 
 interface LanguageItemProps {
+  testID: string;
   selectedLanguage: Language;
   selectedLanguageValue: string;
   onLanguageSelect: (value: string) => void;
@@ -27,10 +28,18 @@ interface SelectLanguageScreenProps {
   navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.SelectLanguage>;
 }
 
-const LanguageItem = ({ selectedLanguage, selectedLanguageValue, onLanguageSelect }: LanguageItemProps) => {
+const LanguageItem = (props: LanguageItemProps) => {
+  const { testID, selectedLanguage, selectedLanguageValue, onLanguageSelect } = props;
+
   const handleLanguageSelect = () => onLanguageSelect(selectedLanguage.value);
+
   return (
-    <TouchableOpacity key={selectedLanguage.value} onPress={handleLanguageSelect} style={styles.langaugeItemContainer}>
+    <TouchableOpacity
+      testID={testID}
+      key={selectedLanguage.value}
+      onPress={handleLanguageSelect}
+      style={styles.langaugeItemContainer}
+    >
       <Text style={styles.languageItem}>{selectedLanguage.label}</Text>
       {selectedLanguage.value === selectedLanguageValue && (
         <View style={styles.successImageContainer}>
@@ -82,6 +91,7 @@ export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
     <ScreenTemplate header={<Header isBackArrow={true} title={i18n.selectLanguage.header} />}>
       {availableLanguages.map(item => (
         <LanguageItem
+          testID={`language-item-${item.value}`}
           selectedLanguage={item}
           selectedLanguageValue={language}
           onLanguageSelect={onLanguageSelect}

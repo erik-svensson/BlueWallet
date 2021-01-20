@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { icons, images } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
-import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams } from 'app/consts';
+import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams, NotificationNavigatorParams } from 'app/consts';
 import {
   createTxPassword as createTxPasswordAction,
   setIsAuthenticated as setIsAuthenticatedAction,
@@ -20,7 +20,10 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: CompositeNavigationProp<
     StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
-    StackNavigationProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>
+    CompositeNavigationProp<
+      StackNavigationProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>,
+      StackNavigationProp<NotificationNavigatorParams, Route.AddNotificationEmail>
+    >
   >;
   createTxPassword: Function;
   setIsAuthenticated: (isAuthenticated: boolean) => SetIsAuthenticatedAction;
@@ -74,7 +77,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
     this.setState({ password });
   };
 
-  changeVisability = () => {
+  changeVisibility = () => {
     this.setState({
       isVisible: !this.state.isVisible,
     });
@@ -100,7 +103,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
           <Text style={styles.pinDescription}>{i18n.onboarding.createPasswordDescription}</Text>
         </View>
         <View style={styles.inputItemContainer}>
-          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisability}>
+          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisibility}>
             <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem

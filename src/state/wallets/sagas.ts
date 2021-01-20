@@ -46,6 +46,7 @@ export function* loadWalletsSaga() {
     yield all([call(() => BlueApp.fetchWalletBalances()), call(() => BlueApp.fetchWalletTransactions())]);
 
     const wallets = BlueApp.getWallets();
+
     yield put(loadWalletsSuccess(wallets));
   } catch ({ message }) {
     if (message.includes(messages.noMatchingScript)) {

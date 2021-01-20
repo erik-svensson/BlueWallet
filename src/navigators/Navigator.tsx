@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { CONST } from 'app/consts';
 import { Toasts } from 'app/containers';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
-import { RootNavigator, PasswordNavigator } from 'app/navigators';
+import { RootNavigator, PasswordNavigator, NotificationNavigator } from 'app/navigators';
 import { UnlockScreen, TermsConditionsScreen, ConnectionIssuesScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
 import ChamberOfSecrets from 'app/screens/ChamberOfSecrets';
@@ -26,6 +26,7 @@ import {
   checkConnection as checkConnectionAction,
   CheckConnectionAction,
 } from 'app/state/electrumX/actions';
+import { selectors as notificationSelectors } from 'app/state/notifications';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { isAndroid, isIos } from 'app/styles';
 
@@ -38,6 +39,8 @@ interface MapStateToProps {
   isTcAccepted: boolean;
   isAuthenticated: boolean;
   isTxPasswordSet: boolean;
+  isNotificationEmailSet: boolean;
+  isNotificationEmailSkip: boolean;
   isLoading: boolean;
   language: string;
   isInitialized: boolean;
@@ -105,6 +108,12 @@ class Navigator extends React.Component<Props, State> {
     return !isPinSet || !isTxPasswordSet;
   };
 
+  shouldRenderNotification = () => {
+    const { isNotificationEmailSet, isNotificationEmailSkip } = this.props;
+
+    return !isNotificationEmailSet || !isNotificationEmailSkip;
+  };
+
   shouldRenderUnlockScreen = () => {
     const { isPinSet, isTxPasswordSet, isAuthenticated } = this.props;
 
@@ -165,6 +174,10 @@ class Navigator extends React.Component<Props, State> {
       return <PasswordNavigator />;
     }
 
+    // if (this.shouldRenderNotification()) {
+    //   return <NotificationNavigator />;
+    // } TODO // till onboarding logic works well with the others
+
     if (!hasConnectedToServerAtLeaseOnce) {
       return <ConnectionIssuesScreen />;
     }
@@ -192,6 +205,8 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isLoading: authenticationSelectors.isLoading(state),
   isPinSet: authenticationSelectors.isPinSet(state),
   isTxPasswordSet: authenticationSelectors.isTxPasswordSet(state),
+  isNotificationEmailSet: notificationSelectors.isNotificationEmailSet(state),
+  isNotificationEmailSkip: notificationSelectors.isNotificationEmailSkip(state),
   isAuthenticated: authenticationSelectors.isAuthenticated(state),
   language: appSettingsSelectors.language(state),
   isInitialized: walletsSelectors.isInitialized(state),

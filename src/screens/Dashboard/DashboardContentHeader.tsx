@@ -68,11 +68,11 @@ export const DashboardContentHeader = ({
       </View>
       {onReceivePress && onSelectPress && !isAllWallets ? (
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity style={styles.circleButton} onPress={onSendPress}>
+          <TouchableOpacity testID="send-coins-button" style={styles.circleButton} onPress={onSendPress}>
             <Image source={images.yellowMinus} style={styles.circleButtonImage} />
             <Text style={styles.circleButtonText}>{i18n.wallets.dashboard.send}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.circleButton} onPress={onReceivePress}>
+          <TouchableOpacity testID="receive-coins-button" style={styles.circleButton} onPress={onReceivePress}>
             <Image source={images.yellowPlus} style={styles.circleButtonImage} />
             <Text style={styles.circleButtonText}>{i18n.wallets.dashboard.receive}</Text>
           </TouchableOpacity>

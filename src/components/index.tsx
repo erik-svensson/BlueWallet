@@ -49,3 +49,4 @@ export { AirdropWalletBalance } from './AirdropWalletBalance';
 export { AirdropWalletsCarousel } from './AirdropWalletsCarousel';
 export { AirdropWalletBalanceCard } from './AirdropWalletBalanceCard';
 export { ProgressButton } from './ProgressButton';
+export { CodeInput } from './CodeInput';

@@ -15,6 +15,7 @@ export { default as ContactDetailsScreen } from './ContactDetailsScreen';
 export { default as TransactionDetailsScreen } from './TransactionDetailsScreen';
 export { default as ReceiveCoinsScreen } from './ReceiveCoinsScreen';
 export { AboutUsScreen } from './Settings/AboutUsScreen';
+export { TermsConditionsSettingsScreen } from './Settings/TermsConditionsSettingsScreen';
 export { default as AdvancedOptionsScreen } from './Settings/AdvancedOptionsScreen';
 export { SelectLanguageScreen } from './Settings/SelectLanguageScreen';
 export { default as SendCoinsScreen } from './SendCoinsScreen';
@@ -50,3 +51,13 @@ export { default as TermsConditionsScreen } from './TermsConditionsScreen';
 export { default as AirdropDashboardScreen } from './AirdropDashboard';
 export { default as AirdropThankYouScreen } from './AirdropThankYou';
 export { default as AirdropRequirementsScreen } from './AirdropRequirements';
+export { default as ConfirmNotificationCodeScreen } from './ConfirmNotificationCodeScreen';
+export { default as AddNotificationEmailScreen } from './AddNotificationEmailScreen';
+export {
+  NotificationScreen,
+  AddEmailScreen,
+  ConfirmEmailScreen,
+  ChooseWalletsForNotificationScreen,
+  ChangeEmailScreen,
+} from './Notifications';
+export { ReceiveNotificationsConfirmationScreen } from './ReceiveNotificationsConfirmationScreen';

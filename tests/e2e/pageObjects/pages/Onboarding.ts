@@ -22,7 +22,7 @@ const Onboarding = () => {
 
   const ConfirmPinScreen = () => ({
     pinInput: element(by.id('confirm-pin-input')),
-    pinValidationError: element(by.id('confirm-pin-validation-error')),
+    pinValidationError: element(by.id('confirm-pin-input-validation-error')),
 
     async typePin(value: string): Promise<void> {
       await actions.typeText(this.pinInput, value);

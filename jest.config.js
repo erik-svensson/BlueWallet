@@ -9,4 +9,12 @@ module.exports = {
   transformIgnorePatterns: ['node_modules/(?!(jest-)?react-native|react-navigation|@react-native-community|@sentry/*)'],
   coveragePathIgnorePatterns: ['/node_modules/'],
   collectCoverageFrom: ['src/**/*.{js,ts,tsx}', 'class/**/*.{js,ts,tsx}', 'utils/**/*.{js,ts,tsx}'],
+  // coverageThreshold: {
+  //   global: {
+  //     branches: 7,
+  //     functions: 6,
+  //     lines: 12,
+  //     statements: 11,
+  //   },
+  // },
 };

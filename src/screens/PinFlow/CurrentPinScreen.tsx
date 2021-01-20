@@ -121,8 +121,10 @@ class CurrentPinScreen extends PureComponent<Props, State> {
           <Text style={typography.headline4}>{i18n.onboarding.currentPin}</Text>
         </View>
         <View style={styles.pinContainer}>
-          <PinInput value={this.state.pin} onTextChange={this.updatePin} />
-          <Text style={styles.errorText}>{error}</Text>
+          <PinInput testID="current-pin-input" value={this.state.pin} onTextChange={this.updatePin} />
+          <Text testID="current-pin-input-validation-error" style={styles.errorText}>
+            {error}
+          </Text>
         </View>
       </ScreenTemplate>
     );

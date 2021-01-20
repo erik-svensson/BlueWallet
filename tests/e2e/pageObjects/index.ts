@@ -5,9 +5,15 @@ import Authenticators from './pages/Authenticators';
 import BetaVersionScreen from './pages/BetaVersionScreen';
 import DeveloperRoom from './pages/DeveloperRoom';
 import Onboarding from './pages/Onboarding';
-import Settings from './pages/Settings';
 import TermsConditionsScreen from './pages/TermsConditionsScreen';
+import TransactionsSend from './pages/Transactions/Send';
+import UnlockScreen from './pages/UnlockScreen';
 import Wallets from './pages/Wallets';
+import AboutUsScreen from './pages/settings/AboutUsScreen';
+import AdvancedOptionsScreen from './pages/settings/AdvancedOptionsScreen';
+import ChangePin from './pages/settings/ChangePin';
+import LanguageScreen from './pages/settings/LanguageScreen';
+import SettingsScreen from './pages/settings/SettingsScreen';
 
 const app = {
   betaVersionScreen: BetaVersionScreen(),
@@ -16,10 +22,18 @@ const app = {
   wallets: Wallets(),
   authenticators: Authenticators(),
   addressBook: AddressBook(),
-  settings: Settings(),
+  settings: {
+    settingsScreen: SettingsScreen(),
+    advancedOptionsScreen: AdvancedOptionsScreen(),
+    languageScreen: LanguageScreen(),
+    changePin: ChangePin(),
+    aboutUsScreen: AboutUsScreen(),
+  },
   navigationBar: NavigationBar(),
   header: Header(),
   termsConditionsScreen: TermsConditionsScreen(),
+  unlockScreen: UnlockScreen(),
+  transactionsSend: TransactionsSend(),
 };
 
 export default app;
