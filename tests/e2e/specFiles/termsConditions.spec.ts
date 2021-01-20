@@ -10,13 +10,14 @@ describe('Terms & Conditions', () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());
 
       await app.developerRoom.tapOnDoNothingButton();
-      await app.termsConditionsScreen.scrollDown();
+      // await app.termsConditionsScreen.scrollDown();
+      await app.termsConditionsScreen.tapOnAgreementCheckboxes();
       await app.termsConditionsScreen.tapOnAgreeButton();
     });
   });
 
   describe('@android @ios @regression', () => {
-    it("shouldn't be possible to accept Terms & Conditions before scrolled to bottom", async () => {
+    it("shouldn't be possible to accept Terms & Conditions without checked agreements", async () => {
       await expectToBeDisabled(app.termsConditionsScreen.agreeButton);
     });
 
