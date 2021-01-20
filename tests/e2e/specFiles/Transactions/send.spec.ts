@@ -14,7 +14,7 @@ describe('Transactions', () => {
   });
 
   describe('Send', () => {
-    describe('@android @ios @smoke', () => {
+    describe('@ios @smoke', () => {
       it('should be possible to send coins from 3-Key Vault wallet (Secure Transaction) to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
         await app.wallets.importExistingWallet({
@@ -38,7 +38,7 @@ describe('Transactions', () => {
       });
     });
 
-    describe('@android @ios @regression', () => {
+    describe('@ios @regression', () => {
       it('should be possible to send coins from 3-Key Vault wallet (Fast Transaction) to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
         await app.wallets.importExistingWallet({

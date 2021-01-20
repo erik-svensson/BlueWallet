@@ -1,7 +1,7 @@
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -74,8 +74,12 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
 
   createContact = () => {
     const { name, address } = this.state;
-    const nameError = this.validateName();
-    const addressError = this.validateAddress();
+
+    const trimmedName = name.value.trim();
+    const trimmedAddress = address.value.trim();
+
+    const nameError = this.validateName(trimmedName);
+    const addressError = this.validateAddress(trimmedAddress);
 
     if (addressError || nameError) {
       this.setState({
@@ -86,8 +90,8 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
     }
     this.props.createContact({
       id: uuidv4(),
-      name: name.value.trim(),
-      address: address.value.trim(),
+      name: trimmedName,
+      address: trimmedAddress,
     });
     this.setState(
       {
@@ -98,26 +102,26 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
     );
   };
 
-  validateAddress = () => {
-    let error = '';
+  validateAddress = (value: string) => {
     try {
-      checkAddress(this.state.address.value);
+      checkAddress(value);
     } catch (_) {
-      error = i18n.send.details.address_field_is_not_valid;
+      return i18n.send.details.address_field_is_not_valid;
     }
-    return error;
+
+    return '';
   };
 
-  validateName = () => {
-    const { name } = this.state;
-    let error = '';
-    if (name.value.match(/[!@#$%^&*()\[\]\\\/,.?":{}|<>]/g)?.length) {
-      error = i18n.contactCreate.nameCannotContainSpecialCharactersError;
+  validateName = (value: string) => {
+    if (value.match(/[!@#$%^&*()\[\]\\\/,.?":{}|<>]/g)?.length) {
+      return i18n.contactCreate.nameCannotContainSpecialCharactersError;
     }
-    if (!name.value.match(/\w/)?.length) {
-      error = i18n.contactCreate.nameMissingAlphanumericCharacterError;
+
+    if (!value.match(/\w/)?.length) {
+      return i18n.contactCreate.nameMissingAlphanumericCharacterError;
     }
-    return error;
+
+    return '';
   };
 
   onScanQrCodePress = () => {
@@ -168,6 +172,9 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
             focused={!!address.value}
             value={address.value}
             multiline
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+            }}
             maxLength={CONST.maxAddressLength}
             setValue={this.setAddress}
             label={i18n.contactCreate.addressLabel}

@@ -7,8 +7,8 @@ const ScanQrCodeScreen = () => ({
   submitButton: element(by.id('custom-string-submit-button')),
 
   async scanCustomString(data: string) {
-    await actions.typeText(this.customStringInput, data);
-    await actions.multiTap(this.submitButton, 2); // Note: For some reasons, it requires to be clicked twice
+    await actions.typeText(this.customStringInput, data, { closeKeyboard: true });
+    await actions.tap(this.submitButton);
   },
 });
 

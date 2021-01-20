@@ -1,4 +1,4 @@
-import Detox, { waitFor, by } from 'detox';
+import Detox, { by, device, waitFor } from 'detox';
 
 import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers';
 
@@ -13,42 +13,48 @@ interface ScrollToElementOptions {
 }
 
 const Actions = () => {
-  const waitForElement = async (element: Detox.DetoxAny) => {
-    await waitFor(element)
+  const waitForElement = async (target: Detox.DetoxAny) => {
+    await waitFor(target)
       .toBeVisible()
       .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT);
   };
 
-  const typeText = async (element: Detox.DetoxAny, text: string, options?: TypeTextOptions) => {
-    await waitForElement(element);
+  const typeText = async (target: Detox.DetoxAny, text: string, options?: TypeTextOptions) => {
+    await waitForElement(target);
 
     if (options?.replace) {
-      await element.clearText();
+      await target.clearText();
     }
 
-    await element.typeText(text);
+    await target.typeText(text);
 
     if (options?.closeKeyboard) {
-      await element.typeText('\n');
+      if (device.getPlatform() === 'android') {
+        await device.pressBack();
+      }
+
+      if (device.getPlatform() === 'ios') {
+        await target.tapReturnKey();
+      }
     }
   };
 
-  const tap = async (element: Detox.DetoxAny) => {
-    await waitForElement(element);
-    await element.tap();
+  const tap = async (target: Detox.DetoxAny) => {
+    await waitForElement(target);
+    await target.tap();
   };
 
-  const multiTap = async (element: Detox.DetoxAny, times: number) => {
-    await waitForElement(element);
-    await element.multiTap(times);
+  const multiTap = async (target: Detox.DetoxAny, times: number) => {
+    await waitForElement(target);
+    await target.multiTap(times);
   };
 
   const scrollToElement = async (
-    element: Detox.DetoxAny,
+    target: Detox.DetoxAny,
     scrollableElement: string,
     options: ScrollToElementOptions = { pixels: 100, direction: 'down' },
   ) => {
-    await waitFor(element)
+    await waitFor(target)
       .toBeVisible()
       .whileElement(by.id(scrollableElement))
       .scroll(options.pixels, options.direction);

@@ -18,15 +18,15 @@ const SendCoins = () => {
     },
 
     async typeCoinsAmountToSend(amount: string) {
-      await actions.typeText(this.amountInput, amount);
+      await actions.typeText(this.amountInput, amount, { closeKeyboard: true });
     },
 
     async typeWalletAddress(address: string) {
-      await actions.typeText(this.walletAdressInput, address);
+      await actions.typeText(this.walletAdressInput, address, { closeKeyboard: true });
     },
 
     async typeNote(note: string) {
-      await actions.typeText(this.noteInupt, note);
+      await actions.typeText(this.noteInupt, note, { closeKeyboard: true });
     },
 
     async chooseTransactionType(type: transactionTypeRadios) {

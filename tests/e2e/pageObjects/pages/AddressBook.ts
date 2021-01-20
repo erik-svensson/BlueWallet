@@ -49,7 +49,7 @@ const AddressBook = () => {
       },
 
       async typeAddress(value: string) {
-        await actions.typeText(this.addressInput, value, { closeKeyboard: false });
+        await actions.typeText(this.addressInput, value, { closeKeyboard: true });
       },
 
       async submit() {
@@ -127,7 +127,7 @@ const AddressBook = () => {
 
   const createNewContact = async function(name: string, address: string) {
     await contactsScreen.tapOnCreateButton();
-    await newContact.addNewContactScreen.typeName(`${name}\n`);
+    await newContact.addNewContactScreen.typeName(name);
     await newContact.addNewContactScreen.typeAddress(address);
     await newContact.addNewContactScreen.submit();
     await newContact.successScreen.close();

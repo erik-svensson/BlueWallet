@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import * as bitcoin from 'bitcoinjs-lib';
 import { compose } from 'lodash/fp';
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 
 import { images, icons } from 'app/assets';
@@ -448,6 +448,9 @@ class SendCoinsScreen extends Component<Props, State> {
         value={transaction.address}
         setValue={text => this.processAddressData(text.trim())}
         multiline
+        onSubmitEditing={() => {
+          Keyboard.dismiss();
+        }}
         maxLength={CONST.maxAddressLength}
       />
     );
