@@ -105,7 +105,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
                           id: wallet.id,
                         }),
                     }),
-                  onBack: () => navigation.navigate(Route.Dashboard),
+                  onBack: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
                 })
             : undefined,
         });

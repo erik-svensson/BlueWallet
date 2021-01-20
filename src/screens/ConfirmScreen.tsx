@@ -5,7 +5,6 @@ import { View, StyleSheet } from 'react-native';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
-import { typography, palette } from 'app/styles';
 
 const i18n = require('../../loc');
 

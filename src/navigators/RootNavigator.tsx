@@ -34,7 +34,7 @@ import {
   CreateAuthenticatorScreen,
   CreateAuthenticatorPublicKeyScreen,
   CreateAuthenticatorSuccessScreen,
-  DeleteEntityScreen,
+  ConfirmScreen,
   ImportAuthenticatorScreen,
   CreateWalletSuccessScreen,
   IntegrateKeyScreen,
@@ -49,7 +49,6 @@ import {
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
   ChangeEmailScreen,
-  ReceiveNotificationsConfirmationScreen,
   CreateTransactionPassword,
   ConfirmTransactionPassword,
   ConfirmNotificationCodeScreen,
@@ -132,7 +131,7 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
         component={CreateAuthenticatorSuccessScreen}
         options={{ gestureEnabled: false }}
       />
-      <Stack.Screen name={Route.DeleteEntity} component={DeleteEntityScreen} />
+      <Stack.Screen name={Route.Confirm} component={ConfirmScreen} />
       <Stack.Screen name={Route.ImportAuthenticator} component={ImportAuthenticatorScreen} />
       <Stack.Screen name={Route.CreateWalletSuccess} component={CreateWalletSuccessScreen} />
       <Stack.Screen name={Route.IntegrateKey} component={IntegrateKeyScreen} />
@@ -146,7 +145,6 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
       <Stack.Screen name={Route.AddEmail} component={AddEmailScreen} />
       <Stack.Screen name={Route.ConfirmEmail} component={ConfirmEmailScreen} />
       <Stack.Screen name={Route.ChangeEmail} component={ChangeEmailScreen} />
-      <Stack.Screen name={Route.ReceiveNotificationsConfirmation} component={ReceiveNotificationsConfirmationScreen} />
     </Stack.Navigator>
   );
 };

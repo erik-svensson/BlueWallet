@@ -193,7 +193,8 @@ export class ImportWalletScreen extends Component<Props, State> {
                                   id: newWallet.id,
                                 }),
                             }),
-                          onBack: () => this.props.navigation.navigate(Route.Dashboard),
+                          onBack: () =>
+                            this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
                         })
                     : undefined,
               });
