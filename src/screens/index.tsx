@@ -51,7 +51,7 @@ export { default as TermsConditionsScreen } from './TermsConditionsScreen';
 export { default as AirdropDashboardScreen } from './AirdropDashboard';
 export { default as AirdropThankYouScreen } from './AirdropThankYou';
 export { default as AirdropRequirementsScreen } from './AirdropRequirements';
-export { default as AirdropFinishedScreen } from './AirdropFinished';
+export { default as AirdropFinishedWalletDetailsScreen } from './AirdropFinishedWalletDetails';
 export { default as ConfirmNotificationCodeScreen } from './ConfirmNotificationCodeScreen';
 export { default as AddNotificationEmailScreen } from './AddNotificationEmailScreen';
 export {

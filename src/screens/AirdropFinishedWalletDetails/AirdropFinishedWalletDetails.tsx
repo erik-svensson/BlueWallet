@@ -15,10 +15,10 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 type Props = {
-  route: RouteProp<MainCardStackNavigatorParams, Route.AirdropFinished>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.AirdropFinishedWalletDetails>;
 };
 
-export const AirdropFinished: FC<Props> = ({ route }: Props) => (
+export const AirdropFinishedWalletDetails: FC<Props> = ({ route }: Props) => (
   <ScreenTemplate header={<Header isBackArrow title={i18n.airdrop.title} />}>
     <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
     <AirdropWalletBalanceCard walletDetails={{ balance: route.params.balance, name: route.params.name }} />
@@ -40,7 +40,7 @@ export const AirdropFinished: FC<Props> = ({ route }: Props) => (
   </ScreenTemplate>
 );
 
-export default AirdropFinished;
+export default AirdropFinishedWalletDetails;
 
 const styles = StyleSheet.create({
   subtitle: {

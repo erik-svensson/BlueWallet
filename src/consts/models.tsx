@@ -174,7 +174,7 @@ export enum Route {
   AirdropDashboard = 'AirdropDashboard',
   AirdropThankYou = 'AirdropThankYou',
   AirdropRequirements = 'AirdropRequirements',
-  AirdropFinished = 'AirdropFinished',
+  AirdropFinishedWalletDetails = 'AirdropFinishedWalletDetails',
   Notifications = 'Notifications',
   AddEmail = 'AddEmail',
   ConfirmEmail = 'ConfirmEmail',
@@ -545,7 +545,7 @@ export type MainCardStackNavigatorParams = {
   [Route.AirdropDashboard]: undefined;
   [Route.AirdropThankYou]: undefined;
   [Route.AirdropRequirements]: undefined;
-  [Route.AirdropFinished]: {
+  [Route.AirdropFinishedWalletDetails]: {
     balance: number;
     name: string;
   };
