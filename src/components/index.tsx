@@ -48,3 +48,4 @@ export { AirdropWalletBalanceCircle } from './AirdropWalletBalanceCircle';
 export { AirdropWalletBalance } from './AirdropWalletBalance';
 export { AirdropWalletsCarousel } from './AirdropWalletsCarousel';
 export { AirdropWalletBalanceCard } from './AirdropWalletBalanceCard';
+export { ProgressButton } from './ProgressButton';
