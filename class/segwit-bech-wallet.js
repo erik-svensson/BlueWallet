@@ -1,4 +1,5 @@
-import config from '../config';
+import config from 'app/config';
+
 import { addressToScriptHash } from '../utils/bitcoin';
 import { LegacyWallet } from './legacy-wallet';
 

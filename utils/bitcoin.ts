@@ -1,7 +1,8 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import { round } from 'lodash';
 
-import config from '../config';
+import config from 'app/config';
+
 import { CONST } from '../src/consts';
 
 const BigNumber = require('bignumber.js');

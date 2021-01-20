@@ -2,9 +2,9 @@
 import { difference, random } from 'lodash';
 import { compose, map, mapValues, values, flatten, uniq, filter as fpFilter } from 'lodash/fp';
 
-import config from './config';
 import { messages, AppErrors } from './error';
 import logger from './logger';
+import config from './src/config';
 import { btcToSatoshi } from './utils/bitcoin';
 import { wait } from './utils/time';
 

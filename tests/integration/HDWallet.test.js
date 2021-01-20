@@ -1,7 +1,7 @@
 import { SegwitP2SHWallet, SegwitBech32Wallet, HDSegwitP2SHWallet, HDLegacyP2PKHWallet } from '../../class';
-import config from '../../config';
-/* global it, jasmine, afterAll, beforeAll */
 import { BitcoinUnit } from '../../models/bitcoinUnits';
+import config from '../../src/config';
+/* global it, jasmine, afterAll, beforeAll */
 
 const assert = require('assert');
 const bitcoin = require('bitcoinjs-lib');

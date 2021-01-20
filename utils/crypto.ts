@@ -9,7 +9,7 @@ import { NativeModules } from 'react-native';
 
 const { RNRandomBytes } = NativeModules;
 
-import config from '../config';
+import config from '../src/config';
 import { ELECTRUM_VAULT_SEED_KEY } from '../src/consts';
 import { bytesToBits, bitsToBytes } from './buffer';
 

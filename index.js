@@ -7,7 +7,7 @@ import React from 'react';
 import { AppRegistry, StatusBar, LogBox } from 'react-native';
 
 import App from './App';
-import config from './config';
+import config from './src/config';
 
 LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
 

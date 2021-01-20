@@ -2,8 +2,8 @@ import BigNumber from 'bignumber.js';
 import * as bip39 from 'bip39';
 import { cloneDeep } from 'lodash';
 
-import config from '../config';
 import signer from '../models/signer';
+import config from '../src/config';
 import { ELECTRUM_VAULT_SEED_PREFIXES } from '../src/consts';
 import { electrumVaultMnemonicToSeed, isElectrumVaultMnemonic } from '../utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';

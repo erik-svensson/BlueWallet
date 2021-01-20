@@ -1,6 +1,5 @@
+import { alt_networks, Network } from 'bitcoinjs-lib';
 import Config from 'react-native-config';
-
-const bitcoin = require('bitcoinjs-lib');
 
 const {
   ENVIRONMENT,
@@ -31,7 +30,7 @@ export default {
   hosts,
   port: PORT || '443',
   networkName,
-  network: bitcoin.alt_networks[networkName],
+  network: alt_networks[networkName] as Network,
   protocol: PROTOCOL || 'tcp',
   electrumXProtocolVersion: ELECTRUM_X_PROTOCOL_VERSION || '2.0',
   explorerUrl: EXPLORER_URL || 'https://explorer.bitcoinvault.global',
