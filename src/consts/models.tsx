@@ -148,6 +148,7 @@ export enum Route {
   AirdropDashboard = 'AirdropDashboard',
   AirdropThankYou = 'AirdropThankYou',
   AirdropRequirements = 'AirdropRequirements',
+  AirdropFinished = 'AirdropFinished',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -462,6 +463,10 @@ export type MainCardStackNavigatorParams = {
   [Route.AirdropDashboard]: undefined;
   [Route.AirdropThankYou]: undefined;
   [Route.AirdropRequirements]: undefined;
+  [Route.AirdropFinished]: {
+    balance: number;
+    name: string;
+  };
 };
 export type DateType = Date | Dayjs;
 export interface Authenticator {

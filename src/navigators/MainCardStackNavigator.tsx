@@ -40,6 +40,7 @@ import {
   AirdropDashboardScreen,
   AirdropThankYouScreen,
   AirdropRequirementsScreen,
+  AirdropFinishedScreen,
 } from 'app/screens';
 
 const Stack = createStackNavigator<MainCardStackNavigatorParams>();
@@ -90,6 +91,7 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.ChunkedQrCode} component={ChunkedQrCode} />
     <Stack.Screen name={Route.AirdropDashboard} component={AirdropDashboardScreen} />
     <Stack.Screen name={Route.AirdropThankYou} component={AirdropThankYouScreen} />
+    <Stack.Screen name={Route.AirdropFinished} component={AirdropFinishedScreen} />
     <Stack.Screen name={Route.AirdropRequirements} component={AirdropRequirementsScreen} />
   </Stack.Navigator>
 );
