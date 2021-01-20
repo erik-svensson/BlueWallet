@@ -4,8 +4,8 @@ import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
 import { images } from 'app/assets';
-import { Header, ScreenTemplate, Image, Countdown, AirdropWalletsList, ProgressButton } from 'app/components';
-import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, AirdropWalletDetails } from 'app/consts';
+import { Header, ScreenTemplate, Image, Countdown } from 'app/components';
+import { CONST, MainCardStackNavigatorParams, Route, RootStackParams } from 'app/consts';
 import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { typography, palette } from 'app/styles';
 
@@ -35,25 +35,7 @@ export const AirdropDashboardScreen: FC<Props> = ({ navigation }) => (
         </Text>
       </View>
       <Countdown dataEnd={CONST.airdropDate} />
-      {/* <Image source={images.airdrop} style={styles.airdropImage} /> */}
-      <AirdropWalletsList
-        wallets={[
-          { balance: 2, name: 'Wallet name A', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
-          { balance: 13, name: 'Wallet name B', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
-        ]}
-        title="Available wallets"
-        itemCallToAction={(wallet: AirdropWalletDetails) => (
-          <ProgressButton
-            timeoutMilis={2000}
-            stepIntervalMilis={100}
-            onComplete={() => {
-              console.log(wallet);
-            }}
-            title="Add"
-            inProgressTitle="Undo"
-          />
-        )}
-      />
+      <Image source={images.airdrop} style={styles.airdropImage} />
       <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
     </View>
   </ScreenTemplate>

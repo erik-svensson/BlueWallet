@@ -36,22 +36,28 @@ export const ProgressButton: FC<Props> = ({
     return () => {
       clearInterval(intervalID);
     };
-  });
+  }, []);
 
   const onPress = () => {
     setInProgress(true);
 
     const _intervalID = setInterval(() => {
       setIntervalID((_intervalID as unknown) as number);
-      console.log('?');
+
       setProgress(prevProgress => {
-        console.log(prevProgress);
         if (prevProgress < timeoutMilis) {
           return prevProgress + stepIntervalMilis;
         } else {
-          clearInterval(intervalID);
-          setInProgress(false);
-          onComplete();
+          clearInterval(_intervalID);
+          setIntervalID(noIntervalID);
+
+          setInProgress(isInProgress => {
+            if (isInProgress) {
+              onComplete();
+            }
+
+            return false;
+          });
 
           return 0;
         }
