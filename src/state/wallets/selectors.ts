@@ -114,6 +114,7 @@ export const unSubscribedWallets = createSelector(subscribedIds, wallets, (ids, 
 type TxEntity = TransactionInput | TransactionOutput;
 const getMyAmount = (wallet: Wallet, entities: TxEntity[]) =>
   entities.reduce((amount: number, entity: TxEntity) => {
+    console.log('entity', entity);
     if (wallet.weOwnAddress(entity.addresses[0])) {
       return entity.value + amount;
     }
@@ -182,7 +183,9 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
         if ([TxType.ALERT_CONFIRMED].includes(transaction.tx_type) && blockedAmount !== undefined) {
           unblockedAmount = blockedAmount === 0 ? 0 : -blockedAmount;
         }
+        console.log('transaction', transaction);
 
+        console.log('transaction.inputs[0]', transaction.inputs[0]);
         const isFromMyWalletTx = wallet.weOwnAddress(transaction.inputs[0].addresses[0]);
 
         let toExternalAddress;

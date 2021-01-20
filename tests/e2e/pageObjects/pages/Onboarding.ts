@@ -56,12 +56,21 @@ const Onboarding = () => {
     },
   });
 
+  const AddEmailNotificationScreen = () => ({
+    skipEmailNotificationButton: element(by.id('skip-notification-email')),
+
+    async skipEmailNotification(): Promise<void> {
+      await actions.tap(this.skipEmailNotificationButton);
+    },
+  });
+
   const betaVersionScreen = BetaVersionScreen();
   const createPinScreen = CreatePinScreen();
   const confirmPinScreen = ConfirmPinScreen();
   const createPasswordScreen = CreatePasswordScreen();
   const confirmPasswordScreen = ConfirmPasswordScreen();
   const successScreen = MessageScreen('success');
+  const addEmailNotificationScreen = AddEmailNotificationScreen();
 
   const passThrough = async function(pin: string, password: string) {
     await createPinScreen.typePin(pin);
@@ -84,6 +93,7 @@ const Onboarding = () => {
     confirmPasswordScreen,
     successScreen,
     passThrough,
+    addEmailNotificationScreen,
   };
 };
 

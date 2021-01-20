@@ -18,14 +18,14 @@ interface Props {
   testID?: string;
 }
 
-export const CheckBox = ({ testID, ...props }: Props) => (
+export const CheckBox = ({ ...props }: Props) => (
   <CheckBoxNative
     checkedIcon={
       <View style={styles.checked}>
         <Image source={icons.tick} style={styles.icon} resizeMode="contain" />
       </View>
     }
-    uncheckedIcon={<View testID={testID} style={styles.unchecked} />}
+    uncheckedIcon={<View style={styles.unchecked} />}
     {...props}
   />
 );

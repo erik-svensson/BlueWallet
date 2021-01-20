@@ -21,6 +21,8 @@ describe('Onboarding', () => {
       await app.onboarding.confirmPasswordScreen.typePassword('qwertyui');
       await app.onboarding.confirmPasswordScreen.submit();
 
+      await app.onboarding.addEmailNotificationScreen.skipEmailNotification();
+
       await waitFor(app.onboarding.successScreen.icon)
         .toBeVisible()
         .withTimeout(20000);

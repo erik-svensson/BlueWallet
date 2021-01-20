@@ -10,7 +10,7 @@ describe('Terms & Conditions', () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());
 
       await app.developerRoom.tapOnDoNothingButton();
-      // await app.termsConditionsScreen.scrollDown();
+      await app.termsConditionsScreen.scrollDown();
       await app.termsConditionsScreen.tapOnAgreementCheckboxes();
       await app.termsConditionsScreen.tapOnAgreeButton();
     });
