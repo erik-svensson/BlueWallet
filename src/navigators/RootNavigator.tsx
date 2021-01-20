@@ -61,13 +61,13 @@ import { MainTabNavigator } from './MainTabNavigator';
 const Stack = createStackNavigator<RootStackParams>();
 
 interface Props {
-  shouldRenderOnBoarding: boolean;
+  shouldRenderCredentialsCreation: boolean;
   shouldRenderNotification: boolean;
 }
 
-export const RootNavigator: FC<Props> = ({ shouldRenderOnBoarding, shouldRenderNotification }) => {
+export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shouldRenderNotification }) => {
   const getInitialRouteName = () => {
-    if (shouldRenderOnBoarding) {
+    if (shouldRenderCredentialsCreation) {
       return Route.CreatePin;
     }
     if (shouldRenderNotification) {

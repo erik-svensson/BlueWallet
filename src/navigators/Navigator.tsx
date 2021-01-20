@@ -102,7 +102,7 @@ class Navigator extends React.Component<Props, State> {
     }
   };
 
-  shouldRenderOnBoarding = () => {
+  shouldRenderCredentialsCreation = () => {
     const { isPinSet, isTxPasswordSet } = this.props;
 
     return !isPinSet || !isTxPasswordSet;
@@ -170,16 +170,16 @@ class Navigator extends React.Component<Props, State> {
       return <BetaVersionScreen onButtonPress={this.handleAcceptBetaVersionRisk} />;
     }
 
-    const _shouldRenderOnBoarding = this.shouldRenderOnBoarding();
+    const _shouldRenderCredentialsCreation = this.shouldRenderCredentialsCreation();
 
-    if (!hasConnectedToServerAtLeaseOnce && !_shouldRenderOnBoarding) {
+    if (!hasConnectedToServerAtLeaseOnce && !_shouldRenderCredentialsCreation) {
       return <ConnectionIssuesScreen />;
     }
 
     return (
       <>
         <RootNavigator
-          shouldRenderOnBoarding={this.shouldRenderOnBoarding()}
+          shouldRenderCredentialsCreation={_shouldRenderCredentialsCreation}
           shouldRenderNotification={this.shouldRenderNotification()}
         />
         {isAuthenticated && <Toasts />}
