@@ -31,6 +31,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         email: action.payload.email,
         isNotificationEmailSet: true,
         isLoading: false,
+        pin: '',
       };
     case NotificationAction.SetNotificationEmailSuccess:
       return {

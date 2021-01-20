@@ -68,15 +68,23 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   navigateToWalletXpub = () => this.navigateWithWallet(Route.ExportWalletXpub);
 
+  renderConfirmScreenContent = () => (
+    <>
+      <Text style={styles.confirmTitle}>{i18n.wallets.deleteWallet.title}</Text>
+      <Text
+        style={styles.confirmDescription}
+      >{`${i18n.wallets.deleteWallet.description1} ${this.props.wallet?.label}${i18n.wallets.deleteWallet.description2}`}</Text>
+    </>
+  );
+
   navigateToDeleteWallet = () => {
     const { deleteWallet, navigation, wallet } = this.props;
     if (!wallet) {
       return;
     }
-    navigation.navigate(Route.Entity, {
-      description: `${i18n.wallets.deleteWallet.description1} ${wallet.label}${i18n.wallets.deleteWallet.description2}`,
+    navigation.navigate(Route.Confirm, {
       title: i18n.wallets.deleteWallet.header,
-      subtitle: i18n.wallets.deleteWallet.title,
+      children: this.renderConfirmScreenContent(),
       onConfirm: () => {
         deleteWallet(wallet.id, {
           onSuccess: () => {
@@ -270,4 +278,12 @@ const styles = StyleSheet.create({
     marginTop: 4,
     ...typography.caption,
   },
+  confirmDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    textAlign: 'center',
+    lineHeight: 19,
+    marginTop: 18,
+  },
+  confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });

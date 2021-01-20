@@ -90,8 +90,9 @@ class ConfirmEmailScreen extends Component<Props, State> {
   firstAddressFlowContent = () => {
     const {
       navigation,
+      createNotificationEmail,
       route: {
-        params: { walletsToSubscribe, email },
+        params: { email },
       },
     } = this.props;
     return {
@@ -101,16 +102,17 @@ class ConfirmEmailScreen extends Component<Props, State> {
         this.props.setNotificationEmail(email);
       },
       onCodeConfirm: () =>
-        CreateMessage({
-          title: i18n.message.success,
-          description: walletsToSubscribe
-            ? i18n.notifications.walletSubscribedSuccessMessage
-            : i18n.notifications.emailAddedSuccessMessage,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.notifications.goToNotifications,
-            onPress: () => navigation.navigate(Route.Notifications, {}),
-          },
+        createNotificationEmail(email, {
+          onSuccess: () =>
+            CreateMessage({
+              title: i18n.message.success,
+              description: i18n.notifications.emailAddedSuccessMessage,
+              type: MessageType.success,
+              buttonProps: {
+                title: i18n.notifications.goToNotifications,
+                onPress: () => navigation.navigate(Route.Notifications, {}),
+              },
+            }),
         }),
     };
   };
@@ -270,9 +272,9 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onConfirm = () => {
-    const { sessionToken, storedEmail } = this.props;
+    const { sessionToken, storedPin } = this.props;
     const { code } = this.state;
-    if (!storedEmail) {
+    if (storedPin) {
       code === this.props.storedPin ? this.infoContainerContent.onCodeConfirm?.() : this.onError();
     } else {
       this.props.authenticate(sessionToken, code, {

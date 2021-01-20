@@ -11,7 +11,6 @@ import {
   createNotificationEmailFailure,
   setNotificationEmailFailure,
   createNotificationEmailSuccess,
-  setNotificationEmailSuccess,
   CreateNotificationEmailAction,
   NotificationAction,
   verifyNotificationEmail,
@@ -42,6 +41,7 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
   try {
     const savedEmail = yield StoreService.getStoreValue('email');
     if (!savedEmail && !!email) {
+      yield StoreService.setStoreValue('email', email);
       yield put(createNotificationEmailSuccess(email));
     } else {
       yield put(skipNotificationEmail());
@@ -64,8 +64,6 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
     const verifyCode = yield call(verifyEmail, { email });
     if (verifyCode.result === Result.success) {
       const decryptedCode = yield decryptCode(email, verifyCode.pin);
-      yield put(setNotificationEmailSuccess(email));
-      yield StoreService.setStoreValue('email', email);
       //Temporaly till we dont have email services run we need know correct pin from backend, remove after
       console.log(decryptedCode, '>>>>');
       yield put(verifyNotificationEmail(decryptedCode));

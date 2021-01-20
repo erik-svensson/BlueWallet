@@ -113,7 +113,7 @@ export enum Route {
   ImportAuthenticator = 'ImportAuthenticator',
   OptionsAuthenticator = 'OptionsAuthenticator',
   CreateWalletSuccess = 'CreateWalletSuccess',
-  Entity = 'Entity',
+  Confirm = 'Confirm',
   CreateAuthenticatorPublicKey = 'CreateAuthenticatorPublicKey',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticator = 'CreateAuthenticator',
@@ -471,13 +471,11 @@ export type RootStackParams = {
   [Route.CreateAuthenticator]: undefined;
   [Route.CreateAuthenticatorPublicKey]: { id: string };
   [Route.CreateAuthenticatorSuccess]: { id: string };
-  [Route.Entity]: {
+  [Route.Confirm]: {
     onConfirm: () => void;
-    description: string | React.ReactNode;
-    subtitle: string;
     title: string;
-    note?: string;
     onBack?: () => void;
+    children: React.ReactNode;
   };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };

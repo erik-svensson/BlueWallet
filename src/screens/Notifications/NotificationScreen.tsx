@@ -40,11 +40,19 @@ export class NotificationScreen extends Component<Props> {
       email: this.props.email,
     });
 
+  renderConfirmScreenContent = () => (
+    <>
+      <Text style={styles.confirmTitle}>{i18n.notifications.deleteYourEmail}</Text>
+      <Text
+        style={styles.confirmDescription}
+      >{`${i18n.wallets.deleteWallet.description1} ${i18n.notifications.deleteYourEmail}${i18n.wallets.deleteWallet.description2}`}</Text>
+    </>
+  );
+
   onDeletePress = () =>
-    this.props.navigation.navigate(Route.Entity, {
+    this.props.navigation.navigate(Route.Confirm, {
       title: i18n.notifications.deleteEmail,
-      subtitle: i18n.notifications.deleteYourEmail,
-      description: `${i18n.wallets.deleteWallet.description1} ${i18n.notifications.deleteYourEmail}${i18n.wallets.deleteWallet.description2}`,
+      children: this.renderConfirmScreenContent(),
       onConfirm: this.deleteEmail,
     });
 
@@ -212,4 +220,12 @@ const styles = StyleSheet.create({
     color: palette.textGrey,
     textAlign: 'center',
   },
+  confirmDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    textAlign: 'center',
+    lineHeight: 19,
+    marginTop: 18,
+  },
+  confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });

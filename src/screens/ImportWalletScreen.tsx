@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { compose } from 'lodash/fp';
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { View, StyleSheet, Text, Keyboard, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -21,7 +21,8 @@ import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
-import { isNotificationEmailSet, storedEmail } from 'app/state/notifications/selectors';
+import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
+import { subscribedIds, isNotificationEmailSet, storedEmail } from 'app/state/notifications/selectors';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { importWallet as importWalletAction, ImportWalletAction } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
@@ -48,6 +49,8 @@ interface Props {
   isNotificationEmailSet: boolean;
   email: string;
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
+  checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
+  subscribedIds: string[];
 }
 
 interface State {
@@ -58,7 +61,7 @@ interface State {
   customWords: string;
 }
 
-export class ImportWalletScreen extends PureComponent<Props, State> {
+export class ImportWalletScreen extends Component<Props, State> {
   state = {
     hasCustomWords: false,
     text: '',
@@ -143,15 +146,22 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     });
   };
 
-  getNotificationDescription = () => (
-    <Text style={styles.notificationDescription}>
-      {i18n.notifications.receiveTransactionDescription}
-      <Text style={styles.boldedText}>{this.props.email}</Text>
-    </Text>
+  renderConfirmScreenContent = () => (
+    <>
+      <Text style={styles.notificationTitle}>{i18n.notifications.getNotification}</Text>
+      <Text style={styles.notificationDescription}>
+        {i18n.notifications.receiveTransactionDescription}
+        <Text style={styles.boldedText}>{this.props.email}</Text>
+      </Text>
+      <Text style={[styles.notificationDescription, styles.note]}>
+        <Text style={styles.boldedText}>{i18n.notifications.noteFirst}</Text>
+        {i18n.notifications.noteSecond}
+      </Text>
+    </>
   );
 
   saveWallet = async (newWallet: any) => {
-    const { importWallet, wallets, email } = this.props;
+    const { importWallet, wallets, email, checkSubscription } = this.props;
     if (wallets.some(wallet => wallet.secret === newWallet.secret)) {
       this.showErrorMessageScreen({
         title: i18n.wallets.importWallet.walletInUseValidationError,
@@ -161,17 +171,16 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       });
     } else {
       newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
+      checkSubscription([newWallet], email);
       importWallet(newWallet, {
         onSuccess: () => {
           this.props.navigation.navigate(Route.CreateWalletSuccess, {
             secret: newWallet.getSecret(),
             onButtonPress: !!email
               ? () =>
-                  this.props.navigation.navigate(Route.Entity, {
+                  this.props.navigation.navigate(Route.Confirm, {
                     title: i18n.notifications.notifications,
-                    subtitle: i18n.notifications.getNotification,
-                    description: this.getNotificationDescription(),
-                    note: i18n.notifications.noteSecond,
+                    children: this.renderConfirmScreenContent(),
                     onConfirm: () =>
                       this.props.navigation.navigate(Route.ConfirmEmail, {
                         email,
@@ -549,10 +558,12 @@ const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isNotificationEmailSet: isNotificationEmailSet(state),
   email: storedEmail(state),
+  subscribedIds: subscribedIds(state),
 });
 
 const mapDispatchToProps = {
   importWallet: importWalletAction,
+  checkSubscription,
 };
 
 export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(ImportWalletScreen);
@@ -615,4 +626,8 @@ const styles = StyleSheet.create({
     ...typography.headline9,
     color: palette.textBlack,
   },
+  note: {
+    marginTop: 42,
+  },
+  notificationTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });

@@ -37,7 +37,7 @@ export { default as AuthenticatorListScreen } from './AuthenticatorList';
 export { default as CreateAuthenticatorScreen } from './CreateAuthenticator';
 export { default as CreateAuthenticatorPublicKeyScreen } from './CreateAuthenticatorPublicKey';
 export { default as CreateAuthenticatorSuccessScreen } from './CreateAuthenticatorSuccess';
-export { default as EntityScreen } from './DeleteEntity';
+export { ConfirmScreen } from './ConfirmScreen';
 export { default as ImportAuthenticatorScreen } from './ImportAuthenticator';
 export { default as OptionsAuthenticatorScreen } from './OptionsAuthenticator';
 export { default as CreateWalletSuccessScreen } from './CreateWalletSuccessScreen';

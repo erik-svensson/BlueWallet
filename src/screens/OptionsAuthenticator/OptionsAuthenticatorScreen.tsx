@@ -46,13 +46,21 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
     name: this.props.authenticator?.name || '',
   };
 
+  renderConfirmScreenContent = () => (
+    <>
+      <Text style={styles.confirmTitle}>{i18n.authenticators.delete.subtitle}</Text>
+      <Text
+        style={styles.confirmDescription}
+      >{`${i18n.wallets.deleteWallet.description1} ${this.props.authenticator?.name}${i18n.wallets.deleteWallet.description2}`}</Text>
+    </>
+  );
+
   onDelete = () => {
     const { deleteAuthenticator, navigation, authenticator } = this.props;
     authenticator &&
-      navigation.navigate(Route.Entity, {
-        description: `${i18n.wallets.deleteWallet.description1} ${authenticator?.name}${i18n.wallets.deleteWallet.description2}`,
+      navigation.navigate(Route.Confirm, {
+        children: this.renderConfirmScreenContent(),
         title: i18n.authenticators.delete.title,
-        subtitle: i18n.authenticators.delete.subtitle,
         onConfirm: () => {
           deleteAuthenticator(authenticator.id, {
             onSuccess: () => {
@@ -212,4 +220,12 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     alignItems: 'center',
   },
+  confirmDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    textAlign: 'center',
+    lineHeight: 19,
+    marginTop: 18,
+  },
+  confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });

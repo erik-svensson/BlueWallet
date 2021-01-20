@@ -72,11 +72,14 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     ]);
   };
 
-  getNotificationDescription = () => (
-    <Text style={styles.notificationDescription}>
-      {i18n.notifications.receiveTransactionDescription}
-      <Text style={styles.boldedText}>{this.props.email}</Text>
-    </Text>
+  renderConfirmScreenContent = () => (
+    <>
+      <Text style={styles.notificationTitle}>{i18n.notifications.getNotification}</Text>
+      <Text style={styles.notificationDescription}>
+        {i18n.notifications.receiveTransactionDescription}
+        <Text style={styles.boldedText}>{this.props.email}</Text>
+      </Text>
+    </>
   );
 
   generateWallet = (wallet: Wallet, onError: Function) => {
@@ -89,11 +92,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           secret: w.getSecret(),
           onButtonPress: !!email
             ? () =>
-                navigation.navigate(Route.Entity, {
+                navigation.navigate(Route.Confirm, {
                   title: i18n.notifications.notifications,
-                  subtitle: i18n.notifications.getNotification,
-                  description: this.getNotificationDescription(),
-                  note: i18n.notifications.noteSecond,
+                  children: this.renderConfirmScreenContent(),
                   onConfirm: () =>
                     navigation.navigate(Route.ConfirmEmail, {
                       email,
@@ -393,4 +394,5 @@ const styles = StyleSheet.create({
     ...typography.headline9,
     color: palette.textBlack,
   },
+  notificationTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });
