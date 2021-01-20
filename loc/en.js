@@ -78,6 +78,11 @@ module.exports = {
       avatarTeaser: 'Become a {goalName}: {goalThreshold} {unit}',
       youReachedGoal: 'You reached goal: ',
     },
+    finished: {
+      subtitle: 'Airdrop finished!',
+      stayTuned: 'Stay tuned for more in {period}',
+      shareIt: 'Share it with others',
+    },
   },
   termsConditions: {
     header: 'Terms & Conditions',

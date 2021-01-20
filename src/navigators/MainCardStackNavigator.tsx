@@ -41,6 +41,7 @@ import {
   AirdropDashboardScreen,
   AirdropThankYouScreen,
   AirdropRequirementsScreen,
+  AirdropFinishedWalletDetailsScreen,
   NotificationScreen,
   AddEmailScreen,
   ConfirmEmailScreen,
@@ -98,6 +99,7 @@ export const MainCardStackNavigator = () => (
     <Stack.Screen name={Route.ChunkedQrCode} component={ChunkedQrCode} />
     <Stack.Screen name={Route.AirdropDashboard} component={AirdropDashboardScreen} />
     <Stack.Screen name={Route.AirdropThankYou} component={AirdropThankYouScreen} />
+    <Stack.Screen name={Route.AirdropFinishedWalletDetails} component={AirdropFinishedWalletDetailsScreen} />
     <Stack.Screen name={Route.AirdropRequirements} component={AirdropRequirementsScreen} />
     <Stack.Screen name={Route.Notifications} component={NotificationScreen} />
     <Stack.Screen name={Route.AddEmail} component={AddEmailScreen} />

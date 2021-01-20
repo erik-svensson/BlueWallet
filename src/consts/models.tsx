@@ -43,6 +43,7 @@ export const CONST = {
   airdropTotalDollarsToShare: '250.000',
   emailCodeErrorMax: 3,
   walletsDefaultGapLimit: 20,
+  nextAirdropPeriod: 'Q1 2021',
 };
 
 export const ADDRESSES_TYPES = {
@@ -173,6 +174,7 @@ export enum Route {
   AirdropDashboard = 'AirdropDashboard',
   AirdropThankYou = 'AirdropThankYou',
   AirdropRequirements = 'AirdropRequirements',
+  AirdropFinishedWalletDetails = 'AirdropFinishedWalletDetails',
   Notifications = 'Notifications',
   AddEmail = 'AddEmail',
   ConfirmEmail = 'ConfirmEmail',
@@ -543,6 +545,10 @@ export type MainCardStackNavigatorParams = {
   [Route.AirdropDashboard]: undefined;
   [Route.AirdropThankYou]: undefined;
   [Route.AirdropRequirements]: undefined;
+  [Route.AirdropFinishedWalletDetails]: {
+    balance: number;
+    name: string;
+  };
   [Route.Notifications]: {
     walletsToSubscribe?: Wallet[];
   };
@@ -568,6 +574,7 @@ export type MainCardStackNavigatorParams = {
     flowType: ConfirmAddressFlowType;
   };
 };
+
 export type DateType = Date | Dayjs;
 export interface Authenticator {
   keyPair: ECPair.ECPairInterface | null;
