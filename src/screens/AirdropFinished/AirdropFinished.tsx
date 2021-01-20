@@ -9,7 +9,7 @@ import {
   SocialShareFacebookButton,
   SocialShareTwitterButton,
 } from 'app/components';
-import { Route, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, CONST } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -25,7 +25,7 @@ export const AirdropFinished: FC<Props> = ({ route }: Props) => (
     <View style={styles.stayTunedContainer}>
       <Text style={styles.firstLine}>
         {i18n.formatString(i18n.airdrop.finished.stayTuned, {
-          period: 'Q1 2021',
+          period: CONST.nextAirdropPeriod,
         })}
       </Text>
       <Text style={styles.secondLine}>{i18n.airdrop.finished.shareIt}</Text>

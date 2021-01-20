@@ -43,6 +43,7 @@ export const CONST = {
   airdropTotalDollarsToShare: '250.000',
   emailCodeErrorMax: 3,
   walletsDefaultGapLimit: 20,
+  nextAirdropPeriod: 'Q1 2021',
 };
 
 export const ADDRESSES_TYPES = {
