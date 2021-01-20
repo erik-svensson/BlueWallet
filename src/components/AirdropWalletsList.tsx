@@ -32,7 +32,6 @@ export const AirdropWalletsList: FC<Props> = props => {
     <View style={styles.container}>
       <Text style={styles.header}>{title}</Text>
       <FlatList
-        style={styles.list}
         data={wallets}
         renderItem={({ item }) => (
           <AirdropWalletsListItem wallet={item} callToAction={itemCallToAction && itemCallToAction(item)} />
