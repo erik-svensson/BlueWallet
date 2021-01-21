@@ -11,6 +11,9 @@ interface Props {
   onComplete: () => any;
   title: string;
   inProgressTitle: string;
+  height?: number;
+  width?: number;
+  borderRadius?: number;
 }
 
 const noIntervalID = -1;
@@ -21,16 +24,49 @@ export const ProgressButton: FC<Props> = ({
   onComplete,
   title,
   inProgressTitle,
+  height = 43,
+  width = 86,
+  borderRadius = 32.5,
 }: Props) => {
   const [inProgress, setInProgress] = useState(false);
   const [progress, setProgress] = useState(0);
   const [intervalID, setIntervalID] = useState(noIntervalID);
+  const styles = StyleSheet.create({
+    stack: {
+      position: 'relative',
+    },
+    greyBackground: {
+      backgroundColor: palette.grey,
+    },
+    progressButtonContainer: {
+      position: 'relative',
+      height,
+      width,
+      borderRadius,
+    },
+    stackItem: {
+      position: 'absolute',
+    },
+    button: {
+      height,
+      width,
+      borderRadius,
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    titleStyle: {
+      alignSelf: 'center',
+      ...typography.button,
+      fontSize: 12,
+      color: palette.white,
+    },
+  });
 
   useEffect(() => {
     return () => {
       clearInterval(intervalID);
     };
-  });
+  }, []);
 
   const onPress = () => {
     setInProgress(true);
@@ -42,14 +78,21 @@ export const ProgressButton: FC<Props> = ({
         if (prevProgress < timeoutMilis) {
           return prevProgress + stepIntervalMilis;
         } else {
-          clearInterval(intervalID);
-          setInProgress(false);
-          onComplete();
+          clearInterval(_intervalID);
+          setIntervalID(noIntervalID);
+
+          setInProgress(isInProgress => {
+            if (isInProgress) {
+              onComplete();
+            }
+
+            return false;
+          });
 
           return 0;
         }
       });
-    }, stepIntervalMilis);
+    }, 100);
   };
 
   const undo = () => {
@@ -74,8 +117,8 @@ export const ProgressButton: FC<Props> = ({
                   color={palette.secondary}
                   progress={progress / timeoutMilis}
                   width={null}
-                  height={43}
-                  borderRadius={32.5}
+                  height={height}
+                  borderRadius={borderRadius}
                 />
               </View>
             </View>
@@ -101,34 +144,3 @@ export const ProgressButton: FC<Props> = ({
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  stack: {
-    position: 'relative',
-  },
-  greyBackground: {
-    backgroundColor: palette.grey,
-  },
-  progressButtonContainer: {
-    width: 200,
-    height: 43,
-    borderRadius: 32.5,
-    bottom: 100,
-    left: 100,
-  },
-  stackItem: {
-    position: 'absolute',
-  },
-  button: {
-    borderRadius: 32.5,
-    height: 43,
-    width: 200,
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  titleStyle: {
-    alignSelf: 'center',
-    ...typography.button,
-    color: palette.white,
-  },
-});

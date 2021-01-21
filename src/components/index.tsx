@@ -50,3 +50,4 @@ export { AirdropWalletsCarousel } from './AirdropWalletsCarousel';
 export { AirdropWalletBalanceCard } from './AirdropWalletBalanceCard';
 export { ProgressButton } from './ProgressButton';
 export { CodeInput } from './CodeInput';
+export { AirdropWalletsList } from './AirdropWalletsList';

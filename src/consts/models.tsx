@@ -65,6 +65,7 @@ export const WALLETS_ADDRESSES_TYPES = {
 export interface AirdropWalletDetails {
   balance: number;
   name: string;
+  address?: string;
 }
 
 export interface AirdropGoal {
