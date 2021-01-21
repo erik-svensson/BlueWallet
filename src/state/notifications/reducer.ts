@@ -5,7 +5,6 @@ export interface NotificationState {
   error: string;
   pin: string;
   isNotificationEmailSet: boolean;
-  isNotificationEmailSkip: boolean;
   isLoading: boolean;
   sessionToken: string;
   subscribedIds: string[];
@@ -16,7 +15,6 @@ const initialState: NotificationState = {
   email: '',
   pin: '',
   isNotificationEmailSet: false,
-  isNotificationEmailSkip: false,
   isLoading: true,
   sessionToken: '',
   subscribedIds: [],
@@ -30,7 +28,6 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         error: '',
         email: action.payload.email,
         isNotificationEmailSet: true,
-        isNotificationEmailSkip: true,
         isLoading: false,
         pin: '',
       };
@@ -52,13 +49,6 @@ export const notificationReducer = (state = initialState, action: NotificationAc
       return {
         ...state,
         email: '',
-      };
-    case NotificationAction.SkipNotificationEmailAction:
-      return {
-        ...state,
-        email: '',
-        isNotificationEmailSet: true,
-        isNotificationEmailSkip: true,
       };
     case NotificationAction.VerifyNotificationEmailAction:
       return {

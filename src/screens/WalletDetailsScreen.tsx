@@ -174,7 +174,6 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       return null;
     }
     const isWatchOnly = wallet.type === WatchOnlyWallet.type;
-    const isToSubscribe = wallet.type === HDSegwitP2SHAirWallet.type;
     return (
       <ScreenTemplate
         footer={
@@ -185,13 +184,11 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               title={i18n.wallets.details.showWalletXPUB}
               containerStyle={styles.button}
             />
-            {isToSubscribe && (
-              <Button
-                onPress={this.onSubscribeButtonPress}
-                title={isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
-                containerStyle={styles.button}
-              />
-            )}
+            <Button
+              onPress={this.onSubscribeButtonPress}
+              title={isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
+              containerStyle={styles.button}
+            />
             <FlatButton
               onPress={this.navigateToDeleteWallet}
               title={i18n.wallets.details.deleteWallet}

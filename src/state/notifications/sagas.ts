@@ -14,7 +14,6 @@ import {
   CreateNotificationEmailAction,
   NotificationAction,
   verifyNotificationEmail,
-  skipNotificationEmail,
   SetNotificationEmailAction,
   SubscribeWalletAction,
   AuthenticateEmailAction,
