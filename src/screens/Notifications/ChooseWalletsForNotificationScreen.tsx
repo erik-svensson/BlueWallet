@@ -110,15 +110,11 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
       route: { params },
     } = this.props;
 
-    if (params.isOnboarding) {
-      navigation.navigate(Route.ConfirmNotificationCode, { email: params.email });
-    } else {
-      this.props.navigation.navigate(Route.ConfirmEmail, {
-        email: params.email,
-        flowType: ConfirmAddressFlowType.SUBSCRIBE,
-        walletsToSubscribe: this.state.wallets,
-      });
-    }
+    navigation.navigate(Route.ConfirmEmail, {
+      email: params.email,
+      flowType: ConfirmAddressFlowType.SUBSCRIBE,
+      walletsToSubscribe: this.state.wallets,
+    });
   };
 
   render() {

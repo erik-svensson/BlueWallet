@@ -408,13 +408,12 @@ export type RootStackParams = {
   };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
-  [Route.ConfirmNotificationCode]: { email?: string };
+  [Route.ConfirmNotificationCode]: { children: React.ReactNode; onSuccess: () => void };
   [Route.ChooseWalletsForNotification]: {
     email: string;
     isOnboarding?: boolean;
   };
   [Route.AddNotificationEmail]: undefined;
-  [Route.ConfirmNotificationCode]: { email?: string };
   [Route.CreateWallet]: undefined;
   [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;

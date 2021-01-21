@@ -43,7 +43,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   onSave = () => {
     const { email } = this.state;
-    const { setNotificationEmail, navigation, hasWallets } = this.props;
+    const { setNotificationEmail, navigation, hasWallets, createNotificationEmail } = this.props;
     if (!isEmail(email)) {
       return this.setState({
         error: i18n.onboarding.emailValidation,
@@ -51,7 +51,33 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     }
     if (!hasWallets) {
       setNotificationEmail(email, {
-        onSuccess: () => navigation.navigate(Route.ConfirmNotificationCode, { email }),
+        onSuccess: () =>
+          navigation.navigate(Route.ConfirmNotificationCode, {
+            children: (
+              <View style={styles.infoContainer}>
+                <Text style={typography.headline4}>{i18n.onboarding.confirmEmail}</Text>
+                <Text style={styles.codeDescription}>{i18n.onboarding.confirmEmailDescription}</Text>
+                <Text style={typography.headline5}>{email}</Text>
+              </View>
+            ),
+            onSuccess: () => {
+              createNotificationEmail(email, {
+                onSuccess: () => {
+                  CreateMessage({
+                    title: i18n.contactCreate.successTitle,
+                    description: i18n.onboarding.successCompletedDescription,
+                    type: MessageType.success,
+                    buttonProps: {
+                      title: i18n.onboarding.successCompletedButton,
+                      onPress: () => {
+                        navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
+                      },
+                    },
+                  });
+                },
+              });
+            },
+          }),
       });
     } else {
       navigation.navigate(Route.ChooseWalletsForNotification, { email, isOnboarding: true });
@@ -150,5 +176,13 @@ const styles = StyleSheet.create({
   },
   skipButton: {
     marginTop: 12,
+  },
+  codeDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    marginTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    textAlign: 'center',
   },
 });
