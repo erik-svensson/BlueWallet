@@ -8,7 +8,7 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../loc');
 
 export const AirdropStayTuned: FC = () => (
-  <View>
+  <View style={styles.container}>
     <Text style={styles.firstLine}>
       {i18n.formatString(i18n.airdrop.finished.stayTuned, {
         period: CONST.nextAirdropPeriod,
@@ -28,6 +28,10 @@ export const AirdropStayTuned: FC = () => (
 export default AirdropStayTuned;
 
 const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flex: 1,
+  },
   firstLine: {
     ...typography.headline5,
     textAlign: 'center',

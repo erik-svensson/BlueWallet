@@ -1,34 +1,86 @@
+import { CompositeNavigationProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
 
-import { AirdropStayTuned } from 'app/components';
+import { images } from 'app/assets';
+import { AirdropStayTuned, AirdropWalletsList, Image } from 'app/components';
+import { RootStackParams, AirdropWalletDetails, Route } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../../loc');
 
-export const AirdropFinished: FC = () => (
-  <View>
-    <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
-    <View style={styles.descriptionContainer}>
-      <Text style={styles.description}>{i18n.airdrop.finished.checkOutData}</Text>
-      <View>
-        <Text style={styles.description}>{i18n.airdrop.finished.readFullReport} </Text>
-        <TouchableOpacity
-          onPress={() => {
-            Linking.openURL('www.medium.com');
-          }}
-        >
-          <Text style={styles.link}>{i18n.airdrop.finished.medium}</Text>
-        </TouchableOpacity>
+interface Props {
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
+    StackNavigationProp<RootStackParams, Route.AirdropDashboard>
+  >;
+}
+
+export const AirdropFinished: FC<Props> = ({ navigation }) => {
+  const goToWalletDetails = (wallet: AirdropWalletDetails) => {
+    navigation.navigate(Route.AirdropFinishedWalletDetails, { balance: wallet.balance, name: wallet.name });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
+      <View style={styles.descriptionContainer}>
+        <Text style={styles.description}>{i18n.airdrop.finished.checkOutData}</Text>
+        <View style={styles.inline}>
+          <Text style={styles.description}>{i18n.airdrop.finished.readFullReport} </Text>
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL('www.medium.com'); // TODO: replace with proper URL
+            }}
+          >
+            <Text style={styles.link}>{i18n.airdrop.finished.medium}</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <AirdropStayTuned />
+      <View style={styles.walletsListContainer}>
+        <AirdropWalletsList
+          wallets={[
+            { balance: 2, name: 'Wallet name A', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
+            { balance: 13, name: 'Wallet name B', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
+          ]}
+          title="Registered wallets"
+          itemCallToAction={(wallet: AirdropWalletDetails) => (
+            <TouchableOpacity
+              style={styles.arrowContainer}
+              testID="forward-button"
+              onPress={() => goToWalletDetails(wallet)}
+            >
+              <Image style={styles.image} source={images.forwardArrow} />
+            </TouchableOpacity>
+          )}
+        />
       </View>
     </View>
-    <AirdropStayTuned />
-  </View>
-);
+  );
+};
 
 export default AirdropFinished;
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
+  arrowContainer: {
+    height: 12,
+    width: 7,
+  },
+  image: {
+    width: 7,
+    height: 12,
+  },
+  inline: {
+    display: 'flex',
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'center',
+  },
   subtitle: {
     marginTop: 12,
     marginBottom: 18,
@@ -49,5 +101,11 @@ const styles = StyleSheet.create({
     color: palette.textSecondary,
     top: 2.5,
     position: 'relative',
+  },
+  walletsListContainer: {
+    marginTop: 36,
+    width: '100%',
+    paddingRight: 10,
+    paddingLeft: 10,
   },
 });
