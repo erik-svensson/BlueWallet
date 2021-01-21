@@ -128,17 +128,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 24,
   },
-  infoContainer: {
-    alignItems: 'center',
-  },
-  codeDescription: {
-    ...typography.caption,
-    color: palette.textGrey,
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: 20,
-    textAlign: 'center',
-  },
   errorText: {
     marginVertical: 10,
     textAlign: 'center',

@@ -159,7 +159,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
       },
       onCodeConfirm: () => {
         !storedEmail && createNotificationEmail(email);
-        // TODO: Refactor, needed for now for another flows like wallet details sub/unsub, craete/import wallet
+        // TODO: Refactor, needed for now for other flows like wallet details sub/unsub, craete/import wallet, all flow should pass onSuccess method
         onSuccess
           ? onSuccess()
           : CreateMessage({
