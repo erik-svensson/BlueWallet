@@ -1,29 +1,33 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
-import { typography, palette } from 'app/styles';
 
-const i18n = require('../../../loc');
+const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.DeleteEntity>;
-  route: RouteProp<RootStackParams, Route.DeleteEntity>;
+  navigation: StackNavigationProp<RootStackParams, Route.Confirm>;
+  route: RouteProp<RootStackParams, Route.Confirm>;
 }
-export const DeleteEntityScreen = ({
+
+export const ConfirmScreen = ({
   navigation,
   route: {
-    params: { onConfirm, name, subtitle, title },
+    params: { onConfirm, title, onBack, children },
   },
 }: Props) => {
   const [clicked, setClicked] = useState(false);
 
-  const onPress = (fn: Function) => {
+  const onYesPress = (callback: () => void) => {
     setClicked(true);
-    fn();
+    callback();
+  };
+
+  const onNoPress = () => {
+    onBack ? onBack() : navigation.goBack();
   };
 
   return (
@@ -33,7 +37,7 @@ export const DeleteEntityScreen = ({
           <Button
             testID="cancel-button"
             title={i18n.wallets.deleteWallet.no}
-            onPress={() => onPress(navigation.goBack)}
+            onPress={onNoPress}
             disabled={clicked}
             type="outline"
             containerStyle={styles.noButton}
@@ -42,32 +46,19 @@ export const DeleteEntityScreen = ({
             testID="confirm-button"
             title={i18n.wallets.deleteWallet.yes}
             disabled={clicked}
-            onPress={() => onPress(onConfirm)}
+            onPress={() => onYesPress(onConfirm)}
             containerStyle={styles.yesButton}
           />
         </View>
       }
       header={<Header isBackArrow title={title} />}
     >
-      <Text style={styles.title}>{subtitle}</Text>
-      <Text style={styles.description}>
-        {i18n.wallets.deleteWallet.description1} {name}
-        {i18n.wallets.deleteWallet.description2}
-      </Text>
+      {children}
     </ScreenTemplate>
   );
 };
 
-export default DeleteEntityScreen;
-
 const styles = StyleSheet.create({
-  title: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
-  description: {
-    ...typography.caption,
-    color: palette.textGrey,
-    textAlign: 'center',
-    marginTop: 18,
-  },
   buttonContainer: { flexDirection: 'row', width: '50%' },
   noButton: { paddingRight: 10, width: '100%' },
   yesButton: { paddingLeft: 10, width: '100%' },

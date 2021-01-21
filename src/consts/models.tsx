@@ -113,7 +113,7 @@ export enum Route {
   ImportAuthenticator = 'ImportAuthenticator',
   OptionsAuthenticator = 'OptionsAuthenticator',
   CreateWalletSuccess = 'CreateWalletSuccess',
-  DeleteEntity = 'DeleteEntity',
+  Confirm = 'Confirm',
   CreateAuthenticatorPublicKey = 'CreateAuthenticatorPublicKey',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticator = 'CreateAuthenticator',
@@ -160,7 +160,6 @@ export enum Route {
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
-  ReceiveNotificationsConfirmation = 'ReceiveNotificationsConfirmation',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -250,10 +249,15 @@ export enum ConfirmAddressFlowType {
   CURRENT_ADDRESS = 'CURRENT_ADDRESS',
   NEW_ADDRESS = 'NEW_ADDRESS',
   DELETE_ADDRESS = 'DELETE_ADDRESS',
-  ANOTHER_ACTION = 'ANOTHER_ACTION',
+  SUBSCRIBE = 'SUBSCRIBE',
   UNSUBSCRIBE = 'UNSUBSCRIBE',
-  RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT',
-  RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE',
+}
+
+export interface InfoContainerContent {
+  title?: string;
+  description?: string;
+  onInit?: () => void;
+  onCodeConfirm?: () => void;
 }
 
 export interface Transaction {
@@ -467,7 +471,12 @@ export type RootStackParams = {
   [Route.CreateAuthenticator]: undefined;
   [Route.CreateAuthenticatorPublicKey]: { id: string };
   [Route.CreateAuthenticatorSuccess]: { id: string };
-  [Route.DeleteEntity]: { onConfirm: () => void; name: string | undefined; subtitle: string; title: string };
+  [Route.Confirm]: {
+    onConfirm: () => void;
+    title: string;
+    onBack?: () => void;
+    children: React.ReactNode;
+  };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
   [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: () => void };
@@ -504,10 +513,6 @@ export type RootStackParams = {
   };
   [Route.ChangeEmail]: {
     email: string;
-  };
-  [Route.ReceiveNotificationsConfirmation]: {
-    address: string;
-    flowType: ConfirmAddressFlowType;
   };
 };
 
