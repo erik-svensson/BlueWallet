@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     width: '100%',
+    paddingBottom: 16,
   },
   header: {
     ...typography.overline,

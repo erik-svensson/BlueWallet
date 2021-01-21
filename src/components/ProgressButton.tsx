@@ -11,13 +11,10 @@ interface Props {
   onComplete: () => any;
   title: string;
   inProgressTitle: string;
+  height?: number;
+  width?: number;
+  borderRadius?: number;
 }
-
-const _styles = {
-  height: 18,
-  width: 53,
-  radius: 9,
-};
 
 const noIntervalID = -1;
 
@@ -27,10 +24,43 @@ export const ProgressButton: FC<Props> = ({
   onComplete,
   title,
   inProgressTitle,
+  height = 43,
+  width = 86,
+  borderRadius = 32.5,
 }: Props) => {
   const [inProgress, setInProgress] = useState(false);
   const [progress, setProgress] = useState(0);
   const [intervalID, setIntervalID] = useState(noIntervalID);
+  const styles = StyleSheet.create({
+    stack: {
+      position: 'relative',
+    },
+    greyBackground: {
+      backgroundColor: palette.grey,
+    },
+    progressButtonContainer: {
+      position: 'relative',
+      height,
+      width,
+      borderRadius,
+    },
+    stackItem: {
+      position: 'absolute',
+    },
+    button: {
+      height,
+      width,
+      borderRadius,
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    titleStyle: {
+      alignSelf: 'center',
+      ...typography.button,
+      fontSize: 12,
+      color: palette.white,
+    },
+  });
 
   useEffect(() => {
     return () => {
@@ -87,8 +117,8 @@ export const ProgressButton: FC<Props> = ({
                   color={palette.secondary}
                   progress={progress / timeoutMilis}
                   width={null}
-                  height={_styles.height}
-                  borderRadius={_styles.radius}
+                  height={height}
+                  borderRadius={borderRadius}
                 />
               </View>
             </View>
@@ -114,34 +144,3 @@ export const ProgressButton: FC<Props> = ({
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  stack: {
-    position: 'relative',
-  },
-  greyBackground: {
-    backgroundColor: palette.grey,
-  },
-  progressButtonContainer: {
-    position: 'relative',
-    height: _styles.height,
-    width: _styles.width,
-    borderRadius: _styles.radius,
-  },
-  stackItem: {
-    position: 'absolute',
-  },
-  button: {
-    height: _styles.height,
-    width: _styles.width,
-    borderRadius: _styles.radius,
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  titleStyle: {
-    alignSelf: 'center',
-    ...typography.button,
-    fontSize: 12,
-    color: palette.white,
-  },
-});
