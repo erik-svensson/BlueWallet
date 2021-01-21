@@ -1,25 +1,12 @@
-import { RouteProp } from '@react-navigation/native';
 import React, { FC } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
 
-import {
-  ScreenTemplate,
-  Header,
-  AirdropWalletBalanceCard,
-  SocialShareFacebookButton,
-  SocialShareTwitterButton,
-  AirdropStayTuned,
-} from 'app/components';
-import { Route, RootStackParams, CONST } from 'app/consts';
+import { AirdropStayTuned } from 'app/components';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../../loc');
 
-type Props = {
-  route: RouteProp<RootStackParams, Route.AirdropFinishedWalletDetails>;
-};
-
-export const AirdropFinished: FC<Props> = ({ route }: Props) => (
+export const AirdropFinished: FC = () => (
   <View>
     <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
     <View style={styles.descriptionContainer}>
@@ -62,26 +49,5 @@ const styles = StyleSheet.create({
     color: palette.textSecondary,
     top: 2.5,
     position: 'relative',
-  },
-  firstLine: {
-    ...typography.headline5,
-    textAlign: 'center',
-  },
-  secondLine: {
-    ...typography.body,
-    color: palette.textGrey,
-    textAlign: 'center',
-    lineHeight: 19,
-  },
-  socialsContainer: {
-    display: 'flex',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-    marginTop: 8,
-  },
-  facebookButtonContainer: {
-    marginRight: 23,
   },
 });
