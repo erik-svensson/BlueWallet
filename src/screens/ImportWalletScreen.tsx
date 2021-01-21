@@ -170,41 +170,41 @@ export class ImportWalletScreen extends Component<Props, State> {
       });
     } else {
       newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
-      checkSubscription([newWallet], email, {
-        onSuccess: (ids: string[]) => {
-          const isWalletSubscribed = ids.some(id => id === newWallet.id);
-          importWallet(newWallet, {
-            onSuccess: () => {
-              this.props.navigation.navigate(Route.CreateWalletSuccess, {
-                secret: newWallet.getSecret(),
-                onButtonPress:
-                  !!email && !isWalletSubscribed
-                    ? () =>
-                        this.props.navigation.navigate(Route.Confirm, {
-                          title: i18n.notifications.notifications,
-                          children: this.renderConfirmScreenContent(),
-                          onConfirm: () =>
-                            this.props.navigation.navigate(Route.ConfirmEmail, {
-                              email,
-                              flowType: ConfirmAddressFlowType.SUBSCRIBE,
-                              walletsToSubscribe: [newWallet],
-                              onBack: () =>
-                                this.props.navigation.navigate(Route.WalletDetails, {
-                                  id: newWallet.id,
-                                }),
-                            }),
-                          onBack: () =>
-                            this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
-                        })
-                    : undefined,
-              });
-            },
-            onFailure: (error: string) =>
-              this.showErrorMessageScreen({
-                description: error,
-              }),
+      // TODO: This part doesn't work when an email is not given while onboarding
+      // checkSubscription([newWallet], email, {
+      //   onSuccess: (ids: string[]) => {
+      //     const isWalletSubscribed = ids.some(id => id === newWallet.id);
+      //   },
+      // });
+      importWallet(newWallet, {
+        onSuccess: () => {
+          this.props.navigation.navigate(Route.CreateWalletSuccess, {
+            secret: newWallet.getSecret(),
+            onButtonPress: !!email
+              ? () =>
+                  this.props.navigation.navigate(Route.Confirm, {
+                    title: i18n.notifications.notifications,
+                    children: this.renderConfirmScreenContent(),
+                    onConfirm: () =>
+                      this.props.navigation.navigate(Route.ConfirmEmail, {
+                        email,
+                        flowType: ConfirmAddressFlowType.SUBSCRIBE,
+                        walletsToSubscribe: [newWallet],
+                        onBack: () =>
+                          this.props.navigation.navigate(Route.WalletDetails, {
+                            id: newWallet.id,
+                          }),
+                      }),
+                    onBack: () =>
+                      this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+                  })
+              : undefined,
           });
         },
+        onFailure: (error: string) =>
+          this.showErrorMessageScreen({
+            description: error,
+          }),
       });
     }
   };
