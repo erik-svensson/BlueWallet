@@ -9,7 +9,6 @@ import { Button, FlatButton, Header, ScreenTemplate, WalletCard, ButtonType, Tex
 import { Wallet, Route, RootStackParams, ActionMeta, CONST, ConfirmAddressFlowType } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { reducer as notificationReducer } from 'app/state/notifications';
 import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
@@ -169,7 +168,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   };
 
   render() {
-    const { wallet, isSubscribed, navigation } = this.props;
+    const { wallet, isSubscribed } = this.props;
     if (!wallet) {
       return null;
     }
