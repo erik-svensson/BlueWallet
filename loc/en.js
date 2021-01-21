@@ -82,6 +82,9 @@ module.exports = {
       subtitle: 'Airdrop finished!',
       stayTuned: 'Stay tuned for more in {period}',
       shareIt: 'Share it with others',
+      checkOutData: 'Check out all the data about it.',
+      readFullReport: 'Read our full report on',
+      medium: 'Medium',
     },
   },
   termsConditions: {
