@@ -146,7 +146,7 @@ export enum Route {
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
   AddNotificationEmail = 'AddNotificationEmail',
-  ConfirmNotificationCode = 'ConfirmNotificationCode',
+  LocalConfirmNotificationCode = 'LocalConfirmNotificationCode',
   CreateTransactionPassword = 'CreateTransactionPassword',
   ConfirmTransactionPassword = 'ConfirmTransactionPassword',
   AdvancedOptions = 'AdvancedOptions',
@@ -407,7 +407,7 @@ export type RootStackParams = {
   };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
-  [Route.ConfirmNotificationCode]: { children: React.ReactNode; onSuccess: () => void; title: string };
+  [Route.LocalConfirmNotificationCode]: { children: React.ReactNode; onSuccess: () => void; title: string };
   [Route.ChooseWalletsForNotification]: {
     email: string;
     onSuccess: () => void;

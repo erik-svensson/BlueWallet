@@ -19,12 +19,12 @@ type State = {
 };
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.ConfirmNotificationCode>;
-  route: RouteProp<RootStackParams, Route.ConfirmNotificationCode>;
+  navigation: StackNavigationProp<RootStackParams, Route.LocalConfirmNotificationCode>;
+  route: RouteProp<RootStackParams, Route.LocalConfirmNotificationCode>;
   pin: string;
 }
 
-class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
+class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   state = {
     userCode: '',
     numberAttempt: 0,
@@ -121,7 +121,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   pin: notificationSelectors.pin(state),
 });
 
-export default connect(mapStateToProps)(ConfirmNotificationCodeScreen);
+export default connect(mapStateToProps)(LocalConfirmNotificationCodeScreen);
 
 const styles = StyleSheet.create({
   codeContainer: {

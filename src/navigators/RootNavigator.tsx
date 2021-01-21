@@ -50,7 +50,7 @@ import {
   ChangeEmailScreen,
   CreateTransactionPassword,
   ConfirmTransactionPassword,
-  ConfirmNotificationCodeScreen,
+  LocalConfirmNotificationCodeScreen,
   AddNotificationEmailScreen,
 } from 'app/screens';
 
@@ -88,7 +88,7 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
         options={{ gestureEnabled: false }}
         initialParams={{ withSkip: true }}
       />
-      <Stack.Screen name={Route.ConfirmNotificationCode} component={ConfirmNotificationCodeScreen} />
+      <Stack.Screen name={Route.LocalConfirmNotificationCode} component={LocalConfirmNotificationCodeScreen} />
       <Stack.Screen name={Route.ChooseWalletsForNotification} component={ChooseWalletsForNotificationScreen} />
 
       <Stack.Screen name={Route.ActionSheet} component={ActionSheet} options={modalOptions} />

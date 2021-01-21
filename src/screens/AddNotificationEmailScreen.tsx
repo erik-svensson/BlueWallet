@@ -57,7 +57,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
     setNotificationEmail(email, {
       onSuccess: () =>
-        navigation.navigate(Route.ConfirmNotificationCode, {
+        navigation.navigate(Route.LocalConfirmNotificationCode, {
           children: (
             <View style={styles.infoContainer}>
               <Text style={typography.headline4}>{i18n.onboarding.confirmEmail}</Text>
