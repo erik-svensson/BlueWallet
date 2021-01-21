@@ -1,5 +1,4 @@
-import config from 'app/config';
-
+import config from '../src/config';
 import { addressToScriptHash } from '../utils/bitcoin';
 import { HDLegacyP2PKHWallet } from './hd-legacy-p2pkh-wallet';
 import { HDSegwitBech32Wallet } from './hd-segwit-bech32-wallet';

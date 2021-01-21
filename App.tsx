@@ -5,11 +5,12 @@ import { View, StyleSheet, LogBox } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import config from 'app/config';
 import { Navigator } from 'app/navigators';
 import { AppStateManager } from 'app/services';
 import { AuthenticationAction } from 'app/state/authentication/actions';
 import { persistor, store } from 'app/state/store';
+
+import config from './src/config';
 
 const i18n = require('./loc');
 
