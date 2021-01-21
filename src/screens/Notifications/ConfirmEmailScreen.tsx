@@ -70,8 +70,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   get infoContainerContent(): InfoContainerContent {
     switch (this.props.route.params.flowType) {
-      case ConfirmAddressFlowType.FIRST_ADDRESS:
-        return this.firstAddressFlowContent();
       // case ConfirmAddressFlowType.CURRENT_ADDRESS:
       //   return this.currentAddressFlowContent();
       // case ConfirmAddressFlowType.NEW_ADDRESS:
@@ -86,36 +84,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
         return {};
     }
   }
-
-  firstAddressFlowContent = () => {
-    const {
-      navigation,
-      createNotificationEmail,
-      route: {
-        params: { email },
-      },
-    } = this.props;
-    return {
-      title: i18n.notifications.confirmEmail,
-      description: i18n.notifications.pleaseEnter,
-      onInit: () => {
-        this.props.setNotificationEmail(email);
-      },
-      onCodeConfirm: () =>
-        createNotificationEmail(email, {
-          onSuccess: () =>
-            CreateMessage({
-              title: i18n.message.success,
-              description: i18n.notifications.emailAddedSuccessMessage,
-              type: MessageType.success,
-              buttonProps: {
-                title: i18n.notifications.goToNotifications,
-                onPress: () => navigation.navigate(Route.Notifications, {}),
-              },
-            }),
-        }),
-    };
-  };
 
   currentAddressFlowContent = () => {
     const {

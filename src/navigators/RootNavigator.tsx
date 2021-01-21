@@ -45,7 +45,6 @@ import {
   OptionsAuthenticatorScreen,
   ChunkedQrCode,
   NotificationScreen,
-  AddEmailScreen,
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
   ChangeEmailScreen,
@@ -87,6 +86,7 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
         name={Route.AddNotificationEmail}
         component={AddNotificationEmailScreen}
         options={{ gestureEnabled: false }}
+        initialParams={{ withSkip: true }}
       />
       <Stack.Screen name={Route.ConfirmNotificationCode} component={ConfirmNotificationCodeScreen} />
       <Stack.Screen name={Route.ChooseWalletsForNotification} component={ChooseWalletsForNotificationScreen} />
@@ -142,7 +142,6 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
       <Stack.Screen name={Route.OptionsAuthenticator} component={OptionsAuthenticatorScreen} />
       <Stack.Screen name={Route.ChunkedQrCode} component={ChunkedQrCode} />
       <Stack.Screen name={Route.Notifications} component={NotificationScreen} />
-      <Stack.Screen name={Route.AddEmail} component={AddEmailScreen} />
       <Stack.Screen name={Route.ConfirmEmail} component={ConfirmEmailScreen} />
       <Stack.Screen name={Route.ChangeEmail} component={ChangeEmailScreen} />
     </Stack.Navigator>

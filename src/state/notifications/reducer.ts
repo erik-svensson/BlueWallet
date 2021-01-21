@@ -30,6 +30,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         error: '',
         email: action.payload.email,
         isNotificationEmailSet: true,
+        isNotificationEmailSkip: true,
         isLoading: false,
         pin: '',
       };

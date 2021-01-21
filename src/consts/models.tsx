@@ -413,7 +413,7 @@ export type RootStackParams = {
     email: string;
     isOnboarding?: boolean;
   };
-  [Route.AddNotificationEmail]: undefined;
+  [Route.AddNotificationEmail]: { withSkip?: boolean };
   [Route.CreateWallet]: undefined;
   [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
@@ -496,9 +496,7 @@ export type RootStackParams = {
   [Route.Notifications]: {
     walletsToSubscribe?: Wallet[];
   };
-  [Route.AddEmail]: {
-    walletsToSubscribe?: Wallet[];
-  };
+  [Route.AddEmail]: { withSkip?: boolean };
   [Route.ConfirmEmail]: {
     email: string;
     newAddress?: string;

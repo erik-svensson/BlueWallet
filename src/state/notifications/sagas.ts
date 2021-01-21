@@ -39,13 +39,8 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
   const { meta, payload } = action as CreateNotificationEmailAction;
   const email = payload.email;
   try {
-    const savedEmail = yield StoreService.getStoreValue('email');
-    if (!savedEmail && !!email) {
-      yield StoreService.setStoreValue('email', email);
-      yield put(createNotificationEmailSuccess(email));
-    } else {
-      yield put(skipNotificationEmail());
-    }
+    yield StoreService.setStoreValue('email', email);
+    yield put(createNotificationEmailSuccess(email));
     if (meta?.onSuccess) {
       meta.onSuccess();
     }

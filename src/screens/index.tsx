@@ -52,7 +52,6 @@ export { default as ConfirmNotificationCodeScreen } from './ConfirmNotificationC
 export { default as AddNotificationEmailScreen } from './AddNotificationEmailScreen';
 export {
   NotificationScreen,
-  AddEmailScreen,
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
   ChangeEmailScreen,

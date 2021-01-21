@@ -42,7 +42,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
     if (setPassword === this.state.password) {
       createTxPassword(setPassword, {
         onSuccess: () => {
-          navigation.navigate(Route.AddNotificationEmail);
+          navigation.navigate(Route.AddNotificationEmail, { withSkip: true });
         },
       });
     } else {

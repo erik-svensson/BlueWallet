@@ -1,3 +1,4 @@
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
@@ -19,6 +20,8 @@ const i18n = require('../../loc');
 
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.AddNotificationEmail>;
+  route: RouteProp<RootStackParams, Route.AddNotificationEmail>;
+
   createNotificationEmail: Function;
   setNotificationEmail: Function;
   hasWallets: boolean;
@@ -105,6 +108,8 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   render() {
     const { email, error } = this.state;
+
+    const { withSkip } = this.props.route.params;
     return (
       <ScreenTemplate
         noScroll
@@ -117,12 +122,14 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
               onPress={this.onSave}
               disabled={email.length === 0}
             />
-            <FlatButton
-              testID="skip-notification-email"
-              containerStyle={styles.skipButton}
-              title={i18n._.skip}
-              onPress={this.skipAddEmail}
-            />
+            {withSkip && (
+              <FlatButton
+                testID="skip-notification-email"
+                containerStyle={styles.skipButton}
+                title={i18n._.skip}
+                onPress={this.skipAddEmail}
+              />
+            )}
           </>
         }
         header={<Header title={i18n.onboarding.onboarding} />}
