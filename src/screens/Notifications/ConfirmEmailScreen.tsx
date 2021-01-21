@@ -31,7 +31,7 @@ import {
   setNotificationEmail,
   SetNotificationEmailAction,
 } from 'app/state/notifications/actions';
-import { sessionToken, notificationError, storedEmail, storedPin } from 'app/state/notifications/selectors';
+import { sessionToken, notificationError, storedEmail } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -143,8 +143,9 @@ class ConfirmEmailScreen extends Component<Props, State> {
       language,
       createNotificationEmail,
       storedEmail,
+
       route: {
-        params: { onBack, email, walletsToSubscribe },
+        params: { email, walletsToSubscribe, onSuccess, onBack },
       },
     } = this.props;
     return {
@@ -158,15 +159,18 @@ class ConfirmEmailScreen extends Component<Props, State> {
       },
       onCodeConfirm: () => {
         !storedEmail && createNotificationEmail(email);
-        CreateMessage({
-          title: i18n.message.success,
-          description: i18n.notifications.updateNotificationPreferences,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.message.goToWalletDetails,
-            onPress: () => (onBack ? onBack() : navigation.popToTop()),
-          },
-        });
+        // To refactor, needed for now for another flows
+        onSuccess
+          ? onSuccess()
+          : CreateMessage({
+              title: i18n.message.success,
+              description: i18n.notifications.updateNotificationPreferences,
+              type: MessageType.success,
+              buttonProps: {
+                title: i18n.message.goToWalletDetails,
+                onPress: () => (onBack ? onBack() : navigation.popToTop()),
+              },
+            });
       },
     };
   };
@@ -240,16 +244,13 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onConfirm = () => {
-    const { sessionToken, storedPin } = this.props;
+    const { sessionToken } = this.props;
     const { code } = this.state;
-    if (storedPin) {
-      code === this.props.storedPin ? this.infoContainerContent.onCodeConfirm?.() : this.onError();
-    } else {
-      this.props.authenticate(sessionToken, code, {
-        onFailure: this.onError,
-        onSuccess: this.infoContainerContent.onCodeConfirm,
-      });
-    }
+
+    this.props.authenticate(sessionToken, code, {
+      onFailure: this.onError,
+      onSuccess: this.infoContainerContent.onCodeConfirm,
+    });
   };
 
   onChange = (code: string) =>
@@ -299,7 +300,6 @@ const mapStateToProps = (state: ApplicationState) => ({
   sessionToken: sessionToken(state),
   notificationError: notificationError(state),
   storedEmail: storedEmail(state),
-  storedPin: storedPin(state),
 });
 
 const mapDispatchToProps = {

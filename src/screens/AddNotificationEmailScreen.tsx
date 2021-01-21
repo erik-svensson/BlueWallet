@@ -5,13 +5,15 @@ import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, RootStackParams } from 'app/consts';
+import { Route, RootStackParams, Wallet, ActionMeta } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import {
   createNotificationEmail as createNotificationEmailAction,
   setNotificationEmail as setNotificationEmailAction,
+  checkSubscription as checkSubscriptionAction,
+  CheckSubscriptionAction,
 } from 'app/state/notifications/actions';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
@@ -25,6 +27,8 @@ interface Props {
   createNotificationEmail: Function;
   setNotificationEmail: Function;
   hasWallets: boolean;
+  wallets: Wallet[];
+  checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
 }
 
 type State = {
@@ -47,7 +51,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   goToLocalEmailConfirm = () => {
     const { setNotificationEmail, navigation, createNotificationEmail, route } = this.props;
 
-    const { onSuccess } = route.params;
+    const { onSuccess, title } = route.params;
 
     const { email } = this.state;
 
@@ -61,6 +65,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
               <Text style={typography.headline5}>{email}</Text>
             </View>
           ),
+          title,
           onSuccess: () => {
             createNotificationEmail(email, {
               onSuccess,
@@ -72,7 +77,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   onConfirm = () => {
     const { email } = this.state;
-    const { navigation, hasWallets, route } = this.props;
+    const { navigation, hasWallets, route, checkSubscription, wallets } = this.props;
     const { onSuccess } = route.params;
 
     if (!isEmail(email)) {
@@ -80,10 +85,26 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         error: i18n.onboarding.emailValidation,
       });
     }
-    if (hasWallets) {
-      return navigation.navigate(Route.ChooseWalletsForNotification, { email, onSuccess });
+    if (!hasWallets) {
+      return this.goToLocalEmailConfirm();
     }
-    this.goToLocalEmailConfirm();
+    checkSubscription(wallets, email, {
+      onSuccess: (ids: string[]) => {
+        const walletsToSubscribe = wallets.filter(w => !ids.includes(w.id));
+        if (!walletsToSubscribe.length) {
+          return this.goToLocalEmailConfirm();
+        }
+        navigation.navigate(Route.ChooseWalletsForNotification, {
+          email,
+          onSuccess,
+          walletsToSubscribe,
+          onSkip: () => this.goToLocalEmailConfirm(),
+        });
+      },
+      onFailure: (error: string) => {
+        this.setState({ error });
+      },
+    });
   };
 
   skipAddEmail = () => {
@@ -157,10 +178,12 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 const mapDispatchToProps = {
   createNotificationEmail: createNotificationEmailAction,
   setNotificationEmail: setNotificationEmailAction,
+  checkSubscription: checkSubscriptionAction,
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
   hasWallets: walletsSelectors.hasWallets(state),
+  wallets: walletsSelectors.wallets(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);

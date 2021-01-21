@@ -407,10 +407,12 @@ export type RootStackParams = {
   };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
-  [Route.ConfirmNotificationCode]: { children: React.ReactNode; onSuccess: () => void };
+  [Route.ConfirmNotificationCode]: { children: React.ReactNode; onSuccess: () => void; title: string };
   [Route.ChooseWalletsForNotification]: {
     email: string;
     onSuccess: () => void;
+    onSkip: () => void;
+    walletsToSubscribe: Wallet[];
   };
   [Route.AddNotificationEmail]: {
     withSkip?: boolean;
@@ -507,6 +509,7 @@ export type RootStackParams = {
     flowType: ConfirmAddressFlowType;
     walletsToSubscribe?: Wallet[];
     onBack?: () => void;
+    onSuccess?: () => void;
   };
   [Route.ChangeEmail]: {
     email: string;

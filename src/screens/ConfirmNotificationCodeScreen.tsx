@@ -79,13 +79,13 @@ class ConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 
   render() {
     const { error, userCode, numberAttempt } = this.state;
-    const { children } = this.props.route.params;
+    const { children, title } = this.props.route.params;
     const allowReSend = numberAttempt < CONST.emailCodeErrorMax;
 
     return (
       <ScreenTemplate
         noScroll
-        header={<Header isBackArrow title={i18n.onboarding.onboarding} />}
+        header={<Header isBackArrow title={title} />}
         keyboardShouldPersistTaps="always"
         footer={
           <>
