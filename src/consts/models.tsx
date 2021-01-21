@@ -1,7 +1,7 @@
 import { VaultTxType, Transaction as BtcTransaction, ECPair } from 'bitcoinjs-lib';
 import { Dayjs } from 'dayjs';
 import React from 'react';
-import { KeyboardType, StyleProp, ViewStyle, Platform } from 'react-native';
+import { KeyboardType, StyleProp, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 import { ImageStyle } from 'react-native-fast-image';
 
@@ -121,7 +121,6 @@ export enum FlowType {
 }
 
 export enum Route {
-  PasswordNavigator = 'PasswordNavigator',
   Dashboard = 'Dashboard',
   RecoverySend = 'RecoverySend',
   RecoverySeed = 'RecoverySeed',
@@ -130,7 +129,7 @@ export enum Route {
   ImportAuthenticator = 'ImportAuthenticator',
   OptionsAuthenticator = 'OptionsAuthenticator',
   CreateWalletSuccess = 'CreateWalletSuccess',
-  DeleteEntity = 'DeleteEntity',
+  Confirm = 'Confirm',
   CreateAuthenticatorPublicKey = 'CreateAuthenticatorPublicKey',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticator = 'CreateAuthenticator',
@@ -158,7 +157,7 @@ export enum Route {
   SendTransactionDetails = 'SendTransactionDetailsScreen',
   ScanQrCode = 'ScanQrCode',
   ChooseContactList = 'ChooseContactList',
-  MainCardStackNavigator = 'MainCardStackNavigator',
+  MainTabStackNavigator = 'MainTabStackNavigator',
   CurrentPin = 'CurrentPin',
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
@@ -181,7 +180,6 @@ export enum Route {
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
-  ReceiveNotificationsConfirmation = 'ReceiveNotificationsConfirmation',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -271,10 +269,15 @@ export enum ConfirmAddressFlowType {
   CURRENT_ADDRESS = 'CURRENT_ADDRESS',
   NEW_ADDRESS = 'NEW_ADDRESS',
   DELETE_ADDRESS = 'DELETE_ADDRESS',
-  ANOTHER_ACTION = 'ANOTHER_ACTION',
+  SUBSCRIBE = 'SUBSCRIBE',
   UNSUBSCRIBE = 'UNSUBSCRIBE',
-  RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT',
-  RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE = 'RECEIVE_NOTIFICATIONS_CONFIRMATION_CREATE',
+}
+
+export interface InfoContainerContent {
+  title?: string;
+  description?: string;
+  onInit?: () => void;
+  onCodeConfirm?: () => void;
 }
 
 export interface Transaction {
@@ -375,14 +378,13 @@ export type MainTabNavigatorParams = {
   [Route.Dashboard]: undefined;
   [Route.AuthenticatorList]: undefined;
   [Route.ContactList]: undefined;
-  [Route.Settings]: undefined;
+  [Route.Settings]: { screen: keyof RootStackParams };
 };
 
 export type RootStackParams = {
-  [Route.MainCardStackNavigator]: undefined;
+  [Route.MainTabStackNavigator]: { screen: keyof MainTabNavigatorParams };
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
   [Route.UnlockTransaction]: { onSuccess: () => void };
-  [Route.PasswordNavigator]: undefined;
   [Route.EditText]: {
     title: string;
     onSave: (value: string) => void;
@@ -417,24 +419,12 @@ export type RootStackParams = {
     size: number;
     feeSatoshi: number;
   };
-};
-
-export type PasswordNavigatorParams = {
   [Route.CreatePin]: {
     flowType: string;
   };
   [Route.ConfirmPin]: {
     flowType: string;
     pin: string;
-  };
-  [Route.Message]: {
-    title: string;
-    source: FastImageSource;
-    description: string;
-    testID?: string;
-    buttonProps?: ButtonProps;
-    imageStyle?: StyleProp<ViewStyle>;
-    asyncTask?: () => void;
   };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
@@ -444,29 +434,7 @@ export type PasswordNavigatorParams = {
     isOnboarding?: boolean;
   };
   [Route.AddNotificationEmail]: undefined;
-};
-
-export type NotificationNavigatorParams = {
-  [Route.AddNotificationEmail]: undefined;
-  [Route.ChooseWalletsForNotification]: {
-    email: string;
-    onboarding?: boolean;
-  };
   [Route.ConfirmNotificationCode]: { email?: string };
-  [Route.Message]: {
-    title: string;
-    source: FastImageSource;
-    description: string;
-    testID?: string;
-    buttonProps?: ButtonProps;
-    imageStyle?: StyleProp<ViewStyle>;
-    asyncTask?: () => void;
-  };
-};
-
-export type MainCardStackNavigatorParams = {
-  [Route.Dashboard]: { activeWallet?: Wallet } | undefined;
-  [Route.MainCardStackNavigator]: undefined;
   [Route.CreateWallet]: undefined;
   [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
@@ -507,7 +475,6 @@ export type MainCardStackNavigatorParams = {
     onContactPress?: (data: string) => void;
     title?: string;
   };
-  [Route.Settings]: undefined;
   [Route.SelectLanguage]: undefined;
   [Route.AboutUs]: undefined;
   [Route.TermsConditions]: undefined;
@@ -522,10 +489,14 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.FilterTransactions]: { onFilterPress: () => void };
   [Route.CreateAuthenticator]: undefined;
-  [Route.AuthenticatorList]: undefined;
   [Route.CreateAuthenticatorPublicKey]: { id: string };
   [Route.CreateAuthenticatorSuccess]: { id: string };
-  [Route.DeleteEntity]: { onConfirm: () => void; name: string | undefined; subtitle: string; title: string };
+  [Route.Confirm]: {
+    onConfirm: () => void;
+    title: string;
+    onBack?: () => void;
+    children: React.ReactNode;
+  };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
   [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: () => void };
@@ -539,8 +510,8 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.ImportWalletChooseType]: undefined;
   [Route.ChunkedQrCode]: {
-    chunkNo: number;
-    chunksQuantity: number;
+    chunkNo: string;
+    chunksQuantity: string;
     onScanned: () => void;
   };
   [Route.AirdropDashboard]: undefined;
@@ -570,10 +541,6 @@ export type MainCardStackNavigatorParams = {
   [Route.ChangeEmail]: {
     email: string;
   };
-  [Route.ReceiveNotificationsConfirmation]: {
-    address: string;
-    flowType: ConfirmAddressFlowType;
-  };
 };
 
 export type DateType = Date | Dayjs;
@@ -589,7 +556,4 @@ export interface Authenticator {
   createdAt: Dayjs;
 }
 
-export type GlobalParams = MainCardStackNavigatorParams &
-  PasswordNavigatorParams &
-  RootStackParams &
-  MainTabNavigatorParams;
+export type GlobalParams = RootStackParams & MainTabNavigatorParams;

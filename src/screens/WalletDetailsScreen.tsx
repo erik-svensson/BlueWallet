@@ -1,4 +1,4 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { cloneDeep } from 'lodash';
 import React from 'react';
@@ -6,15 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, FlatButton, Header, ScreenTemplate, WalletCard, ButtonType, Text } from 'app/components';
-import {
-  Wallet,
-  Route,
-  MainCardStackNavigatorParams,
-  RootStackParams,
-  ActionMeta,
-  CONST,
-  ConfirmAddressFlowType,
-} from 'app/consts';
+import { Wallet, Route, RootStackParams, ActionMeta, CONST, ConfirmAddressFlowType } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { HDSegwitP2SHAirWallet } from 'app/legacy';
@@ -38,14 +30,11 @@ const i18n = require('../../loc');
 
 interface Props {
   updateWallet: (wallet: Wallet) => UpdateWalletAction;
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.WalletDetails>
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.WalletDetails>;
   wallet?: Wallet;
   deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
-  route: RouteProp<MainCardStackNavigatorParams, Route.WalletDetails>;
+  route: RouteProp<RootStackParams, Route.WalletDetails>;
   walletsLabels: string[];
   email: string;
   isSubscribed: boolean;
@@ -79,15 +68,23 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   navigateToWalletXpub = () => this.navigateWithWallet(Route.ExportWalletXpub);
 
+  renderConfirmScreenContent = () => (
+    <>
+      <Text style={styles.confirmTitle}>{i18n.wallets.deleteWallet.title}</Text>
+      <Text
+        style={styles.confirmDescription}
+      >{`${i18n.wallets.deleteWallet.description1} ${this.props.wallet?.label}${i18n.wallets.deleteWallet.description2}`}</Text>
+    </>
+  );
+
   navigateToDeleteWallet = () => {
     const { deleteWallet, navigation, wallet } = this.props;
     if (!wallet) {
       return;
     }
-    navigation.navigate(Route.DeleteEntity, {
-      name: wallet.label,
+    navigation.navigate(Route.Confirm, {
       title: i18n.wallets.deleteWallet.header,
-      subtitle: i18n.wallets.deleteWallet.title,
+      children: this.renderConfirmScreenContent(),
       onConfirm: () => {
         deleteWallet(wallet.id, {
           onSuccess: () => {
@@ -97,7 +94,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               type: MessageType.success,
               buttonProps: {
                 title: i18n.message.returnToDashboard,
-                onPress: () => navigation.navigate(Route.Dashboard),
+                onPress: this.goToDashboard,
               },
             });
           },
@@ -105,6 +102,8 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       },
     });
   };
+
+  goToDashboard = () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
 
   navigateWithWallet = (route: Route.ExportWalletXpub | Route.ExportWallet) => {
     const { navigation, wallet } = this.props;
@@ -153,7 +152,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       }
       return navigation.navigate(Route.ConfirmEmail, {
         email,
-        flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+        flowType: ConfirmAddressFlowType.SUBSCRIBE,
         walletsToSubscribe: [wallet],
       });
     } else {
@@ -170,7 +169,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   };
 
   render() {
-    const { wallet, isSubscribed } = this.props;
+    const { wallet, isSubscribed, navigation } = this.props;
     if (!wallet) {
       return null;
     }
@@ -201,7 +200,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             />
           </>
         }
-        header={<Header isBackArrow title={wallet.label} />}
+        header={<Header isBackArrow title={wallet.label} onBackArrow={this.goToDashboard} />}
       >
         <View style={styles.walletContainer}>
           <WalletCard wallet={wallet} containerStyle={styles.walletContainerInner} />
@@ -279,4 +278,12 @@ const styles = StyleSheet.create({
     marginTop: 4,
     ...typography.caption,
   },
+  confirmDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    textAlign: 'center',
+    lineHeight: 19,
+    marginTop: 18,
+  },
+  confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });

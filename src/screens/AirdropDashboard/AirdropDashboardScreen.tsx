@@ -5,7 +5,7 @@ import { View, StyleSheet, Text } from 'react-native';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Image, Countdown } from 'app/components';
-import { CONST, MainCardStackNavigatorParams, Route, RootStackParams } from 'app/consts';
+import { CONST, Route, RootStackParams } from 'app/consts';
 import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { typography, palette } from 'app/styles';
 
@@ -15,8 +15,8 @@ const i18n = require('../../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.AirdropDashboard>
+    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
+    StackNavigationProp<RootStackParams, Route.AirdropDashboard>
   >;
 }
 

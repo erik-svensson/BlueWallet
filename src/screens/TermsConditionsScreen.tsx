@@ -178,12 +178,14 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
           onPress={this.toggleAgreementToTermsAndConditions}
           containerStyle={styles.checkbox}
           left
+          testID="terms-and-conditions-checkbox"
           checked={agreedToTermsAndConditions}
           title={<Text style={styles.checkboxText}>{i18n.termsConditions.readTermsConditions}</Text>}
         />
         <CheckBox
           onPress={this.toggleAgreementToPrivacyPolicy}
           containerStyle={styles.checkbox}
+          testID="privacy-policy-checkbox"
           left
           checked={agreedToPrivacyPolicy}
           title={<Text style={styles.checkboxText}>{i18n.termsConditions.readPrivacyPolicy}</Text>}

@@ -1,5 +1,4 @@
 import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
@@ -12,7 +11,6 @@ import { typography } from 'app/styles';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.ExportWallet>;
   route: RouteProp<RootStackParams, Route.ExportWallet>;
 }
 

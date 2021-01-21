@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, TextInput as BaseTextInput, StyleProp, ViewStyle, Text } from 'react-native';
+import { StyleSheet, TextInput as BaseTextInput, StyleProp, ViewStyle, Text, Keyboard } from 'react-native';
 
 import { defaultKeyboardType } from 'app/consts';
 import { palette, typography } from 'app/styles';
@@ -46,6 +46,9 @@ export class TextAreaItem extends PureComponent<Props, State> {
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChangeText={onChangeText}
+          onSubmitEditing={() => {
+            Keyboard.dismiss();
+          }}
           autoCapitalize={autoCapitalize}
         />
         {!!error && (

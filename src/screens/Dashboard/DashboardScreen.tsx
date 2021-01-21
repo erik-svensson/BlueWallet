@@ -14,7 +14,7 @@ import {
   StyledText,
   AirdropFloatingButton,
 } from 'app/components';
-import { Wallet, Route, EnhancedTransaction, CONST, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
+import { Wallet, Route, EnhancedTransaction, CONST, MainTabNavigatorParams, RootStackParams } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
@@ -34,8 +34,8 @@ const i18n = require('../../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.Dashboard>
+    StackNavigationProp<MainTabNavigatorParams, Route.Settings>,
+    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
   >;
   wallets: Wallet[];
   isLoading: boolean;

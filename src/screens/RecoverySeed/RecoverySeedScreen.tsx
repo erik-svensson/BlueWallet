@@ -1,11 +1,11 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { compose, range, map, reverse } from 'lodash/fp';
 import React, { Component, GetDerivedStateFromProps } from 'react';
 import { Text, StyleSheet, View, Alert } from 'react-native';
 
 import { Header, ScreenTemplate, Button, FlatButton, InputItem } from 'app/components';
-import { MainCardStackNavigatorParams, Route, RootStackParams, CONST } from 'app/consts';
+import { Route, RootStackParams, CONST } from 'app/consts';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { palette, typography } from 'app/styles';
 
@@ -14,11 +14,8 @@ import { mnemonicToKeyPair, privateKeyToKeyPair } from '../../../utils/crypto';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.RecoverySeed>
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.RecoverySeed>;
+  navigation: StackNavigationProp<RootStackParams, Route.RecoverySeed>;
+  route: RouteProp<RootStackParams, Route.RecoverySeed>;
 }
 
 interface State {
@@ -125,7 +122,6 @@ export class RecoverySeedScreen extends Component<Props, State> {
   };
 
   render() {
-    const { navigation } = this.props;
     const { subtitle, buttonText, description, onBackArrow } = this.props.route.params;
 
     const { isLoading } = this.state;

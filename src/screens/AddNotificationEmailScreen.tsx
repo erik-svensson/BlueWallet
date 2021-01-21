@@ -1,11 +1,10 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, NotificationNavigatorParams, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
@@ -19,14 +18,7 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    CompositeNavigationProp<
-      StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>,
-      StackNavigationProp<NotificationNavigatorParams, Route.AddNotificationEmail>
-    >
-  >;
-
+  navigation: StackNavigationProp<RootStackParams, Route.AddNotificationEmail>;
   createNotificationEmail: Function;
   setNotificationEmail: Function;
   hasWallets: boolean;
@@ -77,7 +69,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           buttonProps: {
             title: i18n.onboarding.successCompletedButton,
             onPress: () => {
-              navigation.pop();
+              navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
             },
           },
         });
@@ -94,7 +86,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         footer={
           <>
             <Button
-              title={i18n.onboarding.confirmNotification}
+              title={i18n._.confirm}
               testID="submit-notification-email"
               onPress={this.onSave}
               disabled={email.length === 0}
@@ -102,7 +94,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             <FlatButton
               testID="skip-notification-email"
               containerStyle={styles.skipButton}
-              title={i18n._.skipStep}
+              title={i18n._.skip}
               onPress={this.skipAddEmail}
             />
           </>

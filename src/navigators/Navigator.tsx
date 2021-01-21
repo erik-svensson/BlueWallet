@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { CONST } from 'app/consts';
 import { Toasts } from 'app/containers';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
-import { RootNavigator, PasswordNavigator, NotificationNavigator } from 'app/navigators';
+import { RootNavigator } from 'app/navigators';
 import { UnlockScreen, TermsConditionsScreen, ConnectionIssuesScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
 import ChamberOfSecrets from 'app/screens/ChamberOfSecrets';
@@ -102,7 +102,7 @@ class Navigator extends React.Component<Props, State> {
     }
   };
 
-  shouldRenderOnBoarding = () => {
+  shouldRenderCredentialsCreation = () => {
     const { isPinSet, isTxPasswordSet } = this.props;
 
     return !isPinSet || !isTxPasswordSet;
@@ -170,21 +170,18 @@ class Navigator extends React.Component<Props, State> {
       return <BetaVersionScreen onButtonPress={this.handleAcceptBetaVersionRisk} />;
     }
 
-    if (this.shouldRenderOnBoarding()) {
-      return <PasswordNavigator />;
-    }
+    const _shouldRenderCredentialsCreation = this.shouldRenderCredentialsCreation();
 
-    // if (this.shouldRenderNotification()) {
-    //   return <NotificationNavigator />;
-    // } TODO // till onboarding logic works well with the others
-
-    if (!hasConnectedToServerAtLeaseOnce) {
+    if (!hasConnectedToServerAtLeaseOnce && !_shouldRenderCredentialsCreation) {
       return <ConnectionIssuesScreen />;
     }
 
     return (
       <>
-        <RootNavigator />
+        <RootNavigator
+          shouldRenderCredentialsCreation={_shouldRenderCredentialsCreation}
+          shouldRenderNotification={this.shouldRenderNotification()}
+        />
         {isAuthenticated && <Toasts />}
         {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
       </>

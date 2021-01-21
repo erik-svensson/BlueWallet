@@ -9,13 +9,13 @@ import {
   SocialShareFacebookButton,
   SocialShareTwitterButton,
 } from 'app/components';
-import { Route, MainCardStackNavigatorParams, CONST } from 'app/consts';
+import { Route, RootStackParams, CONST } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 type Props = {
-  route: RouteProp<MainCardStackNavigatorParams, Route.AirdropFinishedWalletDetails>;
+  route: RouteProp<RootStackParams, Route.AirdropFinishedWalletDetails>;
 };
 
 export const AirdropFinishedWalletDetails: FC<Props> = ({ route }: Props) => (

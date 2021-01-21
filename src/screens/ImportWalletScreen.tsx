@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { compose } from 'lodash/fp';
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { View, StyleSheet, Text, Keyboard, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -10,7 +10,7 @@ import { Button } from 'app/components/Button';
 import {
   Route,
   Wallet,
-  MainCardStackNavigatorParams,
+  RootStackParams,
   ActionMeta,
   ELECTRUM_VAULT_SEED_PREFIXES,
   CONST,
@@ -21,7 +21,8 @@ import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
-import { isNotificationEmailSet, email } from 'app/state/notifications/selectors';
+import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
+import { isNotificationEmailSet, storedEmail } from 'app/state/notifications/selectors';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { importWallet as importWalletAction, ImportWalletAction } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
@@ -41,13 +42,14 @@ import { isElectrumVaultMnemonic } from '../../utils/crypto';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ImportWallet>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ImportWallet>;
+  navigation: StackNavigationProp<RootStackParams, Route.ImportWallet>;
+  route: RouteProp<RootStackParams, Route.ImportWallet>;
   importWallet: (wallet: Wallet, meta?: ActionMeta) => ImportWalletAction;
   wallets: Wallet[];
   isNotificationEmailSet: boolean;
   email: string;
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
+  checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
 }
 
 interface State {
@@ -58,7 +60,7 @@ interface State {
   customWords: string;
 }
 
-export class ImportWalletScreen extends PureComponent<Props, State> {
+export class ImportWalletScreen extends Component<Props, State> {
   state = {
     hasCustomWords: false,
     text: '',
@@ -107,7 +109,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => this.props.navigation.navigate(Route.Dashboard),
+        onPress: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
       },
     });
 
@@ -143,8 +145,22 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     });
   };
 
+  renderConfirmScreenContent = () => (
+    <>
+      <Text style={styles.notificationTitle}>{i18n.notifications.getNotification}</Text>
+      <Text style={styles.notificationDescription}>
+        {i18n.notifications.receiveTransactionDescription}
+        <Text style={styles.boldedText}>{this.props.email}</Text>
+      </Text>
+      <Text style={[styles.notificationDescription, styles.note]}>
+        <Text style={styles.boldedText}>{i18n.notifications.noteFirst}</Text>
+        {i18n.notifications.noteSecond}
+      </Text>
+    </>
+  );
+
   saveWallet = async (newWallet: any) => {
-    const { importWallet, wallets, isNotificationEmailSet, email } = this.props;
+    const { importWallet, wallets, email, checkSubscription } = this.props;
     if (wallets.some(wallet => wallet.secret === newWallet.secret)) {
       this.showErrorMessageScreen({
         title: i18n.wallets.importWallet.walletInUseValidationError,
@@ -154,20 +170,41 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
       });
     } else {
       newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
-      importWallet(newWallet, {
-        onSuccess: () => {
-          // isNotificationEmailSet
-          //   ? this.props.navigation.navigate(Route.ReceiveNotificationsConfirmation, {
-          //       address: email,
-          //       flowType: ConfirmAddressFlowType.RECEIVE_NOTIFICATIONS_CONFIRMATION_IMPORT,
-          //     })
-          //   : // TODO in import wallet logic
-          this.showSuccessImportMessageScreen();
+      checkSubscription([newWallet], email, {
+        onSuccess: (ids: string[]) => {
+          const isWalletSubscribed = ids.some(id => id === newWallet.id);
+          importWallet(newWallet, {
+            onSuccess: () => {
+              this.props.navigation.navigate(Route.CreateWalletSuccess, {
+                secret: newWallet.getSecret(),
+                onButtonPress:
+                  !!email && !isWalletSubscribed
+                    ? () =>
+                        this.props.navigation.navigate(Route.Confirm, {
+                          title: i18n.notifications.notifications,
+                          children: this.renderConfirmScreenContent(),
+                          onConfirm: () =>
+                            this.props.navigation.navigate(Route.ConfirmEmail, {
+                              email,
+                              flowType: ConfirmAddressFlowType.SUBSCRIBE,
+                              walletsToSubscribe: [newWallet],
+                              onBack: () =>
+                                this.props.navigation.navigate(Route.WalletDetails, {
+                                  id: newWallet.id,
+                                }),
+                            }),
+                          onBack: () =>
+                            this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+                        })
+                    : undefined,
+              });
+            },
+            onFailure: (error: string) =>
+              this.showErrorMessageScreen({
+                description: error,
+              }),
+          });
         },
-        onFailure: (error: string) =>
-          this.showErrorMessageScreen({
-            description: error,
-          }),
       });
     }
   };
@@ -303,6 +340,9 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
         testID="import-wallet-name"
         error={this.state.validationError}
         setValue={this.onLabelChange}
+        onSubmitEditing={() => {
+          Keyboard.dismiss();
+        }}
         label={i18n.wallets.add.inputLabel}
         maxLength={maxWalletNameLength}
       />
@@ -463,6 +503,7 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
     const { validationError, text, label, hasCustomWords, customWords } = this.state;
     return (
       <ScreenTemplate
+        keyboardShouldPersistTaps={'always'}
         footer={
           <>
             <Button
@@ -521,11 +562,12 @@ export class ImportWalletScreen extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isNotificationEmailSet: isNotificationEmailSet(state),
-  email: email(state),
+  email: storedEmail(state),
 });
 
 const mapDispatchToProps = {
   importWallet: importWalletAction,
+  checkSubscription,
 };
 
 export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(ImportWalletScreen);
@@ -577,4 +619,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     marginBottom: 30,
   },
+  notificationDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    textAlign: 'center',
+    lineHeight: 19,
+    marginTop: 18,
+  },
+  boldedText: {
+    ...typography.headline9,
+    color: palette.textBlack,
+  },
+  note: {
+    marginTop: 42,
+  },
+  notificationTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });

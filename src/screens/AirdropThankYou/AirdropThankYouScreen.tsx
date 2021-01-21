@@ -4,7 +4,7 @@ import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Button, Header } from 'app/components';
-import { Route, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, RootStackParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { actions, selectors } from 'app/state/airdrop';
 import { ThankYouSeenAction } from 'app/state/airdrop/actions';
@@ -21,7 +21,7 @@ interface ActionProps {
 }
 
 type Props = {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.AirdropThankYou>;
+  navigation: StackNavigationProp<RootStackParams, Route.AirdropThankYou>;
 } & MapStateProps &
   ActionProps;
 

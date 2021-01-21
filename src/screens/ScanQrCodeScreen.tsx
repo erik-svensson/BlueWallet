@@ -5,15 +5,15 @@ import { Image, View, TouchableOpacity, StatusBar, StyleSheet, Dimensions } from
 import { BarCodeReadEvent, RNCamera } from 'react-native-camera';
 
 import { images } from 'app/assets';
-import { MainCardStackNavigatorParams, Route } from 'app/consts';
+import { Route, RootStackParams } from 'app/consts';
 import { getStatusBarHeight } from 'app/styles';
 
 const { width } = Dimensions.get('window');
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ScanQrCode>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ScanQrCode>;
+  navigation: StackNavigationProp<RootStackParams, Route.ScanQrCode>;
+  route: RouteProp<RootStackParams, Route.ScanQrCode>;
 }
 
 export default class ScanQrCodeScreen extends React.PureComponent<Props> {

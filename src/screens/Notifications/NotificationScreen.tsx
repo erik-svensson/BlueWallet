@@ -1,4 +1,4 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image } from 'app/components';
-import { Route, MainCardStackNavigatorParams, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import {
@@ -15,17 +15,15 @@ import {
   CheckSubscriptionAction,
   checkSubscription,
 } from 'app/state/notifications/actions';
+import { storedEmail } from 'app/state/notifications/selectors';
 import { subscribedWallets } from 'app/state/wallets/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.Notifications>
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.Notifications>;
+  navigation: StackNavigationProp<RootStackParams, Route.Notifications>;
+  route: RouteProp<RootStackParams, Route.Notifications>;
   email: string;
   deleteEmail: () => DeleteNotificationEmailAction;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
@@ -42,11 +40,19 @@ export class NotificationScreen extends Component<Props> {
       email: this.props.email,
     });
 
+  renderConfirmScreenContent = () => (
+    <>
+      <Text style={styles.confirmTitle}>{i18n.notifications.deleteYourEmail}</Text>
+      <Text
+        style={styles.confirmDescription}
+      >{`${i18n.wallets.deleteWallet.description1} ${i18n.notifications.deleteYourEmail}${i18n.wallets.deleteWallet.description2}`}</Text>
+    </>
+  );
+
   onDeletePress = () =>
-    this.props.navigation.navigate(Route.DeleteEntity, {
+    this.props.navigation.navigate(Route.Confirm, {
       title: i18n.notifications.deleteEmail,
-      subtitle: i18n.notifications.deleteYourEmail,
-      name: i18n.notifications.deleteYourEmail,
+      children: this.renderConfirmScreenContent(),
       onConfirm: this.deleteEmail,
     });
 
@@ -64,7 +70,7 @@ export class NotificationScreen extends Component<Props> {
   goToConfirmScreen = () =>
     this.props.navigation.navigate(Route.ConfirmEmail, {
       email: this.props.email!,
-      flowType: ConfirmAddressFlowType.ANOTHER_ACTION,
+      flowType: ConfirmAddressFlowType.DELETE_ADDRESS,
     });
 
   removeEmail = () => {
@@ -148,7 +154,7 @@ export class NotificationScreen extends Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  email: state.notifications.email,
+  email: storedEmail(state),
   wallets: subscribedWallets(state),
 });
 
@@ -214,4 +220,12 @@ const styles = StyleSheet.create({
     color: palette.textGrey,
     textAlign: 'center',
   },
+  confirmDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    textAlign: 'center',
+    lineHeight: 19,
+    marginTop: 18,
+  },
+  confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });

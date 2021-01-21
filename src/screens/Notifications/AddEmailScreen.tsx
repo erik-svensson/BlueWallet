@@ -1,18 +1,11 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, InputItem } from 'app/components';
-import {
-  Route,
-  MainCardStackNavigatorParams,
-  RootStackParams,
-  ConfirmAddressFlowType,
-  Wallet,
-  ActionMeta,
-} from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, Wallet, ActionMeta } from 'app/consts';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { createNotificationEmail, CreateNotificationEmailAction } from 'app/state/notifications/actions';
@@ -22,11 +15,8 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.AddEmail>
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.AddEmail>;
+  navigation: StackNavigationProp<RootStackParams, Route.AddEmail>;
+  route: RouteProp<RootStackParams, Route.AddEmail>;
   wallets: Wallet[];
   createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 }

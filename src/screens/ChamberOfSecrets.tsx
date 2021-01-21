@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-raw-text */
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
@@ -22,6 +22,7 @@ import {
   createTxPassword as createTxPasswordAction,
   createTc as createTcAction,
 } from 'app/state/authentication/actions';
+import { createNotificationEmail as createNotificationEmailAction } from 'app/state/notifications/actions';
 import { importWallet as importWalletAction } from 'app/state/wallets/actions';
 import { getStatusBarHeight, typography, palette } from 'app/styles';
 
@@ -50,6 +51,7 @@ interface Props {
     pin: string;
     password: string;
   };
+  createNotificationEmail: (email: string, { onSuccess }?: { onSuccess?: () => void }) => void;
 }
 
 const ChamberOfSecrets = (props: Props) => {
@@ -58,6 +60,7 @@ const ChamberOfSecrets = (props: Props) => {
     createTxPassword,
     createTc,
     onButtonPress,
+    createNotificationEmail,
     credentials = { pin: '1234', password: 'qwertyui' },
   } = props;
 
@@ -83,9 +86,12 @@ const ChamberOfSecrets = (props: Props) => {
   };
 
   const onPressSkipOnboardingButton = () => {
-    createTc();
-    createPin(credentials.pin);
-    createTxPassword(credentials.password);
+    createNotificationEmail('', {
+      onSuccess: () => {
+        createPin(credentials.pin);
+        createTxPassword(credentials.password, { onSuccess: () => createTc() });
+      },
+    });
 
     handleButtonPress();
   };
@@ -173,6 +179,9 @@ const ChamberOfSecrets = (props: Props) => {
             testID="add-wallet-name-input"
             value={walletOptions.name}
             setValue={onWalletNameChange}
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+            }}
             label="Wallet name"
           />
           <InputItem
@@ -180,6 +189,9 @@ const ChamberOfSecrets = (props: Props) => {
             multiline
             value={walletOptions.seedPhrase}
             setValue={onSeedPhraseChange}
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+            }}
             label="Seed phrase"
           />
         </>
@@ -234,4 +246,5 @@ export default connect(null, {
   createTxPassword: createTxPasswordAction,
   createTc: createTcAction,
   importWallet: importWalletAction,
+  createNotificationEmail: createNotificationEmailAction,
 })(ChamberOfSecrets);

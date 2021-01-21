@@ -1,11 +1,11 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
-import { Contact, Route, MainTabNavigatorParams, RootStackParams } from 'app/consts';
+import { Contact, Route, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { deleteContact, DeleteContactAction } from 'app/state/contacts/actions';
 import { typography, palette } from 'app/styles';
@@ -13,20 +13,15 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.DeleteContact>,
-    CompositeNavigationProp<
-      StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
-      StackNavigationProp<RootStackParams, Route.DeleteContact>
-    >
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.DeleteContact>;
   route: RouteProp<RootStackParams, Route.DeleteContact>;
   deleteContact: (contact: Contact) => DeleteContactAction;
 }
 
 export class DeleteContactScreen extends React.PureComponent<Props> {
   navigateBack = () => this.props.navigation.goBack();
-  navigateToContactList = () => this.props.navigation.navigate(Route.ContactList);
+  navigateToContactList = () =>
+    this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.ContactList });
   deleteContact = () => {
     const { contact } = this.props.route.params;
     this.props.deleteContact(contact as Contact);

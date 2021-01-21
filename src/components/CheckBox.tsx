@@ -15,6 +15,7 @@ interface Props {
   containerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
   title?: ReactElement | string;
+  testID?: string;
 }
 
 export const CheckBox = ({ ...props }: Props) => (

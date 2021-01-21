@@ -1,4 +1,4 @@
-import { takeEvery, put, call, all } from 'redux-saga/effects';
+import { takeEvery, put, call } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
@@ -11,7 +11,6 @@ import {
   createNotificationEmailFailure,
   setNotificationEmailFailure,
   createNotificationEmailSuccess,
-  setNotificationEmailSuccess,
   CreateNotificationEmailAction,
   NotificationAction,
   verifyNotificationEmail,
@@ -42,6 +41,7 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
   try {
     const savedEmail = yield StoreService.getStoreValue('email');
     if (!savedEmail && !!email) {
+      yield StoreService.setStoreValue('email', email);
       yield put(createNotificationEmailSuccess(email));
     } else {
       yield put(skipNotificationEmail());
@@ -64,8 +64,6 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
     const verifyCode = yield call(verifyEmail, { email });
     if (verifyCode.result === Result.success) {
       const decryptedCode = yield decryptCode(email, verifyCode.pin);
-      yield put(setNotificationEmailSuccess(email));
-      yield StoreService.setStoreValue('email', email);
       //Temporaly till we dont have email services run we need know correct pin from backend, remove after
       console.log(decryptedCode, '>>>>');
       yield put(verifyNotificationEmail(decryptedCode));
@@ -118,7 +116,8 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
       }
     }
   } catch (error) {
-    yield put(authenticateEmailFailure(error.message));
+    const { msg } = error.response.data;
+    yield put(authenticateEmailFailure(msg));
     if (meta?.onFailure) {
       meta.onFailure();
     }
@@ -126,7 +125,10 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
 }
 
 export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
-  const { wallets, email } = action.payload;
+  const {
+    meta,
+    payload: { wallets, email },
+  } = action;
   try {
     const walletWithHashes = yield Promise.all(
       wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
@@ -140,6 +142,9 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       }
     });
     yield put(checkSubscriptionSuccess(ids));
+    if (meta?.onSuccess) {
+      meta.onSuccess(ids);
+    }
   } catch (error) {
     yield put(checkSubscriptionFailure(error.msg));
   }

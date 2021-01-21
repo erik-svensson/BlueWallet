@@ -1,3 +1,4 @@
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
@@ -5,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { Image, ScreenTemplate, Header, ListItem } from 'app/components';
-import { Route, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, MainTabNavigatorParams, RootStackParams } from 'app/consts';
 import { logoSource } from 'app/helpers/images';
 import { BiometricService, AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
@@ -16,7 +17,10 @@ import { LabeledSettingsRow } from './LabeledSettingsRow';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.Settings>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParams, Route.Settings>,
+    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
+  >;
 }
 
 export const SettingsScreen = (props: Props) => {

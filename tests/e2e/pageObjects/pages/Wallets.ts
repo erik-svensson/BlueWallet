@@ -74,12 +74,12 @@ const Wallets = () => {
       importWalletButton: element(by.id('import-wallet-button')),
 
       async typeName(value: string) {
-        await actions.typeText(this.nameInput, value);
+        await actions.typeText(this.nameInput, value, { closeKeyboard: true });
       },
 
       async chooseType(type: WalletType) {
         // Note: For some reasons it's required to tap multiple times, it seems keyboard is "opened in headless" or whatever
-        await actions.multiTap(this.walletTypeRadios[type], 5);
+        await actions.tap(this.walletTypeRadios[type]);
       },
 
       async tapOnCreateButton() {
@@ -137,7 +137,7 @@ const Wallets = () => {
       proceedButton: element(by.id('confirm-import-button')),
 
       async chooseType(type: WalletType) {
-        await actions.multiTap(this.walletTypeRadios[type], 2);
+        await actions.tap(this.walletTypeRadios[type]);
       },
 
       async tapOnProceedButton() {
@@ -158,7 +158,7 @@ const Wallets = () => {
       },
 
       async typeSeedPhrase(value: string) {
-        await actions.typeText(this.seedPhraseInput, value);
+        await actions.typeText(this.seedPhraseInput, value, { closeKeyboard: true });
       },
 
       async submit() {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { difference, random } from 'lodash';
-import { compose, map, mapValues, values, flatten, uniq } from 'lodash/fp';
+import { compose, map, mapValues, values, flatten, uniq, filter as fpFilter } from 'lodash/fp';
 
 import config from './config';
 import { messages, AppErrors } from './error';
@@ -178,6 +178,8 @@ module.exports.multiGetTransactionsFullByTxid = async function(txIds) {
   const allTxs = { ...txs, ...inputsTxs };
 
   return compose(
+    // TODO: Add proper handling for coinbase transaction, this is quick fix with filtering them completly
+    fpFilter(tx => tx.inputs.length > 0),
     values,
     mapValues(tx => {
       const inputs = tx.vin
@@ -187,7 +189,9 @@ module.exports.multiGetTransactionsFullByTxid = async function(txIds) {
           return { ...input, value: prevOutputOfInput.value, addresses: prevOutputOfInput.scriptPubKey.addresses };
         });
 
-      const outputs = tx.vout.map(output => ({ ...output, addresses: output.scriptPubKey.addresses }));
+      const outputs = tx.vout
+        .filter(o => !!o.scriptPubKey.addresses)
+        .map(output => ({ ...output, addresses: output.scriptPubKey.addresses }));
 
       return { ...tx, outputs, inputs };
     }),

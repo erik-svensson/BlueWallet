@@ -1,27 +1,14 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
-import {
-  Route,
-  MainCardStackNavigatorParams,
-  RootStackParams,
-  NotificationNavigatorParams,
-  ConfirmAddressFlowType,
-  Wallet,
-  ActionMeta,
-} from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
-import {
-  checkSubscription,
-  CheckSubscriptionAction,
-  createNotificationEmail,
-  CreateNotificationEmailAction,
-} from 'app/state/notifications/actions';
+import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
 import { unSubscribedWallets } from 'app/state/wallets/selectors';
 import { typography, palette } from 'app/styles';
 
@@ -30,17 +17,10 @@ const i18n = require('../../../loc');
 type Item = any; // TODO will be changed to proper type when implementing logic
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    CompositeNavigationProp<
-      StackNavigationProp<NotificationNavigatorParams, Route.ConfirmNotificationCode>,
-      StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>
-    >
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.ChooseWalletsForNotification>;
   wallets: Wallet[];
-  route: RouteProp<MainCardStackNavigatorParams, Route.ChooseWalletsForNotification>;
+  route: RouteProp<RootStackParams, Route.ChooseWalletsForNotification>;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
-  createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 }
 
 interface State {
@@ -135,7 +115,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     } else {
       this.props.navigation.navigate(Route.ConfirmEmail, {
         email: params.email,
-        flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
+        flowType: ConfirmAddressFlowType.SUBSCRIBE,
         walletsToSubscribe: this.state.wallets,
       });
     }
@@ -185,7 +165,6 @@ const mapStateToProps = (state: ApplicationState) => {
 
 const mapDispatchToProps = {
   checkSubscription,
-  createNotificationEmail,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChooseWalletsForNotificationScreen);

@@ -8,7 +8,7 @@ import Share from 'react-native-share';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, FlatButton, Separator, TextAreaItem, Mnemonic, InputItem } from 'app/components';
-import { Authenticator, MainCardStackNavigatorParams, Route } from 'app/consts';
+import { Authenticator, RootStackParams, Route } from 'app/consts';
 import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { formatDate } from 'app/helpers/date';
@@ -31,8 +31,8 @@ interface ActionProps {
 }
 
 interface NavigationProps {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.OptionsAuthenticator>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.OptionsAuthenticator>;
+  navigation: StackNavigationProp<RootStackParams, Route.OptionsAuthenticator>;
+  route: RouteProp<RootStackParams, Route.OptionsAuthenticator>;
 }
 
 interface State {
@@ -46,13 +46,21 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
     name: this.props.authenticator?.name || '',
   };
 
+  renderConfirmScreenContent = () => (
+    <>
+      <Text style={styles.confirmTitle}>{i18n.authenticators.delete.subtitle}</Text>
+      <Text
+        style={styles.confirmDescription}
+      >{`${i18n.wallets.deleteWallet.description1} ${this.props.authenticator?.name}${i18n.wallets.deleteWallet.description2}`}</Text>
+    </>
+  );
+
   onDelete = () => {
     const { deleteAuthenticator, navigation, authenticator } = this.props;
     authenticator &&
-      navigation.navigate(Route.DeleteEntity, {
-        name: authenticator?.name,
+      navigation.navigate(Route.Confirm, {
+        children: this.renderConfirmScreenContent(),
         title: i18n.authenticators.delete.title,
-        subtitle: i18n.authenticators.delete.subtitle,
         onConfirm: () => {
           deleteAuthenticator(authenticator.id, {
             onSuccess: () => {
@@ -62,7 +70,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
                 type: MessageType.success,
                 buttonProps: {
                   title: i18n.message.returnToAuthenticators,
-                  onPress: () => navigation.navigate(Route.AuthenticatorList),
+                  onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.AuthenticatorList }),
                 },
               });
             },
@@ -212,4 +220,12 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     alignItems: 'center',
   },
+  confirmDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    textAlign: 'center',
+    lineHeight: 19,
+    marginTop: 18,
+  },
+  confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });

@@ -5,14 +5,14 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { icons } from 'app/assets';
 import { Image } from 'app/components';
-import { Route, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, RootStackParams, MainTabNavigatorParams } from 'app/consts';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
 
 type Props = {
   thankYouFlowCompleted: boolean;
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.Dashboard>
+    StackNavigationProp<MainTabNavigatorParams, Route.Settings>,
+    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
   >;
 };
 

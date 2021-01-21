@@ -1,5 +1,4 @@
 import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
@@ -14,7 +13,6 @@ import { WatchOnlyWallet } from '../../class';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.ExportWalletXpub>;
   route: RouteProp<RootStackParams, Route.ExportWalletXpub>;
 }
 

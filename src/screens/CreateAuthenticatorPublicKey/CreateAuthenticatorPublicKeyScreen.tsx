@@ -6,7 +6,7 @@ import Share from 'react-native-share';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, TextAreaItem, FlatButton } from 'app/components';
-import { Route, Authenticator, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, Authenticator, RootStackParams } from 'app/consts';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
@@ -20,8 +20,8 @@ interface MapStateProps {
 }
 
 interface Props extends MapStateProps {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CreateAuthenticatorPublicKey>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.CreateAuthenticatorPublicKey>;
+  navigation: StackNavigationProp<RootStackParams, Route.CreateAuthenticatorPublicKey>;
+  route: RouteProp<RootStackParams, Route.CreateAuthenticatorPublicKey>;
 }
 class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
   componentDidMount() {
@@ -46,7 +46,7 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
   };
 
   render() {
-    const { authenticator, navigation } = this.props;
+    const { authenticator } = this.props;
 
     if (!authenticator) {
       return null;

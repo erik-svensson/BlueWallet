@@ -1,5 +1,4 @@
 import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, View, StyleSheet, Linking, Clipboard } from 'react-native';
 
@@ -13,14 +12,12 @@ import { satoshiToBtc } from '../../utils/bitcoin';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.SendTransactionDetails>;
   route: RouteProp<RootStackParams, Route.SendTransactionDetails>;
 }
 
 export class SendTransactionDetailsScreen extends PureComponent<Props> {
   render() {
     const {
-      navigation,
       route: { params },
     } = this.props;
     const {

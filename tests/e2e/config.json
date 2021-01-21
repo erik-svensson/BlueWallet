@@ -2,10 +2,9 @@
     "preset": "ts-jest",
     "testEnvironment": "./environment",
     "testRunner": "jest-circus/runner",
-    "testTimeout": 120000,
+    "testTimeout": 180000,
     "testRegex": "\\.spec\\.ts$",
     "setupFilesAfterEnv": ["./setupTests.ts"],
     "reporters": ["detox/runners/jest/streamlineReporter"],
-    "verbose": true,
-    "forceExit": true
+    "verbose": true
 }

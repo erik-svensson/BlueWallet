@@ -4,15 +4,15 @@ import React, { FC } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { Button } from 'app/components';
-import { MainCardStackNavigatorParams, Route, RootStackParams } from 'app/consts';
+import { RootStackParams, Route } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../../loc');
 
 interface Props {
   navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.AirdropDashboard>
+    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
+    StackNavigationProp<RootStackParams, Route.AirdropDashboard>
   >;
 }
 
