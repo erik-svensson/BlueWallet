@@ -24,7 +24,7 @@ interface Props {
 }
 
 interface State {
-  wallets: any[];
+  wallets: Wallet[];
 }
 
 export class ChooseWalletsForNotificationScreen extends PureComponent<Props, State> {

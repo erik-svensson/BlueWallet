@@ -44,47 +44,46 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     });
   };
 
-  onSave = () => {
+  goToLocalEmailConfirm = () => {
+    const { setNotificationEmail, navigation, createNotificationEmail, route } = this.props;
+
+    const { onSuccess } = route.params;
+
     const { email } = this.state;
-    const { setNotificationEmail, navigation, hasWallets, createNotificationEmail } = this.props;
+
+    setNotificationEmail(email, {
+      onSuccess: () =>
+        navigation.navigate(Route.ConfirmNotificationCode, {
+          children: (
+            <View style={styles.infoContainer}>
+              <Text style={typography.headline4}>{i18n.onboarding.confirmEmail}</Text>
+              <Text style={styles.codeDescription}>{i18n.onboarding.confirmEmailDescription}</Text>
+              <Text style={typography.headline5}>{email}</Text>
+            </View>
+          ),
+          onSuccess: () => {
+            createNotificationEmail(email, {
+              onSuccess,
+            });
+          },
+        }),
+    });
+  };
+
+  onConfirm = () => {
+    const { email } = this.state;
+    const { navigation, hasWallets, route } = this.props;
+    const { onSuccess } = route.params;
+
     if (!isEmail(email)) {
       return this.setState({
         error: i18n.onboarding.emailValidation,
       });
     }
-    if (!hasWallets) {
-      setNotificationEmail(email, {
-        onSuccess: () =>
-          navigation.navigate(Route.ConfirmNotificationCode, {
-            children: (
-              <View style={styles.infoContainer}>
-                <Text style={typography.headline4}>{i18n.onboarding.confirmEmail}</Text>
-                <Text style={styles.codeDescription}>{i18n.onboarding.confirmEmailDescription}</Text>
-                <Text style={typography.headline5}>{email}</Text>
-              </View>
-            ),
-            onSuccess: () => {
-              createNotificationEmail(email, {
-                onSuccess: () => {
-                  CreateMessage({
-                    title: i18n.contactCreate.successTitle,
-                    description: i18n.onboarding.successCompletedDescription,
-                    type: MessageType.success,
-                    buttonProps: {
-                      title: i18n.onboarding.successCompletedButton,
-                      onPress: () => {
-                        navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
-                      },
-                    },
-                  });
-                },
-              });
-            },
-          }),
-      });
-    } else {
-      navigation.navigate(Route.ChooseWalletsForNotification, { email, isOnboarding: true });
+    if (hasWallets) {
+      return navigation.navigate(Route.ChooseWalletsForNotification, { email, onSuccess });
     }
+    this.goToLocalEmailConfirm();
   };
 
   skipAddEmail = () => {
@@ -109,7 +108,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   render() {
     const { email, error } = this.state;
 
-    const { withSkip } = this.props.route.params;
+    const { withSkip, title, isBackArrow, description } = this.props.route.params;
     return (
       <ScreenTemplate
         noScroll
@@ -119,7 +118,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             <Button
               title={i18n._.confirm}
               testID="submit-notification-email"
-              onPress={this.onSave}
+              onPress={this.onConfirm}
               disabled={email.length === 0}
             />
             {withSkip && (
@@ -132,11 +131,11 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             )}
           </>
         }
-        header={<Header title={i18n.onboarding.onboarding} />}
+        header={<Header title={title} isBackArrow={isBackArrow} />}
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.onboarding.notification}</Text>
-          <Text style={styles.pinDescription}>{i18n.onboarding.addNotificationEmailDescription}</Text>
+          <Text style={styles.pinDescription}>{description}</Text>
         </View>
         <View style={styles.inputItemContainer}>
           <InputItem

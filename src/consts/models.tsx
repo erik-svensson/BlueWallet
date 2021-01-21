@@ -156,7 +156,6 @@ export enum Route {
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
   Notifications = 'Notifications',
-  AddEmail = 'AddEmail',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
@@ -411,9 +410,15 @@ export type RootStackParams = {
   [Route.ConfirmNotificationCode]: { children: React.ReactNode; onSuccess: () => void };
   [Route.ChooseWalletsForNotification]: {
     email: string;
-    isOnboarding?: boolean;
+    onSuccess: () => void;
   };
-  [Route.AddNotificationEmail]: { withSkip?: boolean };
+  [Route.AddNotificationEmail]: {
+    withSkip?: boolean;
+    title: string;
+    onSuccess: () => void;
+    isBackArrow: boolean;
+    description: string;
+  };
   [Route.CreateWallet]: undefined;
   [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
@@ -496,17 +501,12 @@ export type RootStackParams = {
   [Route.Notifications]: {
     walletsToSubscribe?: Wallet[];
   };
-  [Route.AddEmail]: { withSkip?: boolean };
   [Route.ConfirmEmail]: {
     email: string;
     newAddress?: string;
     flowType: ConfirmAddressFlowType;
     walletsToSubscribe?: Wallet[];
     onBack?: () => void;
-  };
-  [Route.ChooseWalletsForNotification]: {
-    email: string;
-    isOnboarding?: boolean;
   };
   [Route.ChangeEmail]: {
     email: string;

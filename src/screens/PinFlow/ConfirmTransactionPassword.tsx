@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { icons } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
 import { Route, CONST, RootStackParams } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import {
   createTxPassword as createTxPasswordAction,
   setIsAuthenticated as setIsAuthenticatedAction,
@@ -36,13 +37,31 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
     isVisible: false,
   };
 
-  onSave = async () => {
+  onSave = () => {
     const { createTxPassword, navigation } = this.props;
     const { setPassword } = this.props.route.params;
     if (setPassword === this.state.password) {
       createTxPassword(setPassword, {
         onSuccess: () => {
-          navigation.navigate(Route.AddNotificationEmail, { withSkip: true });
+          navigation.navigate(Route.AddNotificationEmail, {
+            withSkip: true,
+            isBackArrow: false,
+            title: i18n.onboarding.onboarding,
+            description: i18n.onboarding.addNotificationEmailDescription,
+            onSuccess: () => {
+              CreateMessage({
+                title: i18n.contactCreate.successTitle,
+                description: i18n.onboarding.emailAddedSuccessMessage,
+                type: MessageType.success,
+                buttonProps: {
+                  title: i18n.onboarding.successCompletedButton,
+                  onPress: () => {
+                    navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
+                  },
+                },
+              });
+            },
+          });
         },
       });
     } else {
