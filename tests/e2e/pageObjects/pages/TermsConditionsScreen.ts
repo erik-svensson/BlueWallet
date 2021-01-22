@@ -15,10 +15,6 @@ const TermsConditionsScreen = () => ({
   },
 
   async scrollDown() {
-    await actions.scrollToElement(this.privacyPolicyCheckbox, 'terms-conditions-screen', {
-      direction: 'down',
-      pixels: 500,
-    });
     await this.termsConditions.scrollTo('bottom');
   },
 
