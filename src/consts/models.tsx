@@ -370,6 +370,8 @@ export type RootStackParams = {
     label: string;
     header?: React.ReactNode;
     value?: string;
+    inputTestID?: string;
+    submitButtonTestID?: string;
     validate?: (value: string) => string | undefined;
     validateOnSave?: (value: string) => void;
     keyboardType?: KeyboardType;
