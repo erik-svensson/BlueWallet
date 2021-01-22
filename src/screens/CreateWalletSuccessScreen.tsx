@@ -51,7 +51,7 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
             testID="create-wallet-close-button"
           />
         }
-        header={<Header isBackArrow title={i18n.wallets.add.title} />}
+        header={<Header isBackArrow={false} title={i18n.wallets.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.wallets.addSuccess.subtitle}</Text>
         <Text style={styles.description}>{i18n.wallets.addSuccess.description}</Text>

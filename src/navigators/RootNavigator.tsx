@@ -80,7 +80,11 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
     <Stack.Navigator initialRouteName={getInitialRouteName()} headerMode="none">
       <Stack.Screen name={Route.CreatePin} component={CreatePinScreen} />
       <Stack.Screen name={Route.ConfirmPin} component={ConfirmPinScreen} />
-      <Stack.Screen name={Route.CreateTransactionPassword} component={CreateTransactionPassword} />
+      <Stack.Screen
+        name={Route.CreateTransactionPassword}
+        options={{ gestureEnabled: false }}
+        component={CreateTransactionPassword}
+      />
       <Stack.Screen name={Route.ConfirmTransactionPassword} component={ConfirmTransactionPassword} />
 
       <Stack.Screen
@@ -94,13 +98,17 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
       <Stack.Screen name={Route.ActionSheet} component={ActionSheet} options={modalOptions} />
       <Stack.Screen name={Route.UnlockTransaction} component={UnlockTransaction} />
       <Stack.Screen name={Route.EditText} component={EditTextScreen} />
-      <Stack.Screen name={Route.Message} component={MessageScreen} options={{}} />
+      <Stack.Screen name={Route.Message} component={MessageScreen} options={{ gestureEnabled: false }} />
       <Stack.Screen name={Route.ExportWallet} component={ExportWalletScreen} />
       <Stack.Screen name={Route.ExportWalletXpub} component={ExportWalletXpubScreen} />
       <Stack.Screen name={Route.DeleteContact} component={DeleteContactScreen} />
       <Stack.Screen name={Route.SendTransactionDetails} component={SendTransactionDetailsScreen} />
 
-      <Stack.Screen name={Route.MainTabStackNavigator} component={MainTabNavigator} />
+      <Stack.Screen
+        name={Route.MainTabStackNavigator}
+        options={{ gestureEnabled: false }}
+        component={MainTabNavigator}
+      />
 
       <Stack.Screen name={Route.CreateWallet} component={CreateWalletScreen} />
       <Stack.Screen name={Route.ImportWallet} component={ImportWalletScreen} />
@@ -133,7 +141,11 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
       />
       <Stack.Screen name={Route.Confirm} component={ConfirmScreen} />
       <Stack.Screen name={Route.ImportAuthenticator} component={ImportAuthenticatorScreen} />
-      <Stack.Screen name={Route.CreateWalletSuccess} component={CreateWalletSuccessScreen} />
+      <Stack.Screen
+        name={Route.CreateWalletSuccess}
+        options={{ gestureEnabled: false }}
+        component={CreateWalletSuccessScreen}
+      />
       <Stack.Screen name={Route.IntegrateKey} component={IntegrateKeyScreen} />
       <Stack.Screen name={Route.RecoveryTransactionList} component={RecoveryTransactionListScreen} />
       <Stack.Screen name={Route.RecoverySend} component={RecoverySendScreen} />
