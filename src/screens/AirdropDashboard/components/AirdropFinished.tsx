@@ -69,8 +69,6 @@ export const AirdropFinished: FC<Props> = ({ navigation }) => {
   );
 };
 
-export default AirdropFinished;
-
 const styles = StyleSheet.create({
   container: {
     width: '100%',

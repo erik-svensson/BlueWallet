@@ -23,6 +23,8 @@ module.exports = {
     scan: 'Scan',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
     skip: 'Skip this step',
+    add: 'Add',
+    undo: 'Undo',
   },
   order: {
     first: 'first',
@@ -45,6 +47,8 @@ module.exports = {
       createNewWallet: 'Create new wallet',
       desc1: 'Monitor your progress and register more wallets.',
       desc2: 'Create new wallet to take part in the Airdrop.',
+      availableWallets: 'Available wallets',
+      registeredWallets: 'Registered wallets',
     },
     itIsAlive: {
       subtitle: 'Airdrop is live! Check it out!',
