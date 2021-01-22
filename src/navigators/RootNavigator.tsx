@@ -1,7 +1,8 @@
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import React, { FC } from 'react';
 
-import { Route, RootStackParams } from 'app/consts';
+import { Route, RootStackParams, USER_VERSIONS } from 'app/consts';
+import { getOnboardingAddEmailParams, getAppUpdateAddEmailParams } from 'app/helpers/notifications';
 import {
   ActionSheet,
   ExportWalletScreen,
@@ -57,13 +58,24 @@ import {
 import { MainTabNavigator } from './MainTabNavigator';
 
 const Stack = createStackNavigator<RootStackParams>();
-
 interface Props {
   shouldRenderCredentialsCreation: boolean;
   shouldRenderNotification: boolean;
+  userVersion: USER_VERSIONS;
 }
 
-export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shouldRenderNotification }) => {
+export const RootNavigator: FC<Props> = ({
+  shouldRenderCredentialsCreation,
+  shouldRenderNotification,
+  userVersion,
+}) => {
+  const getAddEmailInitialParams = () => {
+    if (userVersion === USER_VERSIONS.BEFORE_NOTIFICATIONS_WERE_ADDED) {
+      return getAppUpdateAddEmailParams();
+    }
+    return getOnboardingAddEmailParams();
+  };
+
   const getInitialRouteName = () => {
     if (shouldRenderCredentialsCreation) {
       return Route.CreatePin;
@@ -86,7 +98,7 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
         name={Route.AddNotificationEmail}
         component={AddNotificationEmailScreen}
         options={{ gestureEnabled: false }}
-        initialParams={{ withSkip: true }}
+        initialParams={getAddEmailInitialParams()}
       />
       <Stack.Screen name={Route.LocalConfirmNotificationCode} component={LocalConfirmNotificationCodeScreen} />
       <Stack.Screen name={Route.ChooseWalletsForNotification} component={ChooseWalletsForNotificationScreen} />

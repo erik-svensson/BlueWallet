@@ -11,7 +11,7 @@ export default class StoreService {
   }
 
   async setStoreValue(key: string, value: string | boolean | number): Promise<void> {
-    await AsyncStorage.setItem(key, JSON.stringify(value));
+    await AsyncStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
     return;
   }
 }

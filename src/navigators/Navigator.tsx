@@ -5,7 +5,7 @@ import React from 'react';
 import { isEmulator } from 'react-native-device-info';
 import { connect } from 'react-redux';
 
-import { CONST } from 'app/consts';
+import { CONST, USER_VERSIONS } from 'app/consts';
 import { Toasts } from 'app/containers';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { RootNavigator } from 'app/navigators';
@@ -18,7 +18,12 @@ import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import { updateSelectedLanguage as updateSelectedLanguageAction } from 'app/state/appSettings/actions';
 import { selectors as authenticationSelectors } from 'app/state/authentication';
-import { checkCredentials as checkCredentialsAction, checkTc as checkTcAction } from 'app/state/authentication/actions';
+import {
+  checkCredentials as checkCredentialsAction,
+  checkUserVersion as checkUserVersionAction,
+  checkTc as checkTcAction,
+  CheckUserVersionAction,
+} from 'app/state/authentication/actions';
 import { selectors as electrumXSelectors } from 'app/state/electrumX';
 import {
   startListeners,
@@ -44,6 +49,7 @@ interface MapStateToProps {
   language: string;
   isInitialized: boolean;
   hasConnectedToServerAtLeaseOnce: boolean;
+  userVersion: USER_VERSIONS;
 }
 
 interface ActionsDisptach {
@@ -52,6 +58,7 @@ interface ActionsDisptach {
   updateSelectedLanguage: Function;
   checkTc: Function;
   checkConnection: () => CheckConnectionAction;
+  checkUserVersion: () => CheckUserVersionAction;
 }
 
 interface OwnProps {
@@ -74,7 +81,8 @@ class Navigator extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    const { checkCredentials, startElectrumXListeners, checkTc, checkConnection } = this.props;
+    const { checkCredentials, startElectrumXListeners, checkTc, checkConnection, checkUserVersion } = this.props;
+    checkUserVersion();
     checkTc();
     checkCredentials();
     startElectrumXListeners();
@@ -147,7 +155,14 @@ class Navigator extends React.Component<Props, State> {
   };
 
   renderRoutes = () => {
-    const { isLoading, unlockKey, isAuthenticated, hasConnectedToServerAtLeaseOnce, isTcAccepted } = this.props;
+    const {
+      isLoading,
+      unlockKey,
+      isAuthenticated,
+      hasConnectedToServerAtLeaseOnce,
+      isTcAccepted,
+      userVersion,
+    } = this.props;
 
     if (isLoading) {
       return null;
@@ -180,6 +195,7 @@ class Navigator extends React.Component<Props, State> {
         <RootNavigator
           shouldRenderCredentialsCreation={_shouldRenderCredentialsCreation}
           shouldRenderNotification={this.shouldRenderNotification()}
+          userVersion={userVersion}
         />
         {isAuthenticated && <Toasts />}
         {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
@@ -197,6 +213,7 @@ class Navigator extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
+  userVersion: authenticationSelectors.userVersion(state),
   isTcAccepted: authenticationSelectors.isTcAccepted(state),
   isLoading: authenticationSelectors.isLoading(state),
   isPinSet: authenticationSelectors.isPinSet(state),
@@ -214,6 +231,7 @@ const mapDispatchToProps: ActionsDisptach = {
   startElectrumXListeners: startListeners,
   updateSelectedLanguage: updateSelectedLanguageAction,
   checkConnection: checkConnectionAction,
+  checkUserVersion: checkUserVersionAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigator);
