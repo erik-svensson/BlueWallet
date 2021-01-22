@@ -85,6 +85,7 @@ module.exports = {
       checkOutData: 'Check out all the data about it.',
       readFullReport: 'Read our full report on',
       medium: 'Medium',
+      registeredWallets: 'Registered wallets',
     },
   },
   termsConditions: {

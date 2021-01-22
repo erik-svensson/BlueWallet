@@ -17,6 +17,7 @@ export const images = {
   dashboardNoWallet: require('./images/bvWalletIconNoCards.png'),
   addressBookNoContacts: require('./images/addressBookNoContacts.png'),
   addressBookNotFound: require('./images/bvAppIconsSearchx2.png'),
+  forwardArrow: require('./images/forwardArrow.png'),
   backArrow: require('./images/navigationBarBackArrow.png'),
   nextBlackArrow: require('./images/navigationBarBackArrowCopy.png'),
   successBadge: require('./images/groupCopy2.png'),

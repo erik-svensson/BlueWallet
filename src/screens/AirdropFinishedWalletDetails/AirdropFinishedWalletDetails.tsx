@@ -16,7 +16,9 @@ export const AirdropFinishedWalletDetails: FC<Props> = ({ route }: Props) => (
   <ScreenTemplate header={<Header isBackArrow title={i18n.airdrop.title} />}>
     <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
     <AirdropWalletBalanceCard walletDetails={{ balance: route.params.balance, name: route.params.name }} />
-    <AirdropStayTuned />
+    <View style={styles.stayTunedContainer}>
+      <AirdropStayTuned />
+    </View>
   </ScreenTemplate>
 );
 
@@ -28,5 +30,8 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     ...typography.headline4,
     textAlign: 'center',
+  },
+  stayTunedContainer: {
+    marginTop: 36,
   },
 });

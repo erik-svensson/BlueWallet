@@ -21,7 +21,7 @@ const AirdropWalletsListItem: FC<ItemProps> = ({ wallet, callToAction }) => (
       <Text style={styles.itemName}>{wallet.name}</Text>
       <Text style={styles.itemDescription}>{wallet.address || ''}</Text>
     </View>
-    {callToAction && <View style={styles.callToActionContainer}>{callToAction}</View>}
+    {callToAction}
   </View>
 );
 
@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flex: 1,
-    width: '100%',
     paddingBottom: 16,
   },
   header: {
@@ -67,9 +66,6 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 5,
-  },
-  callToActionContainer: {
-    flex: 1,
   },
   itemName: {
     ...typography.headline5,
