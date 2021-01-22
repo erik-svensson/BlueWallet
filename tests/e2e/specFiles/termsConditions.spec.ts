@@ -1,5 +1,4 @@
-import { wait } from 'app/../utils/time';
-
+import { wait } from '../../../utils/time';
 import { expectToBeDisabled } from '../assertions';
 import { isBeta, SECOND } from '../helpers';
 import app from '../pageObjects';
