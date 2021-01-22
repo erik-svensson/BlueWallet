@@ -31,7 +31,7 @@ import {
   setNotificationEmail,
   SetNotificationEmailAction,
 } from 'app/state/notifications/actions';
-import { sessionToken, notificationError, storedEmail, storedPin } from 'app/state/notifications/selectors';
+import { sessionToken, notificationError, storedEmail } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -70,8 +70,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   get infoContainerContent(): InfoContainerContent {
     switch (this.props.route.params.flowType) {
-      case ConfirmAddressFlowType.FIRST_ADDRESS:
-        return this.firstAddressFlowContent();
       // case ConfirmAddressFlowType.CURRENT_ADDRESS:
       //   return this.currentAddressFlowContent();
       // case ConfirmAddressFlowType.NEW_ADDRESS:
@@ -86,36 +84,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
         return {};
     }
   }
-
-  firstAddressFlowContent = () => {
-    const {
-      navigation,
-      createNotificationEmail,
-      route: {
-        params: { email },
-      },
-    } = this.props;
-    return {
-      title: i18n.notifications.confirmEmail,
-      description: i18n.notifications.pleaseEnter,
-      onInit: () => {
-        this.props.setNotificationEmail(email);
-      },
-      onCodeConfirm: () =>
-        createNotificationEmail(email, {
-          onSuccess: () =>
-            CreateMessage({
-              title: i18n.message.success,
-              description: i18n.notifications.emailAddedSuccessMessage,
-              type: MessageType.success,
-              buttonProps: {
-                title: i18n.notifications.goToNotifications,
-                onPress: () => navigation.navigate(Route.Notifications, {}),
-              },
-            }),
-        }),
-    };
-  };
 
   currentAddressFlowContent = () => {
     const {
@@ -175,8 +143,9 @@ class ConfirmEmailScreen extends Component<Props, State> {
       language,
       createNotificationEmail,
       storedEmail,
+
       route: {
-        params: { onBack, email, walletsToSubscribe },
+        params: { email, walletsToSubscribe, onSuccess, onBack },
       },
     } = this.props;
     return {
@@ -190,15 +159,18 @@ class ConfirmEmailScreen extends Component<Props, State> {
       },
       onCodeConfirm: () => {
         !storedEmail && createNotificationEmail(email);
-        CreateMessage({
-          title: i18n.message.success,
-          description: i18n.notifications.updateNotificationPreferences,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.message.goToWalletDetails,
-            onPress: () => (onBack ? onBack() : navigation.popToTop()),
-          },
-        });
+        // TODO: Refactor, needed for now for other flows like wallet details sub/unsub, craete/import wallet, all flow should pass onSuccess method
+        onSuccess
+          ? onSuccess()
+          : CreateMessage({
+              title: i18n.message.success,
+              description: i18n.notifications.updateNotificationPreferences,
+              type: MessageType.success,
+              buttonProps: {
+                title: i18n.message.goToWalletDetails,
+                onPress: () => (onBack ? onBack() : navigation.popToTop()),
+              },
+            });
       },
     };
   };
@@ -272,16 +244,13 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onConfirm = () => {
-    const { sessionToken, storedPin } = this.props;
+    const { sessionToken } = this.props;
     const { code } = this.state;
-    if (storedPin) {
-      code === this.props.storedPin ? this.infoContainerContent.onCodeConfirm?.() : this.onError();
-    } else {
-      this.props.authenticate(sessionToken, code, {
-        onFailure: this.onError,
-        onSuccess: this.infoContainerContent.onCodeConfirm,
-      });
-    }
+
+    this.props.authenticate(sessionToken, code, {
+      onFailure: this.onError,
+      onSuccess: this.infoContainerContent.onCodeConfirm,
+    });
   };
 
   onChange = (code: string) =>
@@ -331,7 +300,6 @@ const mapStateToProps = (state: ApplicationState) => ({
   sessionToken: sessionToken(state),
   notificationError: notificationError(state),
   storedEmail: storedEmail(state),
-  storedPin: storedPin(state),
 });
 
 const mapDispatchToProps = {

@@ -146,7 +146,7 @@ export enum Route {
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
   AddNotificationEmail = 'AddNotificationEmail',
-  ConfirmNotificationCode = 'ConfirmNotificationCode',
+  LocalConfirmNotificationCode = 'LocalConfirmNotificationCode',
   CreateTransactionPassword = 'CreateTransactionPassword',
   ConfirmTransactionPassword = 'ConfirmTransactionPassword',
   AdvancedOptions = 'AdvancedOptions',
@@ -156,7 +156,6 @@ export enum Route {
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
   Notifications = 'Notifications',
-  AddEmail = 'AddEmail',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
@@ -408,13 +407,20 @@ export type RootStackParams = {
   };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
-  [Route.ConfirmNotificationCode]: { email?: string };
+  [Route.LocalConfirmNotificationCode]: { children: React.ReactNode; onSuccess: () => void; title: string };
   [Route.ChooseWalletsForNotification]: {
     email: string;
-    isOnboarding?: boolean;
+    onSuccess: () => void;
+    onSkip: () => void;
+    walletsToSubscribe: Wallet[];
   };
-  [Route.AddNotificationEmail]: undefined;
-  [Route.ConfirmNotificationCode]: { email?: string };
+  [Route.AddNotificationEmail]: {
+    withSkip?: boolean;
+    title: string;
+    onSuccess: () => void;
+    isBackArrow: boolean;
+    description: string;
+  };
   [Route.CreateWallet]: undefined;
   [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
@@ -497,19 +503,13 @@ export type RootStackParams = {
   [Route.Notifications]: {
     walletsToSubscribe?: Wallet[];
   };
-  [Route.AddEmail]: {
-    walletsToSubscribe?: Wallet[];
-  };
   [Route.ConfirmEmail]: {
     email: string;
     newAddress?: string;
     flowType: ConfirmAddressFlowType;
     walletsToSubscribe?: Wallet[];
     onBack?: () => void;
-  };
-  [Route.ChooseWalletsForNotification]: {
-    email: string;
-    isOnboarding?: boolean;
+    onSuccess?: () => void;
   };
   [Route.ChangeEmail]: {
     email: string;

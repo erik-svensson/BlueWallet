@@ -83,7 +83,25 @@ export class NotificationScreen extends Component<Props> {
   };
 
   onAddEmailPress = () => {
-    this.props.navigation.navigate(Route.AddEmail, { walletsToSubscribe: this.props.route.params.walletsToSubscribe });
+    this.props.navigation.navigate(Route.AddNotificationEmail, {
+      withSkip: false,
+      title: i18n.notifications.notifications,
+      isBackArrow: true,
+      description: i18n.notifications.addYourEmailForDescription,
+      onSuccess: () => {
+        CreateMessage({
+          title: i18n.contactCreate.successTitle,
+          description: i18n.notifications.emailAddedSuccessMessage,
+          type: MessageType.success,
+          buttonProps: {
+            title: i18n.notifications.goToNotifications,
+            onPress: () => {
+              this.props.navigation.navigate(Route.Notifications, {});
+            },
+          },
+        });
+      },
+    });
   };
 
   renderItem = (item: Wallet) => (

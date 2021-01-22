@@ -9,7 +9,6 @@ export enum NotificationAction {
   SetNotificationEmailSuccess = 'SetNotificationEmailSuccess',
   SetNotificationEmailFailure = 'SetNotificationEmailFailure',
   DeleteNotificationEmailAction = 'DeleteNotificationEmailAction',
-  SkipNotificationEmailAction = 'SkipNotificationEmailAction',
   VerifyNotificationEmailAction = 'VerifyNotificationEmailAction',
   SubscribeWalletAction = 'SubscribeWalletAction',
   SubscribeWalletSuccessAction = 'SubscribeWalletSuccessAction',
@@ -69,9 +68,6 @@ export interface DeleteNotificationEmailAction {
   type: NotificationAction.DeleteNotificationEmailAction;
 }
 
-export interface SkipNotificationEmailAction {
-  type: NotificationAction.SkipNotificationEmailAction;
-}
 export interface VerifyNotificationEmailAction {
   type: NotificationAction.VerifyNotificationEmailAction;
   payload: {
@@ -146,7 +142,6 @@ export type NotificationActionType =
   | SetNotificationEmailSuccessAction
   | SetNotificationEmailFailureAction
   | DeleteNotificationEmailAction
-  | SkipNotificationEmailAction
   | VerifyNotificationEmailAction
   | SubscribeWalletAction
   | SubscribeWalletSuccessAction
@@ -195,10 +190,6 @@ export const setNotificationEmailFailure = (error: string): SetNotificationEmail
 
 export const deleteNotificationEmail = (): DeleteNotificationEmailAction => ({
   type: NotificationAction.DeleteNotificationEmailAction,
-});
-
-export const skipNotificationEmail = (): SkipNotificationEmailAction => ({
-  type: NotificationAction.SkipNotificationEmailAction,
 });
 
 export const verifyNotificationEmail = (pin: string): VerifyNotificationEmailAction => ({

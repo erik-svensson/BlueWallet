@@ -9,7 +9,6 @@ import { NotificationState } from './reducer';
 const local = (state: ApplicationState): NotificationState => state.notifications;
 
 export const isNotificationEmailSet = createSelector(local, state => state.isNotificationEmailSet);
-export const isNotificationEmailSkip = createSelector(local, state => state.isNotificationEmailSkip);
 export const pin = createSelector(local, state => state.pin);
 export const subscribedIds = createSelector(local, state => state.subscribedIds);
 export const sessionToken = createSelector(local, state => state.sessionToken);

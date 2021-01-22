@@ -106,9 +106,7 @@ export const subscribedWallets = createSelector(subscribedIds, wallets, (ids, wa
 );
 
 export const unSubscribedWallets = createSelector(subscribedIds, wallets, (ids, walletsList) =>
-  walletsList.filter(
-    wallet => !ids.some(id => id === wallet.id) && wallet.type === HDSegwitP2SHAirWallet.type, // TODO till all wallets are possible to subscribe
-  ),
+  walletsList.filter(wallet => !ids.some(id => id === wallet.id)),
 );
 
 type TxEntity = TransactionInput | TransactionOutput;

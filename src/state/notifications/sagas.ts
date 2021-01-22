@@ -14,7 +14,6 @@ import {
   CreateNotificationEmailAction,
   NotificationAction,
   verifyNotificationEmail,
-  skipNotificationEmail,
   SetNotificationEmailAction,
   SubscribeWalletAction,
   AuthenticateEmailAction,
@@ -39,13 +38,8 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
   const { meta, payload } = action as CreateNotificationEmailAction;
   const email = payload.email;
   try {
-    const savedEmail = yield StoreService.getStoreValue('email');
-    if (!savedEmail && !!email) {
-      yield StoreService.setStoreValue('email', email);
-      yield put(createNotificationEmailSuccess(email));
-    } else {
-      yield put(skipNotificationEmail());
-    }
+    yield StoreService.setStoreValue('email', email);
+    yield put(createNotificationEmailSuccess(email));
     if (meta?.onSuccess) {
       meta.onSuccess();
     }
@@ -64,11 +58,9 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
     const verifyCode = yield call(verifyEmail, { email });
     if (verifyCode.result === Result.success) {
       const decryptedCode = yield decryptCode(email, verifyCode.pin);
-      //Temporaly till we dont have email services run we need know correct pin from backend, remove after
-      console.log(decryptedCode, '>>>>');
       yield put(verifyNotificationEmail(decryptedCode));
     } else {
-      yield put(setNotificationEmailFailure('Your email cannot be verified'));
+      throw new Error('Your email cannot be verified');
     }
     if (meta?.onSuccess) {
       meta.onSuccess();
