@@ -31,6 +31,7 @@ const Wallets = () => {
     filterTransactionsButton: element(by.id('filter-transactions-button')),
     addButton: element(by.id('add-wallet-button')),
     sendButton: element(by.id('send-coins-button')),
+    recieveButton: element(by.id('receive-coins-button')),
 
     getTransactionElement: (note: string) => element(by.id(`transaction-item-${note}`)),
 
@@ -50,6 +51,10 @@ const Wallets = () => {
 
     async tapOnSendButton() {
       await actions.tap(this.sendButton);
+    },
+
+    async tapOnReceiveButton() {
+      await actions.tap(this.recieveButton);
     },
 
     async scrollToTheTransactionWithNote(note: string) {
