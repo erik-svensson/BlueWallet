@@ -18,6 +18,10 @@ interface Props {
   >;
 }
 
+// TODO: when implementing data fetching, add loading and error screens here.
+// loading: https://app.zeplin.io/project/5f0c8686b8151e82242dd409/screen/6005bdd8de723b5789229476
+// error: https://app.zeplin.io/project/5f0c8686b8151e82242dd409/screen/6005a32229c91b1a89551702
+
 export const AirdropDashboardScreen: FC<Props> = ({ navigation }) => (
   <ScreenTemplate header={<Header isBackArrow title={i18n.airdrop.title} />}>
     <View style={styles.wrapper}>
