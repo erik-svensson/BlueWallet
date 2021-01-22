@@ -170,7 +170,16 @@ export class ImportWalletScreen extends Component<Props, State> {
       });
     } else {
       newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
-      !email && this.showSuccessImportMessageScreen();
+      !email &&
+        importWallet(newWallet, {
+          onSuccess: () => {
+            this.showSuccessImportMessageScreen();
+          },
+          onFailure: (error: string) =>
+            this.showErrorMessageScreen({
+              description: error,
+            }),
+        });
       checkSubscription([newWallet], email, {
         onSuccess: (ids: string[]) => {
           const isWalletSubscribed = ids.some(id => id === newWallet.id);
