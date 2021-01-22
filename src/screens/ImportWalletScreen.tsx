@@ -7,7 +7,15 @@ import { connect } from 'react-redux';
 
 import { Header, TextAreaItem, FlatButton, ScreenTemplate, InputItem, CheckBox } from 'app/components';
 import { Button } from 'app/components/Button';
-import { Route, Wallet, RootStackParams, ActionMeta, ELECTRUM_VAULT_SEED_PREFIXES, CONST } from 'app/consts';
+import {
+  Route,
+  Wallet,
+  RootStackParams,
+  ActionMeta,
+  ELECTRUM_VAULT_SEED_PREFIXES,
+  CONST,
+  ConfirmAddressFlowType,
+} from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
