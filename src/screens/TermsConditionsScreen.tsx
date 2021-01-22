@@ -31,6 +31,7 @@ interface Props {
 interface State {
   showWarring: boolean;
   height: number;
+  isWebViewLoaded: boolean;
   agreedToTermsAndConditions: boolean;
   agreedToPrivacyPolicy: boolean;
 }
@@ -39,6 +40,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
   state = {
     showWarring: false,
     height: 500,
+    isWebViewLoaded: false,
     agreedToTermsAndConditions: false,
     agreedToPrivacyPolicy: false,
   };
@@ -159,6 +161,9 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
           scrollEnabled={false}
           automaticallyAdjustContentInsets={true}
           contentInset={{ top: 0, left: 0 }}
+          onLoad={() => {
+            this.setState({ isWebViewLoaded: true });
+          }}
           onNavigationStateChange={event => {
             if (event.title !== undefined) {
               this.setState({
@@ -174,22 +179,27 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
             return true;
           }}
         />
-        <CheckBox
-          onPress={this.toggleAgreementToTermsAndConditions}
-          containerStyle={styles.checkbox}
-          left
-          testID="terms-and-conditions-checkbox"
-          checked={agreedToTermsAndConditions}
-          title={<Text style={styles.checkboxText}>{i18n.termsConditions.readTermsConditions}</Text>}
-        />
-        <CheckBox
-          onPress={this.toggleAgreementToPrivacyPolicy}
-          containerStyle={styles.checkbox}
-          testID="privacy-policy-checkbox"
-          left
-          checked={agreedToPrivacyPolicy}
-          title={<Text style={styles.checkboxText}>{i18n.termsConditions.readPrivacyPolicy}</Text>}
-        />
+        {this.state.isWebViewLoaded && (
+          <>
+            <CheckBox
+              onPress={this.toggleAgreementToTermsAndConditions}
+              containerStyle={styles.checkbox}
+              left
+              testID="terms-and-conditions-checkbox"
+              checked={agreedToTermsAndConditions}
+              title={<Text style={styles.checkboxText}>{i18n.termsConditions.readTermsConditions}</Text>}
+            />
+            <CheckBox
+              onPress={this.toggleAgreementToPrivacyPolicy}
+              containerStyle={styles.checkbox}
+              testID="privacy-policy-checkbox"
+              left
+              checked={agreedToPrivacyPolicy}
+              title={<Text style={styles.checkboxText}>{i18n.termsConditions.readPrivacyPolicy}</Text>}
+            />
+          </>
+        )}
+
         <CustomModal show={showWarring}>{this.renderContent()}</CustomModal>
       </ScreenTemplate>
     );
