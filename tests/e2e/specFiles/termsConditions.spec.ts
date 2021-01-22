@@ -1,5 +1,7 @@
+import { wait } from 'app/../utils/time';
+
 import { expectToBeDisabled } from '../assertions';
-import { isBeta } from '../helpers';
+import { isBeta, SECOND } from '../helpers';
 import app from '../pageObjects';
 
 describe('Terms & Conditions', () => {
@@ -9,6 +11,8 @@ describe('Terms & Conditions', () => {
 
       await app.developerRoom.tapOnDoNothingButton();
 
+      // TODO: I am ashamed of it :(
+      await wait(10 * SECOND);
       await app.termsConditionsScreen.scrollDown();
       await app.termsConditionsScreen.tapOnAgreementCheckboxes();
       await app.termsConditionsScreen.tapOnAgreeButton();
