@@ -17,11 +17,27 @@ interface Props {
   >;
 }
 
-export const AirdropFinished: FC<Props> = ({ navigation }) => {
+interface CallToActionProps {
+  wallet: AirdropWalletDetails;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
+    StackNavigationProp<RootStackParams, Route.AirdropDashboard>
+  >;
+}
+
+const CallToAction: FC<CallToActionProps> = ({ wallet, navigation }) => {
   const goToWalletDetails = (wallet: AirdropWalletDetails) => {
     navigation.navigate(Route.AirdropFinishedWalletDetails, { balance: wallet.balance, name: wallet.name });
   };
 
+  return (
+    <TouchableOpacity style={styles.arrowContainer} testID="forward-button" onPress={() => goToWalletDetails(wallet)}>
+      <Image style={styles.image} source={images.forwardArrow} />
+    </TouchableOpacity>
+  );
+};
+
+export const AirdropFinished: FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
@@ -45,16 +61,8 @@ export const AirdropFinished: FC<Props> = ({ navigation }) => {
             { balance: 2, name: 'Wallet name A', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
             { balance: 13, name: 'Wallet name B', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
           ]}
-          title="Registered wallets"
-          itemCallToAction={(wallet: AirdropWalletDetails) => (
-            <TouchableOpacity
-              style={styles.arrowContainer}
-              testID="forward-button"
-              onPress={() => goToWalletDetails(wallet)}
-            >
-              <Image style={styles.image} source={images.forwardArrow} />
-            </TouchableOpacity>
-          )}
+          title={i18n.airdrop.finished.registeredWallets}
+          itemCallToAction={wallet => <CallToAction wallet={wallet} navigation={navigation} />}
         />
       </View>
     </View>
