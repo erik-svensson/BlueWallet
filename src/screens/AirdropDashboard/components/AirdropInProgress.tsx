@@ -1,7 +1,8 @@
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { FC } from 'react';
+import React, { FC, RefObject } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import Carousel from 'react-native-snap-carousel';
 
 import { images } from 'app/assets';
 import { Image, Countdown, AirdropWalletsList, AirdropWalletsCarousel } from 'app/components';
@@ -33,6 +34,18 @@ const registeredWallets = [
 ];
 
 export const AirdropInProgress: FC<Props> = ({ navigation }) => {
+  let _carouselRef: Carousel<AirdropWalletDetails>;
+
+  const setRef = (carouselRef: Carousel<AirdropWalletDetails>) => {
+    _carouselRef = carouselRef;
+  };
+
+  const setCarouselActiveElement = (wallet: AirdropWalletDetails) => {
+    const snapIndex = registeredWallets.findIndex(w => w.name === wallet.name && w.balance === wallet.balance);
+
+    _carouselRef.snapToItem(snapIndex || 0, true);
+  };
+
   return (
     <>
       <View style={styles.infoContainer}>
@@ -46,13 +59,13 @@ export const AirdropInProgress: FC<Props> = ({ navigation }) => {
       <Countdown dataEnd={CONST.airdropDate} />
       {registeredWallets?.length > 0 ? (
         <>
-          <AirdropWalletsCarousel styles={styles.carouselStyles} items={registeredWallets} />
+          <AirdropWalletsCarousel styles={styles.carouselStyles} items={registeredWallets} setRef={setRef} />
           <View style={styles.walletsListContainer}>
             <AirdropWalletsList
               wallets={registeredWallets}
               title={i18n.airdrop.dashboard.registeredWallets}
               itemCallToAction={(wallet: AirdropWalletDetails) => (
-                <RegisteredWalletAction wallet={wallet} navigation={navigation} />
+                <RegisteredWalletAction onActionClick={() => setCarouselActiveElement(wallet)} />
               )}
             />
           </View>
