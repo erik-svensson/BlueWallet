@@ -42,7 +42,6 @@ class CreatePinScreen extends PureComponent<Props, State> {
     const flowType = this.props.route.params?.flowType || '';
 
     if (flowType !== FlowType.newPin) {
-      console.log('FIRE');
       this.props.setUserVersion(CONST.newestUserVersion);
     }
     this.props.navigation.setOptions({
