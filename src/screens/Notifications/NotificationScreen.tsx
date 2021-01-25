@@ -100,6 +100,7 @@ export class NotificationScreen extends Component<Props> {
           },
         });
       },
+      onSkipSuccess: undefined,
     });
   };
 

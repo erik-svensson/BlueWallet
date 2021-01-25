@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
 import { Route, RootStackParams, Wallet, ActionMeta } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import {
@@ -71,6 +70,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
               onSuccess,
             });
           },
+          email,
         }),
     });
   };
@@ -120,6 +120,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { email, error } = this.state;
 
     const { onSkipSuccess, title, isBackArrow, description } = this.props.route.params;
+
     return (
       <ScreenTemplate
         noScroll

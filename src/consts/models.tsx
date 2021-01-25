@@ -424,7 +424,12 @@ export type RootStackParams = {
   };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
-  [Route.LocalConfirmNotificationCode]: { children: React.ReactNode; onSuccess: () => void; title: string };
+  [Route.LocalConfirmNotificationCode]: {
+    children: React.ReactNode;
+    onSuccess: () => void;
+    title: string;
+    email: string;
+  };
   [Route.ChooseWalletsForNotification]: {
     email: string;
     onSuccess: () => void;

@@ -15,6 +15,7 @@ export const sessionToken = createSelector(local, state => state.sessionToken);
 export const notificationError = createSelector(local, state => state.error);
 export const storedEmail = createSelector(local, state => state.email);
 export const storedPin = createSelector(local, state => state.pin);
+export const error = createSelector(local, state => state.error);
 
 export const isWalletSubscribed = createSelector(
   subscribedIds,
