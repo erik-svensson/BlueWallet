@@ -45,6 +45,8 @@ module.exports = {
       createNewWallet: 'Create new wallet',
       desc1: 'Monitor your progress and register more wallets.',
       desc2: 'Create new wallet to take part in the Airdrop.',
+      connectionError1: 'Couldn’t connect to the server.',
+      connectionError2: 'Please try again in a few minutes.',
     },
     itIsAlive: {
       subtitle: 'Airdrop is live! Check it out!',
