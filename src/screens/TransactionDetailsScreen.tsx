@@ -18,6 +18,7 @@ import {
   EllipsisText,
 } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
+import config from 'app/config';
 import { Route, RootStackParams, TxType, CONST } from 'app/consts';
 import { getConfirmationsText } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
@@ -30,7 +31,6 @@ import {
 } from 'app/state/transactionsNotes/actions';
 import { typography, palette } from 'app/styles';
 
-import config from '../../config';
 import { satoshiToBtc, formatToBtcv, formatToBtcvWithoutUnit } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');

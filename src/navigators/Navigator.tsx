@@ -5,6 +5,7 @@ import React from 'react';
 import { isEmulator } from 'react-native-device-info';
 import { connect } from 'react-redux';
 
+import config from 'app/config';
 import { CONST } from 'app/consts';
 import { Toasts } from 'app/containers';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
@@ -29,8 +30,6 @@ import {
 import { selectors as notificationSelectors } from 'app/state/notifications';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { isAndroid, isIos } from 'app/styles';
-
-import config from '../../config';
 
 const i18n = require('../../loc');
 

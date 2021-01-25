@@ -1,8 +1,8 @@
 import { findLast, difference } from 'lodash';
 import { NativeModules } from 'react-native';
 
-import config from '../config';
 import logger from '../logger';
+import config from '../src/config';
 import { AbstractWallet } from './abstract-wallet';
 
 const { RNRandomBytes } = NativeModules;
