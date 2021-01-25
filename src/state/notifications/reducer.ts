@@ -60,27 +60,20 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         ...state,
         sessionToken: action.payload.sessionToken,
       };
-    case NotificationAction.SubscribeWalletFailureAction:
-      return {
-        ...state,
-        error: action.error,
-      };
     case NotificationAction.UnsubscribeWalletSuccessAction:
       return {
         ...state,
         sessionToken: action.payload.sessionToken,
-      };
-    case NotificationAction.UnsubscribeWalletFailureAction:
-      return {
-        ...state,
-        error: action.error,
       };
     case NotificationAction.AuthenticateEmailSuccessAction:
       return {
         ...state,
         sessionToken: '',
       };
+    case NotificationAction.SubscribeWalletFailureAction:
+    case NotificationAction.UnsubscribeWalletFailureAction:
     case NotificationAction.AuthenticateEmailFailureAction:
+    case NotificationAction.CheckSubscriptionFailureAction:
       return {
         ...state,
         error: action.error,
@@ -91,11 +84,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         subscribedIds: action.payload.subscribedIds,
       };
     }
-    case NotificationAction.CheckSubscriptionFailureAction:
-      return {
-        ...state,
-        error: action.error,
-      };
+
     default:
       return state;
   }

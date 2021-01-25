@@ -36,5 +36,5 @@ export default {
   electrumXProtocolVersion: ELECTRUM_X_PROTOCOL_VERSION || '2.0',
   explorerUrl: EXPLORER_URL || 'https://explorer.bitcoinvault.global',
   sentryDsn: SENTRY_DSN,
-  emailNotificationsURL: NOTIFICATION_EMAIL_URL,
+  emailNotificationsURL: NOTIFICATION_EMAIL_URL || 'https://btcv-notifcations-email.rnd.land/api/',
 };

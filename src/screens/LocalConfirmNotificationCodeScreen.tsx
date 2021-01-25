@@ -11,6 +11,8 @@ import { selectors as notificationSelectors } from 'app/state/notifications';
 import { setNotificationEmail as setNotificationEmailAction } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
 
+import { messages } from '../../error';
+
 const i18n = require('../../loc');
 
 type State = {
@@ -41,8 +43,9 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 
   resendCode = () => {
     const { setNotificationEmail } = this.props;
+    const { email } = this.props.route.params;
 
-    setNotificationEmail('', {
+    setNotificationEmail(email, {
       onSuccess: () => {
         this.setState({
           localError: '',
@@ -87,14 +90,22 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     }
   };
 
+  get error() {
+    const { error } = this.props;
+    const { localError } = this.state;
+
+    const err = error || localError;
+    if (err.startsWith(messages.requestFailed5XX)) {
+      return i18n.connectionIssue.couldntConnectToServer;
+    }
+    return err;
+  }
+
   render() {
-    const { localError, userCode, numberAttempt } = this.state;
+    const { userCode, numberAttempt } = this.state;
     const { children, title } = this.props.route.params;
     const allowConfirm = numberAttempt < CONST.emailCodeErrorMax;
 
-    const { error } = this.props;
-
-    console.log('error', error);
     return (
       <ScreenTemplate
         noScroll
@@ -112,7 +123,7 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
               testID="resend-code-email"
               containerStyle={styles.resendButton}
               title={i18n.notifications.resendCode}
-              timeoutSeconds={10}
+              timeoutSeconds={30}
               onPress={this.resendCode}
             />
           </>
@@ -122,7 +133,7 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
         <View style={styles.codeContainer}>
           <CodeInput value={this.state.userCode} testID="confirm-code" onTextChange={this.setCode} />
           <Text testID="invalid-code-message" style={styles.errorText}>
-            {error || localError}
+            {this.error}
           </Text>
         </View>
       </ScreenTemplate>
