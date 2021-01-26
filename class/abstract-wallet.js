@@ -1,8 +1,8 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import { v4 as uuidv4 } from 'uuid';
 
-import config from '../config';
 import { BitcoinUnit, Chain } from '../models/bitcoinUnits';
+import config from '../src/config';
 
 const createHash = require('create-hash');
 

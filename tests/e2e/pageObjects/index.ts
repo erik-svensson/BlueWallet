@@ -6,6 +6,7 @@ import BetaVersionScreen from './pages/BetaVersionScreen';
 import DeveloperRoom from './pages/DeveloperRoom';
 import Onboarding from './pages/Onboarding';
 import TermsConditionsScreen from './pages/TermsConditionsScreen';
+import TransactionsReceive from './pages/Transactions/Receive';
 import TransactionsSend from './pages/Transactions/Send';
 import UnlockScreen from './pages/UnlockScreen';
 import Wallets from './pages/Wallets';
@@ -34,6 +35,7 @@ const app = {
   termsConditionsScreen: TermsConditionsScreen(),
   unlockScreen: UnlockScreen(),
   transactionsSend: TransactionsSend(),
+  transactionsReceive: TransactionsReceive(),
 };
 
 export default app;

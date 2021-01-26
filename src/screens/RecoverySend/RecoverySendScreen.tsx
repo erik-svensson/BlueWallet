@@ -7,13 +7,13 @@ import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, Image, WalletDropdown } from 'app/components';
+import config from 'app/config';
 import { CONST, Transaction as ITransaction, Route, RootStackParams, TransactionInput } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { loadTransactionsFees } from 'app/helpers/fees';
 import { typography, palette } from 'app/styles';
 
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from '../../../class';
-import config from '../../../config';
 import { btcToSatoshi, satoshiToBtc } from '../../../utils/bitcoin';
 
 const BigNumber = require('bignumber.js');

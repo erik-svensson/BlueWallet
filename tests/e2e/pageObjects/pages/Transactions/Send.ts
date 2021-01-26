@@ -33,7 +33,7 @@ const SendCoins = () => {
       await actions.tap(this.transactionTypeRadios[type]);
     },
 
-    async tapNextButtton() {
+    async tapNextButton() {
       await actions.tap(this.nextButton);
     },
   });

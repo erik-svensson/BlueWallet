@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 
-import config from '../config';
 import signer from '../models/signer';
+import config from '../src/config';
 import { mnemonicToKeyPair } from '../utils/crypto';
 import { AbstractHDSegwitP2SHWallet } from './abstract-hd-segwit-p2sh-wallet';
 
