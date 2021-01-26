@@ -5,7 +5,6 @@ import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeE
 import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
-import { StoreService } from 'app/services';
 
 import {
   createNotificationEmailFailure,
@@ -38,7 +37,6 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
   const { meta, payload } = action as CreateNotificationEmailAction;
   const email = payload.email;
   try {
-    yield StoreService.setStoreValue('email', email);
     yield put(createNotificationEmailSuccess(email));
     if (meta?.onSuccess) {
       meta.onSuccess();
