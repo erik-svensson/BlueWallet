@@ -436,7 +436,6 @@ export type RootStackParams = {
     onSuccess: () => void;
     title: string;
     email: string;
-    onBack?: () => void;
   };
   [Route.ChooseWalletsForNotification]: {
     flowType: ConfirmAddressFlowType;
@@ -445,7 +444,7 @@ export type RootStackParams = {
     email: string;
     onSuccess: () => void;
     onSkip: () => void;
-    walletsToSubscribe: Wallet[];
+    wallets: Wallet[];
   };
   [Route.AddNotificationEmail]: AddNotificationEmailParams;
   [Route.CreateWallet]: undefined;

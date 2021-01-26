@@ -1,17 +1,15 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image } from 'app/components';
-import { Route, RootStackParams, ConfirmAddressFlowType, Wallet, ActionMeta } from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import {
-  setNotificationEmail as setNotificationEmailAction,
-  SetNotificationEmailAction,
   DeleteNotificationEmailAction,
   deleteNotificationEmail as deleteNotificationEmailAction,
   CheckSubscriptionAction,
@@ -29,7 +27,6 @@ interface Props {
   email: string;
   deleteNotificationEmail: () => DeleteNotificationEmailAction;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
-  setNotificationEmail: (email: string, meta?: ActionMeta) => SetNotificationEmailAction;
   subscribedWallets: Wallet[];
   wallets: Wallet[];
 }
@@ -81,7 +78,7 @@ export class NotificationScreen extends Component<Props> {
         this.props.deleteNotificationEmail();
         this.goToDeleteSuccessScreen();
       },
-      walletsToSubscribe: this.props.subscribedWallets,
+      wallets: this.props.subscribedWallets,
       onSkip: () => {
         this.props.deleteNotificationEmail();
         this.goToDeleteSuccessScreen();
@@ -89,27 +86,8 @@ export class NotificationScreen extends Component<Props> {
     });
 
   removeEmail = () => {
-    const { email, setNotificationEmail, deleteNotificationEmail, navigation } = this.props;
-    setNotificationEmail(email, {
-      onSuccess: () => {
-        navigation.navigate(Route.LocalConfirmNotificationCode, {
-          title: i18n.notifications.deleteEmail,
-          children: (
-            <View style={styles.infoContainer}>
-              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
-              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
-              <Text style={typography.headline5}>{email}</Text>
-            </View>
-          ),
-          onSuccess: () => {
-            deleteNotificationEmail();
-            this.goToDeleteSuccessScreen();
-          },
-          onResend: () => setNotificationEmail(email),
-          onBack: () => navigation.navigate(Route.Notifications, {}),
-        });
-      },
-    });
+    this.props.deleteNotificationEmail();
+    this.goToDeleteSuccessScreen();
   };
 
   deleteEmail = () => (!!this.props.subscribedWallets.length ? this.unsubscribeAndRemoveEmail() : this.removeEmail());
@@ -211,7 +189,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 
 const mapDispatchToProps = {
   deleteNotificationEmail: deleteNotificationEmailAction,
-  setNotificationEmail: setNotificationEmailAction,
   checkSubscription: checkSubscriptionAction,
 };
 
@@ -280,15 +257,4 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
-  infoContainer: {
-    alignItems: 'center',
-  },
-  codeDescription: {
-    ...typography.caption,
-    color: palette.textGrey,
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: 20,
-    textAlign: 'center',
-  },
 });

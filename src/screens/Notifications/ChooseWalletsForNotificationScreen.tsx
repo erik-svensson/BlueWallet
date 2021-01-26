@@ -32,10 +32,9 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
 
   checkWallet = (wallet: Wallet) => (this.isWalletChecked(wallet) ? this.removeWallet(wallet) : this.addWallet(wallet));
 
-  checkAll = () =>
-    this.setState({ wallets: this.areAllWalletsChecked() ? [] : this.props.route.params.walletsToSubscribe });
+  checkAll = () => this.setState({ wallets: this.areAllWalletsChecked() ? [] : this.props.route.params.wallets });
 
-  areAllWalletsChecked = () => this.props.route.params.walletsToSubscribe.length === this.state.wallets.length;
+  areAllWalletsChecked = () => this.props.route.params.wallets.length === this.state.wallets.length;
 
   isWalletChecked = (selectedWallet: Wallet) =>
     this.state.wallets.some((wallet: Wallet) => wallet.id === selectedWallet.id);
@@ -75,14 +74,14 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
       email: params.email,
       flowType: params.flowType,
       onSuccess: params.onSuccess,
-      walletsToSubscribe: params.walletsToSubscribe,
+      walletsToSubscribe: params.wallets,
     });
   };
 
   render() {
     const {
       route: {
-        params: { email, walletsToSubscribe, onSkip, subtitle, description },
+        params: { email, wallets, onSkip, subtitle, description },
       },
     } = this.props;
     return (
@@ -104,7 +103,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         </View>
 
         <FlatList
-          data={walletsToSubscribe}
+          data={wallets}
           renderItem={item => this.renderItem(item.item)}
           keyExtractor={item => item.id}
           ListHeaderComponent={this.renderListHeader()}

@@ -109,16 +109,7 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
     }
   } catch (error) {
     const { msg } = error.response.data;
-    let readableErrorMessage = '';
-    switch (msg) {
-      case NotificationApiErrorMessages.WALLET_ALREADY_SUBSCRIBED:
-        readableErrorMessage = 'Wallet is already subscribed';
-        break;
-      default:
-        readableErrorMessage = 'authentication error';
-        break;
-    }
-    yield put(authenticateEmailFailure(readableErrorMessage));
+    yield put(authenticateEmailFailure(msg));
     if (meta?.onFailure) {
       meta.onFailure();
     }
@@ -148,19 +139,10 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     }
   } catch (error) {
     const { msg } = error.response.data;
-    let readableErrorMessage = '';
-    switch (msg) {
-      case NotificationApiErrorMessages.INVALID_EMAIL:
-        readableErrorMessage = i18n.notifications.invalidAddressError;
-        break;
-      default:
-        readableErrorMessage = 'check subscription error';
-        break;
-    }
     if (meta?.onFailure) {
-      meta.onFailure(readableErrorMessage);
+      meta.onFailure(msg);
     }
-    yield put(checkSubscriptionFailure(readableErrorMessage));
+    yield put(checkSubscriptionFailure(msg));
   }
 }
 

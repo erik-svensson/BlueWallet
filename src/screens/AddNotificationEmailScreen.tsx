@@ -8,6 +8,7 @@ import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/compo
 import { Route, RootStackParams, Wallet, ActionMeta, ConfirmAddressFlowType } from 'app/consts';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
+import { selectors as notificationSelectors } from 'app/state/notifications';
 import {
   createNotificationEmail as createNotificationEmailAction,
   verifyNotificationEmail as verifyNotificationEmailAction,
@@ -28,24 +29,25 @@ interface Props {
   verifyNotificationEmail: VerifyNotificationEmailActionFunction;
   hasWallets: boolean;
   wallets: Wallet[];
+  error: string;
   checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
 }
 
 type State = {
   email: string;
-  error: string;
+  localError: string;
 };
 
 class AddNotificationEmailScreen extends PureComponent<Props, State> {
   state = {
     email: '',
-    error: '',
+    localError: '',
   };
 
   setEmail = (email: string): void => {
     this.setState({
       email,
-      error: '',
+      localError: '',
     });
   };
 
@@ -84,7 +86,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
     if (!isEmail(email)) {
       return this.setState({
-        error: i18n.onboarding.emailValidation,
+        localError: i18n.onboarding.emailValidation,
       });
     }
     if (!wallets.length) {
@@ -102,11 +104,11 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           description: i18n.notifications.chooseWalletsDescription,
           email,
           onSuccess,
-          walletsToSubscribe,
+          wallets: walletsToSubscribe,
           onSkip: () => this.goToLocalEmailConfirm(),
         });
       },
-      onFailure: (error: string) => this.setState({ error }),
+      onFailure: () => this.setState({ localError: this.props.error }),
     });
   };
 
@@ -120,8 +122,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   };
 
   render() {
-    const { email, error } = this.state;
-
+    const { email, localError } = this.state;
     const { onSkipSuccess, title, isBackArrow, description } = this.props.route.params;
 
     return (
@@ -159,7 +160,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             testID="confirm-notification-email"
             setValue={this.setEmail}
             autoFocus={true}
-            error={error}
+            error={localError}
             secureTextEntry={false}
             autoCapitalize="none"
             keyboardType="email-address"
@@ -178,6 +179,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.subscribableWallets(state),
+  error: notificationSelectors.readableError(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);
