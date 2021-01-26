@@ -4,7 +4,10 @@ import { ApplicationState } from 'app/state';
 import { WalletsState } from 'app/state/wallets/reducer';
 import { getById } from 'app/state/wallets/selectors';
 
+import { messages } from '../../../error';
 import { NotificationState } from './reducer';
+
+const i18n = require('../../../loc');
 
 const local = (state: ApplicationState): NotificationState => state.notifications;
 
@@ -15,6 +18,12 @@ export const sessionToken = createSelector(local, state => state.sessionToken);
 export const notificationError = createSelector(local, state => state.error);
 export const storedEmail = createSelector(local, state => state.email);
 export const storedPin = createSelector(local, state => state.pin);
+export const readableError = createSelector(notificationError, err => {
+  if (err.startsWith(messages.requestFailed5XX)) {
+    return i18n.connectionIssue.couldntConnectToServer;
+  }
+  return err;
+});
 
 export const isWalletSubscribed = createSelector(
   subscribedIds,

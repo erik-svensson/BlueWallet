@@ -28,8 +28,6 @@ import {
   SubscribeWalletAction,
   unsubscribeWallet,
   UnsubscribeWalletAction,
-  setNotificationEmail,
-  SetNotificationEmailAction,
 } from 'app/state/notifications/actions';
 import { sessionToken, notificationError, storedEmail } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
@@ -43,7 +41,6 @@ interface Props {
   subscribe: (wallets: WalletPayload[], email: string, lang: string) => SubscribeWalletAction;
   unsubscribe: (hashes: string[], email: string) => UnsubscribeWalletAction;
   authenticate: (session_token: string, pin: string, meta: ActionMeta) => AuthenticateEmailAction;
-  setNotificationEmail: (email: string) => SetNotificationEmailAction;
   language: string;
   sessionToken: string;
   notificationError: string;
@@ -307,7 +304,6 @@ const mapDispatchToProps = {
   subscribe: subscribeWallet,
   unsubscribe: unsubscribeWallet,
   authenticate: authenticateEmail,
-  setNotificationEmail,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmailScreen);

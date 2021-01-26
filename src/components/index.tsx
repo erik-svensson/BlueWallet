@@ -40,3 +40,4 @@ export { Calendar } from './Calendar';
 export { CardGroup } from './CardGroup';
 export { RowTemplate } from './RowTemplate';
 export { CodeInput } from './CodeInput';
+export { TimeoutButton } from './TimeoutButton';

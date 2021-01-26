@@ -5,11 +5,10 @@ export enum NotificationAction {
   CreateNotificationEmail = 'CreateNotificationEmail',
   CreateNotificationEmailSuccess = 'CreateNotificationEmailSuccess',
   CreateNotificationEmailFailure = 'CreateNotificationEmailFailure',
-  SetNotificationEmail = 'SetNotificationEmail',
-  SetNotificationEmailSuccess = 'SetNotificationEmailSuccess',
-  SetNotificationEmailFailure = 'SetNotificationEmailFailure',
-  DeleteNotificationEmailAction = 'DeleteNotificationEmailAction',
   VerifyNotificationEmailAction = 'VerifyNotificationEmailAction',
+  VerifyNotificationEmailActionSuccess = 'VerifyNotificationEmailActionSuccess',
+  VerifyNotificationEmailActionFailure = 'VerifyNotificationEmailActionFailure',
+  DeleteNotificationEmailAction = 'DeleteNotificationEmailAction',
   SubscribeWalletAction = 'SubscribeWalletAction',
   SubscribeWalletSuccessAction = 'SubscribeWalletSuccessAction',
   SubscribeWalletFailureAction = 'SubscribeWalletFailureAction',
@@ -44,23 +43,16 @@ export interface CreateNotificationEmailFailureAction {
   error: string;
 }
 
-export interface SetNotificationEmailAction {
-  type: NotificationAction.SetNotificationEmail;
+export interface VerifyNotificationEmailAction {
+  type: NotificationAction.VerifyNotificationEmailAction;
   payload: {
     email: string;
   };
   meta?: ActionMeta;
 }
 
-export interface SetNotificationEmailSuccessAction {
-  type: NotificationAction.SetNotificationEmailSuccess;
-  payload: {
-    email: string;
-  };
-}
-
-export interface SetNotificationEmailFailureAction {
-  type: NotificationAction.SetNotificationEmailFailure;
+export interface VerifyNotificationEmailActionFailure {
+  type: NotificationAction.VerifyNotificationEmailActionFailure;
   error: string;
 }
 
@@ -68,8 +60,8 @@ export interface DeleteNotificationEmailAction {
   type: NotificationAction.DeleteNotificationEmailAction;
 }
 
-export interface VerifyNotificationEmailAction {
-  type: NotificationAction.VerifyNotificationEmailAction;
+export interface VerifyNotificationEmailActionSuccess {
+  type: NotificationAction.VerifyNotificationEmailActionSuccess;
   payload: {
     pin: string;
   };
@@ -138,11 +130,10 @@ export type NotificationActionType =
   | CreateNotificationEmailAction
   | CreateNotificationEmailSuccessAction
   | CreateNotificationEmailFailureAction
-  | SetNotificationEmailAction
-  | SetNotificationEmailSuccessAction
-  | SetNotificationEmailFailureAction
   | DeleteNotificationEmailAction
   | VerifyNotificationEmailAction
+  | VerifyNotificationEmailActionSuccess
+  | VerifyNotificationEmailActionFailure
   | SubscribeWalletAction
   | SubscribeWalletSuccessAction
   | SubscribeWalletFailureAction
@@ -172,29 +163,26 @@ export const createNotificationEmailFailure = (error: string): CreateNotificatio
   error,
 });
 
-export const setNotificationEmail = (email: string, meta?: ActionMeta): SetNotificationEmailAction => ({
-  type: NotificationAction.SetNotificationEmail,
-  payload: { email },
-  meta,
-});
-
-export const setNotificationEmailSuccess = (email: string): SetNotificationEmailSuccessAction => ({
-  type: NotificationAction.SetNotificationEmailSuccess,
-  payload: { email },
-});
-
-export const setNotificationEmailFailure = (error: string): SetNotificationEmailFailureAction => ({
-  type: NotificationAction.SetNotificationEmailFailure,
-  error,
-});
-
 export const deleteNotificationEmail = (): DeleteNotificationEmailAction => ({
   type: NotificationAction.DeleteNotificationEmailAction,
 });
 
-export const verifyNotificationEmail = (pin: string): VerifyNotificationEmailAction => ({
+export type VerifyNotificationEmailActionFunction = (email: string, meta?: ActionMeta) => VerifyNotificationEmailAction;
+
+export const verifyNotificationEmail: VerifyNotificationEmailActionFunction = (email, meta) => ({
   type: NotificationAction.VerifyNotificationEmailAction,
+  payload: { email },
+  meta,
+});
+
+export const verifyNotificationEmailSuccess = (pin: string): VerifyNotificationEmailActionSuccess => ({
+  type: NotificationAction.VerifyNotificationEmailActionSuccess,
   payload: { pin },
+});
+
+export const verifyNotificationEmailFailure = (error: string): VerifyNotificationEmailActionFailure => ({
+  type: NotificationAction.VerifyNotificationEmailActionFailure,
+  error,
 });
 
 export const subscribeWallet = (wallets: WalletPayload[], email: string, lang: string): SubscribeWalletAction => ({

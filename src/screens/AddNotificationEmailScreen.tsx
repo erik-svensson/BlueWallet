@@ -6,14 +6,14 @@ import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
 import { Route, RootStackParams, Wallet, ActionMeta } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import {
   createNotificationEmail as createNotificationEmailAction,
-  setNotificationEmail as setNotificationEmailAction,
+  verifyNotificationEmail as verifyNotificationEmailAction,
   checkSubscription as checkSubscriptionAction,
   CheckSubscriptionAction,
+  VerifyNotificationEmailActionFunction,
 } from 'app/state/notifications/actions';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
@@ -25,7 +25,7 @@ interface Props {
   route: RouteProp<RootStackParams, Route.AddNotificationEmail>;
 
   createNotificationEmail: Function;
-  setNotificationEmail: Function;
+  verifyNotificationEmail: VerifyNotificationEmailActionFunction;
   hasWallets: boolean;
   wallets: Wallet[];
   checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
@@ -49,13 +49,13 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   };
 
   goToLocalEmailConfirm = () => {
-    const { setNotificationEmail, navigation, createNotificationEmail, route } = this.props;
+    const { verifyNotificationEmail, navigation, createNotificationEmail, route } = this.props;
 
     const { onSuccess, title } = route.params;
 
     const { email } = this.state;
 
-    setNotificationEmail(email, {
+    verifyNotificationEmail(email, {
       onSuccess: () =>
         navigation.navigate(Route.LocalConfirmNotificationCode, {
           children: (
@@ -71,6 +71,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
               onSuccess,
             });
           },
+          email,
         }),
     });
   };
@@ -120,6 +121,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { email, error } = this.state;
 
     const { onSkipSuccess, title, isBackArrow, description } = this.props.route.params;
+
     return (
       <ScreenTemplate
         noScroll
@@ -167,7 +169,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
 const mapDispatchToProps = {
   createNotificationEmail: createNotificationEmailAction,
-  setNotificationEmail: setNotificationEmailAction,
+  verifyNotificationEmail: verifyNotificationEmailAction,
   checkSubscription: checkSubscriptionAction,
 };
 
