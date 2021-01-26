@@ -239,7 +239,6 @@ module.exports = {
     goToWalletDetails: 'Go to Wallet Details',
   },
   notifications: {
-    resendCode: 'Resend code',
     addYourAddress: 'Add your email address',
     addYourEmailFor: 'Add your email for notifications',
     addEmail: 'Add email',
