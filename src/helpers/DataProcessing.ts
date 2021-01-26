@@ -1,4 +1,4 @@
-import config from '../../config';
+import config from 'app/config';
 
 const bitcoin = require('bitcoinjs-lib');
 

@@ -3,8 +3,8 @@ import * as bip39 from 'bip39';
 import b58 from 'bs58check';
 import { NativeModules } from 'react-native';
 
-import config from '../config';
 import { BitcoinUnit } from '../models/bitcoinUnits';
+import config from '../src/config';
 import { ELECTRUM_VAULT_SEED_PREFIXES } from '../src/consts';
 import { electrumVaultMnemonicToSeed, isElectrumVaultMnemonic } from '../utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';

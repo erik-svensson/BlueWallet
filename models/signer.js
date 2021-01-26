@@ -8,7 +8,7 @@
  **/
 import * as bitcoinjs from 'bitcoinjs-lib';
 
-import config from '../config';
+import config from '../src/config';
 import { btcToSatoshi } from '../utils/bitcoin';
 import {
   getUtxosWithMinimumRest,
