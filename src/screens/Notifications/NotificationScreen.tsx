@@ -6,17 +6,19 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image } from 'app/components';
-import { Route, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, Wallet, ActionMeta } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import {
-  deleteNotificationEmail,
+  setNotificationEmail as setNotificationEmailAction,
+  SetNotificationEmailAction,
   DeleteNotificationEmailAction,
+  deleteNotificationEmail as deleteNotificationEmailAction,
   CheckSubscriptionAction,
-  checkSubscription,
+  checkSubscription as checkSubscriptionAction,
 } from 'app/state/notifications/actions';
 import { storedEmail } from 'app/state/notifications/selectors';
-import { subscribedWallets } from 'app/state/wallets/selectors';
+import { subscribedWallets, wallets } from 'app/state/wallets/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -25,14 +27,16 @@ interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.Notifications>;
   route: RouteProp<RootStackParams, Route.Notifications>;
   email: string;
-  deleteEmail: () => DeleteNotificationEmailAction;
+  deleteNotificationEmail: () => DeleteNotificationEmailAction;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
+  setNotificationEmail: (email: string, meta?: ActionMeta) => SetNotificationEmailAction;
+  subscribedWallets: Wallet[];
   wallets: Wallet[];
 }
 export class NotificationScreen extends Component<Props> {
   componentDidMount() {
     const { wallets, checkSubscription, email } = this.props;
-    !!email && checkSubscription(wallets, email);
+    !!email && wallets.length && checkSubscription(wallets, email);
   }
 
   onChangeEmailPress = () =>
@@ -74,13 +78,29 @@ export class NotificationScreen extends Component<Props> {
     });
 
   removeEmail = () => {
-    this.props.deleteEmail();
-    this.goToSuccessScreen();
+    const { email, setNotificationEmail, deleteNotificationEmail, navigation } = this.props;
+    setNotificationEmail(email, {
+      onSuccess: () => {
+        navigation.navigate(Route.LocalConfirmNotificationCode, {
+          title: i18n.notifications.deleteEmail,
+          children: (
+            <View style={styles.infoContainer}>
+              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
+              <Text style={typography.headline5}>{email}</Text>
+            </View>
+          ),
+          onSuccess: () => {
+            deleteNotificationEmail();
+            this.goToSuccessScreen();
+          },
+          onResend: () => setNotificationEmail(email),
+        });
+      },
+    });
   };
 
-  deleteEmail = () => {
-    this.props.wallets.length ? this.goToConfirmScreen() : this.removeEmail();
-  };
+  deleteEmail = () => (!!this.props.subscribedWallets.length ? this.goToConfirmScreen() : this.removeEmail());
 
   onAddEmailPress = () => {
     this.props.navigation.navigate(Route.AddNotificationEmail, {
@@ -134,7 +154,7 @@ export class NotificationScreen extends Component<Props> {
     );
 
   render() {
-    const { wallets, email } = this.props;
+    const { subscribedWallets, email } = this.props;
     return (
       <ScreenTemplate
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
@@ -148,11 +168,11 @@ export class NotificationScreen extends Component<Props> {
             <View style={styles.amountAddress}>
               <Text style={styles.email}>{this.props.email}</Text>
             </View>
-            {!!wallets.length && (
+            {!!subscribedWallets.length && (
               <>
                 <Text style={styles.listTitle}>{i18n.notifications.yourSubscriptions}</Text>
                 <FlatList
-                  data={wallets}
+                  data={subscribedWallets}
                   renderItem={item => this.renderItem(item.item)}
                   keyExtractor={item => item.id}
                 />
@@ -173,12 +193,14 @@ export class NotificationScreen extends Component<Props> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   email: storedEmail(state),
-  wallets: subscribedWallets(state),
+  subscribedWallets: subscribedWallets(state),
+  wallets: wallets(state),
 });
 
 const mapDispatchToProps = {
-  deleteEmail: deleteNotificationEmail,
-  checkSubscription,
+  deleteNotificationEmail: deleteNotificationEmailAction,
+  setNotificationEmail: setNotificationEmailAction,
+  checkSubscription: checkSubscriptionAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationScreen);
@@ -246,4 +268,15 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
+  infoContainer: {
+    alignItems: 'center',
+  },
+  codeDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    marginTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    textAlign: 'center',
+  },
 });

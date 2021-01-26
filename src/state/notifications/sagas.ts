@@ -1,4 +1,4 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, takeLatest, put, call } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
@@ -143,7 +143,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
 export default [
   takeEvery(NotificationAction.CheckSubscriptionAction, checkSubscriptionSaga),
   takeEvery(NotificationAction.CreateNotificationEmail, createNotificationEmailSaga),
-  takeEvery(NotificationAction.VerifyNotificationEmailAction, verifyNotificationEmailSaga),
+  takeLatest(NotificationAction.VerifyNotificationEmailAction, verifyNotificationEmailSaga),
   takeEvery(NotificationAction.SubscribeWalletAction, subscribeWalletSaga),
   takeEvery(NotificationAction.AuthenticateEmailAction, authenticateEmailSaga),
   takeEvery(NotificationAction.UnsubscribeWalletAction, unsubscribeWalletSaga),

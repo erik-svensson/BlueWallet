@@ -60,8 +60,8 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         navigation.navigate(Route.LocalConfirmNotificationCode, {
           children: (
             <View style={styles.infoContainer}>
-              <Text style={typography.headline4}>{i18n.onboarding.confirmEmail}</Text>
-              <Text style={styles.codeDescription}>{i18n.onboarding.confirmEmailDescription}</Text>
+              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
               <Text style={typography.headline5}>{email}</Text>
             </View>
           ),
@@ -78,7 +78,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   onConfirm = () => {
     const { email } = this.state;
-    const { navigation, hasWallets, route, checkSubscription, wallets } = this.props;
+    const { navigation, route, checkSubscription, wallets } = this.props;
     const { onSuccess } = route.params;
 
     if (!isEmail(email)) {
@@ -86,7 +86,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         error: i18n.onboarding.emailValidation,
       });
     }
-    if (!hasWallets) {
+    if (!wallets.length) {
       return this.goToLocalEmailConfirm();
     }
     checkSubscription(wallets, email, {
@@ -147,7 +147,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         header={<Header title={title} isBackArrow={isBackArrow} />}
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.onboarding.notification}</Text>
+          <Text style={typography.headline4}>{i18n.notifications.addYourEmailFor}</Text>
           <Text style={styles.pinDescription}>{description}</Text>
         </View>
         <View style={styles.inputItemContainer}>
@@ -174,8 +174,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-  hasWallets: walletsSelectors.hasWallets(state),
-  wallets: walletsSelectors.wallets(state),
+  wallets: walletsSelectors.subscribableWallets(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);
