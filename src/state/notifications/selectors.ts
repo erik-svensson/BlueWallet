@@ -18,8 +18,7 @@ export const sessionToken = createSelector(local, state => state.sessionToken);
 export const notificationError = createSelector(local, state => state.error);
 export const storedEmail = createSelector(local, state => state.email);
 export const storedPin = createSelector(local, state => state.pin);
-export const error = createSelector(local, state => state.error);
-export const enhancedError = createSelector(error, err => {
+export const readableError = createSelector(notificationError, err => {
   if (err.startsWith(messages.requestFailed5XX)) {
     return i18n.connectionIssue.couldntConnectToServer;
   }

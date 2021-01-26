@@ -137,7 +137,7 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   pin: notificationSelectors.pin(state),
-  error: notificationSelectors.enhancedError(state),
+  error: notificationSelectors.readableError(state),
 });
 
 const mapDispatchToProps = {
