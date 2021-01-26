@@ -5,7 +5,7 @@ import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, RootStackParams, Wallet, ActionMeta } from 'app/consts';
+import { Route, RootStackParams, Wallet, ActionMeta, ConfirmAddressFlowType } from 'app/consts';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import {
@@ -45,6 +45,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   setEmail = (email: string): void => {
     this.setState({
       email,
+      error: '',
     });
   };
 
@@ -96,15 +97,16 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           return this.goToLocalEmailConfirm();
         }
         navigation.navigate(Route.ChooseWalletsForNotification, {
+          flowType: ConfirmAddressFlowType.SUBSCRIBE,
+          subtitle: i18n.notifications.getNotification,
+          description: i18n.notifications.chooseWalletsDescription,
           email,
           onSuccess,
           walletsToSubscribe,
           onSkip: () => this.goToLocalEmailConfirm(),
         });
       },
-      onFailure: (error: string) => {
-        this.setState({ error });
-      },
+      onFailure: (error: string) => this.setState({ error }),
     });
   };
 
@@ -160,6 +162,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             error={error}
             secureTextEntry={false}
             autoCapitalize="none"
+            keyboardType="email-address"
           />
         </View>
       </ScreenTemplate>

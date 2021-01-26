@@ -39,7 +39,7 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   };
 
   setCode = (userCode: string) => {
-    this.setState({ userCode });
+    this.setState({ userCode, error: '' });
   };
 
   resendCode = (error = '') => {
@@ -104,12 +104,12 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 
   render() {
     const { userCode, numberAttempt } = this.state;
-    const { children, title } = this.props.route.params;
+    const { children, title, onBack } = this.props.route.params;
     const allowConfirm = numberAttempt < CONST.emailCodeErrorMax;
     return (
       <ScreenTemplate
         noScroll
-        header={<Header isBackArrow title={title} />}
+        header={<Header isBackArrow title={title} onBackArrow={onBack} />}
         keyboardShouldPersistTaps="always"
         footer={
           <>

@@ -261,6 +261,11 @@ export enum ConfirmAddressFlowType {
   UNSUBSCRIBE = 'UNSUBSCRIBE',
 }
 
+export enum NotificationApiErrorMessages {
+  WALLET_ALREADY_SUBSCRIBED = "{'hash': [ErrorDetail(string='wallet with this hash already exists.', code='unique')]}",
+  INVALID_EMAIL = "Bad request: {'email': [ErrorDetail(string='Enter a valid email address.', code='invalid')]}",
+}
+
 export interface InfoContainerContent {
   title?: string;
   description?: string;
@@ -431,8 +436,12 @@ export type RootStackParams = {
     onSuccess: () => void;
     title: string;
     email: string;
+    onBack?: () => void;
   };
   [Route.ChooseWalletsForNotification]: {
+    flowType: ConfirmAddressFlowType;
+    subtitle: string;
+    description: string;
     email: string;
     onSuccess: () => void;
     onSkip: () => void;

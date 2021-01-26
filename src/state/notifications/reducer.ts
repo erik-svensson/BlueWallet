@@ -41,6 +41,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
       return {
         ...state,
         email: '',
+        pin: '',
       };
     case NotificationAction.VerifyNotificationEmailActionSuccess:
       return {
@@ -50,16 +51,19 @@ export const notificationReducer = (state = initialState, action: NotificationAc
     case NotificationAction.SubscribeWalletSuccessAction:
       return {
         ...state,
+        error: '',
         sessionToken: action.payload.sessionToken,
       };
     case NotificationAction.UnsubscribeWalletSuccessAction:
       return {
         ...state,
+        error: '',
         sessionToken: action.payload.sessionToken,
       };
     case NotificationAction.AuthenticateEmailSuccessAction:
       return {
         ...state,
+        error: '',
         sessionToken: '',
       };
     case NotificationAction.SubscribeWalletFailureAction:
@@ -73,6 +77,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
     case NotificationAction.CheckSubscriptionSuccessAction: {
       return {
         ...state,
+        error: '',
         subscribedIds: action.payload.subscribedIds,
       };
     }

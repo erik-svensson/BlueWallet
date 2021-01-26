@@ -258,6 +258,8 @@ module.exports = {
     resend: 'Resend code',
     getNotification: 'Get notifications',
     chooseWalletsDescription: 'Choose wallets from which you’d like to receive transaction notifications',
+    chooseWalletsToUnsubscribeDescription:
+      'You can choose the wallets from which you want to unsubscribe from notifications.',
     emailAddedSuccessMessage: 'Hooray!\n You have successfully added your email address.',
     goToNotifications: 'Go to Notifications',
     changeEmailTitle: 'Change your email',

@@ -2,7 +2,7 @@ import { takeEvery, takeLatest, put, call } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
-import { Wallet } from 'app/consts';
+import { Wallet, NotificationApiErrorMessages } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 
@@ -27,6 +27,8 @@ import {
   unsubscribeWalletSuccess,
   subscribeWalletFailure,
 } from './actions';
+
+const i18n = require('../../../loc');
 
 enum Result {
   error = 'error',
@@ -107,7 +109,16 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
     }
   } catch (error) {
     const { msg } = error.response.data;
-    yield put(authenticateEmailFailure(msg));
+    let readableErrorMessage = '';
+    switch (msg) {
+      case NotificationApiErrorMessages.WALLET_ALREADY_SUBSCRIBED:
+        readableErrorMessage = 'Wallet is already subscribed';
+        break;
+      default:
+        readableErrorMessage = 'authentication error';
+        break;
+    }
+    yield put(authenticateEmailFailure(readableErrorMessage));
     if (meta?.onFailure) {
       meta.onFailure();
     }
@@ -136,7 +147,20 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       meta.onSuccess(ids);
     }
   } catch (error) {
-    yield put(checkSubscriptionFailure(error.msg));
+    const { msg } = error.response.data;
+    let readableErrorMessage = '';
+    switch (msg) {
+      case NotificationApiErrorMessages.INVALID_EMAIL:
+        readableErrorMessage = i18n.notifications.invalidAddressError;
+        break;
+      default:
+        readableErrorMessage = 'check subscription error';
+        break;
+    }
+    if (meta?.onFailure) {
+      meta.onFailure(readableErrorMessage);
+    }
+    yield put(checkSubscriptionFailure(readableErrorMessage));
   }
 }
 

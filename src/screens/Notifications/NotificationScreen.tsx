@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
@@ -60,7 +60,7 @@ export class NotificationScreen extends Component<Props> {
       onConfirm: this.deleteEmail,
     });
 
-  goToSuccessScreen = () =>
+  goToDeleteSuccessScreen = () =>
     CreateMessage({
       title: i18n.message.success,
       description: i18n.notifications.deleteEmailSuccessMessage,
@@ -71,10 +71,21 @@ export class NotificationScreen extends Component<Props> {
       },
     });
 
-  goToConfirmScreen = () =>
-    this.props.navigation.navigate(Route.ConfirmEmail, {
-      email: this.props.email!,
-      flowType: ConfirmAddressFlowType.DELETE_ADDRESS,
+  unsubscribeAndRemoveEmail = () =>
+    this.props.navigation.navigate(Route.ChooseWalletsForNotification, {
+      flowType: ConfirmAddressFlowType.UNSUBSCRIBE,
+      subtitle: i18n.wallets.details.unsubscribeWallet,
+      description: i18n.notifications.chooseWalletsToUnsubscribeDescription,
+      email: this.props.email,
+      onSuccess: () => {
+        this.props.deleteNotificationEmail();
+        this.goToDeleteSuccessScreen();
+      },
+      walletsToSubscribe: this.props.subscribedWallets,
+      onSkip: () => {
+        this.props.deleteNotificationEmail();
+        this.goToDeleteSuccessScreen();
+      },
     });
 
   removeEmail = () => {
@@ -92,15 +103,16 @@ export class NotificationScreen extends Component<Props> {
           ),
           onSuccess: () => {
             deleteNotificationEmail();
-            this.goToSuccessScreen();
+            this.goToDeleteSuccessScreen();
           },
           onResend: () => setNotificationEmail(email),
+          onBack: () => navigation.navigate(Route.Notifications, {}),
         });
       },
     });
   };
 
-  deleteEmail = () => (!!this.props.subscribedWallets.length ? this.goToConfirmScreen() : this.removeEmail());
+  deleteEmail = () => (!!this.props.subscribedWallets.length ? this.unsubscribeAndRemoveEmail() : this.removeEmail());
 
   onAddEmailPress = () => {
     this.props.navigation.navigate(Route.AddNotificationEmail, {

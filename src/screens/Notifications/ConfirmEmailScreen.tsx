@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CodeInput } from 'app/components';
@@ -140,7 +140,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
       language,
       createNotificationEmail,
       storedEmail,
-
       route: {
         params: { email, walletsToSubscribe, onSuccess, onBack },
       },
@@ -176,7 +175,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
     const {
       navigation,
       route: {
-        params: { onBack, email, walletsToSubscribe },
+        params: { onBack, email, walletsToSubscribe, onSuccess },
       },
     } = this.props;
     return {
@@ -186,16 +185,19 @@ class ConfirmEmailScreen extends Component<Props, State> {
         const hashes = await Promise.all(walletsToSubscribe!.map(wallet => getWalletHashedPublicKeys(wallet)));
         this.props.unsubscribe(hashes, email);
       },
-      onCodeConfirm: () =>
-        CreateMessage({
-          title: i18n.message.success,
-          description: i18n.notifications.updateNotificationPreferences,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.message.goToWalletDetails,
-            onPress: () => (onBack ? onBack() : navigation.popToTop()),
-          },
-        }),
+      onCodeConfirm: () => {
+        onSuccess
+          ? onSuccess()
+          : CreateMessage({
+              title: i18n.message.success,
+              description: i18n.notifications.updateNotificationPreferences,
+              type: MessageType.success,
+              buttonProps: {
+                title: i18n.message.goToWalletDetails,
+                onPress: () => (onBack ? onBack() : navigation.popToTop()),
+              },
+            });
+      },
     };
   };
 
@@ -221,6 +223,9 @@ class ConfirmEmailScreen extends Component<Props, State> {
   });
 
   onError = () => {
+    if (this.props.notificationError) {
+      Alert.alert(this.props.notificationError);
+    }
     const newFailNo = this.state.failNo + 1;
     const errorMessage =
       newFailNo < 3
