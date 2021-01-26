@@ -108,28 +108,18 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   };
 
   skipAddEmail = () => {
-    const { createNotificationEmail, navigation } = this.props;
+    const { createNotificationEmail, route } = this.props;
+    const { onSkipSuccess } = route.params;
+
     createNotificationEmail('', {
-      onSuccess: () => {
-        CreateMessage({
-          title: i18n.contactCreate.successTitle,
-          description: i18n.onboarding.successCompletedDescription,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.onboarding.successCompletedButton,
-            onPress: () => {
-              navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
-            },
-          },
-        });
-      },
+      onSuccess: onSkipSuccess,
     });
   };
 
   render() {
     const { email, error } = this.state;
 
-    const { withSkip, title, isBackArrow, description } = this.props.route.params;
+    const { onSkipSuccess, title, isBackArrow, description } = this.props.route.params;
     return (
       <ScreenTemplate
         noScroll
@@ -142,7 +132,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
               onPress={this.onConfirm}
               disabled={email.length === 0}
             />
-            {withSkip && (
+            {onSkipSuccess && (
               <FlatButton
                 testID="skip-notification-email"
                 containerStyle={styles.skipButton}

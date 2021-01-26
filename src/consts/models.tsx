@@ -1,5 +1,6 @@
 import { VaultTxType, Transaction as BtcTransaction, ECPair } from 'bitcoinjs-lib';
 import { Dayjs } from 'dayjs';
+import { last } from 'lodash';
 import React from 'react';
 import { KeyboardType, StyleProp, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
@@ -15,6 +16,12 @@ import {
   HDSegwitP2SHWallet,
   HDLegacyP2PKHWallet,
 } from '../../class';
+
+// don't change the order when addign the new version, the oldest user version is on the top, the newest on the bottom
+export enum USER_VERSIONS {
+  BEFORE_NOTIFICATIONS_WERE_ADDED = 'BEFORE_NOTIFICATIONS_WERE_ADDED',
+  AFTER_NOTIFICATIONS_WERE_ADDED = 'AFTER_NOTIFICATIONS_WERE_ADDED',
+}
 
 export const CONST = {
   pinCodeLength: 4,
@@ -39,6 +46,8 @@ export const CONST = {
   tcVersion: 'tcVersion',
   emailCodeErrorMax: 3,
   walletsDefaultGapLimit: 20,
+  userVersion: 'userVersion',
+  newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
 };
 
 export const ADDRESSES_TYPES = {
@@ -360,6 +369,14 @@ export type MainTabNavigatorParams = {
   [Route.Settings]: { screen: keyof RootStackParams };
 };
 
+export interface AddNotificationEmailParams {
+  title: string;
+  onSuccess: () => void;
+  isBackArrow: boolean;
+  description: string;
+  onSkipSuccess?: () => void;
+}
+
 export type RootStackParams = {
   [Route.MainTabStackNavigator]: { screen: keyof MainTabNavigatorParams };
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
@@ -416,13 +433,7 @@ export type RootStackParams = {
     onSkip: () => void;
     walletsToSubscribe: Wallet[];
   };
-  [Route.AddNotificationEmail]: {
-    withSkip?: boolean;
-    title: string;
-    onSuccess: () => void;
-    isBackArrow: boolean;
-    description: string;
-  };
+  [Route.AddNotificationEmail]: AddNotificationEmailParams;
   [Route.CreateWallet]: undefined;
   [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
@@ -467,9 +478,6 @@ export type RootStackParams = {
   [Route.AboutUs]: undefined;
   [Route.TermsConditions]: undefined;
   [Route.AdvancedOptions]: undefined;
-  [Route.CreatePin]: {
-    flowType: string;
-  };
   [Route.CurrentPin]: undefined;
   [Route.ConfirmPin]: {
     flowType: string;

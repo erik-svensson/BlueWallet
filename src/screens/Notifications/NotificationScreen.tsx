@@ -84,7 +84,6 @@ export class NotificationScreen extends Component<Props> {
 
   onAddEmailPress = () => {
     this.props.navigation.navigate(Route.AddNotificationEmail, {
-      withSkip: false,
       title: i18n.notifications.notifications,
       isBackArrow: true,
       description: i18n.notifications.addYourEmailForDescription,
