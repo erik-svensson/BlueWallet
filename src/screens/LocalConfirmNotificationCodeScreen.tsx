@@ -8,7 +8,10 @@ import { CodeInput, Header, ScreenTemplate, Button, TimeoutButton } from 'app/co
 import { Route, CONST, RootStackParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { selectors as notificationSelectors } from 'app/state/notifications';
-import { setNotificationEmail as setNotificationEmailAction } from 'app/state/notifications/actions';
+import {
+  verifyNotificationEmail as verifyNotificationEmailAction,
+  VerifyNotificationEmailActionFunction,
+} from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -25,7 +28,7 @@ interface Props {
   pin: string;
   error: string;
   email: string;
-  setNotificationEmail: Function;
+  verifyNotificationEmail: VerifyNotificationEmailActionFunction;
 }
 
 class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
@@ -40,10 +43,10 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   };
 
   resendCode = (error = '') => {
-    const { setNotificationEmail } = this.props;
+    const { verifyNotificationEmail } = this.props;
     const { email } = this.props.route.params;
 
-    setNotificationEmail(email, {
+    verifyNotificationEmail(email, {
       onSuccess: () => {
         this.setState({
           localError: error,
@@ -138,7 +141,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const mapDispatchToProps = {
-  setNotificationEmail: setNotificationEmailAction,
+  verifyNotificationEmail: verifyNotificationEmailAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocalConfirmNotificationCodeScreen);

@@ -31,16 +31,8 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         isLoading: false,
         pin: '',
       };
-    case NotificationAction.SetNotificationEmailSuccess:
-      return {
-        ...state,
-        error: '',
-        email: action.payload.email,
-        isLoading: false,
-        pin: '',
-      };
     case NotificationAction.CreateNotificationEmailFailure:
-    case NotificationAction.SetNotificationEmailFailure:
+    case NotificationAction.VerifyNotificationEmailActionFailure:
       return {
         ...state,
         error: action.error,
@@ -50,7 +42,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         ...state,
         email: '',
       };
-    case NotificationAction.VerifyNotificationEmailAction:
+    case NotificationAction.VerifyNotificationEmailActionSuccess:
       return {
         ...state,
         pin: action.payload.pin,

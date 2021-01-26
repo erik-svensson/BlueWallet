@@ -9,12 +9,12 @@ import { StoreService } from 'app/services';
 
 import {
   createNotificationEmailFailure,
-  setNotificationEmailFailure,
   createNotificationEmailSuccess,
   CreateNotificationEmailAction,
   NotificationAction,
-  verifyNotificationEmail,
-  SetNotificationEmailAction,
+  verifyNotificationEmailSuccess,
+  VerifyNotificationEmailAction,
+  verifyNotificationEmailFailure,
   SubscribeWalletAction,
   AuthenticateEmailAction,
   authenticateEmailSuccess,
@@ -51,14 +51,14 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
   }
 }
 
-export function* setNotificationEmailSaga(action: SetNotificationEmailAction | unknown) {
-  const { meta, payload } = action as SetNotificationEmailAction;
+export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailAction | unknown) {
+  const { meta, payload } = action as VerifyNotificationEmailAction;
   const email = payload.email;
   try {
     const verifyCode = yield call(verifyEmail, { email });
     if (verifyCode.result === Result.success) {
       const decryptedCode = yield decryptCode(email, verifyCode.pin);
-      yield put(verifyNotificationEmail(decryptedCode));
+      yield put(verifyNotificationEmailSuccess(decryptedCode));
     } else {
       throw new Error('Your email cannot be verified');
     }
@@ -66,7 +66,7 @@ export function* setNotificationEmailSaga(action: SetNotificationEmailAction | u
       meta.onSuccess();
     }
   } catch (e) {
-    yield put(setNotificationEmailFailure(e.message));
+    yield put(verifyNotificationEmailFailure(e.message));
     if (meta?.onFailure) {
       meta.onFailure();
     }
@@ -145,7 +145,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
 export default [
   takeEvery(NotificationAction.CheckSubscriptionAction, checkSubscriptionSaga),
   takeEvery(NotificationAction.CreateNotificationEmail, createNotificationEmailSaga),
-  takeEvery(NotificationAction.SetNotificationEmail, setNotificationEmailSaga),
+  takeEvery(NotificationAction.VerifyNotificationEmailAction, verifyNotificationEmailSaga),
   takeEvery(NotificationAction.SubscribeWalletAction, subscribeWalletSaga),
   takeEvery(NotificationAction.AuthenticateEmailAction, authenticateEmailSaga),
   takeEvery(NotificationAction.UnsubscribeWalletAction, unsubscribeWalletSaga),
