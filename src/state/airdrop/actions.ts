@@ -101,4 +101,5 @@ export type AirdropActionType =
   | CheckSubscriptionAction
   | SubscribeWalletFailureAction
   | CheckSubscriptionSuccessAction
-  | SubscribeWalletSuccessAction;
+  | SubscribeWalletSuccessAction
+  | CheckSubscriptionFailureAction;
