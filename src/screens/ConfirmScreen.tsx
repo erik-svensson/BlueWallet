@@ -16,14 +16,18 @@ interface Props {
 export const ConfirmScreen = ({
   navigation,
   route: {
-    params: { onConfirm, title, onBack, children },
+    params: { onConfirm, title, onBack, children, isBackArrow },
   },
 }: Props) => {
+  const buttonBlockedTime = 500;
   const [clicked, setClicked] = useState(false);
 
   const onYesPress = (callback: () => void) => {
     setClicked(true);
     callback();
+    setTimeout(() => {
+      setClicked(false);
+    }, buttonBlockedTime);
   };
 
   const onNoPress = () => {
@@ -51,7 +55,7 @@ export const ConfirmScreen = ({
           />
         </View>
       }
-      header={<Header isBackArrow title={title} />}
+      header={<Header isBackArrow={isBackArrow} title={title} />}
     >
       {children}
     </ScreenTemplate>

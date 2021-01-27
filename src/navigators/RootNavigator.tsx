@@ -151,7 +151,7 @@ export const RootNavigator: FC<Props> = ({
         component={CreateAuthenticatorSuccessScreen}
         options={{ gestureEnabled: false }}
       />
-      <Stack.Screen name={Route.Confirm} component={ConfirmScreen} />
+      <Stack.Screen name={Route.Confirm} initialParams={{ isBackArrow: true }} component={ConfirmScreen} />
       <Stack.Screen name={Route.ImportAuthenticator} component={ImportAuthenticatorScreen} />
       <Stack.Screen
         name={Route.CreateWalletSuccess}

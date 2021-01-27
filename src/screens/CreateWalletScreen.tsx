@@ -79,6 +79,10 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
         {i18n.notifications.receiveTransactionDescription}
         <Text style={styles.boldedText}>{this.props.email}</Text>
       </Text>
+      <Text style={[styles.notificationDescription, styles.note]}>
+        <Text style={styles.boldedText}>{i18n.notifications.noteFirst}</Text>
+        {i18n.notifications.noteSecond}
+      </Text>
     </>
   );
 
@@ -100,12 +104,14 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
                       email,
                       flowType: ConfirmAddressFlowType.SUBSCRIBE,
                       walletsToSubscribe: [wallet],
-                      onBack: () =>
-                        navigation.navigate(Route.WalletDetails, {
-                          id: wallet.id,
-                        }),
+                      // onBack: () =>
+                      //   navigation.navigate(Route.WalletDetails, {
+                      //     id: wallet.id,
+                      //   }),
                     }),
-                  onBack: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+                  onBack: () =>
+                    this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+                  isBackArrow: false,
                 })
             : undefined,
         });
@@ -395,4 +401,7 @@ const styles = StyleSheet.create({
     color: palette.textBlack,
   },
   notificationTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
+  note: {
+    marginTop: 42,
+  },
 });

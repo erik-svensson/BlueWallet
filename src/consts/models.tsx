@@ -497,6 +497,7 @@ export type RootStackParams = {
     title: string;
     onBack?: () => void;
     children: React.ReactNode;
+    isBackArrow?: boolean;
   };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
