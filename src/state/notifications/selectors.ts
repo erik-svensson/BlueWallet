@@ -24,6 +24,7 @@ export const readableError = createSelector(notificationError, err => {
   }
   return err;
 });
+export const isLoading = createSelector(local, state => state.isLoading);
 
 export const isWalletSubscribed = createSelector(
   subscribedIds,
