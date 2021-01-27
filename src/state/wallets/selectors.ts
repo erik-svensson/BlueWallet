@@ -78,7 +78,7 @@ export const walletsWithRecoveryTransaction = createSelector(wallets, walletsLis
 
 export const subscribableWallets = createSelector(wallets, walletsList =>
   walletsList.filter(wallet => wallet.type === HDSegwitP2SHAirWallet.type),
-);
+); // TODO - remove when backend is ready to subscribe other wallet types
 
 export const allWallet = createSelector(wallets, walletsList => {
   const { incoming_balance, balance } = walletsList.reduce(
