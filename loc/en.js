@@ -49,6 +49,8 @@ module.exports = {
       desc2: 'Create new wallet to take part in the Airdrop.',
       connectionError1: 'Couldn’t connect to the server.',
       connectionError2: 'Please try again in a few minutes.',
+      loading1: 'Waiting for the server.',
+      loading2: 'It may take a few seconds.',
       availableWallets: 'Available wallets',
       registeredWallets: 'Registered wallets',
     },

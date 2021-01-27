@@ -2,7 +2,7 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { differenceBy } from 'lodash';
 import React, { FC, useEffect } from 'react';
-import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate } from 'app/components';
@@ -24,6 +24,8 @@ const i18n = require('../../../loc');
 
 interface Props {
   wallets: Wallet[];
+  error: boolean;
+  isLoading: boolean;
   isInitialized: boolean;
   checkSubscription: (wallets: Wallet[]) => CheckSubscriptionAction;
   navigation: CompositeNavigationProp<
@@ -34,8 +36,6 @@ interface Props {
   subscribeWallet: (payload: { wallet: WalletPayload; id: string }) => SubscribeWalletAction;
 }
 
-const error = false; // should come from API/Redux
-
 export const AirdropDashboardScreen: FC<Props> = ({
   navigation,
   isInitialized,
@@ -43,6 +43,8 @@ export const AirdropDashboardScreen: FC<Props> = ({
   checkSubscription,
   subscribedWallets,
   subscribeWallet,
+  isLoading,
+  error,
 }) => {
   useEffect(() => {
     checkSubscription(wallets);
@@ -51,15 +53,6 @@ export const AirdropDashboardScreen: FC<Props> = ({
   const getAvailableWallets = (wallets: Wallet[]) => differenceBy(wallets, subscribedWallets, 'id');
 
   const renderContent = () => {
-    if (error) {
-      return (
-        <>
-          <Text>{i18n.airdrop.dashboard.connectionError1}</Text> {/*  style={styles.boldDescription} MISSING */}
-          <Text>{i18n.airdrop.dashboard.connectionError2}</Text> {/*  style={styles.description} MISSING */}
-        </>
-      );
-    }
-
     return isAfterAirdrop() ? (
       <AirdropFinished navigation={navigation} />
     ) : (
@@ -68,8 +61,6 @@ export const AirdropDashboardScreen: FC<Props> = ({
         availableWallets={getAvailableWallets(wallets)}
         subscribedWallets={subscribedWallets}
         subscribeWallet={async (wallet: Wallet) => {
-          console.log('wallet WALLET WALLET');
-          console.log(wallet);
           subscribeWallet({ wallet: await walletToAddressesGenerationBase(wallet), id: wallet.id });
         }}
       />
@@ -92,6 +83,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   subscribedWallets: airdropSelectors.subscribedWallets(state),
   isLoading: airdropSelectors.isLoading(state),
   isInitialized: state.wallets.isInitialized,
+  error: state.airdrop.error,
 });
 
 const mapDispatchToProps = {

@@ -4,7 +4,7 @@ export interface AirdropState {
   thankYouSeen: boolean;
   thankYouFlowCompleted: boolean;
   isLoading: boolean;
-  error: Error | null;
+  error: boolean;
   subscribedIds: string[];
 }
 
@@ -13,7 +13,7 @@ const initialState: AirdropState = {
   thankYouFlowCompleted: false,
   isLoading: false,
   subscribedIds: [],
-  error: null,
+  error: false,
 };
 
 export const airdropReducer = (state = initialState, action: AirdropActionType): AirdropState => {
@@ -32,11 +32,19 @@ export const airdropReducer = (state = initialState, action: AirdropActionType):
       return {
         ...state,
         subscribedIds: action.payload.subscribedIds,
+        error: false,
       };
     case AirdropAction.SubscribeWalletSuccess:
       return {
         ...state,
         subscribedIds: [...state.subscribedIds, action.payload.id],
+        error: false,
+      };
+    case AirdropAction.SubscribeWalletFailure:
+    case AirdropAction.CheckSubscriptionFailure:
+      return {
+        ...state,
+        error: true,
       };
     default:
       return state;
