@@ -1,92 +1,102 @@
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { differenceBy } from 'lodash';
 import React, { FC, useEffect } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 
-import { images } from 'app/assets';
-import { Header, ScreenTemplate, Image, Countdown } from 'app/components';
-import { CONST, Route, RootStackParams, Wallet } from 'app/consts';
-import { isAfterAirdrop, getFormattedAirdropDate } from 'app/helpers/airdrop';
+import { Header, ScreenTemplate } from 'app/components';
+import { Route, RootStackParams, Wallet, WalletPayload } from 'app/consts';
+import { isAfterAirdrop } from 'app/helpers/airdrop';
+import { walletToAddressesGenerationBase } from 'app/helpers/wallets';
 import { ApplicationState } from 'app/state';
-import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
-import * as walletsSelectors from 'app/state/wallets/selectors';
-import { typography, palette } from 'app/styles';
+import {
+  checkSubscription,
+  CheckSubscriptionAction,
+  subscribeWallet,
+  SubscribeWalletAction,
+} from 'app/state/airdrop/actions';
+import * as airdropSelectors from 'app/state/airdrop/selectors';
 
-import { Footer, AirdropFinished } from './components';
+import { AirdropFinished, AirdropInProgress } from './components';
 
 const i18n = require('../../../loc');
 
 interface Props {
   wallets: Wallet[];
   isInitialized: boolean;
-  loadWallets: () => LoadWalletsAction;
+  checkSubscription: (wallets: Wallet[]) => CheckSubscriptionAction;
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
     StackNavigationProp<RootStackParams, Route.AirdropDashboard>
   >;
+  subscribedWallets: Wallet[];
+  subscribeWallet: (payload: { wallet: WalletPayload; id: string }) => SubscribeWalletAction;
 }
 
 const error = false; // should come from API/Redux
 
-export const AirdropDashboardScreen: FC<Props> = ({ navigation, isInitialized, wallets, loadWallets }) => {
-  const _isAfterAirdrop = isAfterAirdrop();
-
+export const AirdropDashboardScreen: FC<Props> = ({
+  navigation,
+  isInitialized,
+  wallets,
+  checkSubscription,
+  subscribedWallets,
+  subscribeWallet,
+}) => {
   useEffect(() => {
-    loadWallets();
-  }, []);
+    checkSubscription(wallets);
+  }, [checkSubscription, wallets]);
 
-  console.log('AirdropDashboardScreen wallets');
-  console.log(wallets);
+  const getAvailableWallets = (wallets: Wallet[]) => differenceBy(wallets, subscribedWallets, 'id');
+
+  const renderContent = () => {
+    if (error) {
+      return (
+        <>
+          <Text>{i18n.airdrop.dashboard.connectionError1}</Text> {/*  style={styles.boldDescription} MISSING */}
+          <Text>{i18n.airdrop.dashboard.connectionError2}</Text> {/*  style={styles.description} MISSING */}
+        </>
+      );
+    }
+
+    return isAfterAirdrop() ? (
+      <AirdropFinished navigation={navigation} />
+    ) : (
+      <AirdropInProgress
+        navigation={navigation}
+        availableWallets={getAvailableWallets(wallets)}
+        subscribedWallets={subscribedWallets}
+        subscribeWallet={async (wallet: Wallet) => {
+          console.log('wallet WALLET WALLET');
+          console.log(wallet);
+          subscribeWallet({ wallet: await walletToAddressesGenerationBase(wallet), id: wallet.id });
+        }}
+      />
+    );
+  };
 
   return !isInitialized ? (
     <View style={styles.loadingIndicatorContainer}>
       <ActivityIndicator size="large" />
     </View>
   ) : (
-    <ScreenTemplate
-      footer={!_isAfterAirdrop && <Footer navigation={navigation} />}
-      header={<Header isBackArrow title={i18n.airdrop.title} />}
-    >
-      <View style={styles.wrapper}>
-        {_isAfterAirdrop ? (
-          <AirdropFinished navigation={navigation} />
-        ) : (
-          <>
-            <View style={styles.infoContainer}>
-              <Text style={typography.headline4}>{i18n.airdrop.title}</Text>
-              <Text style={[styles.description, styles.spaceTop]}>{i18n.airdrop.dashboard.desc1}</Text>
-              <Text style={styles.description}>
-                {i18n.airdrop.dateOfAirdrop}&nbsp;
-                {getFormattedAirdropDate()}
-              </Text>
-            </View>
-            {/* TODO: if airdrop in progress, show wallets etc. */}
-            <Countdown dataEnd={CONST.airdropDate} />
-            <Image source={images.airdrop} style={styles.airdropImage} />
-            {error ? (
-              <>
-                <Text style={styles.boldDescription}>{i18n.airdrop.dashboard.connectionError1}</Text>
-                <Text style={styles.description}>{i18n.airdrop.dashboard.connectionError2}</Text>
-              </>
-            ) : (
-              <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
-            )}
-          </>
-        )}
-      </View>
+    <ScreenTemplate header={<Header isBackArrow title={i18n.airdrop.title} />}>
+      <View style={styles.wrapper}>{renderContent()}</View>
     </ScreenTemplate>
   );
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-  wallets: walletsSelectors.allWallets(state),
-  isLoading: walletsSelectors.isLoading(state),
+  wallets: airdropSelectors.airdropReadyWallets(state),
+  subscribedWallets: airdropSelectors.subscribedWallets(state),
+  isLoading: airdropSelectors.isLoading(state),
   isInitialized: state.wallets.isInitialized,
 });
 
 const mapDispatchToProps = {
-  loadWallets,
+  checkSubscription,
+  subscribeWallet,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AirdropDashboardScreen);
@@ -101,28 +111,5 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  airdropImage: {
-    width: 189,
-    height: 193,
-    marginTop: 27.5,
-    marginBottom: 20,
-  },
-  infoContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  description: {
-    ...typography.caption,
-    color: palette.textGrey,
-    textAlign: 'center',
-    lineHeight: 19,
-  },
-  boldDescription: {
-    ...typography.headline9,
-    textAlign: 'center',
-  },
-  spaceTop: {
-    marginTop: 18,
   },
 });

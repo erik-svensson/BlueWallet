@@ -5,7 +5,7 @@ import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native'
 
 import { images } from 'app/assets';
 import { AirdropStayTuned, AirdropWalletsList, Image } from 'app/components';
-import { RootStackParams, AirdropWalletDetails, Route } from 'app/consts';
+import { RootStackParams, Route } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../../loc');
@@ -18,7 +18,7 @@ interface Props {
 }
 
 interface CallToActionProps {
-  wallet: AirdropWalletDetails;
+  wallet: { balance: number; label: string };
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
     StackNavigationProp<RootStackParams, Route.AirdropDashboard>
@@ -26,8 +26,8 @@ interface CallToActionProps {
 }
 
 const CallToAction: FC<CallToActionProps> = ({ wallet, navigation }) => {
-  const goToWalletDetails = (wallet: AirdropWalletDetails) => {
-    navigation.navigate(Route.AirdropFinishedWalletDetails, { balance: wallet.balance, name: wallet.name });
+  const goToWalletDetails = (wallet: { balance: number; label: string }) => {
+    navigation.navigate(Route.AirdropFinishedWalletDetails, { balance: wallet.balance, label: wallet.label });
   };
 
   return (
@@ -57,10 +57,13 @@ export const AirdropFinished: FC<Props> = ({ navigation }) => {
       <AirdropStayTuned />
       <View style={styles.walletsListContainer}>
         <AirdropWalletsList
-          wallets={[
-            { balance: 2, name: 'Wallet name A', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
-            { balance: 13, name: 'Wallet name B', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
-          ]}
+          wallets={
+            [
+              // TODO: connect it and put subscribedWallets here
+              // { balance: 2, label: 'Wallet name A', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
+              // { balance: 13, label: 'Wallet name B', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
+            ]
+          }
           title={i18n.airdrop.finished.registeredWallets}
           itemCallToAction={wallet => <CallToAction wallet={wallet} navigation={navigation} />}
         />
@@ -68,8 +71,6 @@ export const AirdropFinished: FC<Props> = ({ navigation }) => {
     </View>
   );
 };
-
-export default AirdropFinished;
 
 const styles = StyleSheet.create({
   container: {

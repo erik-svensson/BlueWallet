@@ -23,6 +23,8 @@ module.exports = {
     scan: 'Scan',
     storage_is_encrypted: 'Your storage is encrypted. Password is required to decrypt it',
     skip: 'Skip this step',
+    add: 'Add',
+    undo: 'Undo',
   },
   order: {
     first: 'first',
@@ -47,6 +49,8 @@ module.exports = {
       desc2: 'Create new wallet to take part in the Airdrop.',
       connectionError1: 'Couldn’t connect to the server.',
       connectionError2: 'Please try again in a few minutes.',
+      availableWallets: 'Available wallets',
+      registeredWallets: 'Registered wallets',
     },
     itIsAlive: {
       subtitle: 'Airdrop is live! Check it out!',

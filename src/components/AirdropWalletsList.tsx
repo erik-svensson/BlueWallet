@@ -1,25 +1,25 @@
 import React, { FC } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 
-import { AirdropWalletDetails } from 'app/consts';
+import { Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 interface Props {
   title: string;
-  wallets: AirdropWalletDetails[];
-  itemCallToAction?: (wallet: AirdropWalletDetails) => React.ReactElement;
+  wallets: Wallet[];
+  itemCallToAction?: (wallet: Wallet) => React.ReactElement;
 }
 
 interface ItemProps {
-  wallet: AirdropWalletDetails;
+  wallet: Wallet;
   callToAction?: React.ReactElement;
 }
 
 const AirdropWalletsListItem: FC<ItemProps> = ({ wallet, callToAction }) => (
   <View style={styles.listElement}>
     <View style={styles.textContainer}>
-      <Text style={styles.itemName}>{wallet.name}</Text>
-      <Text style={styles.itemDescription}>{wallet.address || ''}</Text>
+      <Text style={styles.itemName}>{wallet.label}</Text>
+      <Text style={styles.itemDescription}>{wallet.getAddress()}</Text>
     </View>
     {callToAction}
   </View>

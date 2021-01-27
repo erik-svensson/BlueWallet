@@ -98,7 +98,6 @@ export const allWallets = createSelector(wallets, allWallet, (walletsList, aw) =
   if (walletsList.length > 1) {
     return [aw as Wallet, ...walletsList];
   }
-  console.log(walletsList);
   return walletsList;
 });
 

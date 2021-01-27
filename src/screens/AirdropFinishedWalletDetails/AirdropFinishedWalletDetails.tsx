@@ -15,7 +15,7 @@ type Props = {
 export const AirdropFinishedWalletDetails: FC<Props> = ({ route }: Props) => (
   <ScreenTemplate header={<Header isBackArrow title={i18n.airdrop.title} />}>
     <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
-    <AirdropWalletBalanceCard walletDetails={{ balance: route.params.balance, name: route.params.name }} />
+    <AirdropWalletBalanceCard data={{ balance: route.params.balance, label: route.params.label }} />
     <View style={styles.stayTunedContainer}>
       <AirdropStayTuned />
     </View>
