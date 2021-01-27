@@ -75,13 +75,11 @@ export class NotificationScreen extends Component<Props> {
       description: i18n.notifications.chooseWalletsToUnsubscribeDescription,
       email: this.props.email,
       onSuccess: () => {
-        this.props.deleteNotificationEmail();
-        this.goToDeleteSuccessScreen();
+        this.removeEmail();
       },
       wallets: this.props.subscribedWallets,
       onSkip: () => {
-        this.props.deleteNotificationEmail();
-        this.goToDeleteSuccessScreen();
+        this.removeEmail();
       },
     });
 

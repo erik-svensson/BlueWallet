@@ -154,7 +154,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
     }
     const newFailNo = this.state.failNo + 1;
     const errorMessage =
-      newFailNo < 3
+      newFailNo < CONST.emailCodeErrorMax
         ? i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - newFailNo })
         : i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax });
     return this.setState(

@@ -2,7 +2,7 @@ import { takeEvery, takeLatest, put, call } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
-import { Wallet, NotificationApiErrorMessages } from 'app/consts';
+import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 
@@ -139,10 +139,10 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     }
   } catch (error) {
     const { msg } = error.response.data;
+    yield put(checkSubscriptionFailure(msg));
     if (meta?.onFailure) {
       meta.onFailure(msg);
     }
-    yield put(checkSubscriptionFailure(msg));
   }
 }
 
