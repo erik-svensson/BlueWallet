@@ -47,6 +47,10 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     email: '',
   };
 
+  componentDidMount() {
+    this.props.setError('');
+  }
+
   setEmail = (email: string): void => {
     this.setState({
       email,
