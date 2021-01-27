@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 
 import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
-import { Route, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
+import { Route, RootStackParams, Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -32,10 +32,9 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
 
   checkWallet = (wallet: Wallet) => (this.isWalletChecked(wallet) ? this.removeWallet(wallet) : this.addWallet(wallet));
 
-  checkAll = () =>
-    this.setState({ wallets: this.areAllWalletsChecked() ? [] : this.props.route.params.walletsToSubscribe });
+  checkAll = () => this.setState({ wallets: this.areAllWalletsChecked() ? [] : this.props.route.params.wallets });
 
-  areAllWalletsChecked = () => this.props.route.params.walletsToSubscribe.length === this.state.wallets.length;
+  areAllWalletsChecked = () => this.props.route.params.wallets.length === this.state.wallets.length;
 
   isWalletChecked = (selectedWallet: Wallet) =>
     this.state.wallets.some((wallet: Wallet) => wallet.id === selectedWallet.id);
@@ -73,16 +72,16 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
 
     navigation.navigate(Route.ConfirmEmail, {
       email: params.email,
-      flowType: ConfirmAddressFlowType.SUBSCRIBE,
-      walletsToSubscribe: this.state.wallets,
+      flowType: params.flowType,
       onSuccess: params.onSuccess,
+      walletsToSubscribe: params.wallets,
     });
   };
 
   render() {
     const {
       route: {
-        params: { email, walletsToSubscribe, onSkip },
+        params: { email, wallets, onSkip, subtitle, description },
       },
     } = this.props;
     return (
@@ -96,15 +95,15 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         }
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.notifications.getNotification}</Text>
-          <Text style={styles.infoDescription}>{i18n.notifications.chooseWalletsDescription}</Text>
+          <Text style={typography.headline4}>{subtitle}</Text>
+          <Text style={styles.infoDescription}>{description}</Text>
         </View>
         <View style={styles.amountInput}>
           <Text style={styles.amount}>{email}</Text>
         </View>
 
         <FlatList
-          data={walletsToSubscribe}
+          data={wallets}
           renderItem={item => this.renderItem(item.item)}
           keyExtractor={item => item.id}
           ListHeaderComponent={this.renderListHeader()}

@@ -39,7 +39,7 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   };
 
   setCode = (userCode: string) => {
-    this.setState({ userCode });
+    this.setState({ userCode, localError: '' });
   };
 
   resendCode = (error = '') => {
@@ -74,14 +74,15 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   };
 
   onConfirm = () => {
-    const { pin } = this.props;
-    const { onSuccess } = this.props.route.params;
-
+    const {
+      pin,
+      route: {
+        params: { onSuccess },
+      },
+    } = this.props;
     const { userCode } = this.state;
 
-    const passedCode = pin === userCode;
-
-    if (passedCode) {
+    if (pin === userCode) {
       onSuccess();
     } else {
       this.onError();
@@ -99,7 +100,6 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     const { userCode, numberAttempt } = this.state;
     const { children, title } = this.props.route.params;
     const allowConfirm = numberAttempt < CONST.emailCodeErrorMax;
-
     return (
       <ScreenTemplate
         noScroll
