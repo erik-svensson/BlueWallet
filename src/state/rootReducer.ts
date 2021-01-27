@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { Filters } from 'app/consts';
+import { createPersistReducer } from 'app/helpers/reduxPersist';
 
 import { appSettingsReducer, AppSettingsState } from './appSettings/reducer';
 import { AuthenticationState, authenticationReducer } from './authentication/reducer';
@@ -29,7 +30,20 @@ export interface ApplicationState {
   notifications: NotificationState;
 }
 
-export const rootReducer = combineReducers({
+const persistConfig = {
+  key: 'root',
+  blacklist: [
+    'wallets',
+    'authenticators',
+    'authentication',
+    'electrumX',
+    'filters',
+    'toastMessages',
+    NOTIFICATIONS_REDUCER_NAME,
+  ],
+};
+
+const rootReducer = combineReducers({
   contacts: contactsReducer,
   transactions: transactionsNotesReducer,
   appSettings: appSettingsReducer,
@@ -42,3 +56,5 @@ export const rootReducer = combineReducers({
   toastMessages: toastMessageReducer,
   [NOTIFICATIONS_REDUCER_NAME]: notificationReducer,
 });
+
+export const persistedReducer = createPersistReducer(rootReducer, persistConfig);
