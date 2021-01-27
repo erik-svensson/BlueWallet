@@ -27,31 +27,28 @@ export const subscribeWallet = (data: WalletPayload) => {
 // }
 
 export const checkWalletsSubscription = (data: AirdropCheckWalletsSubscription) => {
-  return new Promise(resolve => {
-    setTimeout(resolve({ result: [true] }), Math.random() * 1000);
-  });
+  return { result: [true, true] };
   // return api.post(`check_subscription`, data);
 };
 
-// TODO:
-// // naliczanie bonusu dla walletu który zasherował na mediach społecznościowych
-// POST /share
-// {
-//  hash: string
-// }
-// Response:
-// {
-//   result: string // success or error
-//   msg?:	string // error description
-// }
+export const share = (data: { hash: string }) => {
+  // hash of wallet from which user shared ^
+  return { result: 'success' };
+  // Response:
+  // {
+  //   result: string // success or error
+  //   msg?:	string // error description
+  // }
+  // return api.post(`share`, data);
+};
 
-// // sprawdzanie balansu walletów w momencie rozdawania airdropu
-// POST /check_balances
-// {
-//  hashes:	[string]
-// }
-// Response:
-// {
-//   result: [120000000, null, 5200000000, 21000000000] | 'error' // null dla walletów które nie wzięły udział w airdropie
-//   msg?:	string // error description
-// }
+export const check_balances = (data: { hashes: string[] }) => {
+  return { result: [120000000, null, 5200000000, 21000000000] };
+
+  // Response:
+  // {
+  //   result: [120000000, null, 5200000000, 21000000000] | 'error' // null dla walletów które nie wzięły udział w airdropie
+  //   msg?:	string // error description
+  // }
+  // return api.post(`check_balances`, data);
+};
