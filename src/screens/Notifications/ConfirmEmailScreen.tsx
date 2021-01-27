@@ -146,7 +146,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onError = () => {
-    if (this.props.notificationError === messages.alreadySubscribedReadable) {
+    if (this.props.notificationError === messages.alreadySubscribed) {
       return this.setState({
         error: this.props.notificationError,
         code: '',
