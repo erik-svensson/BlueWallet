@@ -6,7 +6,7 @@ import Carousel from 'react-native-snap-carousel';
 
 import { images } from 'app/assets';
 import { Image, Countdown, AirdropWalletsList, AirdropWalletsCarousel } from 'app/components';
-import { CONST, Route, RootStackParams, Wallet } from 'app/consts';
+import { CONST, Route, RootStackParams, Wallet, AirdropWalletCardData } from 'app/consts';
 import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { typography, palette } from 'app/styles';
 
@@ -25,9 +25,9 @@ interface Props {
 }
 
 export const AirdropInProgress: FC<Props> = ({ navigation, subscribedWallets, availableWallets, subscribeWallet }) => {
-  let _carouselRef: Carousel<{ balance: number; label: string }>;
+  let _carouselRef: Carousel<AirdropWalletCardData>;
 
-  const setRef = (carouselRef: Carousel<{ balance: number; label: string }>) => {
+  const setRef = (carouselRef: Carousel<AirdropWalletCardData>) => {
     _carouselRef = carouselRef;
   };
 

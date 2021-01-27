@@ -62,6 +62,11 @@ export const WALLETS_ADDRESSES_TYPES = {
   [SegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
 };
 
+export interface AirdropWalletCardData {
+  balance: number;
+  label: string;
+}
+
 export interface AirdropGoal {
   name: string;
   threshold: number;

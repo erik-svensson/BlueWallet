@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
-import { CONST, AirdropGoal } from 'app/consts';
+import { CONST, AirdropGoal, AirdropWalletCardData } from 'app/consts';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
 import { typography, palette } from 'app/styles';
 
@@ -10,7 +10,7 @@ import { AirdropWalletBalance } from './AirdropWalletBalance';
 const i18n = require('../../loc');
 
 interface Props {
-  data: { balance: number; label: string };
+  data: AirdropWalletCardData;
 }
 
 export const AirdropWalletBalanceCard: FC<Props> = ({ data }) => {

@@ -5,7 +5,7 @@ import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native'
 
 import { images } from 'app/assets';
 import { AirdropStayTuned, AirdropWalletsList, Image } from 'app/components';
-import { RootStackParams, Route } from 'app/consts';
+import { RootStackParams, Route, AirdropWalletCardData } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../../loc');
@@ -18,20 +18,20 @@ interface Props {
 }
 
 interface CallToActionProps {
-  wallet: { balance: number; label: string };
+  data: AirdropWalletCardData;
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
     StackNavigationProp<RootStackParams, Route.AirdropDashboard>
   >;
 }
 
-const CallToAction: FC<CallToActionProps> = ({ wallet, navigation }) => {
-  const goToWalletDetails = (wallet: { balance: number; label: string }) => {
-    navigation.navigate(Route.AirdropFinishedWalletDetails, { balance: wallet.balance, label: wallet.label });
+const CallToAction: FC<CallToActionProps> = ({ data, navigation }) => {
+  const goToWalletDetails = (data: AirdropWalletCardData) => {
+    navigation.navigate(Route.AirdropFinishedWalletDetails, { balance: data.balance, label: data.label });
   };
 
   return (
-    <TouchableOpacity style={styles.arrowContainer} testID="forward-button" onPress={() => goToWalletDetails(wallet)}>
+    <TouchableOpacity style={styles.arrowContainer} testID="forward-button" onPress={() => goToWalletDetails(data)}>
       <Image style={styles.image} source={images.forwardArrow} />
     </TouchableOpacity>
   );
@@ -65,7 +65,7 @@ export const AirdropFinished: FC<Props> = ({ navigation }) => {
             ]
           }
           title={i18n.airdrop.finished.registeredWallets}
-          itemCallToAction={wallet => <CallToAction wallet={wallet} navigation={navigation} />}
+          itemCallToAction={data => <CallToAction data={data} navigation={navigation} />}
         />
       </View>
     </View>
