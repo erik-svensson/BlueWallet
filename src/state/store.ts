@@ -1,9 +1,8 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import { applyMiddleware, compose, createStore, Middleware, Store } from 'redux';
-import { persistReducer, persistStore } from 'redux-persist';
+import { persistStore } from 'redux-persist';
 import createSagaMiddleware from 'redux-saga';
 
-import { rootReducer, ApplicationState, rootSaga } from '.';
+import { persistedReducer, ApplicationState, rootSaga } from '.';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -18,14 +17,6 @@ function bindMiddleware(middleware: Middleware[]) {
 
   return applyMiddleware(...middlewares);
 }
-
-const persistConfig = {
-  key: 'root',
-  storage: AsyncStorage,
-  blacklist: ['wallets', 'authenticators', 'authentication', 'electrumX', 'filters', 'toastMessages'],
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const configureStore = (): Store<ApplicationState> => createStore(persistedReducer, bindMiddleware(middlewares));
 

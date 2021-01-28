@@ -21,8 +21,13 @@ export enum NotificationAction {
   CheckSubscriptionAction = 'CheckSubscriptionAction',
   CheckSubscriptionSuccessAction = 'CheckSubscriptionSuccessAction',
   CheckSubscriptionFailureAction = 'CheckSubscriptionFailureAction',
+  SetErrorAction = 'SetErrorAction',
 }
 
+export interface SetErrorAction {
+  type: NotificationAction.SetErrorAction;
+  error: string;
+}
 export interface CreateNotificationEmailAction {
   type: NotificationAction.CreateNotificationEmail;
   payload: {
@@ -145,9 +150,11 @@ export type NotificationActionType =
   | AuthenticateEmailFailureAction
   | CheckSubscriptionAction
   | CheckSubscriptionSuccessAction
-  | CheckSubscriptionFailureAction;
+  | CheckSubscriptionFailureAction
+  | SetErrorAction;
 
-export const createNotificationEmail = (email: string, meta?: ActionMeta): CreateNotificationEmailAction => ({
+export type CreateNotificationEmailActionFunction = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
+export const createNotificationEmail: CreateNotificationEmailActionFunction = (email, meta) => ({
   type: NotificationAction.CreateNotificationEmail,
   payload: { email },
   meta,
@@ -248,5 +255,11 @@ export const checkSubscriptionSuccess = (subscribedIds: string[]): CheckSubscrip
 
 export const checkSubscriptionFailure = (error: string): CheckSubscriptionFailureAction => ({
   type: NotificationAction.CheckSubscriptionFailureAction,
+  error,
+});
+
+export type SetErrorActionFunction = (error: string) => SetErrorAction;
+export const setError: SetErrorActionFunction = error => ({
+  type: NotificationAction.SetErrorAction,
   error,
 });

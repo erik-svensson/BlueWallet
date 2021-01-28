@@ -1,4 +1,8 @@
+import { createPersistReducer } from 'app/helpers/reduxPersist';
+
 import { NotificationAction, NotificationActionType } from './actions';
+
+export const NOTIFICATIONS_REDUCER_NAME = 'notifications';
 
 export interface NotificationState {
   email: string;
@@ -15,12 +19,12 @@ const initialState: NotificationState = {
   email: '',
   pin: '',
   isNotificationEmailSet: false,
-  isLoading: true,
+  isLoading: false,
   sessionToken: '',
   subscribedIds: [],
 };
 
-export const notificationReducer = (state = initialState, action: NotificationActionType): NotificationState => {
+const reducer = (state = initialState, action: NotificationActionType): NotificationState => {
   switch (action.type) {
     case NotificationAction.CreateNotificationEmailSuccess:
       return {
@@ -36,6 +40,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
       return {
         ...state,
         error: action.error,
+        isLoading: false,
       };
     case NotificationAction.DeleteNotificationEmailAction:
       return {
@@ -43,10 +48,16 @@ export const notificationReducer = (state = initialState, action: NotificationAc
         email: '',
         pin: '',
       };
+    case NotificationAction.VerifyNotificationEmailAction:
+      return {
+        ...state,
+        isLoading: true,
+      };
     case NotificationAction.VerifyNotificationEmailActionSuccess:
       return {
         ...state,
         pin: action.payload.pin,
+        isLoading: false,
       };
     case NotificationAction.SubscribeWalletSuccessAction:
       return {
@@ -70,6 +81,7 @@ export const notificationReducer = (state = initialState, action: NotificationAc
     case NotificationAction.UnsubscribeWalletFailureAction:
     case NotificationAction.AuthenticateEmailFailureAction:
     case NotificationAction.CheckSubscriptionFailureAction:
+    case NotificationAction.SetErrorAction:
       return {
         ...state,
         error: action.error,
@@ -86,3 +98,8 @@ export const notificationReducer = (state = initialState, action: NotificationAc
       return state;
   }
 };
+
+export const notificationReducer = createPersistReducer(reducer, {
+  key: NOTIFICATIONS_REDUCER_NAME,
+  whitelist: ['email', 'isNotificationEmailSet'],
+});

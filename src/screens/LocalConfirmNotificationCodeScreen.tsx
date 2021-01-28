@@ -11,6 +11,8 @@ import { selectors as notificationSelectors } from 'app/state/notifications';
 import {
   verifyNotificationEmail as verifyNotificationEmailAction,
   VerifyNotificationEmailActionFunction,
+  SetErrorActionFunction,
+  setError as setErrorAction,
 } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
 
@@ -19,7 +21,6 @@ const i18n = require('../../loc');
 type State = {
   userCode: string;
   numberAttempt: number;
-  localError: string;
 };
 
 interface Props {
@@ -28,6 +29,7 @@ interface Props {
   pin: string;
   error: string;
   email: string;
+  setError: SetErrorActionFunction;
   verifyNotificationEmail: VerifyNotificationEmailActionFunction;
 }
 
@@ -35,21 +37,24 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   state = {
     userCode: '',
     numberAttempt: 0,
-    localError: '',
   };
 
+  componentWillUnmount() {
+    this.props.setError('');
+  }
+
   setCode = (userCode: string) => {
-    this.setState({ userCode, localError: '' });
+    this.setState({ userCode });
   };
 
   resendCode = (error = '') => {
-    const { verifyNotificationEmail } = this.props;
+    const { verifyNotificationEmail, setError } = this.props;
     const { email } = this.props.route.params;
 
     verifyNotificationEmail(email, {
       onSuccess: () => {
+        setError(error);
         this.setState({
-          localError: error,
           userCode: '',
           numberAttempt: 0,
         });
@@ -63,11 +68,13 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     if (numberFail === CONST.emailCodeErrorMax) {
       this.resendCode(i18n.onboarding.resendCodeError);
     } else {
-      this.setState({
-        numberAttempt: numberFail,
-        localError: i18n.formatString(i18n.onboarding.validationCodeError, {
+      this.props.setError(
+        i18n.formatString(i18n.onboarding.validationCodeError, {
           numberAttempt: CONST.emailCodeErrorMax - numberFail,
         }),
+      );
+      this.setState({
+        numberAttempt: numberFail,
         userCode: '',
       });
     }
@@ -89,15 +96,9 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     }
   };
 
-  get error() {
-    const { error } = this.props;
-    const { localError } = this.state;
-
-    return error || localError;
-  }
-
   render() {
     const { userCode, numberAttempt } = this.state;
+    const { error } = this.props;
     const { children, title } = this.props.route.params;
     const allowConfirm = numberAttempt < CONST.emailCodeErrorMax;
     return (
@@ -127,7 +128,7 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
         <View style={styles.codeContainer}>
           <CodeInput value={this.state.userCode} testID="confirm-code" onTextChange={this.setCode} />
           <Text testID="invalid-code-message" style={styles.errorText}>
-            {this.error}
+            {error}
           </Text>
         </View>
       </ScreenTemplate>
@@ -142,6 +143,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 
 const mapDispatchToProps = {
   verifyNotificationEmail: verifyNotificationEmailAction,
+  setError: setErrorAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocalConfirmNotificationCodeScreen);
