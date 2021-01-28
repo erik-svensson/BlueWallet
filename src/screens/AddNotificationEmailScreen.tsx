@@ -34,6 +34,7 @@ interface Props {
   error: string;
   isLoading: boolean;
   checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
+  storedEmail: string;
 }
 
 type State = {
@@ -86,7 +87,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   onConfirm = () => {
     const { email } = this.state;
-    const { navigation, route, checkSubscription, wallets, setError } = this.props;
+    const { navigation, route, checkSubscription, wallets, setError, storedEmail } = this.props;
     const { onSuccess } = route.params;
 
     if (!isEmail(email)) {
@@ -98,6 +99,16 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     checkSubscription(wallets, email, {
       onSuccess: (ids: string[]) => {
         const walletsToSubscribe = wallets.filter(w => !ids.includes(w.id));
+        const subscribedWallets = wallets.filter(w => !ids.includes(w.id));
+        if (storedEmail && subscribedWallets) {
+          return navigation.navigate(Route.ConfirmEmail, {
+            // TODO the way is closed - for now backend doesn't allow us to subscribe wallets to more then one email - still, we need another endpoint to unsubscribe and subscribe wallets with one token.
+            email,
+            flowType: ConfirmAddressFlowType.SUBSCRIBE,
+            onSuccess,
+            walletsToSubscribe: subscribedWallets,
+          });
+        }
         if (!walletsToSubscribe.length) {
           return this.goToLocalEmailConfirm();
         }
@@ -195,6 +206,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isLoading: notificationsSelectors.isLoading(state),
   error: notificationsSelectors.readableError(state),
+  storedEmail: notificationsSelectors.storedEmail(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);
