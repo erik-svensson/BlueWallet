@@ -62,6 +62,7 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         ...state,
         pin: action.payload.pin,
         isLoading: false,
+        error: '',
       };
     case NotificationAction.SubscribeWalletSuccessAction:
     case NotificationAction.UnsubscribeWalletSuccessAction:
