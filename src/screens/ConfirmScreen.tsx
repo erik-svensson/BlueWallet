@@ -36,7 +36,7 @@ export const ConfirmScreen = ({
     const _timeoutId = setTimeout(() => {
       setClicked(false);
     }, BUTTON_BLOCKED_TIME);
-    setTimeoutId(_timeoutId);
+    setTimeoutId(Number(_timeoutId));
   };
 
   const onNoPress = () => {
