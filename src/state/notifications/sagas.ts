@@ -58,8 +58,6 @@ export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailActi
     const verifyCode = yield call(verifyEmail, { email });
     if (verifyCode.result === Result.success) {
       const decryptedCode = yield decryptCode(email, verifyCode.pin);
-      console.log('decryptedCode', decryptedCode);
-
       yield put(verifyNotificationEmailSuccess(decryptedCode));
     } else {
       throw new Error('Your email cannot be verified');

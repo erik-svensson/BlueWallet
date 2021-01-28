@@ -13,7 +13,7 @@ interface Props {
   route: RouteProp<RootStackParams, Route.Confirm>;
 }
 
-const BUTTON_BLOCKED_TIME = 500;
+const BUTTON_BLOCKED_TIME = 1000;
 
 export const ConfirmScreen = ({
   navigation,
@@ -28,7 +28,7 @@ export const ConfirmScreen = ({
     return () => {
       timeoutId && clearTimeout(timeoutId);
     };
-  });
+  }, [timeoutId]);
 
   const onYesPress = (callback: () => void) => {
     setClicked(true);
