@@ -237,6 +237,7 @@ module.exports = {
     wrongMnemonicDesc:
       'Your mnemonic does not match any supported wallet. You are trying to import an invalid mnemonic or wallet that has never been used',
     goToWalletDetails: 'Go to Wallet Details',
+    successSubscription: 'Hooray!\n You have successfully subscribed to notifications.',
   },
   notifications: {
     addYourAddress: 'Add your email address',

@@ -86,34 +86,46 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     </>
   );
 
+  navigateToSuccesfullNotificationSubscriptionMessage = () => {
+    const { navigation } = this.props;
+    CreateMessage({
+      title: i18n.contactDelete.success,
+      description: i18n.message.successSubscription,
+      type: MessageType.success,
+      buttonProps: {
+        title: i18n.onboarding.successCompletedButton,
+        onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+      },
+    });
+  };
+
+  navigateToConfirmEmailSubscription = (wallet: Wallet) => {
+    const { navigation, email } = this.props;
+
+    navigation.navigate(Route.Confirm, {
+      title: i18n.notifications.notifications,
+      children: this.renderConfirmScreenContent(),
+      onConfirm: () =>
+        navigation.navigate(Route.ConfirmEmail, {
+          email,
+          flowType: ConfirmAddressFlowType.SUBSCRIBE,
+          walletsToSubscribe: [wallet],
+          onSuccess: this.navigateToSuccesfullNotificationSubscriptionMessage,
+        }),
+      onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+      isBackArrow: false,
+    });
+  };
+
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
     const { navigation, createWallet, email } = this.props;
-    wallet.setLabel(label || i18n.wallets.details.title);
+    wallet.setLabel(label);
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
           secret: w.getSecret(),
-          onButtonPress: !!email
-            ? () =>
-                navigation.navigate(Route.Confirm, {
-                  title: i18n.notifications.notifications,
-                  children: this.renderConfirmScreenContent(),
-                  onConfirm: () =>
-                    navigation.navigate(Route.ConfirmEmail, {
-                      email,
-                      flowType: ConfirmAddressFlowType.SUBSCRIBE,
-                      walletsToSubscribe: [wallet],
-                      // onBack: () =>
-                      //   navigation.navigate(Route.WalletDetails, {
-                      //     id: wallet.id,
-                      //   }),
-                    }),
-                  onBack: () =>
-                    this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
-                  isBackArrow: false,
-                })
-            : undefined,
+          onButtonPress: !!email ? () => this.navigateToConfirmEmailSubscription(wallet) : undefined,
         });
       },
       onFailure: () => onError(),

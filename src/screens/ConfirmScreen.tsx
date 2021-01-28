@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
@@ -13,21 +13,30 @@ interface Props {
   route: RouteProp<RootStackParams, Route.Confirm>;
 }
 
+const BUTTON_BLOCKED_TIME = 500;
+
 export const ConfirmScreen = ({
   navigation,
   route: {
     params: { onConfirm, title, onBack, children, isBackArrow },
   },
 }: Props) => {
-  const buttonBlockedTime = 500;
   const [clicked, setClicked] = useState(false);
+  const [timeoutId, setTimeoutId] = useState(0);
+
+  useEffect(() => {
+    return () => {
+      timeoutId && clearTimeout(timeoutId);
+    };
+  });
 
   const onYesPress = (callback: () => void) => {
     setClicked(true);
     callback();
-    setTimeout(() => {
+    const _timeoutId = setTimeout(() => {
       setClicked(false);
-    }, buttonBlockedTime);
+    }, BUTTON_BLOCKED_TIME);
+    setTimeoutId(_timeoutId);
   };
 
   const onNoPress = () => {
