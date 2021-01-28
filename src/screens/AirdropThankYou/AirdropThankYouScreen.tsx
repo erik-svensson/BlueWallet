@@ -7,7 +7,7 @@ import { ScreenTemplate, Button, Header } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { actions, selectors } from 'app/state/airdrop';
-import { ThankYouSeenAction } from 'app/state/airdrop/actions';
+import { MarkThankYouSeenActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -17,7 +17,7 @@ interface MapStateProps {
 }
 
 interface ActionProps {
-  markThankYouSeen: () => ThankYouSeenAction;
+  markThankYouSeen: MarkThankYouSeenActionCreator;
 }
 
 type Props = {

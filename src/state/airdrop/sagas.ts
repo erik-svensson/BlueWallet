@@ -42,13 +42,13 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   } = action;
 
   try {
-    const walletsWithHashes = yield Promise.all(
-      wallets.map(async (wallet: Wallet) => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
-    );
-    const hashes = walletsWithHashes.map((wallet: Wallet) => wallet.hash);
     const ids: string[] = [];
 
-    if (hashes.length > 0) {
+    if (wallets.length > 0) {
+      const walletsWithHashes = yield Promise.all(
+        wallets.map(async (wallet: Wallet) => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
+      );
+      const hashes = walletsWithHashes.map((wallet: Wallet) => wallet.hash);
       const response = yield call(checkWalletsSubscription, { hashes });
 
       if (response.result === 'error') {

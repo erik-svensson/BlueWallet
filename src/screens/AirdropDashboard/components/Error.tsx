@@ -11,8 +11,8 @@ export const Error: FC = () => {
   return (
     <View style={styles.errorContainer}>
       <Image source={images.airdrop} style={styles.airdropImage} />
-      <Text style={styles.boldDescription}>{i18n.airdrop.dashboard.connectionError1}</Text>
-      <Text style={styles.description}>{i18n.airdrop.dashboard.connectionError2}</Text>
+      <Text style={styles.boldDescription}>{i18n.airdrop.dashboard.cantConnectToServerLine1}</Text>
+      <Text style={styles.description}>{i18n.airdrop.dashboard.cantConnectToServerLine2}</Text>
     </View>
   );
 };

@@ -56,40 +56,56 @@ export interface CheckSubscriptionSuccessAction {
   payload: { subscribedIds: string[] };
 }
 
-export const markThankYouSeen = (): ThankYouSeenAction => ({
+export type MarkThankYouSeenActionCreator = () => ThankYouSeenAction;
+
+export const markThankYouSeen: MarkThankYouSeenActionCreator = () => ({
   type: AirdropAction.ThankYouSeen,
 });
 
-export const completeThankYouFlow = (): ThankYouFlowCompleted => ({
+export type CompleteThankYouFlowActionCreator = () => ThankYouFlowCompleted;
+
+export const completeThankYouFlow: CompleteThankYouFlowActionCreator = () => ({
   type: AirdropAction.ThankYouFlowCompleted,
 });
 
-export const subscribeWallet = (payload: { wallet: WalletPayload; id: string }): SubscribeWalletAction => ({
+export type SubscribeWalletActionCreator = (payload: { wallet: WalletPayload; id: string }) => SubscribeWalletAction;
+
+export const subscribeWallet: SubscribeWalletActionCreator = payload => ({
   type: AirdropAction.SubscribeWallet,
   payload,
 });
 
-export const subscribeWalletSuccess = (id: string): SubscribeWalletSuccessAction => ({
+export type SubscribeWalletSuccessActionCreator = (id: string) => SubscribeWalletSuccessAction;
+
+export const subscribeWalletSuccess: SubscribeWalletSuccessActionCreator = id => ({
   type: AirdropAction.SubscribeWalletSuccess,
   payload: { id },
 });
+
+export type SubscribeWalletFailureActionCreator = (error: string) => SubscribeWalletFailureAction;
 
 export const subscribeWalletFailure = (error: string): SubscribeWalletFailureAction => ({
   type: AirdropAction.SubscribeWalletFailure,
   error,
 });
 
-export const checkSubscription = (wallets: Wallet[]): CheckSubscriptionAction => ({
+export type CheckSubscriptionActionCreator = (wallets: Wallet[]) => CheckSubscriptionAction;
+
+export const checkSubscription: CheckSubscriptionActionCreator = wallets => ({
   type: AirdropAction.CheckSubscription,
   payload: { wallets },
 });
 
-export const checkSubscriptionSuccess = (subscribedIds: string[]): CheckSubscriptionSuccessAction => ({
+export type CheckSubscriptionSuccessActionCreator = (subscribedIds: string[]) => CheckSubscriptionSuccessAction;
+
+export const checkSubscriptionSuccess: CheckSubscriptionSuccessActionCreator = subscribedIds => ({
   type: AirdropAction.CheckSubscriptionSuccess,
   payload: { subscribedIds },
 });
 
-export const checkSubscriptionFailure = (error: string): CheckSubscriptionFailureAction => ({
+export type CheckSubscriptionFailureActionCreator = (error: string) => CheckSubscriptionFailureAction;
+
+export const checkSubscriptionFailure: CheckSubscriptionFailureActionCreator = error => ({
   type: AirdropAction.CheckSubscriptionFailure,
   error,
 });
