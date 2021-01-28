@@ -50,6 +50,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   }
 
   setEmail = (email: string): void => {
+    this.props.setError('');
     this.setState({
       email,
     });
@@ -126,8 +127,15 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { email } = this.state;
     const { error, route, isLoading } = this.props;
 
-    const { onSkipSuccess, title, isBackArrow, description, inputAutofocus } = route.params;
-
+    const {
+      onSkipSuccess,
+      title,
+      isBackArrow,
+      description,
+      subTitle,
+      inputAutofocus,
+      additionalContent,
+    } = route.params;
     return (
       <ScreenTemplate
         noScroll
@@ -154,9 +162,10 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         header={<Header title={title} isBackArrow={isBackArrow} />}
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.notifications.addYourEmailFor}</Text>
+          <Text style={typography.headline4}>{subTitle}</Text>
           <Text style={styles.pinDescription}>{description}</Text>
         </View>
+        {additionalContent}
         <View style={styles.inputItemContainer}>
           <InputItem
             value={email}
@@ -185,7 +194,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isLoading: notificationsSelectors.isLoading(state),
-  error: notificationsSelectors.notificationError(state),
+  error: notificationsSelectors.readableError(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);

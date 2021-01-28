@@ -64,8 +64,9 @@ export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailActi
     if (meta?.onSuccess) {
       meta.onSuccess();
     }
-  } catch (e) {
-    yield put(verifyNotificationEmailFailure(e.message));
+  } catch (error) {
+    const { msg } = error.response.data;
+    yield put(verifyNotificationEmailFailure(msg));
     if (meta?.onFailure) {
       meta.onFailure();
     }

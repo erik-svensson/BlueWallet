@@ -48,7 +48,6 @@ import {
   NotificationScreen,
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
-  ChangeEmailScreen,
   CreateTransactionPassword,
   ConfirmTransactionPassword,
   LocalConfirmNotificationCodeScreen,
@@ -167,7 +166,6 @@ export const RootNavigator: FC<Props> = ({
       <Stack.Screen name={Route.ChunkedQrCode} component={ChunkedQrCode} />
       <Stack.Screen name={Route.Notifications} component={NotificationScreen} />
       <Stack.Screen name={Route.ConfirmEmail} component={ConfirmEmailScreen} />
-      <Stack.Screen name={Route.ChangeEmail} component={ChangeEmailScreen} />
     </Stack.Navigator>
   );
 };

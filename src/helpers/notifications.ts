@@ -21,6 +21,7 @@ export const getOnboardingAddEmailParams = (): AddNotificationEmailParams => ({
   inputAutofocus: false,
   isBackArrow: false,
   title: i18n.onboarding.onboarding,
+  subTitle: i18n.notifications.addYourEmailFor,
   description: i18n.onboarding.addNotificationEmailDescription,
   onSuccess: () => {
     CreateMessage({
@@ -44,6 +45,7 @@ export const getAppUpdateAddEmailParams = (): AddNotificationEmailParams => ({
   inputAutofocus: false,
   isBackArrow: false,
   title: i18n.notifications.notifications,
+  subTitle: i18n.notifications.addYourEmailFor,
   description: i18n.onboarding.addNotificationEmailDescription,
   onSuccess: () => {
     CreateMessage({

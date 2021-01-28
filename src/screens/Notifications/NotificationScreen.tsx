@@ -36,10 +36,34 @@ export class NotificationScreen extends Component<Props> {
     !!email && wallets.length && checkSubscription(wallets, email);
   }
 
-  onChangeEmailPress = () =>
-    this.props.navigation.navigate(Route.ChangeEmail, {
-      email: this.props.email,
+  onChangeEmailPress = () => {
+    this.props.navigation.navigate(Route.AddNotificationEmail, {
+      title: i18n.notifications.notifications,
+      subTitle: i18n.notifications.changeEmailTitle,
+      description: i18n.notifications.changeEmailDescription,
+      isBackArrow: true,
+      additionalContent: (
+        <View style={styles.currentAddress}>
+          <Text style={styles.inputLabel}>{i18n.notifications.yourCurrentEmail}</Text>
+          <Text style={styles.email}>{this.props.email}</Text>
+        </View>
+      ),
+      onSuccess: () => {
+        CreateMessage({
+          title: i18n.contactCreate.successTitle,
+          description: i18n.notifications.emailChangedSuccessMessage,
+          type: MessageType.success,
+          buttonProps: {
+            title: i18n.notifications.goToNotifications,
+            onPress: () => {
+              this.props.navigation.navigate(Route.Notifications, {});
+            },
+          },
+        });
+      },
+      onSkipSuccess: undefined,
     });
+  };
 
   renderConfirmScreenContent = () => (
     <>
@@ -104,6 +128,7 @@ export class NotificationScreen extends Component<Props> {
     this.props.navigation.navigate(Route.AddNotificationEmail, {
       inputAutofocus: true,
       title: i18n.notifications.notifications,
+      subTitle: i18n.notifications.addYourEmailFor,
       isBackArrow: true,
       description: i18n.notifications.addYourEmailForDescription,
       onSuccess: () => {
@@ -170,7 +195,7 @@ export class NotificationScreen extends Component<Props> {
           <>
             <Text style={styles.title}>{i18n.notifications.title}</Text>
             <Text style={styles.description}>{i18n.notifications.description}</Text>
-            <View style={styles.amountAddress}>
+            <View style={styles.currentAddress}>
               <Text style={styles.email}>{this.props.email}</Text>
             </View>
             {!!subscribedWallets.length && (
@@ -247,8 +272,13 @@ const styles = StyleSheet.create({
   itemRow: {
     marginVertical: 8,
   },
-  amountAddress: { width: '100%', borderBottomColor: palette.grey, borderBottomWidth: 1, paddingBottom: 10 },
-  email: { ...typography.caption, color: palette.textGrey },
+  currentAddress: {
+    width: '100%',
+    borderBottomColor: palette.grey,
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+  },
+  email: { ...typography.caption, color: palette.textBlack },
   noWalletsContainer: {
     flex: 1,
     alignItems: 'center',
@@ -272,4 +302,9 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
+  inputLabel: {
+    ...typography.overline,
+    color: palette.textGrey,
+    marginBottom: 4,
+  },
 });

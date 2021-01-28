@@ -168,7 +168,6 @@ export enum Route {
   Notifications = 'Notifications',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
-  ChangeEmail = 'ChangeEmail',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -372,11 +371,13 @@ export type MainTabNavigatorParams = {
 
 export interface AddNotificationEmailParams {
   title: string;
+  subTitle: string;
   onSuccess: () => void;
   isBackArrow: boolean;
   description: string;
   onSkipSuccess?: () => void;
   inputAutofocus: boolean;
+  additionalContent?: React.ReactNode;
 }
 
 export type RootStackParams = {
@@ -532,9 +533,6 @@ export type RootStackParams = {
     wallets?: Wallet[];
     onBack?: () => void;
     onSuccess: () => void;
-  };
-  [Route.ChangeEmail]: {
-    email: string;
   };
 };
 
