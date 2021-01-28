@@ -142,10 +142,16 @@ export class NotificationScreen extends Component<Props> {
     );
 
   render() {
-    const { subscribedWallets, email } = this.props;
+    const { subscribedWallets, email, navigation } = this.props;
     return (
       <ScreenTemplate
-        header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
+        header={
+          <Header
+            isBackArrow={true}
+            onBackArrow={() => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings })}
+            title={i18n.settings.notifications}
+          />
+        }
         noScroll
         footer={this.renderFooter()}
       >

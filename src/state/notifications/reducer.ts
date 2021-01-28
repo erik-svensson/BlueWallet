@@ -35,6 +35,10 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         isLoading: false,
         pin: '',
       };
+    case NotificationAction.SubscribeWalletFailureAction:
+    case NotificationAction.UnsubscribeWalletFailureAction:
+    case NotificationAction.AuthenticateEmailFailureAction:
+    case NotificationAction.CheckSubscriptionFailureAction:
     case NotificationAction.CreateNotificationEmailFailure:
     case NotificationAction.VerifyNotificationEmailActionFailure:
       return {
@@ -58,13 +62,9 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         ...state,
         pin: action.payload.pin,
         isLoading: false,
+        error: '',
       };
     case NotificationAction.SubscribeWalletSuccessAction:
-      return {
-        ...state,
-        error: '',
-        sessionToken: action.payload.sessionToken,
-      };
     case NotificationAction.UnsubscribeWalletSuccessAction:
       return {
         ...state,
@@ -77,10 +77,6 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         error: '',
         sessionToken: '',
       };
-    case NotificationAction.SubscribeWalletFailureAction:
-    case NotificationAction.UnsubscribeWalletFailureAction:
-    case NotificationAction.AuthenticateEmailFailureAction:
-    case NotificationAction.CheckSubscriptionFailureAction:
     case NotificationAction.SetErrorAction:
       return {
         ...state,

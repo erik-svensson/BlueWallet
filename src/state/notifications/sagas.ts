@@ -28,8 +28,6 @@ import {
   subscribeWalletFailure,
 } from './actions';
 
-const i18n = require('../../../loc');
-
 enum Result {
   error = 'error',
   success = 'success',
@@ -81,7 +79,7 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
       yield put(subscribeWalletSuccess(response.session_token));
     }
   } catch (error) {
-    yield put(subscribeWalletFailure(error.msg));
+    yield put(subscribeWalletFailure(error.message));
   }
 }
 

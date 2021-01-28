@@ -159,59 +159,61 @@ export class ImportWalletScreen extends Component<Props, State> {
     </>
   );
 
+  navigateToConfirmEmailSubscription = (wallet: Wallet) => {
+    const { navigation, email } = this.props;
+
+    navigation.navigate(Route.Confirm, {
+      title: i18n.notifications.notifications,
+      children: this.renderConfirmScreenContent(),
+      onConfirm: () =>
+        navigation.navigate(Route.ConfirmEmail, {
+          email,
+          flowType: ConfirmAddressFlowType.SUBSCRIBE,
+          walletsToSubscribe: [wallet],
+          onSuccess: this.showSuccessImportMessageScreen,
+        }),
+      onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+      isBackArrow: false,
+    });
+  };
+
+  importWallet = (wallet: Wallet, onSuccess: () => void) => {
+    const { importWallet } = this.props;
+    importWallet(wallet, {
+      onSuccess,
+      onFailure: (error: string) =>
+        this.showErrorMessageScreen({
+          description: error,
+        }),
+    });
+  };
+
   saveWallet = async (newWallet: any) => {
-    const { importWallet, wallets, email, checkSubscription } = this.props;
+    const { wallets, email, checkSubscription } = this.props;
     if (wallets.some(wallet => wallet.secret === newWallet.secret)) {
-      this.showErrorMessageScreen({
+      return this.showErrorMessageScreen({
         title: i18n.wallets.importWallet.walletInUseValidationError,
         description: i18n.wallets.importWallet.walletInUseValidationError,
         onPress: () => this.navigateToImportWallet(),
         buttonTitle: i18n.message.returnToWalletImport,
       });
-    } else {
-      newWallet.setLabel(this.state.label || i18n.wallets.import.imported + ' ' + newWallet.typeReadable);
-      !email
-        ? importWallet(newWallet, {
-            onSuccess: () => {
-              this.showSuccessImportMessageScreen();
-            },
-            onFailure: (error: string) =>
-              this.showErrorMessageScreen({
-                description: error,
-              }),
-          })
-        : checkSubscription([newWallet], email, {
-            onSuccess: (ids: string[]) => {
-              const isWalletSubscribed = ids.some(id => id === newWallet.id);
-              importWallet(newWallet, {
-                onSuccess: () => {
-                  !isWalletSubscribed
-                    ? this.props.navigation.navigate(Route.Confirm, {
-                        title: i18n.notifications.notifications,
-                        children: this.renderConfirmScreenContent(),
-                        onConfirm: () =>
-                          this.props.navigation.navigate(Route.ConfirmEmail, {
-                            email,
-                            flowType: ConfirmAddressFlowType.SUBSCRIBE,
-                            walletsToSubscribe: [newWallet],
-                            onBack: () =>
-                              this.props.navigation.navigate(Route.WalletDetails, {
-                                id: newWallet.id,
-                              }),
-                          }),
-                        onBack: () =>
-                          this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
-                      })
-                    : this.showSuccessImportMessageScreen();
-                },
-                onFailure: (error: string) =>
-                  this.showErrorMessageScreen({
-                    description: error,
-                  }),
-              });
-            },
-          });
     }
+    newWallet.setLabel(this.state.label);
+    if (email) {
+      return checkSubscription([newWallet], email, {
+        onSuccess: (ids: string[]) => {
+          const isWalletSubscribed = ids.some(id => id === newWallet.id);
+          this.importWallet(newWallet, () => {
+            isWalletSubscribed
+              ? this.showSuccessImportMessageScreen()
+              : this.navigateToConfirmEmailSubscription(newWallet);
+          });
+        },
+      });
+    }
+    this.importWallet(newWallet, () => {
+      this.showSuccessImportMessageScreen();
+    });
   };
 
   showAlert = (error: string) => {
@@ -300,7 +302,6 @@ export class ImportWalletScreen extends Component<Props, State> {
     }
     await wallet.generateAddresses();
     await wallet.fetchTransactions();
-
     return wallet.getTransactions().length !== 0;
   };
 
