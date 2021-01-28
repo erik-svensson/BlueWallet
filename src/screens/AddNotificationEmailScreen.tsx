@@ -5,7 +5,7 @@ import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, RootStackParams, Wallet, ActionMeta } from 'app/consts';
+import { Route, RootStackParams, Wallet, ActionMeta, ConfirmAddressFlowType } from 'app/consts';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { selectors as notificationsSelectors } from 'app/state/notifications';
@@ -27,11 +27,9 @@ const i18n = require('../../loc');
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.AddNotificationEmail>;
   route: RouteProp<RootStackParams, Route.AddNotificationEmail>;
-
   createNotificationEmail: CreateNotificationEmailActionFunction;
   setError: SetErrorActionFunction;
   verifyNotificationEmail: VerifyNotificationEmailActionFunction;
-  hasWallets: boolean;
   wallets: Wallet[];
   error: string;
   isLoading: boolean;
@@ -46,6 +44,10 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   state = {
     email: '',
   };
+
+  componentDidMount() {
+    this.props.setError('');
+  }
 
   setEmail = (email: string): void => {
     this.setState({
@@ -65,8 +67,8 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         navigation.navigate(Route.LocalConfirmNotificationCode, {
           children: (
             <View style={styles.infoContainer}>
-              <Text style={typography.headline4}>{i18n.onboarding.confirmEmail}</Text>
-              <Text style={styles.codeDescription}>{i18n.onboarding.confirmEmailDescription}</Text>
+              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
               <Text style={typography.headline5}>{email}</Text>
             </View>
           ),
@@ -83,13 +85,13 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   onConfirm = () => {
     const { email } = this.state;
-    const { navigation, hasWallets, route, checkSubscription, wallets, setError } = this.props;
+    const { navigation, route, checkSubscription, wallets, setError } = this.props;
     const { onSuccess } = route.params;
 
     if (!isEmail(email)) {
       return setError(i18n.onboarding.emailValidation);
     }
-    if (!hasWallets) {
+    if (!wallets.length) {
       return this.goToLocalEmailConfirm();
     }
     checkSubscription(wallets, email, {
@@ -99,9 +101,12 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           return this.goToLocalEmailConfirm();
         }
         navigation.navigate(Route.ChooseWalletsForNotification, {
+          flowType: ConfirmAddressFlowType.SUBSCRIBE,
+          subtitle: i18n.notifications.getNotification,
+          description: i18n.notifications.chooseWalletsDescription,
           email,
           onSuccess,
-          walletsToSubscribe,
+          wallets: walletsToSubscribe,
           onSkip: () => this.goToLocalEmailConfirm(),
         });
       },
@@ -149,7 +154,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         header={<Header title={title} isBackArrow={isBackArrow} />}
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.onboarding.notification}</Text>
+          <Text style={typography.headline4}>{i18n.notifications.addYourEmailFor}</Text>
           <Text style={styles.pinDescription}>{description}</Text>
         </View>
         <View style={styles.inputItemContainer}>
@@ -162,6 +167,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             error={error}
             secureTextEntry={false}
             autoCapitalize="none"
+            keyboardType="email-address"
           />
         </View>
       </ScreenTemplate>
@@ -177,8 +183,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-  hasWallets: walletsSelectors.hasWallets(state),
-  wallets: walletsSelectors.wallets(state),
+  wallets: walletsSelectors.subscribableWallets(state),
   isLoading: notificationsSelectors.isLoading(state),
   error: notificationsSelectors.notificationError(state),
 });

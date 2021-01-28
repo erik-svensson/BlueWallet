@@ -1,4 +1,4 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, takeLatest, put, call } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
@@ -27,6 +27,8 @@ import {
   unsubscribeWalletSuccess,
   subscribeWalletFailure,
 } from './actions';
+
+const i18n = require('../../../loc');
 
 enum Result {
   error = 'error',
@@ -138,14 +140,18 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       meta.onSuccess(ids);
     }
   } catch (error) {
-    yield put(checkSubscriptionFailure(error.msg));
+    const { msg } = error.response.data;
+    yield put(checkSubscriptionFailure(msg));
+    if (meta?.onFailure) {
+      meta.onFailure(msg);
+    }
   }
 }
 
 export default [
   takeEvery(NotificationAction.CheckSubscriptionAction, checkSubscriptionSaga),
   takeEvery(NotificationAction.CreateNotificationEmail, createNotificationEmailSaga),
-  takeEvery(NotificationAction.VerifyNotificationEmailAction, verifyNotificationEmailSaga),
+  takeLatest(NotificationAction.VerifyNotificationEmailAction, verifyNotificationEmailSaga),
   takeEvery(NotificationAction.SubscribeWalletAction, subscribeWalletSaga),
   takeEvery(NotificationAction.AuthenticateEmailAction, authenticateEmailSaga),
   takeEvery(NotificationAction.UnsubscribeWalletAction, unsubscribeWalletSaga),
