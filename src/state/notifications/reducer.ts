@@ -46,6 +46,7 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
       return {
         ...state,
         email: '',
+        pin: '',
       };
     case NotificationAction.VerifyNotificationEmailAction:
       return {
@@ -61,16 +62,19 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
     case NotificationAction.SubscribeWalletSuccessAction:
       return {
         ...state,
+        error: '',
         sessionToken: action.payload.sessionToken,
       };
     case NotificationAction.UnsubscribeWalletSuccessAction:
       return {
         ...state,
+        error: '',
         sessionToken: action.payload.sessionToken,
       };
     case NotificationAction.AuthenticateEmailSuccessAction:
       return {
         ...state,
+        error: '',
         sessionToken: '',
       };
     case NotificationAction.SubscribeWalletFailureAction:
@@ -85,6 +89,7 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
     case NotificationAction.CheckSubscriptionSuccessAction: {
       return {
         ...state,
+        error: '',
         subscribedIds: action.payload.subscribedIds,
       };
     }
