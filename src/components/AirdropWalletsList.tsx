@@ -19,7 +19,7 @@ const AirdropWalletsListItem: FC<ItemProps> = ({ wallet, callToAction }) => (
   <View style={styles.listElement}>
     <View style={styles.textContainer}>
       <Text style={styles.itemName}>{wallet.label}</Text>
-      <Text style={styles.itemDescription}>{wallet.getAddress()}</Text>
+      <Text style={styles.itemDescription}>{`${wallet.getAddress()[0]}...`}</Text>
     </View>
     {callToAction}
   </View>

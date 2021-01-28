@@ -5,8 +5,11 @@ import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native'
 
 import { images } from 'app/assets';
 import { AirdropStayTuned, AirdropWalletsList, Image } from 'app/components';
-import { RootStackParams, Route, AirdropWalletCardData } from 'app/consts';
+import { RootStackParams, Route, AirdropWalletCardData, Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
+
+import { Error } from './Error';
+import { Loading } from './Loading';
 
 const i18n = require('../../../../loc');
 
@@ -15,6 +18,9 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
     StackNavigationProp<RootStackParams, Route.AirdropDashboard>
   >;
+  error: boolean;
+  loading: boolean;
+  wallets: Wallet[];
 }
 
 interface CallToActionProps {
@@ -37,7 +43,24 @@ const CallToAction: FC<CallToActionProps> = ({ data, navigation }) => {
   );
 };
 
-export const AirdropFinished: FC<Props> = ({ navigation }) => {
+export const AirdropFinished: FC<Props> = ({ navigation, error, loading, wallets }) => {
+  const renderContent = () => {
+    if (loading) {
+      return <Loading />;
+    }
+    if (error) {
+      return <Error />;
+    }
+
+    return (
+      <AirdropWalletsList
+        wallets={wallets}
+        title={i18n.airdrop.finished.registeredWallets}
+        itemCallToAction={data => <CallToAction data={data} navigation={navigation} />}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
@@ -55,19 +78,7 @@ export const AirdropFinished: FC<Props> = ({ navigation }) => {
         </View>
       </View>
       <AirdropStayTuned />
-      <View style={styles.walletsListContainer}>
-        <AirdropWalletsList
-          wallets={
-            [
-              // TODO: connect it and put subscribedWallets here
-              // { balance: 2, label: 'Wallet name A', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
-              // { balance: 13, label: 'Wallet name B', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
-            ]
-          }
-          title={i18n.airdrop.finished.registeredWallets}
-          itemCallToAction={data => <CallToAction data={data} navigation={navigation} />}
-        />
-      </View>
+      <View style={styles.walletsListContainer}>{renderContent()}</View>
     </View>
   );
 };

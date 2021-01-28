@@ -1,30 +1,34 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
 import { images } from 'app/assets';
 import { Image, Countdown, AirdropWalletsList, AirdropWalletsCarousel } from 'app/components';
-import { CONST, Route, RootStackParams, Wallet, AirdropWalletCardData } from 'app/consts';
+import { CONST, Wallet, AirdropWalletCardData } from 'app/consts';
 import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { typography, palette } from 'app/styles';
 
-import { Footer, AvailableWalletAction, RegisteredWalletAction } from './';
+import { AvailableWalletAction, RegisteredWalletAction } from './';
+import { Error } from './Error';
+import { Loading } from './Loading';
 
 const i18n = require('../../../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
-    StackNavigationProp<RootStackParams, Route.AirdropDashboard>
-  >;
   availableWallets: Wallet[];
   subscribedWallets: Wallet[];
   subscribeWallet: (wallet: Wallet) => Promise<void>;
+  error: boolean;
+  loading: boolean;
 }
 
-export const AirdropInProgress: FC<Props> = ({ navigation, subscribedWallets, availableWallets, subscribeWallet }) => {
+export const AirdropInProgress: FC<Props> = ({
+  error,
+  loading,
+  subscribedWallets,
+  availableWallets,
+  subscribeWallet,
+}) => {
   let _carouselRef: Carousel<AirdropWalletCardData>;
 
   const setRef = (carouselRef: Carousel<AirdropWalletCardData>) => {
@@ -35,6 +39,58 @@ export const AirdropInProgress: FC<Props> = ({ navigation, subscribedWallets, av
     const snapIndex = subscribedWallets.findIndex(w => w.label === wallet.label && w.balance === wallet.balance);
 
     _carouselRef.snapToItem(snapIndex || 0, true);
+  };
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <View style={styles.loadingContainer}>
+          <Loading />
+        </View>
+      );
+    }
+    if (error) {
+      return (
+        <View style={styles.errorContainer}>
+          <Error />
+        </View>
+      );
+    }
+
+    return (
+      <>
+        {subscribedWallets?.length > 0 ? (
+          <>
+            <AirdropWalletsCarousel styles={styles.carouselStyles} items={subscribedWallets} setRef={setRef} />
+            <View style={styles.walletsListContainer}>
+              <AirdropWalletsList
+                wallets={subscribedWallets}
+                title={i18n.airdrop.dashboard.registeredWallets}
+                itemCallToAction={(wallet: Wallet) => (
+                  <RegisteredWalletAction onActionClick={() => setCarouselActiveElement(wallet)} />
+                )}
+              />
+            </View>
+          </>
+        ) : (
+          <>
+            <Image source={images.airdrop} style={styles.airdropImage} />
+            <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
+          </>
+        )}
+        {availableWallets?.length > 0 && (
+          <View style={styles.walletsListContainer}>
+            <AirdropWalletsList
+              wallets={availableWallets}
+              title={i18n.airdrop.dashboard.availableWallets}
+              itemCallToAction={(wallet: Wallet) => (
+                <AvailableWalletAction onActionClick={() => subscribeWallet(wallet)} />
+              )}
+            />
+          </View>
+        )}
+      </>
+    );
   };
 
   return (
@@ -48,44 +104,18 @@ export const AirdropInProgress: FC<Props> = ({ navigation, subscribedWallets, av
         </Text>
       </View>
       <Countdown dataEnd={CONST.airdropDate} />
-      {subscribedWallets?.length > 0 ? (
-        <>
-          <AirdropWalletsCarousel styles={styles.carouselStyles} items={subscribedWallets} setRef={setRef} />
-          <View style={styles.walletsListContainer}>
-            <AirdropWalletsList
-              wallets={subscribedWallets}
-              title={i18n.airdrop.dashboard.registeredWallets}
-              itemCallToAction={(wallet: Wallet) => (
-                <RegisteredWalletAction onActionClick={() => setCarouselActiveElement(wallet)} />
-              )}
-            />
-          </View>
-        </>
-      ) : (
-        <>
-          <Image source={images.airdrop} style={styles.airdropImage} />
-          <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
-        </>
-      )}
-      {availableWallets?.length > 0 && (
-        <View style={styles.walletsListContainer}>
-          <AirdropWalletsList
-            wallets={availableWallets}
-            title={i18n.airdrop.dashboard.availableWallets}
-            itemCallToAction={(wallet: Wallet) => (
-              <AvailableWalletAction onActionClick={() => subscribeWallet(wallet)} />
-            )}
-          />
-        </View>
-      )}
-      <View style={styles.footer}>
-        <Footer navigation={navigation} />
-      </View>
+      {renderContent()}
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    marginTop: 10,
+  },
+  errorContainer: {
+    marginTop: 10,
+  },
   carouselStyles: {
     paddingTop: 36,
     paddingBottom: 24,
@@ -114,9 +144,5 @@ const styles = StyleSheet.create({
   },
   spaceTop: {
     marginTop: 18,
-  },
-  footer: {
-    marginTop: 18,
-    width: '100%',
   },
 });

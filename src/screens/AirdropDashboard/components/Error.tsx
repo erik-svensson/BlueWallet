@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { images } from 'app/assets';
 import { Image } from 'app/components';
@@ -9,15 +9,19 @@ const i18n = require('../../../../loc');
 
 export const Error: FC = () => {
   return (
-    <>
+    <View style={styles.errorContainer}>
       <Image source={images.airdrop} style={styles.airdropImage} />
       <Text style={styles.boldDescription}>{i18n.airdrop.dashboard.connectionError1}</Text>
       <Text style={styles.description}>{i18n.airdrop.dashboard.connectionError2}</Text>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  errorContainer: {
+    display: 'flex',
+    alignItems: 'center',
+  },
   description: {
     ...typography.caption,
     textAlign: 'center',

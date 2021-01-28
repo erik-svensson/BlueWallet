@@ -18,7 +18,7 @@ import {
 } from 'app/state/airdrop/actions';
 import * as airdropSelectors from 'app/state/airdrop/selectors';
 
-import { AirdropFinished, AirdropInProgress } from './components';
+import { AirdropFinished, AirdropInProgress, Footer } from './components';
 
 const i18n = require('../../../loc');
 
@@ -49,31 +49,34 @@ export const AirdropDashboardScreen: FC<Props> = ({
   useEffect(() => {
     checkSubscription(wallets);
   }, [checkSubscription, wallets]);
+  const airdropFinished = isAfterAirdrop();
 
   const getAvailableWallets = (wallets: Wallet[]) => differenceBy(wallets, subscribedWallets, 'id');
-
-  const renderContent = () => {
-    return isAfterAirdrop() ? (
-      <AirdropFinished navigation={navigation} />
-    ) : (
-      <AirdropInProgress
-        navigation={navigation}
-        availableWallets={getAvailableWallets(wallets)}
-        subscribedWallets={subscribedWallets}
-        subscribeWallet={async (wallet: Wallet) => {
-          subscribeWallet({ wallet: await walletToAddressesGenerationBase(wallet), id: wallet.id });
-        }}
-      />
-    );
-  };
 
   return !isInitialized ? (
     <View style={styles.loadingIndicatorContainer}>
       <ActivityIndicator size="large" />
     </View>
   ) : (
-    <ScreenTemplate header={<Header isBackArrow title={i18n.airdrop.title} />}>
-      <View style={styles.wrapper}>{renderContent()}</View>
+    <ScreenTemplate
+      header={<Header isBackArrow title={i18n.airdrop.title} />}
+      footer={!airdropFinished && <Footer navigation={navigation} />}
+    >
+      <View style={styles.wrapper}>
+        {airdropFinished ? (
+          <AirdropFinished wallets={subscribedWallets} loading={isLoading} error={error} navigation={navigation} />
+        ) : (
+          <AirdropInProgress
+            loading={isLoading}
+            error={error}
+            availableWallets={getAvailableWallets(wallets)}
+            subscribedWallets={subscribedWallets}
+            subscribeWallet={async (wallet: Wallet) => {
+              subscribeWallet({ wallet: await walletToAddressesGenerationBase(wallet), id: wallet.id });
+            }}
+          />
+        )}
+      </View>
     </ScreenTemplate>
   );
 };
@@ -82,8 +85,8 @@ const mapStateToProps = (state: ApplicationState) => ({
   wallets: airdropSelectors.airdropReadyWallets(state),
   subscribedWallets: airdropSelectors.subscribedWallets(state),
   isLoading: airdropSelectors.isLoading(state),
+  error: airdropSelectors.error(state),
   isInitialized: state.wallets.isInitialized,
-  error: state.airdrop.error,
 });
 
 const mapDispatchToProps = {

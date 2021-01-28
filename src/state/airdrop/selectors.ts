@@ -28,3 +28,4 @@ export const subscribedWallets = createSelector([walletsState, local], (walletsS
 });
 
 export const isLoading = createSelector(local, state => state.isLoading);
+export const error = createSelector(local, state => state.error);

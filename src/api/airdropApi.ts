@@ -27,7 +27,8 @@ export const subscribeWallet = (data: WalletPayload) => {
 // }
 
 export const checkWalletsSubscription = (data: AirdropCheckWalletsSubscription) => {
-  return { result: [true, true] };
+  return { result: [true] };
+  // return { result: 'error' };
   // return api.post(`check_subscription`, data);
 };
 

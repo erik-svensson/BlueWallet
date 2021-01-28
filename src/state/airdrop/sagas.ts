@@ -25,6 +25,9 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   try {
     const response: { msg?: string; result: Result } = yield call(subscribeWallet, payload.wallet);
 
+    if (response.result === 'error') {
+      throw new Error(response.result);
+    }
     if (response.result === 'success') {
       yield put(subscribeWalletSuccess(payload.id));
     }
@@ -47,6 +50,10 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
 
     if (hashes.length > 0) {
       const response = yield call(checkWalletsSubscription, { hashes });
+
+      if (response.result === 'error') {
+        throw new Error(response.result);
+      }
 
       walletsWithHashes.forEach((wallet: Wallet, index: number) => {
         if (response.result[index]) {
