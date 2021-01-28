@@ -28,8 +28,6 @@ import {
   subscribeWalletFailure,
 } from './actions';
 
-const i18n = require('../../../loc');
-
 enum Result {
   error = 'error',
   success = 'success',
