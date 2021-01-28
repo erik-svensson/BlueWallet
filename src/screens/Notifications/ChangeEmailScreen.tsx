@@ -37,6 +37,8 @@ class ChangeEmailScreen extends Component<Props, State> {
       email: this.props.email,
       newAddress: this.state.email,
       flowType: ConfirmAddressFlowType.CURRENT_ADDRESS,
+      // TODO: flow in progress
+      onSuccess: () => {},
     });
   };
 

@@ -16,7 +16,6 @@ import {
   InfoContainerContent,
   Wallet,
 } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { walletToAddressesGenerationBase, getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
@@ -79,12 +78,11 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   subscribeFlowContent = () => {
     const {
-      navigation,
       language,
       createNotificationEmail,
       storedEmail,
       route: {
-        params: { email, walletsToSubscribe, onSuccess, onBack },
+        params: { email, walletsToSubscribe, onSuccess },
       },
     } = this.props;
     return {
@@ -97,28 +95,18 @@ class ConfirmEmailScreen extends Component<Props, State> {
         this.props.subscribe(walletsToSubscribePayload, email, language);
       },
       onCodeConfirm: () => {
-        !storedEmail && createNotificationEmail(email);
-        // TODO: Refactor, needed for now for other flows like wallet details sub/unsub, craete/import wallet, all flow should pass onSuccess method
-        onSuccess
-          ? onSuccess()
-          : CreateMessage({
-              title: i18n.message.success,
-              description: i18n.notifications.updateNotificationPreferences,
-              type: MessageType.success,
-              buttonProps: {
-                title: i18n.message.goToWalletDetails,
-                onPress: () => (onBack ? onBack() : navigation.popToTop()),
-              },
-            });
+        if (storedEmail) {
+          return onSuccess();
+        }
+        createNotificationEmail(email, { onSuccess });
       },
     };
   };
 
   unsubscribeFlowContent = () => {
     const {
-      navigation,
       route: {
-        params: { onBack, email, walletsToSubscribe, onSuccess },
+        params: { email, walletsToSubscribe, onSuccess },
       },
     } = this.props;
     return {
@@ -129,18 +117,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
         this.props.unsubscribe(hashes, email);
       },
       onCodeConfirm: () => {
-        onSuccess
-          ? // TODO: Refactor, needed for now for other flows like wallet details sub/unsub, craete/import wallet, all flow should pass onSuccess method
-            onSuccess()
-          : CreateMessage({
-              title: i18n.message.success,
-              description: i18n.notifications.updateNotificationPreferences,
-              type: MessageType.success,
-              buttonProps: {
-                title: i18n.message.goToWalletDetails,
-                onPress: () => (onBack ? onBack() : navigation.popToTop()),
-              },
-            });
+        onSuccess();
       },
     };
   };

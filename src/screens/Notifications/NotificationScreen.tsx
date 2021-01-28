@@ -64,7 +64,7 @@ export class NotificationScreen extends Component<Props> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.notifications.goToNotifications,
-        onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
+        onPress: () => this.props.navigation.navigate(Route.Notifications),
       },
     });
 
@@ -103,7 +103,7 @@ export class NotificationScreen extends Component<Props> {
           buttonProps: {
             title: i18n.notifications.goToNotifications,
             onPress: () => {
-              this.props.navigation.navigate(Route.Notifications, {});
+              this.props.navigation.navigate(Route.Notifications);
             },
           },
         });

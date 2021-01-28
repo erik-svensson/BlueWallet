@@ -519,16 +519,14 @@ export type RootStackParams = {
     chunksQuantity: string;
     onScanned: () => void;
   };
-  [Route.Notifications]: {
-    walletsToSubscribe?: Wallet[];
-  };
+  [Route.Notifications]: undefined;
   [Route.ConfirmEmail]: {
     email: string;
     newAddress?: string;
     flowType: ConfirmAddressFlowType;
     walletsToSubscribe?: Wallet[];
     onBack?: () => void;
-    onSuccess?: () => void;
+    onSuccess: () => void;
   };
   [Route.ChangeEmail]: {
     email: string;
