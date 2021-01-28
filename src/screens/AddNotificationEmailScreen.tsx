@@ -85,6 +85,22 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     });
   };
 
+  onSuccessWhileChanging = (walletsToSubscribe: Wallet[]) => {
+    const { email } = this.state;
+    const { navigation, route, createNotificationEmail } = this.props;
+    const { onSuccess } = route.params;
+    return navigation.navigate(Route.ConfirmEmail, {
+      email,
+      flowType: ConfirmAddressFlowType.SUBSCRIBE,
+      onSuccess: () => {
+        createNotificationEmail(email, {
+          onSuccess,
+        });
+      },
+      walletsToSubscribe,
+    });
+  };
+
   onConfirm = () => {
     const { email } = this.state;
     const { navigation, route, checkSubscription, wallets, setError, storedEmail } = this.props;
@@ -102,10 +118,12 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         const subscribedWallets = wallets.filter(w => !ids.includes(w.id));
         if (storedEmail && subscribedWallets) {
           return navigation.navigate(Route.ConfirmEmail, {
-            // TODO the way is closed - for now backend doesn't allow us to subscribe wallets to more then one email - still, we need another endpoint to unsubscribe and subscribe wallets with one token.
-            email,
-            flowType: ConfirmAddressFlowType.SUBSCRIBE,
-            onSuccess,
+            email: storedEmail,
+            flowType: ConfirmAddressFlowType.UNSUBSCRIBE,
+            onSuccess: () => {
+              navigation.goBack();
+              this.onSuccessWhileChanging(subscribedWallets);
+            },
             walletsToSubscribe: subscribedWallets,
           });
         }
