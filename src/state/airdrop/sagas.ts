@@ -25,10 +25,10 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   try {
     const response: { msg?: string; result: Result } = yield call(subscribeWallet, payload.wallet);
 
-    if (response.result === 'error') {
+    if (response.result === Result.error) {
       throw new Error(response.result);
     }
-    if (response.result === 'success') {
+    if (response.result === Result.success) {
       yield put(subscribeWalletSuccess(payload.id));
     }
   } catch (error) {
@@ -51,7 +51,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       const hashes = walletsWithHashes.map((wallet: Wallet) => wallet.hash);
       const response = yield call(checkWalletsSubscription, { hashes });
 
-      if (response.result === 'error') {
+      if (response.result === Result.error) {
         throw new Error(response.result);
       }
 
