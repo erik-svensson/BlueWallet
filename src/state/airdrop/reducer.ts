@@ -29,9 +29,17 @@ export const airdropReducer = (state = initialState, action: AirdropActionType):
         thankYouFlowCompleted: true,
       };
     case AirdropAction.CheckSubscription:
+    case AirdropAction.SubscribeWallet:
       return {
         ...state,
         isLoading: true,
+      };
+    case AirdropAction.SubscribeWalletFailure:
+    case AirdropAction.CheckSubscriptionFailure:
+      return {
+        ...state,
+        error: true,
+        isLoading: false,
       };
     case AirdropAction.CheckSubscriptionSuccess:
       return {
@@ -40,23 +48,11 @@ export const airdropReducer = (state = initialState, action: AirdropActionType):
         error: false,
         isLoading: false,
       };
-    case AirdropAction.SubscribeWallet:
-      return {
-        ...state,
-        isLoading: true,
-      };
     case AirdropAction.SubscribeWalletSuccess:
       return {
         ...state,
         subscribedIds: [...state.subscribedIds, action.payload.id],
         error: false,
-        isLoading: false,
-      };
-    case AirdropAction.SubscribeWalletFailure:
-    case AirdropAction.CheckSubscriptionFailure:
-      return {
-        ...state,
-        error: true,
         isLoading: false,
       };
     default:

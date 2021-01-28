@@ -21,10 +21,7 @@ export interface ThankYouFlowCompleted {
 
 export interface SubscribeWalletAction {
   type: AirdropAction.SubscribeWallet;
-  payload: {
-    wallet: WalletPayload;
-    id: string;
-  };
+  payload: Wallet;
 }
 
 export interface SubscribeWalletSuccessAction {
@@ -68,7 +65,7 @@ export const completeThankYouFlow: CompleteThankYouFlowActionCreator = () => ({
   type: AirdropAction.ThankYouFlowCompleted,
 });
 
-export type SubscribeWalletActionCreator = (payload: { wallet: WalletPayload; id: string }) => SubscribeWalletAction;
+export type SubscribeWalletActionCreator = (payload: Wallet) => SubscribeWalletAction;
 
 export const subscribeWallet: SubscribeWalletActionCreator = payload => ({
   type: AirdropAction.SubscribeWallet,

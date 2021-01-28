@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { Header, ScreenTemplate } from 'app/components';
 import { Route, RootStackParams, Wallet } from 'app/consts';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
-import { walletToAddressesGenerationBase } from 'app/helpers/wallets';
 import { ApplicationState } from 'app/state';
 import {
   checkSubscription,
@@ -25,7 +24,6 @@ interface Props {
   wallets: Wallet[];
   error: boolean;
   isLoading: boolean;
-  isInitialized: boolean;
   checkSubscription: CheckSubscriptionActionCreator;
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
@@ -38,7 +36,6 @@ interface Props {
 
 export const AirdropDashboardScreen: FC<Props> = ({
   navigation,
-  isInitialized,
   wallets,
   checkSubscription,
   subscribedWallets,
@@ -52,11 +49,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
   }, [checkSubscription, wallets]);
   const airdropFinished = isAfterAirdrop();
 
-  return !isInitialized ? (
-    <View style={styles.loadingIndicatorContainer}>
-      <ActivityIndicator size="large" />
-    </View>
-  ) : (
+  return (
     <ScreenTemplate
       header={<Header isBackArrow title={i18n.airdrop.title} />}
       footer={!airdropFinished && <Footer navigation={navigation} />}
@@ -70,9 +63,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
             error={error}
             availableWallets={availableWallets}
             subscribedWallets={subscribedWallets}
-            subscribeWallet={async (wallet: Wallet) => {
-              subscribeWallet({ wallet: await walletToAddressesGenerationBase(wallet), id: wallet.id });
-            }}
+            subscribeWallet={subscribeWallet}
           />
         )}
       </View>
@@ -86,7 +77,6 @@ const mapStateToProps = (state: ApplicationState) => ({
   subscribedWallets: airdropSelectors.subscribedWallets(state),
   isLoading: airdropSelectors.isLoading(state),
   error: airdropSelectors.error(state),
-  isInitialized: state.wallets.isInitialized,
 });
 
 const mapDispatchToProps = {

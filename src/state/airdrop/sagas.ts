@@ -1,8 +1,8 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 
 import { subscribeWallet, checkWalletsSubscription } from 'app/api/airdropApi';
-import { Wallet } from 'app/consts';
-import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
+import { Wallet, WalletPayload } from 'app/consts';
+import { getWalletHashedPublicKeys, walletToAddressesGenerationBase } from 'app/helpers/wallets';
 
 import {
   AirdropAction,
@@ -23,7 +23,8 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   const { payload } = action as SubscribeWalletAction;
 
   try {
-    const response: { msg?: string; result: Result } = yield call(subscribeWallet, payload.wallet);
+    const walletPayload: WalletPayload = yield call(walletToAddressesGenerationBase, payload);
+    const response: { msg?: string; result: Result } = yield call(subscribeWallet, walletPayload);
 
     if (response.result === Result.error) {
       throw new Error(response.result);

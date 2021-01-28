@@ -43,24 +43,24 @@ const CallToAction: FC<CallToActionProps> = ({ data, navigation }) => {
   );
 };
 
-export const AirdropFinished: FC<Props> = ({ navigation, error, loading, wallets }) => {
-  const renderContent = () => {
-    if (loading) {
-      return <Loading />;
-    }
-    if (error) {
-      return <Error />;
-    }
+export const AirdropFinishedContent: FC<Props> = ({ navigation, error, loading, wallets }) => {
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <Error />;
+  }
 
-    return (
-      <AirdropWalletsList
-        wallets={wallets}
-        title={i18n.airdrop.finished.registeredWallets}
-        itemCallToAction={data => <CallToAction data={data} navigation={navigation} />}
-      />
-    );
-  };
+  return (
+    <AirdropWalletsList
+      wallets={wallets}
+      title={i18n.airdrop.finished.registeredWallets}
+      itemCallToAction={data => <CallToAction data={data} navigation={navigation} />}
+    />
+  );
+};
 
+export const AirdropFinished: FC<Props> = props => {
   return (
     <View style={styles.container}>
       <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
@@ -78,7 +78,9 @@ export const AirdropFinished: FC<Props> = ({ navigation, error, loading, wallets
         </View>
       </View>
       <AirdropStayTuned />
-      <View style={styles.walletsListContainer}>{renderContent()}</View>
+      <View style={styles.walletsListContainer}>
+        <AirdropFinishedContent {...props} />
+      </View>
     </View>
   );
 };

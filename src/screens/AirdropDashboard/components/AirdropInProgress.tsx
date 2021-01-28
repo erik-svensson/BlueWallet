@@ -6,6 +6,7 @@ import { images } from 'app/assets';
 import { Image, Countdown, AirdropWalletsList, AirdropWalletsCarousel } from 'app/components';
 import { CONST, Wallet, AirdropWalletCardData } from 'app/consts';
 import { getFormattedAirdropDate } from 'app/helpers/airdrop';
+import { SubscribeWalletActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
 import { AvailableWalletAction, RegisteredWalletAction } from './';
@@ -17,31 +18,25 @@ const i18n = require('../../../../loc');
 interface Props {
   availableWallets: Wallet[];
   subscribedWallets: Wallet[];
-  subscribeWallet: (wallet: Wallet) => Promise<void>;
+  subscribeWallet: SubscribeWalletActionCreator;
   error: boolean;
   loading: boolean;
 }
 
-export const AirdropInProgress: FC<Props> = ({
-  error,
-  loading,
-  subscribedWallets,
-  availableWallets,
-  subscribeWallet,
-}) => {
+export const AirdropInProgress: FC<Props> = props => {
   let _carouselRef: Carousel<AirdropWalletCardData>;
 
   const setRef = (carouselRef: Carousel<AirdropWalletCardData>) => {
     _carouselRef = carouselRef;
   };
 
-  const setCarouselActiveElement = (wallet: Wallet) => {
-    const snapIndex = subscribedWallets.findIndex(w => w.label === wallet.label && w.balance === wallet.balance);
-
-    _carouselRef.snapToItem(snapIndex || 0, true);
-  };
-
-  const renderContent = () => {
+  const AirdropInProgressContent: FC<Props> = ({
+    error,
+    loading,
+    subscribedWallets,
+    availableWallets,
+    subscribeWallet,
+  }) => {
     if (loading) {
       return (
         <View style={styles.loadingContainer}>
@@ -93,6 +88,12 @@ export const AirdropInProgress: FC<Props> = ({
     );
   };
 
+  const setCarouselActiveElement = (wallet: Wallet) => {
+    const snapIndex = props.subscribedWallets.findIndex(w => w.label === wallet.label && w.balance === wallet.balance);
+
+    _carouselRef.snapToItem(snapIndex || 0, true);
+  };
+
   return (
     <>
       <View style={styles.infoContainer}>
@@ -104,14 +105,14 @@ export const AirdropInProgress: FC<Props> = ({
         </Text>
       </View>
       <Countdown dataEnd={CONST.airdropDate} />
-      {renderContent()}
+      <AirdropInProgressContent {...props} />
     </>
   );
 };
 
 const styles = StyleSheet.create({
   loadingContainer: {
-    marginTop: 10,
+    marginTop: 20,
   },
   errorContainer: {
     marginTop: 10,
