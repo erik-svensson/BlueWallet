@@ -1,5 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { messages } from 'app/../error';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
@@ -15,7 +16,6 @@ import {
   InfoContainerContent,
   Wallet,
 } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { walletToAddressesGenerationBase, getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
@@ -28,10 +28,8 @@ import {
   SubscribeWalletAction,
   unsubscribeWallet,
   UnsubscribeWalletAction,
-  setNotificationEmail,
-  SetNotificationEmailAction,
 } from 'app/state/notifications/actions';
-import { sessionToken, notificationError, storedEmail, storedPin } from 'app/state/notifications/selectors';
+import { sessionToken, readableError, storedEmail } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -43,7 +41,6 @@ interface Props {
   subscribe: (wallets: WalletPayload[], email: string, lang: string) => SubscribeWalletAction;
   unsubscribe: (hashes: string[], email: string) => UnsubscribeWalletAction;
   authenticate: (session_token: string, pin: string, meta: ActionMeta) => AuthenticateEmailAction;
-  setNotificationEmail: (email: string) => SetNotificationEmailAction;
   language: string;
   sessionToken: string;
   notificationError: string;
@@ -70,14 +67,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   get infoContainerContent(): InfoContainerContent {
     switch (this.props.route.params.flowType) {
-      case ConfirmAddressFlowType.FIRST_ADDRESS:
-        return this.firstAddressFlowContent();
-      // case ConfirmAddressFlowType.CURRENT_ADDRESS:
-      //   return this.currentAddressFlowContent();
-      // case ConfirmAddressFlowType.NEW_ADDRESS:
-      //   return this.newAddressFlowContent();
-      // case ConfirmAddressFlowType.DELETE_ADDRESS:
-      //   return this.deleteAddressFlowContent(); TODO left for someone who do change email flow
       case ConfirmAddressFlowType.SUBSCRIBE:
         return this.subscribeFlowContent();
       case ConfirmAddressFlowType.UNSUBSCRIBE:
@@ -87,96 +76,13 @@ class ConfirmEmailScreen extends Component<Props, State> {
     }
   }
 
-  firstAddressFlowContent = () => {
-    const {
-      navigation,
-      createNotificationEmail,
-      route: {
-        params: { email },
-      },
-    } = this.props;
-    return {
-      title: i18n.notifications.confirmEmail,
-      description: i18n.notifications.pleaseEnter,
-      onInit: () => {
-        this.props.setNotificationEmail(email);
-      },
-      onCodeConfirm: () =>
-        createNotificationEmail(email, {
-          onSuccess: () =>
-            CreateMessage({
-              title: i18n.message.success,
-              description: i18n.notifications.emailAddedSuccessMessage,
-              type: MessageType.success,
-              buttonProps: {
-                title: i18n.notifications.goToNotifications,
-                onPress: () => navigation.navigate(Route.Notifications, {}),
-              },
-            }),
-        }),
-    };
-  };
-
-  currentAddressFlowContent = () => {
-    const {
-      navigation,
-      route: {
-        params: { newAddress },
-      },
-    } = this.props;
-    if (!newAddress) return;
-    return {
-      title: i18n.notifications.confirmCurrentTitle,
-      description: i18n.notifications.confirmCurrentDescription,
-      onCodeConfirm: () => {
-        this.setState({ code: '' }, () =>
-          navigation.navigate(Route.ConfirmEmail, {
-            email: newAddress,
-            flowType: ConfirmAddressFlowType.NEW_ADDRESS,
-          }),
-        );
-      },
-    };
-  };
-
-  newAddressFlowContent = () => ({
-    title: i18n.notifications.confirmNewTitle,
-    description: i18n.notifications.confirmNewDescription,
-    onCodeConfirm: () =>
-      CreateMessage({
-        title: i18n.message.success,
-        description: i18n.notifications.emailChangedSuccessMessage,
-        type: MessageType.success,
-        buttonProps: {
-          title: i18n.notifications.goToNotifications,
-          onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
-        },
-      }),
-  });
-
-  deleteAddressFlowContent = () => ({
-    title: i18n.notifications.verifyAction,
-    description: i18n.notifications.verifyActionDescription,
-    onCodeConfirm: () =>
-      CreateMessage({
-        title: i18n.message.success,
-        description: i18n.notifications.deleteEmailSuccessMessage,
-        type: MessageType.success,
-        buttonProps: {
-          title: i18n.notifications.goToNotifications,
-          onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
-        },
-      }),
-  });
-
   subscribeFlowContent = () => {
     const {
-      navigation,
       language,
       createNotificationEmail,
       storedEmail,
       route: {
-        params: { onBack, email, walletsToSubscribe },
+        params: { email, walletsToSubscribe, onSuccess },
       },
     } = this.props;
     return {
@@ -189,25 +95,18 @@ class ConfirmEmailScreen extends Component<Props, State> {
         this.props.subscribe(walletsToSubscribePayload, email, language);
       },
       onCodeConfirm: () => {
-        !storedEmail && createNotificationEmail(email);
-        CreateMessage({
-          title: i18n.message.success,
-          description: i18n.notifications.updateNotificationPreferences,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.message.goToWalletDetails,
-            onPress: () => (onBack ? onBack() : navigation.popToTop()),
-          },
-        });
+        if (storedEmail) {
+          return onSuccess();
+        }
+        createNotificationEmail(email, { onSuccess });
       },
     };
   };
 
   unsubscribeFlowContent = () => {
     const {
-      navigation,
       route: {
-        params: { onBack, email, walletsToSubscribe },
+        params: { email, walletsToSubscribe, onSuccess },
       },
     } = this.props;
     return {
@@ -217,44 +116,22 @@ class ConfirmEmailScreen extends Component<Props, State> {
         const hashes = await Promise.all(walletsToSubscribe!.map(wallet => getWalletHashedPublicKeys(wallet)));
         this.props.unsubscribe(hashes, email);
       },
-      onCodeConfirm: () =>
-        CreateMessage({
-          title: i18n.message.success,
-          description: i18n.notifications.updateNotificationPreferences,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.message.goToWalletDetails,
-            onPress: () => (onBack ? onBack() : navigation.popToTop()),
-          },
-        }),
+      onCodeConfirm: () => {
+        onSuccess();
+      },
     };
   };
 
-  receiveNotificationsConfirmationImportFlowContent = () => ({
-    title: i18n.notifications.verifyAction,
-    description: i18n.notifications.pleaseEnter,
-    onCodeConfirm: () =>
-      CreateMessage({
-        title: i18n.message.hooray,
-        description: i18n.message.successfullWalletImport,
-        type: MessageType.success,
-        buttonProps: {
-          title: i18n.message.returnToDashboard,
-          onPress: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
-        },
-      }),
-  });
-
-  receiveNotificationsConfirmationCreateFlowContent = () => ({
-    title: i18n.notifications.verifyAction,
-    description: i18n.notifications.pleaseEnter,
-    onCodeConfirm: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
-  });
-
   onError = () => {
+    if (this.props.notificationError === messages.alreadySubscribed) {
+      return this.setState({
+        error: this.props.notificationError,
+        code: '',
+      });
+    }
     const newFailNo = this.state.failNo + 1;
     const errorMessage =
-      newFailNo < 3
+      newFailNo < CONST.emailCodeErrorMax
         ? i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - newFailNo })
         : i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax });
     return this.setState(
@@ -272,16 +149,13 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onConfirm = () => {
-    const { sessionToken, storedPin } = this.props;
+    const { sessionToken } = this.props;
     const { code } = this.state;
-    if (storedPin) {
-      code === this.props.storedPin ? this.infoContainerContent.onCodeConfirm?.() : this.onError();
-    } else {
-      this.props.authenticate(sessionToken, code, {
-        onFailure: this.onError,
-        onSuccess: this.infoContainerContent.onCodeConfirm,
-      });
-    }
+
+    this.props.authenticate(sessionToken, code, {
+      onFailure: this.onError,
+      onSuccess: this.infoContainerContent.onCodeConfirm,
+    });
   };
 
   onChange = (code: string) =>
@@ -329,9 +203,8 @@ class ConfirmEmailScreen extends Component<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
   language: appSettingsSelectors.language(state),
   sessionToken: sessionToken(state),
-  notificationError: notificationError(state),
+  notificationError: readableError(state),
   storedEmail: storedEmail(state),
-  storedPin: storedPin(state),
 });
 
 const mapDispatchToProps = {
@@ -339,7 +212,6 @@ const mapDispatchToProps = {
   subscribe: subscribeWallet,
   unsubscribe: unsubscribeWallet,
   authenticate: authenticateEmail,
-  setNotificationEmail,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmailScreen);

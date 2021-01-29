@@ -3,7 +3,7 @@ import * as bitcoin from 'bitcoinjs-lib';
 import b58 from 'bs58check';
 import { NativeModules } from 'react-native';
 
-import config from '../config';
+import config from '../src/config';
 import { electrumVaultMnemonicToSeed } from '../utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 

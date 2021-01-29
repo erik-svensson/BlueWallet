@@ -18,7 +18,10 @@ import {
   CreateTxPasswordAction,
   CheckCredentialsAction,
   AuthenticationAction,
+  SetUserVersionAction,
   setIsTcAccepted,
+  setUserVersionSuccess,
+  setUserVersionFailure,
 } from './actions';
 
 export function* checkCredentialsSaga(action: CheckCredentialsAction | unknown) {
@@ -107,6 +110,24 @@ export function* checkTcSaga() {
   }
 }
 
+export function* setUserVersionSaga(action: SetUserVersionAction | unknown) {
+  const { payload } = action as SetUserVersionAction;
+  try {
+    yield call(StoreService.setStoreValue, CONST.userVersion, payload.userVersion);
+
+    yield put(setUserVersionSuccess(payload.userVersion));
+  } catch (e) {
+    yield put(setUserVersionFailure(e.message));
+  }
+}
+
+export function* checkUserVersionSaga() {
+  const userVersion = yield call(StoreService.getStoreValue, CONST.userVersion);
+  if (userVersion) {
+    yield put(setUserVersionSuccess(userVersion));
+  }
+}
+
 export function* createTcSaga() {
   yield call(StoreService.setStoreValue, CONST.tcVersion, CONST.tcVersionRequired);
   yield put(setIsTcAccepted(true));
@@ -118,5 +139,7 @@ export default [
   takeEvery(AuthenticationAction.CreatePin, createPinSaga),
   takeEvery(AuthenticationAction.CreateTxPassword, createTxPasswordSaga),
   takeEvery(AuthenticationAction.CheckTc, checkTcSaga),
+  takeEvery(AuthenticationAction.CheckUserVersion, checkUserVersionSaga),
+  takeEvery(AuthenticationAction.SetUserVersion, setUserVersionSaga),
   takeEvery(AuthenticationAction.CreateTc, createTcSaga),
 ];

@@ -1,5 +1,6 @@
 import { VaultTxType, Transaction as BtcTransaction, ECPair } from 'bitcoinjs-lib';
 import { Dayjs } from 'dayjs';
+import { last } from 'lodash';
 import React from 'react';
 import { KeyboardType, StyleProp, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
@@ -16,6 +17,12 @@ import {
   HDSegwitP2SHWallet,
   HDLegacyP2PKHWallet,
 } from '../../class';
+
+// don't change the order when addign the new version, the oldest user version is on the top, the newest on the bottom
+export enum USER_VERSIONS {
+  BEFORE_NOTIFICATIONS_WERE_ADDED = 'BEFORE_NOTIFICATIONS_WERE_ADDED',
+  AFTER_NOTIFICATIONS_WERE_ADDED = 'AFTER_NOTIFICATIONS_WERE_ADDED',
+}
 
 export const CONST = {
   pinCodeLength: 4,
@@ -44,6 +51,8 @@ export const CONST = {
   emailCodeErrorMax: 3,
   walletsDefaultGapLimit: 20,
   nextAirdropPeriod: 'Q1 2021',
+  userVersion: 'userVersion',
+  newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
 };
 
 export const ADDRESSES_TYPES = {
@@ -150,6 +159,7 @@ export enum Route {
   SendCoinsConfirm = 'SendCoinsConfirm',
   EditText = 'EditText',
   AboutUs = 'AboutUs',
+  AddEmail = 'AddEmail',
   TermsConditions = 'TermsConditions',
   SelectLanguage = 'SelectLanguage',
   ActionSheet = 'ActionSheet',
@@ -161,7 +171,7 @@ export enum Route {
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
   AddNotificationEmail = 'AddNotificationEmail',
-  ConfirmNotificationCode = 'ConfirmNotificationCode',
+  LocalConfirmNotificationCode = 'LocalConfirmNotificationCode',
   CreateTransactionPassword = 'CreateTransactionPassword',
   ConfirmTransactionPassword = 'ConfirmTransactionPassword',
   AdvancedOptions = 'AdvancedOptions',
@@ -175,7 +185,6 @@ export enum Route {
   AirdropRequirements = 'AirdropRequirements',
   AirdropFinishedWalletDetails = 'AirdropFinishedWalletDetails',
   Notifications = 'Notifications',
-  AddEmail = 'AddEmail',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
@@ -380,6 +389,14 @@ export type MainTabNavigatorParams = {
   [Route.Settings]: { screen: keyof RootStackParams };
 };
 
+export interface AddNotificationEmailParams {
+  title: string;
+  onSuccess: () => void;
+  isBackArrow: boolean;
+  description: string;
+  onSkipSuccess?: () => void;
+}
+
 export type RootStackParams = {
   [Route.MainTabStackNavigator]: { screen: keyof MainTabNavigatorParams };
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
@@ -390,6 +407,8 @@ export type RootStackParams = {
     label: string;
     header?: React.ReactNode;
     value?: string;
+    inputTestID?: string;
+    submitButtonTestID?: string;
     validate?: (value: string) => string | undefined;
     validateOnSave?: (value: string) => void;
     keyboardType?: KeyboardType;
@@ -427,13 +446,22 @@ export type RootStackParams = {
   };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
-  [Route.ConfirmNotificationCode]: { email?: string };
-  [Route.ChooseWalletsForNotification]: {
+  [Route.LocalConfirmNotificationCode]: {
+    children: React.ReactNode;
+    onSuccess: () => void;
+    title: string;
     email: string;
-    isOnboarding?: boolean;
   };
-  [Route.AddNotificationEmail]: undefined;
-  [Route.ConfirmNotificationCode]: { email?: string };
+  [Route.ChooseWalletsForNotification]: {
+    flowType: ConfirmAddressFlowType;
+    subtitle: string;
+    description: string;
+    email: string;
+    onSuccess: () => void;
+    onSkip: () => void;
+    wallets: Wallet[];
+  };
+  [Route.AddNotificationEmail]: AddNotificationEmailParams;
   [Route.CreateWallet]: undefined;
   [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
@@ -478,9 +506,6 @@ export type RootStackParams = {
   [Route.AboutUs]: undefined;
   [Route.TermsConditions]: undefined;
   [Route.AdvancedOptions]: undefined;
-  [Route.CreatePin]: {
-    flowType: string;
-  };
   [Route.CurrentPin]: undefined;
   [Route.ConfirmPin]: {
     flowType: string;
@@ -495,6 +520,7 @@ export type RootStackParams = {
     title: string;
     onBack?: () => void;
     children: React.ReactNode;
+    isBackArrow?: boolean;
   };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
@@ -520,9 +546,7 @@ export type RootStackParams = {
     balance: number;
     label: string;
   };
-  [Route.Notifications]: {
-    walletsToSubscribe?: Wallet[];
-  };
+  [Route.Notifications]: undefined;
   [Route.AddEmail]: {
     walletsToSubscribe?: Wallet[];
   };
@@ -532,10 +556,7 @@ export type RootStackParams = {
     flowType: ConfirmAddressFlowType;
     walletsToSubscribe?: Wallet[];
     onBack?: () => void;
-  };
-  [Route.ChooseWalletsForNotification]: {
-    email: string;
-    isOnboarding?: boolean;
+    onSuccess: () => void;
   };
   [Route.ChangeEmail]: {
     email: string;

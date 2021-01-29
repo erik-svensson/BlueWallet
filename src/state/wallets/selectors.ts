@@ -76,6 +76,10 @@ export const walletsWithRecoveryTransaction = createSelector(wallets, walletsLis
   walletsList.filter(wallet => [HDSegwitP2SHArWallet.type, HDSegwitP2SHAirWallet.type].includes(wallet.type)),
 );
 
+export const subscribableWallets = createSelector(wallets, walletsList =>
+  walletsList.filter(wallet => wallet.type === HDSegwitP2SHAirWallet.type),
+); // TODO - remove when backend is ready to subscribe other wallet types
+
 export const allWallet = createSelector(wallets, walletsList => {
   const { incoming_balance, balance } = walletsList.reduce(
     (acc, wallet) => ({
@@ -106,9 +110,7 @@ export const subscribedWallets = createSelector(subscribedIds, wallets, (ids, wa
 );
 
 export const unSubscribedWallets = createSelector(subscribedIds, wallets, (ids, walletsList) =>
-  walletsList.filter(
-    wallet => !ids.some(id => id === wallet.id) && wallet.type === HDSegwitP2SHAirWallet.type, // TODO till all wallets are possible to subscribe
-  ),
+  walletsList.filter(wallet => !ids.some(id => id === wallet.id)),
 );
 
 type TxEntity = TransactionInput | TransactionOutput;

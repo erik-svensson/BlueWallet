@@ -10,7 +10,7 @@ import { AppStateManager } from 'app/services';
 import { AuthenticationAction } from 'app/state/authentication/actions';
 import { persistor, store } from 'app/state/store';
 
-import config from './config';
+import config from './src/config';
 
 const i18n = require('./loc');
 

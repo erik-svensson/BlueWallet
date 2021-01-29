@@ -1,5 +1,5 @@
 import { Authenticator } from '../../class';
-import config from '../../config';
+import config from '../../src/config';
 
 const assert = require('assert');
 const bitcoinjs = require('bitcoinjs-lib');

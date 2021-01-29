@@ -19,6 +19,8 @@ export const EditTextScreen = (props: Props) => {
     header,
     onSave,
     title,
+    inputTestID,
+    submitButtonTestID,
     maxLength,
     checkZero,
     keyboardType = defaultKeyboardType,
@@ -57,12 +59,20 @@ export const EditTextScreen = (props: Props) => {
 
   return (
     <ScreenTemplate
-      footer={<Button title={i18n._.save} onPress={handlePressOnSaveButton} disabled={!canSubmit()} />}
+      footer={
+        <Button
+          testID={submitButtonTestID}
+          title={i18n._.save}
+          onPress={handlePressOnSaveButton}
+          disabled={!canSubmit()}
+        />
+      }
       header={<Header isBackArrow={true} title={title} />}
     >
       {header}
       <View style={styles.inputItemContainer}>
         <InputItem
+          testID={inputTestID}
           label={label}
           value={checkZero ? checkZero(value) : value}
           setValue={setValue}

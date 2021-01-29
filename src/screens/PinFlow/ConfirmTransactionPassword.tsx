@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import { icons } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
 import { Route, CONST, RootStackParams } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { getOnboardingAddEmailParams } from 'app/helpers/notifications';
 import {
   createTxPassword as createTxPasswordAction,
   setIsAuthenticated as setIsAuthenticatedAction,
@@ -36,13 +38,13 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
     isVisible: false,
   };
 
-  onSave = async () => {
+  onSave = () => {
     const { createTxPassword, navigation } = this.props;
     const { setPassword } = this.props.route.params;
     if (setPassword === this.state.password) {
       createTxPassword(setPassword, {
         onSuccess: () => {
-          navigation.navigate(Route.AddNotificationEmail);
+          navigation.navigate(Route.AddNotificationEmail, getOnboardingAddEmailParams());
         },
       });
     } else {
