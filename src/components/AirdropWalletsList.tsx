@@ -4,6 +4,8 @@ import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
+import { wait } from '../../utils/time';
+
 interface Props {
   title: string;
   wallets: Wallet[];
@@ -31,12 +33,14 @@ export const AirdropWalletsList: FC<Props> = props => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{title}</Text>
-      <FlatList
-        data={wallets}
-        renderItem={({ item }) => (
-          <AirdropWalletsListItem wallet={item} callToAction={itemCallToAction && itemCallToAction(item)} />
-        )}
-      />
+      {wallets.length > 0 &&
+        wallets.map((wallet, index) => (
+          <AirdropWalletsListItem
+            key={index}
+            wallet={wallet}
+            callToAction={itemCallToAction && itemCallToAction(wallet)}
+          />
+        ))}
     </View>
   );
 };

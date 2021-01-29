@@ -87,11 +87,6 @@ const mapDispatchToProps = {
 export default connect(mapStateToProps, mapDispatchToProps)(AirdropDashboardScreen);
 
 const styles = StyleSheet.create({
-  loadingIndicatorContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   wrapper: {
     display: 'flex',
     justifyContent: 'center',
