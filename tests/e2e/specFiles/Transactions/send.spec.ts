@@ -1,3 +1,5 @@
+import { expect } from 'detox';
+
 import { isBeta, createRandomNote, WALLETS_WITH_COINS, DEFAULT_TRANSACTION_PASSWORD } from '../../helpers';
 import app from '../../pageObjects';
 
@@ -29,18 +31,16 @@ describe('Transactions', () => {
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
         await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
         await app.transactionsSend.sendCoinsMainScreen.chooseTransactionType('Secure');
-        await app.transactionsSend.sendCoinsMainScreen.tapNextButtton();
+        await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
         await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
         await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
         await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
-        await app.transactionsSend.successScreen.close();
-        await app.wallets.dashboardScreen.scrollToTheTransactionWithNote(transactionNote);
+        await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
 
     describe('@ios @regression', () => {
       it('should be possible to send coins from 3-Key Vault wallet (Fast Transaction) to 3-Key Vault wallet', async () => {
-        const transactionNote = createRandomNote();
         await app.wallets.importExistingWallet({
           type: '3-Key Vault',
           name: '3-Key wallet',
@@ -51,14 +51,12 @@ describe('Transactions', () => {
         await app.wallets.dashboardScreen.tapOnSendButton();
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
-        await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
         await app.transactionsSend.sendCoinsMainScreen.chooseTransactionType('Secure Fast');
-        await app.transactionsSend.sendCoinsMainScreen.tapNextButtton();
+        await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
         await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
         await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
         await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
-        await app.transactionsSend.successScreen.close();
-        await app.wallets.dashboardScreen.scrollToTheTransactionWithNote(transactionNote);
+        await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
 
@@ -75,12 +73,11 @@ describe('Transactions', () => {
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
         await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
-        await app.transactionsSend.sendCoinsMainScreen.tapNextButtton();
+        await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
         await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
         await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
         await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
-        await app.transactionsSend.successScreen.close();
-        await app.wallets.dashboardScreen.scrollToTheTransactionWithNote(transactionNote);
+        await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
 
@@ -96,12 +93,11 @@ describe('Transactions', () => {
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
         await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
-        await app.transactionsSend.sendCoinsMainScreen.tapNextButtton();
+        await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
         await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
         await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
         await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
-        await app.transactionsSend.successScreen.close();
-        await app.wallets.dashboardScreen.scrollToTheTransactionWithNote(transactionNote);
+        await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
 
@@ -117,12 +113,11 @@ describe('Transactions', () => {
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
         await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
-        await app.transactionsSend.sendCoinsMainScreen.tapNextButtton();
+        await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
         await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
         await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
         await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
-        await app.transactionsSend.successScreen.close();
-        await app.wallets.dashboardScreen.scrollToTheTransactionWithNote(transactionNote);
+        await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
 
@@ -138,12 +133,11 @@ describe('Transactions', () => {
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
         await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
-        await app.transactionsSend.sendCoinsMainScreen.tapNextButtton();
+        await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
         await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
         await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
         await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
-        await app.transactionsSend.successScreen.close();
-        await app.wallets.dashboardScreen.scrollToTheTransactionWithNote(transactionNote);
+        await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
   });

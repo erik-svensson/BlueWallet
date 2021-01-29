@@ -1,21 +1,19 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, takeLatest, put, call } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
 import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
-import { StoreService } from 'app/services';
 
 import {
   createNotificationEmailFailure,
-  setNotificationEmailFailure,
   createNotificationEmailSuccess,
   CreateNotificationEmailAction,
   NotificationAction,
-  verifyNotificationEmail,
-  skipNotificationEmail,
-  SetNotificationEmailAction,
+  verifyNotificationEmailSuccess,
+  VerifyNotificationEmailAction,
+  verifyNotificationEmailFailure,
   SubscribeWalletAction,
   AuthenticateEmailAction,
   authenticateEmailSuccess,
@@ -39,13 +37,7 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
   const { meta, payload } = action as CreateNotificationEmailAction;
   const email = payload.email;
   try {
-    const savedEmail = yield StoreService.getStoreValue('email');
-    if (!savedEmail && !!email) {
-      yield StoreService.setStoreValue('email', email);
-      yield put(createNotificationEmailSuccess(email));
-    } else {
-      yield put(skipNotificationEmail());
-    }
+    yield put(createNotificationEmailSuccess(email));
     if (meta?.onSuccess) {
       meta.onSuccess();
     }
@@ -57,24 +49,22 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
   }
 }
 
-export function* setNotificationEmailSaga(action: SetNotificationEmailAction | unknown) {
-  const { meta, payload } = action as SetNotificationEmailAction;
+export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailAction | unknown) {
+  const { meta, payload } = action as VerifyNotificationEmailAction;
   const email = payload.email;
   try {
     const verifyCode = yield call(verifyEmail, { email });
     if (verifyCode.result === Result.success) {
       const decryptedCode = yield decryptCode(email, verifyCode.pin);
-      //Temporaly till we dont have email services run we need know correct pin from backend, remove after
-      console.log(decryptedCode, '>>>>');
-      yield put(verifyNotificationEmail(decryptedCode));
+      yield put(verifyNotificationEmailSuccess(decryptedCode));
     } else {
-      yield put(setNotificationEmailFailure('Your email cannot be verified'));
+      throw new Error('Your email cannot be verified');
     }
     if (meta?.onSuccess) {
       meta.onSuccess();
     }
   } catch (e) {
-    yield put(setNotificationEmailFailure(e.message));
+    yield put(verifyNotificationEmailFailure(e.message));
     if (meta?.onFailure) {
       meta.onFailure();
     }
@@ -89,7 +79,7 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
       yield put(subscribeWalletSuccess(response.session_token));
     }
   } catch (error) {
-    yield put(subscribeWalletFailure(error.msg));
+    yield put(subscribeWalletFailure(error.message));
   }
 }
 
@@ -146,14 +136,18 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       meta.onSuccess(ids);
     }
   } catch (error) {
-    yield put(checkSubscriptionFailure(error.msg));
+    const { msg } = error.response.data;
+    yield put(checkSubscriptionFailure(msg));
+    if (meta?.onFailure) {
+      meta.onFailure(msg);
+    }
   }
 }
 
 export default [
   takeEvery(NotificationAction.CheckSubscriptionAction, checkSubscriptionSaga),
   takeEvery(NotificationAction.CreateNotificationEmail, createNotificationEmailSaga),
-  takeEvery(NotificationAction.SetNotificationEmail, setNotificationEmailSaga),
+  takeLatest(NotificationAction.VerifyNotificationEmailAction, verifyNotificationEmailSaga),
   takeEvery(NotificationAction.SubscribeWalletAction, subscribeWalletSaga),
   takeEvery(NotificationAction.AuthenticateEmailAction, authenticateEmailSaga),
   takeEvery(NotificationAction.UnsubscribeWalletAction, unsubscribeWalletSaga),

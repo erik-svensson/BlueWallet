@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Authenticator as IAuthenticator, FinalizedPSBT } from 'app/consts';
 
-import config from '../config';
+import config from '../src/config';
 import {
   bytesToMnemonic,
   mnemonicToKeyPair,

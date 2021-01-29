@@ -1,4 +1,3 @@
-import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
@@ -14,7 +13,6 @@ const i18n = require('../../../loc');
 
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.ChangeEmail>;
-  route: RouteProp<RootStackParams, Route.ChangeEmail>;
   email: string;
 }
 
@@ -39,6 +37,8 @@ class ChangeEmailScreen extends Component<Props, State> {
       email: this.props.email,
       newAddress: this.state.email,
       flowType: ConfirmAddressFlowType.CURRENT_ADDRESS,
+      // TODO: flow in progress
+      onSuccess: () => {},
     });
   };
 

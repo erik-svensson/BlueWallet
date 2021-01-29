@@ -58,6 +58,8 @@ class ReceiveCoinsScreen extends Component<Props, State> {
 
   editAmount = () => {
     this.props.navigation.navigate(Route.EditText, {
+      submitButtonTestID: 'receive-submit-button',
+      inputTestID: 'receive-amount-input',
       title: i18n.receive.header,
       label: i18n.receive.details.amount,
       onSave: this.updateAmount,
@@ -135,6 +137,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
       <ScreenTemplate
         footer={
           <Button
+            testID="share-wallet-address-button"
             title={i18n.receive.details.shareWalletAddress}
             onPress={this.share}
             containerStyle={styles.buttonContainer}
@@ -148,26 +151,20 @@ class ReceiveCoinsScreen extends Component<Props, State> {
           label={wallet.label}
           unit={wallet.preferredBalanceUnit}
         />
-        <View style={styles.qrcontainer}>
+        <View testID="qr-code-icon" style={styles.qrcontainer}>
           {!!this.bip21encoded && (
-            <QRCode
-              quietZone={10}
-              value={this.bip21encoded}
-              size={140}
-              color={BlueApp.settings.foregroundColor}
-              logoBackgroundColor={BlueApp.settings.brandingColor}
-              ecl={'H'}
-              getRef={c => (this.qrCodeSVG = c)}
-            />
+            <QRCode quietZone={10} value={this.bip21encoded} size={140} ecl={'H'} getRef={c => (this.qrCodeSVG = c)} />
           )}
         </View>
         <Text style={styles.labelText}>{i18n.receive.label}:</Text>
-        <Text style={styles.address}>{this.message}</Text>
+        <Text testID="wallet-address-text" style={styles.address}>
+          {this.message}
+        </Text>
         <CopyButton textToCopy={this.message} />
         <Text style={styles.inputTitle}>{i18n.receive.details.receiveWithAmount}</Text>
         <Text style={styles.receiveSubtitle}>{i18n.receive.details.receiveWithAmountSubtitle}</Text>
         <View style={styles.amountInput}>
-          <Text style={styles.amount} onPress={this.editAmount}>
+          <Text testID="receive-amount-text" style={styles.amount} onPress={this.editAmount}>
             {amount ? amount.toString() : i18n.receive.details.amount}
           </Text>
         </View>

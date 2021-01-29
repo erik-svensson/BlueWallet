@@ -18,6 +18,7 @@ import {
   WalletDropdown,
   Warning,
 } from 'app/components';
+import config from 'app/config';
 import { CONST, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
@@ -29,7 +30,6 @@ import { selectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
 import { HDSegwitBech32Wallet, HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet, WatchOnlyWallet } from '../../class';
-import config from '../../config';
 import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
 import { btcToSatoshi, satoshiToBtc } from '../../utils/bitcoin';
 

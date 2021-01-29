@@ -1,7 +1,8 @@
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import React, { FC } from 'react';
 
-import { Route, RootStackParams } from 'app/consts';
+import { Route, RootStackParams, USER_VERSIONS } from 'app/consts';
+import { getOnboardingAddEmailParams, getAppUpdateAddEmailParams } from 'app/helpers/notifications';
 import {
   ActionSheet,
   ExportWalletScreen,
@@ -49,26 +50,36 @@ import {
   OptionsAuthenticatorScreen,
   ChunkedQrCode,
   NotificationScreen,
-  AddEmailScreen,
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
   ChangeEmailScreen,
   CreateTransactionPassword,
   ConfirmTransactionPassword,
-  ConfirmNotificationCodeScreen,
+  LocalConfirmNotificationCodeScreen,
   AddNotificationEmailScreen,
 } from 'app/screens';
 
 import { MainTabNavigator } from './MainTabNavigator';
 
 const Stack = createStackNavigator<RootStackParams>();
-
 interface Props {
   shouldRenderCredentialsCreation: boolean;
   shouldRenderNotification: boolean;
+  userVersion: USER_VERSIONS;
 }
 
-export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shouldRenderNotification }) => {
+export const RootNavigator: FC<Props> = ({
+  shouldRenderCredentialsCreation,
+  shouldRenderNotification,
+  userVersion,
+}) => {
+  const getAddEmailInitialParams = () => {
+    if (userVersion === USER_VERSIONS.BEFORE_NOTIFICATIONS_WERE_ADDED) {
+      return getAppUpdateAddEmailParams();
+    }
+    return getOnboardingAddEmailParams();
+  };
+
   const getInitialRouteName = () => {
     if (shouldRenderCredentialsCreation) {
       return Route.CreatePin;
@@ -84,27 +95,36 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
     <Stack.Navigator initialRouteName={getInitialRouteName()} headerMode="none">
       <Stack.Screen name={Route.CreatePin} component={CreatePinScreen} />
       <Stack.Screen name={Route.ConfirmPin} component={ConfirmPinScreen} />
-      <Stack.Screen name={Route.CreateTransactionPassword} component={CreateTransactionPassword} />
+      <Stack.Screen
+        name={Route.CreateTransactionPassword}
+        options={{ gestureEnabled: false }}
+        component={CreateTransactionPassword}
+      />
       <Stack.Screen name={Route.ConfirmTransactionPassword} component={ConfirmTransactionPassword} />
 
       <Stack.Screen
         name={Route.AddNotificationEmail}
         component={AddNotificationEmailScreen}
         options={{ gestureEnabled: false }}
+        initialParams={getAddEmailInitialParams()}
       />
-      <Stack.Screen name={Route.ConfirmNotificationCode} component={ConfirmNotificationCodeScreen} />
+      <Stack.Screen name={Route.LocalConfirmNotificationCode} component={LocalConfirmNotificationCodeScreen} />
       <Stack.Screen name={Route.ChooseWalletsForNotification} component={ChooseWalletsForNotificationScreen} />
 
       <Stack.Screen name={Route.ActionSheet} component={ActionSheet} options={modalOptions} />
       <Stack.Screen name={Route.UnlockTransaction} component={UnlockTransaction} />
       <Stack.Screen name={Route.EditText} component={EditTextScreen} />
-      <Stack.Screen name={Route.Message} component={MessageScreen} options={{}} />
+      <Stack.Screen name={Route.Message} component={MessageScreen} options={{ gestureEnabled: false }} />
       <Stack.Screen name={Route.ExportWallet} component={ExportWalletScreen} />
       <Stack.Screen name={Route.ExportWalletXpub} component={ExportWalletXpubScreen} />
       <Stack.Screen name={Route.DeleteContact} component={DeleteContactScreen} />
       <Stack.Screen name={Route.SendTransactionDetails} component={SendTransactionDetailsScreen} />
 
-      <Stack.Screen name={Route.MainTabStackNavigator} component={MainTabNavigator} />
+      <Stack.Screen
+        name={Route.MainTabStackNavigator}
+        options={{ gestureEnabled: false }}
+        component={MainTabNavigator}
+      />
 
       <Stack.Screen name={Route.CreateWallet} component={CreateWalletScreen} />
       <Stack.Screen name={Route.ImportWallet} component={ImportWalletScreen} />
@@ -135,9 +155,13 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
         component={CreateAuthenticatorSuccessScreen}
         options={{ gestureEnabled: false }}
       />
-      <Stack.Screen name={Route.Confirm} component={ConfirmScreen} />
+      <Stack.Screen name={Route.Confirm} initialParams={{ isBackArrow: true }} component={ConfirmScreen} />
       <Stack.Screen name={Route.ImportAuthenticator} component={ImportAuthenticatorScreen} />
-      <Stack.Screen name={Route.CreateWalletSuccess} component={CreateWalletSuccessScreen} />
+      <Stack.Screen
+        name={Route.CreateWalletSuccess}
+        options={{ gestureEnabled: false }}
+        component={CreateWalletSuccessScreen}
+      />
       <Stack.Screen name={Route.IntegrateKey} component={IntegrateKeyScreen} />
       <Stack.Screen name={Route.RecoveryTransactionList} component={RecoveryTransactionListScreen} />
       <Stack.Screen name={Route.RecoverySend} component={RecoverySendScreen} />
@@ -146,7 +170,6 @@ export const RootNavigator: FC<Props> = ({ shouldRenderCredentialsCreation, shou
       <Stack.Screen name={Route.OptionsAuthenticator} component={OptionsAuthenticatorScreen} />
       <Stack.Screen name={Route.ChunkedQrCode} component={ChunkedQrCode} />
       <Stack.Screen name={Route.Notifications} component={NotificationScreen} />
-      <Stack.Screen name={Route.AddEmail} component={AddEmailScreen} />
       <Stack.Screen name={Route.ConfirmEmail} component={ConfirmEmailScreen} />
       <Stack.Screen name={Route.ChangeEmail} component={ChangeEmailScreen} />
       <Stack.Screen name={Route.AirdropDashboard} component={AirdropDashboardScreen} />

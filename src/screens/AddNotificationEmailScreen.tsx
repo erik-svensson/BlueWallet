@@ -1,16 +1,23 @@
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
-import { Route, RootStackParams } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { Route, RootStackParams, Wallet, ActionMeta, ConfirmAddressFlowType } from 'app/consts';
 import { isEmail } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
+import { selectors as notificationsSelectors } from 'app/state/notifications';
 import {
   createNotificationEmail as createNotificationEmailAction,
-  setNotificationEmail as setNotificationEmailAction,
+  verifyNotificationEmail as verifyNotificationEmailAction,
+  checkSubscription as checkSubscriptionAction,
+  CheckSubscriptionAction,
+  VerifyNotificationEmailActionFunction,
+  SetErrorActionFunction,
+  setError as setErrorAction,
+  CreateNotificationEmailActionFunction,
 } from 'app/state/notifications/actions';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
@@ -19,21 +26,28 @@ const i18n = require('../../loc');
 
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.AddNotificationEmail>;
-  createNotificationEmail: Function;
-  setNotificationEmail: Function;
-  hasWallets: boolean;
+  route: RouteProp<RootStackParams, Route.AddNotificationEmail>;
+  createNotificationEmail: CreateNotificationEmailActionFunction;
+  setError: SetErrorActionFunction;
+  verifyNotificationEmail: VerifyNotificationEmailActionFunction;
+  wallets: Wallet[];
+  error: string;
+  isLoading: boolean;
+  checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
 }
 
 type State = {
   email: string;
-  error: string;
 };
 
 class AddNotificationEmailScreen extends PureComponent<Props, State> {
   state = {
     email: '',
-    error: '',
   };
+
+  componentDidMount() {
+    this.props.setError('');
+  }
 
   setEmail = (email: string): void => {
     this.setState({
@@ -41,44 +55,79 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     });
   };
 
-  onSave = () => {
+  goToLocalEmailConfirm = () => {
+    const { verifyNotificationEmail, navigation, createNotificationEmail, route } = this.props;
+
+    const { onSuccess, title } = route.params;
+
     const { email } = this.state;
-    const { setNotificationEmail, navigation, hasWallets } = this.props;
-    if (!isEmail(email)) {
-      return this.setState({
-        error: i18n.onboarding.emailValidation,
-      });
-    }
-    if (!hasWallets) {
-      setNotificationEmail(email, {
-        onSuccess: () => navigation.navigate(Route.ConfirmNotificationCode, { email }),
-      });
-    } else {
-      navigation.navigate(Route.ChooseWalletsForNotification, { email, isOnboarding: true });
-    }
+
+    verifyNotificationEmail(email, {
+      onSuccess: () =>
+        navigation.navigate(Route.LocalConfirmNotificationCode, {
+          children: (
+            <View style={styles.infoContainer}>
+              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
+              <Text style={typography.headline5}>{email}</Text>
+            </View>
+          ),
+          title,
+          onSuccess: () => {
+            createNotificationEmail(email, {
+              onSuccess,
+            });
+          },
+          email,
+        }),
+    });
   };
 
-  skipAddEmail = () => {
-    const { createNotificationEmail, navigation } = this.props;
-    createNotificationEmail('', {
-      onSuccess: () => {
-        CreateMessage({
-          title: i18n.contactCreate.successTitle,
-          description: i18n.onboarding.successCompletedDescription,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.onboarding.successCompletedButton,
-            onPress: () => {
-              navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
-            },
-          },
+  onConfirm = () => {
+    const { email } = this.state;
+    const { navigation, route, checkSubscription, wallets, setError } = this.props;
+    const { onSuccess } = route.params;
+
+    if (!isEmail(email)) {
+      return setError(i18n.onboarding.emailValidation);
+    }
+    if (!wallets.length) {
+      return this.goToLocalEmailConfirm();
+    }
+    checkSubscription(wallets, email, {
+      onSuccess: (ids: string[]) => {
+        const walletsToSubscribe = wallets.filter(w => !ids.includes(w.id));
+        if (!walletsToSubscribe.length) {
+          return this.goToLocalEmailConfirm();
+        }
+        navigation.navigate(Route.ChooseWalletsForNotification, {
+          flowType: ConfirmAddressFlowType.SUBSCRIBE,
+          subtitle: i18n.notifications.getNotification,
+          description: i18n.notifications.chooseWalletsDescription,
+          email,
+          onSuccess,
+          wallets: walletsToSubscribe,
+          onSkip: () => this.goToLocalEmailConfirm(),
         });
       },
     });
   };
 
+  skipAddEmail = () => {
+    const { createNotificationEmail, route } = this.props;
+    const { onSkipSuccess } = route.params;
+
+    createNotificationEmail('', {
+      onSuccess: onSkipSuccess,
+    });
+  };
+
   render() {
-    const { email, error } = this.state;
+    const { email } = this.state;
+    const { error, route, isLoading } = this.props;
+
+    const { onSkipSuccess, title, isBackArrow, description } = route.params;
+
     return (
       <ScreenTemplate
         noScroll
@@ -88,22 +137,25 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             <Button
               title={i18n._.confirm}
               testID="submit-notification-email"
-              onPress={this.onSave}
+              onPress={this.onConfirm}
               disabled={email.length === 0}
+              loading={isLoading}
             />
-            <FlatButton
-              testID="skip-notification-email"
-              containerStyle={styles.skipButton}
-              title={i18n._.skip}
-              onPress={this.skipAddEmail}
-            />
+            {onSkipSuccess && (
+              <FlatButton
+                testID="skip-notification-email"
+                containerStyle={styles.skipButton}
+                title={i18n._.skip}
+                onPress={this.skipAddEmail}
+              />
+            )}
           </>
         }
-        header={<Header title={i18n.onboarding.onboarding} />}
+        header={<Header title={title} isBackArrow={isBackArrow} />}
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.onboarding.notification}</Text>
-          <Text style={styles.pinDescription}>{i18n.onboarding.addNotificationEmailDescription}</Text>
+          <Text style={typography.headline4}>{i18n.notifications.addYourEmailFor}</Text>
+          <Text style={styles.pinDescription}>{description}</Text>
         </View>
         <View style={styles.inputItemContainer}>
           <InputItem
@@ -115,6 +167,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             error={error}
             secureTextEntry={false}
             autoCapitalize="none"
+            keyboardType="email-address"
           />
         </View>
       </ScreenTemplate>
@@ -124,11 +177,15 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
 const mapDispatchToProps = {
   createNotificationEmail: createNotificationEmailAction,
-  setNotificationEmail: setNotificationEmailAction,
+  verifyNotificationEmail: verifyNotificationEmailAction,
+  checkSubscription: checkSubscriptionAction,
+  setError: setErrorAction,
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-  hasWallets: walletsSelectors.hasWallets(state),
+  wallets: walletsSelectors.subscribableWallets(state),
+  isLoading: notificationsSelectors.isLoading(state),
+  error: notificationsSelectors.notificationError(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);
@@ -150,5 +207,13 @@ const styles = StyleSheet.create({
   },
   skipButton: {
     marginTop: 12,
+  },
+  codeDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    marginTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    textAlign: 'center',
   },
 });

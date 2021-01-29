@@ -81,35 +81,53 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
         {i18n.notifications.receiveTransactionDescription}
         <Text style={styles.boldedText}>{this.props.email}</Text>
       </Text>
+      <Text style={[styles.notificationDescription, styles.note]}>
+        <Text style={styles.boldedText}>{i18n.notifications.noteFirst}</Text>
+        {i18n.notifications.noteSecond}
+      </Text>
     </>
   );
+
+  navigateToSuccesfullNotificationSubscriptionMessage = () => {
+    const { navigation } = this.props;
+    CreateMessage({
+      title: i18n.contactDelete.success,
+      description: i18n.message.successSubscription,
+      type: MessageType.success,
+      buttonProps: {
+        title: i18n.onboarding.successCompletedButton,
+        onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+      },
+    });
+  };
+
+  navigateToConfirmEmailSubscription = (wallet: Wallet) => {
+    const { navigation, email } = this.props;
+
+    navigation.navigate(Route.Confirm, {
+      title: i18n.notifications.notifications,
+      children: this.renderConfirmScreenContent(),
+      onConfirm: () =>
+        navigation.navigate(Route.ConfirmEmail, {
+          email,
+          flowType: ConfirmAddressFlowType.SUBSCRIBE,
+          walletsToSubscribe: [wallet],
+          onSuccess: this.navigateToSuccesfullNotificationSubscriptionMessage,
+        }),
+      onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+      isBackArrow: false,
+    });
+  };
 
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
     const { navigation, createWallet, email } = this.props;
-    wallet.setLabel(label || i18n.wallets.details.title);
+    wallet.setLabel(label);
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
           secret: w.getSecret(),
-          onButtonPress: !!email
-            ? () =>
-                navigation.navigate(Route.Confirm, {
-                  title: i18n.notifications.notifications,
-                  children: this.renderConfirmScreenContent(),
-                  onConfirm: () =>
-                    navigation.navigate(Route.ConfirmEmail, {
-                      email,
-                      flowType: ConfirmAddressFlowType.SUBSCRIBE,
-                      walletsToSubscribe: [wallet],
-                      onBack: () =>
-                        navigation.navigate(Route.WalletDetails, {
-                          id: wallet.id,
-                        }),
-                    }),
-                  onBack: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
-                })
-            : undefined,
+          onButtonPress: !!email ? () => this.navigateToConfirmEmailSubscription(wallet) : undefined,
         });
       },
       onFailure: () => onError(),
@@ -389,4 +407,7 @@ const styles = StyleSheet.create({
     color: palette.textBlack,
   },
   notificationTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
+  note: {
+    marginTop: 42,
+  },
 });

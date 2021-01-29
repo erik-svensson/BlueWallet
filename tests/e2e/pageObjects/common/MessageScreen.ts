@@ -16,7 +16,7 @@ const MessageScreen = (type: MessageScreenType) => ({
   async waitUntilEnded(): Promise<void> {
     await waitFor(this.icon)
       .toBeNotVisible()
-      .withTimeout(30 * SECOND);
+      .withTimeout(45 * SECOND);
   },
 });
 

@@ -2,11 +2,11 @@ import { cloneDeep } from 'lodash';
 import { Alert } from 'react-native';
 import { takeEvery, takeLatest, put, all, call, select, delay } from 'redux-saga/effects';
 
+import config from 'app/config';
 import { Wallet } from 'app/consts';
 import { takeLatestPerKey } from 'app/helpers/sagas';
 import { BlueApp } from 'app/legacy';
 
-import config from '../../../config';
 import { messages } from '../../../error';
 import { checkAddressNetworkName } from '../../../utils/bitcoin';
 import { actions as electrumXActions } from '../electrumX';

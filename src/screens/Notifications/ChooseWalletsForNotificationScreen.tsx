@@ -2,29 +2,20 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
-import { Route, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { ApplicationState } from 'app/state';
-import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
-import { unSubscribedWallets } from 'app/state/wallets/selectors';
+import { Route, RootStackParams, Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
-type Item = any; // TODO will be changed to proper type when implementing logic
-
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.ChooseWalletsForNotification>;
-  wallets: Wallet[];
   route: RouteProp<RootStackParams, Route.ChooseWalletsForNotification>;
-  checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
 }
 
 interface State {
-  wallets: any[];
+  wallets: Wallet[];
 }
 
 export class ChooseWalletsForNotificationScreen extends PureComponent<Props, State> {
@@ -32,52 +23,21 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     wallets: [],
   };
 
-  componentDidMount() {
-    const {
-      wallets,
-      checkSubscription,
-      route: {
-        params: { email },
-      },
-    } = this.props;
-    checkSubscription(wallets, email); // errors to handle
-  }
+  addWallet = (wallet: Wallet) => this.setState((state: State) => ({ wallets: [...state.wallets, wallet] }));
 
-  onConfirm = () => {
-    this.proceed();
-  };
-
-  goToSuccessScreen = () =>
-    CreateMessage({
-      title: i18n.message.success,
-      description: i18n.notifications.emailAddedSuccessMessage,
-      type: MessageType.success,
-      buttonProps: {
-        title: i18n.notifications.goToNotifications,
-        onPress: () => this.props.navigation.navigate(Route.Notifications, {}),
-      },
-    });
-
-  onSkip = () =>
-    this.props.navigation.navigate(Route.ConfirmEmail, {
-      email: this.props.route.params.email,
-      flowType: ConfirmAddressFlowType.FIRST_ADDRESS,
-    });
-
-  addWallet = (wallet: Item) => this.setState((state: State) => ({ wallets: [...state.wallets, wallet] }));
-
-  removeWallet = (selectingWallet: Item) =>
+  removeWallet = (selectingWallet: Wallet) =>
     this.setState((state: State) => ({
       wallets: state.wallets.filter(wallet => wallet.id !== selectingWallet.id),
     }));
 
-  checkWallet = (wallet: Item) => (this.isWalletChecked(wallet) ? this.removeWallet(wallet) : this.addWallet(wallet));
+  checkWallet = (wallet: Wallet) => (this.isWalletChecked(wallet) ? this.removeWallet(wallet) : this.addWallet(wallet));
 
-  checkAll = () => this.setState({ wallets: this.areAllWalletsChecked() ? [] : this.props.wallets });
+  checkAll = () => this.setState({ wallets: this.areAllWalletsChecked() ? [] : this.props.route.params.wallets });
 
-  areAllWalletsChecked = () => this.props.wallets.length === this.state.wallets.length;
+  areAllWalletsChecked = () => this.props.route.params.wallets.length === this.state.wallets.length;
 
-  isWalletChecked = (selectedWallet: any) => this.state.wallets.some((wallet: Item) => wallet.id === selectedWallet.id);
+  isWalletChecked = (selectedWallet: Wallet) =>
+    this.state.wallets.some((wallet: Wallet) => wallet.id === selectedWallet.id);
 
   renderItem = (item: Wallet) => {
     return (
@@ -104,28 +64,24 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     </View>
   );
 
-  proceed = () => {
+  onConfirm = () => {
     const {
       navigation,
       route: { params },
     } = this.props;
 
-    if (params.isOnboarding) {
-      navigation.navigate(Route.ConfirmNotificationCode, { email: params.email });
-    } else {
-      this.props.navigation.navigate(Route.ConfirmEmail, {
-        email: params.email,
-        flowType: ConfirmAddressFlowType.SUBSCRIBE,
-        walletsToSubscribe: this.state.wallets,
-      });
-    }
+    navigation.navigate(Route.ConfirmEmail, {
+      email: params.email,
+      flowType: params.flowType,
+      onSuccess: params.onSuccess,
+      walletsToSubscribe: params.wallets,
+    });
   };
 
   render() {
     const {
-      wallets,
       route: {
-        params: { email },
+        params: { email, wallets, onSkip, subtitle, description },
       },
     } = this.props;
     return (
@@ -134,13 +90,13 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         footer={
           <>
             <Button title={i18n._.confirm} disabled={!this.state.wallets.length} onPress={this.onConfirm} />
-            <FlatButton containerStyle={styles.skipButton} title={i18n._.skip} onPress={this.onSkip} />
+            <FlatButton containerStyle={styles.skipButton} title={i18n._.skip} onPress={onSkip} />
           </>
         }
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.notifications.getNotification}</Text>
-          <Text style={styles.infoDescription}>{i18n.notifications.chooseWalletsDescription}</Text>
+          <Text style={typography.headline4}>{subtitle}</Text>
+          <Text style={styles.infoDescription}>{description}</Text>
         </View>
         <View style={styles.amountInput}>
           <Text style={styles.amount}>{email}</Text>
@@ -157,17 +113,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
   }
 }
 
-const mapStateToProps = (state: ApplicationState) => {
-  return {
-    wallets: unSubscribedWallets(state),
-  };
-};
-
-const mapDispatchToProps = {
-  checkSubscription,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChooseWalletsForNotificationScreen);
+export default ChooseWalletsForNotificationScreen;
 
 const styles = StyleSheet.create({
   infoContainer: {

@@ -305,6 +305,7 @@ module.exports = {
     wrongMnemonicDesc:
       'Your mnemonic does not match any supported wallet. You are trying to import an invalid mnemonic or wallet that has never been used',
     goToWalletDetails: 'Go to Wallet Details',
+    successSubscription: 'Hooray!\n You have successfully subscribed to notifications.',
   },
   notifications: {
     addYourAddress: 'Add your email address',
@@ -326,6 +327,8 @@ module.exports = {
     resend: 'Resend code',
     getNotification: 'Get notifications',
     chooseWalletsDescription: 'Choose wallets from which you’d like to receive transaction notifications',
+    chooseWalletsToUnsubscribeDescription:
+      'You can choose the wallets from which you want to unsubscribe from notifications.',
     emailAddedSuccessMessage: 'Hooray!\n You have successfully added your email address.',
     goToNotifications: 'Go to Notifications',
     changeEmailTitle: 'Change your email',
@@ -769,5 +772,6 @@ module.exports = {
     noNetworkDescription:
       'Your internet works, but you are not connected to the network. Please wait a moment and try again.',
     electrumXNotConnected: 'Electrum client is not connected',
+    couldntConnectToServer: 'Couldn’t connect to the server.',
   },
 };

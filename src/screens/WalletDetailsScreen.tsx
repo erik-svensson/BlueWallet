@@ -9,11 +9,10 @@ import { Button, FlatButton, Header, ScreenTemplate, WalletCard, ButtonType, Tex
 import { Wallet, Route, RootStackParams, ActionMeta, CONST, ConfirmAddressFlowType } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { reducer as notificationReducer } from 'app/state/notifications';
 import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
-import { isWalletSubscribed } from 'app/state/notifications/selectors';
+import { isWalletSubscribed, storedEmail, isLoading } from 'app/state/notifications/selectors';
 import { reducer as walletReducer } from 'app/state/wallets';
 import {
   updateWallet as updateWalletAction,
@@ -38,6 +37,7 @@ interface Props {
   walletsLabels: string[];
   email: string;
   isSubscribed: boolean;
+  isLoading: boolean;
 }
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
@@ -141,40 +141,48 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     });
   };
 
+  confirmEmail = (flowType: ConfirmAddressFlowType) => {
+    const { email, navigation, wallet } = this.props;
+
+    wallet &&
+      navigation.navigate(Route.ConfirmEmail, {
+        email,
+        flowType,
+        walletsToSubscribe: [wallet],
+        onSuccess: () => {
+          CreateMessage({
+            title: i18n.message.success,
+            description: i18n.notifications.updateNotificationPreferences,
+            type: MessageType.success,
+            buttonProps: {
+              title: i18n.message.goToWalletDetails,
+              onPress: () => navigation.navigate(Route.WalletDetails, { id: wallet.id }),
+            },
+          });
+        },
+      });
+  };
+
   onSubscribeButtonPress = () => {
     const { email, navigation, wallet, isSubscribed } = this.props;
     if (!wallet) return;
-    if (!isSubscribed) {
-      if (!email) {
-        return navigation.navigate(Route.Notifications, {
-          walletsToSubscribe: [wallet],
-        });
-      }
-      return navigation.navigate(Route.ConfirmEmail, {
-        email,
-        flowType: ConfirmAddressFlowType.SUBSCRIBE,
-        walletsToSubscribe: [wallet],
-      });
-    } else {
-      navigation.navigate(Route.ConfirmEmail, {
-        email,
-        flowType: ConfirmAddressFlowType.UNSUBSCRIBE,
-        walletsToSubscribe: [wallet],
-        onBack: () =>
-          navigation.navigate(Route.WalletDetails, {
-            id: wallet.id,
-          }),
-      });
+    if (!email) {
+      return navigation.navigate(Route.Notifications);
     }
+
+    if (!isSubscribed) {
+      return this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE);
+    }
+
+    return this.confirmEmail(ConfirmAddressFlowType.UNSUBSCRIBE);
   };
 
   render() {
-    const { wallet, isSubscribed, navigation } = this.props;
+    const { wallet, isSubscribed, isLoading } = this.props;
     if (!wallet) {
       return null;
     }
     const isWatchOnly = wallet.type === WatchOnlyWallet.type;
-    const isToSubscribe = wallet.type === HDSegwitP2SHAirWallet.type;
     return (
       <ScreenTemplate
         footer={
@@ -185,13 +193,12 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               title={i18n.wallets.details.showWalletXPUB}
               containerStyle={styles.button}
             />
-            {isToSubscribe && (
-              <Button
-                onPress={this.onSubscribeButtonPress}
-                title={isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
-                containerStyle={styles.button}
-              />
-            )}
+            <Button
+              onPress={this.onSubscribeButtonPress}
+              title={isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
+              containerStyle={styles.button}
+              loading={isLoading}
+            />
             <FlatButton
               onPress={this.navigateToDeleteWallet}
               title={i18n.wallets.details.deleteWallet}
@@ -230,7 +237,8 @@ const mapStateToProps = (
   return {
     wallet: getById(state, id),
     walletsLabels: getWalletsLabels(state),
-    email: state.notifications.email,
+    email: storedEmail(state),
+    isLoading: isLoading(state),
     isSubscribed: isWalletSubscribed(state, id),
   };
 };

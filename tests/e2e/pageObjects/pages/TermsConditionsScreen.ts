@@ -15,7 +15,6 @@ const TermsConditionsScreen = () => ({
   },
 
   async scrollDown() {
-    await actions.waitForElement(this.termsConditions);
     await this.termsConditions.scrollTo('bottom');
   },
 

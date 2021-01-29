@@ -1,4 +1,4 @@
-import generalConfig from '../../config';
+import generalConfig from '../config';
 
 export const config = {
   baseURL: generalConfig.emailNotificationsURL,
