@@ -153,15 +153,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
         />
         <View testID="qr-code-icon" style={styles.qrcontainer}>
           {!!this.bip21encoded && (
-            <QRCode
-              quietZone={10}
-              value={this.bip21encoded}
-              size={140}
-              color={BlueApp.settings.foregroundColor}
-              logoBackgroundColor={BlueApp.settings.brandingColor}
-              ecl={'H'}
-              getRef={c => (this.qrCodeSVG = c)}
-            />
+            <QRCode quietZone={10} value={this.bip21encoded} size={140} ecl={'H'} getRef={c => (this.qrCodeSVG = c)} />
           )}
         </View>
         <Text style={styles.labelText}>{i18n.receive.label}:</Text>

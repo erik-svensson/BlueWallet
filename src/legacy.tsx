@@ -13,7 +13,6 @@ import {
   Authenticator,
   HDLegacyP2PKHWallet,
 } from '../class';
-import Biometric from '../class/biometrics';
 
 // ES6 syntax doesn't work here
 const BlueApp: any = require('../BlueApp');
@@ -30,5 +29,4 @@ export {
   Authenticator,
   HDLegacyP2PKHWallet,
   EV,
-  Biometric,
 };
