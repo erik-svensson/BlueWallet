@@ -144,25 +144,23 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   confirmEmail = (flowType: ConfirmAddressFlowType) => {
     const { email, navigation, wallet } = this.props;
 
-    if (!wallet) {
-      return;
-    }
-    navigation.navigate(Route.ConfirmEmail, {
-      email,
-      flowType,
-      walletsToSubscribe: [wallet],
-      onSuccess: () => {
-        CreateMessage({
-          title: i18n.message.success,
-          description: i18n.notifications.updateNotificationPreferences,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.message.goToWalletDetails,
-            onPress: () => navigation.navigate(Route.WalletDetails, { id: wallet.id }),
-          },
-        });
-      },
-    });
+    wallet &&
+      navigation.navigate(Route.ConfirmEmail, {
+        email,
+        flowType,
+        walletsToSubscribe: [wallet],
+        onSuccess: () => {
+          CreateMessage({
+            title: i18n.message.success,
+            description: i18n.notifications.updateNotificationPreferences,
+            type: MessageType.success,
+            buttonProps: {
+              title: i18n.message.goToWalletDetails,
+              onPress: () => navigation.navigate(Route.WalletDetails, { id: wallet.id }),
+            },
+          });
+        },
+      });
   };
 
   onSubscribeButtonPress = () => {
