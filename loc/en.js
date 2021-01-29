@@ -25,6 +25,8 @@ module.exports = {
     skip: 'Skip this step',
     add: 'Add',
     undo: 'Undo',
+    yes: 'Yes',
+    no: 'No',
   },
   order: {
     first: 'first',
@@ -42,6 +44,9 @@ module.exports = {
     dateOfAirdrop: 'Date of Airdrop:',
     circularWalletBalance: {
       yourBalance: 'Your balance',
+    },
+    onboarding: {
+      doYouWantToTakePart: 'Do you want to take part in the Airdrop?',
     },
     dashboard: {
       createNewWallet: 'Create new wallet',
