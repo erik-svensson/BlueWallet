@@ -24,7 +24,7 @@ export const getOnboardingAddEmailParams = (): AddNotificationEmailParams => ({
   onSuccess: () => {
     CreateMessage({
       title: i18n.contactCreate.successTitle,
-      description: i18n.onboarding.emailAddedSuccessMessage,
+      description: i18n.notifications.emailAddedSuccessMessage,
       type: MessageType.success,
       buttonProps: {
         title: i18n.onboarding.successCompletedButton,
@@ -46,7 +46,7 @@ export const getAppUpdateAddEmailParams = (): AddNotificationEmailParams => ({
   onSuccess: () => {
     CreateMessage({
       title: i18n.contactCreate.successTitle,
-      description: i18n.onboarding.emailAddedSuccessMessage,
+      description: i18n.notifications.emailAddedSuccessMessage,
       type: MessageType.success,
       buttonProps: {
         title: i18n.onboarding.successCompletedButton,

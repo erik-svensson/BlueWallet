@@ -52,6 +52,7 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         email: '',
         pin: '',
       };
+    case NotificationAction.CheckSubscriptionAction:
     case NotificationAction.VerifyNotificationEmailAction:
       return {
         ...state,
@@ -87,9 +88,9 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         ...state,
         error: '',
         subscribedIds: action.payload.subscribedIds,
+        isLoading: false,
       };
     }
-
     default:
       return state;
   }
