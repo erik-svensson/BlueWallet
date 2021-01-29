@@ -160,6 +160,7 @@ export enum Route {
   SendCoinsConfirm = 'SendCoinsConfirm',
   EditText = 'EditText',
   AboutUs = 'AboutUs',
+  AddEmail = 'AddEmail',
   TermsConditions = 'TermsConditions',
   SelectLanguage = 'SelectLanguage',
   ActionSheet = 'ActionSheet',
