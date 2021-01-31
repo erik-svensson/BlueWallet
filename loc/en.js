@@ -100,6 +100,14 @@ module.exports = {
       medium: 'Medium',
       registeredWallets: 'Registered wallets',
     },
+    createWalletSuccess: {
+      success: 'Hooray! \n  You have successfully registered to Airdrop!',
+      successWithNotifications:
+        'Hooray! \n  You have successfully subscribed to notifications and registered to Airdrop!',
+      shareIt: 'Share it with others and get {rewardValue} BTCV reward!*',
+      maxReward: '*Maximum reward for one wallet is {rewardValue} BTCV.',
+      successCompletedButton: 'Go to {routeName}',
+    },
   },
   termsConditions: {
     header: 'Terms & Conditions',

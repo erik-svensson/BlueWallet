@@ -85,6 +85,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
         params: { email, walletsToSubscribe, onSuccess },
       },
     } = this.props;
+
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
@@ -92,12 +93,14 @@ class ConfirmEmailScreen extends Component<Props, State> {
         const walletsToSubscribePayload = await Promise.all(
           walletsToSubscribe!.map((wallet: Wallet) => walletToAddressesGenerationBase(wallet)),
         );
+
         this.props.subscribe(walletsToSubscribePayload, email, language);
       },
       onCodeConfirm: () => {
         if (storedEmail) {
           return onSuccess();
         }
+
         createNotificationEmail(email, { onSuccess });
       },
     };
@@ -109,11 +112,13 @@ class ConfirmEmailScreen extends Component<Props, State> {
         params: { email, walletsToSubscribe, onSuccess },
       },
     } = this.props;
+
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
       onInit: async () => {
         const hashes = await Promise.all(walletsToSubscribe!.map(wallet => getWalletHashedPublicKeys(wallet)));
+
         this.props.unsubscribe(hashes, email);
       },
       onCodeConfirm: () => {
@@ -129,11 +134,13 @@ class ConfirmEmailScreen extends Component<Props, State> {
         code: '',
       });
     }
+
     const newFailNo = this.state.failNo + 1;
     const errorMessage =
       newFailNo < CONST.emailCodeErrorMax
         ? i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - newFailNo })
         : i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax });
+
     return this.setState(
       {
         code: '',
@@ -165,6 +172,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   render() {
     const { email, onBack } = this.props.route.params;
+
     return (
       <ScreenTemplate
         noScroll

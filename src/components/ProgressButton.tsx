@@ -66,7 +66,7 @@ export const ProgressButton: FC<Props> = ({
     return () => {
       clearInterval(intervalID);
     };
-  }, []);
+  }, [intervalID]);
 
   const onPress = () => {
     setInProgress(true);

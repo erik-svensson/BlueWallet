@@ -1,4 +1,4 @@
-import { Wallet, WalletPayload } from 'app/consts';
+import { Wallet, WalletPayload, ActionMeta } from 'app/consts';
 
 export enum AirdropAction {
   ThankYouSeen = 'ThankYouSeen',
@@ -65,11 +65,12 @@ export const completeThankYouFlow: CompleteThankYouFlowActionCreator = () => ({
   type: AirdropAction.ThankYouFlowCompleted,
 });
 
-export type SubscribeWalletActionCreator = (payload: Wallet) => SubscribeWalletAction;
+export type SubscribeWalletActionCreator = (payload: Wallet, meta?: ActionMeta) => SubscribeWalletAction;
 
-export const subscribeWallet: SubscribeWalletActionCreator = payload => ({
+export const subscribeWallet: SubscribeWalletActionCreator = (payload, meta) => ({
   type: AirdropAction.SubscribeWallet,
   payload,
+  meta,
 });
 
 export type SubscribeWalletSuccessActionCreator = (id: string) => SubscribeWalletSuccessAction;

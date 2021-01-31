@@ -1,4 +1,4 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
@@ -10,18 +10,19 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../../loc');
 
 interface Props {
+  route: RouteProp<RootStackParams, Route.AirdropDashboard>;
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
     StackNavigationProp<RootStackParams, Route.AirdropDashboard>
   >;
 }
 
-export const Footer: FC<Props> = ({ navigation }) => (
+export const Footer: FC<Props> = ({ navigation, route }) => (
   <>
     <Button
       title={i18n.airdrop.dashboard.createNewWallet}
       onPress={() => {
-        navigation.navigate(Route.CreateWallet);
+        navigation.navigate(Route.CreateWallet, { parentRouteName: route.name });
       }}
       containerStyle={styles.buttonContainer}
     />

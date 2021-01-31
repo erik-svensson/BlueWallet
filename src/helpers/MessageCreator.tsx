@@ -24,6 +24,7 @@ interface Message {
   type: MessageType;
   buttonProps?: ButtonProps;
   asyncTask?: () => void;
+  shareComponent?: React.ReactNode;
 }
 
 const processingImageStyle = {
@@ -41,6 +42,7 @@ export const CreateMessage = (message: Message) => {
     imageStyle: message.type === MessageType.processingState ? processingImageStyle : null,
     buttonProps: message.buttonProps,
     asyncTask: message.asyncTask,
+    shareComponent: message.shareComponent,
   });
 };
 
@@ -58,6 +60,7 @@ export const RenderMessage = (message: Message) => {
           imageStyle: message.type === MessageType.processingState ? processingImageStyle : null,
           buttonProps: message.buttonProps,
           asyncTask: message.asyncTask,
+          shareComponent: message.shareComponent,
         },
       }}
     />
