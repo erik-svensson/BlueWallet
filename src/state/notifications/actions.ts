@@ -159,8 +159,8 @@ export type NotificationActionType =
   | CheckSubscriptionFailureAction
   | SetErrorAction;
 
-export type CreateNotificationEmailActionFunction = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
-export const createNotificationEmail: CreateNotificationEmailActionFunction = (email, meta) => ({
+export type CreateNotificationEmailActionCreator = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
+export const createNotificationEmail: CreateNotificationEmailActionCreator = (email, meta) => ({
   type: NotificationAction.CreateNotificationEmail,
   payload: { email },
   meta,
@@ -180,9 +180,9 @@ export const deleteNotificationEmail = (): DeleteNotificationEmailAction => ({
   type: NotificationAction.DeleteNotificationEmailAction,
 });
 
-export type VerifyNotificationEmailActionFunction = (email: string, meta?: ActionMeta) => VerifyNotificationEmailAction;
+export type VerifyNotificationEmailActionCreator = (email: string, meta?: ActionMeta) => VerifyNotificationEmailAction;
 
-export const verifyNotificationEmail: VerifyNotificationEmailActionFunction = (email, meta) => ({
+export const verifyNotificationEmail: VerifyNotificationEmailActionCreator = (email, meta) => ({
   type: NotificationAction.VerifyNotificationEmailAction,
   payload: { email },
   meta,
@@ -230,7 +230,12 @@ export const unsubscribeWalletFailure = (error: string): SubscribeWalletFailureA
   error,
 });
 
-export const authenticateEmail = (session_token: string, pin: string, meta?: ActionMeta): AuthenticateEmailAction => ({
+export type AuthenticateEmailActionCreator = (
+  session_token: string,
+  pin: string,
+  meta?: ActionMeta,
+) => AuthenticateEmailAction;
+export const authenticateEmail: AuthenticateEmailActionCreator = (session_token, pin, meta) => ({
   type: NotificationAction.AuthenticateEmailAction,
   payload: { session_token, pin },
   meta,
@@ -266,8 +271,8 @@ export const checkSubscriptionFailure = (error: string): CheckSubscriptionFailur
   error,
 });
 
-export type SetErrorActionFunction = (error: string) => SetErrorAction;
-export const setError: SetErrorActionFunction = error => ({
+export type SetErrorActionCreator = (error: string) => SetErrorAction;
+export const setError: SetErrorActionCreator = error => ({
   type: NotificationAction.SetErrorAction,
   error,
 });

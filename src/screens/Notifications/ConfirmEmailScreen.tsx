@@ -6,13 +6,13 @@ import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, CodeInput, TimeoutButton } from 'app/components';
-import { Route, RootStackParams, ConfirmAddressFlowType, CONST, ActionMeta, InfoContainerContent } from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, CONST, InfoContainerContent } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import {
   authenticateEmail,
-  AuthenticateEmailAction,
+  AuthenticateEmailActionCreator,
   createNotificationEmail,
-  CreateNotificationEmailAction,
+  CreateNotificationEmailActionCreator,
   subscribeWallet,
   unsubscribeWallet,
   UnsubscribeWalletActionCreator,
@@ -26,10 +26,10 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.ConfirmEmail>;
   route: RouteProp<RootStackParams, Route.ConfirmEmail>;
-  createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
+  createNotificationEmail: CreateNotificationEmailActionCreator;
   subscribe: SubscribeWalletActionCreator;
   unsubscribe: UnsubscribeWalletActionCreator;
-  authenticate: (session_token: string, pin: string, meta: ActionMeta) => AuthenticateEmailAction;
+  authenticate: AuthenticateEmailActionCreator;
   sessionToken: string;
   notificationError: string;
   storedEmail: string;

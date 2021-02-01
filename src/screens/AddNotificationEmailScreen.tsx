@@ -14,10 +14,10 @@ import {
   verifyNotificationEmail as verifyNotificationEmailAction,
   checkSubscription as checkSubscriptionAction,
   CheckSubscriptionAction,
-  VerifyNotificationEmailActionFunction,
-  SetErrorActionFunction,
+  VerifyNotificationEmailActionCreator,
+  SetErrorActionCreator,
   setError as setErrorAction,
-  CreateNotificationEmailActionFunction,
+  CreateNotificationEmailActionCreator,
 } from 'app/state/notifications/actions';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
@@ -27,9 +27,9 @@ const i18n = require('../../loc');
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.AddNotificationEmail>;
   route: RouteProp<RootStackParams, Route.AddNotificationEmail>;
-  createNotificationEmail: CreateNotificationEmailActionFunction;
-  setError: SetErrorActionFunction;
-  verifyNotificationEmail: VerifyNotificationEmailActionFunction;
+  createNotificationEmail: CreateNotificationEmailActionCreator;
+  setError: SetErrorActionCreator;
+  verifyNotificationEmail: VerifyNotificationEmailActionCreator;
   wallets: Wallet[];
   error: string;
   isLoading: boolean;

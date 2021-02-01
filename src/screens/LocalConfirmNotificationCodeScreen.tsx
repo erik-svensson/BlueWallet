@@ -10,8 +10,8 @@ import { ApplicationState } from 'app/state';
 import { selectors as notificationSelectors } from 'app/state/notifications';
 import {
   verifyNotificationEmail as verifyNotificationEmailAction,
-  VerifyNotificationEmailActionFunction,
-  SetErrorActionFunction,
+  VerifyNotificationEmailActionCreator,
+  SetErrorActionCreator,
   setError as setErrorAction,
 } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
@@ -29,8 +29,8 @@ interface Props {
   pin: string;
   error: string;
   email: string;
-  setError: SetErrorActionFunction;
-  verifyNotificationEmail: VerifyNotificationEmailActionFunction;
+  setError: SetErrorActionCreator;
+  verifyNotificationEmail: VerifyNotificationEmailActionCreator;
 }
 
 class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
