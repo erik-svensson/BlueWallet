@@ -22,4 +22,4 @@ export const availableWallets = createSelector([wallets, subscribedIds], (wallet
   wallets.filter((w: Wallet) => !subscribedIds.includes(w.id)),
 );
 export const isLoading = createSelector(local, state => state.isLoading);
-export const error = createSelector(local, state => state.error);
+export const hasError = createSelector(local, state => !!state.error);
