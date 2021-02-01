@@ -1,11 +1,12 @@
-import { takeEvery, takeLatest, put, call } from 'redux-saga/effects';
+import { takeEvery, takeLatest, put, call, all, select } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
 import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
 import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
-import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
+import { getWalletHashedPublicKeys, walletToAddressesGenerationBase } from 'app/helpers/wallets';
 
+import * as appSettingsSelectors from '../appSettings/selectors';
 import {
   createNotificationEmailFailure,
   createNotificationEmailSuccess,
@@ -72,9 +73,18 @@ export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailActi
 }
 
 export function* subscribeWalletSaga(action: SubscribeWalletAction) {
-  const { payload } = action as SubscribeWalletAction;
+  const {
+    payload: { wallets, email },
+  } = action as SubscribeWalletAction;
   try {
-    const response: { session_token: string; result: Result } = yield call(subscribeEmail, payload);
+    const walletsGenerationBase = yield all(wallets.map(wallet => call(walletToAddressesGenerationBase, wallet)));
+
+    const lang = yield select(appSettingsSelectors.language);
+    const response: { session_token: string; result: Result } = yield call(subscribeEmail, {
+      email,
+      wallets: walletsGenerationBase,
+      lang,
+    });
     if (response.session_token) {
       yield put(subscribeWalletSuccess(response.session_token));
     }
@@ -84,9 +94,13 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
 }
 
 export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
-  const { payload } = action as UnsubscribeWalletAction;
+  const {
+    payload: { wallets, email },
+  } = action as UnsubscribeWalletAction;
   try {
-    const response = yield call(unsubscribeEmail, payload);
+    const hashes = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
+
+    const response = yield call(unsubscribeEmail, { hashes, email });
     if (response.session_token) {
       yield put(unsubscribeWalletSuccess(response.session_token));
     }

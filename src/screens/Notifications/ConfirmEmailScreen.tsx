@@ -6,28 +6,17 @@ import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CodeInput } from 'app/components';
-import {
-  Route,
-  RootStackParams,
-  ConfirmAddressFlowType,
-  CONST,
-  ActionMeta,
-  WalletPayload,
-  InfoContainerContent,
-  Wallet,
-} from 'app/consts';
-import { walletToAddressesGenerationBase, getWalletHashedPublicKeys } from 'app/helpers/wallets';
+import { Route, RootStackParams, ConfirmAddressFlowType, CONST, ActionMeta, InfoContainerContent } from 'app/consts';
 import { ApplicationState } from 'app/state';
-import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import {
   authenticateEmail,
   AuthenticateEmailAction,
   createNotificationEmail,
   CreateNotificationEmailAction,
   subscribeWallet,
-  SubscribeWalletAction,
   unsubscribeWallet,
-  UnsubscribeWalletAction,
+  UnsubscribeWalletActionCreator,
+  SubscribeWalletActionCreator,
 } from 'app/state/notifications/actions';
 import { sessionToken, readableError, storedEmail } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
@@ -38,8 +27,8 @@ interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.ConfirmEmail>;
   route: RouteProp<RootStackParams, Route.ConfirmEmail>;
   createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
-  subscribe: (wallets: WalletPayload[], email: string, lang: string) => SubscribeWalletAction;
-  unsubscribe: (hashes: string[], email: string) => UnsubscribeWalletAction;
+  subscribe: SubscribeWalletActionCreator;
+  unsubscribe: UnsubscribeWalletActionCreator;
   authenticate: (session_token: string, pin: string, meta: ActionMeta) => AuthenticateEmailAction;
   language: string;
   sessionToken: string;
@@ -78,7 +67,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   subscribeFlowContent = () => {
     const {
-      language,
       createNotificationEmail,
       storedEmail,
       route: {
@@ -88,11 +76,8 @@ class ConfirmEmailScreen extends Component<Props, State> {
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
-      onInit: async () => {
-        const walletsToSubscribePayload = await Promise.all(
-          walletsToSubscribe!.map((wallet: Wallet) => walletToAddressesGenerationBase(wallet)),
-        );
-        this.props.subscribe(walletsToSubscribePayload, email, language);
+      onInit: () => {
+        walletsToSubscribe && this.props.subscribe(walletsToSubscribe, email);
       },
       onCodeConfirm: () => {
         if (storedEmail) {
@@ -112,9 +97,8 @@ class ConfirmEmailScreen extends Component<Props, State> {
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
-      onInit: async () => {
-        const hashes = await Promise.all(walletsToSubscribe!.map(wallet => getWalletHashedPublicKeys(wallet)));
-        this.props.unsubscribe(hashes, email);
+      onInit: () => {
+        walletsToSubscribe && this.props.unsubscribe(walletsToSubscribe, email);
       },
       onCodeConfirm: () => {
         onSuccess();
@@ -201,7 +185,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  language: appSettingsSelectors.language(state),
   sessionToken: sessionToken(state),
   notificationError: readableError(state),
   storedEmail: storedEmail(state),
