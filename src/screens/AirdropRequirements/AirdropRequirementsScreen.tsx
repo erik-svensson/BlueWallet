@@ -53,12 +53,13 @@ class AirdropRequirementsScreen extends Component<Props> {
         header={<Header isBackArrow title={i18n.airdrop.title} />}
         footer={
           <>
-            <Button
-              testID="sounds-great"
-              onPress={this.onSoundsGreatPress}
-              style={styles.soundsGreatButton}
-              title={i18n.airdrop.requirements.soundsGreat}
-            />
+            <View style={styles.soundsGreatButtonContainer}>
+              <Button
+                testID="sounds-great"
+                onPress={this.onSoundsGreatPress}
+                title={i18n.airdrop.requirements.soundsGreat}
+              />
+            </View>
             <View style={styles.termsAndConditions}>
               <Text style={styles.description}>{i18n.airdrop.requirements.termsAndConditions.read}&nbsp;</Text>
               <TouchableOpacity onPress={this.onTermsConditionsPress}>
@@ -157,7 +158,7 @@ const styles = StyleSheet.create({
     width: '100%',
     lineHeight: 16,
   },
-  soundsGreatButton: { paddingLeft: 10, width: '100%', marginBottom: 12 },
+  soundsGreatButtonContainer: { paddingLeft: 10, width: '100%', marginBottom: 12 },
   termsAndConditions: {
     display: 'flex',
     flexDirection: 'row',
