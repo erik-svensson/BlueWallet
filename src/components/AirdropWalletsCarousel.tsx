@@ -2,14 +2,14 @@ import React, { FC } from 'react';
 import { Dimensions, ViewStyle } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
-import { AirdropWalletDetails } from 'app/consts';
+import { Wallet, AirdropWalletCardData } from 'app/consts';
 
 import { AirdropWalletBalanceCard } from './AirdropWalletBalanceCard';
 
 interface Props {
-  items: AirdropWalletDetails[];
+  items: Wallet[];
   styles?: ViewStyle;
-  setRef?: (carouselRef: Carousel<AirdropWalletDetails>) => void;
+  setRef?: (carouselRef: Carousel<AirdropWalletCardData>) => void;
 }
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -19,7 +19,7 @@ export const AirdropWalletsCarousel: FC<Props> = ({ items, styles, setRef }) => 
     ref={setRef}
     containerCustomStyle={styles}
     data={items}
-    renderItem={({ item }: { item: AirdropWalletDetails }) => <AirdropWalletBalanceCard walletDetails={item} />}
+    renderItem={({ item }: { item: AirdropWalletCardData }) => <AirdropWalletBalanceCard data={item} />}
     sliderWidth={SCREEN_WIDTH}
     itemWidth={SCREEN_WIDTH * 0.56}
   />

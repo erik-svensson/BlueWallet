@@ -71,10 +71,9 @@ export const WALLETS_ADDRESSES_TYPES = {
   [SegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
 };
 
-export interface AirdropWalletDetails {
+export interface AirdropWalletCardData {
   balance: number;
-  name: string;
-  address?: string;
+  label: string;
 }
 
 export interface AirdropGoal {
@@ -545,7 +544,7 @@ export type RootStackParams = {
   [Route.AirdropRequirements]: undefined;
   [Route.AirdropFinishedWalletDetails]: {
     balance: number;
-    name: string;
+    label: string;
   };
   [Route.Notifications]: undefined;
   [Route.AddEmail]: {

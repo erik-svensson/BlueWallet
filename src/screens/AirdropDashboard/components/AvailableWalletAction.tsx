@@ -1,26 +1,19 @@
 import React, { FC } from 'react';
 
 import { ProgressButton } from 'app/components';
-import { AirdropWalletDetails } from 'app/consts';
 
 const i18n = require('../../../../loc');
 
 interface Props {
-  wallet: AirdropWalletDetails;
+  onActionClick: () => void;
 }
 
-export const AvailableWalletAction: FC<Props> = ({ wallet }) => {
-  const addWallet = (wallet: AirdropWalletDetails) => {
-    // TODO: API call
-    console.log('wallet');
-    console.log(wallet);
-  };
-
+export const AvailableWalletAction: FC<Props> = ({ onActionClick }) => {
   return (
     <ProgressButton
       timeoutMilis={5000}
       stepIntervalMilis={100}
-      onComplete={() => addWallet(wallet)}
+      onComplete={onActionClick}
       title={i18n._.add}
       inProgressTitle={i18n._.undo}
       height={18}

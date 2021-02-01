@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
-import { CONST, AirdropWalletDetails, AirdropGoal } from 'app/consts';
+import { CONST, AirdropGoal, AirdropWalletCardData } from 'app/consts';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
 import { typography, palette } from 'app/styles';
 
@@ -10,10 +10,10 @@ import { AirdropWalletBalance } from './AirdropWalletBalance';
 const i18n = require('../../loc');
 
 interface Props {
-  walletDetails: AirdropWalletDetails;
+  data: AirdropWalletCardData;
 }
 
-export const AirdropWalletBalanceCard: FC<Props> = ({ walletDetails }) => {
+export const AirdropWalletBalanceCard: FC<Props> = ({ data }) => {
   const airdropGoals: AirdropGoal[] = [
     { threshold: 5, name: i18n.airdrop.walletsCarousel.shrimp },
     { threshold: 25, name: i18n.airdrop.walletsCarousel.crab },
@@ -24,20 +24,20 @@ export const AirdropWalletBalanceCard: FC<Props> = ({ walletDetails }) => {
   const _isAfterAirdrop = isAfterAirdrop();
 
   const readableOrder = [i18n.order.first, i18n.order.second, i18n.order.third, i18n.order.fourth];
-  const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > walletDetails.balance);
+  const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > data.balance);
   // TODO: edge case of "all goals reached" not covered by designs. Awaiting UX input. For now returning last one - "whale"
   const nextGoal = unreachedGoals[0] || airdropGoals[airdropGoals.length - 1];
   const nextGoalIndex = airdropGoals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
 
-  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= walletDetails.balance);
+  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= data.balance);
   // TODO: edge case of "none goals reached" not covered by designs. Awaiting UX input. For now returning first one - "shrimp"
   const lastGoal = reachedGoals[reachedGoals.length - 1] || airdropGoals[0];
 
   return (
     <View style={styles.walletCard}>
       <AirdropWalletBalance
-        balance={walletDetails.balance}
-        walletName={walletDetails.name}
+        balance={data.balance}
+        walletName={data.label}
         threshold={nextGoal.threshold}
         footer={
           <>

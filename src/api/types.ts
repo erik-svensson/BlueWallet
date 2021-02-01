@@ -27,6 +27,10 @@ export interface CheckSubscriptionPayload {
   email: string;
 }
 
+export interface AirdropCheckWalletsSubscription {
+  hashes: string[];
+}
+
 export interface VerifyEmailPayload {
   email: string;
 }

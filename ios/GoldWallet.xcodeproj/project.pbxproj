@@ -36,7 +36,6 @@
 		A2986451243B5FDD00A8F351 /* Ubuntu-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644D243B5FDD00A8F351 /* Ubuntu-Bold.ttf */; };
 		A2986452243B5FDD00A8F351 /* Ubuntu-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644E243B5FDD00A8F351 /* Ubuntu-Regular.ttf */; };
 		A2C0A118247E56E00059DACA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A2C0A117247E56E00059DACA /* GoogleService-Info.plist */; };
-		E88A24F9BBBF810B6395D790 /* libPods-GoldWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 731973BA0AC6EA78962CE5B6 /* libPods-GoldWallet.a */; };
 		E9D5F4AACC65A6D4D06C1894 /* libPods-GoldWallet Beta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A3718E6B755FC6AD7DA906 /* libPods-GoldWallet Beta.a */; };
 /* End PBXBuildFile section */
 
@@ -175,7 +174,6 @@
 				906451CAD44154C2950030EC /* libPods-GoldWallet.a in Frameworks */,
 				782F075B5DD048449E2DECE9 /* libz.tbd in Frameworks */,
 				764B49B1420D4AEB8109BF62 /* libsqlite3.0.tbd in Frameworks */,
-				E88A24F9BBBF810B6395D790 /* libPods-GoldWallet.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,7 +388,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1120;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1230;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
@@ -409,10 +407,9 @@
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "GoldWallet" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -790,6 +787,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -821,6 +819,10 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 4.2;
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = (
+					"${PODS_ROOT}",
+					recursive,
+				);
 			};
 			name = Debug;
 		};
@@ -890,6 +892,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -922,6 +925,7 @@
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-expression-type-checking=100 -Xfrontend -warn-long-function-bodies=100";
 				"OTHER_SWIFT_FLAGS[arch=*]" = "";
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;

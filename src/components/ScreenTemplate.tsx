@@ -57,6 +57,7 @@ export class ScreenTemplate extends React.PureComponent<Props> {
       keyboardShouldPersistTaps,
     } = this.props;
     const Container = noScroll ? View : ScrollView;
+
     return (
       <SafeAreaProvider style={styles.container}>
         <StatusBar barStyle={statusBarStyle} />

@@ -9,13 +9,13 @@ import { Route, RootStackParams } from 'app/consts';
 import { CONST } from 'app/consts/models';
 import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { actions } from 'app/state/airdrop';
-import { ThankYouFlowCompleted } from 'app/state/airdrop/actions';
+import { CompleteThankYouFlowActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface ActionProps {
-  completeThankYouFlow: () => ThankYouFlowCompleted;
+  completeThankYouFlow: CompleteThankYouFlowActionCreator;
 }
 
 type Props = {

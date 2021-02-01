@@ -5,8 +5,11 @@ import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native'
 
 import { images } from 'app/assets';
 import { AirdropStayTuned, AirdropWalletsList, Image } from 'app/components';
-import { RootStackParams, AirdropWalletDetails, Route } from 'app/consts';
+import { RootStackParams, Route, AirdropWalletCardData, Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
+
+import { Error } from './Error';
+import { Loading } from './Loading';
 
 const i18n = require('../../../../loc');
 
@@ -15,29 +18,49 @@ interface Props {
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
     StackNavigationProp<RootStackParams, Route.AirdropDashboard>
   >;
+  error: boolean;
+  loading: boolean;
+  wallets: Wallet[];
 }
 
 interface CallToActionProps {
-  wallet: AirdropWalletDetails;
+  data: AirdropWalletCardData;
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
     StackNavigationProp<RootStackParams, Route.AirdropDashboard>
   >;
 }
 
-const CallToAction: FC<CallToActionProps> = ({ wallet, navigation }) => {
-  const goToWalletDetails = (wallet: AirdropWalletDetails) => {
-    navigation.navigate(Route.AirdropFinishedWalletDetails, { balance: wallet.balance, name: wallet.name });
+const CallToAction: FC<CallToActionProps> = ({ data, navigation }) => {
+  const goToWalletDetails = (data: AirdropWalletCardData) => {
+    navigation.navigate(Route.AirdropFinishedWalletDetails, { balance: data.balance, label: data.label });
   };
 
   return (
-    <TouchableOpacity style={styles.arrowContainer} testID="forward-button" onPress={() => goToWalletDetails(wallet)}>
+    <TouchableOpacity style={styles.arrowContainer} testID="forward-button" onPress={() => goToWalletDetails(data)}>
       <Image style={styles.image} source={images.forwardArrow} />
     </TouchableOpacity>
   );
 };
 
-export const AirdropFinished: FC<Props> = ({ navigation }) => {
+export const AirdropFinishedContent: FC<Props> = ({ navigation, error, loading, wallets }) => {
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <Error />;
+  }
+
+  return (
+    <AirdropWalletsList
+      wallets={wallets}
+      title={i18n.airdrop.finished.registeredWallets}
+      itemCallToAction={data => <CallToAction data={data} navigation={navigation} />}
+    />
+  );
+};
+
+export const AirdropFinished: FC<Props> = props => {
   return (
     <View style={styles.container}>
       <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
@@ -56,14 +79,7 @@ export const AirdropFinished: FC<Props> = ({ navigation }) => {
       </View>
       <AirdropStayTuned />
       <View style={styles.walletsListContainer}>
-        <AirdropWalletsList
-          wallets={[
-            { balance: 2, name: 'Wallet name A', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
-            { balance: 13, name: 'Wallet name B', address: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' },
-          ]}
-          title={i18n.airdrop.finished.registeredWallets}
-          itemCallToAction={wallet => <CallToAction wallet={wallet} navigation={navigation} />}
-        />
+        <AirdropFinishedContent {...props} />
       </View>
     </View>
   );
