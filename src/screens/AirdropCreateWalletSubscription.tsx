@@ -28,10 +28,13 @@ type Props = {
   subscribeWallet: SubscribeWalletActionCreator;
 };
 
+const shareReward = 0.01;
+const maxReward = 0.02;
+
 const ShareComponent = () => (
   <View style={styles.shareComponent}>
     <Text style={styles.shareDescription}>
-      {i18n.formatString(i18n.airdrop.createWalletSuccess.shareIt, { rewardValue: 0.01 })}
+      {i18n.formatString(i18n.airdrop.createWalletSuccess.shareIt, { rewardValue: shareReward })}
     </Text>
     <View style={styles.socialsContainer}>
       <View style={styles.facebookButtonContainer}>
@@ -41,7 +44,7 @@ const ShareComponent = () => (
       <SocialShareTwitterButton shareOptions={{ message: 'Waiting for Content', title: 'Waiting for content' }} />
     </View>
     <Text style={styles.maximumReward}>
-      {i18n.formatString(i18n.airdrop.createWalletSuccess.maxReward, { rewardValue: 0.02 })}
+      {i18n.formatString(i18n.airdrop.createWalletSuccess.maxReward, { rewardValue: maxReward })}
     </Text>
   </View>
 );
