@@ -1,4 +1,4 @@
-import { Wallet, WalletPayload, ActionMeta } from 'app/consts';
+import { Wallet, ActionMeta } from 'app/consts';
 
 export enum AirdropAction {
   ThankYouSeen = 'ThankYouSeen',
@@ -22,6 +22,7 @@ export interface ThankYouFlowCompleted {
 export interface SubscribeWalletAction {
   type: AirdropAction.SubscribeWallet;
   payload: Wallet;
+  meta?: ActionMeta;
 }
 
 export interface SubscribeWalletSuccessAction {

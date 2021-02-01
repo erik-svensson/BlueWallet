@@ -20,7 +20,7 @@ enum Result {
 }
 
 export function* subscribeWalletSaga(action: SubscribeWalletAction) {
-  const { payload } = action as SubscribeWalletAction;
+  const { payload, meta } = action as SubscribeWalletAction;
 
   try {
     const walletPayload: WalletPayload = yield call(helpers.walletToAddressesGenerationBase, payload);
@@ -31,9 +31,17 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
     }
     if (response.result === Result.success) {
       yield put(subscribeWalletSuccess(payload.id));
+
+      if (meta?.onSuccess) {
+        meta.onSuccess();
+      }
     }
   } catch (error) {
     yield put(subscribeWalletFailure(error.msg));
+
+    if (meta?.onFailure) {
+      meta.onFailure();
+    }
   }
 }
 

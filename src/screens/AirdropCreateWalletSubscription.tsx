@@ -62,7 +62,7 @@ class AirdropCreateWalletSubscription extends Component<Props> {
           type: MessageType.success,
           buttonProps: {
             title: i18n.formatString(i18n.airdrop.createWalletSuccess.successCompletedButton, {
-              routeName: parentRouteName === Route.AirdropDashboard ? 'Airdrop' : 'Wallets',
+              routeName: parentRouteName === Route.AirdropDashboard ? i18n.airdrop.title : i18n.wallets.dashboard.title,
             }),
             onPress: () =>
               parentRouteName === Route.AirdropDashboard
@@ -113,7 +113,7 @@ class AirdropCreateWalletSubscription extends Component<Props> {
             <Loader size={137} />
           </View>
         ) : (
-          <Text style={styles.description}>{i18n.airdrop.onboarding.doYouWantToTakePart}</Text>
+          <Text style={styles.description}>{i18n.airdrop.createWallet.doYouWantToTakePart}</Text>
         )}
       </ScreenTemplate>
     );

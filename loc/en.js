@@ -45,7 +45,7 @@ module.exports = {
     circularWalletBalance: {
       yourBalance: 'Your balance',
     },
-    onboarding: {
+    createWallet: {
       doYouWantToTakePart: 'Do you want to take part in the Airdrop?',
     },
     dashboard: {
