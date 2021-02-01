@@ -1,10 +1,8 @@
 import React, { FC } from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
 import { Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
-
-import { wait } from '../../utils/time';
 
 interface Props {
   title: string;
@@ -36,7 +34,7 @@ export const AirdropWalletsList: FC<Props> = props => {
       {wallets.length > 0 &&
         wallets.map((wallet, index) => (
           <AirdropWalletsListItem
-            key={index}
+            key={wallet.id}
             wallet={wallet}
             callToAction={itemCallToAction && itemCallToAction(wallet)}
           />
