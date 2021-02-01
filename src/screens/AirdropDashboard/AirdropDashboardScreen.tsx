@@ -78,7 +78,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   availableWallets: airdropSelectors.availableWallets(state),
   subscribedWallets: airdropSelectors.subscribedWallets(state),
   isLoading: airdropSelectors.isLoading(state),
-  error: airdropSelectors.error(state),
+  error: airdropSelectors.hasError(state),
 });
 
 const mapDispatchToProps = {
