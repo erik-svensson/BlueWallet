@@ -96,8 +96,8 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     }
     checkSubscription(wallets, email, {
       onSuccess: (ids: string[]) => {
-        const walletsToSubscribe = wallets.filter(w => !ids.includes(w.id));
-        if (!walletsToSubscribe.length) {
+        const walletsToSubcribe = wallets.filter(w => !ids.includes(w.id));
+        if (!wallets.length) {
           return this.goToLocalEmailConfirm();
         }
         navigation.navigate(Route.ChooseWalletsForNotification, {
@@ -106,7 +106,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           description: i18n.notifications.chooseWalletsDescription,
           email,
           onSuccess,
-          wallets: walletsToSubscribe,
+          wallets: walletsToSubcribe,
           onSkip: () => this.goToLocalEmailConfirm(),
         });
       },
@@ -183,7 +183,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-  wallets: walletsSelectors.subscribableWallets(state),
+  wallets: walletsSelectors.wallets(state),
   isLoading: notificationsSelectors.isLoading(state),
   error: notificationsSelectors.notificationError(state),
 });

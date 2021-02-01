@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate, Button, FlatButton, CodeInput } from 'app/components';
+import { Header, ScreenTemplate, Button, CodeInput, TimeoutButton } from 'app/components';
 import { Route, RootStackParams, ConfirmAddressFlowType, CONST, ActionMeta, InfoContainerContent } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import {
@@ -30,7 +30,6 @@ interface Props {
   subscribe: SubscribeWalletActionCreator;
   unsubscribe: UnsubscribeWalletActionCreator;
   authenticate: (session_token: string, pin: string, meta: ActionMeta) => AuthenticateEmailAction;
-  language: string;
   sessionToken: string;
   notificationError: string;
   storedEmail: string;
@@ -50,7 +49,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
     failNo: 0,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     this.infoContainerContent.onInit?.();
   }
 
@@ -70,14 +69,14 @@ class ConfirmEmailScreen extends Component<Props, State> {
       createNotificationEmail,
       storedEmail,
       route: {
-        params: { email, walletsToSubscribe, onSuccess },
+        params: { email, wallets, onSuccess },
       },
     } = this.props;
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
       onInit: () => {
-        walletsToSubscribe && this.props.subscribe(walletsToSubscribe, email);
+        wallets && this.props.subscribe(wallets, email);
       },
       onCodeConfirm: () => {
         if (storedEmail) {
@@ -91,14 +90,14 @@ class ConfirmEmailScreen extends Component<Props, State> {
   unsubscribeFlowContent = () => {
     const {
       route: {
-        params: { email, walletsToSubscribe, onSuccess },
+        params: { email, wallets, onSuccess },
       },
     } = this.props;
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
       onInit: () => {
-        walletsToSubscribe && this.props.unsubscribe(walletsToSubscribe, email);
+        wallets && this.props.unsubscribe(wallets, email);
       },
       onCodeConfirm: () => {
         onSuccess();
@@ -145,7 +144,9 @@ class ConfirmEmailScreen extends Component<Props, State> {
   onChange = (code: string) =>
     this.setState({ code, error: '', failNo: this.state.failNo >= CONST.emailCodeErrorMax ? 0 : this.state.failNo });
 
-  onResend = () => {};
+  onResend = () => {
+    this.infoContainerContent.onInit?.();
+  };
 
   render() {
     const { email, onBack } = this.props.route.params;
@@ -160,11 +161,12 @@ class ConfirmEmailScreen extends Component<Props, State> {
               onPress={this.onConfirm}
               disabled={this.state.code.length !== CONST.codeLength}
             />
-            {/* <FlatButton // uncomment when api for resend works
+            <TimeoutButton
+              testID="resend-code-email"
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
               onPress={this.onResend}
-            />  TODO uncomment when resend is ready on backend */}
+            />
           </>
         }
       >

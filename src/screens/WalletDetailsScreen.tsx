@@ -148,7 +148,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       navigation.navigate(Route.ConfirmEmail, {
         email,
         flowType,
-        walletsToSubscribe: [wallet],
+        wallets: [wallet],
         onSuccess: () => {
           CreateMessage({
             title: i18n.message.success,

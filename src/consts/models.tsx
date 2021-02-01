@@ -48,6 +48,7 @@ export const CONST = {
   walletsDefaultGapLimit: 20,
   userVersion: 'userVersion',
   newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
+  buttonTimeoutSeconds: 30,
 };
 
 export const ADDRESSES_TYPES = {
@@ -524,7 +525,7 @@ export type RootStackParams = {
     email: string;
     newAddress?: string;
     flowType: ConfirmAddressFlowType;
-    walletsToSubscribe?: Wallet[];
+    wallets?: Wallet[];
     onBack?: () => void;
     onSuccess: () => void;
   };

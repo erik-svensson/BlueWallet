@@ -118,7 +118,6 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
               testID="resend-code-email"
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
-              timeoutSeconds={30}
               onPress={() => this.resendCode()}
             />
           </>
