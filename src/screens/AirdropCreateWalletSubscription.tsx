@@ -69,7 +69,7 @@ class AirdropCreateWalletSubscription extends Component<Props> {
                 ? navigation.navigate(Route.AirdropDashboard)
                 : navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
           },
-          shareComponent: <ShareComponent />,
+          footerComponent: <ShareComponent />,
         }),
     });
   };

@@ -425,7 +425,7 @@ export type RootStackParams = {
     buttonProps?: ButtonProps;
     imageStyle?: StyleProp<ImageStyle>;
     asyncTask?: () => void;
-    shareComponent?: React.ReactNode;
+    footerComponent?: React.ReactNode;
   };
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };

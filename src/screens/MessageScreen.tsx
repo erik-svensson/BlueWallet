@@ -11,7 +11,16 @@ interface Props {
 }
 
 export const MessageScreen = (props: Props) => {
-  const { title, source, description, buttonProps, imageStyle, asyncTask, testID, shareComponent } = props.route.params;
+  const {
+    title,
+    source,
+    description,
+    buttonProps,
+    imageStyle,
+    asyncTask,
+    testID,
+    footerComponent,
+  } = props.route.params;
 
   useEffect(() => {
     const onBackPress = () => true;
@@ -36,7 +45,7 @@ export const MessageScreen = (props: Props) => {
       <Text style={styles.title}>{title}</Text>
       <Image testID={testID} source={source} style={[styles.image, imageStyle]} resizeMode="contain" />
       <Text style={styles.description}>{description}</Text>
-      {shareComponent}
+      {footerComponent}
       {buttonProps && <Button testID="message-close-button" {...buttonProps} />}
     </View>
   );
