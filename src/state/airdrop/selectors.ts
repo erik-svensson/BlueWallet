@@ -21,5 +21,6 @@ export const subscribedWallets = createSelector([wallets, subscribedIds], (walle
 export const availableWallets = createSelector([wallets, subscribedIds], (wallets, subscribedIds) =>
   wallets.filter((w: Wallet) => !subscribedIds.includes(w.id)),
 );
+export const airdropUsersQuantity = createSelector(local, state => state.usersQuantity);
 export const isLoading = createSelector(local, state => state.isLoading);
 export const hasError = createSelector(local, state => !!state.error);

@@ -1,7 +1,7 @@
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate } from 'app/components';
@@ -9,6 +9,7 @@ import { Route, RootStackParams, Wallet } from 'app/consts';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
 import { ApplicationState } from 'app/state';
 import {
+  getUsersQuantity,
   checkSubscription,
   CheckSubscriptionActionCreator,
   subscribeWallet,
@@ -33,11 +34,13 @@ interface Props {
   subscribedWallets: Wallet[];
   availableWallets: Wallet[];
   subscribeWallet: SubscribeWalletActionCreator;
+  usersQuantity: number;
 }
 
 export const AirdropDashboardScreen: FC<Props> = ({
   navigation,
   wallets,
+  usersQuantity,
   checkSubscription,
   subscribedWallets,
   subscribeWallet,
@@ -47,8 +50,10 @@ export const AirdropDashboardScreen: FC<Props> = ({
   route,
 }) => {
   useEffect(() => {
+    getUsersQuantity();
     checkSubscription(wallets);
   }, [checkSubscription, wallets]);
+
   const airdropFinished = isAfterAirdrop();
 
   return (
@@ -66,6 +71,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
             availableWallets={availableWallets}
             subscribedWallets={subscribedWallets}
             subscribeWallet={subscribeWallet}
+            usersQuantity={usersQuantity}
           />
         )}
       </View>
@@ -75,6 +81,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
 
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: airdropSelectors.airdropReadyWallets(state),
+  usersQuantity: airdropSelectors.airdropUsersQuantity(state),
   availableWallets: airdropSelectors.availableWallets(state),
   subscribedWallets: airdropSelectors.subscribedWallets(state),
   isLoading: airdropSelectors.isLoading(state),

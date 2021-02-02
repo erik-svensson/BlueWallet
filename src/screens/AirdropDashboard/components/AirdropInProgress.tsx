@@ -21,6 +21,7 @@ interface Props {
   subscribeWallet: SubscribeWalletActionCreator;
   error: boolean;
   loading: boolean;
+  usersQuantity: number;
 }
 
 export const AirdropInProgress: FC<Props> = props => {

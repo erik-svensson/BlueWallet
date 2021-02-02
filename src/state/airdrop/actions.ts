@@ -9,6 +9,23 @@ export enum AirdropAction {
   CheckSubscription = 'CheckSubscription',
   CheckSubscriptionSuccess = 'CheckSubscriptionSuccess',
   CheckSubscriptionFailure = 'CheckSubscriptionFailure',
+  GetUsersQuantity = 'GetUsersQuantity',
+  GetUsersQuantitySuccess = 'GetUsersQuantitySuccess',
+  GetUsersQuantityFailure = 'GetUsersQuantityFailure',
+}
+
+export interface GetUsersQuantityAction {
+  type: AirdropAction.GetUsersQuantity;
+}
+
+export interface GetUsersQuantitySuccessAction {
+  type: AirdropAction.GetUsersQuantitySuccess;
+  payload: { users: number };
+}
+
+export interface GetUsersQuantityFailureAction {
+  type: AirdropAction.GetUsersQuantityFailure;
+  error: string;
 }
 
 export interface ThankYouSeenAction {
@@ -109,6 +126,26 @@ export const checkSubscriptionFailure: CheckSubscriptionFailureActionCreator = e
   error,
 });
 
+export type GetUsersQuantityActionCreator = () => GetUsersQuantityAction;
+
+export const getUsersQuantity: GetUsersQuantityActionCreator = () => ({
+  type: AirdropAction.GetUsersQuantity,
+});
+
+export type GetUsersQuantitySuccessActionCreator = (users: number) => GetUsersQuantitySuccessAction;
+
+export const getUsersQuantitySuccess: GetUsersQuantitySuccessActionCreator = users => ({
+  type: AirdropAction.GetUsersQuantitySuccess,
+  payload: { users },
+});
+
+export type GetUsersQuantityFailureActionCreator = (error: string) => GetUsersQuantityFailureAction;
+
+export const getUsersQuantityFailure: GetUsersQuantityFailureActionCreator = error => ({
+  type: AirdropAction.GetUsersQuantityFailure,
+  error,
+});
+
 export type AirdropActionType =
   | ThankYouSeenAction
   | ThankYouFlowCompleted
@@ -117,4 +154,7 @@ export type AirdropActionType =
   | SubscribeWalletFailureAction
   | CheckSubscriptionSuccessAction
   | SubscribeWalletSuccessAction
-  | CheckSubscriptionFailureAction;
+  | CheckSubscriptionFailureAction
+  | GetUsersQuantityAction
+  | GetUsersQuantitySuccessAction
+  | GetUsersQuantityFailureAction;
