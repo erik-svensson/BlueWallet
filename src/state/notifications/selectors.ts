@@ -31,7 +31,6 @@ export const readableError = createSelector(notificationError, failedTries, (err
 
   if (err === messages.wrongPIN && failNo < CONST.emailCodeErrorMax) {
     return i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - failNo });
-    // return i18n.formatString(i18n.notifications.codeFinalError, { attemptsLeft: CONST.emailCodeErrorMax });
   }
   return err;
 });
