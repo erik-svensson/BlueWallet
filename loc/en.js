@@ -269,7 +269,6 @@ module.exports = {
     yourCurrentEmail: 'Your current email',
     newEmail: 'New email',
     confirmCurrentTitle: 'Confirm your current email address',
-    confirmCurrentDescription: 'To confirm the request, please enter the code we sent to ',
     confirmNewTitle: 'Confirm your new email address',
     confirmNewDescription: 'Now confirm your new email address. Please enter the code we sent to ',
     emailChangedSuccessMessage: 'Hooray!\n You have successfully updated your email address.',

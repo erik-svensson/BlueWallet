@@ -48,6 +48,7 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
     case NotificationAction.CheckSubscriptionFailureAction:
     case NotificationAction.CreateNotificationEmailFailure:
     case NotificationAction.VerifyNotificationEmailActionFailure:
+    case NotificationAction.UpdateNotificationEmailFailureAction:
       return {
         ...state,
         error: action.error,
@@ -81,6 +82,7 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
       };
     case NotificationAction.SubscribeWalletSuccessAction:
     case NotificationAction.UnsubscribeWalletSuccessAction:
+    case NotificationAction.UpdateNotificationEmailSuccessAction:
       return {
         ...state,
         sessionToken: action.payload.sessionToken,

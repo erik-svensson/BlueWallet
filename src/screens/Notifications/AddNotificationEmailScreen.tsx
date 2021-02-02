@@ -22,7 +22,7 @@ import {
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
-const i18n = require('../../loc');
+const i18n = require('../../../loc');
 
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.AddNotificationEmail>;
@@ -34,7 +34,6 @@ interface Props {
   error: string;
   isLoading: boolean;
   checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
-  storedEmail: string;
 }
 
 type State = {
@@ -85,25 +84,9 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     });
   };
 
-  onSuccessWhileChanging = (walletsToSubscribe: Wallet[]) => {
-    const { email } = this.state;
-    const { navigation, route, createNotificationEmail } = this.props;
-    const { onSuccess } = route.params;
-    return navigation.navigate(Route.ConfirmEmail, {
-      email,
-      flowType: ConfirmAddressFlowType.SUBSCRIBE,
-      onSuccess: () => {
-        createNotificationEmail(email, {
-          onSuccess,
-        });
-      },
-      walletsToSubscribe,
-    });
-  };
-
   onConfirm = () => {
     const { email } = this.state;
-    const { navigation, route, checkSubscription, wallets, setError, storedEmail } = this.props;
+    const { navigation, route, checkSubscription, wallets, setError } = this.props;
     const { onSuccess } = route.params;
 
     if (!isEmail(email)) {
@@ -115,18 +98,6 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     checkSubscription(wallets, email, {
       onSuccess: (ids: string[]) => {
         const walletsToSubscribe = wallets.filter(w => !ids.includes(w.id));
-        const subscribedWallets = wallets.filter(w => !ids.includes(w.id));
-        if (storedEmail && subscribedWallets) {
-          return navigation.navigate(Route.ConfirmEmail, {
-            email: storedEmail,
-            flowType: ConfirmAddressFlowType.UNSUBSCRIBE,
-            onSuccess: () => {
-              navigation.goBack();
-              this.onSuccessWhileChanging(subscribedWallets);
-            },
-            walletsToSubscribe: subscribedWallets,
-          });
-        }
         if (!walletsToSubscribe.length) {
           return this.goToLocalEmailConfirm();
         }
@@ -156,15 +127,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { email } = this.state;
     const { error, route, isLoading } = this.props;
 
-    const {
-      onSkipSuccess,
-      title,
-      isBackArrow,
-      description,
-      subTitle,
-      inputAutofocus,
-      additionalContent,
-    } = route.params;
+    const { onSkipSuccess, title, isBackArrow, description, inputAutofocus } = route.params;
     return (
       <ScreenTemplate
         noScroll
@@ -191,10 +154,9 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         header={<Header title={title} isBackArrow={isBackArrow} />}
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{subTitle}</Text>
+          <Text style={typography.headline4}>{i18n.notifications.addYourEmailFor}</Text>
           <Text style={styles.pinDescription}>{description}</Text>
         </View>
-        {additionalContent}
         <View style={styles.inputItemContainer}>
           <InputItem
             value={email}
@@ -224,7 +186,6 @@ const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isLoading: notificationsSelectors.isLoading(state),
   error: notificationsSelectors.readableError(state),
-  storedEmail: notificationsSelectors.storedEmail(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);

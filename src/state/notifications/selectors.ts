@@ -25,7 +25,7 @@ export const readableError = createSelector(notificationError, failedTries, (err
   if (err.startsWith(messages.requestFailed5XX)) {
     return i18n.connectionIssue.couldntConnectToServer;
   }
-  if (err === messages.invalidEmail) {
+  if (err === messages.invalidEmail || err === messages.invalidEmail2) {
     return i18n.notifications.invalidAddressError;
   }
 

@@ -1,5 +1,12 @@
-import { AuthenticatePayload, SubscribeWalletSuccessPayload } from 'app/api';
-import { ActionMeta, Wallet } from 'app/consts';
+import {
+  SubscribePayload,
+  UnsubscribePayload,
+  AuthenticatePayload,
+  SubscribeWalletSuccessPayload,
+  UpdateNotificationEmailPayload,
+  UpdateNotificationEmailSuccessPayload,
+} from 'app/api';
+import { ActionMeta, Wallet, WalletPayload } from 'app/consts';
 
 export enum NotificationAction {
   CreateNotificationEmail = 'CreateNotificationEmail',
@@ -22,6 +29,9 @@ export enum NotificationAction {
   CheckSubscriptionSuccessAction = 'CheckSubscriptionSuccessAction',
   CheckSubscriptionFailureAction = 'CheckSubscriptionFailureAction',
   SetErrorAction = 'SetErrorAction',
+  UpdateNotificationEmailAction = 'UpdateNotificationEmailAction',
+  UpdateNotificationEmailSuccessAction = 'UpdateNotificationEmailSuccessAction',
+  UpdateNotificationEmailFailureAction = 'UpdateNotificationEmailFailureAction',
 }
 
 export interface SetErrorAction {
@@ -137,6 +147,22 @@ export interface CheckSubscriptionFailureAction {
   error: string;
 }
 
+export interface UpdateNotificationEmailAction {
+  type: NotificationAction.UpdateNotificationEmailAction;
+  payload: UpdateNotificationEmailPayload;
+  meta?: ActionMeta;
+}
+
+export interface UpdateNotificationEmailSuccessAction {
+  type: NotificationAction.UpdateNotificationEmailSuccessAction;
+  payload: UpdateNotificationEmailSuccessPayload;
+}
+
+export interface UpdateNotificationEmailFailureAction {
+  type: NotificationAction.UpdateNotificationEmailFailureAction;
+  error: string;
+}
+
 export type NotificationActionType =
   | CreateNotificationEmailAction
   | CreateNotificationEmailSuccessAction
@@ -157,7 +183,10 @@ export type NotificationActionType =
   | CheckSubscriptionAction
   | CheckSubscriptionSuccessAction
   | CheckSubscriptionFailureAction
-  | SetErrorAction;
+  | SetErrorAction
+  | UpdateNotificationEmailAction
+  | UpdateNotificationEmailSuccessAction
+  | UpdateNotificationEmailFailureAction;
 
 export type CreateNotificationEmailActionCreator = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 export const createNotificationEmail: CreateNotificationEmailActionCreator = (email, meta) => ({
@@ -274,5 +303,31 @@ export const checkSubscriptionFailure = (error: string): CheckSubscriptionFailur
 export type SetErrorActionCreator = (error: string) => SetErrorAction;
 export const setError: SetErrorActionCreator = error => ({
   type: NotificationAction.SetErrorAction,
+  error,
+});
+
+export type UpdateNotificationEmailFunction = (
+  hashes: string[],
+  old_email: string,
+  new_email: string,
+  meta?: ActionMeta,
+) => UpdateNotificationEmailAction;
+export const updateNotificationEmail: UpdateNotificationEmailFunction = (hashes, old_email, new_email, meta) => ({
+  type: NotificationAction.UpdateNotificationEmailAction,
+  payload: {
+    hashes,
+    old_email,
+    new_email,
+  },
+  meta,
+});
+
+export const updateNotificationEmailSuccess = (sessionToken: string): UpdateNotificationEmailSuccessAction => ({
+  type: NotificationAction.UpdateNotificationEmailSuccessAction,
+  payload: { sessionToken },
+});
+
+export const updateNotificationEmailFailure = (error: string): UpdateNotificationEmailFailureAction => ({
+  type: NotificationAction.UpdateNotificationEmailFailureAction,
   error,
 });

@@ -115,12 +115,15 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onConfirm = () => {
-    const { sessionToken } = this.props;
+    const {
+      sessionToken,
+      route: { params },
+    } = this.props;
     const { code } = this.state;
 
     this.props.authenticate(sessionToken, code, {
       onFailure: this.onError,
-      onSuccess: this.infoContainerContent.onCodeConfirm,
+      onSuccess: this.infoContainerContent.onCodeConfirm || params.onSuccess,
     });
   };
 
@@ -142,9 +145,8 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   render() {
-    const { email, onBack } = this.props.route.params;
     const { notificationError } = this.props;
-
+    const { email, onBack, title, description } = this.props.route.params;
     return (
       <ScreenTemplate
         noScroll
@@ -166,9 +168,9 @@ class ConfirmEmailScreen extends Component<Props, State> {
         }
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{this.infoContainerContent?.title}</Text>
+          <Text style={typography.headline4}>{this.infoContainerContent.title || title}</Text>
           <Text style={styles.infoDescription}>
-            {this.infoContainerContent?.description}
+            {this.infoContainerContent.description || description}
             <Text style={styles.email}>{`\n${email}`}</Text>
           </Text>
         </View>

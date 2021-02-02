@@ -14,6 +14,7 @@ import {
   deleteNotificationEmail as deleteNotificationEmailAction,
   CheckSubscriptionAction,
   checkSubscription as checkSubscriptionAction,
+  createNotificationEmail as createNotificationEmailAction,
 } from 'app/state/notifications/actions';
 import { storedEmail } from 'app/state/notifications/selectors';
 import { subscribedWallets, wallets } from 'app/state/wallets/selectors';
@@ -37,31 +38,8 @@ export class NotificationScreen extends Component<Props> {
   }
 
   onChangeEmailPress = () => {
-    this.props.navigation.navigate(Route.AddNotificationEmail, {
-      title: i18n.notifications.notifications,
-      subTitle: i18n.notifications.changeEmailTitle,
-      description: i18n.notifications.changeEmailDescription,
-      isBackArrow: true,
-      additionalContent: (
-        <View style={styles.currentAddress}>
-          <Text style={styles.inputLabel}>{i18n.notifications.yourCurrentEmail}</Text>
-          <Text style={styles.email}>{this.props.email}</Text>
-        </View>
-      ),
-      onSuccess: () => {
-        CreateMessage({
-          title: i18n.contactCreate.successTitle,
-          description: i18n.notifications.emailChangedSuccessMessage,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.notifications.goToNotifications,
-            onPress: () => {
-              this.props.navigation.navigate(Route.Notifications);
-            },
-          },
-        });
-      },
-      onSkipSuccess: undefined,
+    this.props.navigation.navigate(Route.UpdateEmailNotification, {
+      subscribedWallets: this.props.subscribedWallets,
     });
   };
 
@@ -125,10 +103,10 @@ export class NotificationScreen extends Component<Props> {
   deleteEmail = () => (!!this.props.subscribedWallets.length ? this.unsubscribeAndRemoveEmail() : this.removeEmail());
 
   onAddEmailPress = () => {
+    // return this.props.createNotificationEmail('dd@dd.pl');
     this.props.navigation.navigate(Route.AddNotificationEmail, {
       inputAutofocus: true,
       title: i18n.notifications.notifications,
-      subTitle: i18n.notifications.addYourEmailFor,
       isBackArrow: true,
       description: i18n.notifications.addYourEmailForDescription,
       onSuccess: () => {
@@ -230,6 +208,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   deleteNotificationEmail: deleteNotificationEmailAction,
   checkSubscription: checkSubscriptionAction,
+  createNotificationEmail: createNotificationEmailAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationScreen);

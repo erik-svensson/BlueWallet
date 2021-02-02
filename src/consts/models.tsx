@@ -168,6 +168,7 @@ export enum Route {
   Notifications = 'Notifications',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
+  UpdateEmailNotification = 'UpdateEmailNotification',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -259,6 +260,7 @@ export enum ConfirmAddressFlowType {
   DELETE_ADDRESS = 'DELETE_ADDRESS',
   SUBSCRIBE = 'SUBSCRIBE',
   UNSUBSCRIBE = 'UNSUBSCRIBE',
+  UPDATE = 'UPDATE',
 }
 
 export interface InfoContainerContent {
@@ -371,7 +373,6 @@ export type MainTabNavigatorParams = {
 
 export interface AddNotificationEmailParams {
   title: string;
-  subTitle: string;
   onSuccess: () => void;
   isBackArrow: boolean;
   description: string;
@@ -528,11 +529,16 @@ export type RootStackParams = {
   };
   [Route.ConfirmEmail]: {
     email: string;
+    title?: string;
+    description?: string;
     newAddress?: string;
-    flowType: ConfirmAddressFlowType;
     wallets?: Wallet[];
+    flowType?: ConfirmAddressFlowType;
     onBack?: () => void;
-    onSuccess: () => void;
+    onSuccess: (arg?: any) => void;
+  };
+  [Route.UpdateEmailNotification]: {
+    subscribedWallets: Wallet[];
   };
 };
 

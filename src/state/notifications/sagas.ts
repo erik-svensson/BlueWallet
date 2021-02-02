@@ -1,7 +1,13 @@
 import { takeEvery, takeLatest, put, call, all, select } from 'redux-saga/effects';
 
 import { verifyEmail } from 'app/api';
-import { subscribeEmail, authenticateEmail, checkSubscriptionEmail, unsubscribeEmail } from 'app/api/emailApi';
+import {
+  subscribeEmail,
+  authenticateEmail,
+  checkSubscriptionEmail,
+  unsubscribeEmail,
+  modifyEmail,
+} from 'app/api/emailApi';
 import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys, walletToAddressesGenerationBase } from 'app/helpers/wallets';
@@ -27,6 +33,9 @@ import {
   unsubscribeWalletFailure,
   unsubscribeWalletSuccess,
   subscribeWalletFailure,
+  UpdateNotificationEmailAction,
+  updateNotificationEmailSuccess,
+  updateNotificationEmailFailure,
 } from './actions';
 
 enum Result {
@@ -117,7 +126,7 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
     if (response.result === Result.success) {
       yield put(authenticateEmailSuccess());
       if (meta?.onSuccess) {
-        meta.onSuccess();
+        meta.onSuccess(payload.session_token);
       }
     }
   } catch (error) {
@@ -126,6 +135,22 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
     if (meta?.onFailure) {
       meta.onFailure();
     }
+  }
+}
+
+export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
+  const { payload, meta } = action;
+  try {
+    const response = yield call(modifyEmail, payload);
+    if (response.session_token) {
+      yield put(updateNotificationEmailSuccess(response.session_token));
+      if (meta?.onSuccess) {
+        meta.onSuccess();
+      }
+    }
+  } catch (error) {
+    const { msg } = error.response.data;
+    yield put(updateNotificationEmailFailure(msg));
   }
 }
 
@@ -166,4 +191,5 @@ export default [
   takeEvery(NotificationAction.SubscribeWalletAction, subscribeWalletSaga),
   takeEvery(NotificationAction.AuthenticateEmailAction, authenticateEmailSaga),
   takeEvery(NotificationAction.UnsubscribeWalletAction, unsubscribeWalletSaga),
+  takeLatest(NotificationAction.UpdateNotificationEmailAction, updateEmailSaga),
 ];

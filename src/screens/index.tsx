@@ -49,5 +49,10 @@ export { ChunkedQrCode } from './ChunkedQrCode';
 export { default as ConnectionIssuesScreen } from './ConnectionIssues';
 export { default as TermsConditionsScreen } from './TermsConditionsScreen';
 export { default as LocalConfirmNotificationCodeScreen } from './LocalConfirmNotificationCodeScreen';
-export { default as AddNotificationEmailScreen } from './AddNotificationEmailScreen';
-export { NotificationScreen, ConfirmEmailScreen, ChooseWalletsForNotificationScreen } from './Notifications';
+export {
+  NotificationScreen,
+  ConfirmEmailScreen,
+  ChooseWalletsForNotificationScreen,
+  AddNotificationEmailScreen,
+  UpdateEmailNotificationScreen,
+} from './Notifications';
