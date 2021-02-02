@@ -34,10 +34,4 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontWeight: 'bold',
   },
-  airdropImage: {
-    width: 189,
-    height: 193,
-    marginTop: 27.5,
-    marginBottom: 20,
-  },
 });

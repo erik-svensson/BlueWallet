@@ -67,6 +67,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
 
   render() {
     const { password, error, isVisible } = this.state;
+
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps="always"

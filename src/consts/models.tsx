@@ -188,6 +188,7 @@ export enum Route {
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   ChangeEmail = 'ChangeEmail',
+  AirdropCreateWalletSubscription = 'AirdropCreateWalletSubscription',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -424,6 +425,7 @@ export type RootStackParams = {
     buttonProps?: ButtonProps;
     imageStyle?: StyleProp<ImageStyle>;
     asyncTask?: () => void;
+    footerComponent?: React.ReactNode;
   };
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
@@ -462,7 +464,7 @@ export type RootStackParams = {
     wallets: Wallet[];
   };
   [Route.AddNotificationEmail]: AddNotificationEmailParams;
-  [Route.CreateWallet]: undefined;
+  [Route.CreateWallet]: { parentRouteName: string };
   [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
   [Route.WalletDetails]: { id: string };
@@ -487,6 +489,8 @@ export type RootStackParams = {
     buttonTitle?: string;
     successMsgDesc?: string;
   };
+
+  [Route.AirdropCreateWalletSubscription]: { wallet: Wallet; notificationsTurnedOn: boolean; parentRouteName: string };
   [Route.RecoveryTransactionList]: { wallet: Wallet };
   [Route.RecoverySend]: { transactions: Transaction[]; wallet: any };
   [Route.RecoverySeed]: {

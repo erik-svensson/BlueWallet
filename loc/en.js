@@ -25,6 +25,8 @@ module.exports = {
     skip: 'Skip this step',
     add: 'Add',
     undo: 'Undo',
+    yes: 'Yes',
+    no: 'No',
   },
   order: {
     first: 'first',
@@ -42,6 +44,9 @@ module.exports = {
     dateOfAirdrop: 'Date of Airdrop:',
     circularWalletBalance: {
       yourBalance: 'Your balance',
+    },
+    createWallet: {
+      doYouWantToTakePart: 'Do you want to take part in the Airdrop?',
     },
     dashboard: {
       createNewWallet: 'Create new wallet',
@@ -94,6 +99,14 @@ module.exports = {
       readFullReport: 'Read our full report on',
       medium: 'Medium',
       registeredWallets: 'Registered wallets',
+    },
+    createWalletSuccess: {
+      success: 'Hooray! \n  You have successfully registered to Airdrop!',
+      successWithNotifications:
+        'Hooray! \n  You have successfully subscribed to notifications and registered to Airdrop!',
+      shareIt: 'Share it with others and get {rewardValue} BTCV reward!*',
+      maxReward: '*Maximum reward for one wallet is {rewardValue} BTCV.',
+      successCompletedButton: 'Go to {routeName}',
     },
   },
   termsConditions: {

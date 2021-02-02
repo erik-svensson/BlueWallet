@@ -1,7 +1,7 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate } from 'app/components';
@@ -25,6 +25,7 @@ interface Props {
   error: boolean;
   isLoading: boolean;
   checkSubscription: CheckSubscriptionActionCreator;
+  route: RouteProp<RootStackParams, Route.AirdropDashboard>;
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
     StackNavigationProp<RootStackParams, Route.AirdropDashboard>
@@ -43,6 +44,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
   availableWallets,
   isLoading,
   error,
+  route,
 }) => {
   useEffect(() => {
     checkSubscription(wallets);
@@ -52,7 +54,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
   return (
     <ScreenTemplate
       header={<Header isBackArrow title={i18n.airdrop.title} />}
-      footer={!airdropFinished && <Footer navigation={navigation} />}
+      footer={!airdropFinished && <Footer route={route} navigation={navigation} />}
     >
       <View style={styles.wrapper}>
         {airdropFinished ? (

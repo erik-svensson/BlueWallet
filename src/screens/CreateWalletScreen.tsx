@@ -90,6 +90,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   navigateToSuccesfullNotificationSubscriptionMessage = () => {
     const { navigation } = this.props;
+
     CreateMessage({
       title: i18n.contactDelete.success,
       description: i18n.message.successSubscription,
@@ -99,6 +100,13 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
         onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
       },
     });
+  };
+
+  navigateToAirdropWalletSubscription = (wallet: Wallet, notificationsTurnedOn = false) => {
+    const { navigation } = this.props;
+    const { parentRouteName } = this.props.route.params;
+
+    navigation.navigate(Route.AirdropCreateWalletSubscription, { wallet, notificationsTurnedOn, parentRouteName });
   };
 
   navigateToConfirmEmailSubscription = (wallet: Wallet) => {
@@ -112,9 +120,14 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
           walletsToSubscribe: [wallet],
-          onSuccess: this.navigateToSuccesfullNotificationSubscriptionMessage,
+          onSuccess: isAfterAirdrop()
+            ? this.navigateToSuccesfullNotificationSubscriptionMessage
+            : () => this.navigateToAirdropWalletSubscription(wallet, true),
         }),
-      onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+      onBack: () =>
+        isAfterAirdrop()
+          ? this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard })
+          : this.navigateToAirdropWalletSubscription(wallet),
       isBackArrow: false,
     });
   };
@@ -122,12 +135,16 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
     const { navigation, createWallet, email } = this.props;
+
     wallet.setLabel(label);
+
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
           secret: w.getSecret(),
-          onButtonPress: !!email ? () => this.navigateToConfirmEmailSubscription(wallet) : undefined,
+          onButtonPress: true
+            ? () => this.navigateToConfirmEmailSubscription(wallet)
+            : () => (isAfterAirdrop() ? undefined : this.navigateToAirdropWalletSubscription(wallet)),
         });
       },
       onFailure: () => onError(),
@@ -151,6 +168,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       this.showAlert(() => {
         this.navigateToIntegrateRecoveryPublicKeyForAIR(wallet);
       }, error);
+
     try {
       wallet.addPublicKey(recoveryPublicKey);
       navigation.goBack();
@@ -176,13 +194,14 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   navigateToIntegrateRecoveryPublicKeyForAR = () => {
     const { navigation } = this.props;
+
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: recoveryPublicKey => this.createARWallet(recoveryPublicKey),
       headerTitle: i18n.wallets.add.title,
       title: i18n.wallets.publicKey.recoverySubtitle,
       description: i18n.wallets.publicKey.recoveryDescription,
       onBackArrow: () => {
-        navigation.navigate(Route.CreateWallet);
+        navigation.navigate(Route.CreateWallet, { parentRouteName: this.props.route.name });
       },
     });
   };
@@ -190,6 +209,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   navigateToIntegrateInstantPublicKeyForAIR = () => {
     const { navigation } = this.props;
     const wallet = new HDSegwitP2SHAirWallet();
+
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: instantPublicKey => {
         try {
@@ -203,7 +223,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       headerTitle: i18n.wallets.add.title,
       description: i18n.wallets.publicKey.recoveryDescription,
       onBackArrow: () => {
-        navigation.navigate(Route.CreateWallet);
+        navigation.navigate(Route.CreateWallet, { parentRouteName: this.props.route.name });
       },
     });
   };
@@ -230,7 +250,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
     const onError = () =>
       this.showAlert(() => {
-        navigation.navigate(Route.CreateWallet);
+        navigation.navigate(Route.CreateWallet, { parentRouteName: this.props.route.name });
       }, i18n.wallets.add.failed);
     this.createWalletMessage(wallet, onError);
   };
@@ -241,9 +261,11 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   get validationError(): string | undefined {
     const { walletsLabels } = this.props;
+
     if (walletsLabels.includes(this.state.label.trim())) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
+
     if (
       this.state.label.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase() ||
       this.state.label === CONST.allWallets
