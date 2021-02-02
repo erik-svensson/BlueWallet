@@ -124,7 +124,10 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
             ? this.navigateToSuccesfullNotificationSubscriptionMessage
             : () => this.navigateToAirdropWalletSubscription(wallet, true),
         }),
-      onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+      onBack: () =>
+        isAfterAirdrop()
+          ? this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard })
+          : this.navigateToAirdropWalletSubscription(wallet, true),
       isBackArrow: false,
     });
   };
@@ -139,7 +142,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
           secret: w.getSecret(),
-          onButtonPress: !!email
+          onButtonPress: true
             ? () => this.navigateToConfirmEmailSubscription(wallet)
             : () => (isAfterAirdrop() ? undefined : this.navigateToAirdropWalletSubscription(wallet)),
         });
