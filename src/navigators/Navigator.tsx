@@ -81,6 +81,7 @@ class Navigator extends React.Component<Props, State> {
 
   componentDidMount() {
     const { checkCredentials, startElectrumXListeners, checkTc, checkConnection, checkUserVersion } = this.props;
+
     checkUserVersion();
     checkTc();
     checkCredentials();

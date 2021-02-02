@@ -57,6 +57,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
 
   onDelete = () => {
     const { deleteAuthenticator, navigation, authenticator } = this.props;
+
     authenticator &&
       navigation.navigate(Route.Confirm, {
         children: this.renderConfirmScreenContent(),
@@ -81,6 +82,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
 
   share = () => {
     const { authenticator } = this.props;
+
     Share.open({ message: authenticator?.publicKey });
   };
 
@@ -91,6 +93,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
     const { name } = this.state;
     const trimmedName = name.trim();
     const authenticatorsLabels = authenticators.map(a => a.name);
+
     if (trimmedName?.length === 0) {
       return i18n.authenticators.errors.noEmpty;
     }
@@ -106,11 +109,13 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
   saveNameAuthenticator = () => {
     const { authenticator, updateAuthenticator } = this.props;
     const { name } = this.state;
+
     if (!!this.validationError || !authenticator) {
       return;
     }
 
     const updatedAuthenticator = cloneDeep(authenticator);
+
     updatedAuthenticator.name = name.trim();
     updateAuthenticator(updatedAuthenticator);
   };
@@ -166,6 +171,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
 
 const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: Props): MapStateProps => {
   const { id } = props.route.params;
+
   return {
     authenticator: selectors.getById(state, id),
     authenticators: selectors.list(state),

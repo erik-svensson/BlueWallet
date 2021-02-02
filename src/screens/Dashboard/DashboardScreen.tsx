@@ -74,11 +74,13 @@ class DashboardScreen extends Component<Props, State> {
   getActiveWallet = () => {
     const { lastSnappedTo } = this.state;
     const { wallets } = this.props;
+
     return wallets[lastSnappedTo] || wallets[wallets.length - 1];
   };
 
   sendCoins = () => {
     const actionWallet = this.getActiveWallet();
+
     this.props.navigation.navigate(Route.SendCoins, {
       fromAddress: actionWallet.getAddress(),
       fromSecret: actionWallet.getSecret(),
@@ -88,6 +90,7 @@ class DashboardScreen extends Component<Props, State> {
 
   receiveCoins = () => {
     const actionWallet = this.getActiveWallet();
+
     this.props.navigation.navigate(Route.ReceiveCoins, {
       id: actionWallet.id,
     });
@@ -95,6 +98,7 @@ class DashboardScreen extends Component<Props, State> {
 
   recoverCoins = () => {
     const actionWallet = this.getActiveWallet();
+
     this.props.navigation.navigate(Route.RecoveryTransactionList, {
       wallet: actionWallet,
     });
@@ -103,6 +107,7 @@ class DashboardScreen extends Component<Props, State> {
   showModal = () => {
     const { lastSnappedTo } = this.state;
     const { wallets } = this.props;
+
     this.props.navigation.navigate(Route.ActionSheet, {
       wallets,
       selectedIndex: lastSnappedTo,
@@ -131,6 +136,7 @@ class DashboardScreen extends Component<Props, State> {
 
   hasWallets = () => {
     const { wallets } = this.props;
+
     return wallets.length > 0;
   };
 
@@ -170,6 +176,7 @@ class DashboardScreen extends Component<Props, State> {
       <View
         onLayout={event => {
           const { height } = event.nativeEvent.layout;
+
           this.setState({
             contentdHeaderHeight: height,
           });

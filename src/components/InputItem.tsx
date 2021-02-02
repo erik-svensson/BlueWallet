@@ -42,6 +42,7 @@ export class InputItem extends Component<Props, State> {
 
   onFocus = () => {
     const { onFocus } = this.props;
+
     if (onFocus) {
       return onFocus();
     }
@@ -64,6 +65,7 @@ export class InputItem extends Component<Props, State> {
       isActive: false,
     });
     const { onBlur } = this.props;
+
     if (!this.state.value) {
       Animated.timing(this.state.isAnimatedFocused, {
         toValue: 0,
@@ -121,6 +123,7 @@ export class InputItem extends Component<Props, State> {
       inputRange: [0, 1],
       outputRange: [14, 12],
     });
+
     return (
       <View style={styles.container}>
         <Animated.Text style={[styles.label, { top, fontSize }]}>{label}</Animated.Text>

@@ -115,6 +115,7 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
       description: `${i18n.notifications.verifyActionDescription} ${email}`,
       onSuccess: this.onUpdateSuccess,
       walletsToSubscribe: subscribedWallets,
+      onBack: this.goBackToNotificationScreen,
     });
   };
 
@@ -130,6 +131,7 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
       updateNotificationEmailSuccess,
     } = this.props;
     const { subscribedWallets } = route.params;
+
     if (!isEmail(email)) {
       return setError(i18n.onboarding.emailValidation);
     }
@@ -137,6 +139,7 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
       return this.goToLocalEmailConfirm();
     }
     const hashes = await Promise.all(subscribableWallets!.map(wallet => getWalletHashedPublicKeys(wallet)));
+
     updateNotificationEmail(hashes, storedEmail, email, {
       onSuccess: () => {
         return navigation.navigate(Route.ConfirmEmail, {
@@ -144,19 +147,23 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
           title: i18n.notifications.confirmCurrentTitle,
           description: `${i18n.notifications.verifyActionDescription} ${storedEmail}`,
           onSuccess: (sessionToken: string) => {
-            // navigation.goBack();
+            navigation.goBack();
             updateNotificationEmailSuccess(sessionToken);
             this.authenticateNewEmail();
           },
           walletsToSubscribe: subscribedWallets,
+          onBack: this.goBackToNotificationScreen,
         });
       },
     });
   };
 
+  goBackToNotificationScreen = () => this.props.navigation.navigate(Route.Notifications);
+
   render() {
     const { email } = this.state;
     const { error, isLoading, storedEmail } = this.props;
+
     return (
       <ScreenTemplate
         noScroll
@@ -166,7 +173,9 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
             <Button title={i18n._.confirm} onPress={this.onConfirm} disabled={email.length === 0} loading={isLoading} />
           </>
         }
-        header={<Header title={i18n.notifications.notifications} isBackArrow />}
+        header={
+          <Header title={i18n.notifications.notifications} isBackArrow onBackArrow={this.goBackToNotificationScreen} />
+        }
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.notifications.changeEmailTitle}</Text>

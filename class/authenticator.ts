@@ -71,6 +71,7 @@ export class Authenticator implements IAuthenticator {
   async signAndFinalizePSBT(encodedPSBT: string): Promise<FinalizedPSBT> {
     let tx, fee;
     let vaultTxType = VaultTxType.Recovery;
+
     try {
       ({ tx, fee } = signer.signAndFinalizePSBT(encodedPSBT, [this.keyPair], vaultTxType));
     } catch (_) {

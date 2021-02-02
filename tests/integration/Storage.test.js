@@ -12,6 +12,7 @@ it('Appstorage - loadFromDisk works', async () => {
   /** @type {AppStorage} */
   const Storage = new AppStorage();
   const w = new SegwitP2SHWallet();
+
   w.setLabel('testlabel');
   await w.generate();
   Storage.wallets.push(w);
@@ -20,10 +21,12 @@ it('Appstorage - loadFromDisk works', async () => {
   // saved, now trying to load
 
   const Storage2 = new AppStorage();
+
   await Storage2.loadFromDisk();
   assert.strictEqual(Storage2.wallets.length, 1);
   assert.strictEqual(Storage2.wallets[0].getLabel(), 'testlabel');
   let isEncrypted = await Storage2.storageIsEncrypted();
+
   assert.ok(!isEncrypted);
 
   // emulating encrypted storage (and testing flag)
@@ -31,6 +34,7 @@ it('Appstorage - loadFromDisk works', async () => {
   await AsyncStorage.setItem('data', false);
   await AsyncStorage.setItem(AppStorage.FLAG_ENCRYPTED, '1');
   const Storage3 = new AppStorage();
+
   isEncrypted = await Storage3.storageIsEncrypted();
   assert.ok(isEncrypted);
 });
@@ -39,11 +43,13 @@ it('Appstorage - encryptStorage & load encrypted storage works', async () => {
   /** @type {AppStorage} */
   const Storage = new AppStorage();
   let w = new SegwitP2SHWallet();
+
   w.setLabel('testlabel');
   await w.generate();
   Storage.wallets.push(w);
   await Storage.saveToDisk();
   let isEncrypted = await Storage.storageIsEncrypted();
+
   assert.ok(!isEncrypted);
   await Storage.encryptStorage('password');
   isEncrypted = await Storage.storageIsEncrypted();
@@ -53,9 +59,11 @@ it('Appstorage - encryptStorage & load encrypted storage works', async () => {
   // saved, now trying to load, using good password
 
   let Storage2 = new AppStorage();
+
   isEncrypted = await Storage2.storageIsEncrypted();
   assert.ok(isEncrypted);
   let loadResult = await Storage2.loadFromDisk('password');
+
   assert.ok(loadResult);
   assert.strictEqual(Storage2.wallets.length, 1);
   assert.strictEqual(Storage2.wallets[0].getLabel(), 'testlabel');
@@ -98,6 +106,7 @@ it('Appstorage - encryptStorage & load encrypted storage works', async () => {
 
   // next, adding new `fake` storage which should be unlocked with `fake` password
   const createFakeStorageResult = await Storage2.createFakeStorage('fakePassword');
+
   assert.ok(createFakeStorageResult);
   assert.strictEqual(Storage2.wallets.length, 0);
   assert.strictEqual(Storage2.cachedPassword, 'fakePassword');
@@ -109,6 +118,7 @@ it('Appstorage - encryptStorage & load encrypted storage works', async () => {
   // now, will try to load & decrypt with real password and with fake password
   // real:
   let Storage3 = new AppStorage();
+
   loadResult = await Storage3.loadFromDisk('password');
   assert.ok(loadResult);
   assert.strictEqual(Storage3.wallets.length, 2);

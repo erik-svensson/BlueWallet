@@ -98,6 +98,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     checkSubscription(wallets, email, {
       onSuccess: (ids: string[]) => {
         const walletsToSubscribe = wallets.filter(w => !ids.includes(w.id));
+
         if (!walletsToSubscribe.length) {
           return this.goToLocalEmailConfirm();
         }
@@ -128,6 +129,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { error, route, isLoading } = this.props;
 
     const { onSkipSuccess, title, isBackArrow, description, inputAutofocus } = route.params;
+
     return (
       <ScreenTemplate
         noScroll

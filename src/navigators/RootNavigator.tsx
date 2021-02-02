@@ -58,6 +58,7 @@ import {
 import { MainTabNavigator } from './MainTabNavigator';
 
 const Stack = createStackNavigator<RootStackParams>();
+
 interface Props {
   shouldRenderCredentialsCreation: boolean;
   shouldRenderNotification: boolean;

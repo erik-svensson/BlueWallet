@@ -32,6 +32,7 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
         params: { onButtonPress },
       },
     } = this.props;
+
     onButtonPress ? onButtonPress() : navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
   };
 

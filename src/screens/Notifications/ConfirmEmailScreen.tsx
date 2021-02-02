@@ -72,11 +72,18 @@ class ConfirmEmailScreen extends Component<Props, State> {
         params: { email, wallets, onSuccess },
       },
     } = this.props;
+
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
       onInit: () => {
         wallets && this.props.subscribe(wallets, email);
+        // onInit: async () => {
+        //   const walletsToSubscribePayload = await Promise.all(
+        //     walletsToSubscribe!.map((wallet: Wallet) => walletToAddressesGenerationBase(wallet)),
+        //   );
+
+        //   this.props.subscribe(walletsToSubscribePayload, email, language);
       },
       onCodeConfirm: () => {
         if (storedEmail) {
@@ -93,11 +100,16 @@ class ConfirmEmailScreen extends Component<Props, State> {
         params: { email, wallets, onSuccess },
       },
     } = this.props;
+
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
       onInit: () => {
         wallets && this.props.unsubscribe(wallets, email);
+        // onInit: async () => {
+        //   const hashes = await Promise.all(walletsToSubscribe!.map(wallet => getWalletHashedPublicKeys(wallet)));
+
+        //   this.props.unsubscribe(hashes, email);
       },
       onCodeConfirm: () => {
         onSuccess();
@@ -107,11 +119,30 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   onError = () => {
     const { failedTries, setError } = this.props;
+
     this.setCode('');
     if (failedTries === CONST.emailCodeErrorMax) {
       this.infoContainerContent?.onInit?.();
       setError(i18n.formatString(i18n.notifications.codeFinalError, { attemptsLeft: CONST.emailCodeErrorMax }));
     }
+    // const newFailNo = this.state.failNo + 1;
+    // const errorMessage =
+    //   newFailNo < CONST.emailCodeErrorMax
+    //     ? i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - newFailNo })
+    //     : i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax });
+
+    // return this.setState(
+    //   {
+    //     code: '',
+    //     failNo: newFailNo,
+    //     error: errorMessage,
+    //   },
+    //   () => {
+    //     if (newFailNo === CONST.emailCodeErrorMax) {
+    //       this.infoContainerContent?.onInit?.();
+    //     }
+    //   },
+    // );
   };
 
   onConfirm = () => {
@@ -133,12 +164,14 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   onChange = (code: string) => {
     const { setError, notificationError } = this.props;
+
     !!notificationError && setError('');
     this.setCode(code);
   };
 
   onResend = () => {
     const { setError } = this.props;
+
     this.setCode('');
     setError('');
     this.infoContainerContent.onInit?.();
@@ -147,6 +180,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
   render() {
     const { notificationError } = this.props;
     const { email, onBack, title, description } = this.props.route.params;
+
     return (
       <ScreenTemplate
         noScroll

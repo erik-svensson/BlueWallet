@@ -27,6 +27,7 @@ export default class NetworkTransactionFees {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await BlueElectrum.estimateFees();
+
         if (typeof response === 'object') {
           const fast = loc.formatBalanceWithoutSuffix(
             new BigNumber(response.fast)
@@ -50,13 +51,16 @@ export default class NetworkTransactionFees {
             BitcoinUnit.SATS,
           );
           const networkFee = new NetworkTransactionFee(fast, medium, slow);
+
           resolve(networkFee);
         } else {
           const networkFee = new NetworkTransactionFee(1, 1, 1);
+
           reject(networkFee);
         }
       } catch (err) {
         const networkFee = new NetworkTransactionFee(1, 1, 1);
+
         reject(networkFee);
       }
     });

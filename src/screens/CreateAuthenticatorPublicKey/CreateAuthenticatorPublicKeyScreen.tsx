@@ -34,6 +34,7 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 
   navigate = () => {
     const { navigation, authenticator } = this.props;
+
     if (!authenticator) {
       return;
     }
@@ -42,6 +43,7 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 
   share = () => {
     const { authenticator } = this.props;
+
     Share.open({ message: authenticator?.publicKey });
   };
 
@@ -74,6 +76,7 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 
 const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: Props): MapStateProps => {
   const { id } = props.route.params;
+
   return {
     authenticator: selectors.getById(state, id),
   };

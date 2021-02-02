@@ -47,11 +47,13 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
 
   toggleAgreementToTermsAndConditions = () => {
     const { agreedToTermsAndConditions } = this.state;
+
     this.setState({ agreedToTermsAndConditions: !agreedToTermsAndConditions });
   };
 
   toggleAgreementToPrivacyPolicy = () => {
     const { agreedToPrivacyPolicy } = this.state;
+
     this.setState({ agreedToPrivacyPolicy: !agreedToPrivacyPolicy });
   };
 
@@ -75,11 +77,13 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
 
   agreeAction = () => {
     const { createTc } = this.props;
+
     createTc();
   };
 
   get langVersion() {
     const { language } = this.props;
+
     switch (language) {
       case 'zh':
         return zh;
@@ -121,6 +125,7 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
 
   get canAgree() {
     const { agreedToTermsAndConditions, agreedToPrivacyPolicy } = this.state;
+
     return agreedToTermsAndConditions && agreedToPrivacyPolicy;
   }
 

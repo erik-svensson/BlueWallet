@@ -23,6 +23,7 @@ export const AboutUsScreen = () => {
 
   const getBuildData = () => {
     const { width, height } = Dimensions.get('window');
+
     return `${getApplicationName()} ver. ${getVersion()} (build ${getBuildNumber()}) \n ${getBundleId()} \n w, h = ${width.toFixed(
       0,
     )}, ${height.toFixed(0)}`;
@@ -37,6 +38,7 @@ export const AboutUsScreen = () => {
       openAppStoreIfInAppFails: true,
       fallbackPlatformURL: 'https://bitcoinvault.global',
     };
+
     Rate.rate(options);
   };
 

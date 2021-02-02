@@ -52,6 +52,7 @@ export function* loadWalletsSaga() {
     if (message.includes(messages.noMatchingScript)) {
       const [address] = message.split(' ');
       const walletNetworkName = checkAddressNetworkName(address);
+
       Alert.alert(
         i18n.send.error.title,
         i18n.formatString(i18n.wallets.errors.wrongNetwork, {
@@ -69,8 +70,10 @@ export function* deleteWalletSaga(action: DeleteWalletAction | unknown) {
     payload: { id },
     meta,
   } = action as DeleteWalletAction;
+
   try {
     const wallet = BlueApp.removeWalletById(id);
+
     yield BlueApp.saveToDisk();
 
     yield put(deleteWalletSuccess(wallet));
@@ -90,6 +93,7 @@ export function* createWalletSaga(action: CreateWalletAction | unknown) {
     payload: { wallet },
     meta,
   } = action as CreateWalletAction;
+
   try {
     yield wallet.generate();
 
@@ -113,6 +117,7 @@ export function* importWalletSaga(action: ImportWalletAction | unknown) {
     payload: { wallet },
     meta,
   } = action as ImportWalletAction;
+
   try {
     yield all([call(() => wallet.fetchBalance()), call(() => wallet.fetchTransactions())]);
     BlueApp.addWallet(wallet);
@@ -132,8 +137,10 @@ export function* importWalletSaga(action: ImportWalletAction | unknown) {
 
 export function* updateWalletSaga(action: UpdateWalletAction | unknown) {
   const { wallet } = action as UpdateWalletAction;
+
   try {
     const updatedWallet = cloneDeep(BlueApp.updateWallet(wallet));
+
     yield BlueApp.saveToDisk();
 
     yield put(updateWalletSuccess(updatedWallet));

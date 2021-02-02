@@ -26,12 +26,14 @@ interface Props {
 export class WalletCard extends React.Component<Props> {
   goToWalletDetails = () => {
     const { wallet } = this.props;
+
     NavigationService.navigate(Route.WalletDetails, { id: wallet.id });
   };
 
   render() {
     const { showEditButton, wallet, containerStyle } = this.props;
     const isAllWallets = wallet.label !== CONST.allWallets;
+
     return (
       <GradientView style={[styles.itemContainer, containerStyle]} variant={GradientView.Variant.Primary}>
         <>

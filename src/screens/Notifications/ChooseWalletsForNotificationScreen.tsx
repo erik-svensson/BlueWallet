@@ -84,6 +84,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         params: { email, wallets, onSkip, subtitle, description },
       },
     } = this.props;
+
     return (
       <ScreenTemplate
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}

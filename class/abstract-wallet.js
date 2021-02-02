@@ -13,6 +13,7 @@ export class AbstractWallet {
   static fromJson(obj) {
     const obj2 = JSON.parse(obj);
     const temp = new this();
+
     for (const key2 of Object.keys(obj2)) {
       temp[key2] = obj2[key2];
     }

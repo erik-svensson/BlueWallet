@@ -19,6 +19,7 @@ describe('Transactions', () => {
     describe('@ios @smoke', () => {
       it('should be possible to send coins from 3-Key Vault wallet (Secure Transaction) to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
+
         await app.wallets.importExistingWallet({
           type: '3-Key Vault',
           name: '3-Key wallet',
@@ -63,6 +64,7 @@ describe('Transactions', () => {
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from 2-Key Vault wallet to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
+
         await app.wallets.importExistingWallet({
           type: '2-Key Vault',
           name: '2-Key wallet',
@@ -84,6 +86,7 @@ describe('Transactions', () => {
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from Standard HD P2SH wallet to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
+
         await app.wallets.importExistingWallet({
           type: 'Standard HD P2SH',
           name: 'Standard HD wallet',
@@ -104,6 +107,7 @@ describe('Transactions', () => {
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from Standard P2SH wallet to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
+
         await app.wallets.importExistingWallet({
           type: 'Standard HD P2SH',
           name: 'Standard P2SH',
@@ -124,6 +128,7 @@ describe('Transactions', () => {
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from Standard HD SegWit wallet to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
+
         await app.wallets.importExistingWallet({
           type: 'Standard HD P2SH',
           name: 'Standard HD Segwit wallet',

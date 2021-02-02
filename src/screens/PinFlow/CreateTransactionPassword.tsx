@@ -66,6 +66,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
 
   render() {
     const { isVisible, password } = this.state;
+
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps="always"

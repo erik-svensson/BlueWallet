@@ -139,6 +139,7 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
 
   render() {
     const { address, name } = this.state;
+
     return (
       <ScreenTemplate
         footer={

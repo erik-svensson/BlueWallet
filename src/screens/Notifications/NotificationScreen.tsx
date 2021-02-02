@@ -14,7 +14,6 @@ import {
   deleteNotificationEmail as deleteNotificationEmailAction,
   CheckSubscriptionAction,
   checkSubscription as checkSubscriptionAction,
-  createNotificationEmail as createNotificationEmailAction,
 } from 'app/state/notifications/actions';
 import { storedEmail } from 'app/state/notifications/selectors';
 import { subscribedWallets, wallets } from 'app/state/wallets/selectors';
@@ -34,6 +33,7 @@ interface Props {
 export class NotificationScreen extends Component<Props> {
   componentDidMount() {
     const { wallets, checkSubscription, email } = this.props;
+
     !!email && wallets.length && checkSubscription(wallets, email);
   }
 
@@ -66,6 +66,7 @@ export class NotificationScreen extends Component<Props> {
         params: { onBackArrow },
       },
     } = this.props;
+
     navigation.navigate(Route.Notifications, { onBackArrow });
   };
 
@@ -103,7 +104,6 @@ export class NotificationScreen extends Component<Props> {
   deleteEmail = () => (!!this.props.subscribedWallets.length ? this.unsubscribeAndRemoveEmail() : this.removeEmail());
 
   onAddEmailPress = () => {
-    // return this.props.createNotificationEmail('dd@dd.pl');
     this.props.navigation.navigate(Route.AddNotificationEmail, {
       inputAutofocus: true,
       title: i18n.notifications.notifications,
@@ -163,6 +163,7 @@ export class NotificationScreen extends Component<Props> {
         params: { onBackArrow },
       },
     } = this.props;
+
     return (
       <ScreenTemplate
         header={<Header isBackArrow={true} onBackArrow={onBackArrow} title={i18n.settings.notifications} />}
@@ -208,7 +209,6 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   deleteNotificationEmail: deleteNotificationEmailAction,
   checkSubscription: checkSubscriptionAction,
-  createNotificationEmail: createNotificationEmailAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationScreen);
@@ -281,9 +281,4 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
-  inputLabel: {
-    ...typography.overline,
-    color: palette.textGrey,
-    marginBottom: 4,
-  },
 });

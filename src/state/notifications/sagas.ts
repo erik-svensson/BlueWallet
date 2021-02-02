@@ -46,6 +46,7 @@ enum Result {
 export function* createNotificationEmailSaga(action: CreateNotificationEmailAction | unknown) {
   const { meta, payload } = action as CreateNotificationEmailAction;
   const email = payload.email;
+
   try {
     yield put(createNotificationEmailSuccess(email));
     if (meta?.onSuccess) {
@@ -62,10 +63,13 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
 export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailAction | unknown) {
   const { meta, payload } = action as VerifyNotificationEmailAction;
   const email = payload.email;
+
   try {
     const verifyCode = yield call(verifyEmail, { email });
+
     if (verifyCode.result === Result.success) {
       const decryptedCode = yield decryptCode(email, verifyCode.pin);
+
       yield put(verifyNotificationEmailSuccess(decryptedCode));
     } else {
       throw new Error('Your email cannot be verified');
@@ -75,6 +79,7 @@ export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailActi
     }
   } catch (error) {
     const { msg } = error.response.data;
+
     yield put(verifyNotificationEmailFailure(msg));
     if (meta?.onFailure) {
       meta.onFailure();
@@ -86,6 +91,7 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   const {
     payload: { wallets, email },
   } = action as SubscribeWalletAction;
+
   try {
     const walletsGenerationBase = yield all(wallets.map(wallet => call(walletToAddressesGenerationBase, wallet)));
 
@@ -95,6 +101,7 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
       wallets: walletsGenerationBase,
       lang,
     });
+
     if (response.session_token) {
       yield put(subscribeWalletSuccess(response.session_token));
     }
@@ -107,10 +114,12 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
   const {
     payload: { wallets, email },
   } = action as UnsubscribeWalletAction;
+
   try {
     const hashes = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
     const response = yield call(unsubscribeEmail, { hashes, email });
+
     if (response.session_token) {
       yield put(unsubscribeWalletSuccess(response.session_token));
     }
@@ -121,8 +130,10 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
 
 export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
   const { payload, meta } = action as AuthenticateEmailAction;
+
   try {
     const response = yield call(authenticateEmail, payload);
+
     if (response.result === Result.success) {
       yield put(authenticateEmailSuccess());
       if (meta?.onSuccess) {
@@ -131,6 +142,7 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
     }
   } catch (error) {
     const { msg } = error.response.data;
+
     yield put(authenticateEmailFailure(msg));
     if (meta?.onFailure) {
       meta.onFailure();
@@ -140,8 +152,10 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
 
 export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
   const { payload, meta } = action;
+
   try {
     const response = yield call(modifyEmail, payload);
+
     if (response.session_token) {
       yield put(updateNotificationEmailSuccess(response.session_token));
       if (meta?.onSuccess) {
@@ -150,6 +164,7 @@ export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
     }
   } catch (error) {
     const { msg } = error.response.data;
+
     yield put(updateNotificationEmailFailure(msg));
   }
 }
@@ -159,6 +174,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     meta,
     payload: { wallets, email },
   } = action;
+
   try {
     const walletWithHashes = yield Promise.all(
       wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
@@ -166,6 +182,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
     const response = yield call(checkSubscriptionEmail, { hashes, email });
     const ids: string[] = [];
+
     walletWithHashes.forEach((wallet: Wallet, index: number) => {
       if (response.result[index]) {
         ids.push(wallet.id);
@@ -177,6 +194,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     }
   } catch (error) {
     const { msg } = error.response.data;
+
     yield put(checkSubscriptionFailure(msg));
     if (meta?.onFailure) {
       meta.onFailure(msg);

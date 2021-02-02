@@ -54,6 +54,7 @@ class TransactionDetailsScreen extends Component<Props> {
       transaction: { hash },
     } = this.props.route.params;
     const trimmedNote = note.trim();
+
     if (!this.props.note) {
       this.props.createTransactionNoteSuccess(hash, trimmedNote);
     } else {
@@ -63,6 +64,7 @@ class TransactionDetailsScreen extends Component<Props> {
 
   get isMinusValue() {
     const { transaction } = this.props.route.params;
+
     return transaction.valueWithoutFee < 0;
   }
 
@@ -154,6 +156,7 @@ class TransactionDetailsScreen extends Component<Props> {
   editNote = () => {
     const { transaction } = this.props.route.params;
     const { note } = this.props;
+
     this.props.navigation.navigate(Route.EditText, {
       title: transaction.time ? dayjs.unix(transaction.time).format('lll') : '',
       label: i18n.transactions.details.note,
@@ -197,6 +200,7 @@ class TransactionDetailsScreen extends Component<Props> {
     const fromValue = this.getAddresses('inputs');
     const toValue = this.getAddresses('outputs');
     const splitForm = fromValue.split(',')[0];
+
     return (
       <ScreenTemplate
         header={
@@ -253,6 +257,7 @@ class TransactionDetailsScreen extends Component<Props> {
             title={i18n.transactions.details.viewInBlockRxplorer}
             onPress={() => {
               const url = `${config.explorerUrl}/tx/${transaction.txid}`;
+
               Linking.canOpenURL(url).then(supported => {
                 if (supported) {
                   Linking.openURL(url);
@@ -288,6 +293,7 @@ const mapStateToProps = (state: ApplicationState & reducer.TransactionsNotesStat
   const {
     transaction: { hash },
   } = props.route.params;
+
   return {
     note: selectors.getTxNoteByHash(state, hash),
   };
