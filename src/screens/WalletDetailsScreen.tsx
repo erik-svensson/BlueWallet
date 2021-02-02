@@ -47,8 +47,9 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   checkSubscription = () => {
     const { wallet, email, checkSubscription } = this.props;
-    if (!email || !wallet) return;
-    checkSubscription([wallet], email);
+    if (email && wallet) {
+      checkSubscription([wallet], email);
+    }
   };
 
   validationError = (value: string): string | undefined => {
