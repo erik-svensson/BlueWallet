@@ -109,7 +109,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
         navigation.navigate(Route.ConfirmEmail, {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
-          walletsToSubscribe: [wallet],
+          wallets: [wallet],
           onSuccess: this.navigateToSuccesfullNotificationSubscriptionMessage,
         }),
       onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),

@@ -169,7 +169,7 @@ export class ImportWalletScreen extends Component<Props, State> {
         navigation.navigate(Route.ConfirmEmail, {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
-          walletsToSubscribe: [wallet],
+          wallets: [wallet],
           onSuccess: this.showSuccessImportMessageScreen,
         }),
       onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),

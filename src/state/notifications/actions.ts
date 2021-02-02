@@ -1,5 +1,5 @@
-import { SubscribePayload, UnsubscribePayload, AuthenticatePayload, SubscribeWalletSuccessPayload } from 'app/api';
-import { ActionMeta, WalletPayload, Wallet } from 'app/consts';
+import { AuthenticatePayload, SubscribeWalletSuccessPayload } from 'app/api';
+import { ActionMeta, Wallet } from 'app/consts';
 
 export enum NotificationAction {
   CreateNotificationEmail = 'CreateNotificationEmail',
@@ -73,7 +73,10 @@ export interface VerifyNotificationEmailActionSuccess {
 }
 export interface SubscribeWalletAction {
   type: NotificationAction.SubscribeWalletAction;
-  payload: SubscribePayload;
+  payload: {
+    wallets: Wallet[];
+    email: string;
+  };
 }
 
 export interface SubscribeWalletSuccessAction {
@@ -88,7 +91,10 @@ export interface SubscribeWalletFailureAction {
 
 export interface UnsubscribeWalletAction {
   type: NotificationAction.UnsubscribeWalletAction;
-  payload: UnsubscribePayload;
+  payload: {
+    wallets: Wallet[];
+    email: string;
+  };
 }
 
 export interface UnsubscribeWalletSuccessAction {
@@ -153,8 +159,8 @@ export type NotificationActionType =
   | CheckSubscriptionFailureAction
   | SetErrorAction;
 
-export type CreateNotificationEmailActionFunction = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
-export const createNotificationEmail: CreateNotificationEmailActionFunction = (email, meta) => ({
+export type CreateNotificationEmailActionCreator = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
+export const createNotificationEmail: CreateNotificationEmailActionCreator = (email, meta) => ({
   type: NotificationAction.CreateNotificationEmail,
   payload: { email },
   meta,
@@ -174,9 +180,9 @@ export const deleteNotificationEmail = (): DeleteNotificationEmailAction => ({
   type: NotificationAction.DeleteNotificationEmailAction,
 });
 
-export type VerifyNotificationEmailActionFunction = (email: string, meta?: ActionMeta) => VerifyNotificationEmailAction;
+export type VerifyNotificationEmailActionCreator = (email: string, meta?: ActionMeta) => VerifyNotificationEmailAction;
 
-export const verifyNotificationEmail: VerifyNotificationEmailActionFunction = (email, meta) => ({
+export const verifyNotificationEmail: VerifyNotificationEmailActionCreator = (email, meta) => ({
   type: NotificationAction.VerifyNotificationEmailAction,
   payload: { email },
   meta,
@@ -192,9 +198,10 @@ export const verifyNotificationEmailFailure = (error: string): VerifyNotificatio
   error,
 });
 
-export const subscribeWallet = (wallets: WalletPayload[], email: string, lang: string): SubscribeWalletAction => ({
+export type SubscribeWalletActionCreator = (wallets: Wallet[], email: string) => SubscribeWalletAction;
+export const subscribeWallet: SubscribeWalletActionCreator = (wallets, email) => ({
   type: NotificationAction.SubscribeWalletAction,
-  payload: { wallets, email, lang },
+  payload: { wallets, email },
 });
 
 export const subscribeWalletSuccess = (sessionToken: string): SubscribeWalletSuccessAction => ({
@@ -207,9 +214,10 @@ export const subscribeWalletFailure = (error: string): SubscribeWalletFailureAct
   error,
 });
 
-export const unsubscribeWallet = (hashes: string[], email: string): UnsubscribeWalletAction => ({
+export type UnsubscribeWalletActionCreator = (wallets: Wallet[], email: string) => UnsubscribeWalletAction;
+export const unsubscribeWallet: UnsubscribeWalletActionCreator = (wallets, email) => ({
   type: NotificationAction.UnsubscribeWalletAction,
-  payload: { hashes, email },
+  payload: { wallets, email },
 });
 
 export const unsubscribeWalletSuccess = (sessionToken: string): SubscribeWalletSuccessAction => ({
@@ -222,7 +230,12 @@ export const unsubscribeWalletFailure = (error: string): SubscribeWalletFailureA
   error,
 });
 
-export const authenticateEmail = (session_token: string, pin: string, meta?: ActionMeta): AuthenticateEmailAction => ({
+export type AuthenticateEmailActionCreator = (
+  session_token: string,
+  pin: string,
+  meta?: ActionMeta,
+) => AuthenticateEmailAction;
+export const authenticateEmail: AuthenticateEmailActionCreator = (session_token, pin, meta) => ({
   type: NotificationAction.AuthenticateEmailAction,
   payload: { session_token, pin },
   meta,
@@ -258,8 +271,8 @@ export const checkSubscriptionFailure = (error: string): CheckSubscriptionFailur
   error,
 });
 
-export type SetErrorActionFunction = (error: string) => SetErrorAction;
-export const setError: SetErrorActionFunction = error => ({
+export type SetErrorActionCreator = (error: string) => SetErrorAction;
+export const setError: SetErrorActionCreator = error => ({
   type: NotificationAction.SetErrorAction,
   error,
 });

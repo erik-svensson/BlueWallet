@@ -42,10 +42,15 @@ interface Props {
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
   componentDidMount() {
-    const { wallet, email, checkSubscription } = this.props;
-    if (!email || !wallet) return;
-    checkSubscription([wallet], email);
+    this.checkSubscription();
   }
+
+  checkSubscription = () => {
+    const { wallet, email, checkSubscription } = this.props;
+    if (email && wallet) {
+      checkSubscription([wallet], email);
+    }
+  };
 
   validationError = (value: string): string | undefined => {
     const trimmedValue = value.trim();
@@ -148,7 +153,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       navigation.navigate(Route.ConfirmEmail, {
         email,
         flowType,
-        walletsToSubscribe: [wallet],
+        wallets: [wallet],
         onSuccess: () => {
           CreateMessage({
             title: i18n.message.success,
@@ -156,7 +161,10 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             type: MessageType.success,
             buttonProps: {
               title: i18n.message.goToWalletDetails,
-              onPress: () => navigation.navigate(Route.WalletDetails, { id: wallet.id }),
+              onPress: () => {
+                navigation.navigate(Route.WalletDetails, { id: wallet.id });
+                this.checkSubscription();
+              },
             },
           });
         },

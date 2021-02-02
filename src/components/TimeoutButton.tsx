@@ -1,20 +1,27 @@
 import React, { useState, FC } from 'react';
 import { StyleSheet, GestureResponderEvent, ViewStyle, StyleProp } from 'react-native';
 
+import { CONST } from 'app/consts';
 import { useInterval } from 'app/helpers/useInterval';
 import { typography } from 'app/styles';
 
 import { FlatButton } from './FlatButton';
 
 interface Props {
-  timeoutSeconds: number;
+  timeoutSeconds?: number;
   title: string;
   testID?: string;
   onPress: (e?: GestureResponderEvent) => void;
   containerStyle?: StyleProp<ViewStyle>;
 }
 
-export const TimeoutButton: FC<Props> = ({ title, testID, timeoutSeconds, onPress, containerStyle }) => {
+export const TimeoutButton: FC<Props> = ({
+  title,
+  testID,
+  timeoutSeconds = CONST.buttonTimeoutSeconds,
+  onPress,
+  containerStyle,
+}) => {
   const [seconds, setSeconds] = useState(0);
   useInterval(
     () => {
