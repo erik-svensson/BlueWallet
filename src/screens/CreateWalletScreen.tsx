@@ -127,7 +127,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       onBack: () =>
         isAfterAirdrop()
           ? this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard })
-          : this.navigateToAirdropWalletSubscription(wallet, true),
+          : this.navigateToAirdropWalletSubscription(wallet),
       isBackArrow: false,
     });
   };
