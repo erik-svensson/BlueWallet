@@ -1,6 +1,5 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { messages } from 'app/../error';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
@@ -17,8 +16,10 @@ import {
   unsubscribeWallet,
   UnsubscribeWalletActionCreator,
   SubscribeWalletActionCreator,
+  SetErrorActionCreator,
+  setError as setErrorAction,
 } from 'app/state/notifications/actions';
-import { sessionToken, readableError, storedEmail } from 'app/state/notifications/selectors';
+import { sessionToken, readableError, storedEmail, failedTries } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -34,23 +35,22 @@ interface Props {
   notificationError: string;
   storedEmail: string;
   storedPin: string;
+  setError: SetErrorActionCreator;
+  failedTries: number;
 }
 
 interface State {
   code: string;
-  failNo: number;
-  error: string;
 }
 
 class ConfirmEmailScreen extends Component<Props, State> {
   state = {
     code: '',
-    error: '',
-    failNo: 0,
   };
 
   componentDidMount() {
     this.infoContainerContent.onInit?.();
+    this.props.setError('');
   }
 
   get infoContainerContent(): InfoContainerContent {
@@ -106,29 +106,12 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onError = () => {
-    if (this.props.notificationError === messages.alreadySubscribed) {
-      return this.setState({
-        error: this.props.notificationError,
-        code: '',
-      });
+    const { failedTries, setError } = this.props;
+    this.setCode('');
+    if (failedTries === CONST.emailCodeErrorMax) {
+      this.infoContainerContent?.onInit?.();
+      setError(i18n.formatString(i18n.notifications.codeFinalError, { attemptsLeft: CONST.emailCodeErrorMax }));
     }
-    const newFailNo = this.state.failNo + 1;
-    const errorMessage =
-      newFailNo < CONST.emailCodeErrorMax
-        ? i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - newFailNo })
-        : i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax });
-    return this.setState(
-      {
-        code: '',
-        failNo: newFailNo,
-        error: errorMessage,
-      },
-      () => {
-        if (newFailNo === CONST.emailCodeErrorMax) {
-          this.infoContainerContent?.onInit?.();
-        }
-      },
-    );
   };
 
   onConfirm = () => {
@@ -141,15 +124,27 @@ class ConfirmEmailScreen extends Component<Props, State> {
     });
   };
 
-  onChange = (code: string) =>
-    this.setState({ code, error: '', failNo: this.state.failNo >= CONST.emailCodeErrorMax ? 0 : this.state.failNo });
+  setCode = (code: string) => {
+    this.setState({ code });
+  };
+
+  onChange = (code: string) => {
+    const { setError, notificationError } = this.props;
+    !!notificationError && setError('');
+    this.setCode(code);
+  };
 
   onResend = () => {
+    const { setError } = this.props;
+    this.setCode('');
+    setError('');
     this.infoContainerContent.onInit?.();
   };
 
   render() {
     const { email, onBack } = this.props.route.params;
+    const { notificationError } = this.props;
+
     return (
       <ScreenTemplate
         noScroll
@@ -178,8 +173,8 @@ class ConfirmEmailScreen extends Component<Props, State> {
           </Text>
         </View>
         <View style={styles.inputItemContainer}>
-          <CodeInput value={this.state.code} onTextChange={this.onChange} isError={!!this.state.error} />
-          <Text style={styles.error}>{this.state.error}</Text>
+          <CodeInput value={this.state.code} onTextChange={this.onChange} isError={!!notificationError} />
+          <Text style={styles.error}>{notificationError}</Text>
         </View>
       </ScreenTemplate>
     );
@@ -190,6 +185,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   sessionToken: sessionToken(state),
   notificationError: readableError(state),
   storedEmail: storedEmail(state),
+  failedTries: failedTries(state),
 });
 
 const mapDispatchToProps = {
@@ -197,6 +193,7 @@ const mapDispatchToProps = {
   subscribe: subscribeWallet,
   unsubscribe: unsubscribeWallet,
   authenticate: authenticateEmail,
+  setError: setErrorAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmailScreen);

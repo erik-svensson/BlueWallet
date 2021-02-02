@@ -12,6 +12,7 @@ export interface NotificationState {
   isLoading: boolean;
   sessionToken: string;
   subscribedIds: string[];
+  failedTries: number;
 }
 
 const initialState: NotificationState = {
@@ -22,6 +23,7 @@ const initialState: NotificationState = {
   isLoading: false,
   sessionToken: '',
   subscribedIds: [],
+  failedTries: 0,
 };
 
 const reducer = (state = initialState, action: NotificationActionType): NotificationState => {
@@ -35,15 +37,27 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         isLoading: false,
         pin: '',
       };
+    case NotificationAction.UnsubscribeWalletAction:
+    case NotificationAction.SubscribeWalletAction:
+      return {
+        ...state,
+        failedTries: 0,
+      };
     case NotificationAction.SubscribeWalletFailureAction:
     case NotificationAction.UnsubscribeWalletFailureAction:
-    case NotificationAction.AuthenticateEmailFailureAction:
     case NotificationAction.CheckSubscriptionFailureAction:
     case NotificationAction.CreateNotificationEmailFailure:
     case NotificationAction.VerifyNotificationEmailActionFailure:
       return {
         ...state,
         error: action.error,
+        isLoading: false,
+      };
+    case NotificationAction.AuthenticateEmailFailureAction:
+      return {
+        ...state,
+        error: action.error,
+        failedTries: state.failedTries + 1,
         isLoading: false,
       };
     case NotificationAction.DeleteNotificationEmailAction:
@@ -69,7 +83,6 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
     case NotificationAction.UnsubscribeWalletSuccessAction:
       return {
         ...state,
-        error: '',
         sessionToken: action.payload.sessionToken,
       };
     case NotificationAction.AuthenticateEmailSuccessAction:
@@ -77,6 +90,7 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         ...state,
         error: '',
         sessionToken: '',
+        failedTries: 0,
       };
     case NotificationAction.SetErrorAction:
       return {

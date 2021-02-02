@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 
+import { CONST } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { WalletsState } from 'app/state/wallets/reducer';
 import { getById } from 'app/state/wallets/selectors';
@@ -18,12 +19,19 @@ export const sessionToken = createSelector(local, state => state.sessionToken);
 export const notificationError = createSelector(local, state => state.error);
 export const storedEmail = createSelector(local, state => state.email);
 export const storedPin = createSelector(local, state => state.pin);
-export const readableError = createSelector(notificationError, err => {
+export const failedTries = createSelector(local, state => state.failedTries);
+
+export const readableError = createSelector(notificationError, failedTries, (err, failNo) => {
   if (err.startsWith(messages.requestFailed5XX)) {
     return i18n.connectionIssue.couldntConnectToServer;
   }
   if (err === messages.invalidEmail) {
     return i18n.notifications.invalidAddressError;
+  }
+
+  if (err === messages.wrongPIN && failNo < CONST.emailCodeErrorMax) {
+    return i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - failNo });
+    // return i18n.formatString(i18n.notifications.codeFinalError, { attemptsLeft: CONST.emailCodeErrorMax });
   }
   return err;
 });
