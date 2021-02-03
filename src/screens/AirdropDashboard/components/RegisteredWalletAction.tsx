@@ -18,8 +18,10 @@ export const RegisteredWalletAction: FC<Props> = ({ onActionClick }) => {
 
 const styles = StyleSheet.create({
   arrowContainer: {
-    height: 12,
-    width: 7,
+    height: 24,
+    width: 24,
+    top: 7,
+    left: 12,
   },
   image: {
     width: 7,

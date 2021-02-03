@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     ...typography.headline5,
-    marginBottom: 1,
+    marginBottom: 3,
   },
   itemDescription: {
     ...typography.overline,

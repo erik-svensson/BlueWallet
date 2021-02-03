@@ -9,7 +9,7 @@ import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { SubscribeWalletActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
-import { AvailableWalletAction, RegisteredWalletAction } from './';
+import { AvailableWalletAction, RegisteredWalletAction, CommunitySection } from './';
 import { Error } from './Error';
 import { Loading } from './Loading';
 
@@ -53,9 +53,11 @@ export const AirdropInProgress: FC<Props> = props => {
       );
     }
 
+    const userHasSubscribedWallets = subscribedWallets?.length > 0;
+
     return (
       <>
-        {subscribedWallets?.length > 0 ? (
+        {userHasSubscribedWallets ? (
           <>
             <AirdropWalletsCarousel styles={styles.carouselStyles} items={subscribedWallets} setRef={setRef} />
             <View style={styles.walletsListContainer}>
@@ -82,6 +84,15 @@ export const AirdropInProgress: FC<Props> = props => {
               itemCallToAction={(wallet: Wallet) => (
                 <AvailableWalletAction onActionClick={() => subscribeWallet(wallet)} />
               )}
+            />
+          </View>
+        )}
+        {userHasSubscribedWallets && (
+          <View style={styles.communitySectionContainer}>
+            <CommunitySection
+              onActionClick={() => {
+                _carouselRef.snapToItem(subscribedWallets.length, true);
+              }}
             />
           </View>
         )}
@@ -112,6 +123,12 @@ export const AirdropInProgress: FC<Props> = props => {
 };
 
 const styles = StyleSheet.create({
+  communitySectionContainer: {
+    flex: 1,
+    width: '100%',
+    marginTop: 16,
+    marginBottom: 18,
+  },
   loadingContainer: {
     marginTop: 20,
   },
@@ -125,8 +142,6 @@ const styles = StyleSheet.create({
   walletsListContainer: {
     marginTop: 12,
     width: '100%',
-    paddingRight: 10,
-    paddingLeft: 10,
   },
   airdropImage: {
     width: 189,

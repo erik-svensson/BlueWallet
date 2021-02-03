@@ -42,6 +42,11 @@ module.exports = {
   airdrop: {
     title: 'Airdrop',
     dateOfAirdrop: 'Date of Airdrop:',
+    community: {
+      header: 'Airdrop rewards',
+      name: 'Community',
+      description: 'Check the rewards and community progress',
+    },
     circularWalletBalance: {
       yourBalance: 'Your balance',
     },
