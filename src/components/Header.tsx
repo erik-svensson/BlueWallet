@@ -41,9 +41,9 @@ export class Header extends PureComponent<Props> {
   };
 
   renderLeftItem = () => {
-    const { isBackArrow } = this.props;
+    const { isBackArrow, onBackArrow } = this.props;
 
-    if (isBackArrow) {
+    if (isBackArrow || onBackArrow) {
       return (
         <TouchableOpacity testID="back-button" style={styles.backArrowContainer} onPress={this.onLeftItemPress}>
           <Image style={styles.image} source={images.backArrow} />

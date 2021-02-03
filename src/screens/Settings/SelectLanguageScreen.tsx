@@ -82,7 +82,7 @@ export const SelectLanguageScreen = () => {
   };
 
   return (
-    <ScreenTemplate header={<Header isBackArrow={true} title={i18n.selectLanguage.header} />}>
+    <ScreenTemplate header={<Header isBackArrow title={i18n.selectLanguage.header} />}>
       {availableLanguages.map(item => (
         <LanguageItem
           testID={`language-item-${item.value}`}

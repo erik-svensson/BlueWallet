@@ -147,7 +147,6 @@ export class NotificationScreen extends Component<Props> {
       <ScreenTemplate
         header={
           <Header
-            isBackArrow={true}
             onBackArrow={() => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings })}
             title={i18n.settings.notifications}
           />
