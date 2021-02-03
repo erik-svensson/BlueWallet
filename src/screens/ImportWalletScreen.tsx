@@ -172,7 +172,7 @@ export class ImportWalletScreen extends Component<Props, State> {
           wallets: [wallet],
           onSuccess: this.showSuccessImportMessageScreen,
         }),
-      onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+      onBack: () => this.showSuccessImportMessageScreen(),
       isBackArrow: false,
     });
   };
@@ -199,19 +199,21 @@ export class ImportWalletScreen extends Component<Props, State> {
       });
     }
     newWallet.setLabel(this.state.label);
-    if (email) {
-      return checkSubscription([newWallet], email, {
-        onSuccess: (ids: string[]) => {
-          const isWalletSubscribed = ids.some(id => id === newWallet.id);
-          this.importWallet(newWallet, () => {
+
+    this.importWallet(newWallet, () => {
+      if (email) {
+        return checkSubscription([newWallet], email, {
+          onSuccess: (ids: string[]) => {
+            const isWalletSubscribed = ids.some(id => id === newWallet.id);
             isWalletSubscribed
               ? this.showSuccessImportMessageScreen()
               : this.navigateToConfirmEmailSubscription(newWallet);
-          });
-        },
-      });
-    }
-    this.importWallet(newWallet, () => {
+          },
+          onFailure: () => {
+            this.showSuccessImportMessageScreen();
+          },
+        });
+      }
       this.showSuccessImportMessageScreen();
     });
   };
