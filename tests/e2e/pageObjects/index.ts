@@ -9,6 +9,7 @@ import TermsConditionsScreen from './pages/TermsConditionsScreen';
 import TransactionsReceive from './pages/Transactions/Receive';
 import TransactionsSend from './pages/Transactions/Send';
 import UnlockScreen from './pages/UnlockScreen';
+import WalletDetails from './pages/WalletDetails';
 import Wallets from './pages/Wallets';
 import AboutUsScreen from './pages/settings/AboutUsScreen';
 import AdvancedOptionsScreen from './pages/settings/AdvancedOptionsScreen';
@@ -36,6 +37,7 @@ const app = {
   unlockScreen: UnlockScreen(),
   transactionsSend: TransactionsSend(),
   transactionsReceive: TransactionsReceive(),
+  walletDetails: WalletDetails(),
 };
 
 export default app;
