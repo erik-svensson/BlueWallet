@@ -200,9 +200,9 @@ export class ImportWalletScreen extends Component<Props, State> {
     }
     newWallet.setLabel(this.state.label);
 
-    if (email) {
-      return this.importWallet(newWallet, () => {
-        checkSubscription([newWallet], email, {
+    this.importWallet(newWallet, () => {
+      if (email) {
+        return checkSubscription([newWallet], email, {
           onSuccess: (ids: string[]) => {
             const isWalletSubscribed = ids.some(id => id === newWallet.id);
             isWalletSubscribed
@@ -213,9 +213,7 @@ export class ImportWalletScreen extends Component<Props, State> {
             this.showSuccessImportMessageScreen();
           },
         });
-      });
-    }
-    this.importWallet(newWallet, () => {
+      }
       this.showSuccessImportMessageScreen();
     });
   };
