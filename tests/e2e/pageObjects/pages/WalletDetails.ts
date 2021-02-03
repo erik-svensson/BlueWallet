@@ -6,8 +6,8 @@ import MessageScreen from '../common/MessageScreen';
 
 const WalletDetails = () => {
   const mainScreen = () => ({
-    walletName: element(by.id('wallet-name')),
-    walletType: element(by.id('wallet-type')),
+    walletName: element(by.id('wallet-name-text')),
+    walletType: element(by.id('wallet-type-text')),
 
     exportWalletButton: element(by.id('export-wallet-button')),
     showXpubButton: element(by.id('show-xpub-button')),
@@ -16,7 +16,7 @@ const WalletDetails = () => {
     walletInput: element(by.id('wallet-name-input')),
     submitWalletNameButton: element(by.id('submit-wallet-name-button')),
 
-    async renameWalletName(text: string) {
+    async renameWalletTo(text: string) {
       await actions.tap(this.walletName);
       await actions.typeText(this.walletInput, text, { closeKeyboard: true, replace: true });
       await actions.tap(this.submitWalletNameButton);
@@ -30,7 +30,7 @@ const WalletDetails = () => {
       await actions.tap(this.showXpubButton);
     },
 
-    async tapOnDeleteButton() {
+    async tapOnDeleteWalletButton() {
       await actions.tap(this.deleteButton);
     },
   });

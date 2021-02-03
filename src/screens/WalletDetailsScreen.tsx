@@ -233,14 +233,14 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
         <View style={styles.nameInputContainer}>
           <View style={styles.labelInput}>
             <Text style={styles.typeLabel}>{i18n.wallets.details.nameLabel}</Text>
-            <Text testID="wallet-name" style={styles.label} onPress={this.editAmount}>
+            <Text testID="wallet-name-text" style={styles.label} onPress={this.editAmount}>
               {wallet.label}
             </Text>
           </View>
         </View>
         <View style={styles.typeContainer}>
           <Text style={styles.typeLabel}>{i18n.wallets.details.typeLabel}</Text>
-          <Text testID="wallet-type" style={styles.typeValue}>
+          <Text testID="wallet-type-text" style={styles.typeValue}>
             {wallet.typeReadable}
           </Text>
         </View>

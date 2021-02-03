@@ -33,16 +33,16 @@ describe('Wallet details', () => {
   });
 
   describe('@ios @android @regression', () => {
-    it('should be possible to rename the wallet name', async () => {
+    it('should be possible to rename the wallet', async () => {
       const newWalletName = 'Huey, Dewey and Louie wallet';
 
       await app.wallets.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
-      await app.walletDetails.mainScreen.renameWalletName(newWalletName);
+      await app.walletDetails.mainScreen.renameWalletTo(newWalletName);
       await expect(app.walletDetails.mainScreen.walletName).toHaveLabel(newWalletName);
     });
 
-    it('should be possible to check seed phrase of the wallet', async () => {
+    it('should be possible to check if wallet seed phrase is visible', async () => {
       await app.wallets.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
       await app.walletDetails.mainScreen.tapOnExportWalletButton();
@@ -66,7 +66,7 @@ describe('Wallet details', () => {
     it('should be possible to delete the wallet', async () => {
       await app.wallets.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
-      await app.walletDetails.mainScreen.tapOnDeleteButton();
+      await app.walletDetails.mainScreen.tapOnDeleteWalletButton();
       await app.walletDetails.deleteScreen.confirm();
 
       await expect(app.walletDetails.deleteSuccessScreen.icon).toBeVisible();
@@ -75,7 +75,7 @@ describe('Wallet details', () => {
     it('should be possible to tap "No" and abort deleting wallet process', async () => {
       await app.wallets.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
-      await app.walletDetails.mainScreen.tapOnDeleteButton();
+      await app.walletDetails.mainScreen.tapOnDeleteWalletButton();
       await app.walletDetails.deleteScreen.cancel();
 
       await expect(app.walletDetails.mainScreen.walletName).toBeVisible();
