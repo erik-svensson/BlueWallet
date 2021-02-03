@@ -33,6 +33,8 @@ const Wallets = () => {
     sendButton: element(by.id('send-coins-button')),
     recieveButton: element(by.id('receive-coins-button')),
 
+    getWalletDetailsButtonElement: (walletName: string) => element(by.id(`show-${walletName}-details-button`)),
+
     getTransactionElement: (note: string) => element(by.id(`transaction-item-${note}`)),
 
     async tapOnAddButton() {
@@ -47,6 +49,12 @@ const Wallets = () => {
       const wallet = element(by.id(`wallet-${name}`));
 
       await actions.tap(wallet);
+    },
+
+    async tapOnWalletDetailsButton(name: string) {
+      const element = this.getWalletDetailsButtonElement(name);
+
+      await actions.tap(element);
     },
 
     async tapOnSendButton() {

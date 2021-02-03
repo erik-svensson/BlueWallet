@@ -137,6 +137,8 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       return;
     }
     navigation.navigate(Route.EditText, {
+      inputTestID: 'wallet-name-input',
+      submitButtonTestID: 'submit-wallet-name-button',
       title: i18n.wallets.details.nameEdit,
       label: i18n.wallets.details.nameLabel,
       onSave: this.setLabel,
@@ -195,8 +197,15 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       <ScreenTemplate
         footer={
           <>
-            {!isWatchOnly && <Button onPress={this.navigateToWalletExport} title={i18n.wallets.details.exportWallet} />}
+            {!isWatchOnly && (
+              <Button
+                testID="export-wallet-button"
+                onPress={this.navigateToWalletExport}
+                title={i18n.wallets.details.exportWallet}
+              />
+            )}
             <Button
+              testID="show-xpub-button"
               onPress={this.navigateToWalletXpub}
               title={i18n.wallets.details.showWalletXPUB}
               containerStyle={styles.button}
@@ -208,6 +217,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               loading={isLoading}
             />
             <FlatButton
+              testID="delete-wallet-button"
               onPress={this.navigateToDeleteWallet}
               title={i18n.wallets.details.deleteWallet}
               containerStyle={styles.deleteWalletButtonContainer}
@@ -223,14 +233,16 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
         <View style={styles.nameInputContainer}>
           <View style={styles.labelInput}>
             <Text style={styles.typeLabel}>{i18n.wallets.details.nameLabel}</Text>
-            <Text style={styles.label} onPress={this.editAmount}>
+            <Text testID="wallet-name" style={styles.label} onPress={this.editAmount}>
               {wallet.label}
             </Text>
           </View>
         </View>
         <View style={styles.typeContainer}>
           <Text style={styles.typeLabel}>{i18n.wallets.details.typeLabel}</Text>
-          <Text style={styles.typeValue}>{wallet.typeReadable}</Text>
+          <Text testID="wallet-type" style={styles.typeValue}>
+            {wallet.typeReadable}
+          </Text>
         </View>
       </ScreenTemplate>
     );

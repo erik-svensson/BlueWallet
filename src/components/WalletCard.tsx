@@ -42,7 +42,11 @@ export class WalletCard extends React.Component<Props> {
                 {isAllWallets ? wallet.getLabel() : `${i18n.wallets.dashboard.allWallets}`}
               </EllipsisText>
               {showEditButton && isAllWallets && (
-                <StyledText title={i18n.wallets.details.details} onPress={this.goToWalletDetails} />
+                <StyledText
+                  testID={`show-${wallet.getLabel()}-details-button`}
+                  title={i18n.wallets.details.details}
+                  onPress={this.goToWalletDetails}
+                />
               )}
             </View>
 
