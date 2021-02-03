@@ -528,7 +528,7 @@ export class ImportWalletScreen extends Component<Props, State> {
             />
           </>
         }
-        header={<Header isBackArrow={true} title={i18n.wallets.importWallet.header} />}
+        header={<Header isBackArrow title={i18n.wallets.importWallet.header} />}
       >
         <View style={styles.inputItemContainer}>
           <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>

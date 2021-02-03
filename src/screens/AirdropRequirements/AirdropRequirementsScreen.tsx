@@ -24,21 +24,8 @@ type Props = {
 } & ActionProps;
 
 class AirdropRequirementsScreen extends Component<Props> {
-  removeAirdropScreensFromHistory = () => {
-    this.props.navigation.dispatch(state => {
-      const routes = state.routes.filter(r => r.name !== Route.AirdropThankYou && r.name !== Route.AirdropRequirements);
-
-      return CommonActions.reset({
-        ...state,
-        routes,
-        index: routes.length - 1,
-      });
-    });
-  };
-
   onSoundsGreatPress = () => {
     this.props.completeThankYouFlow();
-    this.removeAirdropScreensFromHistory();
 
     this.props.navigation.navigate(Route.AirdropDashboard);
   };

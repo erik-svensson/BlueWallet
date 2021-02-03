@@ -207,7 +207,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             />
           </>
         }
-        header={<Header isBackArrow title={wallet.label} onBackArrow={this.goToDashboard} />}
+        header={<Header title={wallet.label} onBackArrow={this.goToDashboard} />}
       >
         <View style={styles.walletContainer}>
           <WalletCard wallet={wallet} containerStyle={styles.walletContainerInner} />

@@ -86,7 +86,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     } = this.props;
     return (
       <ScreenTemplate
-        header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
+        header={<Header isBackArrow title={i18n.settings.notifications} />}
         footer={
           <>
             <Button title={i18n._.confirm} disabled={!this.state.wallets.length} onPress={this.onConfirm} />

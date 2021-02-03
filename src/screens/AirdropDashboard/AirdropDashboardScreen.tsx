@@ -47,11 +47,17 @@ export const AirdropDashboardScreen: FC<Props> = ({
   useEffect(() => {
     checkSubscription(wallets);
   }, [checkSubscription, wallets]);
+
   const airdropFinished = isAfterAirdrop();
 
   return (
     <ScreenTemplate
-      header={<Header isBackArrow title={i18n.airdrop.title} />}
+      header={
+        <Header
+          onBackArrow={() => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard })}
+          title={i18n.airdrop.title}
+        />
+      }
       footer={!airdropFinished && <Footer navigation={navigation} />}
     >
       <View style={styles.wrapper}>
