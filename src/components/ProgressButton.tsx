@@ -31,48 +31,18 @@ export const ProgressButton: FC<Props> = ({
   const [inProgress, setInProgress] = useState(false);
   const [progress, setProgress] = useState(0);
   const [intervalID, setIntervalID] = useState(noIntervalID);
-  const styles = StyleSheet.create({
-    stack: {
-      position: 'relative',
-    },
-    greyBackground: {
-      backgroundColor: palette.grey,
-    },
-    progressButtonContainer: {
-      position: 'relative',
-      height,
-      width,
-      borderRadius,
-    },
-    stackItem: {
-      position: 'absolute',
-    },
-    button: {
-      height,
-      width,
-      borderRadius,
-      display: 'flex',
-      justifyContent: 'center',
-    },
-    titleStyle: {
-      alignSelf: 'center',
-      ...typography.button,
-      fontSize: 12,
-      color: palette.white,
-    },
-  });
 
   useEffect(() => {
     return () => {
       clearInterval(intervalID);
     };
-  }, []);
+  }, [intervalID]);
 
   const onPress = () => {
     setInProgress(true);
 
     const _intervalID = setInterval(() => {
-      setIntervalID((_intervalID as unknown) as number);
+      setIntervalID(Number(_intervalID));
 
       setProgress(prevProgress => {
         if (prevProgress < timeoutMilis) {
@@ -102,16 +72,18 @@ export const ProgressButton: FC<Props> = ({
     setProgress(0);
   };
 
+  const dynamicStyles = { width, height, borderRadius };
+
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={styles.progressButtonContainer}>
+      <View style={[styles.progressButtonContainer, dynamicStyles]}>
         {inProgress ? (
           <View style={styles.stack}>
             <View style={styles.stackItem}>
-              <View style={[styles.button, styles.greyBackground]}></View>
+              <View style={[styles.button, styles.greyBackground, dynamicStyles]}></View>
             </View>
             <View style={styles.stackItem}>
-              <View style={styles.button}>
+              <View style={[styles.button, dynamicStyles]}>
                 <ProgressBar
                   borderWidth={0}
                   color={palette.secondary}
@@ -124,7 +96,7 @@ export const ProgressButton: FC<Props> = ({
             </View>
             <View style={styles.stackItem}>
               <TouchableOpacity onPress={undo}>
-                <View style={styles.button}>
+                <View style={[styles.button, dynamicStyles]}>
                   <Text style={styles.titleStyle}>{inProgressTitle}</Text>
                 </View>
               </TouchableOpacity>
@@ -134,7 +106,7 @@ export const ProgressButton: FC<Props> = ({
           <View style={styles.stack}>
             <LinearGradient
               colors={[palette.gradientSecondaryFirst, palette.gradientSecondarySecond]}
-              style={styles.button}
+              style={[styles.button, dynamicStyles]}
             >
               <Text style={styles.titleStyle}>{title}</Text>
             </LinearGradient>
@@ -144,3 +116,28 @@ export const ProgressButton: FC<Props> = ({
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  stack: {
+    position: 'relative',
+  },
+  greyBackground: {
+    backgroundColor: palette.grey,
+  },
+  progressButtonContainer: {
+    position: 'relative',
+  },
+  stackItem: {
+    position: 'absolute',
+  },
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  titleStyle: {
+    alignSelf: 'center',
+    ...typography.button,
+    fontSize: 12,
+    color: palette.white,
+  },
+});

@@ -1,4 +1,4 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { compose } from 'lodash/fp';
 import React, { Component } from 'react';
@@ -37,6 +37,7 @@ interface Props {
     StackNavigationProp<MainTabNavigatorParams, Route.Settings>,
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
   >;
+  route: RouteProp<MainTabNavigatorParams, Route.Dashboard>;
   wallets: Wallet[];
   isLoading: boolean;
   allTransactions: EnhancedTransaction[];
@@ -144,6 +145,10 @@ class DashboardScreen extends Component<Props, State> {
     return wallets.length > 0;
   };
 
+  navigateToWalletCreate = () => {
+    this.props.navigation.navigate(Route.CreateWallet, { parentRouteName: this.props.route.name });
+  };
+
   renderHeader = () => {
     const { query } = this.state;
 
@@ -155,9 +160,7 @@ class DashboardScreen extends Component<Props, State> {
               onFilterPress: this.scrollToTransactionList,
             });
           }}
-          onAddPress={() => {
-            this.props.navigation.navigate(Route.CreateWallet);
-          }}
+          onAddPress={this.navigateToWalletCreate}
         >
           <SearchBar query={query} setQuery={this.setQuery} onFocus={this.scrollToTransactionList} />
         </DashboardHeader>
@@ -167,7 +170,7 @@ class DashboardScreen extends Component<Props, State> {
       <Header
         title={i18n.wallets.dashboard.title}
         addButtonTestID="add-wallet-button"
-        addFunction={() => this.props.navigation.navigate(Route.CreateWallet)}
+        addFunction={this.navigateToWalletCreate}
       />
     );
   };
@@ -243,7 +246,7 @@ class DashboardScreen extends Component<Props, State> {
       <ListEmptyState
         testID="no-wallets-icon"
         variant={ListEmptyState.Variant.Dashboard}
-        onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
+        onPress={this.navigateToWalletCreate}
       />
     );
   };

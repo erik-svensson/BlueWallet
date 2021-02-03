@@ -57,6 +57,7 @@ import {
   ConfirmTransactionPassword,
   LocalConfirmNotificationCodeScreen,
   AddNotificationEmailScreen,
+  AirdropCreateWalletSubscription,
 } from 'app/screens';
 
 import { MainTabNavigator } from './MainTabNavigator';
@@ -176,6 +177,7 @@ export const RootNavigator: FC<Props> = ({
       <Stack.Screen name={Route.AirdropThankYou} component={AirdropThankYouScreen} />
       <Stack.Screen name={Route.AirdropFinishedWalletDetails} component={AirdropFinishedWalletDetailsScreen} />
       <Stack.Screen name={Route.AirdropRequirements} component={AirdropRequirementsScreen} />
+      <Stack.Screen name={Route.AirdropCreateWalletSubscription} component={AirdropCreateWalletSubscription} />
     </Stack.Navigator>
   );
 };
