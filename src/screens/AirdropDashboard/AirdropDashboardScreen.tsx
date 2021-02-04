@@ -14,6 +14,7 @@ import {
   CheckSubscriptionActionCreator,
   subscribeWallet,
   SubscribeWalletActionCreator,
+  GetUsersQuantityActionCreator,
 } from 'app/state/airdrop/actions';
 import * as airdropSelectors from 'app/state/airdrop/selectors';
 
@@ -34,6 +35,7 @@ interface Props {
   subscribedWallets: Wallet[];
   availableWallets: Wallet[];
   subscribeWallet: SubscribeWalletActionCreator;
+  getUsersQuantity: GetUsersQuantityActionCreator;
   usersQuantity: number;
 }
 
@@ -43,6 +45,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
   usersQuantity,
   checkSubscription,
   subscribedWallets,
+  getUsersQuantity,
   subscribeWallet,
   availableWallets,
   isLoading,
@@ -51,7 +54,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
 }) => {
   useEffect(() => {
     getUsersQuantity();
-  }, []);
+  }, [getUsersQuantity]);
 
   useEffect(() => {
     checkSubscription(wallets);
@@ -94,6 +97,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   checkSubscription,
   subscribeWallet,
+  getUsersQuantity,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AirdropDashboardScreen);
