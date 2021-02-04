@@ -33,6 +33,8 @@ module.exports = {
     second: 'second',
     third: 'third',
     fourth: 'fourth',
+    fifth: 'fifth',
+    sixth: 'sixth',
   },
   time: {
     days: 'Days',
@@ -46,6 +48,11 @@ module.exports = {
       header: 'Airdrop rewards',
       name: 'Community',
       description: 'Check the rewards and community progress',
+      carouselItemHeader: 'Community progress',
+      user: 'user',
+      users: 'users',
+      airdropParticipants: 'Airdrop participants',
+      goal: 'The {order} goal:',
     },
     circularWalletBalance: {
       yourBalance: 'Your balance',

@@ -81,7 +81,7 @@ export interface AirdropCarouselCardData {
 }
 
 export interface AirdropGoal {
-  name: string;
+  value: string;
   threshold: number;
 }
 

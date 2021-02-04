@@ -1,4 +1,4 @@
-import { CONST, AirdropGoal } from 'app/consts';
+import { CONST, AirdropGoal, AirdropCarouselCardData } from 'app/consts';
 import { formatDate, getTimezoneOffset, isAfter } from 'app/helpers/date';
 
 import { formatToBtcvWithoutSign } from '../../utils/bitcoin';
@@ -10,17 +10,51 @@ export const getFormattedAirdropDate = () =>
 
 export const isAfterAirdrop = () => isAfter(new Date(), CONST.airdropDate);
 
-export const getCarouselItem = (data: { balance: number; label: string }) => {
+export const readableOrder = [
+  i18n.order.first,
+  i18n.order.second,
+  i18n.order.third,
+  i18n.order.fourth,
+  i18n.order.fifth,
+  i18n.order.sixth,
+];
+
+export const airdropCommunityGoals: AirdropGoal[] = [
+  { threshold: 2500, value: '25000' },
+  { threshold: 5000, value: '50000' },
+  { threshold: 10000, value: '100000' },
+  { threshold: 20000, value: '200000' },
+  { threshold: 99999999999, value: '500000' },
+];
+
+export const getCommunityItem = (usersQuantity: number): AirdropCarouselCardData => {
+  const unreachedGoals = airdropCommunityGoals.filter((goal: AirdropGoal) => goal.threshold > usersQuantity);
+  const nextGoal = unreachedGoals[0] || airdropCommunityGoals[airdropCommunityGoals.length - 1];
+  const nextGoalIndex = airdropCommunityGoals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
+
+  return {
+    header: i18n.airdrop.community.carouselItemHeader,
+    circleInnerFirstLine: `${usersQuantity} ${
+      usersQuantity == 1 ? i18n.airdrop.community.user : i18n.airdrop.community.users
+    }`,
+    circleInnerSecondLine: i18n.airdrop.community.airdropParticipants,
+    footerFirstLine: i18n.formatString(i18n.airdrop.community.goal, {
+      order: readableOrder[nextGoalIndex],
+    }),
+    footerSecondLine: `${nextGoal.threshold} ${i18n.airdrop.community.users}`,
+    circleFillPercentage: (usersQuantity / nextGoal.threshold) * 100,
+  };
+};
+
+export const getCarouselItem = (data: { balance: number; label: string }): AirdropCarouselCardData => {
   const _isAfterAirdrop = isAfterAirdrop();
 
   const airdropGoals: AirdropGoal[] = [
-    { threshold: 5, name: i18n.airdrop.walletsCarousel.shrimp },
-    { threshold: 25, name: i18n.airdrop.walletsCarousel.crab },
-    { threshold: 100, name: i18n.airdrop.walletsCarousel.shark },
-    { threshold: 1000, name: i18n.airdrop.walletsCarousel.whale },
+    { threshold: 5, value: i18n.airdrop.walletsCarousel.shrimp },
+    { threshold: 25, value: i18n.airdrop.walletsCarousel.crab },
+    { threshold: 100, value: i18n.airdrop.walletsCarousel.shark },
+    { threshold: 1000, value: i18n.airdrop.walletsCarousel.whale },
   ];
-
-  const readableOrder = [i18n.order.first, i18n.order.second, i18n.order.third, i18n.order.fourth];
 
   const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > data.balance);
   // TODO: edge case of "all goals reached" not covered by designs. Awaiting UX input. For now returning last one - "whale"
@@ -29,7 +63,7 @@ export const getCarouselItem = (data: { balance: number; label: string }) => {
 
   const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= data.balance);
   // TODO: edge case of "none goals reached" not covered by designs. Awaiting UX input. For now returning first one - "shrimp"
-  const lastGoal = reachedGoals[reachedGoals.length - 1] || airdropGoals[0];
+  const previousGoal = reachedGoals[reachedGoals.length - 1] || airdropGoals[0];
 
   return {
     header: data.label,
@@ -41,8 +75,8 @@ export const getCarouselItem = (data: { balance: number; label: string }) => {
           order: readableOrder[nextGoalIndex],
         }),
     footerSecondLine: i18n.formatString(i18n.airdrop.walletsCarousel.avatarTeaser, {
-      goalName: _isAfterAirdrop ? lastGoal.name : nextGoal.name,
-      goalThreshold: _isAfterAirdrop ? lastGoal.threshold : nextGoal.threshold,
+      goalName: _isAfterAirdrop ? previousGoal.value : nextGoal.value,
+      goalThreshold: _isAfterAirdrop ? previousGoal.threshold : nextGoal.threshold,
       unit: CONST.preferredBalanceUnit,
     }),
     circleFillPercentage: (data.balance / nextGoal.threshold) * 100,
