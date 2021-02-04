@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { Button, Header, ScreenTemplate } from 'app/components';
@@ -18,9 +18,13 @@ const BUTTON_BLOCKED_TIME = 1000;
 export const ConfirmScreen = ({
   navigation,
   route: {
-    params: { onConfirm, title, onBack, children, isBackArrow },
+    params: { onConfirm, title, onBack, children, isBackArrow, gestureEnabled = true },
   },
 }: Props) => {
+  useLayoutEffect(() => {
+    navigation.setOptions({ gestureEnabled });
+  }, [navigation, gestureEnabled]);
+
   const [clicked, setClicked] = useState(false);
   const [timeoutId, setTimeoutId] = useState(0);
 

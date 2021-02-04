@@ -126,7 +126,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { email } = this.state;
     const { error, route, isLoading } = this.props;
 
-    const { onSkipSuccess, title, isBackArrow, description } = route.params;
+    const { onSkipSuccess, title, isBackArrow, description, inputAutofocus } = route.params;
 
     return (
       <ScreenTemplate
@@ -163,7 +163,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             label={i18n._.email}
             testID="confirm-notification-email"
             setValue={this.setEmail}
-            autoFocus={true}
+            autoFocus={inputAutofocus}
             error={error}
             secureTextEntry={false}
             autoCapitalize="none"

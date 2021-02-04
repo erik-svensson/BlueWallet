@@ -376,6 +376,7 @@ export interface AddNotificationEmailParams {
   isBackArrow: boolean;
   description: string;
   onSkipSuccess?: () => void;
+  inputAutofocus: boolean;
 }
 
 export type RootStackParams = {
@@ -502,6 +503,7 @@ export type RootStackParams = {
     onBack?: () => void;
     children: React.ReactNode;
     isBackArrow?: boolean;
+    gestureEnabled?: boolean;
   };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
@@ -520,7 +522,9 @@ export type RootStackParams = {
     chunksQuantity: string;
     onScanned: () => void;
   };
-  [Route.Notifications]: undefined;
+  [Route.Notifications]: {
+    onBackArrow: () => void;
+  };
   [Route.ConfirmEmail]: {
     email: string;
     newAddress?: string;

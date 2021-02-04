@@ -164,7 +164,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             buttonProps: {
               title: i18n.message.goToWalletDetails,
               onPress: () => {
-                navigation.navigate(Route.WalletDetails, { id: wallet.id });
+                this.navigateBackToScreen();
                 this.checkSubscription();
               },
             },
@@ -173,11 +173,17 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       });
   };
 
+  navigateBackToScreen = () => {
+    const { navigation, wallet } = this.props;
+
+    wallet && navigation.navigate(Route.WalletDetails, { id: wallet.id });
+  };
+
   onSubscribeButtonPress = () => {
     const { email, navigation, wallet, isSubscribed } = this.props;
     if (!wallet) return;
     if (!email) {
-      return navigation.navigate(Route.Notifications);
+      return navigation.navigate(Route.Notifications, { onBackArrow: () => this.navigateBackToScreen() });
     }
 
     if (!isSubscribed) {

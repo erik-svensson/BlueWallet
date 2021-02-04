@@ -105,6 +105,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     navigation.navigate(Route.Confirm, {
       title: i18n.notifications.notifications,
       children: this.renderConfirmScreenContent(),
+      gestureEnabled: false,
       onConfirm: () =>
         navigation.navigate(Route.ConfirmEmail, {
           email,
