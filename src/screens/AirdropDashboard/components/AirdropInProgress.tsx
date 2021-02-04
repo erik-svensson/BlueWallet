@@ -32,7 +32,7 @@ interface Props {
 
 export const AirdropInProgress: FC<Props> = props => {
   const [communityCarouselActive, setCommunityCarouselActive] = useState(false);
-  const { usersQuantity = 0, subscribedWallets, loading, error, availableWallets, subscribeWallet } = props;
+  const { usersQuantity, subscribedWallets, loading, error, availableWallets, subscribeWallet } = props;
   let _carouselRef: Carousel<AirdropCarouselCardData>;
 
   const setRef = (carouselRef: Carousel<AirdropCarouselCardData>) => {

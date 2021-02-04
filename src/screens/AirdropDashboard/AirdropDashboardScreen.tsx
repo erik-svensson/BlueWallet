@@ -51,6 +51,9 @@ export const AirdropDashboardScreen: FC<Props> = ({
 }) => {
   useEffect(() => {
     getUsersQuantity();
+  }, []);
+
+  useEffect(() => {
     checkSubscription(wallets);
   }, [checkSubscription, wallets]);
 
