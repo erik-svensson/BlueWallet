@@ -19,12 +19,14 @@ export const readableOrder = [
   i18n.order.sixth,
 ];
 
+export const lastThresholdBeforeInfinity = 20000;
+
 export const airdropCommunityGoals: AirdropGoal[] = [
   { threshold: 2500, value: '25000' },
   { threshold: 5000, value: '50000' },
   { threshold: 10000, value: '100000' },
-  { threshold: 20000, value: '200000' },
-  { threshold: 99999999999, value: '500000' },
+  { threshold: lastThresholdBeforeInfinity, value: '200000' },
+  { threshold: 40000, value: '500000' }, // TODO: for now it s 400000 so users can see some progress in progress bar, but in reality if it s 20k+ it s already unlocked
 ];
 
 export const getCommunityItem = (usersQuantity: number): AirdropCarouselCardData => {

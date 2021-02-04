@@ -10,11 +10,12 @@ interface Props {
   items: AirdropCarouselCardData[];
   styles?: ViewStyle;
   setRef?: (carouselRef: Carousel<AirdropCarouselCardData>) => void;
+  onItemSnap: (index: number) => void;
 }
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-export const AirdropCarousel: FC<Props> = ({ items, styles, setRef }) => (
+export const AirdropCarousel: FC<Props> = ({ items, styles, setRef, onItemSnap }) => (
   <Carousel
     ref={setRef}
     containerCustomStyle={styles}
@@ -26,6 +27,7 @@ export const AirdropCarousel: FC<Props> = ({ items, styles, setRef }) => (
     )}
     sliderWidth={SCREEN_WIDTH}
     itemWidth={SCREEN_WIDTH * 0.56}
+    onSnapToItem={onItemSnap}
   />
 );
 

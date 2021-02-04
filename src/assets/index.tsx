@@ -54,6 +54,7 @@ export const icons = {
   dataUsageIcon: require('./images/dataUsageIcon.png'),
   languageIcon: require('./images/languageIcon.png'),
   lockIcon: require('./images/lockIcon.png'),
+  lockIconGrey: require('./images/lockIconGrey.png'),
   infoIcon: require('./images/infoIcon.png'),
   fingerprintIcon: require('./images/fingerprintIcon.png'),
   qrCode: require('./images/qrCode.png'),

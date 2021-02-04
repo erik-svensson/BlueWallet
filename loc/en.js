@@ -53,6 +53,8 @@ module.exports = {
       users: 'users',
       airdropParticipants: 'Airdrop participants',
       goal: 'The {order} goal:',
+      unlockToIncrease: 'Unlock to increase Airdrop to {reward}$',
+      thresholdUsers: '{threshold} users',
     },
     circularWalletBalance: {
       yourBalance: 'Your balance',

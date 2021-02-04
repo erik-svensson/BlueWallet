@@ -6,3 +6,4 @@ export { RegisteredWalletAction } from './RegisteredWalletAction';
 export { CommunitySection } from './CommunitySection';
 export { Error } from './Error';
 export { Loading } from './Loading';
+export { CommunityGoalsListItem } from './CommunityGoalsListItem';
