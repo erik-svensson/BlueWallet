@@ -267,6 +267,7 @@ module.exports = {
     changeEmailDescription:
       'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
     yourCurrentEmail: 'Your current email',
+    theSameAddressError: 'New address cannot be the same as current',
     newEmail: 'New email',
     confirmCurrentTitle: 'Confirm your current email address',
     confirmNewTitle: 'Confirm your new email address',

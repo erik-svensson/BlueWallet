@@ -92,9 +92,7 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
           type: MessageType.success,
           buttonProps: {
             title: i18n.notifications.goToNotifications,
-            onPress: () => {
-              this.props.navigation.navigate(Route.Notifications);
-            },
+            onPress: this.goBackToNotificationScreen,
           },
         });
       },
@@ -120,6 +118,9 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
     if (!isEmail(email)) {
       return setError(i18n.onboarding.emailValidation);
     }
+    if (email === storedEmail) {
+      return setError(i18n.notifications.theSameAddressError);
+    }
     if (!subscribedWallets.length) {
       return this.goToLocalEmailConfirm();
     }
@@ -138,7 +139,10 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
     });
   };
 
-  goBackToNotificationScreen = () => this.props.navigation.navigate(Route.Notifications);
+  goBackToNotificationScreen = () =>
+    this.props.navigation.navigate(Route.Notifications, {
+      onBackArrow: () => this.props.navigation.pop(),
+    });
 
   render() {
     const { email } = this.state;
