@@ -22,7 +22,7 @@ export const storedPin = createSelector(local, state => state.pin);
 export const failedTries = createSelector(local, state => state.failedTries);
 
 export const readableError = createSelector(notificationError, failedTries, (err, failNo) => {
-  if (err.startsWith(messages.requestFailed5XX)) {
+  if (err.startsWith?.(messages.requestFailed5XX)) {
     return i18n.connectionIssue.couldntConnectToServer;
   }
   if (err === messages.invalidEmail || err === messages.invalidEmail2) {

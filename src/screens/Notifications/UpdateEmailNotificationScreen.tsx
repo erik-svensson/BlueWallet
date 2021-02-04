@@ -20,9 +20,7 @@ import {
   setError as setErrorAction,
   CreateNotificationEmailActionCreator,
   updateNotificationEmail as updateNotificationEmailAction,
-  UpdateNotificationEmailCreator,
-  updateNotificationEmailSuccess as updateNotificationEmailSuccessAction,
-  UpdateNotificationEmailSuccessAction,
+  UpdateNotificationEmailActionCreator,
 } from 'app/state/notifications/actions';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
@@ -40,8 +38,7 @@ interface Props {
   isLoading: boolean;
   checkSubscription: CheckSubscriptionActionCreator;
   storedEmail: string;
-  updateNotificationEmail: UpdateNotificationEmailCreator;
-  updateNotificationEmailSuccess: (sessionToken: string) => UpdateNotificationEmailSuccessAction;
+  updateNotificationEmail: UpdateNotificationEmailActionCreator;
 }
 
 type State = {
@@ -58,7 +55,7 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
   }
 
   setEmail = (email: string): void => {
-    this.props.setError('');
+    this.props.error && this.props.setError('');
     this.setState({
       email,
     });
@@ -115,16 +112,9 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
     });
   };
 
-  onConfirm = async () => {
+  onConfirm = () => {
     const { email } = this.state;
-    const {
-      navigation,
-      route,
-      setError,
-      storedEmail,
-      updateNotificationEmail,
-      updateNotificationEmailSuccess,
-    } = this.props;
+    const { navigation, route, setError, storedEmail, updateNotificationEmail } = this.props;
     const { subscribedWallets } = route.params;
 
     if (!isEmail(email)) {
@@ -138,9 +128,8 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
         return navigation.navigate(Route.ConfirmEmail, {
           email: storedEmail,
           flowType: ConfirmAddressFlowType.UPDATE_CURRENT,
-          onSuccess: (sessionToken: string) => {
+          onSuccess: () => {
             navigation.goBack();
-            updateNotificationEmailSuccess(sessionToken);
             this.authenticateNewEmail();
           },
           onBack: this.goBackToNotificationScreen,
@@ -200,7 +189,6 @@ const mapDispatchToProps = {
   checkSubscription: checkSubscriptionAction,
   setError: setErrorAction,
   updateNotificationEmail: updateNotificationEmailAction,
-  updateNotificationEmailSuccess: updateNotificationEmailSuccessAction,
 };
 
 const mapStateToProps = (state: ApplicationState) => ({

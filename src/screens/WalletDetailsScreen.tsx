@@ -42,10 +42,7 @@ interface Props {
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
   componentDidMount() {
-    const { wallet, email, checkSubscription } = this.props;
-
-    if (!email || !wallet) return;
-    checkSubscription([wallet], email);
+    this.checkSubscription();
   }
 
   checkSubscription = () => {

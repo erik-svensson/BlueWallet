@@ -91,7 +91,6 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
       return {
         ...state,
         error: '',
-        sessionToken: '',
         failedTries: 0,
       };
     case NotificationAction.SetErrorAction:

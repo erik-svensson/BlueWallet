@@ -39,8 +39,12 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     numberAttempt: 0,
   };
 
-  setCode = (userCode: string) => {
+  componentWillUnmount() {
     this.props.setError('');
+  }
+
+  setCode = (userCode: string) => {
+    this.props.error && this.props.setError('');
     this.setState({ userCode });
   };
 

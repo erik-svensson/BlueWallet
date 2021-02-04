@@ -150,15 +150,12 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onConfirm = () => {
-    const {
-      sessionToken,
-      route: { params },
-    } = this.props;
+    const { sessionToken } = this.props;
     const { code } = this.state;
 
     this.props.authenticate(sessionToken, code, {
       onFailure: this.onError,
-      onSuccess: this.infoContainerContent.onCodeConfirm || params.onSuccess,
+      onSuccess: this.infoContainerContent.onCodeConfirm,
     });
   };
 

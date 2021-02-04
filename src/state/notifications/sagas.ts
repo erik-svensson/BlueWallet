@@ -157,10 +157,7 @@ export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
   } = action;
 
   try {
-    const walletsWithHashes = yield Promise.all(
-      wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
-    );
-    const hashes = walletsWithHashes.map((wallet: Wallet) => wallet.hash);
+    const hashes = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
     const response = yield call(modifyEmail, {
       hashes,

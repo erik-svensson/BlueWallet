@@ -312,13 +312,18 @@ export const setError: SetErrorActionCreator = error => ({
   error,
 });
 
-export type UpdateNotificationEmailCreator = (
+export type UpdateNotificationEmailActionCreator = (
   wallets: Wallet[],
   currentEmail: string,
   newEmail: string,
   meta?: ActionMeta,
 ) => UpdateNotificationEmailAction;
-export const updateNotificationEmail: UpdateNotificationEmailCreator = (wallets, currentEmail, newEmail, meta) => ({
+export const updateNotificationEmail: UpdateNotificationEmailActionCreator = (
+  wallets,
+  currentEmail,
+  newEmail,
+  meta,
+) => ({
   type: NotificationAction.UpdateNotificationEmailAction,
   payload: {
     wallets,
@@ -328,7 +333,10 @@ export const updateNotificationEmail: UpdateNotificationEmailCreator = (wallets,
   meta,
 });
 
-export const updateNotificationEmailSuccess = (sessionToken: string): UpdateNotificationEmailSuccessAction => ({
+export type UpdateNotificationEmailSuccessActionCreator = (
+  sessionToken: string,
+) => UpdateNotificationEmailSuccessAction;
+export const updateNotificationEmailSuccess: UpdateNotificationEmailSuccessActionCreator = sessionToken => ({
   type: NotificationAction.UpdateNotificationEmailSuccessAction,
   payload: { sessionToken },
 });
