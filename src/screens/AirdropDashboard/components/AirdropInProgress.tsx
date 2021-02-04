@@ -3,9 +3,9 @@ import { View, StyleSheet, Text } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
 import { images } from 'app/assets';
-import { Image, Countdown, AirdropWalletsList, AirdropWalletsCarousel } from 'app/components';
-import { CONST, Wallet, AirdropWalletCardData } from 'app/consts';
-import { getFormattedAirdropDate } from 'app/helpers/airdrop';
+import { Image, Countdown, AirdropWalletsList, AirdropCarousel } from 'app/components';
+import { CONST, Wallet, AirdropCarouselCardData } from 'app/consts';
+import { getFormattedAirdropDate, isAfterAirdrop, getCarouselItem } from 'app/helpers/airdrop';
 import { SubscribeWalletActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
@@ -25,85 +25,33 @@ interface Props {
 }
 
 export const AirdropInProgress: FC<Props> = props => {
-  let _carouselRef: Carousel<AirdropWalletCardData>;
+  let _carouselRef: Carousel<AirdropCarouselCardData>;
 
-  const setRef = (carouselRef: Carousel<AirdropWalletCardData>) => {
+  const setRef = (carouselRef: Carousel<AirdropCarouselCardData>) => {
     _carouselRef = carouselRef;
-  };
-
-  const AirdropInProgressContent: FC<Props> = ({
-    error,
-    loading,
-    subscribedWallets,
-    availableWallets,
-    subscribeWallet,
-  }) => {
-    if (loading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <Loading />
-        </View>
-      );
-    }
-    if (error) {
-      return (
-        <View style={styles.errorContainer}>
-          <Error />
-        </View>
-      );
-    }
-
-    const userHasSubscribedWallets = subscribedWallets?.length > 0;
-
-    return (
-      <>
-        {userHasSubscribedWallets ? (
-          <>
-            <AirdropWalletsCarousel styles={styles.carouselStyles} items={subscribedWallets} setRef={setRef} />
-            <View style={styles.walletsListContainer}>
-              <AirdropWalletsList
-                wallets={subscribedWallets}
-                title={i18n.airdrop.dashboard.registeredWallets}
-                itemCallToAction={(wallet: Wallet) => (
-                  <RegisteredWalletAction onActionClick={() => setCarouselActiveElement(wallet)} />
-                )}
-              />
-            </View>
-          </>
-        ) : (
-          <>
-            <Image source={images.airdrop} style={styles.airdropImage} />
-            <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
-          </>
-        )}
-        {availableWallets?.length > 0 && (
-          <View style={styles.walletsListContainer}>
-            <AirdropWalletsList
-              wallets={availableWallets}
-              title={i18n.airdrop.dashboard.availableWallets}
-              itemCallToAction={(wallet: Wallet) => (
-                <AvailableWalletAction onActionClick={() => subscribeWallet(wallet)} />
-              )}
-            />
-          </View>
-        )}
-        {userHasSubscribedWallets && (
-          <View style={styles.communitySectionContainer}>
-            <CommunitySection
-              onActionClick={() => {
-                _carouselRef.snapToItem(subscribedWallets.length, true);
-              }}
-            />
-          </View>
-        )}
-      </>
-    );
   };
 
   const setCarouselActiveElement = (wallet: Wallet) => {
     const snapIndex = props.subscribedWallets.findIndex(w => w.id === wallet.id && w.balance === wallet.balance);
 
     _carouselRef.snapToItem(snapIndex || 0, true);
+  };
+
+  const userHasSubscribedWallets = props.subscribedWallets?.length > 0;
+
+  const getCarouselItems = (subscribedWallets: Wallet[]) => {
+    const communityItem = {
+      header: 'Community progress',
+      circleInnerFirstLine: `${props.usersQuantity} users`, // TODO: singular plural and translations
+      circleInnerSecondLine: 'Airdrop participants',
+      footerFirstLine: 'The first goal', // TODO: order based on
+      footerSecondLine: '3500 users', // TODO: unhardcode
+      circleFillPercentage: 70, // TODO: calculate, as in wallets
+    };
+
+    const renderableWallets = subscribedWallets.map(getCarouselItem);
+
+    return isAfterAirdrop() ? renderableWallets : [...renderableWallets, communityItem];
   };
 
   return (
@@ -117,7 +65,63 @@ export const AirdropInProgress: FC<Props> = props => {
         </Text>
       </View>
       <Countdown dataEnd={CONST.airdropDate} />
-      <AirdropInProgressContent {...props} />
+      {props.loading && (
+        <View style={styles.loadingContainer}>
+          <Loading />
+        </View>
+      )}
+      {props.error && (
+        <View style={styles.errorContainer}>
+          <Error />
+        </View>
+      )}
+      {!props.error && !props.loading && (
+        <>
+          {userHasSubscribedWallets ? (
+            <>
+              <AirdropCarousel
+                styles={styles.carouselStyles}
+                items={getCarouselItems(props.subscribedWallets)}
+                setRef={setRef}
+              />
+              <View style={styles.walletsListContainer}>
+                <AirdropWalletsList
+                  wallets={props.subscribedWallets}
+                  title={i18n.airdrop.dashboard.registeredWallets}
+                  itemCallToAction={(wallet: Wallet) => (
+                    <RegisteredWalletAction onActionClick={() => setCarouselActiveElement(wallet)} />
+                  )}
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <Image source={images.airdrop} style={styles.airdropImage} />
+              <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
+            </>
+          )}
+          {props.availableWallets?.length > 0 && (
+            <View style={styles.walletsListContainer}>
+              <AirdropWalletsList
+                wallets={props.availableWallets}
+                title={i18n.airdrop.dashboard.availableWallets}
+                itemCallToAction={(wallet: Wallet) => (
+                  <AvailableWalletAction onActionClick={() => props.subscribeWallet(wallet)} />
+                )}
+              />
+            </View>
+          )}
+          {userHasSubscribedWallets && (
+            <View style={styles.communitySectionContainer}>
+              <CommunitySection
+                onActionClick={() => {
+                  _carouselRef.snapToItem(props.subscribedWallets.length, true);
+                }}
+              />
+            </View>
+          )}
+        </>
+      )}
     </>
   );
 };

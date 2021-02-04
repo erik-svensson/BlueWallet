@@ -32,7 +32,7 @@ export const AirdropWalletsList: FC<Props> = props => {
     <View style={styles.container}>
       <Text style={styles.header}>{title}</Text>
       {wallets.length > 0 &&
-        wallets.map((wallet, index) => (
+        wallets.map(wallet => (
           <AirdropWalletsListItem
             key={wallet.id}
             wallet={wallet}

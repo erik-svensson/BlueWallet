@@ -5,7 +5,7 @@ import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native'
 
 import { images } from 'app/assets';
 import { AirdropStayTuned, AirdropWalletsList, Image } from 'app/components';
-import { RootStackParams, Route, AirdropWalletCardData, Wallet } from 'app/consts';
+import { RootStackParams, Route, AirdropCarouselCardData, Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 import { Error } from './Error';
@@ -24,7 +24,7 @@ interface Props {
 }
 
 interface CallToActionProps {
-  data: AirdropWalletCardData;
+  data: { balance: number; label: string };
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
     StackNavigationProp<RootStackParams, Route.AirdropDashboard>
@@ -32,8 +32,8 @@ interface CallToActionProps {
 }
 
 const CallToAction: FC<CallToActionProps> = ({ data, navigation }) => {
-  const goToWalletDetails = (data: AirdropWalletCardData) => {
-    navigation.navigate(Route.AirdropFinishedWalletDetails, { balance: data.balance, label: data.label });
+  const goToWalletDetails = (data: { balance: number; label: string }) => {
+    navigation.navigate(Route.AirdropFinishedWalletDetails, { balance: data.balance, header: data.label });
   };
 
   return (
