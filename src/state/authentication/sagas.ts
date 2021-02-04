@@ -1,7 +1,6 @@
 import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 
 import { CONST } from 'app/consts';
-import { BlueApp } from 'app/legacy';
 import { SecureStorageService, StoreService } from 'app/services';
 
 import {
@@ -28,7 +27,6 @@ export function* checkCredentialsSaga(action: CheckCredentialsAction | unknown) 
   const { meta } = action as CheckCredentialsAction;
 
   try {
-    yield BlueApp.startAndDecrypt();
     const pin = yield call(SecureStorageService.getSecuredValue, CONST.pin);
     const transactionPassword = yield call(SecureStorageService.getSecuredValue, CONST.transactionPassword);
     const credentials = {
