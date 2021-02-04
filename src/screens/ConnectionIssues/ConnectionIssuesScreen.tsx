@@ -31,13 +31,11 @@ export const ConnectionIssuesScreen = () => {
   };
 
   return (
-    // <ScreenTemplate>
     <View style={styles.container}>
       <Text style={styles.title}>{getTitle()}</Text>
       <Loader size={137} />
       <Text style={styles.description}>{getDescription()}</Text>
     </View>
-    // </ScreenTemplate>
   );
 };
 
