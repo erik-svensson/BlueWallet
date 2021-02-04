@@ -50,7 +50,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   }
 
   setEmail = (email: string): void => {
-    this.props.setError('');
+    !!this.props.error && this.props.setError('');
     this.setState({
       email,
     });

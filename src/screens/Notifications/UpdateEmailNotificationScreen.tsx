@@ -5,23 +5,22 @@ import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button } from 'app/components';
-import { Route, RootStackParams, Wallet, ActionMeta } from 'app/consts';
+import { Route, RootStackParams, Wallet, ConfirmAddressFlowType } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isEmail } from 'app/helpers/helpers';
-import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 import { ApplicationState } from 'app/state';
 import { selectors as notificationsSelectors } from 'app/state/notifications';
 import {
   createNotificationEmail as createNotificationEmailAction,
   verifyNotificationEmail as verifyNotificationEmailAction,
   checkSubscription as checkSubscriptionAction,
-  CheckSubscriptionAction,
-  VerifyNotificationEmailActionFunction,
-  SetErrorActionFunction,
+  CheckSubscriptionActionCreator,
+  VerifyNotificationEmailActionCreator,
+  SetErrorActionCreator,
   setError as setErrorAction,
-  CreateNotificationEmailActionFunction,
+  CreateNotificationEmailActionCreator,
   updateNotificationEmail as updateNotificationEmailAction,
-  UpdateNotificationEmailFunction,
+  UpdateNotificationEmailCreator,
   updateNotificationEmailSuccess as updateNotificationEmailSuccessAction,
   UpdateNotificationEmailSuccessAction,
 } from 'app/state/notifications/actions';
@@ -33,15 +32,15 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.UpdateEmailNotification>;
   route: RouteProp<RootStackParams, Route.UpdateEmailNotification>;
-  createNotificationEmail: CreateNotificationEmailActionFunction;
-  setError: SetErrorActionFunction;
-  verifyNotificationEmail: VerifyNotificationEmailActionFunction;
-  subscribableWallets: Wallet[];
+  createNotificationEmail: CreateNotificationEmailActionCreator;
+  setError: SetErrorActionCreator;
+  verifyNotificationEmail: VerifyNotificationEmailActionCreator;
+  wallets: Wallet[];
   error: string;
   isLoading: boolean;
-  checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
+  checkSubscription: CheckSubscriptionActionCreator;
   storedEmail: string;
-  updateNotificationEmail: UpdateNotificationEmailFunction;
+  updateNotificationEmail: UpdateNotificationEmailCreator;
   updateNotificationEmailSuccess: (sessionToken: string) => UpdateNotificationEmailSuccessAction;
 }
 
@@ -106,15 +105,12 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
 
   authenticateNewEmail = () => {
     const { email } = this.state;
-    const { navigation, route } = this.props;
-    const { subscribedWallets } = route.params;
+    const { navigation } = this.props;
 
     return navigation.navigate(Route.ConfirmEmail, {
       email,
-      title: i18n.notifications.confirmNewTitle,
-      description: `${i18n.notifications.verifyActionDescription} ${email}`,
+      flowType: ConfirmAddressFlowType.UPDATE_NEW,
       onSuccess: this.onUpdateSuccess,
-      walletsToSubscribe: subscribedWallets,
       onBack: this.goBackToNotificationScreen,
     });
   };
@@ -124,7 +120,6 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
     const {
       navigation,
       route,
-      subscribableWallets,
       setError,
       storedEmail,
       updateNotificationEmail,
@@ -135,23 +130,19 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
     if (!isEmail(email)) {
       return setError(i18n.onboarding.emailValidation);
     }
-    if (!subscribableWallets.length) {
+    if (!subscribedWallets.length) {
       return this.goToLocalEmailConfirm();
     }
-    const hashes = await Promise.all(subscribableWallets!.map(wallet => getWalletHashedPublicKeys(wallet)));
-
-    updateNotificationEmail(hashes, storedEmail, email, {
+    updateNotificationEmail(subscribedWallets, storedEmail, email, {
       onSuccess: () => {
         return navigation.navigate(Route.ConfirmEmail, {
           email: storedEmail,
-          title: i18n.notifications.confirmCurrentTitle,
-          description: `${i18n.notifications.verifyActionDescription} ${storedEmail}`,
+          flowType: ConfirmAddressFlowType.UPDATE_CURRENT,
           onSuccess: (sessionToken: string) => {
             navigation.goBack();
             updateNotificationEmailSuccess(sessionToken);
             this.authenticateNewEmail();
           },
-          walletsToSubscribe: subscribedWallets,
           onBack: this.goBackToNotificationScreen,
         });
       },
@@ -213,7 +204,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-  subscribableWallets: walletsSelectors.subscribableWallets(state),
+  wallets: walletsSelectors.wallets(state),
   isLoading: notificationsSelectors.isLoading(state),
   error: notificationsSelectors.readableError(state),
   storedEmail: notificationsSelectors.storedEmail(state),

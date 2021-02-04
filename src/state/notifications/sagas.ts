@@ -151,10 +151,22 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
 }
 
 export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
-  const { payload, meta } = action;
+  const {
+    payload: { wallets, currentEmail, newEmail },
+    meta,
+  } = action;
 
   try {
-    const response = yield call(modifyEmail, payload);
+    const walletsWithHashes = yield Promise.all(
+      wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
+    );
+    const hashes = walletsWithHashes.map((wallet: Wallet) => wallet.hash);
+
+    const response = yield call(modifyEmail, {
+      hashes,
+      old_email: currentEmail,
+      new_email: newEmail,
+    });
 
     if (response.session_token) {
       yield put(updateNotificationEmailSuccess(response.session_token));

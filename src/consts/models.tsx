@@ -254,13 +254,10 @@ export enum TxType {
 }
 
 export enum ConfirmAddressFlowType {
-  FIRST_ADDRESS = 'FIRST_ADDRESS',
-  CURRENT_ADDRESS = 'CURRENT_ADDRESS',
-  NEW_ADDRESS = 'NEW_ADDRESS',
-  DELETE_ADDRESS = 'DELETE_ADDRESS',
   SUBSCRIBE = 'SUBSCRIBE',
   UNSUBSCRIBE = 'UNSUBSCRIBE',
-  UPDATE = 'UPDATE',
+  UPDATE_CURRENT = 'UPDATE_CURRENT',
+  UPDATE_NEW = 'UPDATE_NEW',
 }
 
 export interface InfoContainerContent {
@@ -529,11 +526,9 @@ export type RootStackParams = {
   };
   [Route.ConfirmEmail]: {
     email: string;
-    title?: string;
-    description?: string;
     newAddress?: string;
     wallets?: Wallet[];
-    flowType?: ConfirmAddressFlowType;
+    flowType: ConfirmAddressFlowType;
     onBack?: () => void;
     onSuccess: (arg?: any) => void;
   };

@@ -149,7 +149,7 @@ export interface CheckSubscriptionFailureAction {
 
 export interface UpdateNotificationEmailAction {
   type: NotificationAction.UpdateNotificationEmailAction;
-  payload: UpdateNotificationEmailPayload;
+  payload: { wallets: Wallet[]; currentEmail: string; newEmail: string };
   meta?: ActionMeta;
 }
 
@@ -279,7 +279,13 @@ export const authenticateEmailFailure = (error: string): AuthenticateEmailFailur
   error,
 });
 
-export const checkSubscription = (wallets: Wallet[], email: string, meta?: ActionMeta): CheckSubscriptionAction => ({
+export type CheckSubscriptionActionCreator = (
+  wallets: Wallet[],
+  email: string,
+  meta?: ActionMeta,
+) => CheckSubscriptionAction;
+
+export const checkSubscription: CheckSubscriptionActionCreator = (wallets, email, meta) => ({
   type: NotificationAction.CheckSubscriptionAction,
   payload: {
     wallets,
@@ -306,18 +312,18 @@ export const setError: SetErrorActionCreator = error => ({
   error,
 });
 
-export type UpdateNotificationEmailFunction = (
-  hashes: string[],
-  old_email: string,
-  new_email: string,
+export type UpdateNotificationEmailCreator = (
+  wallets: Wallet[],
+  currentEmail: string,
+  newEmail: string,
   meta?: ActionMeta,
 ) => UpdateNotificationEmailAction;
-export const updateNotificationEmail: UpdateNotificationEmailFunction = (hashes, old_email, new_email, meta) => ({
+export const updateNotificationEmail: UpdateNotificationEmailCreator = (wallets, currentEmail, newEmail, meta) => ({
   type: NotificationAction.UpdateNotificationEmailAction,
   payload: {
-    hashes,
-    old_email,
-    new_email,
+    wallets,
+    currentEmail,
+    newEmail,
   },
   meta,
 });

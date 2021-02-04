@@ -59,6 +59,10 @@ class ConfirmEmailScreen extends Component<Props, State> {
         return this.subscribeFlowContent();
       case ConfirmAddressFlowType.UNSUBSCRIBE:
         return this.unsubscribeFlowContent();
+      case ConfirmAddressFlowType.UPDATE_CURRENT:
+        return this.updateCurrentEmailFlowContent();
+      case ConfirmAddressFlowType.UPDATE_NEW:
+        return this.updateNewEmailFlowContent();
       default:
         return {};
     }
@@ -78,12 +82,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
       description: i18n.notifications.verifyActionDescription,
       onInit: () => {
         wallets && this.props.subscribe(wallets, email);
-        // onInit: async () => {
-        //   const walletsToSubscribePayload = await Promise.all(
-        //     walletsToSubscribe!.map((wallet: Wallet) => walletToAddressesGenerationBase(wallet)),
-        //   );
-
-        //   this.props.subscribe(walletsToSubscribePayload, email, language);
       },
       onCodeConfirm: () => {
         if (storedEmail) {
@@ -106,14 +104,38 @@ class ConfirmEmailScreen extends Component<Props, State> {
       description: i18n.notifications.verifyActionDescription,
       onInit: () => {
         wallets && this.props.unsubscribe(wallets, email);
-        // onInit: async () => {
-        //   const hashes = await Promise.all(walletsToSubscribe!.map(wallet => getWalletHashedPublicKeys(wallet)));
-
-        //   this.props.unsubscribe(hashes, email);
       },
       onCodeConfirm: () => {
         onSuccess();
       },
+    };
+  };
+
+  updateCurrentEmailFlowContent = () => {
+    const {
+      route: {
+        params: { onSuccess },
+      },
+    } = this.props;
+
+    return {
+      title: i18n.notifications.confirmCurrentTitle,
+      description: i18n.notifications.verifyActionDescription,
+      onCodeConfirm: onSuccess,
+    };
+  };
+
+  updateNewEmailFlowContent = () => {
+    const {
+      route: {
+        params: { onSuccess },
+      },
+    } = this.props;
+
+    return {
+      title: i18n.notifications.confirmCurrentTitle,
+      description: i18n.notifications.verifyActionDescription,
+      onCodeConfirm: onSuccess,
     };
   };
 
@@ -125,24 +147,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
       this.infoContainerContent?.onInit?.();
       setError(i18n.formatString(i18n.notifications.codeFinalError, { attemptsLeft: CONST.emailCodeErrorMax }));
     }
-    // const newFailNo = this.state.failNo + 1;
-    // const errorMessage =
-    //   newFailNo < CONST.emailCodeErrorMax
-    //     ? i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - newFailNo })
-    //     : i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax });
-
-    // return this.setState(
-    //   {
-    //     code: '',
-    //     failNo: newFailNo,
-    //     error: errorMessage,
-    //   },
-    //   () => {
-    //     if (newFailNo === CONST.emailCodeErrorMax) {
-    //       this.infoContainerContent?.onInit?.();
-    //     }
-    //   },
-    // );
   };
 
   onConfirm = () => {
@@ -179,7 +183,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   render() {
     const { notificationError } = this.props;
-    const { email, onBack, title, description } = this.props.route.params;
+    const { email, onBack } = this.props.route.params;
 
     return (
       <ScreenTemplate
@@ -202,10 +206,10 @@ class ConfirmEmailScreen extends Component<Props, State> {
         }
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{this.infoContainerContent.title || title}</Text>
+          <Text style={typography.headline4}>{this.infoContainerContent.title}</Text>
           <Text style={styles.infoDescription}>
-            {this.infoContainerContent.description || description}
-            <Text style={styles.email}>{`\n${email}`}</Text>
+            {this.infoContainerContent.description}
+            <Text style={styles.email}>{`${email}`}</Text>
           </Text>
         </View>
         <View style={styles.inputItemContainer}>
