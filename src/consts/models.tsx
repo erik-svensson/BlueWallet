@@ -522,7 +522,9 @@ export type RootStackParams = {
     chunksQuantity: string;
     onScanned: () => void;
   };
-  [Route.Notifications]: undefined;
+  [Route.Notifications]: {
+    onBackArrow: () => void;
+  };
   [Route.ConfirmEmail]: {
     email: string;
     newAddress?: string;

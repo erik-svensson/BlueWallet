@@ -57,6 +57,16 @@ export class NotificationScreen extends Component<Props> {
       onConfirm: this.deleteEmail,
     });
 
+  navigateBackToScreen = () => {
+    const {
+      navigation,
+      route: {
+        params: { onBackArrow },
+      },
+    } = this.props;
+    navigation.navigate(Route.Notifications, { onBackArrow });
+  };
+
   goToDeleteSuccessScreen = () =>
     CreateMessage({
       title: i18n.message.success,
@@ -64,7 +74,7 @@ export class NotificationScreen extends Component<Props> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.notifications.goToNotifications,
-        onPress: () => this.props.navigation.navigate(Route.Notifications),
+        onPress: () => this.navigateBackToScreen(),
       },
     });
 
@@ -104,7 +114,7 @@ export class NotificationScreen extends Component<Props> {
           buttonProps: {
             title: i18n.notifications.goToNotifications,
             onPress: () => {
-              this.props.navigation.navigate(Route.Notifications);
+              this.navigateBackToScreen();
             },
           },
         });
@@ -143,16 +153,16 @@ export class NotificationScreen extends Component<Props> {
     );
 
   render() {
-    const { subscribedWallets, email, navigation } = this.props;
+    const {
+      subscribedWallets,
+      email,
+      route: {
+        params: { onBackArrow },
+      },
+    } = this.props;
     return (
       <ScreenTemplate
-        header={
-          <Header
-            isBackArrow={true}
-            onBackArrow={() => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings })}
-            title={i18n.settings.notifications}
-          />
-        }
+        header={<Header isBackArrow={true} onBackArrow={onBackArrow} title={i18n.settings.notifications} />}
         noScroll
         footer={this.renderFooter()}
       >
