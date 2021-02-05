@@ -21,8 +21,15 @@ export interface UpdateNotificationEmailPayload {
   old_email: string;
   new_email: string;
 }
+
 export interface UpdateNotificationEmailSuccessPayload {
   sessionToken: string;
+}
+
+export interface ModifyPayload {
+  hashes: string[];
+  old_email: string;
+  new_email: string;
 }
 
 export interface CheckSubscriptionPayload {
@@ -33,6 +40,12 @@ export interface CheckSubscriptionPayload {
 export interface VerifyEmailPayload {
   email: string;
 }
+
+export interface VerifyEmailResponse {
+  result: string;
+  pin: string;
+}
+
 export interface SubscribeWalletSuccessPayload {
   sessionToken: string;
 }

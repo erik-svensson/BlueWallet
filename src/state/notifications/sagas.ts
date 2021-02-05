@@ -3,11 +3,11 @@ import { takeEvery, takeLatest, put, call, all, select } from 'redux-saga/effect
 import { verifyEmail } from 'app/api';
 import {
   subscribeEmail,
-  authenticateEmail,
+  authenticate,
   checkSubscriptionEmail,
   unsubscribeEmail,
   modifyEmail,
-} from 'app/api/emailApi';
+} from 'app/api/emailNotifications/client';
 import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys, walletToAddressesGenerationBase } from 'app/helpers/wallets';
@@ -45,15 +45,17 @@ enum Result {
 
 export function* createNotificationEmailSaga(action: CreateNotificationEmailAction | unknown) {
   const { meta, payload } = action as CreateNotificationEmailAction;
-  const email = payload.email;
+  const { email } = payload;
 
   try {
     yield put(createNotificationEmailSuccess(email));
+
     if (meta?.onSuccess) {
       meta.onSuccess();
     }
-  } catch (e) {
-    yield put(createNotificationEmailFailure(e.message));
+  } catch (error) {
+    yield put(createNotificationEmailFailure(error.message));
+
     if (meta?.onFailure) {
       meta.onFailure();
     }
@@ -62,25 +64,20 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
 
 export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailAction | unknown) {
   const { meta, payload } = action as VerifyNotificationEmailAction;
-  const email = payload.email;
+  const { email } = payload;
 
   try {
     const verifyCode = yield call(verifyEmail, { email });
+    const decryptedCode = yield decryptCode(email, verifyCode.pin);
 
-    if (verifyCode.result === Result.success) {
-      const decryptedCode = yield decryptCode(email, verifyCode.pin);
+    yield put(verifyNotificationEmailSuccess(decryptedCode));
 
-      yield put(verifyNotificationEmailSuccess(decryptedCode));
-    } else {
-      throw new Error('Your email cannot be verified');
-    }
     if (meta?.onSuccess) {
       meta.onSuccess();
     }
   } catch (error) {
-    const { msg } = error.response.data;
+    yield put(verifyNotificationEmailFailure(error.message));
 
-    yield put(verifyNotificationEmailFailure(msg));
     if (meta?.onFailure) {
       meta.onFailure();
     }
@@ -124,7 +121,7 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
       yield put(unsubscribeWalletSuccess(response.session_token));
     }
   } catch (error) {
-    yield put(unsubscribeWalletFailure(error.msg));
+    yield put(unsubscribeWalletFailure(error.message));
   }
 }
 
@@ -132,18 +129,18 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
   const { payload, meta } = action as AuthenticateEmailAction;
 
   try {
-    const response = yield call(authenticateEmail, payload);
+    const response = yield call(authenticate, payload);
 
     if (response.result === Result.success) {
       yield put(authenticateEmailSuccess());
+
       if (meta?.onSuccess) {
         meta.onSuccess();
       }
     }
   } catch (error) {
-    const { msg } = error.response.data;
+    yield put(authenticateEmailFailure(error.message));
 
-    yield put(authenticateEmailFailure(msg));
     if (meta?.onFailure) {
       meta.onFailure();
     }
@@ -167,14 +164,13 @@ export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
 
     if (response.session_token) {
       yield put(updateNotificationEmailSuccess(response.session_token));
+
       if (meta?.onSuccess) {
         meta.onSuccess();
       }
     }
   } catch (error) {
-    const { msg } = error.response.data;
-
-    yield put(updateNotificationEmailFailure(msg));
+    yield put(updateNotificationEmailFailure(error.message));
   }
 }
 
@@ -197,16 +193,17 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
         ids.push(wallet.id);
       }
     });
+
     yield put(checkSubscriptionSuccess(ids));
+
     if (meta?.onSuccess) {
       meta.onSuccess(ids);
     }
   } catch (error) {
-    const { msg } = error.response.data;
+    yield put(checkSubscriptionFailure(error.message));
 
-    yield put(checkSubscriptionFailure(msg));
     if (meta?.onFailure) {
-      meta.onFailure(msg);
+      meta.onFailure(error.message);
     }
   }
 }
