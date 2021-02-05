@@ -49,6 +49,7 @@ export const CONST = {
   userVersion: 'userVersion',
   newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
   buttonTimeoutSeconds: 30,
+  notificationCodeInputRegex: /^[A-Za-z0-9]*$/,
 };
 
 export const ADDRESSES_TYPES = {

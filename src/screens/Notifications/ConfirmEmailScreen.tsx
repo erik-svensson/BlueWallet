@@ -145,7 +145,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
     this.setCode('');
     if (failedTries === CONST.emailCodeErrorMax) {
       this.infoContainerContent?.onInit?.();
-      setError(i18n.formatString(i18n.notifications.codeFinalError, { attemptsLeft: CONST.emailCodeErrorMax }));
+      setError(i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax }));
     }
   };
 
@@ -206,7 +206,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
           <Text style={typography.headline4}>{this.infoContainerContent.title}</Text>
           <Text style={styles.infoDescription}>
             {this.infoContainerContent.description}
-            <Text style={styles.email}>{`${email}`}</Text>
+            <Text style={styles.email}>{email}</Text>
           </Text>
         </View>
         <View style={styles.inputItemContainer}>
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
   infoDescription: {
     ...typography.caption,
     color: palette.textGrey,
-    margin: 20,
+    marginTop: 20,
     textAlign: 'center',
   },
   inputItemContainer: {
