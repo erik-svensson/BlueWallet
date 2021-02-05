@@ -1,3 +1,5 @@
+import { default as LockIcon } from './images/lockIconGrey.svg';
+
 export const images = {
   Dashboard: require('./images/dashboard.png'),
   DashboardInactive: require('./images/dashboardInactive.png'),
@@ -46,6 +48,7 @@ export const images = {
 };
 
 export const icons = {
+  LockIcon,
   iconDropdown: require('./images/iconDropdown.png'),
   termsIcon: require('./images/terms.png'),
   search: require('./images/iconSearch.png'),
@@ -54,7 +57,6 @@ export const icons = {
   dataUsageIcon: require('./images/dataUsageIcon.png'),
   languageIcon: require('./images/languageIcon.png'),
   lockIcon: require('./images/lockIcon.png'),
-  lockIconGrey: require('./images/lockIconGrey.png'),
   infoIcon: require('./images/infoIcon.png'),
   fingerprintIcon: require('./images/fingerprintIcon.png'),
   qrCode: require('./images/qrCode.png'),

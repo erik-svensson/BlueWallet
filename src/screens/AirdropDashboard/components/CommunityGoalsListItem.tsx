@@ -3,8 +3,6 @@ import { View, StyleSheet, Text } from 'react-native';
 import ProgressBar from 'react-native-progress/Bar';
 
 import { icons } from 'app/assets';
-import { Image } from 'app/components';
-import { lastThresholdBeforeInfinity } from 'app/helpers/airdrop';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../../loc');
@@ -27,7 +25,7 @@ export const CommunityGoalsListItem: FC<CommunityGoalsListItemProps> = props => 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        {locked && <Image source={icons.lockIconGrey} style={styles.lockImage} />}
+        {locked && <icons.LockIcon width={10} height={13} style={styles.lockImage} />}
         <Text style={[styles.header, ...[locked ? [styles.lockedText] : []]]}>
           {i18n.formatString(i18n.airdrop.community.unlockToIncrease, {
             reward,

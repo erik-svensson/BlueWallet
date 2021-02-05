@@ -41,7 +41,7 @@ export const check_balances = (data: { hashes: string[] }) => {
 // TODO: contract for this method has not been agreed on till now. When it s known, this have to be checked/reimplemented
 export const getUsersQuantity = () => {
   return new Promise(resolve => {
-    setTimeout(() => resolve({ result: 'success', users: 2061 }), Math.random() * 1000);
+    setTimeout(() => resolve({ result: 'success', users: 4061 }), Math.random() * 1000);
   });
   // api.get(`users/`); // just an assumption
 };
