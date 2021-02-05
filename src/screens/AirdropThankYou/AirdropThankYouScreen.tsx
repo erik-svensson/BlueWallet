@@ -46,12 +46,12 @@ class AirdropThankYouScreen extends Component<Props> {
         header={<Header isBackArrow title={i18n.airdrop.title} />}
         footer={
           <View style={styles.buttonsContainer}>
-            <View style={styles.iDontCareButtonContainer}>
+            <View style={styles.notNowButtonContainer}>
               <Button
                 testID="cancel-button"
                 type="outline"
                 onPress={this.navigateBack}
-                title={i18n.airdrop.itIsAlive.iDontCare}
+                title={i18n.airdrop.itIsAlive.notNow}
               />
             </View>
             <View style={styles.learnMoreButtonContainer}>
@@ -90,6 +90,6 @@ const styles = StyleSheet.create({
     color: palette.textGrey,
   },
   buttonsContainer: { display: 'flex', flexDirection: 'row', width: '100%' },
-  iDontCareButtonContainer: { flex: 1, paddingRight: 10 },
+  notNowButtonContainer: { flex: 1, paddingRight: 10 },
   learnMoreButtonContainer: { flex: 1, paddingLeft: 10 },
 });
