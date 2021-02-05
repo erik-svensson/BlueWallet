@@ -137,7 +137,7 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
     if (response.result === Result.success) {
       yield put(authenticateEmailSuccess());
       if (meta?.onSuccess) {
-        meta.onSuccess(payload.session_token);
+        meta.onSuccess();
       }
     }
   } catch (error) {
