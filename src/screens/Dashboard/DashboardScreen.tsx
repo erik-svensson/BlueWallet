@@ -44,6 +44,7 @@ interface Props {
   transactionNotes: Record<string, string>;
   isInitialized: boolean;
   airdropThankYouFlowCompleted: boolean;
+  thankYouSeen: boolean;
   loadWallets: () => LoadWalletsAction;
   clearFilters: () => ClearFiltersAction;
   isFilteringOn?: boolean;
@@ -252,7 +253,7 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   render() {
-    const { isInitialized, airdropThankYouFlowCompleted, navigation } = this.props;
+    const { isInitialized, airdropThankYouFlowCompleted, thankYouSeen, navigation } = this.props;
 
     if (!isInitialized) {
       return (
@@ -273,7 +274,11 @@ class DashboardScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         )}
-        <AirdropFloatingButton thankYouFlowCompleted={airdropThankYouFlowCompleted} navigation={navigation} />
+        <AirdropFloatingButton
+          thankYouSeen={thankYouSeen}
+          thankYouFlowCompleted={airdropThankYouFlowCompleted}
+          navigation={navigation}
+        />
       </>
     );
   }
@@ -287,6 +292,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   transactionNotes: transactionsNotesSelectors.transactionNotes(state),
   isFilteringOn: state.filters.isFilteringOn,
   airdropThankYouFlowCompleted: airdropSelectors.thankYouFlowCompleted(state),
+  thankYouSeen: airdropSelectors.thankYouSeen(state),
 });
 
 const mapDispatchToProps = {
