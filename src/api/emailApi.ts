@@ -3,7 +3,7 @@ import {
   SubscribePayload,
   UnsubscribePayload,
   AuthenticatePayload,
-  ModifyPayload,
+  UpdateNotificationEmailPayload,
   CheckSubscriptionPayload,
   VerifyEmailPayload,
 } from './types';
@@ -14,7 +14,7 @@ export const unsubscribeEmail = (data: UnsubscribePayload) => api.post(`unsubscr
 
 export const authenticateEmail = (data: AuthenticatePayload) => api.post(`authenticate/`, data);
 
-export const modifyEmail = (data: ModifyPayload) => api.put(`modify`, data);
+export const modifyEmail = (data: UpdateNotificationEmailPayload) => api.put(`modify/`, data);
 
 export const checkSubscriptionEmail = (data: CheckSubscriptionPayload) => api.post(`check_subscription`, data);
 

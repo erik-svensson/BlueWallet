@@ -46,6 +46,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
       selectedIndex,
       onPress: (index: number) => {
         const newWallet = wallets[index];
+
         this.setState({ selectedTransactions: [] }, () => {
           navigation.setParams({ wallet: newWallet });
         });
@@ -101,6 +102,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 
   canSubmit = () => {
     const { selectedTransactions } = this.state;
+
     return !!selectedTransactions.length;
   };
 
@@ -118,6 +120,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
   renderItem = ({ item: transaction }: { item: Transaction }) => {
     const isChecked = this.isChecked(transaction);
     const toggle = this.toggleTransaction(isChecked, transaction);
+
     return (
       <View style={styles.itemWrapper}>
         <View style={styles.transactionItemContainer}>
@@ -175,6 +178,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState & WalletsState, props: Props): MapStateProps => {
   const { wallet } = props.route.params;
+
   return {
     wallets: selectors.walletsWithRecoveryTransaction(state),
     transactions: selectors.getTransactionsToRecoverByWalletId(state, wallet.id),

@@ -82,6 +82,7 @@ class Navigator extends React.Component<Props, State> {
 
   async componentDidMount() {
     const { checkCredentials, startElectrumXListeners, checkTc, checkConnection, checkUserVersion } = this.props;
+
     await BlueApp.startAndDecrypt();
 
     checkUserVersion();

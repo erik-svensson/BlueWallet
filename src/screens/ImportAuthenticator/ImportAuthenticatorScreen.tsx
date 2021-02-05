@@ -78,6 +78,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
 
   scanQRCode = () => {
     const { navigation } = this.props;
+
     navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (data: string) => {
         this.createImportMessage(() => this.createAuthenticatorScan(data));
@@ -110,6 +111,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
   createAuthenticator = (mnemonic: string) => {
     const { navigation, createAuthenticator } = this.props;
     const { name } = this.state;
+
     createAuthenticator(
       { mnemonic, name: name.trim() },
       {
@@ -142,16 +144,19 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
 
   createAuthenticatorForm = () => {
     const { mnemonic } = this.state;
+
     this.createImportMessage(() => this.createAuthenticator(mnemonic));
   };
 
   get validationError(): string | undefined {
     const { authenticators } = this.props;
     const { name, nameError } = this.state;
+
     if (nameError) {
       return nameError;
     }
     const authenticatorsLabels = authenticators.map(a => a.name);
+
     if (authenticatorsLabels.includes(name.trim())) {
       return i18n.authenticators.import.inUseValidationError;
     }
@@ -159,16 +164,19 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
 
   hasErrors = () => {
     const { mnemonicError } = this.state;
+
     return !!(this.validationError || mnemonicError);
   };
 
   canSubmit = () => {
     const { name, mnemonic } = this.state;
+
     return !!(name && mnemonic && !this.hasErrors());
   };
 
   sendFeedback = () => {
     const { name } = this.state;
+
     if (!!!name.trim()) {
       this.setState({ nameError: i18n.authenticators.errors.noEmpty });
     }
@@ -176,6 +184,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
 
   render() {
     const { mnemonicError, name } = this.state;
+
     return (
       <ScreenTemplate
         footer={

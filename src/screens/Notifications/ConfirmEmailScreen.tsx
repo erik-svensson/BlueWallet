@@ -59,6 +59,10 @@ class ConfirmEmailScreen extends Component<Props, State> {
         return this.subscribeFlowContent();
       case ConfirmAddressFlowType.UNSUBSCRIBE:
         return this.unsubscribeFlowContent();
+      case ConfirmAddressFlowType.UPDATE_CURRENT:
+        return this.updateCurrentEmailFlowContent();
+      case ConfirmAddressFlowType.UPDATE_NEW:
+        return this.updateNewEmailFlowContent();
       default:
         return {};
     }
@@ -72,6 +76,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
         params: { email, wallets, onSuccess },
       },
     } = this.props;
+
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
@@ -93,6 +98,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
         params: { email, wallets, onSuccess },
       },
     } = this.props;
+
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
@@ -105,8 +111,37 @@ class ConfirmEmailScreen extends Component<Props, State> {
     };
   };
 
+  updateCurrentEmailFlowContent = () => {
+    const {
+      route: {
+        params: { onSuccess },
+      },
+    } = this.props;
+
+    return {
+      title: i18n.notifications.confirmCurrentTitle,
+      description: i18n.notifications.verifyActionDescription,
+      onCodeConfirm: onSuccess,
+    };
+  };
+
+  updateNewEmailFlowContent = () => {
+    const {
+      route: {
+        params: { onSuccess },
+      },
+    } = this.props;
+
+    return {
+      title: i18n.notifications.confirmCurrentTitle,
+      description: i18n.notifications.verifyActionDescription,
+      onCodeConfirm: onSuccess,
+    };
+  };
+
   onError = () => {
     const { failedTries, setError } = this.props;
+
     this.setCode('');
     if (failedTries === CONST.emailCodeErrorMax) {
       this.infoContainerContent?.onInit?.();
@@ -130,20 +165,22 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   onChange = (code: string) => {
     const { setError, notificationError } = this.props;
+
     !!notificationError && setError('');
     this.setCode(code);
   };
 
   onResend = () => {
     const { setError } = this.props;
+
     this.setCode('');
     setError('');
     this.infoContainerContent.onInit?.();
   };
 
   render() {
-    const { email, onBack } = this.props.route.params;
     const { notificationError } = this.props;
+    const { email, onBack } = this.props.route.params;
 
     return (
       <ScreenTemplate
@@ -166,15 +203,15 @@ class ConfirmEmailScreen extends Component<Props, State> {
         }
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{this.infoContainerContent?.title}</Text>
+          <Text style={typography.headline4}>{this.infoContainerContent.title}</Text>
           <Text style={styles.infoDescription}>
-            {this.infoContainerContent?.description}
-            <Text style={styles.email}>{`\n${email}`}</Text>
+            {this.infoContainerContent.description}
+            <Text style={styles.email}>{`${email}`}</Text>
           </Text>
         </View>
         <View style={styles.inputItemContainer}>
           <CodeInput value={this.state.code} onTextChange={this.onChange} isError={!!notificationError} />
-          {notificationError && <Text style={styles.error}>{notificationError}</Text>}
+          {!!notificationError && <Text style={styles.error}>{notificationError}</Text>}
         </View>
       </ScreenTemplate>
     );

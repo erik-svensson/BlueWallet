@@ -27,6 +27,7 @@ export const BottomTabBarComponent = ({ state, descriptors, navigation }: Bottom
             navigation.navigate(route.name);
           }
         };
+
         return (
           <TouchableOpacity
             key={index}

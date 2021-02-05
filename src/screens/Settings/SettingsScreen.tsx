@@ -44,7 +44,10 @@ export const SettingsScreen = (props: Props) => {
 
   const onAdvancedOptionsChange = () => navigation.navigate(Route.AdvancedOptions);
 
-  const onNotificationsOptionsChange = () => navigation.navigate(Route.Notifications);
+  const onNotificationsOptionsChange = () =>
+    navigation.navigate(Route.Notifications, {
+      onBackArrow: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings }),
+    });
 
   const onFingerprintLoginChange = async (value: boolean) => {
     dispatch(updateBiometricSetting(value));

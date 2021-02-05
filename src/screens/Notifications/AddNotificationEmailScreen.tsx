@@ -22,7 +22,7 @@ import {
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
-const i18n = require('../../loc');
+const i18n = require('../../../loc');
 
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.AddNotificationEmail>;
@@ -50,6 +50,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   }
 
   setEmail = (email: string): void => {
+    !!this.props.error && this.props.setError('');
     this.setState({
       email,
     });
@@ -97,6 +98,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     checkSubscription(wallets, email, {
       onSuccess: (ids: string[]) => {
         const walletsToSubscribe = wallets.filter(w => !ids.includes(w.id));
+
         if (!walletsToSubscribe.length) {
           return this.goToLocalEmailConfirm();
         }
@@ -126,7 +128,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { email } = this.state;
     const { error, route, isLoading } = this.props;
 
-    const { onSkipSuccess, title, isBackArrow, description } = route.params;
+    const { onSkipSuccess, title, isBackArrow, description, inputAutofocus } = route.params;
 
     return (
       <ScreenTemplate
@@ -163,7 +165,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             label={i18n._.email}
             testID="confirm-notification-email"
             setValue={this.setEmail}
-            autoFocus={true}
+            autoFocus={inputAutofocus}
             error={error}
             secureTextEntry={false}
             autoCapitalize="none"
@@ -185,7 +187,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isLoading: notificationsSelectors.isLoading(state),
-  error: notificationsSelectors.notificationError(state),
+  error: notificationsSelectors.readableError(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);

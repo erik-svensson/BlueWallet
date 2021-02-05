@@ -29,6 +29,7 @@ export class TextAreaItem extends PureComponent<Props, State> {
   render() {
     const { style, placeholder, onChangeText, error, value, editable, autoCapitalize, testID } = this.props;
     const { isActive } = this.state;
+
     return (
       <>
         <BaseTextInput

@@ -16,6 +16,7 @@ const removeNotNeededUtxos = ({ utxos, negativeAmount }: Solution) => {
 
   for (let i = endIndex; i >= 0; i--) {
     const utxo = utxos[i];
+
     if (utxo.value <= -nA) {
       nA += utxo.value;
       newUtxos = [...newUtxos.slice(0, i), ...newUtxos.slice(i + 1)];
@@ -34,6 +35,7 @@ export const getUtxosFromMaxToMin = (utxos: Utxo[], amount: number): Utxo[] | nu
 
   for (let i = endIndex; i >= 0; i--) {
     const ux = sortedUtxos[i];
+
     am -= ux.value;
 
     solution.utxos.push(ux);
@@ -57,8 +59,10 @@ export const getUtxosSolutionFromMinToMax = (utxos: Utxo[], amount: number): Sol
   const solution: Solution = { utxos: [], negativeAmount: 0 };
 
   let am = amount;
+
   for (let i = 0; i < sortedUtxos.length; i++) {
     const ux = sortedUtxos[i];
+
     am -= ux.value;
 
     solution.utxos.push(ux);
@@ -108,6 +112,7 @@ export const getUtxosWithMinimumRest = (utxos: Utxo[], amount: number): Utxo[] |
     while (a > 0) {
       const randomIndex = random(0, upperTreshold);
       const u = utxos[randomIndex];
+
       if (findIndex(solutions[i].utxos, u) !== -1) {
         continue;
       }

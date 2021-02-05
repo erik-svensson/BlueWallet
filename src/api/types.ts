@@ -16,10 +16,13 @@ export interface AuthenticatePayload {
   pin: string;
 }
 
-export interface ModifyPayload {
+export interface UpdateNotificationEmailPayload {
   hashes: string[];
   old_email: string;
   new_email: string;
+}
+export interface UpdateNotificationEmailSuccessPayload {
+  sessionToken: string;
 }
 
 export interface CheckSubscriptionPayload {

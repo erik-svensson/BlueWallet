@@ -38,6 +38,7 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
     const { contact } = props.route.params;
+
     this.state = {
       name: contact.name,
       address: contact.address,
@@ -61,6 +62,7 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
   saveChanges = (changes: Partial<Contact>) => {
     const { contact } = this.props.route.params;
     const updatedContact = { ...contact, ...changes };
+
     this.props.navigation.setParams({ contact: updatedContact });
     this.props.updateContact(updatedContact);
   };
@@ -73,11 +75,13 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
 
   navigateToContactQRCode = () => {
     const { contact } = this.props.route.params;
+
     this.props.navigation.navigate(Route.ContactQRCode, { contact });
   };
 
   deleteContact = () => {
     const { contact } = this.props.route.params;
+
     this.props.navigation.navigate(Route.DeleteContact, { contact });
   };
 

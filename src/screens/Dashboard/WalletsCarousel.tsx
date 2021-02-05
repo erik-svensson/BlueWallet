@@ -30,6 +30,7 @@ export class WalletsCarousel extends Component<Props> {
 
   render() {
     const { getIndex } = this.props;
+
     return (
       <View>
         <Carousel

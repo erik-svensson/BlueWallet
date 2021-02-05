@@ -7,6 +7,7 @@ import { Text } from './Text';
 
 const getInitials = (name: string): string => {
   const initials = name.match(/\b\w/g) || [];
+
   return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
 };
 

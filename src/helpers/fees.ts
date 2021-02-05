@@ -5,6 +5,7 @@ import NetworkTransactionFees, { NetworkTransactionFee } from '../../models/netw
 export const loadTransactionsFees = async () => {
   try {
     const recommendedFees = await NetworkTransactionFees.recommendedFees();
+
     if (recommendedFees && recommendedFees.hasOwnProperty('fastestFee')) {
       await AsyncStorage.setItem(NetworkTransactionFee.StorageKey, JSON.stringify(recommendedFees));
       return Number(recommendedFees.fastestFee);

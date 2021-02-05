@@ -15,6 +15,7 @@ export const MessageScreen = (props: Props) => {
 
   useEffect(() => {
     const onBackPress = () => true;
+
     BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
     if (asyncTask) {
@@ -22,6 +23,7 @@ export const MessageScreen = (props: Props) => {
         await asyncTask();
       };
       // hack for creating message screen immediately
+
       setTimeout(() => asynchrousTask(), 0);
     }
 

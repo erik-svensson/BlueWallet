@@ -21,11 +21,13 @@ export class ContactQRCodeScreen extends React.PureComponent<Props> {
 
   openShareDialog = () => {
     const { contact } = this.props.route.params;
+
     this.qrCodeSVG.toDataURL((data: string) => {
       const shareImageBase64 = {
         message: contact.address,
         url: `data:image/png;base64,${data}`,
       };
+
       try {
         Share.open(shareImageBase64);
       } catch (error) {
@@ -36,6 +38,7 @@ export class ContactQRCodeScreen extends React.PureComponent<Props> {
 
   render() {
     const { contact } = this.props.route.params;
+
     return (
       <ScreenTemplate
         footer={

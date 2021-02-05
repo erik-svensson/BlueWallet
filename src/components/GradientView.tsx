@@ -20,6 +20,7 @@ export class GradientView extends PureComponent<Props> {
   static Variant = GradientVariant;
   render() {
     const { variant, style, children } = this.props;
+
     return (
       <LinearGradient {...gradients[variant]} style={style} {...this.props}>
         {children}

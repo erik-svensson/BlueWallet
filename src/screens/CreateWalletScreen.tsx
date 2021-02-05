@@ -54,8 +54,10 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     const { navigation } = this.props;
 
     const onError = () => this.showAlert(() => this.navigateToIntegrateRecoveryPublicKeyForAR());
+
     try {
       const wallet = new HDSegwitP2SHArWallet([recoveryPublicKey]);
+
       navigation.goBack();
       this.createWalletMessage(wallet, onError);
     } catch (_) {
@@ -88,6 +90,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   navigateToSuccesfullNotificationSubscriptionMessage = () => {
     const { navigation } = this.props;
+
     CreateMessage({
       title: i18n.contactDelete.success,
       description: i18n.message.successSubscription,
@@ -105,6 +108,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     navigation.navigate(Route.Confirm, {
       title: i18n.notifications.notifications,
       children: this.renderConfirmScreenContent(),
+      gestureEnabled: false,
       onConfirm: () =>
         navigation.navigate(Route.ConfirmEmail, {
           email,
@@ -120,6 +124,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
     const { navigation, createWallet, email } = this.props;
+
     wallet.setLabel(label);
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
@@ -149,6 +154,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       this.showAlert(() => {
         this.navigateToIntegrateRecoveryPublicKeyForAIR(wallet);
       }, error);
+
     try {
       wallet.addPublicKey(recoveryPublicKey);
       navigation.goBack();
@@ -174,6 +180,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   navigateToIntegrateRecoveryPublicKeyForAR = () => {
     const { navigation } = this.props;
+
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: recoveryPublicKey => this.createARWallet(recoveryPublicKey),
       headerTitle: i18n.wallets.add.title,
@@ -188,6 +195,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   navigateToIntegrateInstantPublicKeyForAIR = () => {
     const { navigation } = this.props;
     const wallet = new HDSegwitP2SHAirWallet();
+
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: instantPublicKey => {
         try {
@@ -230,6 +238,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       this.showAlert(() => {
         navigation.navigate(Route.CreateWallet);
       }, i18n.wallets.add.failed);
+
     this.createWalletMessage(wallet, onError);
   };
 
@@ -239,6 +248,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   get validationError(): string | undefined {
     const { walletsLabels } = this.props;
+
     if (walletsLabels.includes(this.state.label.trim())) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
