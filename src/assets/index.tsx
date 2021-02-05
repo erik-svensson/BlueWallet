@@ -1,4 +1,4 @@
-import { default as LockIcon } from './images/lockIconGrey.svg';
+import { default as LockIconGrey } from './images/lockIconGrey.svg';
 
 export const images = {
   Dashboard: require('./images/dashboard.png'),
@@ -48,7 +48,7 @@ export const images = {
 };
 
 export const icons = {
-  LockIcon,
+  LockIconGrey,
   iconDropdown: require('./images/iconDropdown.png'),
   termsIcon: require('./images/terms.png'),
   search: require('./images/iconSearch.png'),

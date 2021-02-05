@@ -25,7 +25,7 @@ export const CommunityGoalsListItem: FC<CommunityGoalsListItemProps> = props => 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        {locked && <icons.LockIcon width={10} height={13} style={styles.lockImage} />}
+        {locked && <icons.LockIconGrey width={10} height={13} style={styles.lockImage} />}
         <Text style={[styles.header, ...[locked ? [styles.lockedText] : []]]}>
           {i18n.formatString(i18n.airdrop.community.unlockToIncrease, {
             reward,
