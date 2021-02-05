@@ -2,9 +2,11 @@ import {
   SubscribePayload,
   UnsubscribePayload,
   AuthenticatePayload,
-  SubscribeWalletSuccessPayload,
-  UpdateNotificationEmailPayload,
-  UpdateNotificationEmailSuccessPayload,
+  ModifyPayload,
+  ModifyResponse,
+  SubscribeResponse,
+  UnsubscribeEmailResponse,
+  Result,
 } from 'app/api';
 import { ActionMeta, Wallet, WalletPayload } from 'app/consts';
 
@@ -91,7 +93,7 @@ export interface SubscribeWalletAction {
 
 export interface SubscribeWalletSuccessAction {
   type: NotificationAction.SubscribeWalletSuccessAction;
-  payload: SubscribeWalletSuccessPayload;
+  payload: SubscribeResponse;
 }
 
 export interface SubscribeWalletFailureAction {
@@ -109,7 +111,7 @@ export interface UnsubscribeWalletAction {
 
 export interface UnsubscribeWalletSuccessAction {
   type: NotificationAction.UnsubscribeWalletSuccessAction;
-  payload: SubscribeWalletSuccessPayload;
+  payload: UnsubscribeEmailResponse;
 }
 
 export interface UnsubscribeWalletFailureAction {
@@ -155,7 +157,7 @@ export interface UpdateNotificationEmailAction {
 
 export interface UpdateNotificationEmailSuccessAction {
   type: NotificationAction.UpdateNotificationEmailSuccessAction;
-  payload: UpdateNotificationEmailSuccessPayload;
+  payload: ModifyResponse;
 }
 
 export interface UpdateNotificationEmailFailureAction {
@@ -233,9 +235,9 @@ export const subscribeWallet: SubscribeWalletActionCreator = (wallets, email) =>
   payload: { wallets, email },
 });
 
-export const subscribeWalletSuccess = (sessionToken: string): SubscribeWalletSuccessAction => ({
+export const subscribeWalletSuccess = (result: Result, sessionToken: string): SubscribeWalletSuccessAction => ({
   type: NotificationAction.SubscribeWalletSuccessAction,
-  payload: { sessionToken },
+  payload: { result, sessionToken },
 });
 
 export const subscribeWalletFailure = (error: string): SubscribeWalletFailureAction => ({
@@ -249,9 +251,9 @@ export const unsubscribeWallet: UnsubscribeWalletActionCreator = (wallets, email
   payload: { wallets, email },
 });
 
-export const unsubscribeWalletSuccess = (sessionToken: string): SubscribeWalletSuccessAction => ({
+export const unsubscribeWalletSuccess = (result: Result, sessionToken: string): SubscribeWalletSuccessAction => ({
   type: NotificationAction.SubscribeWalletSuccessAction,
-  payload: { sessionToken },
+  payload: { result, sessionToken },
 });
 
 export const unsubscribeWalletFailure = (error: string): SubscribeWalletFailureAction => ({

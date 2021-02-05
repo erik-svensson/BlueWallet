@@ -11,6 +11,9 @@ import {
   CheckSubscriptionPayload,
   VerifyEmailPayload,
   VerifyEmailResponse,
+  SubscribeResponse,
+  ModifyResponse,
+  CheckSubscriptionResponse,
 } from './types';
 
 export enum EmailNotificationsError {
@@ -21,31 +24,31 @@ export enum EmailNotificationsError {
 
 const httpClient = createHttpClient(config.emailNotificationsApi);
 
-export const subscribeEmail = async (data: SubscribePayload) => {
+export const subscribeEmail = async (data: SubscribePayload): Promise<SubscribeResponse> => {
   const response = await httpClient.post(`/subscribe/`, data);
 
   return response.data;
 };
 
-export const unsubscribeEmail = async (data: UnsubscribePayload) => {
+export const unsubscribeEmail = async (data: UnsubscribePayload): Promise<UnsubscribePayload> => {
   const response = await httpClient.post(`/unsubscribe/`, data);
 
   return response.data;
 };
 
-export const authenticate = async (data: AuthenticatePayload) => {
+export const authenticate = async (data: AuthenticatePayload): Promise<AuthenticatePayload> => {
   const response = await httpClient.post(`/authenticate/`, data);
 
-  return response;
+  return response.data;
 };
 
-export const modifyEmail = async (data: ModifyPayload) => {
+export const modifyEmail = async (data: ModifyPayload): Promise<ModifyResponse> => {
   const response = await httpClient.put(`/modify/`, data);
 
   return response.data;
 };
 
-export const checkSubscriptionEmail = async (data: CheckSubscriptionPayload) => {
+export const checkSubscriptionEmail = async (data: CheckSubscriptionPayload): Promise<CheckSubscriptionResponse> => {
   const response = await httpClient.post(`/check_subscription/`, data);
 
   return response.data;

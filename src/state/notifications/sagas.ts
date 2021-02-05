@@ -93,15 +93,13 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
     const walletsGenerationBase = yield all(wallets.map(wallet => call(walletToAddressesGenerationBase, wallet)));
 
     const lang = yield select(appSettingsSelectors.language);
-    const response: { session_token: string; result: Result } = yield call(subscribeEmail, {
+    const { session_token, result } = yield call(subscribeEmail, {
       email,
       wallets: walletsGenerationBase,
       lang,
     });
 
-    if (response.session_token) {
-      yield put(subscribeWalletSuccess(response.session_token));
-    }
+    yield put(subscribeWalletSuccess(result, session_token));
   } catch (error) {
     yield put(subscribeWalletFailure(error.message));
   }
@@ -115,11 +113,9 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
   try {
     const hashes = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
-    const response = yield call(unsubscribeEmail, { hashes, email });
+    const { session_token, result } = yield call(unsubscribeEmail, { hashes, email });
 
-    if (response.session_token) {
-      yield put(unsubscribeWalletSuccess(response.session_token));
-    }
+    yield put(unsubscribeWalletSuccess(result, session_token));
   } catch (error) {
     yield put(unsubscribeWalletFailure(error.message));
   }

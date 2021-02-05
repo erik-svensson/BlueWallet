@@ -14,20 +14,23 @@ const createHttpClient = (baseUrl: string) => {
   });
 
   const onRequest = (request: AxiosRequestConfig) => {
-    logger.info('http', `--> ${request.method?.toUpperCase()} ${request.baseURL}${request.url}`);
+    console.log(`--> ${request.method?.toUpperCase()} ${request.baseURL}${request.url}`);
+    // logger.info('http', `--> ${request.method?.toUpperCase()} ${request.baseURL}${request.url}`);
 
     return request;
   };
 
   const onResponse = (response: AxiosResponse<any>): AxiosResponse<any> => {
-    logger.info('http', `<-- ${response.status} ${response.config.baseURL}${response.config.url}`);
+    // logger.info('http', `<-- ${response.status} ${response.config.baseURL}${response.config.url}`);
+    console.log(`<-- ${response.status} ${response.config.baseURL}${response.config.url}`);
 
     return response;
   };
 
   const onError = (error: AxiosError) => {
     if (error.response) {
-      logger.error('http', `<-- ${error.response.status} ${error.config.baseURL}${error.config.url}`);
+      console.error(`<-- ${error.response.status} ${error.config.baseURL}${error.config.url}`);
+      // logger.error('http', `<-- ${error.response.status} ${error.config.baseURL}${error.config.url}`);
     }
 
     if (!error?.response) {
