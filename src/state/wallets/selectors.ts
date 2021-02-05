@@ -139,6 +139,7 @@ const getTranasctionStatus = (tx: Transaction, confirmations: number): Transacti
 
 const getTranasctionTags = (tx: Transaction): TagsType[] => {
   const tags: TagsType[] = [tx.status];
+
   if (tx.unblockedAmount !== undefined) {
     tags.push(Tags.UNBLOCKED);
   }
@@ -154,6 +155,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
       const walletBalanceUnit = wallet.getPreferredBalanceUnit();
       const walletLabel = wallet.getLabel();
       const id = wallet.id;
+
       return wallet.transactions.map(transaction => {
         const { height } = transaction;
         // blockHeight + 1 -> we add 1, because when the transaction height is equal blockheight the transaction has 1 confirmation
@@ -172,11 +174,13 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
         const myBalanceChangeSatoshi = btcToSatoshi(outputsMyAmount - inputsMyAmount, 0);
 
         let blockedAmount;
+
         if ([TxType.ALERT_PENDING, TxType.ALERT_CONFIRMED, TxType.ALERT_RECOVERED].includes(transaction.tx_type)) {
           blockedAmount = outputsMyAmount < 0 ? 0 : -roundBtcToSatoshis(outputsMyAmount);
         }
 
         let unblockedAmount;
+
         if ([TxType.ALERT_CONFIRMED].includes(transaction.tx_type) && blockedAmount !== undefined) {
           unblockedAmount = blockedAmount === 0 ? 0 : -blockedAmount;
         }

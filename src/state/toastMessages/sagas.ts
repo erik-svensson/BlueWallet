@@ -9,6 +9,7 @@ export function* addToastMessageSaga(action: AddToastMessageAction | unknown) {
     timeout: delay(payload.duration),
     cancelled: take((action: unknown) => {
       const { payload: cancelPayload, type } = action as HideToastMessageAction;
+
       if (type === ToastMessageAction.HideToastMessage) {
         return cancelPayload.id === payload.id;
       }

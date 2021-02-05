@@ -23,6 +23,7 @@ export const TimeoutButton: FC<Props> = ({
   containerStyle,
 }) => {
   const [seconds, setSeconds] = useState(0);
+
   useInterval(
     () => {
       setSeconds(seconds - 1);

@@ -19,6 +19,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
   constructor(pubKeysHex = []) {
     super("m/0'");
     let pubKeys;
+
     try {
       pubKeys = pubKeysHex.map(
         p =>
@@ -42,6 +43,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
     const { pubKeys } = data;
     const parsedPubKeysBuffors = pubKeys.map(pk => Buffer.from(pk.data));
     const wallet = new this();
+
     for (const key of Object.keys(data)) {
       wallet[key] = data[key];
     }
@@ -57,11 +59,13 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
     }
     const newPubKeysHex = publicKeys.map(p => p.toString(BUFFER_ENCODING));
     const pubKeysHex = this.pubKeys.map(p => p.toString(BUFFER_ENCODING));
+
     return pubKeysHex.some(p => newPubKeysHex.includes(p));
   };
 
   addPublicKey(publicKeyHex) {
     let publicKey;
+
     try {
       publicKey = ECPair.fromPublicKey(Buffer.from(publicKeyHex, BUFFER_ENCODING), {
         network: config.network,
@@ -106,6 +110,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
     paymentMethod,
   }) {
     const newUtxos = cloneDeep(utxos);
+
     for (const utxo of newUtxos) {
       utxo.wif = this._getWifForAddress(utxo.address);
     }
@@ -113,6 +118,7 @@ export class AbstractHDSegwitP2SHVaultWallet extends AbstractHDSegwitP2SHWallet 
     const keyPairsFromMnemonics = await Promise.all(mnemonics.map(m => mnemonicToKeyPair(m)));
 
     let keyPairsFromPrivateKeys = [];
+
     try {
       keyPairsFromPrivateKeys = privateKeys.map(p =>
         ECPair.fromPrivateKey(Buffer.from(p, BUFFER_ENCODING), {

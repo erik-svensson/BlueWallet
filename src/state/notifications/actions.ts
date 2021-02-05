@@ -1,5 +1,12 @@
-import { AuthenticatePayload, SubscribeWalletSuccessPayload } from 'app/api';
-import { ActionMeta, Wallet } from 'app/consts';
+import {
+  SubscribePayload,
+  UnsubscribePayload,
+  AuthenticatePayload,
+  SubscribeWalletSuccessPayload,
+  UpdateNotificationEmailPayload,
+  UpdateNotificationEmailSuccessPayload,
+} from 'app/api';
+import { ActionMeta, Wallet, WalletPayload } from 'app/consts';
 
 export enum NotificationAction {
   CreateNotificationEmail = 'CreateNotificationEmail',
@@ -22,6 +29,9 @@ export enum NotificationAction {
   CheckSubscriptionSuccessAction = 'CheckSubscriptionSuccessAction',
   CheckSubscriptionFailureAction = 'CheckSubscriptionFailureAction',
   SetErrorAction = 'SetErrorAction',
+  UpdateNotificationEmailAction = 'UpdateNotificationEmailAction',
+  UpdateNotificationEmailSuccessAction = 'UpdateNotificationEmailSuccessAction',
+  UpdateNotificationEmailFailureAction = 'UpdateNotificationEmailFailureAction',
 }
 
 export interface SetErrorAction {
@@ -137,6 +147,22 @@ export interface CheckSubscriptionFailureAction {
   error: string;
 }
 
+export interface UpdateNotificationEmailAction {
+  type: NotificationAction.UpdateNotificationEmailAction;
+  payload: { wallets: Wallet[]; currentEmail: string; newEmail: string };
+  meta?: ActionMeta;
+}
+
+export interface UpdateNotificationEmailSuccessAction {
+  type: NotificationAction.UpdateNotificationEmailSuccessAction;
+  payload: UpdateNotificationEmailSuccessPayload;
+}
+
+export interface UpdateNotificationEmailFailureAction {
+  type: NotificationAction.UpdateNotificationEmailFailureAction;
+  error: string;
+}
+
 export type NotificationActionType =
   | CreateNotificationEmailAction
   | CreateNotificationEmailSuccessAction
@@ -157,7 +183,10 @@ export type NotificationActionType =
   | CheckSubscriptionAction
   | CheckSubscriptionSuccessAction
   | CheckSubscriptionFailureAction
-  | SetErrorAction;
+  | SetErrorAction
+  | UpdateNotificationEmailAction
+  | UpdateNotificationEmailSuccessAction
+  | UpdateNotificationEmailFailureAction;
 
 export type CreateNotificationEmailActionCreator = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 export const createNotificationEmail: CreateNotificationEmailActionCreator = (email, meta) => ({
@@ -250,7 +279,13 @@ export const authenticateEmailFailure = (error: string): AuthenticateEmailFailur
   error,
 });
 
-export const checkSubscription = (wallets: Wallet[], email: string, meta?: ActionMeta): CheckSubscriptionAction => ({
+export type CheckSubscriptionActionCreator = (
+  wallets: Wallet[],
+  email: string,
+  meta?: ActionMeta,
+) => CheckSubscriptionAction;
+
+export const checkSubscription: CheckSubscriptionActionCreator = (wallets, email, meta) => ({
   type: NotificationAction.CheckSubscriptionAction,
   payload: {
     wallets,
@@ -274,5 +309,39 @@ export const checkSubscriptionFailure = (error: string): CheckSubscriptionFailur
 export type SetErrorActionCreator = (error: string) => SetErrorAction;
 export const setError: SetErrorActionCreator = error => ({
   type: NotificationAction.SetErrorAction,
+  error,
+});
+
+export type UpdateNotificationEmailActionCreator = (
+  wallets: Wallet[],
+  currentEmail: string,
+  newEmail: string,
+  meta?: ActionMeta,
+) => UpdateNotificationEmailAction;
+export const updateNotificationEmail: UpdateNotificationEmailActionCreator = (
+  wallets,
+  currentEmail,
+  newEmail,
+  meta,
+) => ({
+  type: NotificationAction.UpdateNotificationEmailAction,
+  payload: {
+    wallets,
+    currentEmail,
+    newEmail,
+  },
+  meta,
+});
+
+export type UpdateNotificationEmailSuccessActionCreator = (
+  sessionToken: string,
+) => UpdateNotificationEmailSuccessAction;
+export const updateNotificationEmailSuccess: UpdateNotificationEmailSuccessActionCreator = sessionToken => ({
+  type: NotificationAction.UpdateNotificationEmailSuccessAction,
+  payload: { sessionToken },
+});
+
+export const updateNotificationEmailFailure = (error: string): UpdateNotificationEmailFailureAction => ({
+  type: NotificationAction.UpdateNotificationEmailFailureAction,
   error,
 });

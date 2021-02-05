@@ -50,6 +50,7 @@ export function* listenBlockchainHeadersSaga() {
 
   while (true) {
     const { height } = yield take(chan);
+
     yield put(setBlockHeight(height));
   }
 }
@@ -58,6 +59,7 @@ export function* fetchBlockchainHeadersSaga() {
   try {
     yield BlueElectrum.waitTillConnected();
     const { height: blockHeight } = yield BlueElectrum.getBlockchainHeaders();
+
     yield put(fetchBlockHeightSuccess(blockHeight));
   } catch (err) {
     yield put(fetchBlockHeightFailure(err.message));
@@ -131,6 +133,7 @@ export function* listenOnClose() {
     yield take(chan);
     const isInternetReachable = yield select(isInternetReachableSelector);
     const { isInitialized } = (yield select()).wallets;
+
     if (isInternetReachable && isInitialized) {
       yield put(
         addToastMessage({
@@ -218,6 +221,7 @@ function emitInternetConnectionChange() {
     const unsubscribe = NetInfo.addEventListener(state => {
       emitter(state);
     });
+
     return () => {
       unsubscribe();
     };

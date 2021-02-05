@@ -22,7 +22,7 @@ import {
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
-const i18n = require('../../loc');
+const i18n = require('../../../loc');
 
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.AddNotificationEmail>;
@@ -50,6 +50,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
   }
 
   setEmail = (email: string): void => {
+    !!this.props.error && this.props.setError('');
     this.setState({
       email,
     });
@@ -97,6 +98,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     checkSubscription(wallets, email, {
       onSuccess: (ids: string[]) => {
         const walletsToSubscribe = wallets.filter(w => !ids.includes(w.id));
+
         if (!walletsToSubscribe.length) {
           return this.goToLocalEmailConfirm();
         }
@@ -185,7 +187,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isLoading: notificationsSelectors.isLoading(state),
-  error: notificationsSelectors.notificationError(state),
+  error: notificationsSelectors.readableError(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);

@@ -62,6 +62,7 @@ export class WatchOnlyWallet extends LegacyWallet {
    */
   async init() {
     let hdWalletInstance;
+
     if (this.secret.startsWith('xpub')) hdWalletInstance = new HDLegacyP2PKHWallet();
     else if (this.secret.startsWith('ypub')) hdWalletInstance = new HDSegwitP2SHWallet();
     else if (this.secret.startsWith('zpub')) hdWalletInstance = new HDSegwitBech32Wallet();

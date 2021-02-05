@@ -47,6 +47,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   checkSubscription = () => {
     const { wallet, email, checkSubscription } = this.props;
+
     if (email && wallet) {
       checkSubscription([wallet], email);
     }
@@ -57,10 +58,12 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     const checkAllWallets =
       value.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase() || value === CONST.allWallets;
     const { walletsLabels, wallet } = this.props;
+
     if (!wallet) {
       return;
     }
     const allOtherWalletLabels = walletsLabels.filter((label: string) => label !== wallet.label);
+
     if (allOtherWalletLabels.includes(trimmedValue)) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
@@ -84,6 +87,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   navigateToDeleteWallet = () => {
     const { deleteWallet, navigation, wallet } = this.props;
+
     if (!wallet) {
       return;
     }
@@ -112,6 +116,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   navigateWithWallet = (route: Route.ExportWalletXpub | Route.ExportWallet) => {
     const { navigation, wallet } = this.props;
+
     if (!wallet) {
       return;
     }
@@ -123,16 +128,19 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   setLabel = (label: string) => {
     const trimmedlabel = label.trim();
     const { wallet, updateWallet } = this.props;
+
     if (!wallet) {
       return;
     }
     const updatedWallet = cloneDeep(wallet);
+
     updatedWallet.setLabel(trimmedlabel);
     updateWallet(updatedWallet);
   };
 
   editAmount = () => {
     const { wallet, navigation } = this.props;
+
     if (!wallet) {
       return;
     }
@@ -181,6 +189,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   onSubscribeButtonPress = () => {
     const { email, navigation, wallet, isSubscribed } = this.props;
+
     if (!wallet) return;
     if (!email) {
       return navigation.navigate(Route.Notifications, { onBackArrow: () => this.navigateBackToScreen() });
@@ -195,10 +204,12 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   render() {
     const { wallet, isSubscribed, isLoading } = this.props;
+
     if (!wallet) {
       return null;
     }
     const isWatchOnly = wallet.type === WatchOnlyWallet.type;
+
     return (
       <ScreenTemplate
         footer={
@@ -260,6 +271,7 @@ const mapStateToProps = (
   props: Props,
 ) => {
   const { id } = props.route.params;
+
   return {
     wallet: getById(state, id),
     walletsLabels: getWalletsLabels(state),

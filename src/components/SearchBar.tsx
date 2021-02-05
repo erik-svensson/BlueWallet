@@ -41,6 +41,7 @@ export class SearchBar extends React.PureComponent<Props, State> {
 
   render() {
     const { focused } = this.state;
+
     return (
       <View style={styles.container}>
         <View style={styles.inputContainer}>

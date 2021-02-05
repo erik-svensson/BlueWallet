@@ -53,16 +53,19 @@ export const privateKeyToPublicKey = (privateKey: Buffer) =>
 const create132BitKeyWithSha256 = (bytes: Buffer, random128bits: string) => {
   const SALT_LENGHT = 4;
   const sha256Bits = bytesToBits(crypto.sha256(bytes));
+
   return sha256Bits.slice(0, SALT_LENGHT) + random128bits;
 };
 
 const generateWordsFromBytes = (random132bits: string) => {
   const dividedBits = random132bits.match(/.{1,11}/g);
+
   if (dividedBits === null) {
     throw new Error('Couldn`t parse bits');
   }
   return dividedBits.map(bit => {
     const index = parseInt(bit, 2);
+
     return bip39.wordlists.english[index];
   });
 };
@@ -70,6 +73,7 @@ const generateWordsFromBytes = (random132bits: string) => {
 export const bytesToMnemonic = (bytes: Buffer): string => {
   const random128bits = bytesToBits(bytes);
   const random132bits = create132BitKeyWithSha256(bytes, random128bits);
+
   return generateWordsFromBytes(random132bits).join(' ');
 };
 
@@ -78,6 +82,7 @@ export const mnemonicToBits = (mnemonic: string) => {
 
   return mnemonic.split(' ').reduce((bits, word) => {
     const index = bip39.wordlists.english.indexOf(word);
+
     if (index === -1) {
       throw new Error(
         i18n.formatString(i18n.wallets.errors.noIndexForWord, {
@@ -92,6 +97,7 @@ export const mnemonicToBits = (mnemonic: string) => {
 export const mnemonicToEntropy = (mnemonic: string) => {
   const SALT_LENGHT = 4;
   const bits128 = mnemonicToBits(mnemonic).slice(SALT_LENGHT);
+
   return bitsToBytes(bits128);
 };
 
@@ -134,6 +140,7 @@ export const mnemonicToKeyPair = async (mnemonic: string) => {
 export const isElectrumVaultMnemonic = (mnemonic: string, prefix: string): boolean => {
   const hmac = hmacSHA512(mnemonic, ELECTRUM_VAULT_SEED_KEY);
   const hex = hmac.toString(CryptoJS.enc.Hex);
+
   return hex.startsWith(prefix);
 };
 
@@ -144,6 +151,7 @@ export const getRandomBytes = (byteSize: number): Promise<Buffer> =>
         reject(err);
       }
       const buffer = Buffer.from(bytes, 'base64');
+
       resolve(buffer);
     });
   });

@@ -41,6 +41,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
   onSave = () => {
     const { createTxPassword, navigation } = this.props;
     const { setPassword } = this.props.route.params;
+
     if (setPassword === this.state.password) {
       createTxPassword(setPassword, {
         onSuccess: () => {
@@ -67,6 +68,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
 
   render() {
     const { password, error, isVisible } = this.state;
+
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps="always"

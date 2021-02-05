@@ -39,9 +39,11 @@ class ConfirmPinScreen extends PureComponent<Props, State> {
 
   updatePin = (pin: string) => {
     const { createPin } = this.props;
+
     this.setState({ pin }, () => {
       if (this.state.pin.length === CONST.pinCodeLength) {
         const setPin = this.props.route.params.pin;
+
         if (setPin === this.state.pin) {
           createPin(setPin, {
             onSuccess: () => {
@@ -74,6 +76,7 @@ class ConfirmPinScreen extends PureComponent<Props, State> {
 
   render() {
     const { error } = this.state;
+
     return (
       <ScreenTemplate
         noScroll

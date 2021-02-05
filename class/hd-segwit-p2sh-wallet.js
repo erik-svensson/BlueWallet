@@ -18,6 +18,7 @@ export class HDSegwitP2SHWallet extends AbstractHDSegwitP2SHWallet {
       redeem: bitcoin.payments.p2wpkh({ pubkey: hdNode.publicKey, network: config.network }),
       network: config.network,
     });
+
     return address;
   }
 
@@ -31,6 +32,7 @@ export class HDSegwitP2SHWallet extends AbstractHDSegwitP2SHWallet {
    */
   createTx(utxos, amount, fee, address) {
     const newUtxos = cloneDeep(utxos);
+
     for (const utxo of newUtxos) {
       utxo.wif = this._getWifForAddress(utxo.address);
     }

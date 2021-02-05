@@ -43,6 +43,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
   setWordInMnemonic = (word: string, index: number) => {
     const { mnemonic } = this.state;
     const newMnemonic = [...mnemonic];
+
     newMnemonic[index - 1] = word.trim().toLocaleLowerCase();
     this.setState({ mnemonic: newMnemonic });
   };
@@ -57,6 +58,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
 
   renderInputs = () => {
     const { mnemonic } = this.state;
+
     return compose(
       map((index: number) => (
         <InputItem
@@ -73,6 +75,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
 
   canSubmit = () => {
     const { mnemonic, isLoading } = this.state;
+
     return mnemonic.every(word => word !== '') && !isLoading;
   };
 
@@ -109,6 +112,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
         setTimeout(async () => {
           try {
             const keyPair = await mnemonicToKeyPair(mnemonic.join(' '));
+
             this.setState({ isLoading: false }, () => {
               onSubmit(keyPair, mnemonic);
             });
@@ -125,6 +129,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
     const { subtitle, buttonText, description, onBackArrow } = this.props.route.params;
 
     const { isLoading } = this.state;
+
     return (
       <ScreenTemplate
         header={<Header onBackArrow={onBackArrow} isBackArrow title={i18n.send.recovery.recover} />}

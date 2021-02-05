@@ -33,13 +33,15 @@ interface Props {
 export class NotificationScreen extends Component<Props> {
   componentDidMount() {
     const { wallets, checkSubscription, email } = this.props;
+
     !!email && wallets.length && checkSubscription(wallets, email);
   }
 
-  onChangeEmailPress = () =>
-    this.props.navigation.navigate(Route.ChangeEmail, {
-      email: this.props.email,
+  onChangeEmailPress = () => {
+    this.props.navigation.navigate(Route.UpdateEmailNotification, {
+      subscribedWallets: this.props.subscribedWallets,
     });
+  };
 
   renderConfirmScreenContent = () => (
     <>
@@ -64,6 +66,7 @@ export class NotificationScreen extends Component<Props> {
         params: { onBackArrow },
       },
     } = this.props;
+
     navigation.navigate(Route.Notifications, { onBackArrow });
   };
 
@@ -160,6 +163,7 @@ export class NotificationScreen extends Component<Props> {
         params: { onBackArrow },
       },
     } = this.props;
+
     return (
       <ScreenTemplate
         header={<Header isBackArrow={true} onBackArrow={onBackArrow} title={i18n.settings.notifications} />}
@@ -170,7 +174,7 @@ export class NotificationScreen extends Component<Props> {
           <>
             <Text style={styles.title}>{i18n.notifications.title}</Text>
             <Text style={styles.description}>{i18n.notifications.description}</Text>
-            <View style={styles.amountAddress}>
+            <View style={styles.currentAddress}>
               <Text style={styles.email}>{this.props.email}</Text>
             </View>
             {!!subscribedWallets.length && (
@@ -247,8 +251,13 @@ const styles = StyleSheet.create({
   itemRow: {
     marginVertical: 8,
   },
-  amountAddress: { width: '100%', borderBottomColor: palette.grey, borderBottomWidth: 1, paddingBottom: 10 },
-  email: { ...typography.caption, color: palette.textGrey },
+  currentAddress: {
+    width: '100%',
+    borderBottomColor: palette.grey,
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+  },
+  email: { ...typography.caption, color: palette.textBlack },
   noWalletsContainer: {
     flex: 1,
     alignItems: 'center',

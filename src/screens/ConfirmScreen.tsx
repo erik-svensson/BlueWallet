@@ -40,6 +40,7 @@ export const ConfirmScreen = ({
     const _timeoutId = setTimeout(() => {
       setClicked(false);
     }, BUTTON_BLOCKED_TIME);
+
     setTimeoutId(Number(_timeoutId));
   };
 

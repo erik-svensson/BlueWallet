@@ -42,6 +42,7 @@ export class ContactListScreen extends PureComponent<Props, State> {
 
   navigateToContactDetails = (contact: Contact) => {
     const { navigation, route } = this.props;
+
     if (route.params?.onContactPress) {
       route.params?.onContactPress(contact.address);
       return navigation.goBack();
@@ -64,6 +65,7 @@ export class ContactListScreen extends PureComponent<Props, State> {
       contacts,
       route: { params },
     } = this.props;
+
     return (
       <ScreenTemplate
         header={

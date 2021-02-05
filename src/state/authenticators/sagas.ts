@@ -42,6 +42,7 @@ export function* deleteAuthenticatorSaga(action: DeleteAuthenticatorAction | unk
 
   try {
     const authenticator = BlueApp.removeAuthenticatorById(id);
+
     yield BlueApp.saveToDisk();
     yield put(deleteAuthenticatorSuccess(authenticator));
 
@@ -61,8 +62,10 @@ export function* createAuthenticatorSaga(action: CreateAuthenticatorAction | unk
     payload: { name, mnemonic },
     meta,
   } = action as CreateAuthenticatorAction;
+
   try {
     const authenticator = new Authenticator(name);
+
     yield authenticator.init({ mnemonic });
     BlueApp.addAuthenticator(authenticator);
     yield BlueApp.saveToDisk();
@@ -80,8 +83,10 @@ export function* createAuthenticatorSaga(action: CreateAuthenticatorAction | unk
 
 export function* updateAuthenticatorSaga(action: UpdateAuthenticatorAction | unknown) {
   const { authenticator } = action as UpdateAuthenticatorAction;
+
   try {
     const updatedAuthenticator = cloneDeep(BlueApp.updateAuthenticator(authenticator));
+
     yield BlueApp.saveToDisk();
     yield put(updateAuthenticatorSuccess(updatedAuthenticator));
   } catch (e) {
@@ -102,6 +107,7 @@ export function* signTransactionSaga(action: SignTransactionAction | unknown) {
       try {
         const authenticator = authenticators[i];
         const finalizedPsbt = yield authenticator.signAndFinalizePSBT(encodedPsbt);
+
         yield put(signTransactionSuccess());
         if (meta?.onSuccess) {
           meta.onSuccess({ authenticator, finalizedPsbt });

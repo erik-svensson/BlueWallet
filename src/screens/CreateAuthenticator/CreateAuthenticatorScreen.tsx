@@ -40,6 +40,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
     const { authenticators } = this.props;
     const { label } = this.state;
     const authenticatorsLabels = authenticators.map(a => a.name);
+
     if (matchAlphanumericCharacters(label)) {
       return i18n.contactCreate.nameCannotContainSpecialCharactersError;
     }
@@ -52,6 +53,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
 
   canSubmit = () => {
     const { label } = this.state;
+
     return !label.trim().length || !!this.validationError;
   };
 
@@ -79,6 +81,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
 
   createAuthenticator = () => {
     const { navigation, createAuthenticator } = this.props;
+
     createAuthenticator(
       { name: this.state.label.trim() },
       {
@@ -92,6 +95,7 @@ class CreateAuthenticatorScreen extends Component<Props> {
 
   navigateToImport = () => {
     const { navigation } = this.props;
+
     navigation.navigate(Route.ImportAuthenticator);
   };
 
