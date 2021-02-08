@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { EmailNotificationsError } from 'app/api';
+import { GeneralHttpError } from 'app/api/client';
 import { CONST } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { WalletsState } from 'app/state/wallets/reducer';
@@ -22,8 +23,8 @@ export const storedPin = createSelector(local, state => state.pin);
 export const failedTries = createSelector(local, state => state.failedTries);
 
 export const readableError = createSelector(notificationError, failedTries, (errorMsg, failNo) => {
-  if (errorMsg === '') {
-    return '';
+  if (errorMsg.includes(GeneralHttpError.NO_MESSAGE) || errorMsg.includes(GeneralHttpError.NO_RESPONSE)) {
+    return i18n.connectionIssue.couldntConnectToServer;
   }
 
   if (errorMsg.includes(EmailNotificationsError.INVALID_EMAIL)) {
@@ -34,7 +35,7 @@ export const readableError = createSelector(notificationError, failedTries, (err
     return i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - failNo });
   }
 
-  return i18n.connectionIssue.couldntConnectToServer;
+  return errorMsg;
 });
 
 export const isLoading = createSelector(local, state => state.isLoading);

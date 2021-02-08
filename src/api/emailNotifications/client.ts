@@ -20,6 +20,7 @@ export enum EmailNotificationsError {
   INVALID_EMAIL = 'Enter a valid email address',
   ERROR_VERIFICATION_ERROR = 'On /verify-email/ request the server responded with result: "error"',
   WRONG_PIN = 'Wrong pin',
+  ERROR_REQUEST_AUTHENTICATION = 'On /authenticate/ request the server responded with result: "error',
 }
 
 const httpClient = createHttpClient(config.emailNotificationsApi);
@@ -39,6 +40,10 @@ export const unsubscribeEmail = async (data: UnsubscribePayload): Promise<Unsubs
 export const authenticate = async (data: AuthenticatePayload): Promise<AuthenticatePayload> => {
   const response = await httpClient.post(`/authenticate/`, data);
 
+  if (response.data.result === 'error') {
+    throw new HttpError(EmailNotificationsError.ERROR_REQUEST_AUTHENTICATION);
+  }
+
   return response.data;
 };
 
@@ -49,7 +54,7 @@ export const modifyEmail = async (data: ModifyPayload): Promise<ModifyResponse> 
 };
 
 export const checkSubscriptionEmail = async (data: CheckSubscriptionPayload): Promise<CheckSubscriptionResponse> => {
-  const response = await httpClient.post(`/check_subscription/`, data);
+  const response = await httpClient.post(`/check_subscription`, data);
 
   return response.data;
 };

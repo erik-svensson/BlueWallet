@@ -38,11 +38,6 @@ import {
   updateNotificationEmailFailure,
 } from './actions';
 
-enum Result {
-  error = 'error',
-  success = 'success',
-}
-
 export function* createNotificationEmailSaga(action: CreateNotificationEmailAction | unknown) {
   const { meta, payload } = action as CreateNotificationEmailAction;
   const { email } = payload;
@@ -67,8 +62,8 @@ export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailActi
   const { email } = payload;
 
   try {
-    const verifyCode = yield call(verifyEmail, { email });
-    const decryptedCode = yield decryptCode(email, verifyCode.pin);
+    const { pin } = yield call(verifyEmail, { email });
+    const decryptedCode = yield decryptCode(email, pin);
 
     yield put(verifyNotificationEmailSuccess(decryptedCode));
 
@@ -125,14 +120,11 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
   const { payload, meta } = action as AuthenticateEmailAction;
 
   try {
-    const response = yield call(authenticate, payload);
+    yield call(authenticate, payload);
+    yield put(authenticateEmailSuccess());
 
-    if (response.result === Result.success) {
-      yield put(authenticateEmailSuccess());
-
-      if (meta?.onSuccess) {
-        meta.onSuccess();
-      }
+    if (meta?.onSuccess) {
+      meta.onSuccess();
     }
   } catch (error) {
     yield put(authenticateEmailFailure(error.message));
@@ -152,18 +144,16 @@ export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
   try {
     const hashes = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
-    const response = yield call(modifyEmail, {
+    const { session_token } = yield call(modifyEmail, {
       hashes,
       old_email: currentEmail,
       new_email: newEmail,
     });
 
-    if (response.session_token) {
-      yield put(updateNotificationEmailSuccess(response.session_token));
+    yield put(updateNotificationEmailSuccess(session_token));
 
-      if (meta?.onSuccess) {
-        meta.onSuccess();
-      }
+    if (meta?.onSuccess) {
+      meta.onSuccess();
     }
   } catch (error) {
     yield put(updateNotificationEmailFailure(error.message));
