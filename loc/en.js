@@ -50,8 +50,9 @@ module.exports = {
     },
     dashboard: {
       createNewWallet: 'Create new wallet',
-      desc1: 'Monitor your progress and register more wallets.',
-      desc2: 'Create new wallet to take part in the Airdrop.',
+      desc1: 'Add your wallets before time runs out.',
+      desc1WithWallets: 'Monitor your progress and register more wallets.',
+      desc2: 'Create or add a wallet to take part in the Airdrop.',
       cantConnectToServerLine1: 'Couldn’t connect to the server.',
       cantConnectToServerLine2: 'Please try again in a few minutes.',
       loading1: 'Waiting for the server.',
@@ -60,22 +61,21 @@ module.exports = {
       registeredWallets: 'Registered wallets',
     },
     itIsAlive: {
-      subtitle: 'Airdrop is live! Check it out!',
-      description: 'We are happy to announce our first Bitcoin Vault Airdrop for Gold Wallet.',
-      iDontCare: "I don't care",
+      subtitle: 'Airdrop is live!',
+      description: 'Our first BTCV airdrop is here.\nCheck it out to get rewards!',
+      notNow: 'Not now',
       learnMore: 'Learn more',
     },
     requirements: {
       soundsGreat: 'Sounds great!',
-      subtitle: 'Thank you for creating the Bitcoin Vault community.',
-      description:
-        'We are glad that you are a part of it! We want to share ${airdropTotalDollarsToShare} in BTCV as a reward for being a supportive community.',
+      subtitle: 'Thank you for being a part of Bitcoin Vault',
+      description: 'We want to share ${airdropTotalDollarsToShare} in BTCV to reward you for being with us!',
       listHeader: 'Requirements for the Airdrop:',
       points: {
         0: '3-Key Vault Wallet',
-        1: 'Minimum amount of BTCV stored in 3-Key Vault Wallet - {airdropMinimumBTCVRequired} BTCV*',
+        1: 'At least {airdropMinimumBTCVRequired} BTCV stored on the wallet*',
       },
-      rewardExplanation: '*Reward will be based on the % of your coins in the general pool',
+      rewardExplanation: '*Your reward depends on how many coins you have in the general pool.',
       soundsGreat: 'Sounds great!',
       termsAndConditions: {
         read: 'Read',
@@ -92,10 +92,10 @@ module.exports = {
       youReachedGoal: 'You reached goal: ',
     },
     finished: {
-      subtitle: 'Airdrop finished!',
+      subtitle: 'Airdrop is over!',
       stayTuned: 'Stay tuned for more in {period}',
       shareIt: 'Share it with others',
-      checkOutData: 'Check out all the data about it.',
+      checkOutData: 'Want to know more about it?',
       readFullReport: 'Read our full report on',
       medium: 'Medium',
       registeredWallets: 'Registered wallets',
@@ -103,7 +103,7 @@ module.exports = {
     createWalletSuccess: {
       success: 'Hooray! \n  You have successfully registered to Airdrop!',
       successWithNotifications:
-        'Hooray! \n  You have successfully subscribed to notifications and registered to Airdrop!',
+        'Hooray! \n  You have successfully subscribed to notifications and registered for Airdrop!',
       shareIt: 'Share it with others and get {rewardValue} BTCV reward!*',
       maxReward: '*Maximum reward for one wallet is {rewardValue} BTCV.',
       successCompletedButton: 'Go to {routeName}',
