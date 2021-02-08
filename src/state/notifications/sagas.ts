@@ -94,7 +94,7 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
       lang,
     });
 
-    yield put(subscribeWalletSuccess(result, session_token));
+    yield put(subscribeWalletSuccess(session_token));
   } catch (error) {
     yield put(subscribeWalletFailure(error.message));
   }

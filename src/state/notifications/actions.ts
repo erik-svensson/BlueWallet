@@ -93,7 +93,7 @@ export interface SubscribeWalletAction {
 
 export interface SubscribeWalletSuccessAction {
   type: NotificationAction.SubscribeWalletSuccessAction;
-  payload: SubscribeResponse;
+  payload: { sessionToken: string };
 }
 
 export interface SubscribeWalletFailureAction {
@@ -235,9 +235,9 @@ export const subscribeWallet: SubscribeWalletActionCreator = (wallets, email) =>
   payload: { wallets, email },
 });
 
-export const subscribeWalletSuccess = (result: Result, sessionToken: string): SubscribeWalletSuccessAction => ({
+export const subscribeWalletSuccess = (sessionToken: string): SubscribeWalletSuccessAction => ({
   type: NotificationAction.SubscribeWalletSuccessAction,
-  payload: { result, sessionToken },
+  payload: { sessionToken },
 });
 
 export const subscribeWalletFailure = (error: string): SubscribeWalletFailureAction => ({
@@ -253,7 +253,7 @@ export const unsubscribeWallet: UnsubscribeWalletActionCreator = (wallets, email
 
 export const unsubscribeWalletSuccess = (result: Result, sessionToken: string): SubscribeWalletSuccessAction => ({
   type: NotificationAction.SubscribeWalletSuccessAction,
-  payload: { result, sessionToken },
+  payload: { sessionToken },
 });
 
 export const unsubscribeWalletFailure = (error: string): SubscribeWalletFailureAction => ({
