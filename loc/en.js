@@ -62,7 +62,7 @@ module.exports = {
     },
     itIsAlive: {
       subtitle: 'Airdrop is live!',
-      description: 'Our first BTCV airdrop is here.\n Check it out to get rewards!',
+      description: 'Our first BTCV airdrop is here.\nCheck it out to get rewards!',
       notNow: 'Not now',
       learnMore: 'Learn more',
     },
