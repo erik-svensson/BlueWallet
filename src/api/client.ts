@@ -19,10 +19,10 @@ const createHttpClient = (baseUrl: string) => {
     return request;
   };
 
-  const onResponse = (response: AxiosResponse<any>): AxiosResponse<any> => {
+  const onResponse = (response: AxiosResponse<any>) => {
     logger.info('http', `<-- ${response.status} ${response.config.baseURL}${response.config.url}`);
 
-    return response;
+    return response.data;
   };
 
   const onError = (error: AxiosError) => {

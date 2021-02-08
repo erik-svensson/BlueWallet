@@ -1,5 +1,3 @@
-import { HttpError } from 'app/../error/AppErrors';
-
 import config from 'app/config';
 
 import createHttpClient from '../client';
@@ -25,46 +23,19 @@ export enum EmailNotificationsError {
 
 const httpClient = createHttpClient(config.emailNotificationsApi);
 
-export const subscribeEmail = async (data: SubscribePayload): Promise<SubscribeResponse> => {
-  const response = await httpClient.post(`/subscribe/`, data);
+export const subscribeEmail = async (data: SubscribePayload): Promise<SubscribeResponse> =>
+  httpClient.post(`/subscribe/`, data);
 
-  return response.data;
-};
+export const unsubscribeEmail = async (data: UnsubscribePayload): Promise<UnsubscribePayload> =>
+  httpClient.post(`/unsubscribe/`, data);
 
-export const unsubscribeEmail = async (data: UnsubscribePayload): Promise<UnsubscribePayload> => {
-  const response = await httpClient.post(`/unsubscribe/`, data);
+export const authenticate = async (data: AuthenticatePayload): Promise<AuthenticatePayload> =>
+  httpClient.post(`/authenticate/`, data);
 
-  return response.data;
-};
+export const modifyEmail = async (data: ModifyPayload): Promise<ModifyResponse> => httpClient.put(`/modify/`, data);
 
-export const authenticate = async (data: AuthenticatePayload): Promise<AuthenticatePayload> => {
-  const response = await httpClient.post(`/authenticate/`, data);
+export const checkSubscriptionEmail = async (data: CheckSubscriptionPayload): Promise<CheckSubscriptionResponse> =>
+  httpClient.post(`/check_subscription`, data);
 
-  if (response.data.result === 'error') {
-    throw new HttpError(EmailNotificationsError.ERROR_REQUEST_AUTHENTICATION);
-  }
-
-  return response.data;
-};
-
-export const modifyEmail = async (data: ModifyPayload): Promise<ModifyResponse> => {
-  const response = await httpClient.put(`/modify/`, data);
-
-  return response.data;
-};
-
-export const checkSubscriptionEmail = async (data: CheckSubscriptionPayload): Promise<CheckSubscriptionResponse> => {
-  const response = await httpClient.post(`/check_subscription`, data);
-
-  return response.data;
-};
-
-export const verifyEmail = async (data: VerifyEmailPayload): Promise<VerifyEmailResponse> => {
-  const response = await httpClient.post(`/verify_email/`, data);
-
-  if (response.data.result === 'error') {
-    throw new HttpError(EmailNotificationsError.ERROR_VERIFICATION_ERROR);
-  }
-
-  return response.data;
-};
+export const verifyEmail = async (data: VerifyEmailPayload): Promise<VerifyEmailResponse> =>
+  httpClient.post(`/verify_email/`, data);
