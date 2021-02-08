@@ -27,16 +27,15 @@ export const CommunityAchievementsList: FC<CommunityAchievementsListProps> = ({ 
 
   return (
     <View style={styles.achievementsListContainer}>
-      {communityGoals.length > 0 &&
-        communityGoals.map((goal, index) => (
-          <CommunityGoalsListItem
-            key={goal.threshold}
-            threshold={goal.threshold}
-            reward={goal.value}
-            previousThreshold={index === 0 ? 0 : communityGoals[index - 1].threshold}
-            currentUsersQuantity={usersQuantity || 0}
-          />
-        ))}
+      {communityGoals.map((goal, index) => (
+        <CommunityGoalsListItem
+          key={goal.threshold}
+          threshold={goal.threshold}
+          reward={goal.value}
+          previousThreshold={index === 0 ? 0 : communityGoals[index - 1].threshold}
+          currentUsersQuantity={usersQuantity || 0}
+        />
+      ))}
     </View>
   );
 };

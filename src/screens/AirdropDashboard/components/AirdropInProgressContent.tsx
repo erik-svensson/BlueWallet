@@ -40,7 +40,7 @@ export const AirdropInProgressContent: FC<Props> = ({
   };
 
   const setCarouselActiveElement = (wallet: Wallet) => {
-    const snapIndex = subscribedWallets.findIndex(w => w.id === wallet.id && w.balance === wallet.balance);
+    const snapIndex = subscribedWallets.findIndex(w => w.id === wallet.id);
 
     _carouselRef.snapToItem(snapIndex || 0, true);
   };

@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { Dimensions, ViewStyle, View, StyleSheet } from 'react-native';
+import { ViewStyle, View, StyleSheet } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
-import { AirdropCarouselCardData } from 'app/consts';
+import { AirdropCarouselCardData, dimensions } from 'app/consts';
 
 import { AirdropBalanceCard } from './AirdropBalanceCard';
 
@@ -12,8 +12,6 @@ interface Props {
   setRef?: (carouselRef: Carousel<AirdropCarouselCardData>) => void;
   onItemSnap: (index: number) => void;
 }
-
-const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export const AirdropCarousel: FC<Props> = ({ items, styles, setRef, onItemSnap }) => (
   <Carousel
@@ -25,8 +23,8 @@ export const AirdropCarousel: FC<Props> = ({ items, styles, setRef, onItemSnap }
         <AirdropBalanceCard data={item} />
       </View>
     )}
-    sliderWidth={SCREEN_WIDTH}
-    itemWidth={SCREEN_WIDTH * 0.56}
+    sliderWidth={dimensions.width}
+    itemWidth={dimensions.width * 0.56}
     onSnapToItem={onItemSnap}
   />
 );

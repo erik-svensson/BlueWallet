@@ -5,10 +5,10 @@ import { Image, View, TouchableOpacity, StatusBar, StyleSheet, Dimensions } from
 import { BarCodeReadEvent, RNCamera } from 'react-native-camera';
 
 import { images } from 'app/assets';
-import { Route, RootStackParams } from 'app/consts';
+import { Route, RootStackParams, dimensions } from 'app/consts';
 import { getStatusBarHeight } from 'app/styles';
 
-const { width } = Dimensions.get('window');
+const { width } = dimensions;
 const i18n = require('../../loc');
 
 interface Props {

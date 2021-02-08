@@ -2,7 +2,7 @@ import { VaultTxType, Transaction as BtcTransaction, ECPair } from 'bitcoinjs-li
 import { Dayjs } from 'dayjs';
 import { last } from 'lodash';
 import React from 'react';
-import { KeyboardType, StyleProp, Platform } from 'react-native';
+import { Dimensions, KeyboardType, StyleProp, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 import { ImageStyle } from 'react-native-fast-image';
 
@@ -17,6 +17,8 @@ import {
   HDSegwitP2SHWallet,
   HDLegacyP2PKHWallet,
 } from '../../class';
+
+export const dimensions = Dimensions.get('window');
 
 // don't change the order when addign the new version, the oldest user version is on the top, the newest on the bottom
 export enum USER_VERSIONS {
