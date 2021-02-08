@@ -45,7 +45,7 @@ export const AboutUsScreen = () => {
   };
 
   return (
-    <ScreenTemplate header={<Header isBackArrow={true} title={i18n.aboutUs.header} />}>
+    <ScreenTemplate header={<Header isBackArrow title={i18n.aboutUs.header} />}>
       <Text style={styles.title}>{i18n.aboutUs.title}</Text>
       <Text style={styles.description}>{i18n.aboutUs.alwaysBackupYourKeys}</Text>
       <Button

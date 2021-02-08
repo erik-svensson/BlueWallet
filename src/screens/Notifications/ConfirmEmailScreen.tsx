@@ -176,7 +176,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
     return (
       <ScreenTemplate
         noScroll
-        header={<Header isBackArrow={true} title={i18n.settings.notifications} onBackArrow={onBack} />}
+        header={<Header title={i18n.settings.notifications} onBackArrow={onBack} />}
         footer={
           <>
             <Button

@@ -46,19 +46,17 @@ class AirdropThankYouScreen extends Component<Props> {
         header={<Header isBackArrow title={i18n.airdrop.title} />}
         footer={
           <View style={styles.buttonsContainer}>
-            <Button
-              testID="cancel-button"
-              type="outline"
-              style={styles.iDontCareButton}
-              onPress={this.navigateBack}
-              title={i18n.airdrop.itIsAlive.iDontCare}
-            />
-            <Button
-              testID="learn-more"
-              onPress={this.goToLearnMore}
-              style={styles.learnMoreButton}
-              title={i18n.airdrop.itIsAlive.learnMore}
-            />
+            <View style={styles.notNowButtonContainer}>
+              <Button
+                testID="cancel-button"
+                type="outline"
+                onPress={this.navigateBack}
+                title={i18n.airdrop.itIsAlive.notNow}
+              />
+            </View>
+            <View style={styles.learnMoreButtonContainer}>
+              <Button testID="learn-more" onPress={this.goToLearnMore} title={i18n.airdrop.itIsAlive.learnMore} />
+            </View>
           </View>
         }
       >
@@ -91,7 +89,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: palette.textGrey,
   },
-  buttonsContainer: { flexDirection: 'row', width: '50%' },
-  iDontCareButton: { paddingRight: 10, width: '100%' },
-  learnMoreButton: { paddingLeft: 10, width: '100%' },
+  buttonsContainer: { display: 'flex', flexDirection: 'row', width: '100%' },
+  notNowButtonContainer: { flex: 1, paddingRight: 10 },
+  learnMoreButtonContainer: { flex: 1, paddingLeft: 10 },
 });

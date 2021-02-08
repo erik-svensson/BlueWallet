@@ -1,6 +1,6 @@
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { icons } from 'app/assets';
@@ -9,6 +9,7 @@ import { Route, RootStackParams, MainTabNavigatorParams } from 'app/consts';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
 
 type Props = {
+  thankYouSeen: boolean;
   thankYouFlowCompleted: boolean;
   navigation: CompositeNavigationProp<
     StackNavigationProp<MainTabNavigatorParams, Route.Settings>,
@@ -16,14 +17,14 @@ type Props = {
   >;
 };
 
-export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, navigation }: Props) => {
+export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, thankYouSeen, navigation }: Props) => {
   // TODO: this implementation doesn't work.
   // As discussed with Paweł, We have to merge PasswordNavigator with MainStackNavigator, otherwise it fails miserably.
-  // useEffect(() => {
-  //   if (navigation && !thankYouSeen) {
-  //     navigation.navigate(Route.AirdropThankYou);
-  //   }
-  // }, [navigation, thankYouSeen]);
+  useEffect(() => {
+    if (navigation && !thankYouSeen) {
+      navigation.navigate(Route.AirdropThankYou);
+    }
+  }, [navigation, thankYouSeen]);
 
   const onButtonPress = () => {
     if (isAfterAirdrop()) {

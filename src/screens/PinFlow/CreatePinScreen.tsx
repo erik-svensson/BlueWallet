@@ -92,8 +92,9 @@ class CreatePinScreen extends PureComponent<Props, State> {
       <ScreenTemplate
         header={
           <Header
-            isBackArrow={this.props.route.params?.flowType === FlowType.newPin}
-            onBackArrow={() => this.props.navigation.popToTop()}
+            onBackArrow={
+              this.props.route.params?.flowType === FlowType.newPin ? () => this.props.navigation.popToTop() : undefined
+            }
             title={
               this.props.route.params?.flowType === FlowType.newPin
                 ? i18n.onboarding.changePin

@@ -7,3 +7,5 @@ export { CommunitySection } from './CommunitySection';
 export { Error } from './Error';
 export { Loading } from './Loading';
 export { CommunityGoalsListItem } from './CommunityGoalsListItem';
+export { CommunityAchievementsList } from './CommunityAchievementsList';
+export { AirdropInProgressContent } from './AirdropInProgressContent';

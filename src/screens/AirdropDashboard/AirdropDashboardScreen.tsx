@@ -64,7 +64,12 @@ export const AirdropDashboardScreen: FC<Props> = ({
 
   return (
     <ScreenTemplate
-      header={<Header isBackArrow title={i18n.airdrop.title} />}
+      header={
+        <Header
+          onBackArrow={() => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard })}
+          title={i18n.airdrop.title}
+        />
+      }
       footer={!airdropFinished && <Footer route={route} navigation={navigation} />}
     >
       <View style={styles.wrapper}>
