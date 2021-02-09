@@ -10,7 +10,7 @@ export const getFormattedAirdropDate = () =>
 
 export const isAfterAirdrop = () => isAfter(new Date(), CONST.airdropDate);
 
-export const readableOrder = [
+export const getReadableOrder = () => [
   i18n.order.first,
   i18n.order.second,
   i18n.order.third,
@@ -41,7 +41,7 @@ export const getCommunityItem = (usersQuantity: number): AirdropCarouselCardData
     }`,
     circleInnerSecondLine: i18n.airdrop.community.airdropParticipants,
     footerFirstLine: i18n.formatString(i18n.airdrop.community.goal, {
-      order: readableOrder[nextGoalIndex],
+      order: getReadableOrder()[nextGoalIndex],
     }),
     footerSecondLine: `${nextGoal.threshold} ${i18n.airdrop.community.users}`,
     circleFillPercentage: (usersQuantity / nextGoal.threshold) * 100,
@@ -74,7 +74,7 @@ export const getCarouselItem = (data: { balance: number; label: string }): Airdr
     footerFirstLine: _isAfterAirdrop
       ? i18n.airdrop.walletsCarousel.youReachedGoal
       : i18n.formatString(i18n.airdrop.walletsCarousel.yourNextGoal, {
-          order: readableOrder[nextGoalIndex],
+          order: getReadableOrder()[nextGoalIndex],
         }),
     footerSecondLine: i18n.formatString(i18n.airdrop.walletsCarousel.avatarTeaser, {
       goalName: _isAfterAirdrop ? previousGoal.value : nextGoal.value,

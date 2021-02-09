@@ -35,7 +35,7 @@ export const CommunityGoalsListItem: FC<CommunityGoalsListItemProps> = props => 
       <ProgressBar
         borderWidth={0}
         unfilledColor={palette.lightGrey}
-        color={'#F7C331'}
+        color={palette.textSecondaryLight}
         progress={progress}
         width={null}
         height={10}
