@@ -251,7 +251,7 @@ export const unsubscribeWallet: UnsubscribeWalletActionCreator = (wallets, email
   payload: { wallets, email },
 });
 
-export const unsubscribeWalletSuccess = (result: Result, sessionToken: string): SubscribeWalletSuccessAction => ({
+export const unsubscribeWalletSuccess = (sessionToken: string): SubscribeWalletSuccessAction => ({
   type: NotificationAction.SubscribeWalletSuccessAction,
   payload: { sessionToken },
 });

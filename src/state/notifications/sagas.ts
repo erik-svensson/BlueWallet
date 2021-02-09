@@ -108,9 +108,9 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
   try {
     const hashes = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
-    const { session_token, result } = yield call(unsubscribeEmail, { hashes, email });
+    const { session_token } = yield call(unsubscribeEmail, { hashes, email });
 
-    yield put(unsubscribeWalletSuccess(result, session_token));
+    yield put(unsubscribeWalletSuccess(session_token));
   } catch (error) {
     yield put(unsubscribeWalletFailure(error.message));
   }
