@@ -1,6 +1,6 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 
-import { subscribeWallet, checkWalletsSubscription } from 'app/api/airdropApi';
+import { subscribeWallet, checkWalletsSubscription, getUsersQuantity } from 'app/api/airdropApi';
 import { Wallet, WalletPayload } from 'app/consts';
 import * as helpers from 'app/helpers/wallets';
 
@@ -12,6 +12,8 @@ import {
   CheckSubscriptionAction,
   checkSubscriptionSuccess,
   checkSubscriptionFailure,
+  getUsersQuantitySuccess,
+  getUsersQuantityFailure,
 } from './actions';
 
 enum Result {
@@ -77,7 +79,23 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   }
 }
 
+export function* getUsersQuantitySaga() {
+  try {
+    const response: { msg?: string; result: Result; users: number } = yield call(getUsersQuantity);
+
+    if (response.result === Result.error) {
+      throw new Error(response.result);
+    }
+    if (response.result === Result.success) {
+      yield put(getUsersQuantitySuccess(response.users));
+    }
+  } catch (error) {
+    yield put(getUsersQuantityFailure(error.msg));
+  }
+}
+
 export default [
   takeEvery(AirdropAction.CheckSubscription, checkSubscriptionSaga),
   takeEvery(AirdropAction.SubscribeWallet, subscribeWalletSaga),
+  takeEvery(AirdropAction.GetUsersQuantity, getUsersQuantitySaga),
 ];

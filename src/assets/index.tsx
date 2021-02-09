@@ -1,3 +1,5 @@
+import { default as LockIconGrey } from './images/lockIconGrey.svg';
+
 export const images = {
   Dashboard: require('./images/dashboard.png'),
   DashboardInactive: require('./images/dashboardInactive.png'),
@@ -46,6 +48,7 @@ export const images = {
 };
 
 export const icons = {
+  LockIconGrey,
   iconDropdown: require('./images/iconDropdown.png'),
   termsIcon: require('./images/terms.png'),
   search: require('./images/iconSearch.png'),

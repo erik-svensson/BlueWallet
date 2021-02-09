@@ -1,8 +1,8 @@
-import { Dimensions, Platform, StatusBar } from 'react-native';
+import { Platform, StatusBar } from 'react-native';
 
-import { CONST } from 'app/consts';
+import { CONST, dimensions } from 'app/consts';
 
-const { height, width } = Dimensions.get('window');
+const { height, width } = dimensions;
 
 const iphoneXHeight = 812;
 const iphoneXMaxHeight = 896;

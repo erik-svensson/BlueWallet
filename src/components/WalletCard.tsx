@@ -1,8 +1,8 @@
 import React from 'react';
-import { Dimensions, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
 import { images } from 'app/assets';
-import { Route, Wallet, CONST } from 'app/consts';
+import { Route, Wallet, CONST, dimensions } from 'app/consts';
 import { NavigationService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
@@ -13,8 +13,7 @@ import { StyledText } from './StyledText';
 
 const i18n = require('../../loc');
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
-const ITEM_WIDTH = SCREEN_WIDTH * 0.82;
+const ITEM_WIDTH = dimensions.width * 0.82;
 const ITEM_HEIGHT = ITEM_WIDTH * 0.63;
 
 interface Props {

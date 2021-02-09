@@ -1,7 +1,7 @@
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC, useEffect } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate } from 'app/components';
@@ -9,10 +9,12 @@ import { Route, RootStackParams, Wallet } from 'app/consts';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
 import { ApplicationState } from 'app/state';
 import {
+  getUsersQuantity,
   checkSubscription,
   CheckSubscriptionActionCreator,
   subscribeWallet,
   SubscribeWalletActionCreator,
+  GetUsersQuantityActionCreator,
 } from 'app/state/airdrop/actions';
 import * as airdropSelectors from 'app/state/airdrop/selectors';
 
@@ -33,19 +35,27 @@ interface Props {
   subscribedWallets: Wallet[];
   availableWallets: Wallet[];
   subscribeWallet: SubscribeWalletActionCreator;
+  getUsersQuantity: GetUsersQuantityActionCreator;
+  usersQuantity: number;
 }
 
 export const AirdropDashboardScreen: FC<Props> = ({
   navigation,
   wallets,
+  usersQuantity,
   checkSubscription,
   subscribedWallets,
+  getUsersQuantity,
   subscribeWallet,
   availableWallets,
   isLoading,
   error,
   route,
 }) => {
+  useEffect(() => {
+    getUsersQuantity();
+  }, [getUsersQuantity]);
+
   useEffect(() => {
     checkSubscription(wallets);
   }, [checkSubscription, wallets]);
@@ -72,6 +82,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
             availableWallets={availableWallets}
             subscribedWallets={subscribedWallets}
             subscribeWallet={subscribeWallet}
+            usersQuantity={usersQuantity}
           />
         )}
       </View>
@@ -81,6 +92,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
 
 const mapStateToProps = (state: ApplicationState) => ({
   wallets: airdropSelectors.airdropReadyWallets(state),
+  usersQuantity: airdropSelectors.airdropUsersQuantity(state),
   availableWallets: airdropSelectors.availableWallets(state),
   subscribedWallets: airdropSelectors.subscribedWallets(state),
   isLoading: airdropSelectors.isLoading(state),
@@ -90,6 +102,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   checkSubscription,
   subscribeWallet,
+  getUsersQuantity,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AirdropDashboardScreen);

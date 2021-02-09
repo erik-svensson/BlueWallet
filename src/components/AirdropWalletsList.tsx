@@ -31,14 +31,13 @@ export const AirdropWalletsList: FC<Props> = props => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{title}</Text>
-      {wallets.length > 0 &&
-        wallets.map((wallet, index) => (
-          <AirdropWalletsListItem
-            key={wallet.id}
-            wallet={wallet}
-            callToAction={itemCallToAction && itemCallToAction(wallet)}
-          />
-        ))}
+      {wallets.map(wallet => (
+        <AirdropWalletsListItem
+          key={wallet.id}
+          wallet={wallet}
+          callToAction={itemCallToAction && itemCallToAction(wallet)}
+        />
+      ))}
     </View>
   );
 };
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     ...typography.headline5,
-    marginBottom: 1,
+    marginBottom: 3,
   },
   itemDescription: {
     ...typography.overline,

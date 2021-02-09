@@ -1,10 +1,11 @@
 import React from 'react';
-import { Text, StyleSheet, View, Linking, Dimensions } from 'react-native';
+import { Text, StyleSheet, View, Linking } from 'react-native';
 import { getApplicationName, getVersion, getBundleId, getBuildNumber } from 'react-native-device-info';
 import Rate, { AndroidMarket } from 'react-native-rate';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
+import { dimensions } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -22,7 +23,8 @@ export const AboutUsScreen = () => {
   ];
 
   const getBuildData = () => {
-    const { width, height } = Dimensions.get('window');
+    const { width, height } = dimensions;
+
     return `${getApplicationName()} ver. ${getVersion()} (build ${getBuildNumber()}) \n ${getBundleId()} \n w, h = ${width.toFixed(
       0,
     )}, ${height.toFixed(0)}`;
@@ -37,6 +39,7 @@ export const AboutUsScreen = () => {
       openAppStoreIfInAppFails: true,
       fallbackPlatformURL: 'https://bitcoinvault.global',
     };
+
     Rate.rate(options);
   };
 

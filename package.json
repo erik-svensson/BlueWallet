@@ -51,6 +51,7 @@
     "metro-react-native-babel-preset": "^0.59.0",
     "prettier": "^1.19.1",
     "react-native-config-node": "^0.0.3",
+    "react-native-svg-transformer": "^0.14.3",
     "redux-devtools-extension": "^2.13.8",
     "rn-nodeify": "github:tradle/rn-nodeify",
     "ts-jest": "^26.4.1",

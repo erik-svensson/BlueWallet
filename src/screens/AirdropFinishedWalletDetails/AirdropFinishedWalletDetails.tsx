@@ -2,9 +2,10 @@ import { RouteProp } from '@react-navigation/native';
 import React, { FC } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 
-import { ScreenTemplate, Header, AirdropWalletBalanceCard, AirdropStayTuned } from 'app/components';
+import { ScreenTemplate, Header, AirdropBalanceCard, AirdropStayTuned } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
-import { typography, palette } from 'app/styles';
+import { getCarouselItem } from 'app/helpers/airdrop';
+import { typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
@@ -15,7 +16,14 @@ type Props = {
 export const AirdropFinishedWalletDetails: FC<Props> = ({ route }: Props) => (
   <ScreenTemplate header={<Header isBackArrow title={i18n.airdrop.title} />}>
     <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
-    <AirdropWalletBalanceCard data={{ balance: route.params.balance, label: route.params.label }} />
+    <View style={styles.walletCard}>
+      <AirdropBalanceCard
+        data={getCarouselItem({
+          balance: route.params.balance,
+          label: route.params.header,
+        })}
+      />
+    </View>
     <View style={styles.stayTunedContainer}>
       <AirdropStayTuned />
     </View>
@@ -25,6 +33,7 @@ export const AirdropFinishedWalletDetails: FC<Props> = ({ route }: Props) => (
 export default AirdropFinishedWalletDetails;
 
 const styles = StyleSheet.create({
+  walletCard: { alignItems: 'center' },
   subtitle: {
     marginTop: 12,
     marginBottom: 18,
