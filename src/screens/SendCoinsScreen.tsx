@@ -73,6 +73,7 @@ class SendCoinsScreen extends Component<Props, State> {
 
   async componentDidMount() {
     const fee = await loadTransactionsFees();
+
     if (fee) {
       this.setState({ fee });
     }
@@ -82,6 +83,7 @@ class SendCoinsScreen extends Component<Props, State> {
     const { wallets } = this.props;
 
     const wallet = wallets[index];
+
     this.setState({
       wallet,
     });
@@ -91,6 +93,7 @@ class SendCoinsScreen extends Component<Props, State> {
     const { wallets } = this.props;
     const { wallet } = this.state;
     const selectedIndex = wallets.findIndex((w: Wallet) => w.label === wallet.label);
+
     this.props.navigation.navigate(Route.ActionSheet, {
       wallets,
       selectedIndex,
@@ -157,6 +160,7 @@ class SendCoinsScreen extends Component<Props, State> {
     if (!amount) amount = 0;
     if (!fee) fee = 0;
     let availableBalance;
+
     try {
       availableBalance = new BigNumber(balance);
       availableBalance = availableBalance.div(CONST.satoshiInBtc); // sat2btc
@@ -192,6 +196,7 @@ class SendCoinsScreen extends Component<Props, State> {
     }
     if (transaction.address) {
       const address = transaction.address.trim().toLowerCase();
+
       if (address.startsWith('lnb') || address.startsWith('lightning:lnb')) {
         return i18n.send.transaction.lightningError;
       }
@@ -235,6 +240,7 @@ class SendCoinsScreen extends Component<Props, State> {
   isAlert = (wallet: Wallet) => {
     const { type } = wallet;
     const { vaultTxType } = this.state;
+
     switch (type) {
       case HDSegwitP2SHArWallet.type:
         return true;
@@ -248,6 +254,7 @@ class SendCoinsScreen extends Component<Props, State> {
   isFastTx = (wallet: Wallet) => {
     const { type } = wallet;
     const { vaultTxType } = this.state;
+
     switch (type) {
       case HDSegwitP2SHAirWallet.type:
         return vaultTxType === bitcoin.payments.VaultTxType.Instant;
@@ -300,6 +307,7 @@ class SendCoinsScreen extends Component<Props, State> {
         fee,
         transaction.address,
       );
+
       tx = txHex;
 
       fee = satoshiToBtc(feeSatoshi).toNumber();
@@ -320,6 +328,7 @@ class SendCoinsScreen extends Component<Props, State> {
 
   navigateToScanInstantPrivateKey = (onBarCodeScanned: (privateKey: string) => void) => {
     const { navigation } = this.props;
+
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: scannedKey => {
         CreateMessage({
@@ -338,6 +347,7 @@ class SendCoinsScreen extends Component<Props, State> {
 
   createTransactionByWallet = async (wallet: any) => {
     const { type } = wallet;
+
     switch (type) {
       case HDSegwitP2SHArWallet.type:
         return this.createStandardTransaction((utxos: Utxo[], amount: number, fee: number, address: string) =>
@@ -351,6 +361,7 @@ class SendCoinsScreen extends Component<Props, State> {
         );
       case HDSegwitP2SHAirWallet.type:
         const { vaultTxType } = this.state;
+
         if (vaultTxType === bitcoin.payments.VaultTxType.Alert) {
           return this.createStandardTransaction((utxos: Utxo[], amount: number, fee: number, address: string) =>
             wallet.createTx({
@@ -421,6 +432,7 @@ class SendCoinsScreen extends Component<Props, State> {
 
   renderAmountInput = () => {
     const { transaction } = this.state;
+
     return (
       <InputItem
         testID="send-coins-amount-input"
@@ -437,6 +449,7 @@ class SendCoinsScreen extends Component<Props, State> {
 
   renderAddressInput = () => {
     const { transaction } = this.state;
+
     return (
       <InputItem
         testID="send-coins-wallet-address-input"
@@ -471,6 +484,7 @@ class SendCoinsScreen extends Component<Props, State> {
 
   shouldShowVaultTransaction = () => {
     const { wallet } = this.state;
+
     return wallet.type === HDSegwitP2SHAirWallet.type;
   };
 
@@ -505,11 +519,13 @@ class SendCoinsScreen extends Component<Props, State> {
 
   confirmTransactionWithNetworkConnectionCheck = () => {
     const { checkNetworkConnection } = this.props;
+
     checkNetworkConnection(this.confirmTransaction);
   };
 
   render() {
     const { wallet, fee, isLoading } = this.state;
+
     return (
       <ScreenTemplate
         footer={

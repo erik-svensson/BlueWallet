@@ -55,6 +55,8 @@ export const CONST = {
   nextAirdropPeriod: 'Q1 2021',
   userVersion: 'userVersion',
   newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
+  buttonTimeoutSeconds: 30,
+  notificationCodeInputRegex: /^[A-Za-z0-9]*$/,
 };
 
 export const ADDRESSES_TYPES = {
@@ -193,8 +195,8 @@ export enum Route {
   Notifications = 'Notifications',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
-  ChangeEmail = 'ChangeEmail',
   AirdropCreateWalletSubscription = 'AirdropCreateWalletSubscription',
+  UpdateEmailNotification = 'UpdateEmailNotification',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -280,12 +282,10 @@ export enum TxType {
 }
 
 export enum ConfirmAddressFlowType {
-  FIRST_ADDRESS = 'FIRST_ADDRESS',
-  CURRENT_ADDRESS = 'CURRENT_ADDRESS',
-  NEW_ADDRESS = 'NEW_ADDRESS',
-  DELETE_ADDRESS = 'DELETE_ADDRESS',
   SUBSCRIBE = 'SUBSCRIBE',
   UNSUBSCRIBE = 'UNSUBSCRIBE',
+  UPDATE_CURRENT = 'UPDATE_CURRENT',
+  UPDATE_NEW = 'UPDATE_NEW',
 }
 
 export interface InfoContainerContent {
@@ -402,6 +402,8 @@ export interface AddNotificationEmailParams {
   isBackArrow: boolean;
   description: string;
   onSkipSuccess?: () => void;
+  inputAutofocus: boolean;
+  additionalContent?: React.ReactNode;
 }
 
 export type RootStackParams = {
@@ -531,6 +533,7 @@ export type RootStackParams = {
     onBack?: () => void;
     children: React.ReactNode;
     isBackArrow?: boolean;
+    gestureEnabled?: boolean;
   };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
@@ -556,20 +559,22 @@ export type RootStackParams = {
     balance: number;
     header: string;
   };
-  [Route.Notifications]: undefined;
   [Route.AddEmail]: {
     walletsToSubscribe?: Wallet[];
+  };
+  [Route.Notifications]: {
+    onBackArrow: () => void;
   };
   [Route.ConfirmEmail]: {
     email: string;
     newAddress?: string;
+    wallets?: Wallet[];
     flowType: ConfirmAddressFlowType;
-    walletsToSubscribe?: Wallet[];
     onBack?: () => void;
-    onSuccess: () => void;
+    onSuccess: (arg?: any) => void;
   };
-  [Route.ChangeEmail]: {
-    email: string;
+  [Route.UpdateEmailNotification]: {
+    subscribedWallets: Wallet[];
   };
 };
 

@@ -18,6 +18,7 @@ export const getOnboardingAddEmailParams = (): AddNotificationEmailParams => ({
       },
     });
   },
+  inputAutofocus: false,
   isBackArrow: false,
   title: i18n.onboarding.onboarding,
   description: i18n.onboarding.addNotificationEmailDescription,
@@ -40,6 +41,7 @@ export const getAppUpdateAddEmailParams = (): AddNotificationEmailParams => ({
   onSkipSuccess: () => {
     NavigationService.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
   },
+  inputAutofocus: false,
   isBackArrow: false,
   title: i18n.notifications.notifications,
   description: i18n.onboarding.addNotificationEmailDescription,

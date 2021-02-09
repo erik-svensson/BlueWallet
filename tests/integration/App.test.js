@@ -27,11 +27,13 @@ beforeEach(() => {
 describe('unit - LegacyWallet', function() {
   it('serialize and unserialize work correctly', () => {
     const a = new LegacyWallet();
+
     +a.fetchBalance(); // to initalize BlueElectrum, to be replaced with something better
     a.setLabel('my1');
     const key = JSON.stringify(a);
 
     const b = LegacyWallet.fromJson(key);
+
     assert(key === JSON.stringify(b));
 
     assert.strictEqual(key, JSON.stringify(b));
@@ -39,6 +41,7 @@ describe('unit - LegacyWallet', function() {
 
   it('can validate addresses', () => {
     const w = new LegacyWallet();
+
     assert.ok(w.isAddressValid('YRMDysNqxPQiHee3NodziKKsHhRvysur63'));
     assert.ok(!w.isAddressValid('YRMDysNqxPQiHee3NodziKKsHhRvysur64'));
     assert.ok(!w.isAddressValid('3BDsBDxDimYgNZzsqszNZobqQq3yeUoJf2'));
@@ -58,6 +61,7 @@ it('SegwitP2SHWallet can generate segwit P2SH address from WIF', async () => {
 
 it('Wallet can fetch balance', async () => {
   const w = new LegacyWallet();
+
   w._address = 'YWw3NfAvYyZfMgzqooG4b4NYUzBdAToYba'; // hack internals
   assert.ok(w.getBalance() === 0);
   assert.ok(w.getUnconfirmedBalance() === 0);
@@ -69,6 +73,7 @@ it('Wallet can fetch balance', async () => {
 
 it('Wallet can fetch UTXO', async () => {
   const w = new LegacyWallet();
+
   w._address = 'YWw3NfAvYyZfMgzqooG4b4NYUzBdAToYba';
   assert.strictEqual(w.getAddress(), 'YWw3NfAvYyZfMgzqooG4b4NYUzBdAToYba');
   await w.fetchUtxos();
@@ -77,6 +82,7 @@ it('Wallet can fetch UTXO', async () => {
 
 xit('Wallet can fetch TXs', async () => {
   const w = new LegacyWallet();
+
   w._address = 'YRMrqNUKAfA2bQ7RmSz1hLYCeGAtci8NkT';
   await w.fetchTransactions();
   assert.ok(w.getTransactions().length >= 1);
@@ -87,6 +93,7 @@ xit('Wallet can fetch TXs', async () => {
     blocktime: 1585665354,
     value: 449995000000,
   };
+
   assert.strictEqual(tx0['blockhash'], txExpected['blockhash']);
   assert.strictEqual(tx0['blocktime'], txExpected['blocktime']);
   assert.strictEqual(tx0['value'], txExpected['value']);

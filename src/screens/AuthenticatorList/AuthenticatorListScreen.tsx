@@ -55,6 +55,7 @@ class AuthenticatorListScreen extends Component<Props, State> {
   };
   componentDidMount() {
     const { loadAuthenticators } = this.props;
+
     loadAuthenticators();
   }
 
@@ -63,11 +64,13 @@ class AuthenticatorListScreen extends Component<Props, State> {
 
   readPsbt = () => {
     const { navigation } = this.props;
+
     navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (psbt: string) => {
         if (isCodeChunked(psbt)) {
           const [chunkNo, chunksQuantity, codeValue] = psbt.split(';');
           const newCodeValue = this.state.codeValue.concat(codeValue);
+
           return this.setState({ codeValue: newCodeValue }, () => {
             if (chunkNo === chunksQuantity) {
               this.signTransaction(this.state.codeValue);
@@ -88,6 +91,7 @@ class AuthenticatorListScreen extends Component<Props, State> {
 
   signTransaction = (psbt: string) => {
     const { navigation, signTransaction } = this.props;
+
     signTransaction(psbt, {
       onSuccess: ({
         finalizedPsbt: { recipients, tx, fee, vaultTxType },
@@ -100,6 +104,7 @@ class AuthenticatorListScreen extends Component<Props, State> {
           vaultTxType === bitcoin.payments.VaultTxType.Recovery
             ? i18n.message.cancelTxSuccess
             : i18n.send.transaction.fastSuccess;
+
         navigation.navigate(Route.SendCoinsConfirm, {
           fee,
           // dirty hack, pretending that we are sending from real wallet
@@ -165,16 +170,19 @@ class AuthenticatorListScreen extends Component<Props, State> {
 
   hasAuthenticators = () => {
     const { authenticators } = this.props;
+
     return !!authenticators.length;
   };
 
   getAuthenticatorsList = () => {
     const { authenticators } = this.props;
+
     return authenticators.sort((a, b) => b.createdAt.valueOf() - a.createdAt.valueOf());
   };
 
   render() {
     const { navigation, loadAuthenticators, isLoading } = this.props;
+
     return (
       <ScreenTemplate
         noScroll={true}

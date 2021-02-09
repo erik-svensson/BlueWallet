@@ -77,8 +77,10 @@ export class AbstractHDWallet extends LegacyWallet {
   _getAddressWithLowestBalance() {
     let min = 1e6;
     let addr_min = false;
+
     for (const addr in this._addr_balances) {
       const balance = this._addr_balances[addr].total;
+
       if (balance === 0) return addr;
       if (balance < min) {
         min = balance;
@@ -110,6 +112,7 @@ export class AbstractHDWallet extends LegacyWallet {
 
   async fetchTransactions() {
     const txids_to_update = [];
+
     this._lastTxFetch = new Date().getTime();
     const tx_addr_dict = await BlueElectrum.multiGetHistoryByAddress(this.getAddress());
 
@@ -155,6 +158,7 @@ export class AbstractHDWallet extends LegacyWallet {
 
   async fetchBalance() {
     const balance = await BlueElectrum.multiGetBalanceByAddress(this.getAddress());
+
     this.balance = balance.balance + balance.unconfirmed_balance;
     this.confirmed_balance = balance.balance;
     this.incoming_balance = balance.incoming_balance;
@@ -174,6 +178,7 @@ export class AbstractHDWallet extends LegacyWallet {
   async fetchUtxos() {
     this.utxo = [];
     const utxos = await BlueElectrum.multiGetUtxoByAddress(this.getAddress());
+
     this.utxo = utxos;
     return this.utxo;
   }

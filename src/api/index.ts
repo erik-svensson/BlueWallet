@@ -1,2 +1,2 @@
-export * from './emailApi';
-export * from './types';
+export * from './emailNotifications/client';
+export * from './emailNotifications/types';

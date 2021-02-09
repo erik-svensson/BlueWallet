@@ -26,6 +26,7 @@ export const GenericInputItem = (props: Props) => {
   };
   const onFocus = () => {
     const { maxLength, validate, validateOnSave } = props;
+
     NavigationService.navigate(Route.EditText, {
       title,
       label,
@@ -36,5 +37,6 @@ export const GenericInputItem = (props: Props) => {
       maxLength,
     });
   };
+
   return <InputItem testID={props.testID} focused value={value} onFocus={onFocus} label={label} />;
 };

@@ -74,7 +74,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
       email: params.email,
       flowType: params.flowType,
       onSuccess: params.onSuccess,
-      walletsToSubscribe: params.wallets,
+      wallets: params.wallets,
     });
   };
 
@@ -84,6 +84,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         params: { email, wallets, onSkip, subtitle, description },
       },
     } = this.props;
+
     return (
       <ScreenTemplate
         header={<Header isBackArrow title={i18n.settings.notifications} />}

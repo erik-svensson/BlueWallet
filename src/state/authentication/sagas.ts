@@ -1,7 +1,6 @@
 import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 
 import { CONST } from 'app/consts';
-import { BlueApp } from 'app/legacy';
 import { SecureStorageService, StoreService } from 'app/services';
 
 import {
@@ -28,7 +27,6 @@ export function* checkCredentialsSaga(action: CheckCredentialsAction | unknown) 
   const { meta } = action as CheckCredentialsAction;
 
   try {
-    yield BlueApp.startAndDecrypt();
     const pin = yield call(SecureStorageService.getSecuredValue, CONST.pin);
     const transactionPassword = yield call(SecureStorageService.getSecuredValue, CONST.transactionPassword);
     const credentials = {
@@ -50,8 +48,10 @@ export function* checkCredentialsSaga(action: CheckCredentialsAction | unknown) 
 
 export function* authenticateSaga(action: AuthenticateAction | unknown) {
   const { meta, payload } = action as AuthenticateAction;
+
   try {
     const storedPin = yield call(SecureStorageService.getSecuredValue, CONST.pin);
+
     if (payload.pin !== storedPin) {
       throw new Error('Wrong pin');
     }
@@ -71,6 +71,7 @@ export function* authenticateSaga(action: AuthenticateAction | unknown) {
 
 export function* createPinSaga(action: CreatePinAction | unknown) {
   const { meta, payload } = action as CreatePinAction;
+
   try {
     yield call(SecureStorageService.setSecuredValue, CONST.pin, payload.pin);
 
@@ -89,6 +90,7 @@ export function* createPinSaga(action: CreatePinAction | unknown) {
 
 export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) {
   const { meta, payload } = action as CreateTxPasswordAction;
+
   try {
     yield call(SecureStorageService.setSecuredValue, CONST.transactionPassword, payload.txPassword, true);
     yield put(createTxPasswordSuccess());
@@ -105,6 +107,7 @@ export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) 
 
 export function* checkTcSaga() {
   const tcVersion = yield call(StoreService.getStoreValue, CONST.tcVersion);
+
   if (tcVersion && Number(tcVersion) >= CONST.tcVersionRequired) {
     yield put(setIsTcAccepted(true));
   }
@@ -112,6 +115,7 @@ export function* checkTcSaga() {
 
 export function* setUserVersionSaga(action: SetUserVersionAction | unknown) {
   const { payload } = action as SetUserVersionAction;
+
   try {
     yield call(StoreService.setStoreValue, CONST.userVersion, payload.userVersion);
 
@@ -123,6 +127,7 @@ export function* setUserVersionSaga(action: SetUserVersionAction | unknown) {
 
 export function* checkUserVersionSaga() {
   const userVersion = yield call(StoreService.getStoreValue, CONST.userVersion);
+
   if (userVersion) {
     yield put(setUserVersionSuccess(userVersion));
   }

@@ -4,6 +4,7 @@ export default class StoreService {
   async getStoreValue(key: string): Promise<string> {
     try {
       const value = (await AsyncStorage.getItem(key)) || '';
+
       return value;
     } catch (_) {
       return '';

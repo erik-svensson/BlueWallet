@@ -56,8 +56,10 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     const { navigation } = this.props;
 
     const onError = () => this.showAlert(() => this.navigateToIntegrateRecoveryPublicKeyForAR());
+
     try {
       const wallet = new HDSegwitP2SHArWallet([recoveryPublicKey]);
+
       navigation.goBack();
       this.createWalletMessage(wallet, onError);
     } catch (_) {
@@ -115,11 +117,12 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     navigation.navigate(Route.Confirm, {
       title: i18n.notifications.notifications,
       children: this.renderConfirmScreenContent(),
+      gestureEnabled: false,
       onConfirm: () =>
         navigation.navigate(Route.ConfirmEmail, {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
-          walletsToSubscribe: [wallet],
+          wallets: [wallet],
           onSuccess: isAfterAirdrop()
             ? this.navigateToSuccesfullNotificationSubscriptionMessage
             : () => this.navigateToAirdropWalletSubscription(wallet, true),
@@ -252,6 +255,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       this.showAlert(() => {
         navigation.navigate(Route.CreateWallet, { parentRouteName: this.props.route.name });
       }, i18n.wallets.add.failed);
+
     this.createWalletMessage(wallet, onError);
   };
 

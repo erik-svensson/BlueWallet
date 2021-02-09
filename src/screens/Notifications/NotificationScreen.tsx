@@ -33,13 +33,15 @@ interface Props {
 export class NotificationScreen extends Component<Props> {
   componentDidMount() {
     const { wallets, checkSubscription, email } = this.props;
+
     !!email && wallets.length && checkSubscription(wallets, email);
   }
 
-  onChangeEmailPress = () =>
-    this.props.navigation.navigate(Route.ChangeEmail, {
-      email: this.props.email,
+  onChangeEmailPress = () => {
+    this.props.navigation.navigate(Route.UpdateEmailNotification, {
+      subscribedWallets: this.props.subscribedWallets,
     });
+  };
 
   renderConfirmScreenContent = () => (
     <>
@@ -57,6 +59,17 @@ export class NotificationScreen extends Component<Props> {
       onConfirm: this.deleteEmail,
     });
 
+  navigateBackToScreen = () => {
+    const {
+      navigation,
+      route: {
+        params: { onBackArrow },
+      },
+    } = this.props;
+
+    navigation.navigate(Route.Notifications, { onBackArrow });
+  };
+
   goToDeleteSuccessScreen = () =>
     CreateMessage({
       title: i18n.message.success,
@@ -64,7 +77,7 @@ export class NotificationScreen extends Component<Props> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.notifications.goToNotifications,
-        onPress: () => this.props.navigation.navigate(Route.Notifications),
+        onPress: () => this.navigateBackToScreen(),
       },
     });
 
@@ -92,6 +105,7 @@ export class NotificationScreen extends Component<Props> {
 
   onAddEmailPress = () => {
     this.props.navigation.navigate(Route.AddNotificationEmail, {
+      inputAutofocus: true,
       title: i18n.notifications.notifications,
       isBackArrow: true,
       description: i18n.notifications.addYourEmailForDescription,
@@ -103,7 +117,7 @@ export class NotificationScreen extends Component<Props> {
           buttonProps: {
             title: i18n.notifications.goToNotifications,
             onPress: () => {
-              this.props.navigation.navigate(Route.Notifications);
+              this.navigateBackToScreen();
             },
           },
         });
@@ -142,15 +156,17 @@ export class NotificationScreen extends Component<Props> {
     );
 
   render() {
-    const { subscribedWallets, email, navigation } = this.props;
+    const {
+      subscribedWallets,
+      email,
+      route: {
+        params: { onBackArrow },
+      },
+    } = this.props;
+
     return (
       <ScreenTemplate
-        header={
-          <Header
-            onBackArrow={() => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings })}
-            title={i18n.settings.notifications}
-          />
-        }
+        header={<Header isBackArrow={true} onBackArrow={onBackArrow} title={i18n.settings.notifications} />}
         noScroll
         footer={this.renderFooter()}
       >
@@ -158,7 +174,7 @@ export class NotificationScreen extends Component<Props> {
           <>
             <Text style={styles.title}>{i18n.notifications.title}</Text>
             <Text style={styles.description}>{i18n.notifications.description}</Text>
-            <View style={styles.amountAddress}>
+            <View style={styles.currentAddress}>
               <Text style={styles.email}>{this.props.email}</Text>
             </View>
             {!!subscribedWallets.length && (
@@ -235,8 +251,13 @@ const styles = StyleSheet.create({
   itemRow: {
     marginVertical: 8,
   },
-  amountAddress: { width: '100%', borderBottomColor: palette.grey, borderBottomWidth: 1, paddingBottom: 10 },
-  email: { ...typography.caption, color: palette.textGrey },
+  currentAddress: {
+    width: '100%',
+    borderBottomColor: palette.grey,
+    borderBottomWidth: 1,
+    paddingBottom: 10,
+  },
+  email: { ...typography.caption, color: palette.textBlack },
   noWalletsContainer: {
     flex: 1,
     alignItems: 'center',

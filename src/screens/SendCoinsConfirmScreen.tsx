@@ -43,6 +43,7 @@ interface Props {
 class SendCoinsConfirmScreen extends Component<Props> {
   getAmountByTx = (txDecoded: Transaction): { my: number; foreign: number } => {
     const { fromWallet } = this.props.route.params;
+
     return txDecoded.outs.reduce(
       (amount: { my: number; foreign: number }, out: { value: number; script: Uint8Array }) => {
         if (fromWallet.isOutputScriptMine(out.script)) {
@@ -65,6 +66,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const balance = fromWallet.balance;
     const incomingBalance = fromWallet.incoming_balance;
     const amount = this.getAmountByTx(txDecoded);
+
     if (isAlert) {
       return {
         availableBalance: satoshiToBtc(balance - amount.my - amount.foreign).toNumber() - fee,
@@ -74,6 +76,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
     if (pendingAmountDecrease !== undefined) {
       const decreasePending = roundBtcToSatoshis(pendingAmountDecrease);
+
       return {
         availableBalance: satoshiToBtc(balance + amount.my),
         pendingBalance: satoshiToBtc(incomingBalance).toNumber() - decreasePending,
@@ -160,6 +163,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
   shouldRenderNewBalances = () => {
     const { fromWallet } = this.props.route.params;
+
     return !!(fromWallet.balance !== undefined && fromWallet.incoming_balance !== undefined);
   };
 
@@ -170,6 +174,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const { fromWallet, isAlert } = params;
 
     const { availableBalance, pendingBalance } = this.getNewBalances();
+
     return (
       <View style={styles.balancesContainer}>
         {isAlert && <Warning />}

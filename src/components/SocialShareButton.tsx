@@ -17,9 +17,11 @@ export const SocialShareButton: FC<Props> = ({ source, shareOptions }) => {
       await Share.shareSingle(shareOptions);
     } catch (error) {
       const errorMsg = `SocialShareButton ${shareOptions.social} error: ${JSON.stringify(error)}`;
+
       captureException(errorMsg);
     }
   };
+
   return (
     <TouchableOpacity style={styles.icon} onPress={addPostToSocialMediaApp}>
       <Image style={styles.icon} source={source} />

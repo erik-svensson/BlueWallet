@@ -134,6 +134,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
 
   validateAmount = (amount?: string) => {
     const a = Number(amount);
+
     if (Number.isNaN(a)) {
       return i18n._.invalid;
     }
@@ -147,6 +148,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
 
   renderCommonCardContent = () => {
     const { fromDate, toDate, fromAmount, toAmount } = this.props.filters;
+
     return (
       <>
         <View style={styles.spacing10}>
@@ -215,6 +217,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
           <View style={styles.statusesContainer}>
             {this.transactionTagsList.map(({ tag, text }) => {
               const isActive = this.isTagActive(tag);
+
               return (
                 <TouchableOpacity
                   onPress={() => this.props.toggleTransactionTag(tag)}
@@ -234,6 +237,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
 
   onContactPress = (data: string) => {
     const addressData = processAddressData(data);
+
     this.setAddress(addressData.address);
   };
 

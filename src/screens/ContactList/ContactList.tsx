@@ -17,10 +17,12 @@ interface Props {
 export class ContactList extends React.PureComponent<Props> {
   get sections(): ReadonlyArray<SectionListData<Contact>> {
     const sections = {};
+
     this.props.contacts
       .sort((a, b) => a.name.localeCompare(b.name))
       .forEach(contact => {
         const firstLetter = contact.name.charAt(0);
+
         if (sections[firstLetter]) {
           sections[firstLetter].push(contact);
         } else {

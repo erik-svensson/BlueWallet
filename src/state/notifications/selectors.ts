@@ -1,10 +1,12 @@
 import { createSelector } from 'reselect';
 
+import { EmailNotificationsError } from 'app/api';
+import { GeneralHttpError } from 'app/api/client';
+import { CONST } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { WalletsState } from 'app/state/wallets/reducer';
 import { getById } from 'app/state/wallets/selectors';
 
-import { messages } from '../../../error';
 import { NotificationState } from './reducer';
 
 const i18n = require('../../../loc');
@@ -18,15 +20,24 @@ export const sessionToken = createSelector(local, state => state.sessionToken);
 export const notificationError = createSelector(local, state => state.error);
 export const storedEmail = createSelector(local, state => state.email);
 export const storedPin = createSelector(local, state => state.pin);
-export const readableError = createSelector(notificationError, err => {
-  if (err.startsWith(messages.requestFailed5XX)) {
+export const failedTries = createSelector(local, state => state.failedTries);
+
+export const readableError = createSelector(notificationError, failedTries, (errorMsg, failNo) => {
+  if (errorMsg.includes(GeneralHttpError.NO_MESSAGE) || errorMsg.includes(GeneralHttpError.NO_RESPONSE)) {
     return i18n.connectionIssue.couldntConnectToServer;
   }
-  if (err === messages.invalidEmail) {
+
+  if (errorMsg.includes(EmailNotificationsError.INVALID_EMAIL)) {
     return i18n.notifications.invalidAddressError;
   }
-  return err;
+
+  if (errorMsg.includes(EmailNotificationsError.WRONG_PIN) && failNo < CONST.emailCodeErrorMax) {
+    return i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - failNo });
+  }
+
+  return errorMsg;
 });
+
 export const isLoading = createSelector(local, state => state.isLoading);
 
 export const isWalletSubscribed = createSelector(

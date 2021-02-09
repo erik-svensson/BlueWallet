@@ -1,5 +1,8 @@
-import { AirdropCheckWalletsSubscription } from 'app/api';
 import { WalletPayload } from 'app/consts';
+
+export interface AirdropCheckWalletsSubscription {
+  hashes: string[];
+}
 
 import api from './client';
 

@@ -1,35 +1,25 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { messages } from 'app/../error';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate, Button, FlatButton, CodeInput } from 'app/components';
-import {
-  Route,
-  RootStackParams,
-  ConfirmAddressFlowType,
-  CONST,
-  ActionMeta,
-  WalletPayload,
-  InfoContainerContent,
-  Wallet,
-} from 'app/consts';
-import { walletToAddressesGenerationBase, getWalletHashedPublicKeys } from 'app/helpers/wallets';
+import { Header, ScreenTemplate, Button, CodeInput, TimeoutButton } from 'app/components';
+import { Route, RootStackParams, ConfirmAddressFlowType, CONST, InfoContainerContent } from 'app/consts';
 import { ApplicationState } from 'app/state';
-import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import {
   authenticateEmail,
-  AuthenticateEmailAction,
+  AuthenticateEmailActionCreator,
   createNotificationEmail,
-  CreateNotificationEmailAction,
+  CreateNotificationEmailActionCreator,
   subscribeWallet,
-  SubscribeWalletAction,
   unsubscribeWallet,
-  UnsubscribeWalletAction,
+  UnsubscribeWalletActionCreator,
+  SubscribeWalletActionCreator,
+  SetErrorActionCreator,
+  setError as setErrorAction,
 } from 'app/state/notifications/actions';
-import { sessionToken, readableError, storedEmail } from 'app/state/notifications/selectors';
+import { sessionToken, readableError, storedEmail, failedTries } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -37,32 +27,30 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.ConfirmEmail>;
   route: RouteProp<RootStackParams, Route.ConfirmEmail>;
-  createNotificationEmail: (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
-  subscribe: (wallets: WalletPayload[], email: string, lang: string) => SubscribeWalletAction;
-  unsubscribe: (hashes: string[], email: string) => UnsubscribeWalletAction;
-  authenticate: (session_token: string, pin: string, meta: ActionMeta) => AuthenticateEmailAction;
-  language: string;
+  createNotificationEmail: CreateNotificationEmailActionCreator;
+  subscribe: SubscribeWalletActionCreator;
+  unsubscribe: UnsubscribeWalletActionCreator;
+  authenticate: AuthenticateEmailActionCreator;
   sessionToken: string;
   notificationError: string;
   storedEmail: string;
   storedPin: string;
+  setError: SetErrorActionCreator;
+  failedTries: number;
 }
 
 interface State {
   code: string;
-  failNo: number;
-  error: string;
 }
 
 class ConfirmEmailScreen extends Component<Props, State> {
   state = {
     code: '',
-    error: '',
-    failNo: 0,
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     this.infoContainerContent.onInit?.();
+    this.props.setError('');
   }
 
   get infoContainerContent(): InfoContainerContent {
@@ -71,6 +59,10 @@ class ConfirmEmailScreen extends Component<Props, State> {
         return this.subscribeFlowContent();
       case ConfirmAddressFlowType.UNSUBSCRIBE:
         return this.unsubscribeFlowContent();
+      case ConfirmAddressFlowType.UPDATE_CURRENT:
+        return this.updateCurrentEmailFlowContent();
+      case ConfirmAddressFlowType.UPDATE_NEW:
+        return this.updateNewEmailFlowContent();
       default:
         return {};
     }
@@ -78,29 +70,23 @@ class ConfirmEmailScreen extends Component<Props, State> {
 
   subscribeFlowContent = () => {
     const {
-      language,
       createNotificationEmail,
       storedEmail,
       route: {
-        params: { email, walletsToSubscribe, onSuccess },
+        params: { email, wallets, onSuccess },
       },
     } = this.props;
 
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
-      onInit: async () => {
-        const walletsToSubscribePayload = await Promise.all(
-          walletsToSubscribe!.map((wallet: Wallet) => walletToAddressesGenerationBase(wallet)),
-        );
-
-        this.props.subscribe(walletsToSubscribePayload, email, language);
+      onInit: () => {
+        wallets && this.props.subscribe(wallets, email);
       },
       onCodeConfirm: () => {
         if (storedEmail) {
           return onSuccess();
         }
-
         createNotificationEmail(email, { onSuccess });
       },
     };
@@ -109,17 +95,15 @@ class ConfirmEmailScreen extends Component<Props, State> {
   unsubscribeFlowContent = () => {
     const {
       route: {
-        params: { email, walletsToSubscribe, onSuccess },
+        params: { email, wallets, onSuccess },
       },
     } = this.props;
 
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
-      onInit: async () => {
-        const hashes = await Promise.all(walletsToSubscribe!.map(wallet => getWalletHashedPublicKeys(wallet)));
-
-        this.props.unsubscribe(hashes, email);
+      onInit: () => {
+        wallets && this.props.unsubscribe(wallets, email);
       },
       onCodeConfirm: () => {
         onSuccess();
@@ -127,32 +111,42 @@ class ConfirmEmailScreen extends Component<Props, State> {
     };
   };
 
+  updateCurrentEmailFlowContent = () => {
+    const {
+      route: {
+        params: { onSuccess },
+      },
+    } = this.props;
+
+    return {
+      title: i18n.notifications.confirmCurrentTitle,
+      description: i18n.notifications.verifyActionDescription,
+      onCodeConfirm: onSuccess,
+    };
+  };
+
+  updateNewEmailFlowContent = () => {
+    const {
+      route: {
+        params: { onSuccess },
+      },
+    } = this.props;
+
+    return {
+      title: i18n.notifications.confirmCurrentTitle,
+      description: i18n.notifications.verifyActionDescription,
+      onCodeConfirm: onSuccess,
+    };
+  };
+
   onError = () => {
-    if (this.props.notificationError === messages.alreadySubscribed) {
-      return this.setState({
-        error: this.props.notificationError,
-        code: '',
-      });
+    const { failedTries, setError } = this.props;
+
+    this.setCode('');
+    if (failedTries === CONST.emailCodeErrorMax) {
+      this.infoContainerContent?.onInit?.();
+      setError(i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax }));
     }
-
-    const newFailNo = this.state.failNo + 1;
-    const errorMessage =
-      newFailNo < CONST.emailCodeErrorMax
-        ? i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - newFailNo })
-        : i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax });
-
-    return this.setState(
-      {
-        code: '',
-        failNo: newFailNo,
-        error: errorMessage,
-      },
-      () => {
-        if (newFailNo === CONST.emailCodeErrorMax) {
-          this.infoContainerContent?.onInit?.();
-        }
-      },
-    );
   };
 
   onConfirm = () => {
@@ -165,18 +159,33 @@ class ConfirmEmailScreen extends Component<Props, State> {
     });
   };
 
-  onChange = (code: string) =>
-    this.setState({ code, error: '', failNo: this.state.failNo >= CONST.emailCodeErrorMax ? 0 : this.state.failNo });
+  setCode = (code: string) => {
+    this.setState({ code });
+  };
 
-  onResend = () => {};
+  onChange = (code: string) => {
+    const { setError, notificationError } = this.props;
+
+    !!notificationError && setError('');
+    this.setCode(code);
+  };
+
+  onResend = () => {
+    const { setError } = this.props;
+
+    this.setCode('');
+    setError('');
+    this.infoContainerContent.onInit?.();
+  };
 
   render() {
+    const { notificationError } = this.props;
     const { email, onBack } = this.props.route.params;
 
     return (
       <ScreenTemplate
         noScroll
-        header={<Header title={i18n.settings.notifications} onBackArrow={onBack} />}
+        header={<Header isBackArrow={true} title={i18n.settings.notifications} onBackArrow={onBack} />}
         footer={
           <>
             <Button
@@ -184,24 +193,25 @@ class ConfirmEmailScreen extends Component<Props, State> {
               onPress={this.onConfirm}
               disabled={this.state.code.length !== CONST.codeLength}
             />
-            {/* <FlatButton // uncomment when api for resend works
+            <TimeoutButton
+              testID="resend-code-email"
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
               onPress={this.onResend}
-            />  TODO uncomment when resend is ready on backend */}
+            />
           </>
         }
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{this.infoContainerContent?.title}</Text>
+          <Text style={typography.headline4}>{this.infoContainerContent.title}</Text>
           <Text style={styles.infoDescription}>
-            {this.infoContainerContent?.description}
-            <Text style={styles.email}>{`\n${email}`}</Text>
+            {this.infoContainerContent.description}
+            <Text style={styles.email}>{email}</Text>
           </Text>
         </View>
         <View style={styles.inputItemContainer}>
-          <CodeInput value={this.state.code} onTextChange={this.onChange} isError={!!this.state.error} />
-          <Text style={styles.error}>{this.state.error}</Text>
+          <CodeInput value={this.state.code} onTextChange={this.onChange} isError={!!notificationError} />
+          {!!notificationError && <Text style={styles.error}>{notificationError}</Text>}
         </View>
       </ScreenTemplate>
     );
@@ -209,10 +219,10 @@ class ConfirmEmailScreen extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  language: appSettingsSelectors.language(state),
   sessionToken: sessionToken(state),
   notificationError: readableError(state),
   storedEmail: storedEmail(state),
+  failedTries: failedTries(state),
 });
 
 const mapDispatchToProps = {
@@ -220,6 +230,7 @@ const mapDispatchToProps = {
   subscribe: subscribeWallet,
   unsubscribe: unsubscribeWallet,
   authenticate: authenticateEmail,
+  setError: setErrorAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmailScreen);
@@ -231,7 +242,7 @@ const styles = StyleSheet.create({
   infoDescription: {
     ...typography.caption,
     color: palette.textGrey,
-    margin: 20,
+    marginTop: 20,
     textAlign: 'center',
   },
   inputItemContainer: {

@@ -53,11 +53,11 @@ export { default as AirdropThankYouScreen } from './AirdropThankYou';
 export { default as AirdropRequirementsScreen } from './AirdropRequirements';
 export { default as AirdropFinishedWalletDetailsScreen } from './AirdropFinishedWalletDetails';
 export { default as LocalConfirmNotificationCodeScreen } from './LocalConfirmNotificationCodeScreen';
-export { default as AddNotificationEmailScreen } from './AddNotificationEmailScreen';
 export { default as AirdropCreateWalletSubscription } from './AirdropCreateWalletSubscription';
 export {
   NotificationScreen,
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
-  ChangeEmailScreen,
+  AddNotificationEmailScreen,
+  UpdateEmailNotificationScreen,
 } from './Notifications';

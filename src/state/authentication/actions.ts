@@ -241,8 +241,8 @@ export const checkUserVersion = (): CheckUserVersionAction => ({
   type: AuthenticationAction.CheckUserVersion,
 });
 
-export type SetUserVersionActionFunction = (userVersion: USER_VERSIONS) => SetUserVersionAction;
-export const setUserVersion: SetUserVersionActionFunction = userVersion => ({
+export type SetUserVersionActionCreator = (userVersion: USER_VERSIONS) => SetUserVersionAction;
+export const setUserVersion: SetUserVersionActionCreator = userVersion => ({
   type: AuthenticationAction.SetUserVersion,
   payload: {
     userVersion,

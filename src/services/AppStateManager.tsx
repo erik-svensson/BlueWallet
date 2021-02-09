@@ -26,6 +26,7 @@ export default class AppStateManager extends PureComponent<Props, State> {
   handleAppStateChange = (nextAppState: string) => {
     const { handleAppComesToBackground, handleAppComesToForeground } = this.props;
     const { appState } = this.state;
+
     if (appState === 'background' && nextAppState === 'active') {
       !!handleAppComesToForeground && handleAppComesToForeground();
     }

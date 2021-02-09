@@ -52,17 +52,18 @@ import {
   NotificationScreen,
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
-  ChangeEmailScreen,
   CreateTransactionPassword,
   ConfirmTransactionPassword,
   LocalConfirmNotificationCodeScreen,
   AddNotificationEmailScreen,
   AirdropCreateWalletSubscription,
+  UpdateEmailNotificationScreen,
 } from 'app/screens';
 
 import { MainTabNavigator } from './MainTabNavigator';
 
 const Stack = createStackNavigator<RootStackParams>();
+
 interface Props {
   shouldRenderCredentialsCreation: boolean;
   shouldRenderNotification: boolean;
@@ -172,12 +173,12 @@ export const RootNavigator: FC<Props> = ({
       <Stack.Screen name={Route.ChunkedQrCode} component={ChunkedQrCode} />
       <Stack.Screen name={Route.Notifications} component={NotificationScreen} />
       <Stack.Screen name={Route.ConfirmEmail} component={ConfirmEmailScreen} />
-      <Stack.Screen name={Route.ChangeEmail} component={ChangeEmailScreen} />
       <Stack.Screen name={Route.AirdropDashboard} component={AirdropDashboardScreen} />
       <Stack.Screen name={Route.AirdropThankYou} component={AirdropThankYouScreen} />
       <Stack.Screen name={Route.AirdropFinishedWalletDetails} component={AirdropFinishedWalletDetailsScreen} />
       <Stack.Screen name={Route.AirdropRequirements} component={AirdropRequirementsScreen} />
       <Stack.Screen name={Route.AirdropCreateWalletSubscription} component={AirdropCreateWalletSubscription} />
+      <Stack.Screen name={Route.UpdateEmailNotification} component={UpdateEmailNotificationScreen} />
     </Stack.Navigator>
   );
 };

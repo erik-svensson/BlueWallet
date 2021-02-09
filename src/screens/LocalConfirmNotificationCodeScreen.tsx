@@ -10,8 +10,8 @@ import { ApplicationState } from 'app/state';
 import { selectors as notificationSelectors } from 'app/state/notifications';
 import {
   verifyNotificationEmail as verifyNotificationEmailAction,
-  VerifyNotificationEmailActionFunction,
-  SetErrorActionFunction,
+  VerifyNotificationEmailActionCreator,
+  SetErrorActionCreator,
   setError as setErrorAction,
 } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
@@ -29,8 +29,8 @@ interface Props {
   pin: string;
   error: string;
   email: string;
-  setError: SetErrorActionFunction;
-  verifyNotificationEmail: VerifyNotificationEmailActionFunction;
+  setError: SetErrorActionCreator;
+  verifyNotificationEmail: VerifyNotificationEmailActionCreator;
 }
 
 class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
@@ -44,6 +44,7 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   }
 
   setCode = (userCode: string) => {
+    this.props.error && this.props.setError('');
     this.setState({ userCode });
   };
 
@@ -65,6 +66,7 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   onError = () => {
     const { numberAttempt } = this.state;
     const numberFail = numberAttempt + 1;
+
     if (numberFail === CONST.emailCodeErrorMax) {
       this.resendCode(i18n.onboarding.resendCodeError);
     } else {
@@ -101,6 +103,7 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     const { error } = this.props;
     const { children, title } = this.props.route.params;
     const allowConfirm = numberAttempt < CONST.emailCodeErrorMax;
+
     return (
       <ScreenTemplate
         noScroll
@@ -118,7 +121,6 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
               testID="resend-code-email"
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
-              timeoutSeconds={30}
               onPress={() => this.resendCode()}
             />
           </>

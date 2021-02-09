@@ -19,6 +19,7 @@ export class TermsConditionsSettingsScreen extends React.PureComponent<Props> {
 
   get langVersion() {
     const { language } = this.props;
+
     switch (language) {
       case 'zh':
         return zh;

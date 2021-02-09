@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import { ScreenTemplate, Loader } from 'app/components';
+import { Loader } from 'app/components';
 import { selectors } from 'app/state/electrumX';
 import { typography, palette } from 'app/styles';
 
@@ -31,20 +31,25 @@ export const ConnectionIssuesScreen = () => {
   };
 
   return (
-    <ScreenTemplate>
-      <View style={styles.container}>
-        <Text style={styles.title}>{getTitle()}</Text>
-        <Loader size={137} />
-        <Text style={styles.description}>{getDescription()}</Text>
-      </View>
-    </ScreenTemplate>
+    <View style={styles.container}>
+      <Text style={styles.title}>{getTitle()}</Text>
+      <Loader size={137} />
+      <Text style={styles.description}>{getDescription()}</Text>
+    </View>
   );
 };
 
 export default ConnectionIssuesScreen;
 
 const styles = StyleSheet.create({
-  container: { justifyContent: 'center', alignItems: 'center', flex: 1 },
+  container: {
+    backgroundColor: palette.white,
+    alignItems: 'center',
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    flex: 1,
+    zIndex: 1000,
+  },
   title: { ...typography.headline4, textAlign: 'center', paddingBottom: 66 },
   description: {
     ...typography.body,

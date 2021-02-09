@@ -33,6 +33,7 @@ class CreateAuthenticatorSuccessScreen extends Component<Props> {
 
   navigate = () => {
     const { navigation } = this.props;
+
     navigation.navigate(Route.MainTabStackNavigator, { screen: Route.AuthenticatorList });
   };
 
@@ -63,6 +64,7 @@ class CreateAuthenticatorSuccessScreen extends Component<Props> {
 
 const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: Props): MapStateProps => {
   const { id } = props.route.params;
+
   return {
     authenticator: selectors.getById(state, id),
   };

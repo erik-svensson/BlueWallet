@@ -12,6 +12,7 @@ dayjs.extend(utc);
 
 export const secondsToFormat = (seconds: number, format: string) => {
   const d = dayjs.duration({ seconds });
+
   return dayjs.utc(d.asMilliseconds()).format(format);
 };
 
@@ -43,6 +44,7 @@ export const getUtcDate = (date: DateType | string) => dayjs.utc(date);
 
 export const getTimezoneOffset = () => {
   const offset = -new Date().getTimezoneOffset();
+
   return `GMT ${offset < 0 ? '-' : '+'}${dayjs.duration({ minutes: offset }).asHours()}`;
 };
 

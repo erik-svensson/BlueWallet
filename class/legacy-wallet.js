@@ -15,6 +15,7 @@ const signer = require('../models/signer');
  *  Has private key and single address like "1ABCD....."
  *  (legacy P2PKH compressed)
  */
+
 export class LegacyWallet extends AbstractWallet {
   static type = 'legacy';
   static typeReadable = 'Legacy (P2PKH)';
@@ -34,6 +35,7 @@ export class LegacyWallet extends AbstractWallet {
 
   async generate() {
     const that = this;
+
     return new Promise(function(resolve) {
       if (typeof RNRandomBytes === 'undefined') {
         // CLI/CI environment
@@ -57,6 +59,7 @@ export class LegacyWallet extends AbstractWallet {
         that.secret = bitcoin.ECPair.makeRandom({
           rng(length) {
             const b = Buffer.from(bytes, 'base64');
+
             return b;
           },
           network: config.network,
@@ -69,8 +72,10 @@ export class LegacyWallet extends AbstractWallet {
   getAddress() {
     if (this._address) return this._address;
     let address;
+
     try {
       const keyPair = bitcoin.ECPair.fromWIF(this.secret, config.network);
+
       address = bitcoin.payments.p2pkh({
         pubkey: keyPair.publicKey,
         network: config.network,
@@ -91,6 +96,7 @@ export class LegacyWallet extends AbstractWallet {
    */
   async fetchBalance() {
     const balance = await BlueElectrum.getBalanceByAddress(this.getAddress());
+
     this.balance = balance.confirmed + balance.unconfirmed;
     this.unconfirmed_balance = balance.unconfirmed;
     this.confirmed_balance = balance.balance;
@@ -107,6 +113,7 @@ export class LegacyWallet extends AbstractWallet {
   async fetchUtxos() {
     this.utxo = [];
     const utxos = await BlueElectrum.multiGetUtxoByAddress([this.getAddress()]);
+
     this.utxo = utxos;
 
     return this.utxo;
@@ -142,6 +149,7 @@ export class LegacyWallet extends AbstractWallet {
    */
   createTx(utxos, amount, fee, toAddress) {
     const amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
+
     return signer.createTransaction(utxos, toAddress, amountPlusFee, fee, this.getSecret(), this.getAddress());
   }
 
@@ -150,6 +158,7 @@ export class LegacyWallet extends AbstractWallet {
       return 0;
     }
     let max = 0;
+
     for (const tx of this.getTransactions()) {
       max = Math.max(new Date(tx.received) * 1, max);
     }
@@ -161,6 +170,7 @@ export class LegacyWallet extends AbstractWallet {
     return (array => {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
+
         [array[i], array[j]] = [array[j], array[i]];
       }
       return array[0];
@@ -223,6 +233,7 @@ export class LegacyWallet extends AbstractWallet {
 
     for (const tx of txs_full) {
       let value = 0;
+
       for (const input of tx.inputs) {
         if (!input.txid) continue; // coinbase
         if (this.weOwnAddress(input.addresses[0])) value -= input.value;
@@ -247,6 +258,7 @@ export class LegacyWallet extends AbstractWallet {
 
     this.transactions = this.transactions.filter(t => {
       const duplicatedTx = transactions.find(trans => trans.txid === t.txid);
+
       return !!!duplicatedTx;
     });
 

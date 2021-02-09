@@ -25,11 +25,11 @@ export const ExportWalletXpubScreen = ({ route }: Props) => {
   return (
     <ScreenTemplate header={<Header title={i18n.wallets.exportWalletXpub.header} isBackArrow />}>
       <Text style={styles.title}>{wallet.label}</Text>
-      <View style={styles.qrCodeContainer}>
+      <View testID="wallet-xpub-qr-code" style={styles.qrCodeContainer}>
         <QRCode quietZone={10} value={xpub} size={140} ecl={'H'} />
       </View>
-      <TextAreaItem value={xpub} editable={false} style={styles.textArea} />
-      <CopyButton textToCopy={xpub} />
+      <TextAreaItem testID="wallet-xpub" value={xpub} editable={false} style={styles.textArea} />
+      <CopyButton testID="wallet-xpub-copy-button" textToCopy={xpub} />
     </ScreenTemplate>
   );
 };

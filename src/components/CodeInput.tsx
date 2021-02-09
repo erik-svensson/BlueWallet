@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { CodeField, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 
@@ -12,18 +12,18 @@ interface Props {
   isError?: boolean;
 }
 
-export const CodeInput = ({ value, onTextChange, testID, isError = false }: Props) => {
-  const [_, setValue] = useState('');
+export const CodeInput: FC<Props> = ({ value, onTextChange, testID, isError = false }) => {
+  const setCodeValue = (code: string) => {
+    if (CONST.notificationCodeInputRegex.test(code)) {
+      onTextChange(code);
+    }
+  };
+
   const ref = useBlurOnFulfill({ value, cellCount: CONST.pinCodeLength });
   const [propsInput, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
-    setValue,
+    setValue: setCodeValue,
   });
-
-  const setCodeValue = (code: string) => {
-    setValue(code);
-    onTextChange(code);
-  };
 
   return (
     <CodeField

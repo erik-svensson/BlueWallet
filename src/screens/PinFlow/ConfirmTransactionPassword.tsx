@@ -41,6 +41,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
   onSave = () => {
     const { createTxPassword, navigation } = this.props;
     const { setPassword } = this.props.route.params;
+
     if (setPassword === this.state.password) {
       createTxPassword(setPassword, {
         onSuccess: () => {

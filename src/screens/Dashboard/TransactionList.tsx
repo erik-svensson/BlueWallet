@@ -51,6 +51,7 @@ class TransactionList extends PureComponent<Props> {
 
   getSectionData = () => {
     const { search, transactions, filters, transactionNotes } = this.props;
+
     return getGroupedTransactions(
       transactions,
       curry(filterBySearch)(search),
@@ -82,6 +83,7 @@ class TransactionList extends PureComponent<Props> {
       reference,
       filters,
     } = this.props;
+
     return (
       <SectionList
         testID="dashboard-screen"

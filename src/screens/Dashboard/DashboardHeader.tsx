@@ -17,6 +17,7 @@ interface Props {
 export class DashboardHeader extends React.PureComponent<Props> {
   render() {
     const { onAddPress, onFilterPress } = this.props;
+
     return (
       <GradientView variant={GradientView.Variant.Primary} style={styles.container}>
         <View style={styles.header}>

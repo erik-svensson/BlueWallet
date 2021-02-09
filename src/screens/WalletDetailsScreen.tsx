@@ -42,20 +42,28 @@ interface Props {
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
   componentDidMount() {
-    const { wallet, email, checkSubscription } = this.props;
-    if (!email || !wallet) return;
-    checkSubscription([wallet], email);
+    this.checkSubscription();
   }
+
+  checkSubscription = () => {
+    const { wallet, email, checkSubscription } = this.props;
+
+    if (email && wallet) {
+      checkSubscription([wallet], email);
+    }
+  };
 
   validationError = (value: string): string | undefined => {
     const trimmedValue = value.trim();
     const checkAllWallets =
       value.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase() || value === CONST.allWallets;
     const { walletsLabels, wallet } = this.props;
+
     if (!wallet) {
       return;
     }
     const allOtherWalletLabels = walletsLabels.filter((label: string) => label !== wallet.label);
+
     if (allOtherWalletLabels.includes(trimmedValue)) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
@@ -79,6 +87,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   navigateToDeleteWallet = () => {
     const { deleteWallet, navigation, wallet } = this.props;
+
     if (!wallet) {
       return;
     }
@@ -107,6 +116,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   navigateWithWallet = (route: Route.ExportWalletXpub | Route.ExportWallet) => {
     const { navigation, wallet } = this.props;
+
     if (!wallet) {
       return;
     }
@@ -118,20 +128,25 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   setLabel = (label: string) => {
     const trimmedlabel = label.trim();
     const { wallet, updateWallet } = this.props;
+
     if (!wallet) {
       return;
     }
     const updatedWallet = cloneDeep(wallet);
+
     updatedWallet.setLabel(trimmedlabel);
     updateWallet(updatedWallet);
   };
 
   editAmount = () => {
     const { wallet, navigation } = this.props;
+
     if (!wallet) {
       return;
     }
     navigation.navigate(Route.EditText, {
+      inputTestID: 'wallet-name-input',
+      submitButtonTestID: 'submit-wallet-name-button',
       title: i18n.wallets.details.nameEdit,
       label: i18n.wallets.details.nameLabel,
       onSave: this.setLabel,
@@ -148,7 +163,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
       navigation.navigate(Route.ConfirmEmail, {
         email,
         flowType,
-        walletsToSubscribe: [wallet],
+        wallets: [wallet],
         onSuccess: () => {
           CreateMessage({
             title: i18n.message.success,
@@ -156,18 +171,28 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             type: MessageType.success,
             buttonProps: {
               title: i18n.message.goToWalletDetails,
-              onPress: () => navigation.navigate(Route.WalletDetails, { id: wallet.id }),
+              onPress: () => {
+                this.navigateBackToScreen();
+                this.checkSubscription();
+              },
             },
           });
         },
       });
   };
 
+  navigateBackToScreen = () => {
+    const { navigation, wallet } = this.props;
+
+    wallet && navigation.navigate(Route.WalletDetails, { id: wallet.id });
+  };
+
   onSubscribeButtonPress = () => {
     const { email, navigation, wallet, isSubscribed } = this.props;
+
     if (!wallet) return;
     if (!email) {
-      return navigation.navigate(Route.Notifications);
+      return navigation.navigate(Route.Notifications, { onBackArrow: () => this.navigateBackToScreen() });
     }
 
     if (!isSubscribed) {
@@ -179,16 +204,25 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   render() {
     const { wallet, isSubscribed, isLoading } = this.props;
+
     if (!wallet) {
       return null;
     }
     const isWatchOnly = wallet.type === WatchOnlyWallet.type;
+
     return (
       <ScreenTemplate
         footer={
           <>
-            {!isWatchOnly && <Button onPress={this.navigateToWalletExport} title={i18n.wallets.details.exportWallet} />}
+            {!isWatchOnly && (
+              <Button
+                testID="export-wallet-button"
+                onPress={this.navigateToWalletExport}
+                title={i18n.wallets.details.exportWallet}
+              />
+            )}
             <Button
+              testID="show-xpub-button"
               onPress={this.navigateToWalletXpub}
               title={i18n.wallets.details.showWalletXPUB}
               containerStyle={styles.button}
@@ -200,6 +234,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               loading={isLoading}
             />
             <FlatButton
+              testID="delete-wallet-button"
               onPress={this.navigateToDeleteWallet}
               title={i18n.wallets.details.deleteWallet}
               containerStyle={styles.deleteWalletButtonContainer}
@@ -215,14 +250,16 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
         <View style={styles.nameInputContainer}>
           <View style={styles.labelInput}>
             <Text style={styles.typeLabel}>{i18n.wallets.details.nameLabel}</Text>
-            <Text style={styles.label} onPress={this.editAmount}>
+            <Text testID="wallet-name-text" style={styles.label} onPress={this.editAmount}>
               {wallet.label}
             </Text>
           </View>
         </View>
         <View style={styles.typeContainer}>
           <Text style={styles.typeLabel}>{i18n.wallets.details.typeLabel}</Text>
-          <Text style={styles.typeValue}>{wallet.typeReadable}</Text>
+          <Text testID="wallet-type-text" style={styles.typeValue}>
+            {wallet.typeReadable}
+          </Text>
         </View>
       </ScreenTemplate>
     );
@@ -234,6 +271,7 @@ const mapStateToProps = (
   props: Props,
 ) => {
   const { id } = props.route.params;
+
   return {
     wallet: getById(state, id),
     walletsLabels: getWalletsLabels(state),
