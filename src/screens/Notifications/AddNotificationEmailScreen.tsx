@@ -120,7 +120,10 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { onSkipSuccess } = route.params;
 
     createNotificationEmail('', {
-      onSuccess: onSkipSuccess,
+      onSuccess: () => {
+        this.props.navigation.popToTop();
+        onSkipSuccess?.();
+      },
     });
   };
 
