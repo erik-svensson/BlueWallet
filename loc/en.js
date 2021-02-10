@@ -292,6 +292,10 @@ module.exports = {
       'Would you like to receive transaction notifications from this wallet to your email address ',
     noteFirst: 'Note: ',
     noteSecond: 'If you want to change your email address you can do it later in Settings.',
+    noSubscription: {
+      title: 'Your subscriptions',
+      description: 'You are not subscribed to any notifications.',
+    },
   },
   onboarding: {
     changePin: 'Change PIN',
