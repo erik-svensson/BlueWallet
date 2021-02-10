@@ -2,6 +2,7 @@ import { expect } from 'detox';
 
 import { isBeta, WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers';
 import app from '../pageObjects';
+import { createNewContact } from '../steps';
 
 describe('Address book', () => {
   beforeEach(async () => {
@@ -19,21 +20,21 @@ describe('Address book', () => {
 
     describe('@android @ios @regression', () => {
       it('should display "No results" if couldn\'t find a contact using Search feature', async () => {
-        await app.addressBook.createNewContact('Heisenberg', '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+        await createNewContact('Heisenberg', '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
 
         await app.addressBook.contactsScreen.typeInSearchbar('Walter');
         await expect(app.addressBook.contactsScreen.noContactsFoundIcon).toBeVisible();
       });
 
       it('should be possible to find a contact using Search feature', async () => {
-        await app.addressBook.createNewContact('Heisenberg', '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+        await createNewContact('Heisenberg', '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
 
         await app.addressBook.contactsScreen.typeInSearchbar('Heisenberg');
         await expect(app.addressBook.contactsScreen.getContactElement('Heisenberg')).toBeVisible();
       });
 
       it('should be possible to clear content of the searchbox by clicking on clear button', async () => {
-        await app.addressBook.createNewContact('Heisenberg', '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+        await createNewContact('Heisenberg', '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
 
         await app.addressBook.contactsScreen.typeInSearchbar('Test');
         await app.addressBook.contactsScreen.clearSearchbar();
@@ -80,7 +81,7 @@ describe('Address book', () => {
     const contactName = 'Heisenberg';
 
     beforeEach(async () => {
-      await app.addressBook.createNewContact(contactName, '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+      await createNewContact(contactName, '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
       await app.addressBook.contactsScreen.tapOnContact('Heisenberg');
     });
 

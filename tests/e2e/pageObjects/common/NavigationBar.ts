@@ -12,7 +12,7 @@ const NavigationBar = () => ({
     settings: element(by.id('navigation-tab-3')),
   },
 
-  async changeTab(tab: Tab): Promise<void> {
+  async changeTab(tab: Tab) {
     await actions.tap(this.tabs[tab]);
   },
 });

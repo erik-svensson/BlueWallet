@@ -121,23 +121,10 @@ const AddressBook = () => {
     };
   };
 
-  const contactsScreen = ContactsScreen();
-  const newContact = NewContact();
-  const details = Details();
-
-  const createNewContact = async function(name: string, address: string) {
-    await contactsScreen.tapOnCreateButton();
-    await newContact.addNewContactScreen.typeName(name);
-    await newContact.addNewContactScreen.typeAddress(address);
-    await newContact.addNewContactScreen.submit();
-    await newContact.successScreen.close();
-  };
-
   return {
-    contactsScreen,
-    newContact,
-    details,
-    createNewContact,
+    contactsScreen: ContactsScreen(),
+    newContact: NewContact(),
+    details: Details(),
   };
 };
 

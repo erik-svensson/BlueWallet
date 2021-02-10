@@ -3,6 +3,7 @@ import NavigationBar from './common/NavigationBar';
 import AddressBook from './pages/AddressBook';
 import Authenticators from './pages/Authenticators';
 import BetaVersionScreen from './pages/BetaVersionScreen';
+import Dashboard from './pages/Dashboard';
 import DeveloperRoom from './pages/DeveloperRoom';
 import Onboarding from './pages/Onboarding';
 import TermsConditionsScreen from './pages/TermsConditionsScreen';
@@ -21,6 +22,7 @@ const app = {
   betaVersionScreen: BetaVersionScreen(),
   developerRoom: DeveloperRoom(),
   onboarding: Onboarding(),
+  dashboard: Dashboard(),
   wallets: Wallets(),
   authenticators: Authenticators(),
   addressBook: AddressBook(),
