@@ -59,7 +59,7 @@ export class ActionSheet extends PureComponent<Props> {
     this.timingAnimation(0);
     this.springAnimation(0);
 
-    this.props.navigation.popToTop();
+    this.props.navigation.goBack();
   };
 
   renderWalletItems = () => {
@@ -76,8 +76,8 @@ export class ActionSheet extends PureComponent<Props> {
         selected={index == selectedIndex}
         index={index}
         onPress={() => {
-          this.close();
           onPress(index);
+          this.close();
         }}
       />
     ));

@@ -52,7 +52,7 @@ interface MapStateToProps {
   userVersion: USER_VERSIONS;
 }
 
-interface ActionsDisptach {
+interface ActionsDispatch {
   checkCredentials: Function;
   startElectrumXListeners: () => StartListenersAction;
   updateSelectedLanguage: Function;
@@ -65,7 +65,7 @@ interface OwnProps {
   unlockKey: string;
 }
 
-type Props = MapStateToProps & ActionsDisptach & OwnProps;
+type Props = MapStateToProps & ActionsDispatch & OwnProps;
 
 interface State {
   isBetaVersionRiskAccepted: boolean;
@@ -225,7 +225,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   hasConnectedToServerAtLeaseOnce: electrumXSelectors.hasConnectedToServerAtLeaseOnce(state),
 });
 
-const mapDispatchToProps: ActionsDisptach = {
+const mapDispatchToProps: ActionsDispatch = {
   checkCredentials: checkCredentialsAction,
   checkTc: checkTcAction,
   startElectrumXListeners: startListeners,
