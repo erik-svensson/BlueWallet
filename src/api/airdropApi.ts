@@ -8,7 +8,7 @@ import api from './client';
 
 export const subscribeWallet = (data: WalletPayload) => {
   return new Promise(resolve => {
-    setTimeout(() => resolve({ result: 'success' }), Math.random() * 1000);
+    setTimeout(() => resolve({ result: 'success' }), Math.random() * 5000);
   });
   // api.post(`subscribe/`, data);
 };
