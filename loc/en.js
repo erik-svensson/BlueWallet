@@ -382,7 +382,7 @@ module.exports = {
       address: 'address',
       address_field_is_not_valid: 'Address field is not valid',
       amount_field_is_not_valid: 'Amount field is not valid',
-      amount_is_too_high: "There is a maximum of 21,000,000 BTCV that will ever exist, so don't try to send more!",
+      amount_is_too_high: "There is a maximum of {maxCoinsInput} BTCV that will ever exist, so don't try to send more!",
       amount_placeholder: 'amount to send (in BTCV)',
       cancel: 'Cancel',
       create: 'Create Invoice',
