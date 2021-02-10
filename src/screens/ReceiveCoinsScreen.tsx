@@ -9,13 +9,12 @@ import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, WalletDropdown } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Route, RootStackParams, Wallet } from 'app/consts';
+import { Route, RootStackParams, Wallet, CONST } from 'app/consts';
 import { checkZero } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { selectors, reducer } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
-import BlueApp from '../../BlueApp';
 import logger from '../../logger';
 
 const i18n = require('../../loc');
@@ -56,7 +55,11 @@ class ReceiveCoinsScreen extends Component<Props, State> {
   };
 
   validate = (value: string): string | undefined =>
-    !Number(value.replace(',', '.')) && i18n.send.details.amount_field_is_not_valid;
+    (!Number(value.replace(',', '.')) && i18n.send.details.amount_field_is_not_valid) ||
+    (Number(value) > CONST.maxCoinsInput &&
+      i18n.formatString(i18n.send.details.amount_is_too_high, {
+        maxCoinsInput: CONST.maxCoinsInput.toLocaleString(),
+      }));
 
   editAmount = () => {
     this.props.navigation.navigate(Route.EditText, {
