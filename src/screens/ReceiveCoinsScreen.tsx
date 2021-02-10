@@ -15,7 +15,6 @@ import { ApplicationState } from 'app/state';
 import { selectors, reducer } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
-import BlueApp from '../../BlueApp';
 import logger from '../../logger';
 
 const i18n = require('../../loc');
