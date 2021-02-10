@@ -56,7 +56,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
 
   validate = (value: string): string | undefined =>
     (!Number(value.replace(',', '.')) && i18n.send.details.amount_field_is_not_valid) ||
-    (Number(value) > CONST.maxCoinsInput && i18n.send.details.amount_is_too_heigh);
+    (Number(value) > CONST.maxCoinsInput && i18n.send.details.amount_is_too_high);
 
   editAmount = () => {
     this.props.navigation.navigate(Route.EditText, {
