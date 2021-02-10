@@ -292,7 +292,6 @@ const styles = StyleSheet.create({
   noSubscriptionDescription: {
     ...typography.caption,
     color: palette.textGrey,
-
     marginHorizontal: 15,
   },
 });
