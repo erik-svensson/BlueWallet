@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
+import { Loader } from 'app/components';
 import { Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
@@ -8,25 +9,33 @@ interface Props {
   title: string;
   wallets: Wallet[];
   itemCallToAction?: (wallet: Wallet) => React.ReactElement;
+  loadingWalletsIds?: string[];
 }
 
 interface ItemProps {
   wallet: Wallet;
   callToAction?: React.ReactElement;
+  loading: boolean;
 }
 
-const AirdropWalletsListItem: FC<ItemProps> = ({ wallet, callToAction }) => (
+const AirdropWalletsListItem: FC<ItemProps> = ({ wallet, callToAction, loading }) => (
   <View style={styles.listElement}>
     <View style={styles.textContainer}>
       <Text style={styles.itemName}>{wallet.label}</Text>
       <Text style={styles.itemDescription}>{`${wallet.getAddressForTransaction()}`}</Text>
     </View>
-    {callToAction}
+    {loading ? (
+      <View style={styles.loaderContainer}>
+        <Loader size={13} />
+      </View>
+    ) : (
+      callToAction
+    )}
   </View>
 );
 
 export const AirdropWalletsList: FC<Props> = props => {
-  const { title, wallets, itemCallToAction } = props;
+  const { title, wallets, itemCallToAction, loadingWalletsIds = [] } = props;
 
   return (
     <View style={styles.container}>
@@ -36,6 +45,7 @@ export const AirdropWalletsList: FC<Props> = props => {
           key={wallet.id}
           wallet={wallet}
           callToAction={itemCallToAction && itemCallToAction(wallet)}
+          loading={loadingWalletsIds.includes(wallet.id)}
         />
       ))}
     </View>
@@ -49,6 +59,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     paddingBottom: 16,
+  },
+  loaderContainer: {
+    flex: 1,
+    display: 'flex',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   header: {
     ...typography.overline,

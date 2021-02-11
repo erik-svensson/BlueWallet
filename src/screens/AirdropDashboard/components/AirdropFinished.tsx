@@ -5,7 +5,7 @@ import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native'
 
 import { images } from 'app/assets';
 import { AirdropStayTuned, AirdropWalletsList, Image } from 'app/components';
-import { RootStackParams, Route, AirdropCarouselCardData, Wallet } from 'app/consts';
+import { RootStackParams, Route, Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 import { Error } from './Error';

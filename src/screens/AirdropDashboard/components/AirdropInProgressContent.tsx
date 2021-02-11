@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
@@ -33,10 +33,31 @@ export const AirdropInProgressContent: FC<Props> = ({
   usersQuantity,
 }) => {
   const [communityCarouselActive, setCommunityCarouselActive] = useState(false);
+  const [loadingWalletsIds, setLoadingWalletsIds] = useState<string[]>([]);
   let _carouselRef: Carousel<AirdropCarouselCardData>;
 
   const setRef = (carouselRef: Carousel<AirdropCarouselCardData>) => {
     _carouselRef = carouselRef;
+  };
+
+  useEffect(() => {
+    const idsToRemove: string[] = [];
+
+    loadingWalletsIds.forEach(id => {
+      if (!availableWallets.filter(w => w.id === id)[0]) {
+        idsToRemove.push(id);
+      }
+    });
+
+    const stillLoading = loadingWalletsIds.filter(id => !idsToRemove.includes(id));
+
+    setLoadingWalletsIds(stillLoading);
+  }, [availableWallets, loading]);
+
+  const _subscribeWallet = (wallet: Wallet) => {
+    setLoadingWalletsIds([...loadingWalletsIds, wallet.id]);
+
+    subscribeWallet(wallet);
   };
 
   const setCarouselActiveElement = (wallet: Wallet) => {
@@ -57,13 +78,6 @@ export const AirdropInProgressContent: FC<Props> = ({
     return isAfterAirdrop() ? renderableWallets : [...renderableWallets, getCommunityItem(usersQuantity)];
   };
 
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Loading />
-      </View>
-    );
-  }
   if (error) {
     return (
       <View style={styles.errorContainer}>
@@ -106,8 +120,9 @@ export const AirdropInProgressContent: FC<Props> = ({
             wallets={availableWallets}
             title={i18n.airdrop.dashboard.availableWallets}
             itemCallToAction={(wallet: Wallet) => (
-              <AvailableWalletAction onActionClick={() => subscribeWallet(wallet)} />
+              <AvailableWalletAction onActionClick={() => _subscribeWallet(wallet)} />
             )}
+            loadingWalletsIds={loadingWalletsIds}
           />
         </View>
       )}
@@ -131,9 +146,6 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 16,
     marginBottom: 18,
-  },
-  loadingContainer: {
-    marginTop: 20,
   },
   errorContainer: {
     marginTop: 10,
