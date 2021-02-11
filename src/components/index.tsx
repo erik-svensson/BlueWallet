@@ -51,3 +51,4 @@ export { CodeInput } from './CodeInput';
 export { AirdropStayTuned } from './AirdropStayTuned';
 export { AirdropWalletsList } from './AirdropWalletsList';
 export { TimeoutButton } from './TimeoutButton';
+export { StyledSwitch } from './StyledSwitch';

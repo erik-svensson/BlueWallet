@@ -1,10 +1,10 @@
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { FC, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate } from 'app/components';
+import { Header, ScreenTemplate, StyledSwitch } from 'app/components';
 import { Route, RootStackParams, Wallet } from 'app/consts';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
 import { ApplicationState } from 'app/state';
@@ -52,6 +52,8 @@ export const AirdropDashboardScreen: FC<Props> = ({
   error,
   route,
 }) => {
+  const [airdropFinished, setAirdropFinished] = useState(false);
+
   useEffect(() => {
     getUsersQuantity();
   }, [getUsersQuantity]);
@@ -60,7 +62,9 @@ export const AirdropDashboardScreen: FC<Props> = ({
     checkSubscription(wallets);
   }, [checkSubscription, wallets]);
 
-  const airdropFinished = isAfterAirdrop();
+  const onSwitchPress = () => {
+    setAirdropFinished(airdropFinished => !airdropFinished);
+  };
 
   return (
     <ScreenTemplate
@@ -85,6 +89,9 @@ export const AirdropDashboardScreen: FC<Props> = ({
             usersQuantity={usersQuantity}
           />
         )}
+      </View>
+      <View style={styles.switch}>
+        <StyledSwitch testID={'whatever'} onValueChange={onSwitchPress} value={airdropFinished} />
       </View>
     </ScreenTemplate>
   );
@@ -112,5 +119,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  switch: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
   },
 });
