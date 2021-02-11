@@ -113,7 +113,7 @@ class AirdropCreateWalletSubscription extends Component<Props> {
       >
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <Loader size={137} />
+            <Loader size={87} />
           </View>
         ) : (
           <Text style={styles.description}>{i18n.airdrop.createWallet.doYouWantToTakePart}</Text>
@@ -143,8 +143,10 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     display: 'flex',
+    flex: 1,
     alignItems: 'center',
-    marginTop: 30,
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   buttonsContainer: { flexDirection: 'row', width: '50%' },
   noButton: { paddingRight: 10, width: '100%' },
