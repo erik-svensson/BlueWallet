@@ -177,8 +177,8 @@ export class NotificationScreen extends Component<Props> {
             <View style={styles.currentAddress}>
               <Text style={styles.email}>{this.props.email}</Text>
             </View>
-            <Text style={styles.noSubscriptionTitle}>{i18n.notifications.noSubscription.title}</Text>
-            <Text style={styles.noSubscriptionDescription}>{i18n.notifications.noSubscription.description}</Text>
+            <Text style={styles.noSubscriptionTitle}>{i18n.notifications.yourSubscriptions}</Text>
+            <Text style={styles.noSubscriptionDescription}>{i18n.notifications.noSubscriptionDescription}</Text>
             {!!subscribedWallets.length && (
               <>
                 <Text style={styles.listTitle}>{i18n.notifications.yourSubscriptions}</Text>
