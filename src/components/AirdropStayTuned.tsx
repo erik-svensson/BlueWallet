@@ -18,9 +18,15 @@ export const AirdropStayTuned: FC = () => (
     <View style={styles.socialsContainer}>
       <View style={styles.facebookButtonContainer}>
         {/* TODO: fill share buttons content */}
-        <SocialShareFacebookButton shareOptions={{ message: 'Waiting for Content', title: 'Waiting for content' }} />
+        <SocialShareFacebookButton
+          // if valid URL is not provided at all, facebook throws error :|. If it s empty string, facebook asks for URL during sharing process :| [2]
+          shareOptions={{ url: 'http://www.medium.com', message: 'Waiting for Content', title: 'Waiting for content' }}
+        />
       </View>
-      <SocialShareTwitterButton shareOptions={{ message: 'Waiting for Content', title: 'Waiting for content' }} />
+      <SocialShareTwitterButton
+        // TODO: provide URL or leave as is. If url param is missing, '(null)' gets inserted at the end of message
+        shareOptions={{ url: '', message: 'Waiting for Content', title: 'Waiting for content' }}
+      />
     </View>
   </View>
 );

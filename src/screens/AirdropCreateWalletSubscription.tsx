@@ -39,9 +39,15 @@ const ShareComponent = () => (
     <View style={styles.socialsContainer}>
       <View style={styles.facebookButtonContainer}>
         {/* TODO: fill share buttons content */}
-        <SocialShareFacebookButton shareOptions={{ message: 'Waiting for Content', title: 'Waiting for content' }} />
+        <SocialShareFacebookButton
+          // if valid URL is not provided, facebook throws error :|
+          shareOptions={{ url: 'http://www.medium.com', message: 'Waiting for Content', title: 'Waiting for content' }}
+        />
       </View>
-      <SocialShareTwitterButton shareOptions={{ message: 'Waiting for Content', title: 'Waiting for content' }} />
+      <SocialShareTwitterButton
+        // TODO: provide URL or leave as is. Otherwise (null) gets inserted at the end of message on twitter
+        shareOptions={{ url: '', message: 'Waiting for Content', title: 'Waiting for content' }}
+      />
     </View>
     <Text style={styles.maximumReward}>
       {i18n.formatString(i18n.airdrop.createWalletSuccess.maxReward, { rewardValue: maxReward })}
