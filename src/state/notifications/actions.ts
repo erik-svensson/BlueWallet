@@ -1,14 +1,5 @@
-import {
-  SubscribePayload,
-  UnsubscribePayload,
-  AuthenticatePayload,
-  ModifyPayload,
-  ModifyResponse,
-  SubscribeResponse,
-  UnsubscribeEmailResponse,
-  Result,
-} from 'app/api';
-import { ActionMeta, Wallet, WalletPayload } from 'app/consts';
+import { AuthenticatePayload, ModifyResponse, UnsubscribeEmailResponse } from 'app/api';
+import { ActionMeta, Wallet } from 'app/consts';
 
 export enum NotificationAction {
   CreateNotificationEmail = 'CreateNotificationEmail',

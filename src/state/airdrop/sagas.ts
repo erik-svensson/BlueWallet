@@ -1,6 +1,6 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 
-import { subscribeWallet, checkWalletsSubscription, getUsersQuantity } from 'app/api/airdropApi';
+import { subscribeWallet, checkWalletsSubscription, getUsersQuantity } from 'app/api/airdrop/client';
 import { Wallet, WalletPayload } from 'app/consts';
 import * as helpers from 'app/helpers/wallets';
 

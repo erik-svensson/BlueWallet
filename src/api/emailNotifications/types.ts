@@ -1,9 +1,6 @@
 import { WalletPayload } from 'app/consts';
 
-export enum Result {
-  SUCCESS = 'success',
-  ERROR = 'error',
-}
+import { Result } from '../types';
 
 export interface SubscribePayload {
   wallets: WalletPayload[];
