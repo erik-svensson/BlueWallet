@@ -39,8 +39,10 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
       };
     case NotificationAction.UnsubscribeWalletAction:
     case NotificationAction.SubscribeWalletAction:
+    case NotificationAction.UpdateNotificationEmailAction:
       return {
         ...state,
+        isLoading: true,
         failedTries: 0,
       };
     case NotificationAction.SubscribeWalletFailureAction:
@@ -85,6 +87,7 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
     case NotificationAction.UpdateNotificationEmailSuccessAction:
       return {
         ...state,
+        isLoading: false,
         sessionToken: action.payload.sessionToken,
       };
     case NotificationAction.AuthenticateEmailSuccessAction:

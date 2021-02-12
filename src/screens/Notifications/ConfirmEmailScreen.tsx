@@ -49,7 +49,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   componentDidMount() {
-    this.infoContainerContent.onInit?.();
     this.props.setError('');
   }
 
@@ -73,16 +72,13 @@ class ConfirmEmailScreen extends Component<Props, State> {
       createNotificationEmail,
       storedEmail,
       route: {
-        params: { email, wallets, onSuccess },
+        params: { email, onSuccess },
       },
     } = this.props;
 
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
-      onInit: () => {
-        wallets && this.props.subscribe(wallets, email);
-      },
       onCodeConfirm: () => {
         if (storedEmail) {
           return onSuccess();
@@ -95,19 +91,14 @@ class ConfirmEmailScreen extends Component<Props, State> {
   unsubscribeFlowContent = () => {
     const {
       route: {
-        params: { email, wallets, onSuccess },
+        params: { onSuccess },
       },
     } = this.props;
 
     return {
       title: i18n.notifications.verifyAction,
       description: i18n.notifications.verifyActionDescription,
-      onInit: () => {
-        wallets && this.props.unsubscribe(wallets, email);
-      },
-      onCodeConfirm: () => {
-        onSuccess();
-      },
+      onCodeConfirm: onSuccess,
     };
   };
 
@@ -140,11 +131,11 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onError = () => {
-    const { failedTries, setError } = this.props;
+    const { failedTries, setError, route } = this.props;
 
     this.setCode('');
     if (failedTries === CONST.emailCodeErrorMax) {
-      this.infoContainerContent?.onInit?.();
+      route.params.onResend();
       setError(i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax }));
     }
   };
@@ -171,11 +162,11 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onResend = () => {
-    const { setError } = this.props;
+    const { setError, route } = this.props;
 
     this.setCode('');
     setError('');
-    this.infoContainerContent.onInit?.();
+    route.params.onResend();
   };
 
   render() {

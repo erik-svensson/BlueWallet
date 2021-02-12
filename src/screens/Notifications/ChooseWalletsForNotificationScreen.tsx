@@ -1,10 +1,19 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
+import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
-import { Route, RootStackParams, Wallet } from 'app/consts';
+import { Route, RootStackParams, Wallet, ConfirmAddressFlowType } from 'app/consts';
+import { ApplicationState } from 'app/state';
+import {
+  subscribeWallet as subscribeWalletAction,
+  SubscribeWalletActionCreator,
+  unsubscribeWallet as unsubscribeWalletAction,
+  UnsubscribeWalletActionCreator,
+} from 'app/state/notifications/actions';
+import { isLoading, readableError } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -12,6 +21,10 @@ const i18n = require('../../../loc');
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.ChooseWalletsForNotification>;
   route: RouteProp<RootStackParams, Route.ChooseWalletsForNotification>;
+  subscribe: SubscribeWalletActionCreator;
+  unsubscribe: UnsubscribeWalletActionCreator;
+  error: string;
+  isLoading: boolean;
 }
 
 interface State {
@@ -64,22 +77,58 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     </View>
   );
 
+  onFailure = () => {
+    Alert.alert(this.props.error);
+  };
+
+  onResend = () => {
+    const {
+      route: { params },
+    } = this.props;
+
+    if (params.flowType === ConfirmAddressFlowType.SUBSCRIBE) {
+      return this.props.subscribe(this.state.wallets, params.email, { onFailure: this.onFailure });
+    }
+    if (params.flowType === ConfirmAddressFlowType.UNSUBSCRIBE) {
+      return this.props.unsubscribe(this.state.wallets, params.email, { onFailure: this.onFailure });
+    }
+  };
+
   onConfirm = () => {
     const {
       navigation,
       route: { params },
     } = this.props;
 
-    navigation.navigate(Route.ConfirmEmail, {
-      email: params.email,
-      flowType: params.flowType,
-      onSuccess: params.onSuccess,
-      wallets: params.wallets,
-    });
+    if (params.flowType === ConfirmAddressFlowType.SUBSCRIBE) {
+      return this.props.subscribe(this.state.wallets, params.email, {
+        onSuccess: () =>
+          navigation.navigate(Route.ConfirmEmail, {
+            email: params.email,
+            flowType: params.flowType,
+            onSuccess: params.onSuccess,
+            onResend: this.onResend,
+          }),
+        onFailure: this.onFailure,
+      });
+    }
+    if (params.flowType === ConfirmAddressFlowType.UNSUBSCRIBE) {
+      return this.props.unsubscribe(this.state.wallets, params.email, {
+        onSuccess: () =>
+          navigation.navigate(Route.ConfirmEmail, {
+            email: params.email,
+            flowType: params.flowType,
+            onSuccess: params.onSuccess,
+            onResend: this.onResend,
+          }),
+        onFailure: this.onFailure,
+      });
+    }
   };
 
   render() {
     const {
+      isLoading,
       route: {
         params: { email, wallets, onSkip, subtitle, description },
       },
@@ -91,7 +140,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         footer={
           <>
             <Button title={i18n._.confirm} disabled={!this.state.wallets.length} onPress={this.onConfirm} />
-            <FlatButton containerStyle={styles.skipButton} title={i18n._.skip} onPress={onSkip} />
+            <FlatButton containerStyle={styles.skipButton} title={i18n._.skip} onPress={onSkip} loading={isLoading} />
           </>
         }
       >
@@ -114,7 +163,17 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
   }
 }
 
-export default ChooseWalletsForNotificationScreen;
+const mapStateToProps = (state: ApplicationState) => ({
+  error: readableError(state),
+  isLoading: isLoading(state),
+});
+
+const mapDispatchToProps = {
+  subscribe: subscribeWalletAction,
+  unsubscribe: unsubscribeWalletAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChooseWalletsForNotificationScreen);
 
 const styles = StyleSheet.create({
   infoContainer: {

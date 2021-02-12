@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button, FlatButton } from 'app/components';
@@ -56,6 +56,8 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     });
   };
 
+  onFailure = () => Alert.alert(this.props.error);
+
   goToLocalEmailConfirm = () => {
     const { verifyNotificationEmail, navigation, createNotificationEmail, route } = this.props;
 
@@ -81,6 +83,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           },
           email,
         }),
+      onFailure: this.onFailure,
     });
   };
 
@@ -109,7 +112,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           email,
           onSuccess,
           wallets: walletsToSubscribe,
-          onSkip: () => this.goToLocalEmailConfirm(),
+          onSkip: this.goToLocalEmailConfirm,
         });
       },
     });
@@ -151,6 +154,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
                 testID="skip-notification-email"
                 containerStyle={styles.skipButton}
                 title={i18n._.skip}
+                loading={isLoading}
                 onPress={this.skipAddEmail}
               />
             )}

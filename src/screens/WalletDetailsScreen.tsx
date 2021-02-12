@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { cloneDeep } from 'lodash';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, FlatButton, Header, ScreenTemplate, WalletCard, ButtonType, Text } from 'app/components';
@@ -11,8 +11,15 @@ import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import { reducer as notificationReducer } from 'app/state/notifications';
-import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
-import { isWalletSubscribed, storedEmail, isLoading } from 'app/state/notifications/selectors';
+import {
+  checkSubscription,
+  CheckSubscriptionAction,
+  subscribeWallet as subscribeWalletAction,
+  unsubscribeWallet as unsubscribeWalletAction,
+  SubscribeWalletActionCreator,
+  UnsubscribeWalletActionCreator,
+} from 'app/state/notifications/actions';
+import { isWalletSubscribed, storedEmail, isLoading, readableError } from 'app/state/notifications/selectors';
 import { reducer as walletReducer } from 'app/state/wallets';
 import {
   updateWallet as updateWalletAction,
@@ -31,8 +38,11 @@ interface Props {
   updateWallet: (wallet: Wallet) => UpdateWalletAction;
   navigation: StackNavigationProp<RootStackParams, Route.WalletDetails>;
   wallet?: Wallet;
+  error: string;
   deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
+  subscribe: SubscribeWalletActionCreator;
+  unsubscribe: UnsubscribeWalletActionCreator;
   route: RouteProp<RootStackParams, Route.WalletDetails>;
   walletsLabels: string[];
   email: string;
@@ -48,7 +58,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   checkSubscription = () => {
     const { wallet, email, checkSubscription } = this.props;
 
-    if (email && wallet) {
+    if (wallet) {
       checkSubscription([wallet], email);
     }
   };
@@ -156,7 +166,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     });
   };
 
-  confirmEmail = (flowType: ConfirmAddressFlowType) => {
+  confirmEmail = (flowType: ConfirmAddressFlowType, onResend: () => void) => {
     const { email, navigation, wallet } = this.props;
 
     wallet &&
@@ -178,6 +188,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             },
           });
         },
+        onResend,
       });
   };
 
@@ -185,6 +196,30 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     const { navigation, wallet } = this.props;
 
     wallet && navigation.navigate(Route.WalletDetails, { id: wallet.id });
+  };
+
+  onFailure = () => {
+    Alert.alert(this.props.error);
+  };
+
+  subscribe = (wallet: Wallet, email: string) => {
+    this.props.subscribe([wallet], email, {
+      onSuccess: () =>
+        this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE, () =>
+          this.props.subscribe([wallet], email, { onFailure: this.onFailure }),
+        ),
+      onFailure: this.onFailure,
+    });
+  };
+
+  unSubscribe = (wallet: Wallet, email: string) => {
+    this.props.unsubscribe([wallet], email, {
+      onSuccess: () =>
+        this.confirmEmail(ConfirmAddressFlowType.UNSUBSCRIBE, () =>
+          this.props.unsubscribe([wallet], email, { onFailure: this.onFailure }),
+        ),
+      onFailure: this.onFailure,
+    });
   };
 
   onSubscribeButtonPress = () => {
@@ -196,10 +231,10 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     }
 
     if (!isSubscribed) {
-      return this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE);
+      return this.subscribe(wallet, email);
     }
 
-    return this.confirmEmail(ConfirmAddressFlowType.UNSUBSCRIBE);
+    return this.unSubscribe(wallet, email);
   };
 
   render() {
@@ -278,12 +313,15 @@ const mapStateToProps = (
     email: storedEmail(state),
     isLoading: isLoading(state),
     isSubscribed: isWalletSubscribed(state, id),
+    error: readableError(state),
   };
 };
 
 const mapDispatchToProps = {
   updateWallet: updateWalletAction,
   deleteWallet: deleteWalletAction,
+  subscribe: subscribeWalletAction,
+  unsubscribe: unsubscribeWalletAction,
   checkSubscription,
 };
 
