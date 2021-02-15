@@ -177,17 +177,15 @@ export class NotificationScreen extends Component<Props> {
             <View style={styles.currentAddress}>
               <Text style={styles.email}>{this.props.email}</Text>
             </View>
-            <Text style={styles.noSubscriptionTitle}>{i18n.notifications.yourSubscriptions}</Text>
-            <Text style={styles.noSubscriptionDescription}>{i18n.notifications.noSubscriptionDescription}</Text>
-            {!!subscribedWallets.length && (
-              <>
-                <Text style={styles.listTitle}>{i18n.notifications.yourSubscriptions}</Text>
-                <FlatList
-                  data={subscribedWallets}
-                  renderItem={item => this.renderItem(item.item)}
-                  keyExtractor={item => item.id}
-                />
-              </>
+            <Text style={styles.listTitle}>{i18n.notifications.yourSubscriptions}</Text>
+            {!!subscribedWallets.length ? (
+              <FlatList
+                data={subscribedWallets}
+                renderItem={item => this.renderItem(item.item)}
+                keyExtractor={item => item.id}
+              />
+            ) : (
+              <Text style={styles.noSubscriptionDescription}>{i18n.notifications.noSubscriptionDescription}</Text>
             )}
           </>
         ) : (
@@ -283,12 +281,6 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
-  noSubscriptionTitle: {
-    ...typography.overline,
-    color: palette.textGrey,
-    marginVertical: 25,
-    marginHorizontal: 15,
-  },
   noSubscriptionDescription: {
     ...typography.caption,
     color: palette.textGrey,
