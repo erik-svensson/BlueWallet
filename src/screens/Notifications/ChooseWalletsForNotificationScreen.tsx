@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
@@ -77,20 +77,16 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     </View>
   );
 
-  onFailure = () => {
-    Alert.alert(this.props.error);
-  };
-
   onResend = () => {
     const {
       route: { params },
     } = this.props;
 
     if (params.flowType === ConfirmAddressFlowType.SUBSCRIBE) {
-      return this.props.subscribe(this.state.wallets, params.email, { onFailure: this.onFailure });
+      return this.props.subscribe(this.state.wallets, params.email);
     }
     if (params.flowType === ConfirmAddressFlowType.UNSUBSCRIBE) {
-      return this.props.unsubscribe(this.state.wallets, params.email, { onFailure: this.onFailure });
+      return this.props.unsubscribe(this.state.wallets, params.email);
     }
   };
 
@@ -101,27 +97,21 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     } = this.props;
 
     if (params.flowType === ConfirmAddressFlowType.SUBSCRIBE) {
-      return this.props.subscribe(this.state.wallets, params.email, {
-        onSuccess: () =>
-          navigation.navigate(Route.ConfirmEmail, {
-            email: params.email,
-            flowType: params.flowType,
-            onSuccess: params.onSuccess,
-            onResend: this.onResend,
-          }),
-        onFailure: this.onFailure,
+      this.props.subscribe(this.state.wallets, params.email);
+      return navigation.navigate(Route.ConfirmEmail, {
+        email: params.email,
+        flowType: params.flowType,
+        onSuccess: params.onSuccess,
+        onResend: this.onResend,
       });
     }
     if (params.flowType === ConfirmAddressFlowType.UNSUBSCRIBE) {
-      return this.props.unsubscribe(this.state.wallets, params.email, {
-        onSuccess: () =>
-          navigation.navigate(Route.ConfirmEmail, {
-            email: params.email,
-            flowType: params.flowType,
-            onSuccess: params.onSuccess,
-            onResend: this.onResend,
-          }),
-        onFailure: this.onFailure,
+      this.props.unsubscribe(this.state.wallets, params.email);
+      navigation.navigate(Route.ConfirmEmail, {
+        email: params.email,
+        flowType: params.flowType,
+        onSuccess: params.onSuccess,
+        onResend: this.onResend,
       });
     }
   };
@@ -143,6 +133,8 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
             <FlatButton containerStyle={styles.skipButton} title={i18n._.skip} onPress={onSkip} loading={isLoading} />
           </>
         }
+        noScroll
+        contentContainer={styles.screenTemplate}
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{subtitle}</Text>
@@ -153,9 +145,9 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         </View>
 
         <FlatList
-          data={wallets}
+          data={[...wallets, ...wallets, ...wallets, ...wallets, ...wallets]}
           renderItem={item => this.renderItem(item.item)}
-          keyExtractor={item => item.id}
+          keyExtractor={(_, index) => index.toString()}
           ListHeaderComponent={this.renderListHeader()}
         />
       </ScreenTemplate>
@@ -179,6 +171,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     alignItems: 'center',
   },
+  screenTemplate: { flex: 1 },
   infoDescription: {
     ...typography.caption,
     color: palette.textGrey,

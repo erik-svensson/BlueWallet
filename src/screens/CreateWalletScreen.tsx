@@ -108,10 +108,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     });
   };
 
-  onFailure = () => {
-    Alert.alert(this.props.error);
-  };
-
   navigateToConfirmEmailSubscription = (wallet: Wallet) => {
     const { navigation, email } = this.props;
 
@@ -119,19 +115,16 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       title: i18n.notifications.notifications,
       children: this.renderConfirmScreenContent(),
       gestureEnabled: false,
-      onConfirm: () =>
-        this.props.subscribe([wallet], email, {
-          onSuccess: () =>
-            navigation.navigate(Route.ConfirmEmail, {
-              email,
-              flowType: ConfirmAddressFlowType.SUBSCRIBE,
-              wallets: [wallet],
-              onSuccess: this.navigateToSuccesfullNotificationSubscriptionMessage,
-              onResend: () => this.props.subscribe([wallet], email, { onFailure: this.onFailure }),
-            }),
-          onFailure: this.onFailure,
-        }),
-
+      onConfirm: () => {
+        this.props.subscribe([wallet], email);
+        navigation.navigate(Route.ConfirmEmail, {
+          email,
+          flowType: ConfirmAddressFlowType.SUBSCRIBE,
+          wallets: [wallet],
+          onSuccess: this.navigateToSuccesfullNotificationSubscriptionMessage,
+          onResend: () => this.props.subscribe([wallet], email),
+        });
+      },
       onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
       isBackArrow: false,
     });

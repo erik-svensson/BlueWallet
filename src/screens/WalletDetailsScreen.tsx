@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { cloneDeep } from 'lodash';
 import React from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, FlatButton, Header, ScreenTemplate, WalletCard, ButtonType, Text } from 'app/components';
@@ -198,28 +198,17 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     wallet && navigation.navigate(Route.WalletDetails, { id: wallet.id });
   };
 
-  onFailure = () => {
-    Alert.alert(this.props.error);
-  };
-
   subscribe = (wallet: Wallet, email: string) => {
-    this.props.subscribe([wallet], email, {
-      onSuccess: () =>
-        this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE, () =>
-          this.props.subscribe([wallet], email, { onFailure: this.onFailure }),
-        ),
-      onFailure: this.onFailure,
-    });
+    this.props.subscribe([wallet], email);
+    this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE, () => this.props.subscribe([wallet], email));
+    // , {
+    // onSuccess: () => this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE, () => this.props.subscribe([wallet], email)),
+    // });
   };
 
   unSubscribe = (wallet: Wallet, email: string) => {
-    this.props.unsubscribe([wallet], email, {
-      onSuccess: () =>
-        this.confirmEmail(ConfirmAddressFlowType.UNSUBSCRIBE, () =>
-          this.props.unsubscribe([wallet], email, { onFailure: this.onFailure }),
-        ),
-      onFailure: this.onFailure,
-    });
+    this.props.unsubscribe([wallet], email);
+    this.confirmEmail(ConfirmAddressFlowType.UNSUBSCRIBE, () => this.props.unsubscribe([wallet], email));
   };
 
   onSubscribeButtonPress = () => {

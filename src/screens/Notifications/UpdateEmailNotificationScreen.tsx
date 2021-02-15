@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
-import { Text, StyleSheet, View, Alert } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, InputItem, ScreenTemplate, Button } from 'app/components';
@@ -66,25 +66,20 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
 
     const { email } = this.state;
 
-    verifyNotificationEmail(email, {
-      onSuccess: () =>
-        navigation.navigate(Route.LocalConfirmNotificationCode, {
-          children: (
-            <View style={styles.infoContainer}>
-              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
-              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
-              <Text style={typography.headline5}>{email}</Text>
-            </View>
-          ),
-          title: i18n.notifications.notifications,
-          onSuccess: this.onUpdateSuccess,
-          email,
-        }),
-      onFailure: this.onFailure,
+    verifyNotificationEmail(email);
+    navigation.navigate(Route.LocalConfirmNotificationCode, {
+      children: (
+        <View style={styles.infoContainer}>
+          <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+          <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
+          <Text style={typography.headline5}>{email}</Text>
+        </View>
+      ),
+      title: i18n.notifications.notifications,
+      onSuccess: this.onUpdateSuccess,
+      email,
     });
   };
-
-  onFailure = () => Alert.alert(this.props.error);
 
   onUpdateSuccess = () =>
     this.props.createNotificationEmail(this.state.email, {
@@ -140,7 +135,7 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
 
   onConfirm = () => {
     const { email } = this.state;
-    const { navigation, route, setError, storedEmail, updateNotificationEmail } = this.props;
+    const { route, setError, storedEmail, updateNotificationEmail } = this.props;
     const { subscribedWallets } = route.params;
 
     if (!isEmail(email)) {
