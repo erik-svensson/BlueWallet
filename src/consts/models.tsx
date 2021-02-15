@@ -533,6 +533,7 @@ export type RootStackParams = {
     flowType: ConfirmAddressFlowType;
     onBack?: () => void;
     onSuccess: (arg?: any) => void;
+    onResend: () => void;
   };
   [Route.UpdateEmailNotification]: {
     subscribedWallets: Wallet[];

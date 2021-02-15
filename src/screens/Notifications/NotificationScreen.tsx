@@ -117,6 +117,7 @@ export class NotificationScreen extends Component<Props> {
           buttonProps: {
             title: i18n.notifications.goToNotifications,
             onPress: () => {
+              this.props.checkSubscription(this.props.wallets, this.props.email);
               this.navigateBackToScreen();
             },
           },

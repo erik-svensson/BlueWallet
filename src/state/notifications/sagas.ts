@@ -82,27 +82,37 @@ export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailActi
 export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   const {
     payload: { wallets, email },
+    meta,
   } = action as SubscribeWalletAction;
 
   try {
     const walletsGenerationBase = yield all(wallets.map(wallet => call(walletToAddressesGenerationBase, wallet)));
 
     const lang = yield select(appSettingsSelectors.language);
-    const { session_token, result } = yield call(subscribeEmail, {
+    const { session_token } = yield call(subscribeEmail, {
       email,
       wallets: walletsGenerationBase,
       lang,
     });
 
     yield put(subscribeWalletSuccess(session_token));
+
+    if (meta?.onSuccess) {
+      meta.onSuccess();
+    }
   } catch (error) {
     yield put(subscribeWalletFailure(error.message));
+
+    if (meta?.onFailure) {
+      meta.onFailure();
+    }
   }
 }
 
 export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
   const {
     payload: { wallets, email },
+    meta,
   } = action as UnsubscribeWalletAction;
 
   try {
@@ -111,8 +121,16 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
     const { session_token } = yield call(unsubscribeEmail, { hashes, email });
 
     yield put(unsubscribeWalletSuccess(session_token));
+
+    if (meta?.onSuccess) {
+      meta.onSuccess();
+    }
   } catch (error) {
     yield put(unsubscribeWalletFailure(error.message));
+
+    if (meta?.onFailure) {
+      meta.onFailure();
+    }
   }
 }
 
