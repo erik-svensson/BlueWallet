@@ -11,7 +11,6 @@ import { typography, palette } from 'app/styles';
 
 import { AvailableWalletAction, RegisteredWalletAction, CommunitySection, CommunityAchievementsList } from './';
 import { Error } from './Error';
-import { Loading } from './Loading';
 
 const i18n = require('../../../../loc');
 
