@@ -20,9 +20,8 @@ export const sessionToken = createSelector(local, state => state.sessionToken);
 export const notificationError = createSelector(local, state => state.error);
 export const storedEmail = createSelector(local, state => state.email);
 export const storedPin = createSelector(local, state => state.pin);
-export const failedTries = createSelector(local, state => state.failedTries);
 
-export const readableError = createSelector(notificationError, failedTries, (errorMsg, failNo) => {
+export const readableError = createSelector(notificationError, errorMsg => {
   if (errorMsg.includes(GeneralHttpError.NO_MESSAGE) || errorMsg.includes(GeneralHttpError.NO_RESPONSE)) {
     return i18n.connectionIssue.couldntConnectToServer;
   }
@@ -30,11 +29,19 @@ export const readableError = createSelector(notificationError, failedTries, (err
   if (errorMsg.includes(EmailNotificationsError.INVALID_EMAIL)) {
     return i18n.notifications.invalidAddressError;
   }
-
-  if (errorMsg.includes(EmailNotificationsError.WRONG_PIN) && failNo < CONST.emailCodeErrorMax) {
-    return i18n.formatString(i18n.notifications.codeError, { attemptsLeft: CONST.emailCodeErrorMax - failNo });
+  if (errorMsg === EmailNotificationsError.WRONG_PIN_2_LEFT) {
+    return i18n.formatString(i18n.notifications.codeError, {
+      attemptsLeft: 2,
+    });
   }
-
+  if (errorMsg === EmailNotificationsError.WRONG_PIN_1_LEFT) {
+    return i18n.formatString(i18n.notifications.codeError, {
+      attemptsLeft: 1,
+    });
+  }
+  if (errorMsg === EmailNotificationsError.WRONG_PIN_NO_TRIALS_LEFT) {
+    return i18n.notifications.codeFinalError;
+  }
   return errorMsg;
 });
 

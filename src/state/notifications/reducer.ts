@@ -12,7 +12,6 @@ export interface NotificationState {
   isLoading: boolean;
   sessionToken: string;
   subscribedIds: string[];
-  failedTries: number;
 }
 
 const initialState: NotificationState = {
@@ -23,7 +22,6 @@ const initialState: NotificationState = {
   isLoading: false,
   sessionToken: '',
   subscribedIds: [],
-  failedTries: 0,
 };
 
 const reducer = (state = initialState, action: NotificationActionType): NotificationState => {
@@ -43,7 +41,6 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
       return {
         ...state,
         isLoading: true,
-        failedTries: 0,
       };
     case NotificationAction.SubscribeWalletFailureAction:
     case NotificationAction.UnsubscribeWalletFailureAction:
@@ -60,7 +57,6 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
       return {
         ...state,
         error: action.error,
-        failedTries: state.failedTries + 1,
         isLoading: false,
       };
     case NotificationAction.DeleteNotificationEmailAction:
@@ -94,7 +90,6 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
       return {
         ...state,
         error: '',
-        failedTries: 0,
       };
     case NotificationAction.SetErrorAction:
       return {

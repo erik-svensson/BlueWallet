@@ -19,7 +19,7 @@ import {
   SetErrorActionCreator,
   setError as setErrorAction,
 } from 'app/state/notifications/actions';
-import { sessionToken, readableError, storedEmail, failedTries } from 'app/state/notifications/selectors';
+import { sessionToken, readableError, storedEmail } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -35,8 +35,8 @@ interface Props {
   notificationError: string;
   storedEmail: string;
   storedPin: string;
+  error: string;
   setError: SetErrorActionCreator;
-  failedTries: number;
 }
 
 interface State {
@@ -131,12 +131,11 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   onError = () => {
-    const { failedTries, setError, route } = this.props;
+    const { route, error } = this.props;
 
     this.setCode('');
-    if (failedTries === CONST.emailCodeErrorMax) {
+    if (error === i18n.notifications.codeFinalError) {
       route.params.onResend();
-      setError(i18n.formatString(i18n.notifications.codeFinalError, { attemptsNo: CONST.emailCodeErrorMax }));
     }
   };
 
@@ -213,7 +212,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   sessionToken: sessionToken(state),
   notificationError: readableError(state),
   storedEmail: storedEmail(state),
-  failedTries: failedTries(state),
+  error: readableError(state),
 });
 
 const mapDispatchToProps = {

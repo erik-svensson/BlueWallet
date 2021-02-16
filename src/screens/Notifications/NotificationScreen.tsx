@@ -180,11 +180,13 @@ export class NotificationScreen extends Component<Props> {
             </View>
             <Text style={styles.listTitle}>{i18n.notifications.yourSubscriptions}</Text>
             {!!subscribedWallets.length ? (
-              <FlatList
-                data={subscribedWallets}
-                renderItem={item => this.renderItem(item.item)}
-                keyExtractor={item => item.id}
-              />
+              <>
+                <FlatList
+                  data={subscribedWallets}
+                  renderItem={item => this.renderItem(item.item)}
+                  keyExtractor={item => item.id}
+                />
+              </>
             ) : (
               <Text style={styles.noSubscriptionDescription}>{i18n.notifications.noSubscriptionDescription}</Text>
             )}
@@ -286,5 +288,6 @@ const styles = StyleSheet.create({
     ...typography.caption,
     color: palette.textGrey,
     marginHorizontal: 15,
+    textAlign: 'center',
   },
 });
