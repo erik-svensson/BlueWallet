@@ -59,7 +59,8 @@ class ReceiveCoinsScreen extends Component<Props, State> {
     (Number(value.replace(',', '.')) > CONST.maxCoinsInput &&
       i18n.formatString(i18n.send.details.amount_is_too_high, {
         maxCoinsInput: CONST.maxCoinsInput.toLocaleString(),
-      }));
+      })) ||
+    (Number(value.replace(',', '.')) < 0 && i18n.send.details.amount_is_negative);
 
   editAmount = () => {
     this.props.navigation.navigate(Route.EditText, {
