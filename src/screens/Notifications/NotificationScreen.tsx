@@ -117,6 +117,7 @@ export class NotificationScreen extends Component<Props> {
           buttonProps: {
             title: i18n.notifications.goToNotifications,
             onPress: () => {
+              this.props.checkSubscription(this.props.wallets, this.props.email);
               this.navigateBackToScreen();
             },
           },
@@ -177,6 +178,8 @@ export class NotificationScreen extends Component<Props> {
             <View style={styles.currentAddress}>
               <Text style={styles.email}>{this.props.email}</Text>
             </View>
+            <Text style={styles.noSubscriptionTitle}>{i18n.notifications.yourSubscriptions}</Text>
+            <Text style={styles.noSubscriptionDescription}>{i18n.notifications.noSubscriptionDescription}</Text>
             {!!subscribedWallets.length && (
               <>
                 <Text style={styles.listTitle}>{i18n.notifications.yourSubscriptions}</Text>
@@ -281,4 +284,15 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
+  noSubscriptionTitle: {
+    ...typography.overline,
+    color: palette.textGrey,
+    marginVertical: 25,
+    marginHorizontal: 15,
+  },
+  noSubscriptionDescription: {
+    ...typography.caption,
+    color: palette.textGrey,
+    marginHorizontal: 15,
+  },
 });

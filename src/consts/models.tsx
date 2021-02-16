@@ -51,12 +51,13 @@ export const CONST = {
   airdropMinimumBTCVRequired: 5,
   airdropTotalDollarsToShare: '250.000',
   emailCodeErrorMax: 3,
-  walletsDefaultGapLimit: 20,
   nextAirdropPeriod: 'Q1 2021',
+  walletsDefaultGapLimit: '20/20',
   userVersion: 'userVersion',
   newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
   buttonTimeoutSeconds: 30,
   notificationCodeInputRegex: /^[A-Za-z0-9]*$/,
+  maxCoinsInput: 21000000,
 };
 
 export const ADDRESSES_TYPES = {
@@ -253,7 +254,7 @@ export interface Wallet {
 
 export interface WalletPayload {
   name: string;
-  gap_limit: number;
+  gap_limit: string;
   derivation_path?: Record<string, unknown>;
   xpub: string;
   address_type: string;
@@ -572,6 +573,7 @@ export type RootStackParams = {
     flowType: ConfirmAddressFlowType;
     onBack?: () => void;
     onSuccess: (arg?: any) => void;
+    onResend: () => void;
   };
   [Route.UpdateEmailNotification]: {
     subscribedWallets: Wallet[];

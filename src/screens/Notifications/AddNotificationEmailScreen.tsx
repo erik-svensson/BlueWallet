@@ -63,24 +63,22 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
     const { email } = this.state;
 
-    verifyNotificationEmail(email, {
-      onSuccess: () =>
-        navigation.navigate(Route.LocalConfirmNotificationCode, {
-          children: (
-            <View style={styles.infoContainer}>
-              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
-              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
-              <Text style={typography.headline5}>{email}</Text>
-            </View>
-          ),
-          title,
-          onSuccess: () => {
-            createNotificationEmail(email, {
-              onSuccess,
-            });
-          },
-          email,
-        }),
+    verifyNotificationEmail(email);
+    navigation.navigate(Route.LocalConfirmNotificationCode, {
+      children: (
+        <View style={styles.infoContainer}>
+          <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+          <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
+          <Text style={typography.headline5}>{email}</Text>
+        </View>
+      ),
+      title,
+      onSuccess: () => {
+        createNotificationEmail(email, {
+          onSuccess,
+        });
+      },
+      email,
     });
   };
 
@@ -109,7 +107,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           email,
           onSuccess,
           wallets: walletsToSubscribe,
-          onSkip: () => this.goToLocalEmailConfirm(),
+          onSkip: this.goToLocalEmailConfirm,
         });
       },
     });
@@ -120,7 +118,10 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { onSkipSuccess } = route.params;
 
     createNotificationEmail('', {
-      onSuccess: onSkipSuccess,
+      onSuccess: () => {
+        this.props.navigation.popToTop();
+        onSkipSuccess?.();
+      },
     });
   };
 
@@ -148,6 +149,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
                 testID="skip-notification-email"
                 containerStyle={styles.skipButton}
                 title={i18n._.skip}
+                loading={isLoading}
                 onPress={this.skipAddEmail}
               />
             )}

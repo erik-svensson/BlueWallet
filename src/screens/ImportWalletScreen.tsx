@@ -21,8 +21,13 @@ import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
-import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
-import { isNotificationEmailSet, storedEmail } from 'app/state/notifications/selectors';
+import {
+  checkSubscription,
+  CheckSubscriptionAction,
+  subscribeWallet as subscribeWalletAction,
+  SubscribeWalletActionCreator,
+} from 'app/state/notifications/actions';
+import { isNotificationEmailSet, storedEmail, readableError } from 'app/state/notifications/selectors';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { importWallet as importWalletAction, ImportWalletAction } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
@@ -48,6 +53,9 @@ interface Props {
   wallets: Wallet[];
   isNotificationEmailSet: boolean;
   email: string;
+  subscribe: SubscribeWalletActionCreator;
+  error: string;
+
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
   checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
 }
@@ -167,13 +175,17 @@ export class ImportWalletScreen extends Component<Props, State> {
       title: i18n.notifications.notifications,
       children: this.renderConfirmScreenContent(),
       gestureEnabled: false,
-      onConfirm: () =>
+      onConfirm: () => {
+        this.props.subscribe([wallet], email);
         navigation.navigate(Route.ConfirmEmail, {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
           wallets: [wallet],
           onSuccess: this.showSuccessImportMessageScreen,
-        }),
+          onResend: () => this.props.subscribe([wallet], email),
+        });
+      },
+
       onBack: () => this.showSuccessImportMessageScreen(),
       isBackArrow: false,
     });
@@ -548,7 +560,7 @@ export class ImportWalletScreen extends Component<Props, State> {
             />
           </>
         }
-        header={<Header isBackArrow title={i18n.wallets.importWallet.header} />}
+        header={<Header isBackArrow={true} title={i18n.wallets.importWallet.header} />}
       >
         <View style={styles.inputItemContainer}>
           <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>
@@ -589,11 +601,13 @@ const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isNotificationEmailSet: isNotificationEmailSet(state),
   email: storedEmail(state),
+  error: readableError(state),
 });
 
 const mapDispatchToProps = {
   importWallet: importWalletAction,
   checkSubscription,
+  subscribe: subscribeWalletAction,
 };
 
 export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(ImportWalletScreen);

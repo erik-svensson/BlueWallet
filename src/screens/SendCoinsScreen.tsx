@@ -62,7 +62,7 @@ class SendCoinsScreen extends Component<Props, State> {
 
     this.state = {
       isLoading: false,
-      amount: 0,
+      amount: 1,
       wallet: fromWallet || wallets[0],
       transaction: new BitcoinTransaction(toAddress),
       memo: '',
@@ -112,10 +112,15 @@ class SendCoinsScreen extends Component<Props, State> {
     </View>
   );
 
+  validate = (value: string): string | undefined =>
+    !Number(value.replace(',', '.')) && i18n.send.details.amount_field_is_not_valid;
+
   setTransactionFee = () => {
     this.props.navigation.navigate(Route.EditText, {
       title: i18n.send.create.fee,
+      keyboardType: 'number-pad',
       label: i18n.send.create.amount,
+      validate: this.validate,
       onSave: this.saveTransactionFee,
       value: this.state.amount?.toString(),
       header: this.renderSetTransactionFeeHeader(),

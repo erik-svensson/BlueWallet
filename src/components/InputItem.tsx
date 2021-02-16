@@ -37,7 +37,11 @@ export class InputItem extends Component<Props, State> {
   }
 
   shouldComponentUpdate(nextProps: Props) {
-    return this.props.value !== nextProps.value || this.props.error !== nextProps.error;
+    return (
+      this.props.value !== nextProps.value ||
+      this.props.error !== nextProps.error ||
+      this.props.secureTextEntry !== nextProps.secureTextEntry
+    );
   }
 
   onFocus = () => {

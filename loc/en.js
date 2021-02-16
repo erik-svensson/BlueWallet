@@ -391,6 +391,7 @@ module.exports = {
       'Would you like to receive transaction notifications from this wallet to your email address ',
     noteFirst: 'Note: ',
     noteSecond: 'If you want to change your email address you can do it later in Settings.',
+    noSubscriptionDescription: 'You are not subscribed to any notifications.',
   },
   onboarding: {
     changePin: 'Change PIN',
@@ -481,6 +482,7 @@ module.exports = {
       address: 'address',
       address_field_is_not_valid: 'Address field is not valid',
       amount_field_is_not_valid: 'Amount field is not valid',
+      amount_is_too_high: "There is a maximum of {maxCoinsInput} BTCV that will ever exist, so don't try to send more!",
       amount_placeholder: 'amount to send (in BTCV)',
       cancel: 'Cancel',
       create: 'Create Invoice',

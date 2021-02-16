@@ -1,5 +1,14 @@
-import { AuthenticatePayload, ModifyResponse, UnsubscribeEmailResponse } from 'app/api';
-import { ActionMeta, Wallet } from 'app/consts';
+import {
+  SubscribePayload,
+  UnsubscribePayload,
+  AuthenticatePayload,
+  ModifyPayload,
+  ModifyResponse,
+  SubscribeResponse,
+  UnsubscribeEmailResponse,
+  Result,
+} from 'app/api';
+import { ActionMeta, Wallet, WalletPayload } from 'app/consts';
 
 export enum NotificationAction {
   CreateNotificationEmail = 'CreateNotificationEmail',
@@ -80,6 +89,7 @@ export interface SubscribeWalletAction {
     wallets: Wallet[];
     email: string;
   };
+  meta?: ActionMeta;
 }
 
 export interface SubscribeWalletSuccessAction {
@@ -98,6 +108,7 @@ export interface UnsubscribeWalletAction {
     wallets: Wallet[];
     email: string;
   };
+  meta?: ActionMeta;
 }
 
 export interface UnsubscribeWalletSuccessAction {
@@ -220,10 +231,15 @@ export const verifyNotificationEmailFailure = (error: string): VerifyNotificatio
   error,
 });
 
-export type SubscribeWalletActionCreator = (wallets: Wallet[], email: string) => SubscribeWalletAction;
-export const subscribeWallet: SubscribeWalletActionCreator = (wallets, email) => ({
+export type SubscribeWalletActionCreator = (
+  wallets: Wallet[],
+  email: string,
+  meta?: ActionMeta,
+) => SubscribeWalletAction;
+export const subscribeWallet: SubscribeWalletActionCreator = (wallets, email, meta) => ({
   type: NotificationAction.SubscribeWalletAction,
   payload: { wallets, email },
+  meta,
 });
 
 export const subscribeWalletSuccess = (sessionToken: string): SubscribeWalletSuccessAction => ({
@@ -236,10 +252,15 @@ export const subscribeWalletFailure = (error: string): SubscribeWalletFailureAct
   error,
 });
 
-export type UnsubscribeWalletActionCreator = (wallets: Wallet[], email: string) => UnsubscribeWalletAction;
-export const unsubscribeWallet: UnsubscribeWalletActionCreator = (wallets, email) => ({
+export type UnsubscribeWalletActionCreator = (
+  wallets: Wallet[],
+  email: string,
+  meta?: ActionMeta,
+) => UnsubscribeWalletAction;
+export const unsubscribeWallet: UnsubscribeWalletActionCreator = (wallets, email, meta) => ({
   type: NotificationAction.UnsubscribeWalletAction,
   payload: { wallets, email },
+  meta,
 });
 
 export const unsubscribeWalletSuccess = (sessionToken: string): SubscribeWalletSuccessAction => ({
