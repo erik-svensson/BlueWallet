@@ -66,20 +66,18 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
 
     const { email } = this.state;
 
-    verifyNotificationEmail(email, {
-      onSuccess: () =>
-        navigation.navigate(Route.LocalConfirmNotificationCode, {
-          children: (
-            <View style={styles.infoContainer}>
-              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
-              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
-              <Text style={typography.headline5}>{email}</Text>
-            </View>
-          ),
-          title: i18n.notifications.notifications,
-          onSuccess: this.onUpdateSuccess,
-          email,
-        }),
+    verifyNotificationEmail(email);
+    navigation.navigate(Route.LocalConfirmNotificationCode, {
+      children: (
+        <View style={styles.infoContainer}>
+          <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+          <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
+          <Text style={typography.headline5}>{email}</Text>
+        </View>
+      ),
+      title: i18n.notifications.notifications,
+      onSuccess: this.onUpdateSuccess,
+      email,
     });
   };
 
@@ -98,6 +96,19 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
       },
     });
 
+  authenticateCurrentEmail = () => {
+    return this.props.navigation.navigate(Route.ConfirmEmail, {
+      email: this.props.storedEmail,
+      flowType: ConfirmAddressFlowType.UPDATE_CURRENT,
+      onSuccess: () => {
+        this.props.navigation.goBack();
+        this.authenticateNewEmail();
+      },
+      onBack: this.goBackToNotificationScreen,
+      onResend: this.onResend,
+    });
+  };
+
   authenticateNewEmail = () => {
     const { email } = this.state;
     const { navigation } = this.props;
@@ -107,12 +118,24 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
       flowType: ConfirmAddressFlowType.UPDATE_NEW,
       onSuccess: this.onUpdateSuccess,
       onBack: this.goBackToNotificationScreen,
+      onResend: () => {
+        this.props.navigation.goBack();
+        this.authenticateCurrentEmail();
+        this.onResend();
+      },
     });
   };
 
+  onResend = () =>
+    this.props.updateNotificationEmail(
+      this.props.route.params.subscribedWallets,
+      this.props.storedEmail,
+      this.state.email,
+    );
+
   onConfirm = () => {
     const { email } = this.state;
-    const { navigation, route, setError, storedEmail, updateNotificationEmail } = this.props;
+    const { route, setError, storedEmail, updateNotificationEmail } = this.props;
     const { subscribedWallets } = route.params;
 
     if (!isEmail(email)) {
@@ -121,21 +144,12 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
     if (email === storedEmail) {
       return setError(i18n.notifications.theSameAddressError);
     }
+
     if (!subscribedWallets.length) {
       return this.goToLocalEmailConfirm();
     }
     updateNotificationEmail(subscribedWallets, storedEmail, email, {
-      onSuccess: () => {
-        return navigation.navigate(Route.ConfirmEmail, {
-          email: storedEmail,
-          flowType: ConfirmAddressFlowType.UPDATE_CURRENT,
-          onSuccess: () => {
-            navigation.goBack();
-            this.authenticateNewEmail();
-          },
-          onBack: this.goBackToNotificationScreen,
-        });
-      },
+      onSuccess: this.authenticateCurrentEmail,
     });
   };
 

@@ -17,7 +17,11 @@ import {
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
-import { storedEmail } from 'app/state/notifications/selectors';
+import {
+  subscribeWallet as subscribeWalletAction,
+  SubscribeWalletActionCreator,
+} from 'app/state/notifications/actions';
+import { storedEmail, readableError } from 'app/state/notifications/selectors';
 import { selectors as walletsSelector } from 'app/state/wallets';
 import { createWallet as createWalletAction, CreateWalletAction } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
@@ -29,8 +33,10 @@ interface Props {
   route: RouteProp<RootStackParams, Route.CreateWallet>;
   appSettings: AppSettingsState;
   createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
+  subscribe: SubscribeWalletActionCreator;
   walletsLabels: string[];
   email: string;
+  error: string;
 }
 
 interface State {
@@ -109,13 +115,16 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       title: i18n.notifications.notifications,
       children: this.renderConfirmScreenContent(),
       gestureEnabled: false,
-      onConfirm: () =>
+      onConfirm: () => {
+        this.props.subscribe([wallet], email);
         navigation.navigate(Route.ConfirmEmail, {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
           wallets: [wallet],
           onSuccess: this.navigateToSuccesfullNotificationSubscriptionMessage,
-        }),
+          onResend: () => this.props.subscribe([wallet], email),
+        });
+      },
       onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
       isBackArrow: false,
     });
@@ -383,10 +392,12 @@ const mapStateToProps = (state: ApplicationState) => ({
   appSettings: state.appSettings,
   walletsLabels: walletsSelector.getWalletsLabels(state),
   email: storedEmail(state),
+  error: readableError(state),
 });
 
 const mapDispatchToProps = {
   createWallet: createWalletAction,
+  subscribe: subscribeWalletAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateWalletScreen);
