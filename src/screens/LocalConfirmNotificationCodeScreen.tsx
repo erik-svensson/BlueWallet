@@ -68,11 +68,11 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     const numberFail = numberAttempt + 1;
 
     if (numberFail === CONST.emailCodeErrorMax) {
-      this.resendCode(i18n.onboarding.resendCodeError);
+      this.resendCode(i18n.notifications.notifications);
     } else {
       this.props.setError(
-        i18n.formatString(i18n.onboarding.validationCodeError, {
-          numberAttempt: CONST.emailCodeErrorMax - numberFail,
+        i18n.formatString(i18n.notifications.codeError, {
+          attemptsLeft: CONST.emailCodeErrorMax - numberFail,
         }),
       );
       this.setState({
