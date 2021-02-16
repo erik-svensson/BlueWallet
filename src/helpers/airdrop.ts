@@ -1,7 +1,7 @@
 import { CONST, AirdropGoal, AirdropCarouselCardData } from 'app/consts';
 import { formatDate, getTimezoneOffset, isAfter } from 'app/helpers/date';
 
-import { formatToBtcvWithoutSign } from '../../utils/bitcoin';
+import { formatToBtcvWithoutSign, satoshiToBtc } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
 
@@ -58,18 +58,21 @@ export const getCarouselItem = (data: { balance: number; label: string }): Airdr
     { threshold: 1000, value: i18n.airdrop.walletsCarousel.whale },
   ];
 
-  const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > data.balance);
+  const btcvBalance = satoshiToBtc(data.balance);
+  const balance = formatToBtcvWithoutSign(btcvBalance);
+
+  const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > btcvBalance);
   // TODO: edge case of "all goals reached" not covered by designs. Awaiting UX input. For now returning last one - "whale"
   const nextGoal = unreachedGoals[0] || airdropGoals[airdropGoals.length - 1];
   const nextGoalIndex = airdropGoals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
 
-  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= data.balance);
+  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= btcvBalance);
   // TODO: edge case of "none goals reached" not covered by designs. Awaiting UX input. For now returning first one - "shrimp"
   const previousGoal = reachedGoals[reachedGoals.length - 1] || airdropGoals[0];
 
   return {
     header: data.label,
-    circleInnerFirstLine: formatToBtcvWithoutSign(data.balance),
+    circleInnerFirstLine: balance,
     circleInnerSecondLine: i18n.airdrop.circularWalletBalance.yourBalance,
     footerFirstLine: _isAfterAirdrop
       ? i18n.airdrop.walletsCarousel.youReachedGoal
