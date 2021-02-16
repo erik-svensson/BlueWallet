@@ -58,14 +58,15 @@ export const getCarouselItem = (data: { balance: number; label: string }): Airdr
     { threshold: 1000, value: i18n.airdrop.walletsCarousel.whale },
   ];
 
-  const balance = formatToBtcvWithoutSign(satoshiToBtc(data.balance));
+  const btcvBalance = satoshiToBtc(data.balance);
+  const balance = formatToBtcvWithoutSign(btcvBalance);
 
-  const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > parseInt(balance, 10));
+  const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > btcvBalance);
   // TODO: edge case of "all goals reached" not covered by designs. Awaiting UX input. For now returning last one - "whale"
   const nextGoal = unreachedGoals[0] || airdropGoals[airdropGoals.length - 1];
   const nextGoalIndex = airdropGoals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
 
-  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= parseInt(balance, 10));
+  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= btcvBalance);
   // TODO: edge case of "none goals reached" not covered by designs. Awaiting UX input. For now returning first one - "shrimp"
   const previousGoal = reachedGoals[reachedGoals.length - 1] || airdropGoals[0];
 
