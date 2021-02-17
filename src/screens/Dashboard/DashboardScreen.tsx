@@ -266,7 +266,7 @@ class DashboardScreen extends Component<Props, State> {
         {!!this.props.isFilteringOn && (
           <View style={styles.clearFiltersButtonContainer}>
             <TouchableOpacity onPress={this.resetFilters} style={styles.clearFiltersButton}>
-              <StyledText title={i18n.filterTransactions.clearFilters} />
+              <StyledText testID="clear-all-filters-button" title={i18n.filterTransactions.clearFilters} />
             </TouchableOpacity>
           </View>
         )}

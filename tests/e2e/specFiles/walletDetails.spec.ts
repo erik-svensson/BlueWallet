@@ -2,7 +2,7 @@ import { expect } from 'detox';
 
 import { isBeta, WALLETS_WITH_COINS } from '../helpers';
 import app from '../pageObjects';
-import { importExistingWallet } from '../steps';
+import steps from '../steps';
 
 describe('Wallet details', () => {
   const walletName = 'Scrooge McDuck wallet';
@@ -15,7 +15,7 @@ describe('Wallet details', () => {
   });
 
   beforeEach(async () => {
-    await importExistingWallet({
+    await steps.importWallet({
       type: '3-Key Vault',
       name: walletName,
       fastPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].FAST_KEY,

@@ -2,7 +2,7 @@ import { expect } from 'detox';
 
 import { isBeta, createRandomNote, WALLETS_WITH_COINS, DEFAULT_TRANSACTION_PASSWORD } from '../../helpers';
 import app from '../../pageObjects';
-import { importExistingWallet } from '../../steps';
+import steps from '../../steps';
 
 const DATA_FOR_TRANSACTIONS = {
   AMOUNT_TO_SEND: '0.0001',
@@ -21,7 +21,7 @@ describe('Transactions', () => {
       it('should be possible to send coins from 3-Key Vault wallet (Secure Transaction) to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
 
-        await importExistingWallet({
+        await steps.importWallet({
           type: '3-Key Vault',
           name: '3-Key wallet',
           fastPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].FAST_KEY,
@@ -43,7 +43,7 @@ describe('Transactions', () => {
 
     describe('@ios @regression', () => {
       it('should be possible to send coins from 3-Key Vault wallet (Fast Transaction) to 3-Key Vault wallet', async () => {
-        await importExistingWallet({
+        await steps.importWallet({
           type: '3-Key Vault',
           name: '3-Key wallet',
           fastPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].FAST_KEY,
@@ -66,7 +66,7 @@ describe('Transactions', () => {
       it('should be possible to send coins from 2-Key Vault wallet to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
 
-        await importExistingWallet({
+        await steps.importWallet({
           type: '2-Key Vault',
           name: '2-Key wallet',
           cancelPublicKey: WALLETS_WITH_COINS['2-Keys Vault'].CANCEL_KEY,
@@ -88,7 +88,7 @@ describe('Transactions', () => {
       it('should be possible to send coins from Standard HD P2SH wallet to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
 
-        await importExistingWallet({
+        await steps.importWallet({
           type: 'Standard HD P2SH',
           name: 'Standard HD wallet',
           seedPhrase: WALLETS_WITH_COINS['Standard HD P2SH'].SEED_PHRASE,
@@ -109,7 +109,7 @@ describe('Transactions', () => {
       it('should be possible to send coins from Standard P2SH wallet to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
 
-        await importExistingWallet({
+        await steps.importWallet({
           type: 'Standard HD P2SH',
           name: 'Standard P2SH',
           seedPhrase: WALLETS_WITH_COINS['Standard P2SH'].SEED_PHRASE,
@@ -130,7 +130,7 @@ describe('Transactions', () => {
       it('should be possible to send coins from Standard HD SegWit wallet to 3-Key Vault wallet', async () => {
         const transactionNote = createRandomNote();
 
-        await importExistingWallet({
+        await steps.importWallet({
           type: 'Standard HD P2SH',
           name: 'Standard HD Segwit wallet',
           seedPhrase: WALLETS_WITH_COINS['Standard HD Segwit'].SEED_PHRASE,

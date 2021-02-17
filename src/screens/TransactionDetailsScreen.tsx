@@ -81,7 +81,9 @@ class TransactionDetailsScreen extends Component<Props> {
               resizeMode="contain"
             />
             <Image source={icons.wallet} style={styles.walletIcon} resizeMode="contain" />
-            <EllipsisText style={styles.walletLabel}>{transaction.walletLabel}</EllipsisText>
+            <EllipsisText testID="transaction-details-header" style={styles.walletLabel}>
+              {transaction.walletLabel}
+            </EllipsisText>
           </View>
           {transaction.toExternalAddress !== undefined && (
             <View style={styles.rowWrapper}>
@@ -203,6 +205,7 @@ class TransactionDetailsScreen extends Component<Props> {
 
     return (
       <ScreenTemplate
+        testID="transction-details-screen"
         header={
           <Header
             isBackArrow
@@ -230,7 +233,7 @@ class TransactionDetailsScreen extends Component<Props> {
         <View style={styles.contentRowContainer}>
           <View style={styles.row}>
             <Text style={styles.contentRowTitle}>{i18n.transactions.details.from}</Text>
-            <CopyButton textToCopy={splitForm} />
+            <CopyButton testID="from-address-copy-button" textToCopy={splitForm} />
           </View>
           <Text style={styles.contentRowBody}>{fromValue}</Text>
           <StyledText
@@ -243,17 +246,18 @@ class TransactionDetailsScreen extends Component<Props> {
         <View style={styles.contentRowContainer}>
           <View style={styles.row}>
             <Text style={styles.contentRowTitle}>{i18n.transactions.details.to}</Text>
-            <CopyButton textToCopy={toValue.split(',')[0]} />
+            <CopyButton testID="to-address-copy-button" textToCopy={toValue.split(',')[0]} />
           </View>
           <Text style={styles.contentRowBody}>{toValue}</Text>
         </View>
         <View style={styles.contentRowContainer}>
           <View style={styles.row}>
             <Text style={styles.contentRowTitle}>{i18n.transactions.details.transactionId}</Text>
-            <CopyButton textToCopy={transaction.txid} />
+            <CopyButton testID="txid-copy-button" textToCopy={transaction.txid} />
           </View>
           <Text style={styles.contentRowBody}>{transaction.txid}</Text>
           <StyledText
+            testID="view-in-block-explorer-button"
             title={i18n.transactions.details.viewInBlockRxplorer}
             onPress={() => {
               const url = `${config.explorerUrl}/tx/${transaction.txid}`;

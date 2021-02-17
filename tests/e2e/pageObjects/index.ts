@@ -5,8 +5,10 @@ import Authenticators from './pages/Authenticators';
 import BetaVersionScreen from './pages/BetaVersionScreen';
 import Dashboard from './pages/Dashboard';
 import DeveloperRoom from './pages/DeveloperRoom';
+import FiltersScreen from './pages/FiltersScreen';
 import Onboarding from './pages/Onboarding';
 import TermsConditionsScreen from './pages/TermsConditionsScreen';
+import TransactionDetails from './pages/TransactionDetailsScreen';
 import TransactionsReceive from './pages/Transactions/Receive';
 import TransactionsSend from './pages/Transactions/Send';
 import UnlockScreen from './pages/UnlockScreen';
@@ -23,6 +25,8 @@ const app = {
   developerRoom: DeveloperRoom(),
   onboarding: Onboarding(),
   dashboard: Dashboard(),
+  filterScreen: FiltersScreen(),
+  transactionDetails: TransactionDetails(),
   wallets: Wallets(),
   authenticators: Authenticators(),
   addressBook: AddressBook(),

@@ -67,6 +67,7 @@ export class ActionSheet extends PureComponent<Props> {
 
     return wallets.map((wallet: Wallet, index: number) => (
       <WalletItem
+        testID={`wallet-dropdown-${wallet.label}-item`}
         key={`${wallet.secret}${wallet.label}`}
         variant={wallet.label === 'All wallets' ? GradientView.Variant.Secondary : GradientView.Variant.Primary}
         value={wallet.balance}

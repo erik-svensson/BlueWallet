@@ -96,7 +96,7 @@ export enum TransactionStatus {
   PENDING = 'PENDING',
   DONE = 'DONE',
   CANCELED = 'CANCELED',
-  'CANCELED-DONE' = 'CANCELED-DONE',
+  CANCELED_DONE = 'CANCELED_DONE',
 }
 
 enum AdditionalTags {

@@ -40,6 +40,7 @@ export const DashboardContentHeader = ({
   return (
     <View style={styles.header}>
       <Dropdown
+        testID="wallets-dropdown"
         title={i18n.formatBalance(Number(balance), unit, true)}
         label={<Text style={styles.buttonDescription}>{i18n.wallets.dashboard.availableBalance}</Text>}
         onSelectPress={onSelectPress}
@@ -77,7 +78,7 @@ export const DashboardContentHeader = ({
             <Text style={styles.circleButtonText}>{i18n.wallets.dashboard.receive}</Text>
           </TouchableOpacity>
           {!!type && shouldRenderRecover(type) && (
-            <TouchableOpacity style={styles.circleButton} onPress={onRecoveryPress}>
+            <TouchableOpacity testID="recover-coins-button" style={styles.circleButton} onPress={onRecoveryPress}>
               <Image source={images.cancel} style={styles.circleButtonImage} />
               <Text style={styles.circleButtonText}>{i18n.wallets.dashboard.recover}</Text>
             </TouchableOpacity>

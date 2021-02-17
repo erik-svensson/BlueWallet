@@ -34,6 +34,7 @@ export class WalletsCarousel extends Component<Props> {
     return (
       <View>
         <Carousel
+          testID="wallet-carousel"
           {...this.props}
           ref={this.carouselRef}
           renderItem={this.renderItem}

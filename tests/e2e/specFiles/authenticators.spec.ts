@@ -2,7 +2,7 @@ import { expect } from 'detox';
 
 import { isBeta } from '../helpers';
 import app from '../pageObjects';
-import { createAuthenticator } from '../steps';
+import steps from '../steps';
 
 describe('Authenticators', () => {
   beforeEach(async () => {
@@ -20,7 +20,7 @@ describe('Authenticators', () => {
 
     describe('@android @ios @regression', () => {
       it('should be possible to display details of an authenticator', async () => {
-        await createAuthenticator('My Auth');
+        await steps.createAuthenticator('My Auth');
 
         await app.authenticators.dashboardScreen.tapOnAuthenticator('My Auth');
         await expect(app.authenticators.details.detailsScreen.nameInput).toBeVisible();
@@ -57,7 +57,7 @@ describe('Authenticators', () => {
       xit('should be possible to import an authenticator using QR code', async () => {});
 
       it("shouldn't be possible to create a new authenticator with non-unique name", async () => {
-        await createAuthenticator('My Auth');
+        await steps.createAuthenticator('My Auth');
 
         await app.authenticators.dashboardScreen.tapOnAddButton();
         await app.authenticators.addNewAuthenticator.createScreen.typeName('My Auth');
@@ -65,7 +65,7 @@ describe('Authenticators', () => {
       });
 
       it("shouldn't be possible to import a new authenticator with non-unique name", async () => {
-        await createAuthenticator('My Auth');
+        await steps.createAuthenticator('My Auth');
 
         await app.authenticators.dashboardScreen.tapOnAddButton();
         await app.authenticators.addNewAuthenticator.createScreen.tapOnImportButton();
@@ -74,7 +74,7 @@ describe('Authenticators', () => {
       });
 
       it("shouldn't be possible to import a new authenticator if seed phrase is invalid", async () => {
-        await createAuthenticator('My Auth');
+        await steps.createAuthenticator('My Auth');
 
         await app.authenticators.dashboardScreen.tapOnAddButton();
         await app.authenticators.addNewAuthenticator.createScreen.tapOnImportButton();
@@ -87,7 +87,7 @@ describe('Authenticators', () => {
   describe('Details', () => {
     describe('@android @ios @smoke', () => {
       it('should be possible to check details of an authenticator', async () => {
-        await createAuthenticator('My Auth');
+        await steps.createAuthenticator('My Auth');
 
         await app.authenticators.dashboardScreen.tapOnAuthenticator('My Auth');
         await expect(app.authenticators.details.detailsScreen.nameInput).toBeVisible();
@@ -96,7 +96,7 @@ describe('Authenticators', () => {
 
     describe('@android @ios @regression', () => {
       it('should be possible to rename an authenticator', async () => {
-        await createAuthenticator('My Auth');
+        await steps.createAuthenticator('My Auth');
 
         await app.authenticators.dashboardScreen.tapOnAuthenticator('My Auth');
         await app.authenticators.details.detailsScreen.changeName('Goofy Auth\n');
@@ -104,7 +104,7 @@ describe('Authenticators', () => {
       });
 
       it('should be possible to delete an authenticator', async () => {
-        await createAuthenticator('My Auth');
+        await steps.createAuthenticator('My Auth');
 
         await app.authenticators.dashboardScreen.tapOnAuthenticator('My Auth');
         await app.authenticators.details.detailsScreen.scrollView.scrollTo('bottom');

@@ -1,7 +1,7 @@
 import app from './pageObjects';
 import { CreateWalletOptions, ImportWalletOptions } from './pageObjects/types';
 
-export const passThroughOnboarding = async (pin: string, password: string) => {
+const passThroughOnboarding = async (pin: string, password: string) => {
   await app.onboarding.createPinScreen.typePin(pin);
   await app.onboarding.confirmPinScreen.typePin(pin);
 
@@ -14,7 +14,7 @@ export const passThroughOnboarding = async (pin: string, password: string) => {
   await app.onboarding.successScreen.close();
 };
 
-export const createWallet = async (options: CreateWalletOptions) => {
+const createWallet = async (options: CreateWalletOptions) => {
   const { type, name, fastPublicKey, cancelPublicKey } = options;
 
   await app.dashboard.dashboardScreen.tapOnAddButton();
@@ -36,7 +36,7 @@ export const createWallet = async (options: CreateWalletOptions) => {
   await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
 };
 
-export const importExistingWallet = async (options: ImportWalletOptions) => {
+const importWallet = async (options: ImportWalletOptions) => {
   const { type, name, seedPhrase, fastPublicKey, cancelPublicKey } = options;
 
   await app.dashboard.dashboardScreen.tapOnAddButton();
@@ -62,11 +62,11 @@ export const importExistingWallet = async (options: ImportWalletOptions) => {
   await app.wallets.importWallet.successScreen.close();
 };
 
-export const createAuthenticator = async (name: string) => {
-  await app.dashboard.dashboardScreen.tapOnAddButton();
+const createAuthenticator = async (name: string) => {
+  await app.authenticators.dashboardScreen.tapOnAddButton();
 
-  await app.authenticators.addNewAuthenticator.createScreen.submit();
   await app.authenticators.addNewAuthenticator.createScreen.typeName(name);
+  await app.authenticators.addNewAuthenticator.createScreen.submit();
   await app.authenticators.addNewAuthenticator.loadingScreen.waitUntilEnded();
   await app.authenticators.addNewAuthenticator.publicKeyScreen.proceed();
   await app.authenticators.addNewAuthenticator.seedPhraseScreen.proceed();
@@ -79,3 +79,7 @@ export const createNewContact = async (name: string, address: string) => {
   await app.addressBook.newContact.addNewContactScreen.submit();
   await app.addressBook.newContact.successScreen.close();
 };
+
+const steps = { passThroughOnboarding, createWallet, importWallet, createAuthenticator, createNewContact };
+
+export default steps;

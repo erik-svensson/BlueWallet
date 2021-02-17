@@ -42,7 +42,7 @@ class TransactionList extends PureComponent<Props> {
 
   renderListEmpty = () => {
     return (
-      <View style={styles.noTransactionsContainer}>
+      <View testID="no-transactions-icon" style={styles.noTransactionsContainer}>
         <Image source={images.noTransactions} style={styles.noTransactionsImage} />
         <Text style={styles.noTransactionsLabel}>{i18n.wallets.dashboard.noTransactions}</Text>
       </View>
@@ -64,7 +64,7 @@ class TransactionList extends PureComponent<Props> {
     return (
       <View style={styles.itemWrapper}>
         <TransactionItem
-          testID={transaction.note && `transaction-item-${transaction.note}`}
+          testID={`transaction-item-${transaction.note ? transaction.note : transaction.txid}`}
           item={transaction}
           onPress={this.onTransactionItemPress}
         />

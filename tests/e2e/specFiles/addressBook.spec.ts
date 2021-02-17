@@ -1,4 +1,4 @@
-import { expect } from 'detox';
+import { expect, waitFor } from 'detox';
 
 import { isBeta, WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers';
 import app from '../pageObjects';
