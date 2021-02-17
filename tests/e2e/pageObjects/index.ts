@@ -25,7 +25,7 @@ const app = {
   developerRoom: DeveloperRoom(),
   onboarding: Onboarding(),
   dashboard: Dashboard(),
-  filterScreen: FiltersScreen(),
+  filtersScreen: FiltersScreen(),
   transactionDetails: TransactionDetails(),
   wallets: Wallets(),
   authenticators: Authenticators(),

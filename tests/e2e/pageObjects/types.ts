@@ -1,9 +1,9 @@
-export type StandardWalletType = '3-Key Vault' | '2-Key Vault' | 'Standard HD P2SH';
+export type BasicWalletType = '3-Key Vault' | '2-Key Vault' | 'Standard HD P2SH';
 
-export type WalletType = StandardWalletType | 'Standard P2SH' | 'Standard HD SegWit';
+export type WalletType = BasicWalletType | 'Standard P2SH' | 'Standard HD SegWit';
 
 export interface ImportWalletOptions {
-  type: StandardWalletType;
+  type: BasicWalletType;
   name: string;
   seedPhrase: string;
   fastPublicKey?: string;

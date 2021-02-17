@@ -112,7 +112,7 @@ describe('Dashboard', () => {
       await expect(app.dashboard.dashboardScreen.recieveButton).toBeVisible();
       await expect(app.dashboard.dashboardScreen.sendButton).toBeVisible();
 
-      await expect(app.dashboard.dashboardScreen.recoverButton).toBeNotVisible();
+      await expect(app.dashboard.dashboardScreen.cancelButton).toBeNotVisible();
     });
 
     it('should be displayed Send, Receive, and Cancel buttons for 2 Key Vault wallets', async () => {
@@ -123,7 +123,7 @@ describe('Dashboard', () => {
       });
 
       await expect(app.dashboard.dashboardScreen.recieveButton).toBeVisible();
-      await expect(app.dashboard.dashboardScreen.recoverButton).toBeVisible();
+      await expect(app.dashboard.dashboardScreen.cancelButton).toBeVisible();
       await expect(app.dashboard.dashboardScreen.sendButton).toBeVisible();
     });
 
@@ -136,7 +136,7 @@ describe('Dashboard', () => {
       });
 
       await expect(app.dashboard.dashboardScreen.recieveButton).toBeVisible();
-      await expect(app.dashboard.dashboardScreen.recoverButton).toBeVisible();
+      await expect(app.dashboard.dashboardScreen.cancelButton).toBeVisible();
       await expect(app.dashboard.dashboardScreen.sendButton).toBeVisible();
     });
 
@@ -325,8 +325,8 @@ describe('Dashboard', () => {
         );
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
-        await app.filterScreen.tapOnReceivedFilterOption();
-        await app.filterScreen.tapOnApplyFiltersButton();
+        await app.filtersScreen.tapOnReceivedFilterOption();
+        await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of receivedTransactions) {
           await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
@@ -347,8 +347,8 @@ describe('Dashboard', () => {
         );
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
-        await app.filterScreen.tapOnSentFilterOption();
-        await app.filterScreen.tapOnApplyFiltersButton();
+        await app.filtersScreen.tapOnSentFilterOption();
+        await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of receivedTransactions) {
           await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
@@ -371,8 +371,8 @@ describe('Dashboard', () => {
         );
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
-        await app.filterScreen.chooseContactToFilterBy(fromAddress);
-        await app.filterScreen.tapOnApplyFiltersButton();
+        await app.filtersScreen.chooseContactToFilterBy(fromAddress);
+        await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of transactions) {
           await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
@@ -395,8 +395,8 @@ describe('Dashboard', () => {
         );
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
-        await app.filterScreen.typeFromAmount('0.01');
-        await app.filterScreen.tapOnApplyFiltersButton();
+        await app.filtersScreen.typeFromAmount('0.01');
+        await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of transactions) {
           await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
@@ -417,9 +417,9 @@ describe('Dashboard', () => {
         );
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
-        await app.filterScreen.tapOnSentFilterOption();
-        await app.filterScreen.tapOnStatusOption(TransactionStatus.CANCELED_DONE);
-        await app.filterScreen.tapOnApplyFiltersButton();
+        await app.filtersScreen.tapOnSentFilterOption();
+        await app.filtersScreen.tapOnStatusOption(TransactionStatus.CANCELED_DONE);
+        await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of transactions) {
           await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
@@ -432,18 +432,18 @@ describe('Dashboard', () => {
 
       it("shouldn't apply filters if a user exited the screen by back button", async () => {
         await app.dashboard.dashboardScreen.tapOnFilterButton();
-        await app.filterScreen.tapOnStatusOption(TransactionStatus.CANCELED_DONE);
+        await app.filtersScreen.tapOnStatusOption(TransactionStatus.CANCELED_DONE);
 
-        await app.filterScreen.header.tapOnBackButton();
-        await expect(app.filterScreen.clearAllFiltersButton).toBeNotVisible();
+        await app.filtersScreen.header.tapOnBackButton();
+        await expect(app.filtersScreen.clearAllFiltersButton).toBeNotVisible();
       });
 
       it('should be possible to clear all applied filters from Dashboard screen', async () => {
         const transactions = TRANSACTION_WALLETS['3-Key Vault'].TRANSACTIONS;
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
-        await app.filterScreen.tapOnStatusOption(TransactionStatus.CANCELED_DONE);
-        await app.filterScreen.tapOnApplyFiltersButton();
+        await app.filtersScreen.tapOnStatusOption(TransactionStatus.CANCELED_DONE);
+        await app.filtersScreen.tapOnApplyFiltersButton();
 
         await app.dashboard.dashboardScreen.tapOnClearAllFiltersButton();
 
@@ -456,12 +456,12 @@ describe('Dashboard', () => {
         const transactions = TRANSACTION_WALLETS['3-Key Vault'].TRANSACTIONS;
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
-        await app.filterScreen.tapOnStatusOption(TransactionStatus.CANCELED_DONE);
-        await app.filterScreen.tapOnApplyFiltersButton();
+        await app.filtersScreen.tapOnStatusOption(TransactionStatus.CANCELED_DONE);
+        await app.filtersScreen.tapOnApplyFiltersButton();
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
-        await app.filterScreen.tapOnClearAllButton();
-        await app.filterScreen.header.tapOnBackButton();
+        await app.filtersScreen.tapOnClearAllButton();
+        await app.filtersScreen.header.tapOnBackButton();
 
         for (const transaction of transactions) {
           await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);

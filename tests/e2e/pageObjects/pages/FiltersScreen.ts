@@ -36,12 +36,12 @@ const FiltersScreen = () => ({
   },
 
   async selectFromDateFilter() {
-    // No idea how to implement this with the current date picker component
+    // No idea how to implement this with the current date picker component. Probably it's not possible
     throw new Error('Not implemented');
   },
 
   async selectToDateFilter() {
-    // No idea how to implement this with the current date picker component
+    // No idea how to implement this with the current date picker component. Probably it's not possible
     throw new Error('Not implemented');
   },
 

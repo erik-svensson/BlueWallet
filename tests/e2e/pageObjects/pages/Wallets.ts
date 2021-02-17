@@ -3,7 +3,7 @@ import { by, element } from 'detox';
 import actions from '../../actions';
 import MessageScreen from '../common/MessageScreen';
 import ScanQrCodeScreen from '../common/ScanQrCodeScreen';
-import { StandardWalletType, WalletType } from '../types';
+import { BasicWalletType, WalletType } from '../types';
 
 const Wallets = () => {
   const AddNewWallet = () => {
@@ -85,7 +85,7 @@ const Wallets = () => {
       },
       proceedButton: element(by.id('confirm-import-button')),
 
-      async chooseType(type: StandardWalletType) {
+      async chooseType(type: BasicWalletType) {
         await actions.tap(this.walletTypeRadios[type]);
       },
 

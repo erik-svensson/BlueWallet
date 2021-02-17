@@ -40,7 +40,7 @@ export const DashboardContentHeader = ({
   return (
     <View style={styles.header}>
       <Dropdown
-        testID="wallets-dropdown"
+        testID="dashboard-wallets-dropdown"
         title={i18n.formatBalance(Number(balance), unit, true)}
         label={<Text style={styles.buttonDescription}>{i18n.wallets.dashboard.availableBalance}</Text>}
         onSelectPress={onSelectPress}

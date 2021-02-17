@@ -10,8 +10,8 @@ const Dashboard = () => {
     addButton: element(by.id('add-wallet-button')),
     filterButton: element(by.id('filter-transactions-button')),
 
-    walletsCarousel: element(by.id('wallet-carousel')),
-    walletsDropdown: element(by.id('wallets-dropdown')),
+    walletsCarousel: element(by.id('wallets-carousel')),
+    walletsDropdown: element(by.id('dashboard-wallets-dropdown')),
     getWalletDropdownItem: (walletName: string) => element(by.id(`wallet-dropdown-${walletName}-item`)),
     getWalletCardElement: (walletName: string) => element(by.id(`wallet-${walletName}-card`)),
     getWalletDetailsButtonElement: (walletName: string) => element(by.id(`show-${walletName}-details-button`)),
@@ -19,7 +19,7 @@ const Dashboard = () => {
     noWalletsIcon: element(by.id('no-wallets-icon')),
 
     recieveButton: element(by.id('receive-coins-button')),
-    recoverButton: element(by.id('recover-coins-button')),
+    cancelButton: element(by.id('recover-coins-button')),
     sendButton: element(by.id('send-coins-button')),
 
     noTransactionsIcon: element(by.id('no-transactions-icon')),
