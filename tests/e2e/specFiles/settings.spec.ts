@@ -25,7 +25,7 @@ describe('Settings', () => {
       await app.header.tapOnBackButton();
       await app.navigationBar.changeTab('wallets');
 
-      await app.wallets.dashboardScreen.tapOnAddButton();
+      await app.dashboard.dashboardScreen.tapOnAddButton();
 
       await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios['Standard HD P2SH']).toBeVisible();
       await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios['Standard HD SegWit']).toBeVisible();
@@ -96,7 +96,7 @@ describe('Settings', () => {
         await app.settings.languageScreen.confirmLanguageChange();
 
         // TODO: To make it working, use element.getAttributes('title'). It's supported only for iOS and Detox must be upgraded first
-        await waitFor(app.wallets.dashboardScreen.header)
+        await waitFor(app.dashboard.dashboardScreen.header)
           .toHaveText(walletsInLocalLanguages[language])
           .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT);
       }),

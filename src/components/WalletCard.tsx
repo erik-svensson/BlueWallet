@@ -35,7 +35,11 @@ export class WalletCard extends React.Component<Props> {
     const isAllWallets = wallet.label !== CONST.allWallets;
 
     return (
-      <GradientView style={[styles.itemContainer, containerStyle]} variant={GradientView.Variant.Primary}>
+      <GradientView
+        testID={isAllWallets ? `wallet-${wallet.getLabel()}-card` : `wallet-${CONST.allWallets}-card`}
+        style={[styles.itemContainer, containerStyle]}
+        variant={GradientView.Variant.Primary}
+      >
         <>
           <Image source={images.coinLogoInCircle} style={styles.iconInCircle} resizeMode="contain" />
           <View style={styles.cardContent}>

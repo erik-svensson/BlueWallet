@@ -7,11 +7,12 @@ interface Props {
   children: React.ReactNode | string;
   style?: StyleProp<TextStyle>;
   numberOfLines?: number;
+  testID?: string;
   ellipsizeMode?: EllipsizeMode;
 }
 
-export const EllipsisText = ({ children, style, numberOfLines = 1, ellipsizeMode = 'tail' }: Props) => (
-  <Text numberOfLines={numberOfLines} ellipsizeMode={ellipsizeMode} style={style}>
+export const EllipsisText = ({ children, style, testID, numberOfLines = 1, ellipsizeMode = 'tail' }: Props) => (
+  <Text testID={testID} numberOfLines={numberOfLines} ellipsizeMode={ellipsizeMode} style={style}>
     {children}
   </Text>
 );
