@@ -66,6 +66,7 @@ const Actions = () => {
     await carousel.swipe(direction, 'fast', 0.75, 0.5);
   };
 
+  /** Scrolls down and up to find an element */
   const searchForElement = async (target: Detox.DetoxAny, scrollable: string) => {
     const pixels = 100;
 
