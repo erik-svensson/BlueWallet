@@ -170,6 +170,7 @@ export class NotificationScreen extends Component<Props> {
         header={<Header isBackArrow={true} onBackArrow={onBackArrow} title={i18n.settings.notifications} />}
         noScroll
         footer={this.renderFooter()}
+        contentContainer={styles.screenTemplate}
       >
         {email ? (
           <>
@@ -185,6 +186,7 @@ export class NotificationScreen extends Component<Props> {
                   data={subscribedWallets}
                   renderItem={item => this.renderItem(item.item)}
                   keyExtractor={item => item.id}
+                  showsVerticalScrollIndicator={false}
                 />
               </>
             ) : (
@@ -223,6 +225,7 @@ const styles = StyleSheet.create({
     marginVertical: 18,
     marginTop: 40,
   },
+  screenTemplate: { flex: 1 },
   description: {
     ...typography.caption,
     color: palette.textGrey,
