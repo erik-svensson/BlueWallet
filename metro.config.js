@@ -2,8 +2,12 @@ const { getDefaultConfig } = require('metro-config');
 
 module.exports = (async () => {
   const {
-    resolver: { sourceExts, assetExts },
+    resolver: { assetExts, sourceExts: defaultSourceExts },
   } = await getDefaultConfig();
+
+  const sourceExts = process.env.RN_SRC_EXT
+    ? process.env.RN_SRC_EXT.split(',').concat(defaultSourceExts)
+    : defaultSourceExts;
 
   return {
     resolver: {
