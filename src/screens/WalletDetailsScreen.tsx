@@ -201,9 +201,6 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   subscribe = (wallet: Wallet, email: string) => {
     this.props.subscribe([wallet], email);
     this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE, () => this.props.subscribe([wallet], email));
-    // , {
-    // onSuccess: () => this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE, () => this.props.subscribe([wallet], email)),
-    // });
   };
 
   unSubscribe = (wallet: Wallet, email: string) => {
