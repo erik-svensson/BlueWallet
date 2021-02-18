@@ -45,7 +45,8 @@ export const CONST = {
   tcVersionRequired: 2,
   tcVersion: 'tcVersion',
   emailCodeErrorMax: 3,
-  walletsDefaultGapLimit: '20/20',
+  walletsDefaultGapLimit: 20,
+  walletsDefaultAddressRange: '20/0',
   userVersion: 'userVersion',
   newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
   buttonTimeoutSeconds: 30,
@@ -227,7 +228,8 @@ export interface Wallet {
 
 export interface WalletPayload {
   name: string;
-  gap_limit: string;
+  gap_limit: number;
+  address_range: string;
   derivation_path?: Record<string, unknown>;
   xpub: string;
   address_type: string;
