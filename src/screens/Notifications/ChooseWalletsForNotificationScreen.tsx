@@ -147,7 +147,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         <FlatList
           data={wallets}
           renderItem={item => this.renderItem(item.item)}
-          keyExtractor={(_, index) => index.toString()}
+          keyExtractor={item => item.id}
           ListHeaderComponent={this.renderListHeader()}
         />
       </ScreenTemplate>

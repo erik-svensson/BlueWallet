@@ -2,7 +2,6 @@ import { createSelector } from 'reselect';
 
 import { EmailNotificationsError } from 'app/api';
 import { GeneralHttpError } from 'app/api/client';
-import { CONST } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { WalletsState } from 'app/state/wallets/reducer';
 import { getById } from 'app/state/wallets/selectors';
