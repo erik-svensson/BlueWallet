@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { compose } from 'lodash/fp';
+import { compose, debounce } from 'lodash/fp';
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Keyboard, Alert } from 'react-native';
 import { connect } from 'react-redux';
@@ -127,7 +127,7 @@ export class ImportWalletScreen extends Component<Props, State> {
   };
 
   onChangeText = (mnemonic: string) => {
-    this.setState({ text: mnemonic });
+    debounce(200)(() => this.setState({ text: mnemonic }));
   };
 
   onLabelChange = (value: string) => {
