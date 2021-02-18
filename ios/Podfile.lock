@@ -411,7 +411,7 @@ PODS:
     - React-Core
   - RNPrivacySnapshot (1.0.0):
     - React
-  - RNRate (1.0.1):
+  - RNRate (1.2.4):
     - React
   - RNReanimated (1.13.2):
     - React-Core
@@ -502,7 +502,7 @@ DEPENDENCIES:
   - RNHandoff (from `../node_modules/react-native-handoff`)
   - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPrivacySnapshot (from `../node_modules/react-native-privacy-snapshot`)
-  - RNRate (from `../node_modules/react-native-rate/ios`)
+  - RNRate (from `../node_modules/react-native-rate`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSecureKeyStore (from `../node_modules/react-native-secure-key-store/ios`)
@@ -652,7 +652,7 @@ EXTERNAL SOURCES:
   RNPrivacySnapshot:
     :path: "../node_modules/react-native-privacy-snapshot"
   RNRate:
-    :path: "../node_modules/react-native-rate/ios"
+    :path: "../node_modules/react-native-rate"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -746,7 +746,7 @@ SPEC CHECKSUMS:
   RNHandoff: d3b0754cca3a6bcd9b25f544f733f7f033ccf5fa
   RNLocalize: 7c7aeda16c01db7a0918981c14875c0a53be9b79
   RNPrivacySnapshot: 71919dde3c6a29dd332115409c2aec564afee8f4
-  RNRate: 29be49c24b314c4e8ec09d848c3965f61cb0be47
+  RNRate: 15b861025a7821730761fce7f44561ce7e0b2de0
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
   RNSecureKeyStore: f1ad870e53806453039f650720d2845c678d89c8
@@ -762,4 +762,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 455bf95e96026a70ba7e1615d448987947c42e5b
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1
