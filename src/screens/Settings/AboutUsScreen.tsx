@@ -5,6 +5,7 @@ import Rate, { AndroidMarket } from 'react-native-rate';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
+import config from 'app/config';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -36,7 +37,7 @@ export const AboutUsScreen = () => {
 
     const options = {
       AppleAppID: '1515116464',
-      GooglePackageName: 'io.goldwallet.wallet',
+      GooglePackageName: config.applicationId,
       preferredAndroidMarket: AndroidMarket.Google,
       preferInApp,
       openAppStoreIfInAppFails,
