@@ -7,12 +7,13 @@ import { RowTemplate } from './RowTemplate';
 
 interface CardHeaderProps {
   title: string;
+  testID?: string;
   isChoosen: boolean;
   onCardPress: (title: string) => void;
 }
 
 export const CardHeader = (props: CardHeaderProps) => {
-  const { title, isChoosen, onCardPress } = props;
+  const { title, isChoosen, testID, onCardPress } = props;
 
   const onPress = () => {
     onCardPress(title);
@@ -20,6 +21,7 @@ export const CardHeader = (props: CardHeaderProps) => {
 
   return (
     <TouchableOpacity
+      testID={testID}
       activeOpacity={1}
       onPress={onPress}
       style={[styles.headerContainer, { borderBottomColor: isChoosen ? palette.textSecondary : palette.textGrey }]}
@@ -31,6 +33,7 @@ export const CardHeader = (props: CardHeaderProps) => {
 
 export interface Card {
   title: string;
+  testID?: string;
   content: any;
 }
 
@@ -51,6 +54,7 @@ export const CardGroup = ({ label, cards, onCardPressAction, activeTitle }: Prop
         items={cards.map((card, index) => (
           <CardHeader
             key={index}
+            testID={card.testID}
             title={card.title}
             isChoosen={isChoosen(card.title)}
             onCardPress={onCardPressAction}

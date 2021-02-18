@@ -5,11 +5,114 @@ export const WAIT_FOR_ELEMENT_TIMEOUT = 10 * SECOND;
 export const DEFAULT_UNLOCK_PIN = '1234';
 export const DEFAULT_TRANSACTION_PASSWORD = 'qwertyui';
 
+export enum TransactionType {
+  RECEIVED,
+  SENT,
+}
+
+export enum TransactionStatus {
+  PENDING = 'PENDING',
+  DONE = 'DONE',
+  CANCELED = 'CANCELED',
+  CANCELED_DONE = 'CANCELED_DONE',
+}
+
 interface ECDSA {
   PUBLIC_KEY: string;
   PRIVATE_KEY_PHRASE: string;
   PRIVATE_KEY: string;
 }
+
+/** Wallets used to test displaying transaction. Don't touch it. */
+export const TRANSACTION_WALLETS = {
+  '3-Key Vault': {
+    SEED_PHRASE: 'muscle danger eternal venture zoo kiss taste menu swap story category side',
+    FAST_KEY: {
+      PUBLIC_KEY:
+        '04a76693e3d79b43a954ce60efc3b6588750a42e1a52e4eb4dd21ab6620ceb739b2a1962e6c21981cedefc24f401dd2ef4f2051b296ff4ba2cb0cf15f31f103e5d',
+      PRIVATE_KEY_PHRASE: 'cricket cotton acquire unhappy maple social nest note steel moon project scale',
+      PRIVATE_KEY: 'e38ad7f3b216749383d247a7e46390658ddadf94748a8f689bca7fee3c1bc9e3',
+    },
+    CANCEL_KEY: {
+      PUBLIC_KEY:
+        '04d9f7578604c5161440e34dbdb4cb35b82e823f4d191b6d2581a32cd77af68527efb8e37661de7ae596d8a6ec219db8634635a7e054e470542da7559ee7f74ce8',
+      PRIVATE_KEY_PHRASE: 'license agree excite knife tortoise torch inquiry bone roast course social remind',
+      PRIVATE_KEY: 'a4d201a4bee0e8a5b624b9bf71fcf1ad24aaf35cefcba2495c4f6f50c268f985',
+    },
+    TRANSACTIONS: [
+      {
+        id: 'b58824f08e5c245d9fe7ff8753bfb295cd0ef806976051095e08a83184186512',
+        type: TransactionType.RECEIVED,
+        status: TransactionStatus.DONE,
+        from: '2NFCCzE2oWvMx2Z4hvgfsmDHqD4eo3Gczpe',
+        amount: 0.0001,
+      },
+      {
+        id: '4e791ccbba5397b95c77fccd4fe6b643ca7595cdf935060968187cee812dfbac',
+        type: TransactionType.RECEIVED,
+        status: TransactionStatus.DONE,
+        from: '2NFCCzE2oWvMx2Z4hvgfsmDHqD4eo3Gczpe',
+        amount: 0.01,
+      },
+      {
+        id: '70727170e4e84f80d9e9c4786929ac44610ce02e6fa1fe9a78597df82e09a679',
+        type: TransactionType.SENT,
+        status: TransactionStatus.CANCELED,
+        from: '2MuFYLrRvb6wfu668tKfKAF8P7HPZBGm3aa',
+        amount: 0.0002,
+      },
+      {
+        id: '246087148afd57f5ef02e29e87d92a223748ab81ccb7ca7434f3b9d73e179347',
+        type: TransactionType.SENT,
+        status: TransactionStatus.DONE,
+        from: '2N9e3xjNbcZbYg1JZjhYRTxcNgWTr8e4ZRZ',
+        amount: 0.0001,
+      },
+      {
+        id: 'c34dd81dd2777f95f52c02e0cafd87679a9cc3a54f01d20627b0fcdcd8027a1e',
+        type: TransactionType.SENT,
+        status: TransactionStatus.CANCELED_DONE,
+        from: '2MuFYLrRvb6wfu668tKfKAF8P7HPZBGm3aa',
+        amount: 0.0002,
+      },
+    ],
+  },
+  '2-Key Vault': {
+    SEED_PHRASE: 'reduce entire guitar kite frozen brand major rebuild grab joy only kingdom',
+    CANCEL_KEY: {
+      PUBLIC_KEY:
+        '04f69bf9db9b1e094e33ac4aeaea89071ffe77c55cfd6940ed66c0db3041847ce15b19e9abff17db1aa2c54d64359ff159bd150c4b049be75f802064a06e7eacf0',
+      PRIVATE_KEY_PHRASE: 'state stool vicious divert lion stereo lava cute wolf sport slab debate',
+      PRIVATE_KEY: '667353184fe4db381ebcb9549e567f9fbcd23a6322b88ca1ed8ec494ecfddfc0',
+    },
+    TRANSACTIONS: [
+      {
+        id: '0bfa12e3e765fdd0ed6dbf4076ebcfd5ba9bc3335d7706c8366dda2d801b499b',
+        type: TransactionType.RECEIVED,
+        status: TransactionStatus.DONE,
+        from: '2NCp8UPmPXwzScnC6pS1d8q2MvarRGXinWd',
+      },
+      {
+        id: '246087148afd57f5ef02e29e87d92a223748ab81ccb7ca7434f3b9d73e179347',
+        type: TransactionType.RECEIVED,
+        status: TransactionStatus.DONE,
+        from: '2N9e3xjNbcZbYg1JZjhYRTxcNgWTr8e4ZRZ',
+      },
+      {
+        id: '70727170e4e84f80d9e9c4786929ac44610ce02e6fa1fe9a78597df82e09a679',
+        type: TransactionType.RECEIVED,
+        status: TransactionStatus.CANCELED,
+        from: '2MuFYLrRvb6wfu668tKfKAF8P7HPZBGm3aa',
+      },
+      {
+        id: 'c34dd81dd2777f95f52c02e0cafd87679a9cc3a54f01d20627b0fcdcd8027a1e',
+        type: TransactionType.RECEIVED,
+        status: TransactionStatus.CANCELED_DONE,
+        from: '2MuFYLrRvb6wfu668tKfKAF8P7HPZBGm3aa',
+      },
+    ],
+  },
+};
 
 /** Wallets keys used for testing import feautre. Don't use them for other purposes. */
 export const WALLETS = {

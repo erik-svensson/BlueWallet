@@ -64,36 +64,14 @@ const Onboarding = () => {
     },
   });
 
-  const betaVersionScreen = BetaVersionScreen();
-  const createPinScreen = CreatePinScreen();
-  const confirmPinScreen = ConfirmPinScreen();
-  const createPasswordScreen = CreatePasswordScreen();
-  const confirmPasswordScreen = ConfirmPasswordScreen();
-  const successScreen = MessageScreen('success');
-  const addEmailNotificationScreen = AddEmailNotificationScreen();
-
-  const passThrough = async function(pin: string, password: string) {
-    await createPinScreen.typePin(pin);
-    await confirmPinScreen.typePin(pin);
-
-    await createPasswordScreen.typePassword(password);
-    await createPasswordScreen.submit();
-
-    await confirmPasswordScreen.typePassword(password);
-    await confirmPasswordScreen.submit();
-
-    await successScreen.close();
-  };
-
   return {
-    betaVersionScreen,
-    createPinScreen,
-    confirmPinScreen,
-    createPasswordScreen,
-    confirmPasswordScreen,
-    successScreen,
-    passThrough,
-    addEmailNotificationScreen,
+    betaVersionScreen: BetaVersionScreen(),
+    createPinScreen: CreatePinScreen(),
+    confirmPinScreen: ConfirmPinScreen(),
+    createPasswordScreen: CreatePasswordScreen(),
+    confirmPasswordScreen: ConfirmPasswordScreen(),
+    successScreen: MessageScreen('success'),
+    addEmailNotificationScreen: AddEmailNotificationScreen(),
   };
 };
 

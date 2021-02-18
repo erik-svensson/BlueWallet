@@ -57,7 +57,7 @@ export const SettingsScreen = (props: Props) => {
     <>
       <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} />
       <ListItem
-        testID="advanced-options"
+        testID="advanced-options-settings-item"
         title={i18n.settings.advancedOptions}
         source={icons.buildIcon}
         onPress={onAdvancedOptionsChange}

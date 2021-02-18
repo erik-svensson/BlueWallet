@@ -49,18 +49,49 @@ const Actions = () => {
     await target.multiTap(times);
   };
 
-  const scrollToElement = async (
-    target: Detox.DetoxAny,
-    scrollableElement: string,
-    options: ScrollToElementOptions = { pixels: 100, direction: 'down' },
-  ) => {
+  const scrollToElement = async (target: Detox.DetoxAny, scrollable: string, options?: ScrollToElementOptions) => {
+    const { pixels, direction } = options || { pixels: 100, direction: 'down' };
+
     await waitFor(target)
       .toBeVisible()
-      .whileElement(by.id(scrollableElement))
-      .scroll(options.pixels, options.direction);
+      .whileElement(by.id(scrollable))
+      .scroll(pixels, direction);
   };
 
-  return { waitForElement, typeText, tap, multiTap, scrollToElement };
+  const swipeCarousel = async (carousel: Detox.DetoxAny, direction: 'left' | 'right') => {
+    await waitFor(carousel)
+      .toBeVisible()
+      .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT);
+
+    await carousel.swipe(direction, 'fast', 0.75, 0.5);
+  };
+
+  /** Scrolls down and up to find an element */
+  const searchForElement = async (target: Detox.DetoxAny, scrollable: string) => {
+    const pixels = 100;
+
+    try {
+      await waitFor(target)
+        .toBeVisible()
+        .whileElement(by.id(scrollable))
+        .scroll(pixels, 'down');
+
+      return;
+    } catch (error) {}
+
+    try {
+      await waitFor(target)
+        .toBeVisible()
+        .whileElement(by.id(scrollable))
+        .scroll(pixels, 'up');
+
+      return;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return { waitForElement, typeText, tap, multiTap, scrollToElement, swipeCarousel, searchForElement };
 };
 
 export default Actions();
