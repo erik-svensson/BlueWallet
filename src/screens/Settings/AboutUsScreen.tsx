@@ -41,6 +41,7 @@ export const AboutUsScreen = () => {
       preferredAndroidMarket: AndroidMarket.Google,
       preferInApp,
       openAppStoreIfInAppFails,
+      inAppDelay: 0,
       fallbackPlatformURL: 'https://bitcoinvault.global',
     };
 
