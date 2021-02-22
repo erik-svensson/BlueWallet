@@ -213,7 +213,6 @@ class DashboardScreen extends Component<Props, State> {
 
   getTransactions = () => {
     const { allTransactions } = this.props;
-
     const activeWallet = this.getActiveWallet();
 
     return isAllWallets(activeWallet) ? allTransactions : allTransactions.filter(t => t.walletId === activeWallet.id);
