@@ -10,7 +10,7 @@ import { NativeModules } from 'react-native';
 const { RNRandomBytes } = NativeModules;
 
 import config from '../src/config';
-import { ELECTRUM_VAULT_SEED_KEY } from '../src/consts';
+import { ELECTRUM_VAULT_SEED_KEY, HeaderObject } from '../src/consts';
 import { bytesToBits, bitsToBytes } from './buffer';
 
 const i18n = require('../loc');
@@ -164,3 +164,30 @@ export const electrumVaultMnemonicToSeed = (mnemonic: string, password = '') =>
     keylen: 64,
     digest: 'sha512',
   });
+
+export const mapperForEnvironment = (environment: string, header: string) => {
+  const headersTestnet = {
+    xpub: '0488b21e',
+    ypub: '049d7cb2',
+    Ypub: '0295b43f',
+    zpub: '04b24746',
+    Zpub: '02aa7ed3',
+  };
+  const headersMainnet = {
+    xpub: '043587cf',
+    ypub: '044a5262',
+    Ypub: '024289ef',
+    zpub: '045f1cf6',
+    Zpub: '02575483',
+  };
+
+  const getKeyByValue = (obj: HeaderObject) =>
+    Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, value]));
+  const mainnet = config.networkName === 'bitcoinvault' && 'mainnet';
+
+  if (environment === mainnet) {
+    return getKeyByValue(headersMainnet)[header];
+  } else {
+    return getKeyByValue(headersTestnet)[header];
+  }
+};
