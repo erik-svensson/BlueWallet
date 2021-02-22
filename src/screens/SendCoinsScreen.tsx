@@ -23,7 +23,7 @@ import { CONST, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadTransactionsFees } from 'app/helpers/fees';
-import { checkZero } from 'app/helpers/helpers';
+import { checkMinSatoshi, checkZero } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
@@ -186,6 +186,9 @@ class SendCoinsScreen extends Component<Props, State> {
 
     const numAmount = this.toNumber(transaction.amount);
 
+    if (checkMinSatoshi(transaction.amount)) {
+      return i18n.send.details.amount_field_is_less_than_minSatoshi;
+    }
     if (!numAmount || numAmount <= 0) {
       return i18n.send.details.amount_field_is_not_valid;
     }

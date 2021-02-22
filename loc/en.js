@@ -382,6 +382,7 @@ module.exports = {
       amount_field_is_not_valid: 'Amount field is not valid',
       amount_is_too_high: "There is a maximum of {maxCoinsInput} BTCV that will ever exist, so don't try to send more!",
       amount_is_negative: 'Amount can not be negative',
+      amount_field_is_less_than_minSatoshi: 'The minimum amount you can send is 1 Satoshi',
       amount_placeholder: 'amount to send (in BTCV)',
       cancel: 'Cancel',
       create: 'Create Invoice',
