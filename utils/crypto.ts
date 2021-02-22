@@ -165,7 +165,7 @@ export const electrumVaultMnemonicToSeed = (mnemonic: string, password = '') =>
     digest: 'sha512',
   });
 
-export const mapperForEnvironment = (environment: string, header: string) => {
+export const getMasterPublicKeyPrefix = (header: string) => {
   const headersTestnet = {
     xpub: '0488b21e',
     ypub: '049d7cb2',
@@ -183,9 +183,8 @@ export const mapperForEnvironment = (environment: string, header: string) => {
 
   const getKeyByValue = (obj: HeaderObject) =>
     Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, value]));
-  const mainnet = config.networkName === 'bitcoinvault' && 'mainnet';
 
-  if (environment === mainnet) {
+  if (config.networkName === 'bitcoinvault') {
     return getKeyByValue(headersMainnet)[header];
   } else {
     return getKeyByValue(headersTestnet)[header];

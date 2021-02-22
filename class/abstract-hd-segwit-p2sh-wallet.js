@@ -6,7 +6,7 @@ import { NativeModules } from 'react-native';
 import { BitcoinUnit } from '../models/bitcoinUnits';
 import config from '../src/config';
 import { ELECTRUM_VAULT_SEED_PREFIXES } from '../src/consts';
-import { electrumVaultMnemonicToSeed, isElectrumVaultMnemonic, mapperForEnvironment } from '../utils/crypto';
+import { electrumVaultMnemonicToSeed, isElectrumVaultMnemonic, getMasterPublicKeyPrefix } from '../utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
@@ -24,10 +24,10 @@ const { RNRandomBytes } = NativeModules;
 function ypubToXpub(ypub) {
   let data = b58.decode(ypub);
 
-  if (data.readUInt32BE() !== Number(`0x${mapperForEnvironment(config.networkName, 'ypub')}`))
+  if (data.readUInt32BE() !== Number(`0x${getMasterPublicKeyPrefix('ypub')}`))
     throw new Error('Not a valid ypub extended key!');
   data = data.slice(4);
-  data = Buffer.concat([Buffer.from(mapperForEnvironment(config.networkName, 'xpub'), 'hex'), data]);
+  data = Buffer.concat([Buffer.from(getMasterPublicKeyPrefix('xpub'), 'hex'), data]);
 
   return b58.encode(data);
 }
@@ -173,7 +173,7 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
     let data = b58.decode(xpub);
 
     data = data.slice(4);
-    data = Buffer.concat([Buffer.from(mapperForEnvironment(config.networkName, 'ypub'), 'hex'), data]);
+    data = Buffer.concat([Buffer.from(getMasterPublicKeyPrefix('ypub'), 'hex'), data]);
     this._xpub = b58.encode(data);
 
     return this._xpub;
