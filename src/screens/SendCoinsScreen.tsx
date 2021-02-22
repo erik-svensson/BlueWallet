@@ -493,7 +493,7 @@ class SendCoinsScreen extends Component<Props, State> {
     return wallet.type === HDSegwitP2SHAirWallet.type;
   };
 
-  onVaultTranscationSelect = (vaultTxType: number) => {
+  onVaultTransactionSelect = (vaultTxType: number) => {
     this.setState({ vaultTxType });
   };
 
@@ -508,7 +508,7 @@ class SendCoinsScreen extends Component<Props, State> {
           subtitle={i18n.send.transaction.alertDesc}
           value={bitcoin.payments.VaultTxType.Alert}
           checked={this.state.vaultTxType === bitcoin.payments.VaultTxType.Alert}
-          onPress={this.onVaultTranscationSelect}
+          onPress={this.onVaultTransactionSelect}
         />
         <RadioButton
           testID="send-coins-secure-fast-transaction-type-radio"
@@ -516,7 +516,7 @@ class SendCoinsScreen extends Component<Props, State> {
           subtitle={i18n.send.transaction.instantDesc}
           value={bitcoin.payments.VaultTxType.Instant}
           checked={this.state.vaultTxType === bitcoin.payments.VaultTxType.Instant}
-          onPress={this.onVaultTranscationSelect}
+          onPress={this.onVaultTransactionSelect}
         />
       </View>
     );
