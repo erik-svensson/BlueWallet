@@ -167,18 +167,18 @@ export const electrumVaultMnemonicToSeed = (mnemonic: string, password = '') =>
 
 export const getMasterPublicKeyPrefix = (header: string) => {
   const headersTestnet = {
-    xpub: '0488b21e',
-    ypub: '049d7cb2',
-    Ypub: '0295b43f',
-    zpub: '04b24746',
-    Zpub: '02aa7ed3',
-  };
-  const headersMainnet = {
     xpub: '043587cf',
     ypub: '044a5262',
     Ypub: '024289ef',
     zpub: '045f1cf6',
     Zpub: '02575483',
+  };
+  const headersMainnet = {
+    xpub: '0488b21e',
+    ypub: '049d7cb2',
+    Ypub: '0295b43f',
+    zpub: '04b24746',
+    Zpub: '02aa7ed3',
   };
 
   const getKeyByValue = (obj: HeaderObject) =>
