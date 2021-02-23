@@ -557,12 +557,4 @@ export interface Authenticator {
 
 export type GlobalParams = RootStackParams & MainTabNavigatorParams;
 
-export type HeaderObject = {
-  xpub: string;
-  ypub: string;
-  Ypub: string;
-  zpub: string;
-  Zpub: string;
-};
-
 export type MasterPublicKay = 'xpub' | 'ypub' | 'Ypub' | 'Zpub' | 'zpub';

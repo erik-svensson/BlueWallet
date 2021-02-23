@@ -10,7 +10,7 @@ import { NativeModules } from 'react-native';
 const { RNRandomBytes } = NativeModules;
 
 import config from '../src/config';
-import { ELECTRUM_VAULT_SEED_KEY, HeaderObject, MasterPublicKay } from '../src/consts';
+import { ELECTRUM_VAULT_SEED_KEY, MasterPublicKay } from '../src/consts';
 import { bytesToBits, bitsToBytes } from './buffer';
 
 const i18n = require('../loc');
@@ -181,12 +181,5 @@ export const getMasterPublicKeyPrefix = (header: MasterPublicKay) => {
     Zpub: '02aa7ed3',
   };
 
-  const getKeyByValue = (obj: HeaderObject) =>
-    Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, value]));
-
-  if (config.networkName === 'bitcoinvault') {
-    return getKeyByValue(headersMainnet)[header];
-  } else {
-    return getKeyByValue(headersTestnet)[header];
-  }
+  return config.networkName === 'bitcoinvault' ? headersMainnet[header] : headersTestnet[header];
 };
