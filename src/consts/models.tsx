@@ -564,3 +564,5 @@ export type HeaderObject = {
   zpub: string;
   Zpub: string;
 };
+
+export type MasterPublicKay = 'xpub' | 'ypub' | 'Ypub' | 'Zpub' | 'zpub';

@@ -10,7 +10,7 @@ import { NativeModules } from 'react-native';
 const { RNRandomBytes } = NativeModules;
 
 import config from '../src/config';
-import { ELECTRUM_VAULT_SEED_KEY, HeaderObject } from '../src/consts';
+import { ELECTRUM_VAULT_SEED_KEY, HeaderObject, MasterPublicKay } from '../src/consts';
 import { bytesToBits, bitsToBytes } from './buffer';
 
 const i18n = require('../loc');
@@ -165,7 +165,7 @@ export const electrumVaultMnemonicToSeed = (mnemonic: string, password = '') =>
     digest: 'sha512',
   });
 
-export const getMasterPublicKeyPrefix = (header: string) => {
+export const getMasterPublicKeyPrefix = (header: MasterPublicKay) => {
   const headersTestnet = {
     xpub: '043587cf',
     ypub: '044a5262',

@@ -27,7 +27,8 @@ function ypubToXpub(ypub) {
   if (data.readUInt32BE() !== Number(`0x${getMasterPublicKeyPrefix('ypub')}`))
     throw new Error('Not a valid ypub extended key!');
   data = data.slice(4);
-  data = Buffer.concat([Buffer.from(getMasterPublicKeyPrefix('xpub'), 'hex'), data]);
+  // WARNING: don't replace for dynamic type since this will not working in development environment
+  data = Buffer.concat([Buffer.from('0488b21e', 'hex'), data]);
 
   return b58.encode(data);
 }
