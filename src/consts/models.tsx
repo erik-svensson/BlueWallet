@@ -557,4 +557,4 @@ export interface Authenticator {
 
 export type GlobalParams = RootStackParams & MainTabNavigatorParams;
 
-export type MasterPublicKay = 'xpub' | 'ypub' | 'Ypub' | 'Zpub' | 'zpub';
+export type MasterPublicKey = 'xpub' | 'ypub' | 'Ypub' | 'Zpub' | 'zpub';
