@@ -42,10 +42,10 @@ export const checkZero = (amount: string) => {
   }
 };
 
-export const checkMinSatoshi = (amount: string | undefined) => {
+export const checkMinSatoshi = (amount: number) => {
   const minSatoshi = new BigNumber(1).dividedBy(CONST.satoshiInBtc);
 
-  if (Number(amount) < minSatoshi && Number(amount) !== 0) {
+  if (amount < minSatoshi && amount !== 0) {
     return true;
   }
 };
