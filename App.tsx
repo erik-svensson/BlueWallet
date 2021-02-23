@@ -4,6 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import { View, StyleSheet, LogBox } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import Smartlook from 'smartlook-react-native-wrapper';
 
 import { Navigator } from 'app/navigators';
 import { AppStateManager } from 'app/services';
@@ -30,6 +31,10 @@ export default class App extends React.PureComponent {
   state = {
     unlockKey: getNewKey(),
   };
+
+  componentDidMount() {
+    Smartlook.setupAndStartRecording(config.smartlookKey);
+  }
 
   lockScreen = () => {
     store.dispatch({
