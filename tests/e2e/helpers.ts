@@ -1,6 +1,9 @@
 export const SECOND = 1000;
 
-export const WAIT_FOR_ELEMENT_TIMEOUT = 10 * SECOND;
+export const WAIT_FOR_ELEMENT_TIMEOUT = {
+  DEFAULT: 10 * SECOND,
+  TRANSACTION_CONFIRMATION: 120 * SECOND,
+};
 
 export const DEFAULT_UNLOCK_PIN = '1234';
 export const DEFAULT_TRANSACTION_PASSWORD = 'qwertyui';
@@ -147,18 +150,30 @@ export const WALLETS = {
 
 /** Wallets created for transaction testing. */
 export const WALLETS_WITH_COINS = {
-  '3-Keys Vault': {
-    SEED_PHRASE: 'viable reason stable tongue sibling jazz virus dress despair tunnel truly heart',
-    FAST_KEY:
-      '0442d7724d90fb60bc969f8b0fd46f3f63fe17637d5a0ba2fa9800b3b85946b72c3b81199572cd91bad23c87c3e96dbaa68e1c4b3e47d09276bd63138c584a5a7b',
-    CANCEL_KEY:
-      '04e8bc5e2428dcebe434306adaa944cb5eb7df80ec2e544f94ab2cea9bc5a70b5b1af42a83a936cd9d277413a8c5303001beaa268724270e4f2ce4d62010421960',
+  '3-Key Vault': {
+    SEED_PHRASE: 'cancel distance owner rapid symbol display destroy history dirt ready mango lazy',
+    FAST_KEY: {
+      PUBLIC_KEY:
+        '049d51d410f68069d027f1bb82df79848bd06f9f36b62b94254268c1f85a75cdde947beba7c0c2a8e2512a9338004dc664c53f89a235097d48f1b91e75735a6d99',
+      PRIVATE_KEY: '4ad65f4fbb128e9ad1015867fc27913e6393ade21c3908fed56aa31a74b4aa7c',
+      PRIVATE_KEY_PHRASE: 'usage desk pledge view equal coil boring sorry kiss fence thunder breeze',
+    },
+    CANCEL_KEY: {
+      PUBLIC_KEY:
+        '04072259c909ef1202d57d54ed1e98187feacc0d5dca9b235ff7df79eb923a4d0d8511a00f75e2c7aba20f7114d1ba7a3e36aa1c74405eaacb1abf5c576e1d94fe',
+      PRIVATE_KEY: '83ee5d5471f475c5c6228322942a0b658340682f7432095395cbf3f3ea640bbd',
+      PRIVATE_KEY_PHRASE: 'wild crush caution hobby visual penalty holiday offer text disorder appear cart',
+    },
   },
 
-  '2-Keys Vault': {
-    SEED_PHRASE: 'judge void hair leader legal fantasy strong clinic knee child great situate',
-    CANCEL_KEY:
-      '0442d7724d90fb60bc969f8b0fd46f3f63fe17637d5a0ba2fa9800b3b85946b72c3b81199572cd91bad23c87c3e96dbaa68e1c4b3e47d09276bd63138c584a5a7b',
+  '2-Key Vault': {
+    SEED_PHRASE: 'obscure analyst search hawk undo embody curtain master slice skill correct flee',
+    CANCEL_KEY: {
+      PUBLIC_KEY:
+        '04e7dc2895538eef94067f8da59dba82604a4636cb959dc6460a7655c6f9946de8c2fd008395ee407268439fa58f65e10d646f4fe80df4216e07857e0e3018a82a',
+      PRIVATE_KEY: 'a3cb454757335e196f304cdbd8c70a67ab14833df10a99502fdacf477e2bacd2',
+      PRIVATE_KEY_PHRASE: 'tape creek unlock lock gauge clip sting leader mechanic tooth brush appear',
+    },
   },
 
   'Standard HD P2SH': {
@@ -171,6 +186,15 @@ export const WALLETS_WITH_COINS = {
 
   'Standard HD Segwit': {
     SEED_PHRASE: 'patrol correct rural firm special eight smooth orphan pilot oppose wealth rival',
+  },
+  // Wallet for receiving coins from send and cancel tests.
+  '3-Key moneybox': {
+    WALLET_ADDRESS: '2NCp8UPmPXwzScnC6pS1d8q2MvarRGXinWd',
+    SEED_PHRASE: 'elegant glass unhappy fiction goat response scale joke despair hand solid vivid',
+    PUBLIC_FAST_KEY:
+      '04bff919b085937500916be58b23115e09c1a43ea2a3f577ab6ba9e637fa6e39d86855e6ea400d725f36eede053b83b967bfd7ab75971c2f4ae294c31d93cc4a3e',
+    PUBLIC_CANCEL_KEY:
+      '042d3564005160aab0a40af4a93e995b71df1e646104222b221b78eb0da0b8e94a60735fa723a2831aad00aeb855de0d584cca049faacc536a5efb953453a1e88f',
   },
 };
 

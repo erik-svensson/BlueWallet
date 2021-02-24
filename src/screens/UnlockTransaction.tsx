@@ -95,7 +95,7 @@ class UnlockTransaction extends PureComponent<Props, State> {
             <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem
-            testID="confirm-transaction-password-input"
+            testID="transaction-password-input"
             value={password}
             setValue={this.updatePassword}
             autoFocus={true}

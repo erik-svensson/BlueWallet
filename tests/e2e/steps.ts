@@ -1,5 +1,5 @@
 import app from './pageObjects';
-import { CreateWalletOptions, ImportWalletOptions } from './pageObjects/types';
+import { CreateWalletOptions, ImportWalletOptions, SendCoinsOptions } from './pageObjects/types';
 
 const passThroughOnboarding = async (pin: string, password: string) => {
   await app.onboarding.createPinScreen.typePin(pin);
@@ -80,6 +80,25 @@ export const createNewContact = async (name: string, address: string) => {
   await app.addressBook.newContact.successScreen.close();
 };
 
-const steps = { passThroughOnboarding, createWallet, importWallet, createAuthenticator, createNewContact };
+const sendCoins = async (options: SendCoinsOptions) => {
+  const { type, amountToSend, walletAdress, transactionNote, transactionType, transactionPassword } = options;
+
+  await app.dashboard.dashboardScreen.tapOnSendButton();
+  await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(amountToSend);
+  await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(walletAdress);
+  await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
+
+  if (type === '3-Key Vault') {
+    await app.transactionsSend.sendCoinsMainScreen.chooseTransactionType(transactionType!);
+  }
+
+  await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
+  await app.transactionsSend.transactionConfirmationScreen.tapConfirmButton();
+  await app.transactionsSend.transactionPasswordScreen.typePassword(transactionPassword);
+  await app.transactionsSend.transactionPasswordScreen.tapConfirmPasswordButton();
+  await app.transactionsSend.successScreen.close();
+};
+
+const steps = { passThroughOnboarding, createWallet, importWallet, createAuthenticator, createNewContact, sendCoins };
 
 export default steps;

@@ -62,6 +62,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
     return compose(
       map((index: number) => (
         <InputItem
+          testID={`cancel-seed-phrase-${index}-input`}
           key={index.toString()}
           label={`${index}.`}
           value={mnemonic[index - 1]}
@@ -132,10 +133,17 @@ export class RecoverySeedScreen extends Component<Props, State> {
 
     return (
       <ScreenTemplate
+        testID="cancel-seed-phrase-screen"
         header={<Header onBackArrow={onBackArrow} isBackArrow title={i18n.send.recovery.recover} />}
         footer={
           <>
-            <Button loading={isLoading} disabled={!this.canSubmit()} title={buttonText} onPress={this.submit} />
+            <Button
+              testID={'cancel-seed-phrase-cancel-button'}
+              loading={isLoading}
+              disabled={!this.canSubmit()}
+              title={buttonText}
+              onPress={this.submit}
+            />
             <FlatButton
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}

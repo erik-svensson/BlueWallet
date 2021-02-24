@@ -2,6 +2,8 @@ import { by, element } from 'detox';
 
 import actions from '../../../actions';
 import MessageScreen from '../../common/MessageScreen';
+import TransactionConfirmationScreen from '../../common/TransactionConfirmationScreen';
+import TransactionPasswordScreen from '../../common/TransactionPasswordScreen';
 
 type transactionTypeRadios = 'Secure' | 'Secure Fast';
 
@@ -38,31 +40,10 @@ const SendCoins = () => {
     },
   });
 
-  const SendCoinsConfirmationScreen = () => ({
-    sendNowButton: element(by.id('send-coins-confirmation-button')),
-
-    async tapSendButton() {
-      await actions.tap(this.sendNowButton);
-    },
-  });
-
-  const SendCoinsPasswordScreen = () => ({
-    passwordInput: element(by.id('confirm-transaction-password-input')),
-    confirmPasswordButton: element(by.id('confirm-transaction-confirm-button')),
-
-    async typePassword(password: string) {
-      await actions.typeText(this.passwordInput, password);
-    },
-
-    async tapConfirmPasswordButton() {
-      await actions.tap(this.confirmPasswordButton);
-    },
-  });
-
   return {
     sendCoinsMainScreen: SendCoinsMainScreen(),
-    sendCoinsConfirmationScreen: SendCoinsConfirmationScreen(),
-    sendCoinsPasswordScreen: SendCoinsPasswordScreen(),
+    transactionConfirmationScreen: TransactionConfirmationScreen(),
+    transactionPasswordScreen: TransactionPasswordScreen(),
     successScreen: MessageScreen('success'),
   };
 };

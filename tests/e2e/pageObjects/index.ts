@@ -9,6 +9,7 @@ import FiltersScreen from './pages/FiltersScreen';
 import Onboarding from './pages/Onboarding';
 import TermsConditionsScreen from './pages/TermsConditionsScreen';
 import TransactionDetails from './pages/TransactionDetailsScreen';
+import TransactionsCancel from './pages/Transactions/Cancel';
 import TransactionsReceive from './pages/Transactions/Receive';
 import TransactionsSend from './pages/Transactions/Send';
 import UnlockScreen from './pages/UnlockScreen';
@@ -41,6 +42,7 @@ const app = {
   header: Header(),
   termsConditionsScreen: TermsConditionsScreen(),
   unlockScreen: UnlockScreen(),
+  transactionsCancel: TransactionsCancel(),
   transactionsSend: TransactionsSend(),
   transactionsReceive: TransactionsReceive(),
   walletDetails: WalletDetails(),

@@ -6,7 +6,6 @@ import steps from '../../steps';
 
 const DATA_FOR_TRANSACTIONS = {
   AMOUNT_TO_SEND: '0.0001',
-  WALLET_ADDRESS: '2MuY5McUz14TH6B3H9EypErpnFjNbNeqDVz',
 };
 
 describe('Transactions', () => {
@@ -19,24 +18,26 @@ describe('Transactions', () => {
   describe('Send', () => {
     describe('@ios @smoke', () => {
       it('should be possible to send coins from 3-Key Vault wallet (Secure Transaction) to 3-Key Vault wallet', async () => {
-        const transactionNote = createRandomNote();
+        const note = createRandomNote();
 
         await steps.importWallet({
           type: '3-Key Vault',
           name: '3-Key wallet',
-          fastPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].FAST_KEY,
-          cancelPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].CANCEL_KEY,
-          seedPhrase: WALLETS_WITH_COINS['3-Keys Vault'].SEED_PHRASE,
+          fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          seedPhrase: WALLETS_WITH_COINS['3-Key Vault'].SEED_PHRASE,
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
-        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
-        await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
+        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
+          WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
+        );
+        await app.transactionsSend.sendCoinsMainScreen.typeNote(note);
         await app.transactionsSend.sendCoinsMainScreen.chooseTransactionType('Secure');
         await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
-        await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
-        await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
-        await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
+        await app.transactionsSend.transactionConfirmationScreen.tapConfirmButton();
+        await app.transactionsSend.transactionPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
+        await app.transactionsSend.transactionPasswordScreen.tapConfirmPasswordButton();
         await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
@@ -46,47 +47,55 @@ describe('Transactions', () => {
         await steps.importWallet({
           type: '3-Key Vault',
           name: '3-Key wallet',
-          fastPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].FAST_KEY,
-          cancelPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].CANCEL_KEY,
-          seedPhrase: WALLETS_WITH_COINS['3-Keys Vault'].SEED_PHRASE,
+          fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          seedPhrase: WALLETS_WITH_COINS['3-Key Vault'].SEED_PHRASE,
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
-        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
+        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
+          WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
+        );
         await app.transactionsSend.sendCoinsMainScreen.chooseTransactionType('Secure Fast');
         await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
-        await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
-        await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
-        await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
+        await app.wallets.addNewWallet.addFastKeyScreen.tapScanOnQrCode();
+        await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(
+          WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PRIVATE_KEY,
+        );
+        await app.transactionsSend.transactionConfirmationScreen.tapConfirmButton();
+        await app.transactionsSend.transactionPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
+        await app.transactionsSend.transactionPasswordScreen.tapConfirmPasswordButton();
         await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
 
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from 2-Key Vault wallet to 3-Key Vault wallet', async () => {
-        const transactionNote = createRandomNote();
+        const note = createRandomNote();
 
         await steps.importWallet({
           type: '2-Key Vault',
           name: '2-Key wallet',
-          cancelPublicKey: WALLETS_WITH_COINS['2-Keys Vault'].CANCEL_KEY,
-          seedPhrase: WALLETS_WITH_COINS['2-Keys Vault'].SEED_PHRASE,
+          cancelPublicKey: WALLETS_WITH_COINS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          seedPhrase: WALLETS_WITH_COINS['2-Key Vault'].SEED_PHRASE,
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
-        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
-        await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
+        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
+          WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
+        );
+        await app.transactionsSend.sendCoinsMainScreen.typeNote(note);
         await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
-        await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
-        await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
-        await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
+        await app.transactionsSend.transactionConfirmationScreen.tapConfirmButton();
+        await app.transactionsSend.transactionPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
+        await app.transactionsSend.transactionPasswordScreen.tapConfirmPasswordButton();
         await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
 
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from Standard HD P2SH wallet to 3-Key Vault wallet', async () => {
-        const transactionNote = createRandomNote();
+        const note = createRandomNote();
 
         await steps.importWallet({
           type: 'Standard HD P2SH',
@@ -95,19 +104,21 @@ describe('Transactions', () => {
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
-        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
-        await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
+        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
+          WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
+        );
+        await app.transactionsSend.sendCoinsMainScreen.typeNote(note);
         await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
-        await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
-        await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
-        await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
+        await app.transactionsSend.transactionConfirmationScreen.tapConfirmButton();
+        await app.transactionsSend.transactionPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
+        await app.transactionsSend.transactionPasswordScreen.tapConfirmPasswordButton();
         await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
 
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from Standard P2SH wallet to 3-Key Vault wallet', async () => {
-        const transactionNote = createRandomNote();
+        const note = createRandomNote();
 
         await steps.importWallet({
           type: 'Standard HD P2SH',
@@ -116,19 +127,21 @@ describe('Transactions', () => {
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
-        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
-        await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
+        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
+          WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
+        );
+        await app.transactionsSend.sendCoinsMainScreen.typeNote(note);
         await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
-        await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
-        await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
-        await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
+        await app.transactionsSend.transactionConfirmationScreen.tapConfirmButton();
+        await app.transactionsSend.transactionPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
+        await app.transactionsSend.transactionPasswordScreen.tapConfirmPasswordButton();
         await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
 
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from Standard HD SegWit wallet to 3-Key Vault wallet', async () => {
-        const transactionNote = createRandomNote();
+        const note = createRandomNote();
 
         await steps.importWallet({
           type: 'Standard HD P2SH',
@@ -137,12 +150,14 @@ describe('Transactions', () => {
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
         await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
-        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(DATA_FOR_TRANSACTIONS.WALLET_ADDRESS);
-        await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
+        await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
+          WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
+        );
+        await app.transactionsSend.sendCoinsMainScreen.typeNote(note);
         await app.transactionsSend.sendCoinsMainScreen.tapNextButton();
-        await app.transactionsSend.sendCoinsConfirmationScreen.tapSendButton();
-        await app.transactionsSend.sendCoinsPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
-        await app.transactionsSend.sendCoinsPasswordScreen.tapConfirmPasswordButton();
+        await app.transactionsSend.transactionConfirmationScreen.tapConfirmButton();
+        await app.transactionsSend.transactionPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
+        await app.transactionsSend.transactionPasswordScreen.tapConfirmPasswordButton();
         await expect(app.transactionsSend.successScreen.icon).toBeVisible();
       });
     });
