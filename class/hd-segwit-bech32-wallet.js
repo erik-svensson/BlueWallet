@@ -4,7 +4,7 @@ import b58 from 'bs58check';
 import { NativeModules } from 'react-native';
 
 import config from '../src/config';
-import { electrumVaultMnemonicToSeed } from '../utils/crypto';
+import { electrumVaultMnemonicToSeed, getMasterPublicKeyPrefix } from '../utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
@@ -173,7 +173,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     let data = b58.decode(xpub);
 
     data = data.slice(4);
-    data = Buffer.concat([Buffer.from('04b24746', 'hex'), data]);
+    data = Buffer.concat([Buffer.from(getMasterPublicKeyPrefix('zpub'), 'hex'), data]);
     this._xpub = b58.encode(data);
 
     return this._xpub;
@@ -365,7 +365,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     let data = b58.decode(zpub);
 
     data = data.slice(4);
-    data = Buffer.concat([Buffer.from('0488b21e', 'hex'), data]);
+    data = Buffer.concat([Buffer.from(getMasterPublicKeyPrefix('xpub'), 'hex'), data]);
 
     return b58.encode(data);
   }

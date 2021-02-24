@@ -47,6 +47,7 @@ export const CONST = {
   emailCodeErrorMax: 3,
   walletsDefaultGapLimit: 20,
   walletsDefaultAddressRange: '20/0',
+  walletsDefaultDerivationPath: 'm/0',
   userVersion: 'userVersion',
   newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
   buttonTimeoutSeconds: 30,
@@ -230,7 +231,7 @@ export interface WalletPayload {
   name: string;
   gap_limit: number;
   address_range: string;
-  derivation_path?: Record<string, unknown>;
+  derivation_path?: string;
   xpub: string;
   address_type: string;
   instant_public_key?: string;
@@ -556,3 +557,5 @@ export interface Authenticator {
 }
 
 export type GlobalParams = RootStackParams & MainTabNavigatorParams;
+
+export type MasterPublicKey = 'xpub' | 'ypub' | 'Ypub' | 'Zpub' | 'zpub';
