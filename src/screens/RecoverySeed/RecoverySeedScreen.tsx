@@ -138,7 +138,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
         footer={
           <>
             <Button
-              testID={'cancel-seed-phrase-cancel-button'}
+              testID={'seed-phrase-cancel-button'}
               loading={isLoading}
               disabled={!this.canSubmit()}
               title={buttonText}

@@ -17,8 +17,7 @@ describe('Transactions', () => {
 
   describe('Cancel', () => {
     describe('@ios @regression', () => {
-      //TODO: Test is disabled due to long transaction confirmations.
-      //Please turn it on after resolving this problem and verify if it is still working correctly.      xit('should be possible to cancel transaction for 3-Key Vault wallet', async () => {
+      // TODO: Test is disabled due to long transaction confirmations.
       xit('should be possible to cancel transaction for 3-Key Vault wallet', async () => {
         const note = createRandomNote();
         const wallet = WALLETS_WITH_COINS['3-Key Vault'];
@@ -32,8 +31,8 @@ describe('Transactions', () => {
         });
         await steps.sendCoins({
           type: '3-Key Vault',
-          amountToSend: DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND,
-          walletAdress: WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
+          amount: DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND,
+          walletAddress: WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
           transactionNote: note,
           transactionType: 'Secure',
           transactionPassword: DEFAULT_TRANSACTION_PASSWORD,
@@ -61,8 +60,7 @@ describe('Transactions', () => {
     });
 
     describe('@ios @regression', () => {
-      //TODO: Test is disabled due to long transaction confirmations.
-      //Please turn it on after resolving this problem and verify if it is still working correctly.
+      // TODO: Test is disabled due to long transaction confirmations.
       xit('should be possible to cancel transaction for 2-Key Vault wallet', async () => {
         const note = createRandomNote();
         const wallet = WALLETS_WITH_COINS['2-Key Vault'];
@@ -75,8 +73,8 @@ describe('Transactions', () => {
         });
         await steps.sendCoins({
           type: '2-Key Vault',
-          amountToSend: DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND,
-          walletAdress: WALLETS_WITH_COINS['3-Keys moneybox'].WALLET_ADDRESS,
+          amount: DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND,
+          walletAddress: WALLETS_WITH_COINS['3-Keys moneybox'].WALLET_ADDRESS,
           transactionNote: note,
           transactionPassword: DEFAULT_TRANSACTION_PASSWORD,
         });

@@ -21,9 +21,9 @@ export interface CreateWalletOptions {
 
 export interface SendCoinsOptions {
   type: WalletType;
-  amountToSend: string;
-  walletAdress: string;
-  transactionNote: string;
+  amount: string;
+  walletAddress: string;
+  transactionNote?: string;
   transactionType?: TransactionType;
   transactionPassword: string;
 }

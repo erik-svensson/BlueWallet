@@ -81,13 +81,22 @@ export const createNewContact = async (name: string, address: string) => {
 };
 
 const sendCoins = async (options: SendCoinsOptions) => {
-  const { type, amountToSend, walletAdress, transactionNote, transactionType, transactionPassword } = options;
+  const {
+    type,
+    amount: amountToSend,
+    walletAddress: walletAdress,
+    transactionNote,
+    transactionType,
+    transactionPassword,
+  } = options;
 
   await app.dashboard.dashboardScreen.tapOnSendButton();
   await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(amountToSend);
   await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(walletAdress);
-  await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
 
+  if (transactionNote !== undefined) {
+    await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
+  }
   if (type === '3-Key Vault') {
     await app.transactionsSend.sendCoinsMainScreen.chooseTransactionType(transactionType!);
   }

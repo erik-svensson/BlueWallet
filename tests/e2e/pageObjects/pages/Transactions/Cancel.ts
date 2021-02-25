@@ -38,7 +38,7 @@ const CancelTransaction = () => {
 
   const SeedPhraseScreen = () => ({
     self: 'cancel-seed-phrase-screen',
-    cancelButton: element(by.id('cancel-seed-phrase-cancel-button')),
+    cancelButton: element(by.id('seed-phrase-cancel-button')),
 
     async typePrivateCancelKeySeedPhrase(seedPhrases: string) {
       await this.typeSeedPhraseFrom(seedPhrases.split(' '));
@@ -52,9 +52,9 @@ const CancelTransaction = () => {
       await actions.tap(this.cancelButton);
     },
 
-    //Private function
-    //Seed Phrase list index starts from 0 but index for id starts from 1
+    /** Private function */
     async typeSeedPhraseFrom(list: string[]) {
+      /** Seed Phrase list index starts from 0 but index for id starts from 1 */
       for (let index = 0; index < list.length; index++) {
         const seedPhraseInput = element(by.id(`cancel-seed-phrase-${index + 1}-input`));
 

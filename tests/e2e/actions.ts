@@ -66,6 +66,7 @@ const Actions = () => {
     await carousel.swipe(direction, 'fast', 0.75, 0.5);
   };
 
+  /** Swipes screen from top to bottom to refresh scrollView */
   const refreshView = async (scrollView: string) => {
     await waitFor(Detox.element(by.id(scrollView)))
       .toBeVisible()

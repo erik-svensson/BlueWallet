@@ -191,10 +191,14 @@ export const WALLETS_WITH_COINS = {
   '3-Key moneybox': {
     WALLET_ADDRESS: '2NCp8UPmPXwzScnC6pS1d8q2MvarRGXinWd',
     SEED_PHRASE: 'elegant glass unhappy fiction goat response scale joke despair hand solid vivid',
-    PUBLIC_FAST_KEY:
-      '04bff919b085937500916be58b23115e09c1a43ea2a3f577ab6ba9e637fa6e39d86855e6ea400d725f36eede053b83b967bfd7ab75971c2f4ae294c31d93cc4a3e',
-    PUBLIC_CANCEL_KEY:
-      '042d3564005160aab0a40af4a93e995b71df1e646104222b221b78eb0da0b8e94a60735fa723a2831aad00aeb855de0d584cca049faacc536a5efb953453a1e88f',
+    FAST_KEY: {
+      PUBLIC_KEY:
+        '04bff919b085937500916be58b23115e09c1a43ea2a3f577ab6ba9e637fa6e39d86855e6ea400d725f36eede053b83b967bfd7ab75971c2f4ae294c31d93cc4a3e',
+    },
+    CANCEL_KEY: {
+      PUBLIC_KEY:
+        '042d3564005160aab0a40af4a93e995b71df1e646104222b221b78eb0da0b8e94a60735fa723a2831aad00aeb855de0d584cca049faacc536a5efb953453a1e88f',
+    },
   },
 };
 
