@@ -47,6 +47,9 @@ export const AboutUsScreen = () => {
 
     Rate.rate(options, () => {
       setRate(true);
+      setTimeout(() => {
+        setRate(false);
+      }, 5000);
     });
   };
 
@@ -72,6 +75,7 @@ export const AboutUsScreen = () => {
         source={icons.star}
         title={i18n.aboutUs.rateGoldWallet}
         containerStyle={styles.buttonContainer}
+        loading={rate}
       />
       <View style={styles.buildWithContainer}>
         <Text style={styles.title}>{i18n.aboutUs.buildWithAwesome}</Text>
