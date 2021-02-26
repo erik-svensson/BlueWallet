@@ -26,7 +26,7 @@ interface Props {
   wallets: Wallet[];
 }
 interface State {
-  amount: number;
+  amount: number | string;
 }
 
 class ReceiveCoinsScreen extends Component<Props, State> {
@@ -50,7 +50,9 @@ class ReceiveCoinsScreen extends Component<Props, State> {
     const parsedAmount = amount;
 
     this.setState({
-      amount: parseFloat(parsedAmount),
+      amount: parseFloat(parsedAmount.replace(',', '.'))
+        .toFixed(8)
+        .replace(/0+$/, ''),
     });
   };
 
