@@ -1,6 +1,6 @@
 import { expect } from 'detox';
 
-import { isBeta } from '../helpers';
+import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
 import steps from '../steps';
 

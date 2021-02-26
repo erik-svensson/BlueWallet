@@ -1,6 +1,7 @@
 import { expect } from 'detox';
 
-import { isBeta, WALLETS_WITH_COINS } from '../helpers';
+import { WALLETS_WITH_COINS } from '../helpers/consts';
+import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
 import steps from '../steps';
 
@@ -81,5 +82,11 @@ describe('Wallet details', () => {
 
       await expect(app.walletDetails.mainScreen.walletName).toBeVisible();
     });
+
+    it('should display "Subscribe to notifications" button if an email is added but wallet doesn\'t subscribe yet', async () => {});
+
+    it('should display "Subscribe to notifications" button if an email address is not added yet', async () => {});
+
+    it('should display "Unsubscribe to notifications" button if an email address is added and wallet subscribes it', async () => {});
   });
 });

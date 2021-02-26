@@ -1,7 +1,6 @@
 import { by, element, waitFor } from 'detox';
 
 import actions from '../../actions';
-import { SECOND } from '../../helpers';
 
 export type MessageScreenType = 'success' | 'errorState' | 'processingState';
 
@@ -16,7 +15,7 @@ const MessageScreen = (type: MessageScreenType) => ({
   async waitUntilEnded() {
     await waitFor(this.icon)
       .toBeNotVisible()
-      .withTimeout(120 * SECOND);
+      .withTimeout(120 * 1000);
   },
 });
 

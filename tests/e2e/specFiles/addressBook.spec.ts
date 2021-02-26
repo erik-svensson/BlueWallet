@@ -1,6 +1,7 @@
 import { expect, waitFor } from 'detox';
 
-import { isBeta, WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers';
+import { WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers/consts';
+import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
 import { createNewContact } from '../steps';
 

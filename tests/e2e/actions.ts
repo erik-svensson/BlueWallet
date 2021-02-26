@@ -1,6 +1,7 @@
+/** A set of functions being a wrapper on the Detox's native methods to make developing tests even easier */
 import Detox, { by, device, waitFor } from 'detox';
 
-import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers';
+import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers/consts';
 
 interface TypeTextOptions {
   replace?: boolean;

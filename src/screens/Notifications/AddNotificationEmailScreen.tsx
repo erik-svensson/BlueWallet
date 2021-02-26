@@ -139,14 +139,14 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           <>
             <Button
               title={i18n._.confirm}
-              testID="submit-notification-email"
+              testID="submit-add-email-button"
               onPress={this.onConfirm}
               disabled={email.length === 0}
               loading={isLoading}
             />
             {onSkipSuccess && (
               <FlatButton
-                testID="skip-notification-email"
+                testID="skip-adding-email-button"
                 containerStyle={styles.skipButton}
                 title={i18n._.skip}
                 loading={isLoading}
@@ -165,7 +165,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           <InputItem
             value={email}
             label={i18n._.email}
-            testID="confirm-notification-email"
+            testID="add-email-input"
             setValue={this.setEmail}
             autoFocus={inputAutofocus}
             error={error}

@@ -18,6 +18,7 @@ import Wallets from './pages/Wallets';
 import AboutUsScreen from './pages/settings/AboutUsScreen';
 import AdvancedOptionsScreen from './pages/settings/AdvancedOptionsScreen';
 import ChangePin from './pages/settings/ChangePin';
+import EmailNotifications from './pages/settings/EmailNotifications';
 import LanguageScreen from './pages/settings/LanguageScreen';
 import SettingsScreen from './pages/settings/SettingsScreen';
 
@@ -34,6 +35,7 @@ const app = {
   settings: {
     settingsScreen: SettingsScreen(),
     advancedOptionsScreen: AdvancedOptionsScreen(),
+    emailNotifications: EmailNotifications(),
     languageScreen: LanguageScreen(),
     changePin: ChangePin(),
     aboutUsScreen: AboutUsScreen(),

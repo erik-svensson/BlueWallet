@@ -11,6 +11,7 @@ const WalletDetails = () => {
 
     exportWalletButton: element(by.id('export-wallet-button')),
     showXpubButton: element(by.id('show-xpub-button')),
+    manageSubscription: element(by.id('manage-email-notifications-subscription')),
     deleteButton: element(by.id('delete-wallet-button')),
 
     walletInput: element(by.id('wallet-name-input')),
@@ -28,6 +29,10 @@ const WalletDetails = () => {
 
     async tapOnShowXpubButton() {
       await actions.tap(this.showXpubButton);
+    },
+
+    async tapOnManageSubscriptionButton() {
+      await actions.tap(this.manageSubscription);
     },
 
     async tapOnDeleteWalletButton() {

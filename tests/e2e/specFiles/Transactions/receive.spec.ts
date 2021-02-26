@@ -1,6 +1,7 @@
 import { expect } from 'detox';
 
-import { isBeta, WALLETS_WITH_COINS } from '../../helpers';
+import { WALLETS_WITH_COINS } from '../../helpers/consts';
+import { isBeta } from '../../helpers/utils';
 import app from '../../pageObjects';
 import steps from '../../steps';
 
