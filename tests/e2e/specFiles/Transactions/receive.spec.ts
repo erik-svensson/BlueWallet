@@ -22,8 +22,8 @@ describe('Transactions', () => {
         await steps.createWallet({
           type: '3-Key Vault',
           name: '3-Key',
-          fastPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].FAST_KEY,
-          cancelPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].CANCEL_KEY,
+          fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
         });
       });
 
@@ -44,7 +44,7 @@ describe('Transactions', () => {
         await steps.createWallet({
           type: '2-Key Vault',
           name: '2-Key',
-          cancelPublicKey: WALLETS_WITH_COINS['2-Keys Vault'].CANCEL_KEY,
+          cancelPublicKey: WALLETS_WITH_COINS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
         });
       });
 
