@@ -64,6 +64,7 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         ...state,
         email: '',
         pin: '',
+        subscribedIds: [],
       };
     case NotificationAction.CheckSubscriptionAction:
     case NotificationAction.VerifyNotificationEmailAction:
