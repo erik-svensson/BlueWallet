@@ -25,7 +25,7 @@ export enum EmailNotificationsError {
   ERROR_REQUEST_AUTHENTICATION = 'On /authenticate/ request the server responded with result: "error',
 }
 
-const httpClient = createHttpClient(config.emailNotificationsApi);
+const httpClient = createHttpClient('http://217.96.228.216:8765/api/');
 
 export const subscribeEmail = (data: SubscribePayload): Promise<SubscribeResponse> =>
   httpClient.post(`/subscribe/`, data);
