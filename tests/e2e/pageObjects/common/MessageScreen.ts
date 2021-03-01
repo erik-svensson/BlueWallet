@@ -1,4 +1,4 @@
-import { by, element } from 'detox';
+import { by, element, waitFor } from 'detox';
 
 import actions from '../../actions';
 import { SECOND } from '../../helpers';

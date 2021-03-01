@@ -13,10 +13,10 @@ interface ScrollToElementOptions {
 }
 
 const Actions = () => {
-  const waitForElement = async (target: Detox.DetoxAny) => {
+  const waitForElement = async (target: Detox.DetoxAny, timeout?: number) => {
     await waitFor(target)
       .toBeVisible()
-      .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT);
+      .withTimeout(timeout || WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
   };
 
   const typeText = async (target: Detox.DetoxAny, text: string, options?: TypeTextOptions) => {
@@ -61,9 +61,18 @@ const Actions = () => {
   const swipeCarousel = async (carousel: Detox.DetoxAny, direction: 'left' | 'right') => {
     await waitFor(carousel)
       .toBeVisible()
-      .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT);
+      .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
 
     await carousel.swipe(direction, 'fast', 0.75, 0.5);
+  };
+
+  /** Swipes screen from top to bottom to refresh scrollView */
+  const refreshView = async (scrollView: string) => {
+    await waitFor(Detox.element(by.id(scrollView)))
+      .toBeVisible()
+      .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
+
+    await Detox.element(by.id(scrollView)).swipe('down', 'fast', 0.75, 0.5);
   };
 
   /** Scrolls down and up to find an element */
@@ -91,7 +100,7 @@ const Actions = () => {
     }
   };
 
-  return { waitForElement, typeText, tap, multiTap, scrollToElement, swipeCarousel, searchForElement };
+  return { waitForElement, typeText, tap, multiTap, scrollToElement, swipeCarousel, refreshView, searchForElement };
 };
 
 export default Actions();

@@ -21,7 +21,7 @@ const i18n = require('../../loc');
 const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void, buttonTitle?: string) => (
   <View style={styles.footer}>
     <Button
-      testID="send-coins-confirmation-button"
+      testID="transaction-confirmation-button"
       title={buttonTitle || i18n.send.confirm.sendNow}
       containerStyle={styles.buttonContainer}
       onPress={onSendPress}

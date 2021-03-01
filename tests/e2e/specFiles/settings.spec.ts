@@ -98,7 +98,7 @@ describe('Settings', () => {
         // TODO: To make it working, use element.getAttributes('title'). It's supported only for iOS and Detox must be upgraded first
         await waitFor(app.dashboard.dashboardScreen.header)
           .toHaveText(walletsInLocalLanguages[language])
-          .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT);
+          .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
       }),
     );
 

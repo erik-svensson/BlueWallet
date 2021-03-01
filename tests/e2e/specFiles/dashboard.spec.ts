@@ -119,7 +119,7 @@ describe('Dashboard', () => {
       await steps.createWallet({
         type: '2-Key Vault',
         name: 'My Wallet',
-        cancelPublicKey: WALLETS_WITH_COINS['2-Keys Vault'].CANCEL_KEY,
+        cancelPublicKey: WALLETS_WITH_COINS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
       });
 
       await expect(app.dashboard.dashboardScreen.recieveButton).toBeVisible();
@@ -131,8 +131,8 @@ describe('Dashboard', () => {
       await steps.createWallet({
         type: '3-Key Vault',
         name: 'My Wallet',
-        fastPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].FAST_KEY,
-        cancelPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].CANCEL_KEY,
+        fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
       });
 
       await expect(app.dashboard.dashboardScreen.recieveButton).toBeVisible();
@@ -144,8 +144,8 @@ describe('Dashboard', () => {
       await steps.createWallet({
         type: '3-Key Vault',
         name: 'Main Wallet',
-        fastPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].FAST_KEY,
-        cancelPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].CANCEL_KEY,
+        fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
       });
 
       await app.dashboard.dashboardScreen.scrollTo(app.dashboard.dashboardScreen.noTransactionsIcon);
@@ -175,7 +175,7 @@ describe('Dashboard', () => {
       });
 
       for (const transaction of transactions) {
-        await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
+        await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
       }
     });
 
@@ -199,11 +199,11 @@ describe('Dashboard', () => {
       await app.dashboard.dashboardScreen.switchWalletWithDropdown('Main');
 
       for (const transaction of TRANSACTION_WALLETS['3-Key Vault'].TRANSACTIONS) {
-        await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
+        await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
       }
 
       for (const transaction of TRANSACTION_WALLETS['2-Key Vault'].TRANSACTIONS) {
-        jestExpect(await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id)).toThrowError();
+        jestExpect(await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id)).toThrowError();
       }
     });
 
@@ -225,7 +225,7 @@ describe('Dashboard', () => {
 
         const transaction = TRANSACTION_WALLETS['3-Key Vault'].TRANSACTIONS[0];
 
-        await app.dashboard.dashboardScreen.scrollToTransaction(transaction.id);
+        await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
 
         await expect(app.transactionDetails.header).toBeVisible();
@@ -244,7 +244,7 @@ describe('Dashboard', () => {
 
         const transaction = TRANSACTION_WALLETS['3-Key Vault'].TRANSACTIONS[0];
 
-        await app.dashboard.dashboardScreen.scrollToTransaction(transaction.id);
+        await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
 
         await app.transactionDetails.tapOnFromCopyButton();
@@ -261,7 +261,7 @@ describe('Dashboard', () => {
 
         const transaction = TRANSACTION_WALLETS['3-Key Vault'].TRANSACTIONS[0];
 
-        await app.dashboard.dashboardScreen.scrollToTransaction(transaction.id);
+        await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
 
         await app.transactionDetails.tapOnToCopyButton();
@@ -278,7 +278,7 @@ describe('Dashboard', () => {
 
         const transaction = TRANSACTION_WALLETS['3-Key Vault'].TRANSACTIONS[0];
 
-        await app.dashboard.dashboardScreen.scrollToTransaction(transaction.id);
+        await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
 
         await app.transactionDetails.tapOnTxidCopyButton();
@@ -295,7 +295,7 @@ describe('Dashboard', () => {
 
         const transaction = TRANSACTION_WALLETS['3-Key Vault'].TRANSACTIONS[0];
 
-        await app.dashboard.dashboardScreen.scrollToTransaction(transaction.id);
+        await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
 
         await app.transactionDetails.tapOnViewInBlockExplorerButton();
@@ -329,11 +329,11 @@ describe('Dashboard', () => {
         await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of receivedTransactions) {
-          await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
+          await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
         }
 
         for (const transaction of restTransactions) {
-          jestExpect(app.dashboard.dashboardScreen.searchForTransactionn(transaction.id)).rejects.toThrowError();
+          jestExpect(app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id)).rejects.toThrowError();
         }
       });
 
@@ -351,11 +351,11 @@ describe('Dashboard', () => {
         await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of receivedTransactions) {
-          await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
+          await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
         }
 
         for (const transaction of restTransactions) {
-          jestExpect(app.dashboard.dashboardScreen.searchForTransactionn(transaction.id)).rejects.toThrowError();
+          jestExpect(app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id)).rejects.toThrowError();
         }
       });
 
@@ -375,11 +375,11 @@ describe('Dashboard', () => {
         await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of transactions) {
-          await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
+          await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
         }
 
         for (const transaction of restTransactions) {
-          jestExpect(app.dashboard.dashboardScreen.searchForTransactionn(transaction.id)).rejects.toThrowError();
+          jestExpect(app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id)).rejects.toThrowError();
         }
       });
 
@@ -399,11 +399,11 @@ describe('Dashboard', () => {
         await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of transactions) {
-          await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
+          await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
         }
 
         for (const transaction of restTransactions) {
-          jestExpect(app.dashboard.dashboardScreen.searchForTransactionn(transaction.id)).rejects.toThrowError();
+          jestExpect(app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id)).rejects.toThrowError();
         }
       });
 
@@ -422,11 +422,11 @@ describe('Dashboard', () => {
         await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of transactions) {
-          await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
+          await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
         }
 
         for (const transaction of restTransactions) {
-          jestExpect(app.dashboard.dashboardScreen.searchForTransactionn(transaction.id)).rejects.toThrowError();
+          jestExpect(app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id)).rejects.toThrowError();
         }
       });
 
@@ -448,7 +448,7 @@ describe('Dashboard', () => {
         await app.dashboard.dashboardScreen.tapOnClearAllFiltersButton();
 
         for (const transaction of transactions) {
-          await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
+          await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
         }
       });
 
@@ -464,7 +464,7 @@ describe('Dashboard', () => {
         await app.filtersScreen.header.tapOnBackButton();
 
         for (const transaction of transactions) {
-          await app.dashboard.dashboardScreen.searchForTransactionn(transaction.id);
+          await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
         }
       });
     });
