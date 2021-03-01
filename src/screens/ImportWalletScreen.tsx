@@ -150,7 +150,7 @@ export class ImportWalletScreen extends Component<Props, State> {
 
   onScanQrCodeButtonPress = () => {
     return this.props.navigation.navigate(Route.ScanQrCode, {
-      onBarCodeScan: (mnemonic: string) => this.importMnemonic(mnemonic),
+      onBarCodeScan: (mnemonic: string) => this.setState({ text: mnemonic }),
     });
   };
 
@@ -530,12 +530,6 @@ export class ImportWalletScreen extends Component<Props, State> {
     checkNetworkConnection(() => callback());
   };
 
-  get canScan() {
-    const { validationError, label } = this.state;
-
-    return label.trim() && !!!validationError;
-  }
-
   render() {
     const { validationError, text, label, hasCustomWords, customWords } = this.state;
 
@@ -552,11 +546,9 @@ export class ImportWalletScreen extends Component<Props, State> {
             />
             <FlatButton
               testID="scan-import-wallet-qr-code-button"
-              disabled={!label || !!validationError}
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}
               onPress={this.executeWithNetworkConnectionCheck(this.onScanQrCodeButtonPress)}
-              disabledTitleStyle={{ color: palette.grey }}
             />
           </>
         }
@@ -569,6 +561,7 @@ export class ImportWalletScreen extends Component<Props, State> {
             testID="import-wallet-seed-phrase-input"
             error={validationError}
             autoCapitalize="none"
+            value={text}
             onChangeText={this.onChangeText}
             placeholder={i18n.wallets.importWallet.placeholder}
             style={styles.textArea}

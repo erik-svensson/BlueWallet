@@ -1,6 +1,7 @@
-import Detox, { by, element } from 'detox';
+import { by, element } from 'detox';
 
 import actions from '../../actions';
+import { WAIT_FOR_ELEMENT_TIMEOUT } from '../../helpers';
 
 const Dashboard = () => {
   const DashboardScreen = () => ({
@@ -64,6 +65,10 @@ const Dashboard = () => {
       await actions.tap(this.recieveButton);
     },
 
+    async tapOnCancelButton() {
+      await actions.tap(this.cancelButton);
+    },
+
     async tapOnClearAllFiltersButton() {
       await actions.tap(this.clearAllFiltersButton);
     },
@@ -77,12 +82,29 @@ const Dashboard = () => {
     },
 
     /** Scrolls to the transaction of testID based on a transaction id or a note */
-    async scrollToTransaction(id?: string) {
+    async scrollToTransactionWith(id?: string) {
       await actions.scrollToElement(element(by.id(`transaction-item-${id}`)), this.self);
     },
 
-    async searchForTransactionn(id?: string) {
+    async refreshDashboard() {
+      await actions.refreshView(this.self);
+    },
+
+    async searchForTransactionWith(id?: string) {
       await actions.searchForElement(element(by.id(`transaction-item-${id}`)), this.self);
+    },
+
+    async waitForConfirmationForTransactionWith(note: string) {
+      const confirmationNumber = 1;
+
+      await actions.waitForElement(
+        element(by.id(`transaction-item-${note}`).withDescendant(by.id(`transaction-${confirmationNumber}-text`))),
+        WAIT_FOR_ELEMENT_TIMEOUT.TRANSACTION_CONFIRMATION,
+      );
+    },
+
+    async scrollToCancelButton() {
+      await actions.scrollToElement(this.cancelButton, this.self, { pixels: 200, direction: 'up' });
     },
   });
 

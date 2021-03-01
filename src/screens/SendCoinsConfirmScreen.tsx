@@ -21,7 +21,7 @@ const i18n = require('../../loc');
 const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void, buttonTitle?: string) => (
   <View style={styles.footer}>
     <Button
-      testID="send-coins-confirmation-button"
+      testID="transaction-confirmation-button"
       title={buttonTitle || i18n.send.confirm.sendNow}
       containerStyle={styles.buttonContainer}
       onPress={onSendPress}
@@ -211,8 +211,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
           <View>
             <View style={styles.chooseWalletButton}>
               <Text style={typography.headline4}>
-                {roundBtcToSatoshis(item.amount) || satoshiToBtc(item.value).toString()}{' '}
-                {fromWallet.preferredBalanceUnit}
+                {`${item.amount.toFixed(8) || satoshiToBtc(item.value).toString()} ${fromWallet.preferredBalanceUnit}`}
               </Text>
             </View>
             <View style={styles.descriptionContainer}>

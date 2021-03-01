@@ -63,7 +63,7 @@ describe('Address book', () => {
         await app.addressBook.newContact.addNewContactScreen.submit();
         await waitFor(app.addressBook.newContact.addNewContactScreen.nameValidationError)
           .toBeVisible()
-          .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT);
+          .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
       });
 
       it("shouldn't be possible to create a new contact if address is invalid", async () => {
@@ -72,7 +72,7 @@ describe('Address book', () => {
         await app.addressBook.newContact.addNewContactScreen.submit(); // TODO: Remove it once it's fixed in the app
         await waitFor(app.addressBook.newContact.addNewContactScreen.addressValidationError)
           .toBeVisible()
-          .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT);
+          .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
       });
     });
   });

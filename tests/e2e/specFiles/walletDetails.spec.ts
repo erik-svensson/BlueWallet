@@ -18,9 +18,9 @@ describe('Wallet details', () => {
     await steps.importWallet({
       type: '3-Key Vault',
       name: walletName,
-      fastPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].FAST_KEY,
-      cancelPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].CANCEL_KEY,
-      seedPhrase: WALLETS_WITH_COINS['3-Keys Vault'].SEED_PHRASE,
+      fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
+      cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+      seedPhrase: WALLETS_WITH_COINS['3-Key Vault'].SEED_PHRASE,
     });
   });
 

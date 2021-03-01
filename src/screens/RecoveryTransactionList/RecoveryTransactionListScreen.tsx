@@ -126,7 +126,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
         <View style={styles.transactionItemContainer}>
           <TransactionItem onPress={toggle} item={transaction} />
         </View>
-        <CheckBox testID={`transaction-${transaction.note}-checkbox`} onPress={toggle} right checked={isChecked} />
+        <CheckBox testID={`transaction-item-${transaction.note}-checkbox`} onPress={toggle} right checked={isChecked} />
       </View>
     );
   };
@@ -169,7 +169,12 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />
+          <Button
+            testID="cancel-transaction-next-button"
+            onPress={this.submit}
+            disabled={!this.canSubmit()}
+            title={i18n.send.details.next}
+          />
         </View>
       </View>
     );

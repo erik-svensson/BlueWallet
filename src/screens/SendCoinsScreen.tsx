@@ -186,7 +186,7 @@ class SendCoinsScreen extends Component<Props, State> {
 
     const numAmount = this.toNumber(transaction.amount);
 
-    if (checkMinSatoshi(transaction.amount)) {
+    if (checkMinSatoshi(numAmount)) {
       return i18n.send.details.amount_field_is_less_than_minSatoshi;
     }
     if (!numAmount || numAmount <= 0) {
