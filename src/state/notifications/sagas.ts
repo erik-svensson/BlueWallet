@@ -204,7 +204,6 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       meta.onSuccess(ids);
     }
   } catch (error) {
-    console.log({ error });
     yield put(checkSubscriptionFailure(error.message));
 
     if (meta?.onFailure) {

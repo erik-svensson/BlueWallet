@@ -10,7 +10,7 @@ import App from './App';
 import config from './src/config';
 
 LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
-__DEV__ = false;
+
 if (!Error.captureStackTrace) {
   // captureStackTrace is only available when debugging
   // eslint-disable-next-line @typescript-eslint/no-empty-function

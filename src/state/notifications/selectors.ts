@@ -21,7 +21,6 @@ export const storedEmail = createSelector(local, state => state.email);
 export const storedPin = createSelector(local, state => state.pin);
 
 export const readableError = createSelector(notificationError, errorMsg => {
-  console.log({ errorMsg });
   if (errorMsg.includes(GeneralHttpError.NO_MESSAGE) || errorMsg.includes(GeneralHttpError.NO_RESPONSE)) {
     return i18n.connectionIssue.couldntConnectToServer;
   }
