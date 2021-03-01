@@ -8,15 +8,12 @@ export enum GeneralHttpError {
 }
 
 const createHttpClient = (baseUrl: string) => {
-  console.log({ baseUrl });
   const httpClient = axios.create({
     baseURL: baseUrl,
     headers: { 'Content-Type': 'application/json' },
   });
 
   const onRequest = (request: AxiosRequestConfig) => {
-    console.log({ request });
-
     logger.info('http', `--> ${request.method?.toUpperCase()} ${request.baseURL}${request.url}`);
 
     return request;
@@ -29,7 +26,6 @@ const createHttpClient = (baseUrl: string) => {
   };
 
   const onError = (error: AxiosError) => {
-    console.log({ error });
     if (error.response) {
       logger.error('http', `<-- ${error.response.status} ${error.config.baseURL}${error.config.url}`);
     }
