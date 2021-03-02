@@ -46,8 +46,10 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
   }
 
   setName = (name: string) => {
-    this.setState({ name });
-    this.saveChanges({ name });
+    const trimmedName = name.trim();
+
+    this.setState({ name: trimmedName });
+    this.saveChanges({ name: trimmedName });
   };
 
   setAddress = (address: string) => {
@@ -61,6 +63,7 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
 
   saveChanges = (changes: Partial<Contact>) => {
     const { contact } = this.props.route.params;
+
     const updatedContact = { ...contact, ...changes };
 
     this.props.navigation.setParams({ contact: updatedContact });

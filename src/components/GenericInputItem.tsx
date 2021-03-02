@@ -21,7 +21,7 @@ export const GenericInputItem = (props: Props) => {
   const [title] = useState(props.title);
   const [value, setValue] = useState(props.value);
   const handleValueSave = (newValue: string) => {
-    setValue(newValue);
+    setValue(newValue.trim());
     value && props.onSave && props.onSave(newValue);
   };
   const onFocus = () => {
