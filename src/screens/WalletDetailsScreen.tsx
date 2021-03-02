@@ -249,7 +249,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               containerStyle={styles.button}
             />
             <Button
-              testID="manage-email-notifications-subscription"
+              testID="manage-email-notifications-subscription-button"
               onPress={this.onSubscribeButtonPress}
               title={isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
               containerStyle={styles.button}

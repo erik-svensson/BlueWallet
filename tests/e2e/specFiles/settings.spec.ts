@@ -1,5 +1,5 @@
 import { expect as jestExpect } from '@jest/globals';
-import { expect } from 'detox';
+import { expect, waitFor } from 'detox';
 
 import gmailClient from '../gmail';
 import { DEFAULT_EMAIL_ADDRESS, DEFAULT_UNLOCK_PIN, ECDSA_KEYS, WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers/consts';

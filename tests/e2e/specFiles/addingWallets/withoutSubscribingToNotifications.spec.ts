@@ -1,3 +1,5 @@
+import { waitFor } from 'detox';
+
 import { ECDSA_KEYS, WALLETS } from '../../helpers/consts';
 import { isBeta } from '../../helpers/utils';
 import app from '../../pageObjects';
@@ -7,6 +9,7 @@ describe('Adding wallet', () => {
     beforeEach(async () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());
       await app.developerRoom.tapOnSkipOnboardingButton();
+      await app.onboarding.addEmailNotificationScreen.skip();
       await app.navigationBar.changeTab('wallets');
     });
 
@@ -131,10 +134,10 @@ describe('Adding wallet', () => {
             WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
           );
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
+          await app.wallets.importWallet.successScreen.close();
+          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
             .toBeVisible()
             .withTimeout(20000);
         });
@@ -161,10 +164,10 @@ describe('Adding wallet', () => {
             WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
           );
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
+          await app.wallets.importWallet.successScreen.close();
+          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
             .toBeVisible()
             .withTimeout(20000);
         });
@@ -185,10 +188,10 @@ describe('Adding wallet', () => {
             WALLETS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
           );
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
+          await app.wallets.importWallet.successScreen.close();
+          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
             .toBeVisible()
             .withTimeout(20000);
         });
@@ -210,10 +213,10 @@ describe('Adding wallet', () => {
             WALLETS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
           );
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
+          await app.wallets.importWallet.successScreen.close();
+          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
             .toBeVisible()
             .withTimeout(20000);
         });
@@ -229,10 +232,10 @@ describe('Adding wallet', () => {
           await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['Standard HD P2SH'].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
+          await app.wallets.importWallet.successScreen.close();
+          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
             .toBeVisible()
             .withTimeout(20000);
         });
@@ -249,10 +252,10 @@ describe('Adding wallet', () => {
           await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['Standard HD P2SH'].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
+          await app.wallets.importWallet.successScreen.close();
+          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
             .toBeVisible()
             .withTimeout(20000);
         });

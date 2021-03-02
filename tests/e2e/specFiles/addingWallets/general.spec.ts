@@ -1,3 +1,5 @@
+import { waitFor } from 'detox';
+
 import { expectToBeDisabled } from '../../assertions';
 import app from '../../pageObjects';
 import steps from '../../steps';

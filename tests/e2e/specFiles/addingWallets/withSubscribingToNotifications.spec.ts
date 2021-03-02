@@ -1,3 +1,5 @@
+import { waitFor } from 'detox';
+
 import gmailClient from '../../gmail';
 import { DEFAULT_EMAIL_ADDRESS, ECDSA_KEYS, WALLETS } from '../../helpers/consts';
 import { isBeta, randomizeEmailAddress } from '../../helpers/utils';
