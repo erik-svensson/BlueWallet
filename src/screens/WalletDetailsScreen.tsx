@@ -224,9 +224,8 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   };
 
   render() {
-    const { wallet, isSubscribed, isLoading, email } = this.props;
+    const { wallet, isSubscribed, isLoading } = this.props;
 
-    console.log({ email });
     if (!wallet) {
       return null;
     }
