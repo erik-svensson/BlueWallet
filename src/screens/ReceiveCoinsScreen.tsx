@@ -52,7 +52,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
     this.setState({
       amount: parseFloat(parsedAmount.replace(',', '.'))
         .toFixed(8)
-        .replace(/0+$/, ''),
+        .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1'),
     });
   };
 
