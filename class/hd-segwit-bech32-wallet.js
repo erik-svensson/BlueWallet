@@ -122,9 +122,14 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   async generateAddresses() {
     if (!this._node0) {
       const xpub = this.constructor._zpubToXpub(await this.getXpub());
-      const hdNode = HDNode.fromBase58(xpub);
 
-      this._node0 = hdNode.derive(0);
+      try {
+        const hdNode = HDNode.fromBase58(xpub);
+
+        this._node0 = hdNode.derive(0);
+      } catch (error) {
+        throw error;
+      }
     }
     for (let index = 0; index < this.num_addresses; index++) {
       const address = this.constructor._nodeToBech32SegwitAddress(this._node0.derive(index));
@@ -364,8 +369,11 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   static _zpubToXpub(zpub) {
     let data = b58.decode(zpub);
 
+    if (data.readUInt32BE() !== Number(`0x${getMasterPublicKeyPrefix('zpub')}`))
+      throw new Error('Not a valid zpub extended key!');
     data = data.slice(4);
-    data = Buffer.concat([Buffer.from(getMasterPublicKeyPrefix('xpub'), 'hex'), data]);
+    // WARNING: don't replace for dynamic type since this will not working in development environment
+    data = Buffer.concat([Buffer.from('0488b21e', 'hex'), data]);
 
     return b58.encode(data);
   }
