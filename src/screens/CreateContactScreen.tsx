@@ -55,7 +55,7 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   }
 
   get canCreateContact(): boolean {
-    return !!this.state.address && !!this.state.name && !this.state.name.error && !this.state.address.error;
+    return !!this.state.address.value && !!this.state.name.value && !this.state.name.error && !this.state.address.error;
   }
 
   setName = (value: string): void => {
