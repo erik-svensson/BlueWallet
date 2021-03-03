@@ -96,7 +96,7 @@ class AirdropCreateWalletSubscription extends Component<Props> {
 
     return (
       <ScreenTemplate
-        header={<Header isBackArrow title={i18n.airdrop.title} />}
+        header={<Header title={i18n.airdrop.title} />}
         footer={
           <View style={styles.buttonsContainer}>
             <Button
