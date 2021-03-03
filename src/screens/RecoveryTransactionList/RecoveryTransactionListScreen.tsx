@@ -63,11 +63,11 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
     );
   };
 
-  addTranscation = (transaction: Transaction) => {
+  addTransaction = (transaction: Transaction) => {
     this.setState((state: State) => ({ selectedTransactions: [...state.selectedTransactions, transaction] }));
   };
 
-  removeTranscation = (transaction: Transaction) => {
+  removeTransaction = (transaction: Transaction) => {
     this.setState((state: State) => ({
       selectedTransactions: state.selectedTransactions.filter(t => t.hash !== transaction.hash),
     }));
@@ -115,7 +115,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
   };
 
   toggleTransaction = (isChecked: boolean, transaction: Transaction) => () =>
-    isChecked ? this.removeTranscation(transaction) : this.addTranscation(transaction);
+    isChecked ? this.removeTransaction(transaction) : this.addTransaction(transaction);
 
   renderItem = ({ item: transaction }: { item: Transaction }) => {
     const isChecked = this.isChecked(transaction);
@@ -126,7 +126,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
         <View style={styles.transactionItemContainer}>
           <TransactionItem onPress={toggle} item={transaction} />
         </View>
-        <CheckBox onPress={toggle} right checked={isChecked} />
+        <CheckBox testID={`transaction-item-${transaction.note}-checkbox`} onPress={toggle} right checked={isChecked} />
       </View>
     );
   };
@@ -169,7 +169,12 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />
+          <Button
+            testID="cancel-transaction-next-button"
+            onPress={this.submit}
+            disabled={!this.canSubmit()}
+            title={i18n.send.details.next}
+          />
         </View>
       </View>
     );

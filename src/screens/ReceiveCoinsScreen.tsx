@@ -26,7 +26,7 @@ interface Props {
   wallets: Wallet[];
 }
 interface State {
-  amount: number;
+  amount: number | string;
 }
 
 class ReceiveCoinsScreen extends Component<Props, State> {
@@ -50,7 +50,9 @@ class ReceiveCoinsScreen extends Component<Props, State> {
     const parsedAmount = amount;
 
     this.setState({
-      amount: parseFloat(parsedAmount),
+      amount: parseFloat(parsedAmount.replace(',', '.'))
+        .toFixed(8)
+        .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1'),
     });
   };
 
@@ -59,7 +61,8 @@ class ReceiveCoinsScreen extends Component<Props, State> {
     (Number(value.replace(',', '.')) > CONST.maxCoinsInput &&
       i18n.formatString(i18n.send.details.amount_is_too_high, {
         maxCoinsInput: CONST.maxCoinsInput.toLocaleString(),
-      }));
+      })) ||
+    (Number(value.replace(',', '.')) < 0 && i18n.send.details.amount_is_negative);
 
   editAmount = () => {
     this.props.navigation.navigate(Route.EditText, {

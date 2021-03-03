@@ -2,6 +2,8 @@ import { CONST, Wallet, TxType } from 'app/consts';
 
 import { decryptCode } from './decode';
 
+const BigNumber = require('bignumber.js');
+
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const isAllWallets = (wallet: Wallet): boolean => wallet.label === CONST.allWallets;
@@ -37,6 +39,14 @@ export const checkZero = (amount: string) => {
     return newAmount;
   } else {
     return amount;
+  }
+};
+
+export const checkMinSatoshi = (amount: number) => {
+  const minSatoshi = new BigNumber(1).dividedBy(CONST.satoshiInBtc);
+
+  if (amount < minSatoshi && amount !== 0) {
+    return true;
   }
 };
 

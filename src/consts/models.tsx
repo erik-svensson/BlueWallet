@@ -52,7 +52,9 @@ export const CONST = {
   airdropTotalDollarsToShare: '250.000',
   emailCodeErrorMax: 3,
   nextAirdropPeriod: 'Q1 2021',
-  walletsDefaultGapLimit: '20/20',
+  walletsDefaultGapLimit: 20,
+  walletsDefaultAddressRange: '20/0',
+  walletsDefaultDerivationPath: 'm/0',
   userVersion: 'userVersion',
   newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
   buttonTimeoutSeconds: 30,
@@ -118,7 +120,7 @@ export enum TransactionStatus {
   PENDING = 'PENDING',
   DONE = 'DONE',
   CANCELED = 'CANCELED',
-  'CANCELED-DONE' = 'CANCELED-DONE',
+  CANCELED_DONE = 'CANCELED_DONE',
 }
 
 enum AdditionalTags {
@@ -189,6 +191,7 @@ export enum Route {
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
+  AirdropTermsAndConditions = 'AirdropTermsAndConditions',
   AirdropDashboard = 'AirdropDashboard',
   AirdropThankYou = 'AirdropThankYou',
   AirdropRequirements = 'AirdropRequirements',
@@ -254,8 +257,9 @@ export interface Wallet {
 
 export interface WalletPayload {
   name: string;
-  gap_limit: string;
-  derivation_path?: Record<string, unknown>;
+  gap_limit: number;
+  address_range: string;
+  derivation_path?: string;
   xpub: string;
   address_type: string;
   instant_public_key?: string;
@@ -553,6 +557,7 @@ export type RootStackParams = {
     chunksQuantity: string;
     onScanned: () => void;
   };
+  [Route.AirdropTermsAndConditions]: undefined;
   [Route.AirdropDashboard]: undefined;
   [Route.AirdropThankYou]: undefined;
   [Route.AirdropRequirements]: undefined;
@@ -594,3 +599,5 @@ export interface Authenticator {
 }
 
 export type GlobalParams = RootStackParams & MainTabNavigatorParams;
+
+export type MasterPublicKey = 'xpub' | 'ypub' | 'Ypub' | 'Zpub' | 'zpub';

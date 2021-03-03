@@ -3,9 +3,13 @@ import NavigationBar from './common/NavigationBar';
 import AddressBook from './pages/AddressBook';
 import Authenticators from './pages/Authenticators';
 import BetaVersionScreen from './pages/BetaVersionScreen';
+import Dashboard from './pages/Dashboard';
 import DeveloperRoom from './pages/DeveloperRoom';
+import FiltersScreen from './pages/FiltersScreen';
 import Onboarding from './pages/Onboarding';
 import TermsConditionsScreen from './pages/TermsConditionsScreen';
+import TransactionDetails from './pages/TransactionDetailsScreen';
+import TransactionsCancel from './pages/Transactions/Cancel';
 import TransactionsReceive from './pages/Transactions/Receive';
 import TransactionsSend from './pages/Transactions/Send';
 import UnlockScreen from './pages/UnlockScreen';
@@ -21,6 +25,9 @@ const app = {
   betaVersionScreen: BetaVersionScreen(),
   developerRoom: DeveloperRoom(),
   onboarding: Onboarding(),
+  dashboard: Dashboard(),
+  filtersScreen: FiltersScreen(),
+  transactionDetails: TransactionDetails(),
   wallets: Wallets(),
   authenticators: Authenticators(),
   addressBook: AddressBook(),
@@ -35,6 +42,7 @@ const app = {
   header: Header(),
   termsConditionsScreen: TermsConditionsScreen(),
   unlockScreen: UnlockScreen(),
+  transactionsCancel: TransactionsCancel(),
   transactionsSend: TransactionsSend(),
   transactionsReceive: TransactionsReceive(),
   walletDetails: WalletDetails(),

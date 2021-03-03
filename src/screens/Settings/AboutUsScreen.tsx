@@ -1,16 +1,18 @@
-import React from 'react';
-import { Text, StyleSheet, View, Linking } from 'react-native';
+import React, { useState } from 'react';
+import { Text, StyleSheet, View, Linking, Platform } from 'react-native';
 import { getApplicationName, getVersion, getBundleId, getBuildNumber } from 'react-native-device-info';
 import Rate, { AndroidMarket } from 'react-native-rate';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
+import config from 'app/config';
 import { dimensions } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 export const AboutUsScreen = () => {
+  const [rate, setRate] = useState<boolean>(false);
   const libraries = [
     'React Native',
     'React Native Elements',
@@ -31,16 +33,25 @@ export const AboutUsScreen = () => {
   };
 
   const handleRateButtonPress = () => {
+    const openAppStoreIfInAppFails = Platform.select({ android: true, ios: false }) as boolean;
+    const preferInApp = Platform.select({ android: false, ios: true }) as boolean;
+
     const options = {
       AppleAppID: '1515116464',
-      GooglePackageName: 'io.goldwallet.wallet',
+      GooglePackageName: config.applicationId,
       preferredAndroidMarket: AndroidMarket.Google,
-      preferInApp: true,
-      openAppStoreIfInAppFails: true,
+      preferInApp,
+      openAppStoreIfInAppFails,
+      inAppDelay: 0,
       fallbackPlatformURL: 'https://bitcoinvault.global',
     };
 
-    Rate.rate(options);
+    Rate.rate(options, () => {
+      setRate(true);
+      setTimeout(() => {
+        setRate(false);
+      }, 5000);
+    });
   };
 
   const goToGithub = () => {
@@ -60,10 +71,12 @@ export const AboutUsScreen = () => {
       />
       <Button
         testID="rate-us-button"
+        disabled={rate}
         onPress={handleRateButtonPress}
         source={icons.star}
         title={i18n.aboutUs.rateGoldWallet}
         containerStyle={styles.buttonContainer}
+        loading={rate}
       />
       <View style={styles.buildWithContainer}>
         <Text style={styles.title}>{i18n.aboutUs.buildWithAwesome}</Text>

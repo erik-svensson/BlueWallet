@@ -30,7 +30,7 @@ export const Footer: FC<Props> = ({ navigation, route }) => (
       <Text style={styles.description}>{i18n.airdrop.requirements.termsAndConditions.read}&nbsp;</Text>
       <TouchableOpacity
         onPress={() => {
-          //TODO: navigate TC
+          navigation.navigate(Route.AirdropTermsAndConditions);
         }}
       >
         <Text style={styles.termsText}>{i18n.airdrop.requirements.termsAndConditions.termsAndConditions}</Text>

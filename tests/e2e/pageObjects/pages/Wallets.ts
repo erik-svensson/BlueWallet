@@ -1,75 +1,11 @@
 import { by, element } from 'detox';
-import { act } from 'react-test-renderer';
 
 import actions from '../../actions';
 import MessageScreen from '../common/MessageScreen';
 import ScanQrCodeScreen from '../common/ScanQrCodeScreen';
-
-export type WalletType = '3-Key Vault' | '2-Key Vault' | 'Standard HD P2SH' | 'Standard P2SH' | 'Standard HD SegWit';
-
-export interface ImportWalletOptions {
-  type: WalletType;
-  name: string;
-  seedPhrase: string;
-  fastPublicKey?: string;
-  cancelPublicKey?: string;
-}
-
-export interface CreateWalletOptions {
-  type: WalletType;
-  name: string;
-  fastPublicKey?: string;
-  cancelPublicKey?: string;
-}
+import { BasicWalletType, WalletType } from '../types';
 
 const Wallets = () => {
-  const DashboardScreen = () => ({
-    header: element(by.id('dashboard-header')),
-    self: element(by.id('dashboard-screen')),
-
-    noWalletsIcon: element(by.id('no-wallets-icon')),
-    filterTransactionsButton: element(by.id('filter-transactions-button')),
-    addButton: element(by.id('add-wallet-button')),
-    sendButton: element(by.id('send-coins-button')),
-    recieveButton: element(by.id('receive-coins-button')),
-
-    getWalletDetailsButtonElement: (walletName: string) => element(by.id(`show-${walletName}-details-button`)),
-
-    getTransactionElement: (note: string) => element(by.id(`transaction-item-${note}`)),
-
-    async tapOnAddButton() {
-      await actions.tap(this.addButton);
-    },
-
-    async tapOnFilterButton() {
-      await actions.tap(this.filterTransactionsButton);
-    },
-
-    async tapOnWallet(name: string) {
-      const wallet = element(by.id(`wallet-${name}`));
-
-      await actions.tap(wallet);
-    },
-
-    async tapOnWalletDetailsButton(name: string) {
-      const element = this.getWalletDetailsButtonElement(name);
-
-      await actions.tap(element);
-    },
-
-    async tapOnSendButton() {
-      await actions.tap(this.sendButton);
-    },
-
-    async tapOnReceiveButton() {
-      await actions.tap(this.recieveButton);
-    },
-
-    async scrollToTheTransactionWithNote(note: string) {
-      await actions.scrollToElement(element(by.id(`transaction-item-${note}`)), 'dashboard-screen');
-    },
-  });
-
   const AddNewWallet = () => {
     const CreateScreen = () => ({
       nameInput: element(by.id('create-wallet-name-input')),
@@ -149,7 +85,7 @@ const Wallets = () => {
       },
       proceedButton: element(by.id('confirm-import-button')),
 
-      async chooseType(type: WalletType) {
+      async chooseType(type: BasicWalletType) {
         await actions.tap(this.walletTypeRadios[type]);
       },
 
@@ -210,60 +146,11 @@ const Wallets = () => {
     };
   };
 
-  const dashboardScreen = DashboardScreen();
-  const addNewWallet = AddNewWallet();
-  const importWallet = ImportWallet();
-  const scanQrCodeScreen = ScanQrCodeScreen();
-
-  async function createWallet(options: CreateWalletOptions): Promise<void> {
-    const { type, name, fastPublicKey, cancelPublicKey } = options;
-
-    await dashboardScreen.tapOnAddButton();
-    await addNewWallet.createScreen.typeName(name);
-    await addNewWallet.createScreen.chooseType(type);
-    await addNewWallet.createScreen.tapOnCreateButton();
-
-    if (type === '3-Key Vault') {
-      await addNewWallet.addFastKeyScreen.tapScanOnQrCode();
-      await addNewWallet.scanQrCodeScreen.scanCustomString(fastPublicKey!);
-    }
-
-    if (type === '3-Key Vault' || type === '2-Key Vault') {
-      await addNewWallet.addFastKeyScreen.tapScanOnQrCode();
-      await addNewWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
-    }
-
-    await addNewWallet.loadingScreen.waitUntilEnded();
-    await addNewWallet.successScreen.tapOnCloseButton();
-  }
-
-  async function importExistingWallet(options: ImportWalletOptions): Promise<void> {
-    const { type, name, seedPhrase, fastPublicKey, cancelPublicKey } = options;
-
-    await dashboardScreen.tapOnAddButton();
-    await addNewWallet.createScreen.tapOnImportButton();
-    await importWallet.chooseWalletTypeScreen.chooseType(type);
-    await importWallet.chooseWalletTypeScreen.tapOnProceedButton();
-
-    await importWallet.importScreen.typeName(name);
-    await importWallet.importScreen.typeSeedPhrase(seedPhrase);
-    await importWallet.importScreen.submit();
-
-    if (type === '3-Key Vault') {
-      await addNewWallet.addFastKeyScreen.tapScanOnQrCode();
-      await addNewWallet.scanQrCodeScreen.scanCustomString(fastPublicKey!);
-    }
-
-    if (type === '3-Key Vault' || type === '2-Key Vault') {
-      await addNewWallet.addFastKeyScreen.tapScanOnQrCode();
-      await addNewWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
-    }
-
-    await importWallet.loadingScreen.waitUntilEnded();
-    await importWallet.successScreen.close();
-  }
-
-  return { dashboardScreen, addNewWallet, importWallet, scanQrCodeScreen, createWallet, importExistingWallet };
+  return {
+    addNewWallet: AddNewWallet(),
+    importWallet: ImportWallet(),
+    scanQrCodeScreen: ScanQrCodeScreen(),
+  };
 };
 
 export default Wallets;

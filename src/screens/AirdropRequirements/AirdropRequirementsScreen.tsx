@@ -31,7 +31,7 @@ class AirdropRequirementsScreen extends Component<Props> {
   };
 
   onTermsConditionsPress = () => {
-    // TODO: this.props.navigation.navigate(Route.AirdropTermsAndConditions);
+    this.props.navigation.navigate(Route.AirdropTermsAndConditions);
   };
 
   render() {

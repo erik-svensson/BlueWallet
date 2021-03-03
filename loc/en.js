@@ -380,8 +380,7 @@ module.exports = {
     deleteYourEmailDescription: 'your email address',
     deleteEmailSuccessMessage: 'Hooray!\n You have successfully deleted your email address.',
     codeError: 'Please enter a valid code.\n You have {attemptsLeft} more attempts.',
-    codeFinalError:
-      'You have entered an invalid code {attemptsNo} times.\n We have sent a new code to your email address.',
+    codeFinalError: 'You have entered an invalid code 3 times.\n We have sent a new code to your email address.',
     walletSubscribedSuccessMessage:
       'Hooray!\n You have successfully added your email address and subscribed to the notifications.',
     no: 'No',
@@ -423,8 +422,6 @@ module.exports = {
     successDescription: 'Hooray! \n  You have successfully created your PIN.',
     successDescriptionChangedPin: 'Hooray! \n  You have successfully changed your PIN.',
     tryAgain: 'Try again after',
-    emailValidation: 'Enter valid email address',
-    validationCodeError: 'Please enter a valid code. You have {numberAttempt} more attempts.',
     resendCodeError: 'You have entered an invalid code 3 times. \n We have sent a new code to your email address.',
     successCompletedDescription: 'Hooray! \n You have successfully finished your onboarding proccess.',
     successCompletedButton: 'Go To Wallets',
@@ -483,6 +480,8 @@ module.exports = {
       address_field_is_not_valid: 'Address field is not valid',
       amount_field_is_not_valid: 'Amount field is not valid',
       amount_is_too_high: "There is a maximum of {maxCoinsInput} BTCV that will ever exist, so don't try to send more!",
+      amount_is_negative: 'Amount can not be negative',
+      amount_field_is_less_than_minSatoshi: 'The minimum amount you can send is 1 Satoshi',
       amount_placeholder: 'amount to send (in BTCV)',
       cancel: 'Cancel',
       create: 'Create Invoice',

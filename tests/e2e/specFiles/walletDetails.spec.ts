@@ -2,6 +2,7 @@ import { expect } from 'detox';
 
 import { isBeta, WALLETS_WITH_COINS } from '../helpers';
 import app from '../pageObjects';
+import steps from '../steps';
 
 describe('Wallet details', () => {
   const walletName = 'Scrooge McDuck wallet';
@@ -14,18 +15,18 @@ describe('Wallet details', () => {
   });
 
   beforeEach(async () => {
-    await app.wallets.importExistingWallet({
+    await steps.importWallet({
       type: '3-Key Vault',
       name: walletName,
-      fastPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].FAST_KEY,
-      cancelPublicKey: WALLETS_WITH_COINS['3-Keys Vault'].CANCEL_KEY,
-      seedPhrase: WALLETS_WITH_COINS['3-Keys Vault'].SEED_PHRASE,
+      fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
+      cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+      seedPhrase: WALLETS_WITH_COINS['3-Key Vault'].SEED_PHRASE,
     });
   });
 
   describe('@ios @android @smoke', () => {
     it('should be possible to check details', async () => {
-      await app.wallets.dashboardScreen.tapOnWalletDetailsButton(walletName);
+      await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
       await expect(app.walletDetails.mainScreen.walletName).toBeVisible();
       await expect(app.walletDetails.mainScreen.walletType).toBeVisible();
@@ -36,14 +37,14 @@ describe('Wallet details', () => {
     it('should be possible to rename the wallet', async () => {
       const newWalletName = 'Huey, Dewey and Louie wallet';
 
-      await app.wallets.dashboardScreen.tapOnWalletDetailsButton(walletName);
+      await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
       await app.walletDetails.mainScreen.renameWalletTo(newWalletName);
       await expect(app.walletDetails.mainScreen.walletName).toHaveLabel(newWalletName);
     });
 
     it('should be possible to check if wallet seed phrase is visible', async () => {
-      await app.wallets.dashboardScreen.tapOnWalletDetailsButton(walletName);
+      await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
       await app.walletDetails.mainScreen.tapOnExportWalletButton();
 
@@ -52,7 +53,7 @@ describe('Wallet details', () => {
     });
 
     it('should be possible to check and copy the wallet XPUB', async () => {
-      await app.wallets.dashboardScreen.tapOnWalletDetailsButton(walletName);
+      await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
       await app.walletDetails.mainScreen.tapOnShowXpubButton();
 
@@ -64,7 +65,7 @@ describe('Wallet details', () => {
     });
 
     it('should be possible to delete the wallet', async () => {
-      await app.wallets.dashboardScreen.tapOnWalletDetailsButton(walletName);
+      await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
       await app.walletDetails.mainScreen.tapOnDeleteWalletButton();
       await app.walletDetails.deleteScreen.confirm();
@@ -73,7 +74,7 @@ describe('Wallet details', () => {
     });
 
     it('should be possible to tap "No" and abort deleting wallet process', async () => {
-      await app.wallets.dashboardScreen.tapOnWalletDetailsButton(walletName);
+      await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
       await app.walletDetails.mainScreen.tapOnDeleteWalletButton();
       await app.walletDetails.deleteScreen.cancel();

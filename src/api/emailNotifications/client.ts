@@ -18,6 +18,10 @@ export enum EmailNotificationsError {
   INVALID_EMAIL = 'Enter a valid email address',
   ERROR_VERIFICATION_ERROR = 'On /verify-email/ request the server responded with result: "error"',
   WRONG_PIN = 'Wrong pin',
+  TRIALS_LEFT = 'Trials left',
+  WRONG_PIN_1_LEFT = 'Request to /authenticate/ failed. Details: Trials left: 1',
+  WRONG_PIN_2_LEFT = 'Request to /authenticate/ failed. Details: Trials left: 2',
+  WRONG_PIN_NO_TRIALS_LEFT = 'Request to /authenticate/ failed. Details: No more trials left',
   ERROR_REQUEST_AUTHENTICATION = 'On /authenticate/ request the server responded with result: "error',
 }
 

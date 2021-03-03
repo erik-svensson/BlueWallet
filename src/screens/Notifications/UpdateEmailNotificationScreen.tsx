@@ -139,7 +139,7 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
     const { subscribedWallets } = route.params;
 
     if (!isEmail(email)) {
-      return setError(i18n.onboarding.emailValidation);
+      return setError(i18n.notifications.invalidAddressError);
     }
     if (email === storedEmail) {
       return setError(i18n.notifications.theSameAddressError);

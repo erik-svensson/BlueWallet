@@ -1,4 +1,4 @@
-import { by, element } from 'detox';
+import { by, element, waitFor } from 'detox';
 
 import actions from '../../actions';
 import { SECOND } from '../../helpers';
@@ -9,14 +9,14 @@ const MessageScreen = (type: MessageScreenType) => ({
   icon: element(by.id(`${type}-message`)),
   closeButton: element(by.id('message-close-button')),
 
-  async close(): Promise<void> {
+  async close() {
     await actions.tap(this.closeButton);
   },
 
-  async waitUntilEnded(): Promise<void> {
+  async waitUntilEnded() {
     await waitFor(this.icon)
       .toBeNotVisible()
-      .withTimeout(45 * SECOND);
+      .withTimeout(120 * SECOND);
   },
 });
 

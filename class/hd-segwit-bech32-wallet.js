@@ -4,7 +4,7 @@ import b58 from 'bs58check';
 import { NativeModules } from 'react-native';
 
 import config from '../src/config';
-import { electrumVaultMnemonicToSeed } from '../utils/crypto';
+import { electrumVaultMnemonicToSeed, getMasterPublicKeyPrefix } from '../utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
@@ -122,9 +122,14 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   async generateAddresses() {
     if (!this._node0) {
       const xpub = this.constructor._zpubToXpub(await this.getXpub());
-      const hdNode = HDNode.fromBase58(xpub);
 
-      this._node0 = hdNode.derive(0);
+      try {
+        const hdNode = HDNode.fromBase58(xpub);
+
+        this._node0 = hdNode.derive(0);
+      } catch (error) {
+        throw error;
+      }
     }
     for (let index = 0; index < this.num_addresses; index++) {
       const address = this.constructor._nodeToBech32SegwitAddress(this._node0.derive(index));
@@ -173,7 +178,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     let data = b58.decode(xpub);
 
     data = data.slice(4);
-    data = Buffer.concat([Buffer.from('04b24746', 'hex'), data]);
+    data = Buffer.concat([Buffer.from(getMasterPublicKeyPrefix('zpub'), 'hex'), data]);
     this._xpub = b58.encode(data);
 
     return this._xpub;
@@ -364,7 +369,10 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   static _zpubToXpub(zpub) {
     let data = b58.decode(zpub);
 
+    if (data.readUInt32BE() !== Number(`0x${getMasterPublicKeyPrefix('zpub')}`))
+      throw new Error('Not a valid zpub extended key!');
     data = data.slice(4);
+    // WARNING: don't replace for dynamic type since this will not working in development environment
     data = Buffer.concat([Buffer.from('0488b21e', 'hex'), data]);
 
     return b58.encode(data);
