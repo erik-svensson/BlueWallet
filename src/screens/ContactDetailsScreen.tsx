@@ -61,6 +61,12 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
     checkAddress(address);
   };
 
+  validateName = (value: string) => {
+    if (value.match(/[@'|"“”‘|’„”,.;]/g)?.length) {
+      throw Error('no special characters');
+    }
+  };
+
   saveChanges = (changes: Partial<Contact>) => {
     const { contact } = this.props.route.params;
 
@@ -128,6 +134,8 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
             title={i18n.contactDetails.editName}
             label={i18n.contactDetails.nameLabel}
             value={name}
+            validateName
+            validateOnSave={this.validateName}
             onSave={this.setName}
           />
         </View>
