@@ -168,7 +168,13 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
         keyboardShouldPersistTaps="always"
         footer={
           <>
-            <Button title={i18n._.confirm} onPress={this.onConfirm} disabled={email.length === 0} loading={isLoading} />
+            <Button
+              testID="change-email-confirm-button"
+              title={i18n._.confirm}
+              onPress={this.onConfirm}
+              disabled={email.length === 0}
+              loading={isLoading}
+            />
           </>
         }
         header={
@@ -181,13 +187,15 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
         </View>
         <View style={styles.currentAddress}>
           <Text style={styles.inputLabel}>{i18n.notifications.yourCurrentEmail}</Text>
-          <Text style={styles.email}>{storedEmail}</Text>
+          <Text testID="current-email-text" style={styles.email}>
+            {storedEmail}
+          </Text>
         </View>
         <View style={styles.inputItemContainer}>
           <InputItem
             value={email}
             label={i18n._.email}
-            testID="confirm-notification-email"
+            testID="change-email-input"
             setValue={this.setEmail}
             autoFocus={true}
             error={error}

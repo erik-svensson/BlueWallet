@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2019",
-    "module": "esnext",
+    "module": "CommonJS",
     "jsx": "react-native",
     "noEmit": true,
     "allowJs": true,

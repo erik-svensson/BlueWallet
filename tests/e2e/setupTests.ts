@@ -1,3 +1,7 @@
+/**
+ * Global hooks. beforeEach, afterAll and other hooks defined here are applied to any
+ * test suite in the project.
+ */
 import { device } from 'detox';
 
 beforeEach(async () => {

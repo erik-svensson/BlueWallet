@@ -1,6 +1,7 @@
 import { expect } from 'detox';
 
-import { isBeta, createRandomNote, WALLETS_WITH_COINS, DEFAULT_TRANSACTION_PASSWORD } from '../../helpers';
+import { WALLETS_WITH_COINS, DEFAULT_TRANSACTION_PASSWORD } from '../../helpers/consts';
+import { isBeta, randomString } from '../../helpers/utils';
 import app from '../../pageObjects';
 import steps from '../../steps';
 
@@ -12,6 +13,7 @@ describe('Transactions', () => {
   beforeEach(async () => {
     isBeta() && (await app.onboarding.betaVersionScreen.close());
     await app.developerRoom.tapOnSkipOnboardingButton();
+    await app.onboarding.addEmailNotificationScreen.skip();
     await app.navigationBar.changeTab('wallets');
   });
 
@@ -19,7 +21,7 @@ describe('Transactions', () => {
     describe('@ios @regression', () => {
       // TODO: Test is disabled due to long transaction confirmations.
       xit('should be possible to cancel transaction for 3-Key Vault wallet', async () => {
-        const note = createRandomNote();
+        const note = randomString();
         const wallet = WALLETS_WITH_COINS['3-Key Vault'];
 
         await steps.importWallet({
@@ -62,7 +64,7 @@ describe('Transactions', () => {
     describe('@ios @regression', () => {
       // TODO: Test is disabled due to long transaction confirmations.
       xit('should be possible to cancel transaction for 2-Key Vault wallet', async () => {
-        const note = createRandomNote();
+        const note = randomString();
         const wallet = WALLETS_WITH_COINS['2-Key Vault'];
 
         await steps.importWallet({

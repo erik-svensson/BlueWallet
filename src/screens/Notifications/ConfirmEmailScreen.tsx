@@ -179,12 +179,13 @@ class ConfirmEmailScreen extends Component<Props, State> {
         footer={
           <>
             <Button
+              testID="submit-verify-action-code-button"
               title={i18n._.confirm}
               onPress={this.onConfirm}
               disabled={this.state.code.length !== CONST.codeLength}
             />
             <TimeoutButton
-              testID="resend-code-email"
+              testID="resend-verify-action-code-button"
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
               onPress={this.onResend}
@@ -200,7 +201,12 @@ class ConfirmEmailScreen extends Component<Props, State> {
           </Text>
         </View>
         <View style={styles.inputItemContainer}>
-          <CodeInput value={this.state.code} onTextChange={this.onChange} isError={!!notificationError} />
+          <CodeInput
+            testID="verify-action-code-input"
+            value={this.state.code}
+            onTextChange={this.onChange}
+            isError={!!notificationError}
+          />
           {!!notificationError && <Text style={styles.error}>{notificationError}</Text>}
         </View>
       </ScreenTemplate>

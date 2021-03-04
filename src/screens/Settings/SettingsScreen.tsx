@@ -62,7 +62,12 @@ export const SettingsScreen = (props: Props) => {
         source={icons.buildIcon}
         onPress={onAdvancedOptionsChange}
       />
-      <ListItem title={i18n.settings.notifications} source={icons.bell} onPress={onNotificationsOptionsChange} />
+      <ListItem
+        testID="email-notifications-settings-item"
+        title={i18n.settings.notifications}
+        source={icons.bell}
+        onPress={onNotificationsOptionsChange}
+      />
     </>
   );
 
