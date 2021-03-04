@@ -72,7 +72,7 @@ const importWallet = async (options: ImportWalletOptions) => {
   await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
   await app.wallets.importWallet.importScreen.typeName(name);
-  await app.wallets.importWallet.importScreen.typeSeedPhrase(seedPhrase);
+  await app.wallets.importWallet.importScreen.pasteSeedPhrase(seedPhrase);
   await app.wallets.importWallet.importScreen.submit();
 
   if (type === '3-Key Vault') {
