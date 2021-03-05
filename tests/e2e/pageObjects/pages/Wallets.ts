@@ -110,6 +110,11 @@ const Wallets = () => {
         await actions.typeText(this.seedPhraseInput, value, { closeKeyboard: true });
       },
 
+      /** Pastes the whole string without typing. Use only during non-user behaviour testing. */
+      async pasteSeedPhrase(value: string) {
+        await actions.replaceText(this.seedPhraseInput, value, { closeKeyboard: true });
+      },
+
       async submit() {
         await actions.tap(this.submitButton);
       },
