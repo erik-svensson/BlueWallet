@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 
 import { Header, InputItem, Button, ScreenTemplate } from 'app/components';
@@ -25,6 +25,7 @@ export const EditTextScreen = (props: Props) => {
     checkZero,
     keyboardType = defaultKeyboardType,
     validate,
+    validateName,
     validateOnSave = null,
     emptyValueAllowed = false,
     value: paramsValue,
@@ -33,12 +34,21 @@ export const EditTextScreen = (props: Props) => {
   const [value, setValue] = useState(paramsValue || '');
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    setError('');
+  }, [value]);
+
   const handlePressOnSaveButton = () => {
     if (validateOnSave) {
       try {
         validateOnSave(value);
       } catch (err) {
-        setError(i18n.send.details.address_field_is_not_valid);
+        if (validateName) {
+          setError(i18n.contactCreate.nameCannotContainSpecialCharactersError);
+        } else {
+          setError(i18n.send.details.address_field_is_not_valid);
+        }
+
         return;
       }
     }
@@ -47,7 +57,7 @@ export const EditTextScreen = (props: Props) => {
   };
 
   const canSubmit = () => {
-    if (!value) {
+    if (!value.trim()) {
       return emptyValueAllowed;
     }
 
