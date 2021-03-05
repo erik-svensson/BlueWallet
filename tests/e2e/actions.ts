@@ -40,6 +40,27 @@ const Actions = () => {
     }
   };
 
+  /** Pastes the whole string without typing. Use only during non-user behaviour testing. */
+  const replaceText = async (target: Detox.DetoxAny, text: string, options?: TypeTextOptions) => {
+    await waitForElement(target);
+
+    if (options?.replace) {
+      await target.clearText();
+    }
+
+    await target.replaceText(text);
+
+    if (options?.closeKeyboard) {
+      if (device.getPlatform() === 'android') {
+        await device.pressBack();
+      }
+
+      if (device.getPlatform() === 'ios') {
+        await target.tapReturnKey();
+      }
+    }
+  };
+
   const tap = async (target: Detox.DetoxAny) => {
     await waitForElement(target);
     await target.tap();
@@ -101,7 +122,17 @@ const Actions = () => {
     }
   };
 
-  return { waitForElement, typeText, tap, multiTap, scrollToElement, swipeCarousel, refreshView, searchForElement };
+  return {
+    waitForElement,
+    typeText,
+    replaceText,
+    tap,
+    multiTap,
+    scrollToElement,
+    swipeCarousel,
+    refreshView,
+    searchForElement,
+  };
 };
 
 export default Actions();
