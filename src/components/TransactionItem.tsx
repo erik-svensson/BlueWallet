@@ -57,7 +57,11 @@ export const TransactionItem = ({ item, onPress, testID }: Props) => {
             item.toExternalAddress ? styles.label : null,
           ]}
         >
-          {formatToBtcv(satoshiToBtc(item.valueWithoutFee).toNumber())}
+          {formatToBtcv(
+            satoshiToBtc(item.valueWithoutFee)
+              .toFixed(8)
+              .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1'),
+          )}
         </Text>
       </View>
       {item.blockedAmount !== undefined && (

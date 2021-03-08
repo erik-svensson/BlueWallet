@@ -103,7 +103,11 @@ class TransactionDetailsScreen extends Component<Props> {
             transaction.toExternalAddress ? styles.lightGrayText : null,
           ]}
         >
-          {formatToBtcvWithoutUnit(satoshiToBtc(transaction.valueWithoutFee).toNumber())}
+          {formatToBtcvWithoutUnit(
+            satoshiToBtc(transaction.valueWithoutFee)
+              .toFixed(8)
+              .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1'),
+          )}
         </Text>
         <Text style={styles.unit}>{CONST.preferredBalanceUnit}</Text>
         <TransactionLabelStatus status={transaction.status} />
