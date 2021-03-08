@@ -112,13 +112,13 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
         footer={
           <>
             <Button
+              testID="confirm-code-email-button"
               title={i18n._.confirm}
-              testID="confirm-code-email"
               onPress={this.onConfirm}
               disabled={allowConfirm && userCode.length < CONST.codeLength}
             />
             <TimeoutButton
-              testID="resend-code-email"
+              testID="resend-code-email-button"
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
               onPress={() => this.resendCode()}
@@ -128,8 +128,8 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
       >
         {children}
         <View style={styles.codeContainer}>
-          <CodeInput value={this.state.userCode} testID="confirm-code" onTextChange={this.setCode} />
-          <Text testID="invalid-code-message" style={styles.errorText}>
+          <CodeInput value={this.state.userCode} testID="confirm-code-input" onTextChange={this.setCode} />
+          <Text testID="confirm-code-input-validation-error" style={styles.errorText}>
             {error}
           </Text>
         </View>

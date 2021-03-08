@@ -7,6 +7,7 @@ const SettingsScreen = () => ({
 
   settingsItems: {
     advancedOptions: element(by.id('advanced-options-settings-item')),
+    emailNotifications: element(by.id('email-notifications-settings-item')),
     language: element(by.id('language-settings-item')),
     changePin: element(by.id('change-pin-settings-item')),
     aboutUs: element(by.id('about-us-settings-item')),
@@ -20,6 +21,10 @@ const SettingsScreen = () => ({
 
   async tapOnAdvancedOptions() {
     await actions.tap(this.settingsItems.advancedOptions);
+  },
+
+  async tapOnEmailNotifications() {
+    await actions.tap(this.settingsItems.emailNotifications);
   },
 
   async tapOnChangePin() {

@@ -1,7 +1,7 @@
 import { by, element } from 'detox';
 
 import actions from '../../actions';
-import { WAIT_FOR_ELEMENT_TIMEOUT } from '../../helpers';
+import { WAIT_FOR_ELEMENT_TIMEOUT } from '../../helpers/consts';
 
 const Dashboard = () => {
   const DashboardScreen = () => ({

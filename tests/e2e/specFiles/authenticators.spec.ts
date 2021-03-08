@@ -1,6 +1,6 @@
 import { expect } from 'detox';
 
-import { isBeta } from '../helpers';
+import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
 import steps from '../steps';
 
@@ -8,6 +8,7 @@ describe('Authenticators', () => {
   beforeEach(async () => {
     isBeta() && (await app.onboarding.betaVersionScreen.close());
     await app.developerRoom.tapOnSkipOnboardingButton();
+    await app.onboarding.addEmailNotificationScreen.skip();
     await app.navigationBar.changeTab('authenticators');
   });
 

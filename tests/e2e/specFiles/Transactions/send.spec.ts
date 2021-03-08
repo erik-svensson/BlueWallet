@@ -1,6 +1,7 @@
 import { expect } from 'detox';
 
-import { isBeta, createRandomNote, WALLETS_WITH_COINS, DEFAULT_TRANSACTION_PASSWORD } from '../../helpers';
+import { WALLETS_WITH_COINS, DEFAULT_TRANSACTION_PASSWORD } from '../../helpers/consts';
+import { isBeta, randomString } from '../../helpers/utils';
 import app from '../../pageObjects';
 import steps from '../../steps';
 
@@ -12,13 +13,14 @@ describe('Transactions', () => {
   beforeEach(async () => {
     isBeta() && (await app.onboarding.betaVersionScreen.close());
     await app.developerRoom.tapOnSkipOnboardingButton();
+    await app.onboarding.addEmailNotificationScreen.skip();
     await app.navigationBar.changeTab('wallets');
   });
 
   describe('Send', () => {
     describe('@ios @smoke', () => {
       it('should be possible to send coins from 3-Key Vault wallet (Secure Transaction) to 3-Key Vault wallet', async () => {
-        const note = createRandomNote();
+        const note = randomString();
 
         await steps.importWallet({
           type: '3-Key Vault',
@@ -71,7 +73,7 @@ describe('Transactions', () => {
 
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from 2-Key Vault wallet to 3-Key Vault wallet', async () => {
-        const note = createRandomNote();
+        const note = randomString();
 
         await steps.importWallet({
           type: '2-Key Vault',
@@ -95,7 +97,7 @@ describe('Transactions', () => {
 
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from Standard HD P2SH wallet to 3-Key Vault wallet', async () => {
-        const note = createRandomNote();
+        const note = randomString();
 
         await steps.importWallet({
           type: 'Standard HD P2SH',
@@ -118,7 +120,7 @@ describe('Transactions', () => {
 
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from Standard P2SH wallet to 3-Key Vault wallet', async () => {
-        const note = createRandomNote();
+        const note = randomString();
 
         await steps.importWallet({
           type: 'Standard HD P2SH',
@@ -141,7 +143,7 @@ describe('Transactions', () => {
 
     describe('@android @ios @regression', () => {
       it('should be possible to send coins from Standard HD SegWit wallet to 3-Key Vault wallet', async () => {
-        const note = createRandomNote();
+        const note = randomString();
 
         await steps.importWallet({
           type: 'Standard HD P2SH',

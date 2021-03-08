@@ -110,6 +110,11 @@ const Wallets = () => {
         await actions.typeText(this.seedPhraseInput, value, { closeKeyboard: true });
       },
 
+      /** Pastes the whole string without typing. Use only during non-user behaviour testing. */
+      async pasteSeedPhrase(value: string) {
+        await actions.replaceText(this.seedPhraseInput, value, { closeKeyboard: true });
+      },
+
       async submit() {
         await actions.tap(this.submitButton);
       },
@@ -146,9 +151,46 @@ const Wallets = () => {
     };
   };
 
+  const subscribeToEmailNotifications = {
+    getNotificationsScreen: {
+      yesButton: element(by.id('confirm-button')),
+      noButton: element(by.id('cancel-button')),
+
+      async tapOnYes() {
+        await actions.tap(this.yesButton);
+      },
+
+      async tapOnNo() {
+        await actions.tap(this.noButton);
+      },
+    },
+
+    verifyActionScreen: {
+      pincodeInput: element(by.id('verify-action-code-input')),
+
+      submitButton: element(by.id('submit-verify-action-code-button')),
+      resendButton: element(by.id('resend-verify-action-code-button')),
+
+      async typeCode(value: string) {
+        await actions.typeText(this.pincodeInput, value);
+      },
+
+      async submit() {
+        await actions.tap(this.submitButton);
+      },
+
+      async tapOnResendButton() {
+        await actions.tap(this.resendButton);
+      },
+    },
+
+    successScreen: MessageScreen('success'),
+  };
+
   return {
     addNewWallet: AddNewWallet(),
     importWallet: ImportWallet(),
+    subscribeToEmailNotifications,
     scanQrCodeScreen: ScanQrCodeScreen(),
   };
 };
