@@ -38,6 +38,7 @@ export const getWalletHashedPublicKeys = async (wallet: Wallet): Promise<string>
       .reverse()
       .join('') || '';
   const xpub = await wallet.getXpub();
+  const walletType = WALLETS_ADDRESSES_TYPES[wallet.type];
 
-  return sha256(`${xpub}${encodedPubKeys}`).toString();
+  return sha256(`${walletType}${xpub}${encodedPubKeys}`).toString();
 };
