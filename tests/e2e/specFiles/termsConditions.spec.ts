@@ -4,7 +4,6 @@ import app from '../pageObjects';
 
 describe('Terms & Conditions', () => {
   describe('@android @ios @smoke', () => {
-    //TODO this is ridiculous, but have to fix how its scrolling, ATM its touching email adress while scrolling and highlighting it instead of scrolling
     it('should be possible to accept Terms & Conditions and proceed', async () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());
 
