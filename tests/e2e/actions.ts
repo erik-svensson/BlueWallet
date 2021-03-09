@@ -1,6 +1,7 @@
+/** A set of functions being a wrapper on the Detox's native methods to make developing tests even easier */
 import Detox, { by, device, waitFor } from 'detox';
 
-import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers';
+import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers/consts';
 
 interface TypeTextOptions {
   replace?: boolean;
@@ -27,6 +28,27 @@ const Actions = () => {
     }
 
     await target.typeText(text);
+
+    if (options?.closeKeyboard) {
+      if (device.getPlatform() === 'android') {
+        await device.pressBack();
+      }
+
+      if (device.getPlatform() === 'ios') {
+        await target.tapReturnKey();
+      }
+    }
+  };
+
+  /** Pastes the whole string without typing. Use only during non-user behaviour testing. */
+  const replaceText = async (target: Detox.DetoxAny, text: string, options?: TypeTextOptions) => {
+    await waitForElement(target);
+
+    if (options?.replace) {
+      await target.clearText();
+    }
+
+    await target.replaceText(text);
 
     if (options?.closeKeyboard) {
       if (device.getPlatform() === 'android') {
@@ -100,7 +122,17 @@ const Actions = () => {
     }
   };
 
-  return { waitForElement, typeText, tap, multiTap, scrollToElement, swipeCarousel, refreshView, searchForElement };
+  return {
+    waitForElement,
+    typeText,
+    replaceText,
+    tap,
+    multiTap,
+    scrollToElement,
+    swipeCarousel,
+    refreshView,
+    searchForElement,
+  };
 };
 
 export default Actions();

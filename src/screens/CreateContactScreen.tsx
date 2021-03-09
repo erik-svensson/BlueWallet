@@ -109,8 +109,11 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   };
 
   validateName = (value: string) => {
-    if (value.match(/[@,."]/g)?.length) {
+    if (value.match(/[@'|"“”‘|’„”,.;]/g)?.length) {
       return i18n.contactCreate.nameCannotContainSpecialCharactersError;
+    }
+    if (!!!value.length) {
+      return i18n.contactCreate.nameCannotEmpty;
     }
     return '';
   };

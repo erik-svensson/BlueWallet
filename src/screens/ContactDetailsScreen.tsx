@@ -46,8 +46,10 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
   }
 
   setName = (name: string) => {
-    this.setState({ name });
-    this.saveChanges({ name });
+    const trimmedName = name.trim();
+
+    this.setState({ name: trimmedName });
+    this.saveChanges({ name: trimmedName });
   };
 
   setAddress = (address: string) => {
@@ -59,8 +61,15 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
     checkAddress(address);
   };
 
+  validateName = (value: string) => {
+    if (value.match(/[@'|"“”‘|’„”,.;]/g)?.length) {
+      throw Error('no special characters');
+    }
+  };
+
   saveChanges = (changes: Partial<Contact>) => {
     const { contact } = this.props.route.params;
+
     const updatedContact = { ...contact, ...changes };
 
     this.props.navigation.setParams({ contact: updatedContact });
@@ -125,6 +134,8 @@ export class ContactDetailsScreen extends React.PureComponent<Props, State> {
             title={i18n.contactDetails.editName}
             label={i18n.contactDetails.nameLabel}
             value={name}
+            validateName
+            validateOnSave={this.validateName}
             onSave={this.setName}
           />
         </View>

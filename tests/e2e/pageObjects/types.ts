@@ -10,6 +10,7 @@ export interface ImportWalletOptions {
   seedPhrase: string;
   fastPublicKey?: string;
   cancelPublicKey?: string;
+  emailAddress?: string;
 }
 
 export interface CreateWalletOptions {
@@ -17,6 +18,7 @@ export interface CreateWalletOptions {
   name: string;
   fastPublicKey?: string;
   cancelPublicKey?: string;
+  emailAddress?: string;
 }
 
 export interface SendCoinsOptions {

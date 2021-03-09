@@ -1,7 +1,7 @@
 import { by, element } from 'detox';
 
 import actions from '../../actions';
-import { TransactionStatus } from '../../helpers';
+import { TransactionStatus } from '../../helpers/types';
 import Header from '../common/Header';
 
 const FiltersScreen = () => ({

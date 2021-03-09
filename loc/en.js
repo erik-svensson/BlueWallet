@@ -134,6 +134,7 @@ module.exports = {
     buttonLabel: 'Add new contact',
     description: 'Please enter name and address\n for your new contact.',
     nameCannotContainSpecialCharactersError: 'Name cannot contain special characters.',
+    nameCannotEmpty: 'Name cannot be empty field',
     nameLabel: 'Name',
     nameMissingAlphanumericCharacterError: 'Name is missing alphanumeric character.',
     screenTitle: 'Add new contact',

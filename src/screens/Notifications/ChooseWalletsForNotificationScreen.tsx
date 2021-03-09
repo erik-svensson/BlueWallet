@@ -57,6 +57,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
       <View style={styles.itemRow}>
         <View style={styles.row}>
           <CheckBox
+            testID={`subscribe-${item.label}-wallet-checkbox`}
             checked={this.isWalletChecked(item)}
             onPress={() => this.checkWallet(item)}
             containerStyle={styles.checkBox}
@@ -73,7 +74,12 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
   renderListHeader = () => (
     <View style={styles.listHeader}>
       <Text style={styles.listHeaderTitle}> {i18n.tabNavigator.wallets}</Text>
-      <CheckBox checked={this.areAllWalletsChecked()} onPress={this.checkAll} containerStyle={styles.checkBox} />
+      <CheckBox
+        testID="subscribe-all-wallets-checkbox"
+        checked={this.areAllWalletsChecked()}
+        onPress={this.checkAll}
+        containerStyle={styles.checkBox}
+      />
     </View>
   );
 
@@ -129,8 +135,19 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
         header={<Header isBackArrow={true} title={i18n.settings.notifications} />}
         footer={
           <>
-            <Button title={i18n._.confirm} disabled={!this.state.wallets.length} onPress={this.onConfirm} />
-            <FlatButton containerStyle={styles.skipButton} title={i18n._.skip} onPress={onSkip} loading={isLoading} />
+            <Button
+              testID="confirm-action-button"
+              title={i18n._.confirm}
+              disabled={!this.state.wallets.length}
+              onPress={this.onConfirm}
+            />
+            <FlatButton
+              testID="skip-button"
+              containerStyle={styles.skipButton}
+              title={i18n._.skip}
+              onPress={onSkip}
+              loading={isLoading}
+            />
           </>
         }
         noScroll
@@ -141,7 +158,9 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
           <Text style={styles.infoDescription}>{description}</Text>
         </View>
         <View style={styles.amountInput}>
-          <Text style={styles.amount}>{email}</Text>
+          <Text testID="email-address-text" style={styles.amount}>
+            {email}
+          </Text>
         </View>
 
         <FlatList

@@ -395,6 +395,7 @@ export type RootStackParams = {
     value?: string;
     inputTestID?: string;
     submitButtonTestID?: string;
+    validateName?: boolean;
     validate?: (value: string) => string | undefined;
     validateOnSave?: (value: string) => void;
     keyboardType?: KeyboardType;

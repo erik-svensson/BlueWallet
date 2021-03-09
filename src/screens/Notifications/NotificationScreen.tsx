@@ -128,7 +128,11 @@ export class NotificationScreen extends Component<Props> {
   };
 
   renderItem = (item: Wallet) => (
-    <TouchableOpacity style={styles.itemRow} onPress={() => this.goToWalletDetails(item.id)}>
+    <TouchableOpacity
+      testID={`wallet-${item.label}-item`}
+      style={styles.itemRow}
+      onPress={() => this.goToWalletDetails(item.id)}
+    >
       <View style={styles.row}>
         <Text style={styles.walletName}>{item.label}</Text>
         <Image source={images.backArrow} style={styles.arrow} resizeMode="contain" />
@@ -144,8 +148,9 @@ export class NotificationScreen extends Component<Props> {
   renderFooter = () =>
     this.props.email ? (
       <>
-        <Button title={i18n.notifications.change} onPress={this.onChangeEmailPress} />
+        <Button testID="change-email-button" title={i18n.notifications.change} onPress={this.onChangeEmailPress} />
         <FlatButton
+          testID="delete-email-button"
           containerStyle={styles.deleteButton}
           buttonType={ButtonType.Warning}
           title={i18n.notifications.delete}
@@ -153,7 +158,7 @@ export class NotificationScreen extends Component<Props> {
         />
       </>
     ) : (
-      <Button title={i18n.notifications.addEmail} onPress={this.onAddEmailPress} />
+      <Button testID="add-email-button" title={i18n.notifications.addEmail} onPress={this.onAddEmailPress} />
     );
 
   render() {
@@ -177,7 +182,9 @@ export class NotificationScreen extends Component<Props> {
             <Text style={styles.title}>{i18n.notifications.title}</Text>
             <Text style={styles.description}>{i18n.notifications.description}</Text>
             <View style={styles.currentAddress}>
-              <Text style={styles.email}>{this.props.email}</Text>
+              <Text testID="current-email-text" style={styles.email}>
+                {this.props.email}
+              </Text>
             </View>
             <Text style={styles.listTitle}>{i18n.notifications.yourSubscriptions}</Text>
             {!!subscribedWallets.length ? (
@@ -196,7 +203,7 @@ export class NotificationScreen extends Component<Props> {
         ) : (
           <View style={styles.noWalletsContainer}>
             <Text style={typography.headline4}>{i18n.notifications.addYourAddress}</Text>
-            <Image source={images.bigBell} style={styles.bigBell} resizeMode="contain" />
+            <Image testID="no-email-address-icon" source={images.bigBell} style={styles.bigBell} resizeMode="contain" />
             <Text style={styles.noWalletsDescription}>{i18n.notifications.addYourAddressDescription}</Text>
           </View>
         )}
