@@ -8,6 +8,9 @@ class SmartlookApp {
   init() {
     Smartlook.setupAndStartRecording(config.smartlookKey);
   }
+  eventRegister = (eventName: string, event: {}) => {
+    Smartlook.trackCustomEvent(`${eventName}`, { prop: event });
+  };
 }
 
 export default SmartlookApp;
