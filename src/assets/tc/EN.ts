@@ -102,7 +102,7 @@ export const en = `<!DOCTYPE html>
 <p>
     If, to the extent permitted by the Application, you grant express permission to a third party to access or connect to your Wallet account, either through the third party’s product or service or through the Application, you acknowledge that granting permission to a third party to take specific actions on your behalf does not relieve you of any of your responsibilities under these Terms. You are fully responsible for all acts or omissions of any third party with access to your Wallet account. 
 </p>
-You are responsible for:
+<p>You are responsible for:</p>
 <ol type="i">
     <li>
         making all arrangements necessary for you to have access to the Websites and any Products;
@@ -140,7 +140,7 @@ You are responsible for:
 <p>
     If we provide desktop, mobile or other applications for download, you may download a single copy to your computer or mobile device solely for your own personal, noncommercial use, provided you agree to be bound by our end user license agreement for such applications.
 </p>
-You must not:
+<p>You must not:</p>
 <ol type="i">
     <li>
         Modify copies of any materials from this site.
