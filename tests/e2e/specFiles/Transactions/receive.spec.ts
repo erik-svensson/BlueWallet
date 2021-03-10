@@ -7,7 +7,7 @@ import steps from '../../steps';
 
 const DATA_FOR_TRANSACTIONS = {
   DEFAULT_VALUE: 'Amount',
-  AMOUNT_TO_RECEIVE: '10',
+  AMOUNT_TO_RECEIVE: { INTEGER: '10', DECIMAL: '0.01' },
 };
 
 describe('Transactions', () => {
@@ -30,13 +30,39 @@ describe('Transactions', () => {
       });
 
       describe('@iOS @smoke', () => {
-        it('should be possible to see QRCode, wallet address and receive amount', async () => {
+        it('should be possible to see QRCode, wallet address and receive amount (integer amount)', async () => {
           await app.dashboard.dashboardScreen.tapOnReceiveButton();
           await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
           await expect(app.transactionsReceive.walletAddressText).toBeVisible();
           await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.DEFAULT_VALUE);
-          await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE);
-          await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE);
+          await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER);
+          await expect(app.transactionsReceive.receiveAmountText).toHaveText(
+            DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER,
+          );
+        });
+      });
+    });
+
+    describe('3-Key Vault', () => {
+      beforeEach(async () => {
+        await steps.createWallet({
+          type: '3-Key Vault',
+          name: '3-Key',
+          fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+        });
+      });
+
+      describe('@iOS @smoke', () => {
+        it('should be possible to see QRCode, wallet address and receive amount (decimal amount)', async () => {
+          await app.dashboard.dashboardScreen.tapOnReceiveButton();
+          await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
+          await expect(app.transactionsReceive.walletAddressText).toBeVisible();
+          await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.DEFAULT_VALUE);
+          await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.DECIMAL);
+          await expect(app.transactionsReceive.receiveAmountText).toHaveText(
+            DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.DECIMAL,
+          );
         });
       });
     });
@@ -56,8 +82,10 @@ describe('Transactions', () => {
           await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
           await expect(app.transactionsReceive.walletAddressText).toBeVisible();
           await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.DEFAULT_VALUE);
-          await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE);
-          await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE);
+          await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER);
+          await expect(app.transactionsReceive.receiveAmountText).toHaveText(
+            DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER,
+          );
         });
       });
     });
@@ -76,8 +104,10 @@ describe('Transactions', () => {
           await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
           await expect(app.transactionsReceive.walletAddressText).toBeVisible();
           await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.DEFAULT_VALUE);
-          await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE);
-          await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE);
+          await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER);
+          await expect(app.transactionsReceive.receiveAmountText).toHaveText(
+            DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER,
+          );
         });
       });
     });
@@ -96,8 +126,10 @@ describe('Transactions', () => {
           await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
           await expect(app.transactionsReceive.walletAddressText).toBeVisible();
           await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.DEFAULT_VALUE);
-          await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE);
-          await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE);
+          await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER);
+          await expect(app.transactionsReceive.receiveAmountText).toHaveText(
+            DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER,
+          );
         });
       });
     });
@@ -117,8 +149,10 @@ describe('Transactions', () => {
         await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
         await expect(app.transactionsReceive.walletAddressText).toBeVisible();
         await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.DEFAULT_VALUE);
-        await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE);
-        await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE);
+        await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER);
+        await expect(app.transactionsReceive.receiveAmountText).toHaveText(
+          DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER,
+        );
       });
     });
   });
