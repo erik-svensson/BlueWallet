@@ -34,14 +34,10 @@ export const AboutUsScreen = () => {
   const handleRateButtonPress = () => {
     setRate(true);
 
-    const openAppStoreIfInAppFails = Platform.select({ android: true, ios: false }) as boolean;
-    const preferInApp = Platform.select({ android: false, ios: true }) as boolean;
-
     const options = {
       AppleAppID: '1515116464',
       GooglePackageName: config.applicationId,
       preferredAndroidMarket: AndroidMarket.Google,
-      // openAppStoreIfInAppFails,
       inAppDelay: 0,
       fallbackPlatformURL: 'https://bitcoinvault.global',
     };
