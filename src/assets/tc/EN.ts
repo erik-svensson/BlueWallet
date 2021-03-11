@@ -24,23 +24,23 @@ export const en = `<!DOCTYPE html>
     Terms of Use
 </h3>
 <p>
-    PLEASE READ THESE TERMS OF USE (THE "<b>TERMS</b>") CAREFULLY BEFORE USING THE WEBSITE OR ANY SERVICES OR PRODUCTS OFFERED THROUGH THE WEBSITE
+    PLEASE READ THESE TERMS OF USE (THE "<b>TERMS</b>") CAREFULLY BEFORE USING THE WEBSITE OR ANY SERVICES OR PRODUCTS OFFERED THROUGH THE WEBSITE 
 </p>
 <h3>
     Acceptance of the Terms of Use
 </h3>
 <p>
-    These terms of use are entered into by and between you and Mine Best sp. z o.o., a limited liability company duly organized and validly existing under the laws of Poland, at the address: ul. Jerzego Ficowskiego 15, 01-747 Warsaw, Poland, ("<b>Company</b>", "<b>we</b>" or "<b>us</b>").
+    These terms of use are entered into by and between you and <b>CyberBit OÜ</b>, a limited liability company duly organized and validly existing under the laws of Estonia, at the address:  Harju maakond, Tallinn, Kesklinna linnaosa, Pärnu mnt 158, 11317, Estonia, ("<b>Company</b>", "<b>we</b>" or "<b>us</b>").
 </p>
 <p>
     The following terms and conditions, together with any documents they expressly incorporate by reference (jointly, these "Terms of Use"), govern your access to and use of <a href="https://www.bitcoinvault.global">www.bitcoinvault.global</a>, (the "Website"), including the associated ELECTRUM VAULT desktop application and GOLD WALLET mobile application (each, the “Application” and jointly, the “Applications”) and your access to and use of any media, analytics, content, functionality and services offered on or through any of the Website and Applications, and your access to and use of all and any related sites and services.
 </p>
 <p>
-    The Website, the Applications, and all and any other media, analytics, content, functionality, products and services offered by us or through us, are referred to as the "Product".
-</p> 
+    The Website, the Applications, and all and any other media, analytics, content, functionality, products and services offered by us or through us, are referred to as the “Product”.
+</p>
 <p>
-    Please read the Terms of Use carefully before you start to use a Website and any Product. By using the Website or any Product (like e.g. creating or importing a wallet, downloading or running our desktop or mobile application, or visiting our website) or by clicking to accept or agree to the Terms of Use when this option is made available to you, you acknowledge that you have read, understood, and agreed to be bound and abide by these Terms of Use. 
-</p> 
+    Please read the Terms of Use carefully before you start to use a Website and any Product. By using the Website or any Product (like e.g. creating or importing a wallet, downloading or running our desktop or mobile application, or visiting our website) or by clicking to accept or agree to the Terms of Use when this option is made available to you, you acknowledge that you have read, understood, and agreed to be bound and abide by these Terms of Use.
+</p>
 <p>
     We may change the format and content of the Websites and the Products from time to time without noticing you. Any such changes with respect to your use of the Application will take effect immediately when posted on our website or on our Application. Your continued use of the Application following any such change will signify your acceptance to be bound by the then current Terms. You are expected to check this page frequently, so you are aware of any changes, as they are binding on you.
 </p>
@@ -48,22 +48,20 @@ export const en = `<!DOCTYPE html>
     You agree that your use of the Websites and the Products is on an 'as is' and 'as available' basis and is at your sole risk. Whilst we try to make sure that all information contained in the Websites and any Products (other than any user-generated content) is correct, it is not, and it is not intended to be, any authority or advice on which any reliance should be placed.
 </p>
 <p>
-    If you do not agree to these Terms or any modifications to these Terms, you must not access or use the Website and any Products or any Application or access or use any Product. 
+    If you do not agree to these Terms or any modifications to these Terms, you must not access or use the Website and any Products or any Application or access or use any Product.
 </p>
 <p>
     Failure or delay by the Application in enforcing or partially enforcing any provision of these Terms shall not be construed as a waiver of any rights.
 </p>
 <p>
-    If you have any questions or comments related to these Terms of Use, please send us a message on our website at <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a> or contact us through Facebook, Telegram or Twitter. If you do not agree to this Agreement or any modifications to this Agreement, you should not use our Services.
+    If you have any questions or comments related to these Terms of Use, please send us a message on our website at <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a> or contact us through Facebook, Telegram, Instagram or Twitter. If you do not agree to this Agreement or any modifications to this Agreement, you should not use our Services.
 </p>
 <h3>
     Who may use our Website and any Product, incl. Applications
 </h3>
 <p>
-    The Website is offered and available to users who are of legal age (i) in Poland (18 years or older) and (ii) in the users’ jurisdiction or place of residence. By using the Website and any Products, you represent and warrant that you (i) are 18 years of age or older, (ii) are of legal age in your jurisdiction or place or residence, (iii) not barred to use the Website and any Products under any applicable law, order, directive, regulation, or sanction list and (iii) are using the Website and any Products only for a lawful purpose.
-</p>
-<p>
-    If you are using our Website or Products on behalf of a legal entity, you further represent and warrant that: (a) the legal entity is duly organized and validly existing under the applicable laws of the jurisdiction of its organization; and (b) you are duly authorized by such legal entity to act on its behalf.
+    The Website is offered and available to users who are of legal age (i) in Poland (18 years or older) and (ii) in the users’ jurisdiction or place of residence. By using the Website and any Products, you represent and warrant that you (i) are 18 years of age or older, (ii) are of legal age in your jurisdiction or place or residence, (iii) not barred to use the Website and any Products under any applicable law, order, directive, regulation, or sanction list and (iii) are using the Website and any Products only for a lawful purpose. 
+If you are using our Website or Products on behalf of a legal entity, you further represent and warrant that: (a) the legal entity is duly organized and validly existing under the applicable laws of the jurisdiction of its organization; and (b) you are duly authorized by such legal entity to act on its behalf. 
 </p>
 <p>
     You can only use our Services if permitted under the laws of your jurisdiction. Please make sure that these Terms are in compliance with all laws, rules, and regulations that apply to you. By using the Application, you represent and warrant that you meet all eligibility requirements that we outline in these Terms. We may still refuse to let certain people access or use the Applications, however, and we reserve the right to change our eligibility criteria at any time.
@@ -76,6 +74,8 @@ export const en = `<!DOCTYPE html>
 </h3>
 <p>
     The Application is software that generates Wallet addresses that you may use to send and receive Bitcoin Vault (“BTCV”) tokens (the “BTCV tokens”). 
+</p>
+<p>
     You must keep your Wallet address, seed phrase, and private key access information secure. Failure to do so may result in the loss of control of BTCV tokens associated with the Wallet. 
 </p>
 <p>
@@ -94,15 +94,17 @@ export const en = `<!DOCTYPE html>
     You agree to immediately notify us of any unauthorized use of your password, account, or any other breach of security, however we will not be liable for any loss or damage arising from your failure to comply with this respect. When you create a Wallet, you are strongly advised to take precautions in order to avoid loss of access to and/or control over your Wallet. 
 </p>
 <p>
-    You must ensure that you have an adequate balance in your Wallet and/or gas to complete transactions before initiating a transaction. You acknowledge and agree that we will not be liable for any failed transactions due to insufficient funds or gas associated with your Wallet account. 
+    You must ensure that you have an adequate balance in your Wallet and/or gas to complete transactions before initiating a transaction. You acknowledge and agree that we will not be liable for any failed transactions due to insufficient funds or gas associated with your Wallet account.
 </p>
 <p>
     It is your responsibility to determine what, if any, taxes apply to the transactions that you have submitted transaction details for via the Products, and it is your responsibility to report and remit the correct tax to the appropriate tax authority. You agree that we are not responsible for determining whether taxes apply to your BTCV transactions or for collecting, reporting, withholding, or remitting any taxes arising from any BTCV tokens-related transactions.
 </p>
 <p>
-    If, to the extent permitted by the Application, you grant express permission to a third party to access or connect to your Wallet account, either through the third party’s product or service or through the Application, you acknowledge that granting permission to a third party to take specific actions on your behalf does not relieve you of any of your responsibilities under these Terms. You are fully responsible for all acts or omissions of any third party with access to your Wallet account. 
+    If, to the extent permitted by the Application, you grant express permission to a third party to access or connect to your Wallet account, either through the third party’s product or service or through the Application, you acknowledge that granting permission to a third party to take specific actions on your behalf does not relieve you of any of your responsibilities under these Terms. You are fully responsible for all acts or omissions of any third party with access to your Wallet account.
 </p>
-<p>You are responsible for:</p>
+<p>
+    You are responsible for:
+</p>
 <ol type="i">
     <li>
         making all arrangements necessary for you to have access to the Websites and any Products;
@@ -113,9 +115,7 @@ export const en = `<!DOCTYPE html>
 </ol>
 <p>
     To access a Website or some of the resources it offers, you may be asked to provide certain registration details or other information. It is a condition of your use of the Website that all the information you provide on the Website is correct, current and complete. You agree that all information you provide to register using a Website or otherwise, including, but not limited to,  using any interactive features on the Website, is governed by our Privacy Policy, and you consent to all actions we take with respect to your information consistent with our Privacy Policy.
-</p>
-<p>
-    You should use caution when inputting personal information on to the Websites on a public or shared computer so that others are not able to view or record your personal information.
+You should use caution when inputting personal information on to the Websites on a public or shared computer so that others are not able to view or record your personal information.
 </p>
 <h3>
     Copyrights and License
@@ -140,7 +140,9 @@ export const en = `<!DOCTYPE html>
 <p>
     If we provide desktop, mobile or other applications for download, you may download a single copy to your computer or mobile device solely for your own personal, noncommercial use, provided you agree to be bound by our end user license agreement for such applications.
 </p>
-<p>You must not:</p>
+<p>
+    You must not:
+</p>
 <ol type="i">
     <li>
         Modify copies of any materials from this site.
@@ -158,30 +160,29 @@ export const en = `<!DOCTYPE html>
 <p>
     If you print, copy, modify, download or otherwise use or provide any other person with access to any part of the Websites and any Products in breach of the Terms, your right to use the Websites and any Products will cease immediately and you must, at our option, return or destroy any copies of the materials you have made. No right, title or interest in or to the Websites or any Products or any content on the Website or any Products is transferred to you, and all rights not expressly granted are reserved by us. Any use of the Websites not expressly permitted by these Terms of Use is a breach of these Terms of Use and may violate copyright, trademark and other laws.
 </p>
-
 <p>
     As a user of the Products, we grant you a limited, personal, non-commercial, non-exclusive, non-transferable, and revocable license to use the Application. 
 </p>
 <p>
     When using our Products, you may not:
-    <ol type="i">
-        <li>
-            use our Products to break the law, 
-        </li>
-        <li>
-            use or attempt to use another user’s Wallet without authorization or use our Products in any manner that could interfere, disrupt, negatively affect, or inhibit other users from fully enjoying it;
-        </li>
-        <li>
-            distribute any virus or other harmful computer code through our Application;
-        </li>
-        <li>
-            take any action that may impose an unreasonable or disproportionately large load on our or any of our third party providers’ infrastructure;
-        </li>
-        <li>
-            attempt to circumvent our security (you may not bypass, circumvent, or attempt to bypass or circumvent any measures that we may use to prevent or restrict access to the Products including, without limitation, other accounts, computer systems, or networks connected to the Products. 
-        </li>
-    </ol>
 </p>
+<ol type="i">
+    <li>
+        use our Products to break the law, 
+    </li>
+    <li>
+        use or attempt to use another user’s Wallet without authorization or use our Products in any manner that could interfere, disrupt, negatively affect, or inhibit other users from fully enjoying it;
+    </li>
+    <li>
+        distribute any virus or other harmful computer code through our Application;
+    </li>
+    <li>
+        take any action that may impose an unreasonable or disproportionately large load on our or any of our third party providers’ infrastructure;
+    </li>
+    <li>
+        attempt to circumvent our security (you may not bypass, circumvent, or attempt to bypass or circumvent any measures that we may use to prevent or restrict access to the Products including, without limitation, other accounts, computer systems, or networks connected to the Products.
+    </li>
+</ol>
 <p>
     Any use of the Application other than as specifically authorized in these Terms, without our prior written permission, is strictly prohibited and will terminate your license to use the Application.
 </p>
@@ -196,18 +197,12 @@ export const en = `<!DOCTYPE html>
 </p>
 <p>
     The Websites and the Products are not in any manner or in any form or part intended to constitute or form the basis of any advice (professional or otherwise) or to be used in, or in relation to, any investment or other decision or transaction. We do not accept any liability (regardless of how it might arise) for any claim or loss arising from:
-</p>    
-    <ul>
-        <li>
-            any advice given;
-        </li>
-        <li>
-            any investment or other decision made; or
-        </li>
-        <li>
-            any transaction made or effected;
-        </li>
-    </ul>
+</p>
+<ul>
+    <li>any advice given;</li>
+    <li>any investment or other decision made; or</li>
+    <li>any transaction made or effected;</li>
+</ul>
 <p>
     in reliance on, or based on, any information on the Websites or in any of the Products, nor do we accept any liability arising from any other use of, or reliance on, the Products.
 </p>
@@ -218,7 +213,7 @@ export const en = `<!DOCTYPE html>
     We cannot and do not guarantee that any content of any Website and any Product will be free from viruses and/or other code that may have contaminating or destructive elements. It is your responsibility to implement appropriate IT security safeguards (including antivirus and other security checks) to satisfy your requirements as to the safety and reliability of content.
 </p>
 <p>
-    You release us from all liability related to any losses, damages, or claims arising from:
+    You release us from all liability related to any losses, damages, or claims arising from: 
 </p>
     <ol type="a">
         <li>
@@ -277,10 +272,155 @@ export const en = `<!DOCTYPE html>
     You agree that any claim you may have arising out of or related to your relationship with us must be filed within one year after such claim arises, otherwise, your claim in permanently barred.
 </p>
 <h3>
+    PRIVACY PROTECTION
+</h3>
+<ol type="1">
+    <li>
+        We process your personal data in accordance with the General Data Protection Regulation, i.e. the Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016) on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC, hereinafter referred to as "GDPR".
+    </li>
+    <li>
+        The data controller of your personal data is the Company. You may contact us by e-mail at contact@bitcoinvault.global
+    </li>
+    <li>
+        We collect information that you provide directly to us due to your consent for receiving email notifications to your e-mail address. Additionally we collect certain technical information using cookies to help us operate and provide our services to you. Cookies are files with small amount of data, which may include an anonymous unique identifier. Cookies are sent to your browser from a website and stored on your computer's hard drive. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our website.
+    </li>
+    <li>
+        Our website and services are directed to adults. Our services are not intended for children under relevant age of majority, and we do not knowingly collect personal data from children under that age. If you are under the age of majority, you are not permitted to submit any personal data to us. 
+    </li>
+    <li>
+        We may use your personal data and technical information we collect, as described to you at the time of collection, for the following purposes:
+        <ol type="a">
+            <li>
+                providing, operating and maintaining our services, including e-mail notifications;
+            </li>
+            <li>
+                improving and evaluating our services; 
+            </li>
+            <li>
+                developing new features, products or services; 
+            </li>
+            <li>
+                customer service and support;
+            </li>
+            <li>
+                tailoring and personalizing the content we provide you, including marketing, promotional and sponsored content and advertising within the services;
+            </li>
+            <li>
+                marketing and communications (like e.g. contacting you directly about your use of an account or a service for which you are registered and responding to your requests, feedback or questions);
+            </li>
+            <li>
+                research and analytics as regards how you interact with our services, including to monitor usage and activity trends and for statistical purposes; creating reports; measuring or understanding the effectiveness of content, communications, our services and to deliver relevant advertising to you;
+            </li>
+            <li>
+                legal compliance in order to comply with laws, regulations and requests from law enforcement or other governmental entities; carrying out our obligations and enforce our rights arising from any contracts; and using as evidence for litigation purposes;
+            </li>
+            <li>
+                protecting rights, property and interests of ours or any relevant third party; investigating, preventing or otherwise addressing activity that we, in our sole discretion, may consider to be or pose a risk of being, an illegal, unethical, or legally questionable activity.
+            </li>
+            <li>
+                We may also create aggregate or anonymous information about your and other users’ use of our services for purposes similar to those listed above.
+            </li>
+        </ol>
+        </li>
+    <li>
+        Your personal data will be used by us in a way the law allows us to. The legal basis for the processing of your personal data is accordingly:
+        <ol type="a">
+            <li>
+                Article 6(1)(b) of GDPR – i.e. processing is necessary for the performance of a contract we are about to enter into or have entered into with you;
+            </li>
+            <li>
+                Article 6(1)(a) GDPR - i.e. your consent to the processing of your personal data for one or more specific purposes;
+            </li>
+            <li>
+                Article 6(1)(f) of GDPR - i.e. processing is necessary for the purposes resulting from legitimate interests pursued by us or by a third party, which are the performance of a contract we are about to enter into or have entered into with a relevant third party, as well as the establishment, investigation or defense of legal claims resulting from or related to our contractual relations with you or a relevant third party (it should be stressed that we make sure that we consider and balance any potential negative impact on you and your rights before we process your personal data for our legitimate interests; we do not use your personal data for activities where our interests are overridden by the impact on you) and/or
+            </li>
+            <li>
+                Article 6(1)(c) of GDPR - i.e. processing is necessary to fulfil the legal obligation imposed on us as the Data Controller.
+            </li>
+        </ol>
+    </li>
+    <li>
+        The security of your personal data is very important to us. That is why we have implemented administrative, technical and physical safeguards designed to protect your personal data against theft or misuse. Unfortunately, no system, safeguards or procedures can guarantee complete security of your information. As a result, while we strive to protect your personal data from unauthorized third parties access, we cannot ensure or warrant the security of such data. Thus, your use of our Website, services and communications with us is at your own risk. You are responsible for protecting the data and for the security of information that you transmit to us over the Internet.
+    </li>
+    <li>
+        We may share your personal data as follows:
+        <ol type="a">
+            <li>
+                with our subsidiaries and affiliates, including any future ones;
+            </li>
+            <li>
+                with our service providers and sub-contractors to the extent reasonably necessary to enable us to provide our services;
+            </li>
+            <li>
+                with a third party with whom we must legally share information about you;
+            </li>
+            <li>
+                with other third parties with your express consent;
+            </li>
+            <li>
+                to comply with any court order, law or legal process, including to respond to any government or regulatory request;
+            </li>
+            <li>
+                to investigate potential unauthorized access or misuse of our services or otherwise enforce or apply our terms of use and other agreements;
+            </li>
+            <li>
+                to protect our assets or rights, including, but not limited to, for billing and collection purposes;
+            </li>
+            <li>
+                if we believe disclosure is necessary or appropriate to protect rights, property or safety of ours or our customers or third parties, including exchanging information with other companies and organizations for the purposes of fraud protection and/or any illegal activities; and
+            </li>
+            <li>
+                with any other entity disclosed by us when you provide the data.
+            </li>
+            <li>
+                We may also share aggregate or anonymous data for marketing, advertising, research, compliance, or other purposes.
+            </li>
+        </ol>
+    </li>
+    <li>
+        As our business activity is worldwide we may share your personal data with entities cooperating with us around the world. Given that we are an organization of international scope of activity, this may involve transferring your personal data outside of the European Economic Area (“EEA”). Where your personal data is transferred outside of the EEA, we take appropriate measures to ensure that recipients properly protect the personal data. In particular, these measures include:
+            <ol type="a">
+                <li>
+                    for entities based in the United States - signing with them standard contractual clauses approved by the European Commission or ensuring that they join the EU-US Privacy Shield data protection program or
+                </li>
+                <li>
+                    for entities based in other countries outside the EEA, signing with them standard contractual clauses approved by the European Commission.
+                </li>
+            </ol>
+        You can obtain a copy of the above mentioned security features by contacting us at the above mentioned e-mail address for contact in matters related to data processing and data protection.
+    </li>
+    <li>
+        As your personal data is processed by us, a company acting in the European Union, you have certain rights under the GDPR.  Under the conditions set out in the GDPR you have the right to: 
+            <ol type="a">
+                <li>
+                    request us to access, rectify, delete or restrict the processing of your personal data; 
+                </li>
+                <li>
+                    object to the processing of your personal data; 
+                </li>
+                <li>
+                    transfer your personal data; 
+                </li>
+                <li>
+                    receive a copy of your personal data; 
+                </li>
+                <li>
+                    withdraw your consent to the processing of your personal data at any time without affecting the lawfulness of the processing that was carried out on the basis of your consent prior to its withdrawal (this applies if the processing is based on your consent);
+                </li>
+                <li>
+                    lodge a complaint with the data protection authority at any time. We hope, however, that we would be able to resolve any concerns that you may have before you approach your data protection authority, so please do contact us in the first instance.
+                </li>
+            </ol>
+    </li>
+    <li>
+        We will keep your personal data only for as long as is necessary for the purposes set out in these Terms and to fulfil our legal obligations. It means that in practice we will process your personal data no longer than until the end of the calendar year in which the longest period possible under the relevant legal regulations expires: the statute of limitations for public law liabilities or the statute of limitations for potential contractual claims that may be raised against us due to civil contractual or tort liability. We will not keep more data than we need.
+    </li>
+</ol>
+<h3>
     GOVERNING LAW
 </h3>
 <p>
-    No matter where you’re located, the laws of Poland will govern these Terms and the parties’ relationship as if you signed these Terms in Poland, without regard to Poland’s conflicts of laws rules. If any provisions of these Terms are inconsistent with any applicable law, those provisions will be superseded or modified only to the extent such provisions are inconsistent. The parties agree to submit to the courts in Poland for exclusive jurisdiction of any dispute arising out of or related to your use of the Products or your breach of these Terms. You waive any objection based on lack of personal jurisdiction, place of residence, improper venue, or forum non conveniens in any such action.
+No matter where you’re located, the laws of Poland will govern these Terms and the parties’ relationship as if you signed these Terms in Poland, without regard to Poland’s conflicts of laws rules. If any provisions of these Terms are inconsistent with any applicable law, those provisions will be superseded or modified only to the extent such provisions are inconsistent. The parties agree to submit to the courts in Poland for exclusive jurisdiction of any dispute arising out of or related to your use of the Products or your breach of these Terms. You waive any objection based on lack of personal jurisdiction, place of residence, improper venue, or forum non conveniens in any such action.
 </p>
 <h3>
     TERMINATION
@@ -324,6 +464,8 @@ export const en = `<!DOCTYPE html>
 <p>
     The Terms constitute the sole and entire agreement between you and us with respect to the Website and the Products and supersede all prior and contemporaneous understandings, agreements, representations and warranties, both written and oral, with respect to the Websites.
 </p>
+
+
 <p>
 </p>
 <p>
