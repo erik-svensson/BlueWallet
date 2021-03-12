@@ -32,24 +32,18 @@ export const AboutUsScreen = () => {
   };
 
   const handleRateButtonPress = () => {
-    const openAppStoreIfInAppFails = Platform.select({ android: true, ios: false }) as boolean;
-    const preferInApp = Platform.select({ android: false, ios: true }) as boolean;
+    setRate(true);
 
     const options = {
       AppleAppID: '1515116464',
       GooglePackageName: config.applicationId,
       preferredAndroidMarket: AndroidMarket.Google,
-      preferInApp,
-      openAppStoreIfInAppFails,
       inAppDelay: 0,
       fallbackPlatformURL: 'https://bitcoinvault.global',
     };
 
     Rate.rate(options, () => {
-      setRate(true);
-      setTimeout(() => {
-        setRate(false);
-      }, 5000);
+      setRate(false);
     });
   };
 
@@ -70,7 +64,6 @@ export const AboutUsScreen = () => {
       />
       <Button
         testID="rate-us-button"
-        disabled={rate}
         onPress={handleRateButtonPress}
         source={icons.star}
         title={i18n.aboutUs.rateGoldWallet}
