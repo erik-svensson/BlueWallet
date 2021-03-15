@@ -1,3 +1,4 @@
+import b58 from 'bs58check';
 import { findLast, difference } from 'lodash';
 import { NativeModules } from 'react-native';
 
@@ -67,6 +68,17 @@ export class LegacyWallet extends AbstractWallet {
         resolve();
       });
     });
+  }
+
+  // add during problem with subscribe email
+  getXpub() {
+    if (this._xpub) {
+      return this._xpub;
+    }
+    const keyPair = bitcoin.ECPair.fromWIF(this.secret, config.network);
+
+    this._xpub = b58.encode(keyPair.publicKey);
+    return this._xpub;
   }
 
   getAddress() {
