@@ -129,6 +129,10 @@ export class WatchOnlyWallet extends LegacyWallet {
     }
   }
 
+  getXpub() {
+    return this._address;
+  }
+
   async fetchUtxos() {
     if (this._hdWalletInstance) return this._hdWalletInstance.fetchUtxos();
     throw new Error('Not initialized');
