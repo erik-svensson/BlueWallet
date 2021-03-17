@@ -63,22 +63,25 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
     const { email } = this.state;
 
-    verifyNotificationEmail(email);
-    navigation.navigate(Route.LocalConfirmNotificationCode, {
-      children: (
-        <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
-          <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
-          <Text style={typography.headline5}>{email}</Text>
-        </View>
-      ),
-      title,
+    verifyNotificationEmail(email, {
       onSuccess: () => {
-        createNotificationEmail(email, {
-          onSuccess,
+        navigation.navigate(Route.LocalConfirmNotificationCode, {
+          children: (
+            <View style={styles.infoContainer}>
+              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
+              <Text style={typography.headline5}>{email}</Text>
+            </View>
+          ),
+          title,
+          onSuccess: () => {
+            createNotificationEmail(email, {
+              onSuccess,
+            });
+          },
+          email,
         });
       },
-      email,
     });
   };
 

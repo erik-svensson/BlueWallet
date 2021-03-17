@@ -23,6 +23,7 @@ export enum EmailNotificationsError {
   WRONG_PIN_2_LEFT = 'Request to /authenticate/ failed. Details: Trials left: 2',
   WRONG_PIN_NO_TRIALS_LEFT = 'Request to /authenticate/ failed. Details: No more trials left',
   ERROR_REQUEST_AUTHENTICATION = 'On /authenticate/ request the server responded with result: "error',
+  FAILED_TO_SEND = 'Failed to send email with code',
 }
 
 const httpClient = createHttpClient(config.emailNotificationsApi);
