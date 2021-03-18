@@ -253,7 +253,7 @@ module.exports = {
     description:
       'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
     delete: 'Delete email',
-    invalidAddressError: 'Enter valid email address',
+    invalidAddressError: 'Enter a valid email address',
     yourSubscriptions: 'Your subscriptions',
     confirmEmail: 'Confirm your email address',
     pleaseEnter: 'Please enter the code we sent to: ',
@@ -293,6 +293,7 @@ module.exports = {
     noteFirst: 'Note: ',
     noteSecond: 'If you want to change your email address you can do it later in Settings.',
     noSubscriptionDescription: 'You are not subscribed to any notifications.',
+    genericError: "Something went wrong. We're sorry.",
   },
   onboarding: {
     changePin: 'Change PIN',

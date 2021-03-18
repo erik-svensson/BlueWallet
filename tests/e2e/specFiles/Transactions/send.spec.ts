@@ -6,7 +6,7 @@ import app from '../../pageObjects';
 import steps from '../../steps';
 
 const DATA_FOR_TRANSACTIONS = {
-  AMOUNT_TO_SEND: '0.0001',
+  AMOUNT_TO_SEND: { DECIMAL: '0.0001', INTEGER: '100' },
 };
 
 describe('Transactions', () => {
@@ -30,7 +30,9 @@ describe('Transactions', () => {
           seedPhrase: WALLETS_WITH_COINS['3-Key Vault'].SEED_PHRASE,
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
-        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
+        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(
+          DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND.DECIMAL,
+        );
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
           WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
         );
@@ -54,7 +56,9 @@ describe('Transactions', () => {
           seedPhrase: WALLETS_WITH_COINS['3-Key Vault'].SEED_PHRASE,
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
-        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
+        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(
+          DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND.DECIMAL,
+        );
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
           WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
         );
@@ -82,7 +86,9 @@ describe('Transactions', () => {
           seedPhrase: WALLETS_WITH_COINS['2-Key Vault'].SEED_PHRASE,
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
-        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
+        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(
+          DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND.DECIMAL,
+        );
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
           WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
         );
@@ -105,7 +111,9 @@ describe('Transactions', () => {
           seedPhrase: WALLETS_WITH_COINS['Standard HD P2SH'].SEED_PHRASE,
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
-        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
+        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(
+          DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND.DECIMAL,
+        );
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
           WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
         );
@@ -128,7 +136,9 @@ describe('Transactions', () => {
           seedPhrase: WALLETS_WITH_COINS['Standard P2SH'].SEED_PHRASE,
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
-        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
+        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(
+          DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND.DECIMAL,
+        );
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
           WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
         );
@@ -151,7 +161,9 @@ describe('Transactions', () => {
           seedPhrase: WALLETS_WITH_COINS['Standard HD Segwit'].SEED_PHRASE,
         });
         await app.dashboard.dashboardScreen.tapOnSendButton();
-        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND);
+        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(
+          DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND.DECIMAL,
+        );
         await app.transactionsSend.sendCoinsMainScreen.typeWalletAddress(
           WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
         );
@@ -161,6 +173,25 @@ describe('Transactions', () => {
         await app.transactionsSend.transactionPasswordScreen.typePassword(DEFAULT_TRANSACTION_PASSWORD);
         await app.transactionsSend.transactionPasswordScreen.tapConfirmPasswordButton();
         await expect(app.transactionsSend.successScreen.icon).toBeVisible();
+      });
+    });
+
+    describe('@ios @smoke', () => {
+      it('should be possible to enter integer amount of coins to send', async () => {
+        await steps.importWallet({
+          type: '3-Key Vault',
+          name: '3-Key wallet',
+          fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          seedPhrase: WALLETS_WITH_COINS['3-Key Vault'].SEED_PHRASE,
+        });
+        await app.dashboard.dashboardScreen.tapOnSendButton();
+        await app.transactionsSend.sendCoinsMainScreen.typeCoinsAmountToSend(
+          DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND.INTEGER,
+        );
+        expect(app.transactionsSend.sendCoinsMainScreen.amountInput).toHaveText(
+          DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND.INTEGER,
+        );
       });
     });
   });

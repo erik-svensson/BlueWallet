@@ -1,4 +1,3 @@
-import b58 from 'bs58check';
 import sha256 from 'crypto-js/sha256';
 
 import { Wallet, CONST, WALLETS_ADDRESSES_TYPES, WalletPayload } from 'app/consts';

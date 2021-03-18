@@ -24,7 +24,9 @@ export const readableError = createSelector(notificationError, errorMsg => {
   if (errorMsg.includes(GeneralHttpError.NO_MESSAGE) || errorMsg.includes(GeneralHttpError.NO_RESPONSE)) {
     return i18n.connectionIssue.couldntConnectToServer;
   }
-
+  if (errorMsg.includes(EmailNotificationsError.FAILED_TO_SEND)) {
+    return i18n.notifications.invalidAddressError;
+  }
   if (errorMsg.includes(EmailNotificationsError.INVALID_EMAIL)) {
     return i18n.notifications.invalidAddressError;
   }
@@ -41,7 +43,9 @@ export const readableError = createSelector(notificationError, errorMsg => {
   if (errorMsg === EmailNotificationsError.WRONG_PIN_NO_TRIALS_LEFT) {
     return i18n.notifications.codeFinalError;
   }
-  return errorMsg;
+  if (errorMsg) {
+    return i18n.notifications.genericError;
+  } else return errorMsg;
 });
 
 export const isLoading = createSelector(local, state => state.isLoading);
