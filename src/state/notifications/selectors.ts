@@ -30,17 +30,26 @@ export const readableError = createSelector(notificationError, errorMsg => {
   if (errorMsg.includes(EmailNotificationsError.INVALID_EMAIL)) {
     return i18n.notifications.invalidAddressError;
   }
-  if (errorMsg === EmailNotificationsError.WRONG_PIN_2_LEFT) {
+  if (
+    errorMsg.includes(EmailNotificationsError.WRONG_PIN_2_LEFT) ||
+    errorMsg.includes(EmailNotificationsError.WRONG_PIN_2_LEFT_2)
+  ) {
     return i18n.formatString(i18n.notifications.codeError, {
       attemptsLeft: 2,
     });
   }
-  if (errorMsg === EmailNotificationsError.WRONG_PIN_1_LEFT) {
+  if (
+    errorMsg.includes(EmailNotificationsError.WRONG_PIN_1_LEFT) ||
+    errorMsg.includes(EmailNotificationsError.WRONG_PIN_1_LEFT_2)
+  ) {
     return i18n.formatString(i18n.notifications.codeError, {
       attemptsLeft: 1,
     });
   }
-  if (errorMsg === EmailNotificationsError.WRONG_PIN_NO_TRIALS_LEFT) {
+  if (
+    errorMsg.includes(EmailNotificationsError.WRONG_PIN_NO_TRIALS_LEFT) ||
+    errorMsg.includes(EmailNotificationsError.WRONG_PIN_NO_TRIALS_LEFT_2)
+  ) {
     return i18n.notifications.codeFinalError;
   }
   if (errorMsg) {
