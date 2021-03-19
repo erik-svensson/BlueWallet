@@ -12,6 +12,7 @@ export interface NotificationState {
   isLoading: boolean;
   sessionToken: string;
   subscribedIds: string[];
+  resendStartTime: number;
 }
 
 const initialState: NotificationState = {
@@ -22,6 +23,7 @@ const initialState: NotificationState = {
   isLoading: false,
   sessionToken: '',
   subscribedIds: [],
+  resendStartTime: 0,
 };
 
 const reducer = (state = initialState, action: NotificationActionType): NotificationState => {
@@ -105,6 +107,18 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         isLoading: false,
       };
     }
+    case NotificationAction.StartResendAction: {
+      return {
+        ...state,
+        resendStartTime: new Date().getTime(),
+      };
+    }
+    case NotificationAction.ResetResendTimeAction: {
+      return {
+        ...state,
+        resendStartTime: 0,
+      };
+    }
     default:
       return state;
   }
@@ -112,5 +126,5 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
 
 export const notificationReducer = createPersistReducer(reducer, {
   key: NOTIFICATIONS_REDUCER_NAME,
-  whitelist: ['email', 'isNotificationEmailSet'],
+  whitelist: ['email', 'isNotificationEmailSet', 'resendStartTime'],
 });

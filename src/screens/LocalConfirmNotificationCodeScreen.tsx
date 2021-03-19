@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import { CodeInput, Header, ScreenTemplate, Button, TimeoutButton } from 'app/components';
 import { Route, CONST, RootStackParams } from 'app/consts';
+import { AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { selectors as notificationSelectors } from 'app/state/notifications';
 import {
@@ -13,6 +14,10 @@ import {
   VerifyNotificationEmailActionCreator,
   SetErrorActionCreator,
   setError as setErrorAction,
+  startResend as startResendAction,
+  resetResendTime as resetResendTimeAction,
+  ResetResendTimeAction,
+  StartResendAction,
 } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
 
@@ -21,6 +26,7 @@ const i18n = require('../../loc');
 type State = {
   userCode: string;
   numberAttempt: number;
+  timestampDiff: number;
 };
 
 interface Props {
@@ -31,13 +37,21 @@ interface Props {
   email: string;
   setError: SetErrorActionCreator;
   verifyNotificationEmail: VerifyNotificationEmailActionCreator;
+  resendStartTime: number;
+  startResend: () => StartResendAction;
+  resetResendTime: () => ResetResendTimeAction;
 }
 
 class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   state = {
     userCode: '',
     numberAttempt: 0,
+    timestampDiff: 0,
   };
+
+  componentDidMount() {
+    this.props.resetResendTime();
+  }
 
   componentWillUnmount() {
     this.props.setError('');
@@ -98,6 +112,19 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     }
   };
 
+  setResentTIme = () => {
+    this.props.startResend();
+  };
+
+  updateTimestampDiff = () => {
+    const { resendStartTime } = this.props;
+    const timestampDiff = Math.floor((new Date().getTime() - resendStartTime) / 1000);
+
+    this.setState({
+      timestampDiff: !!resendStartTime && timestampDiff < 30 ? timestampDiff : 0,
+    });
+  };
+
   render() {
     const { userCode, numberAttempt } = this.state;
     const { error } = this.props;
@@ -122,11 +149,16 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
               onPress={() => this.resendCode()}
+              timeInBackground={this.state.timestampDiff}
             />
           </>
         }
       >
         {children}
+        <AppStateManager
+          handleAppComesToForeground={this.updateTimestampDiff}
+          handleAppComesToBackground={this.setResentTIme}
+        />
         <View style={styles.codeContainer}>
           <CodeInput value={this.state.userCode} testID="confirm-code-input" onTextChange={this.setCode} />
           <Text testID="confirm-code-input-validation-error" style={styles.errorText}>
@@ -141,11 +173,14 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
   pin: notificationSelectors.pin(state),
   error: notificationSelectors.readableError(state),
+  resendStartTime: notificationSelectors.resendStartTime(state),
 });
 
 const mapDispatchToProps = {
   verifyNotificationEmail: verifyNotificationEmailAction,
   setError: setErrorAction,
+  startResend: startResendAction,
+  resetResendTime: resetResendTimeAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocalConfirmNotificationCodeScreen);

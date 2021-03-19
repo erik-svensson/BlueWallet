@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import { StyleSheet, GestureResponderEvent, ViewStyle, StyleProp } from 'react-native';
 
 import { CONST } from 'app/consts';
@@ -13,6 +13,7 @@ interface Props {
   testID?: string;
   onPress: (e?: GestureResponderEvent) => void;
   containerStyle?: StyleProp<ViewStyle>;
+  timeInBackground?: number;
 }
 
 export const TimeoutButton: FC<Props> = ({
@@ -21,8 +22,13 @@ export const TimeoutButton: FC<Props> = ({
   timeoutSeconds = CONST.buttonTimeoutSeconds,
   onPress,
   containerStyle,
+  timeInBackground = 0,
 }) => {
   const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    setSeconds(seconds => seconds - timeInBackground);
+  }, [timeInBackground]);
 
   useInterval(
     () => {
