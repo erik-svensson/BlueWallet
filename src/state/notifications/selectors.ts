@@ -19,6 +19,7 @@ export const sessionToken = createSelector(local, state => state.sessionToken);
 export const notificationError = createSelector(local, state => state.error);
 export const storedEmail = createSelector(local, state => state.email);
 export const storedPin = createSelector(local, state => state.pin);
+export const resendStartTime = createSelector(local, state => state.resendStartTime);
 
 export const readableError = createSelector(notificationError, errorMsg => {
   if (errorMsg.includes(GeneralHttpError.NO_MESSAGE) || errorMsg.includes(GeneralHttpError.NO_RESPONSE)) {
