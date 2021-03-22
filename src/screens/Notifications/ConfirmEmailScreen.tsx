@@ -63,6 +63,10 @@ class ConfirmEmailScreen extends Component<Props, State> {
     this.props.resetResendTime();
   }
 
+  componentWillUnmount() {
+    this.props.setError('');
+  }
+
   get infoContainerContent(): InfoContainerContent {
     switch (this.props.route.params.flowType) {
       case ConfirmAddressFlowType.SUBSCRIBE:
