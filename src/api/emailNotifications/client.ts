@@ -27,6 +27,7 @@ export enum EmailNotificationsError {
   WRONG_PIN_NO_TRIALS_LEFT_2 = 'No more trials left',
   ERROR_REQUEST_AUTHENTICATION = 'On /authenticate/ request the server responded with result: "error',
   FAILED_TO_SEND = 'Failed to send email with code',
+  THE_SAME_EMAIL = 'already existing email address',
 }
 
 const httpClient = createHttpClient(config.emailNotificationsApi);
