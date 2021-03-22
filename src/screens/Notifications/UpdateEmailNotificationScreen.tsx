@@ -143,7 +143,7 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
       return setError(i18n.notifications.invalidAddressError);
     }
     if (email === storedEmail) {
-      return setError(EmailNotificationsError.THE_SAME_EMAIL); //i18n.notifications.theSameAddressError);
+      return setError(EmailNotificationsError.THE_SAME_EMAIL);
     }
 
     if (!subscribedWallets.length) {
