@@ -25,6 +25,8 @@ export enum NotificationAction {
   UpdateNotificationEmailAction = 'UpdateNotificationEmailAction',
   UpdateNotificationEmailSuccessAction = 'UpdateNotificationEmailSuccessAction',
   UpdateNotificationEmailFailureAction = 'UpdateNotificationEmailFailureAction',
+  StartResendAction = 'StartResendAction',
+  ResetResendTimeAction = 'ResetResendTimeAction',
 }
 
 export interface SetErrorAction {
@@ -158,6 +160,14 @@ export interface UpdateNotificationEmailFailureAction {
   error: string;
 }
 
+export interface StartResendAction {
+  type: NotificationAction.StartResendAction;
+}
+
+export interface ResetResendTimeAction {
+  type: NotificationAction.ResetResendTimeAction;
+}
+
 export type NotificationActionType =
   | CreateNotificationEmailAction
   | CreateNotificationEmailSuccessAction
@@ -181,7 +191,9 @@ export type NotificationActionType =
   | SetErrorAction
   | UpdateNotificationEmailAction
   | UpdateNotificationEmailSuccessAction
-  | UpdateNotificationEmailFailureAction;
+  | UpdateNotificationEmailFailureAction
+  | StartResendAction
+  | ResetResendTimeAction;
 
 export type CreateNotificationEmailActionCreator = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 export const createNotificationEmail: CreateNotificationEmailActionCreator = (email, meta) => ({
@@ -349,4 +361,12 @@ export const updateNotificationEmailSuccess: UpdateNotificationEmailSuccessActio
 export const updateNotificationEmailFailure = (error: string): UpdateNotificationEmailFailureAction => ({
   type: NotificationAction.UpdateNotificationEmailFailureAction,
   error,
+});
+
+export const startResend = (): StartResendAction => ({
+  type: NotificationAction.StartResendAction,
+});
+
+export const resetResendTime = (): ResetResendTimeAction => ({
+  type: NotificationAction.ResetResendTimeAction,
 });

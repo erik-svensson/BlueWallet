@@ -4,6 +4,7 @@ import React, { PureComponent } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
+import { EmailNotificationsError } from 'app/api';
 import { Header, InputItem, ScreenTemplate, Button } from 'app/components';
 import { Route, RootStackParams, Wallet, ConfirmAddressFlowType } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
@@ -143,7 +144,7 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
       return setError(i18n.notifications.invalidAddressError);
     }
     if (email === storedEmail) {
-      return setError(i18n.notifications.theSameAddressError);
+      return setError(EmailNotificationsError.THE_SAME_EMAIL);
     }
 
     if (!subscribedWallets.length) {
