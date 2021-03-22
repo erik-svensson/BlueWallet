@@ -34,6 +34,7 @@ interface Props {
   setError: SetErrorActionCreator;
   verifyNotificationEmail: VerifyNotificationEmailActionCreator;
   wallets: Wallet[];
+  wallet: Wallet;
   error: string;
   isLoading: boolean;
   checkSubscription: CheckSubscriptionActionCreator;
@@ -156,6 +157,7 @@ class UpdateEmailNotificationScreen extends PureComponent<Props, State> {
   goBackToNotificationScreen = () =>
     this.props.navigation.navigate(Route.Notifications, {
       onBackArrow: () => this.props.navigation.pop(),
+      wallet: this.props.route.params.wallet,
     });
 
   render() {

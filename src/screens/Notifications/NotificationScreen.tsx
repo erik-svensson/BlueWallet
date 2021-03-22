@@ -40,6 +40,7 @@ export class NotificationScreen extends Component<Props> {
   onChangeEmailPress = () => {
     this.props.navigation.navigate(Route.UpdateEmailNotification, {
       subscribedWallets: this.props.subscribedWallets,
+      wallet: this.props.route.params.wallet,
     });
   };
 
@@ -63,11 +64,11 @@ export class NotificationScreen extends Component<Props> {
     const {
       navigation,
       route: {
-        params: { onBackArrow },
+        params: { onBackArrow, wallet },
       },
     } = this.props;
 
-    navigation.navigate(Route.Notifications, { onBackArrow });
+    navigation.navigate(Route.Notifications, { onBackArrow, wallet });
   };
 
   goToDeleteSuccessScreen = () =>
@@ -87,6 +88,7 @@ export class NotificationScreen extends Component<Props> {
       subtitle: i18n.wallets.details.unsubscribeWallet,
       description: i18n.notifications.chooseWalletsToUnsubscribeDescription,
       email: this.props.email,
+      wallet: this.props.route.params.wallet,
       onSuccess: () => {
         this.removeEmail();
       },
@@ -109,6 +111,7 @@ export class NotificationScreen extends Component<Props> {
       title: i18n.notifications.notifications,
       isBackArrow: true,
       description: i18n.notifications.addYourEmailForDescription,
+      wallet: this.props.route.params.wallet,
       onSuccess: () => {
         CreateMessage({
           title: i18n.contactCreate.successTitle,
