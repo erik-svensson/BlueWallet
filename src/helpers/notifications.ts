@@ -1,4 +1,4 @@
-import { Route, AddNotificationEmailParams } from 'app/consts';
+import { Route, AddNotificationEmailParams, Wallet } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { NavigationService } from 'app/services';
 
@@ -20,6 +20,7 @@ export const getOnboardingAddEmailParams = (): AddNotificationEmailParams => ({
   },
   inputAutofocus: false,
   isBackArrow: false,
+  wallet: {} as Wallet,
   title: i18n.onboarding.onboarding,
   description: i18n.onboarding.addNotificationEmailDescription,
   onSuccess: () => {
@@ -43,6 +44,7 @@ export const getAppUpdateAddEmailParams = (): AddNotificationEmailParams => ({
   },
   inputAutofocus: false,
   isBackArrow: false,
+  wallet: {} as Wallet,
   title: i18n.notifications.notifications,
   description: i18n.onboarding.addNotificationEmailDescription,
   onSuccess: () => {
