@@ -28,6 +28,7 @@ export enum EmailNotificationsError {
   ERROR_REQUEST_AUTHENTICATION = 'On /authenticate/ request the server responded with result: "error',
   FAILED_TO_SEND = 'Failed to send email with code',
   THE_SAME_EMAIL = 'already existing email address',
+  INVALID_EMAIL_NAME = 'Invalid wallet name',
 }
 
 const httpClient = createHttpClient(config.emailNotificationsApi);

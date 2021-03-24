@@ -270,6 +270,7 @@ module.exports = {
     yourCurrentEmail: 'Your current email',
     theSameAddressError: "You can't enter your current email address",
     newEmail: 'New email',
+    invalidName: 'Invalid wallet name',
     confirmCurrentTitle: 'Confirm your current email address',
     confirmNewTitle: 'Confirm your new email address',
     confirmNewDescription: 'Now confirm your new email address. Please enter the code we sent to ',
