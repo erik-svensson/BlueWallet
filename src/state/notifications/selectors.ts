@@ -56,6 +56,9 @@ export const readableError = createSelector(notificationError, errorMsg => {
   if (errorMsg === EmailNotificationsError.THE_SAME_EMAIL) {
     return i18n.notifications.theSameAddressError;
   }
+  if (errorMsg.includes(EmailNotificationsError.INVALID_EMAIL_NAME)) {
+    return i18n.notifications.invalidName;
+  }
   if (errorMsg) {
     return i18n.notifications.genericError;
   } else return errorMsg;

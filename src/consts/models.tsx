@@ -376,6 +376,7 @@ export type MainTabNavigatorParams = {
 export interface AddNotificationEmailParams {
   title: string;
   onSuccess: () => void;
+  wallet: Wallet;
   isBackArrow: boolean;
   description: string;
   onSkipSuccess?: () => void;
@@ -444,6 +445,7 @@ export type RootStackParams = {
     subtitle: string;
     description: string;
     email: string;
+    wallet: Wallet;
     onSuccess: () => void;
     onSkip: () => void;
     wallets: Wallet[];
@@ -529,6 +531,7 @@ export type RootStackParams = {
   };
   [Route.Notifications]: {
     onBackArrow: () => void;
+    wallet: Wallet;
   };
   [Route.ConfirmEmail]: {
     email: string;
@@ -541,6 +544,7 @@ export type RootStackParams = {
   };
   [Route.UpdateEmailNotification]: {
     subscribedWallets: Wallet[];
+    wallet: Wallet;
   };
 };
 
