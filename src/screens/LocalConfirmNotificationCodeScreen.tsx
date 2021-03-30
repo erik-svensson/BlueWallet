@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 
 import { CodeInput, Header, ScreenTemplate, Button, TimeoutButton } from 'app/components';
 import { Route, CONST, RootStackParams } from 'app/consts';
-import { AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { selectors as notificationSelectors } from 'app/state/notifications';
 import {
@@ -26,7 +25,6 @@ const i18n = require('../../loc');
 type State = {
   userCode: string;
   numberAttempt: number;
-  timestampDiff: number;
 };
 
 interface Props {
@@ -46,7 +44,6 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   state = {
     userCode: '',
     numberAttempt: 0,
-    timestampDiff: 0,
   };
 
   componentDidMount() {
@@ -116,15 +113,6 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     this.props.startResend();
   };
 
-  updateTimestampDiff = () => {
-    const { resendStartTime } = this.props;
-    const timestampDiff = Math.floor((new Date().getTime() - resendStartTime) / 1000);
-
-    this.setState({
-      timestampDiff: !!resendStartTime && timestampDiff < 30 ? timestampDiff : 0,
-    });
-  };
-
   render() {
     const { userCode, numberAttempt } = this.state;
     const { error } = this.props;
@@ -149,16 +137,11 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
               onPress={() => this.resendCode()}
-              timeInBackground={this.state.timestampDiff}
             />
           </>
         }
       >
         {children}
-        <AppStateManager
-          handleAppComesToForeground={this.updateTimestampDiff}
-          handleAppComesToBackground={this.setResentTIme}
-        />
         <View style={styles.codeContainer}>
           <CodeInput value={this.state.userCode} testID="confirm-code-input" onTextChange={this.setCode} />
           <Text testID="confirm-code-input-validation-error" style={styles.errorText}>

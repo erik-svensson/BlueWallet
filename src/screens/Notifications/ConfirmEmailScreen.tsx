@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, CodeInput, TimeoutButton } from 'app/components';
 import { Route, RootStackParams, ConfirmAddressFlowType, CONST, InfoContainerContent } from 'app/consts';
-import { AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import {
   authenticateEmail,
@@ -49,13 +48,11 @@ interface Props {
 
 interface State {
   code: string;
-  timestampDiff: number;
 }
 
 class ConfirmEmailScreen extends Component<Props, State> {
   state = {
     code: '',
-    timestampDiff: 0,
   };
 
   componentDidMount() {
@@ -183,19 +180,6 @@ class ConfirmEmailScreen extends Component<Props, State> {
     route.params.onResend();
   };
 
-  setResentTIme = () => {
-    this.props.startResend();
-  };
-
-  updateTimestampDiff = () => {
-    const { resendStartTime } = this.props;
-    const timestampDiff = Math.floor((new Date().getTime() - resendStartTime) / 1000);
-
-    this.setState({
-      timestampDiff: !!resendStartTime && timestampDiff < 30 ? timestampDiff : 0,
-    });
-  };
-
   render() {
     const { notificationError } = this.props;
     const { email, onBack } = this.props.route.params;
@@ -217,16 +201,11 @@ class ConfirmEmailScreen extends Component<Props, State> {
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
               onPress={this.onResend}
-              timeInBackground={this.state.timestampDiff}
             />
           </>
         }
       >
         <>
-          <AppStateManager
-            handleAppComesToForeground={this.updateTimestampDiff}
-            handleAppComesToBackground={this.setResentTIme}
-          />
           <View style={styles.infoContainer}>
             <Text style={typography.headline4}>{this.infoContainerContent.title}</Text>
             <Text style={styles.infoDescription}>
