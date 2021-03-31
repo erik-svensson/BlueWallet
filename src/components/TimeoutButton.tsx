@@ -29,15 +29,17 @@ export const TimeoutButton: FC<Props> = ({
   const startTimer = () => {
     BackgroundTimer.runBackgroundTimer(() => {
       setSeconds(secs => {
-        if (secs > 0) return secs - 1;
-        else return 0;
+        return secs > 0 ? secs - 1 : 0;
       });
     }, 1000);
   };
 
   useEffect(() => {
-    if (timerOn) startTimer();
-    else BackgroundTimer.stopBackgroundTimer();
+    if (timerOn) {
+      startTimer();
+    } else {
+      BackgroundTimer.stopBackgroundTimer();
+    }
     return () => {
       BackgroundTimer.stopBackgroundTimer();
     };
