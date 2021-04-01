@@ -493,7 +493,7 @@ export type RootStackParams = {
   };
   [Route.SelectLanguage]: undefined;
   [Route.AboutUs]: undefined;
-  [Route.TermsConditions]: undefined;
+  [Route.TermsConditions]: { language: string };
   [Route.AdvancedOptions]: undefined;
   [Route.CurrentPin]: undefined;
   [Route.ConfirmPin]: {

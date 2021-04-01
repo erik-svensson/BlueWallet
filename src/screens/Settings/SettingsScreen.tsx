@@ -28,6 +28,9 @@ export const SettingsScreen = (props: Props) => {
   const { isBiometricsEnabled } = useSelector((state: ApplicationState) => ({
     isBiometricsEnabled: state.appSettings.isBiometricsEnabled,
   }));
+  const { language } = useSelector((state: ApplicationState) => ({
+    language: state.appSettings.language,
+  }));
   const [biometryTypeAvailable, setBiometryTypeAvailable] = useState(false);
 
   useEffect(() => {
@@ -38,7 +41,7 @@ export const SettingsScreen = (props: Props) => {
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
 
-  const navigateToTermsConditions = () => navigation.navigate(Route.TermsConditions);
+  const navigateToTermsConditions = () => navigation.navigate(Route.TermsConditions, { language });
 
   const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
 
