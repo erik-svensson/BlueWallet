@@ -211,7 +211,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
           <View>
             <View style={styles.chooseWalletButton}>
               <Text style={typography.headline4}>
-                {`${item.amount.toFixed(8).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') ||
+                {`${item.amount?.toFixed(8).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') ||
                   satoshiToBtc(item.value).toString()} ${fromWallet.preferredBalanceUnit}`}
               </Text>
             </View>
