@@ -27,7 +27,7 @@ export const jp = `<!DOCTYPE html>
     ウェブサイト、またはウェブサイトを通して提供されるサービスや製品をご利用になる前に、本ご利用規約（以下<b>「規約」</b>といいます）をよくお読みください。 
 </p>
 <h3>
-    Acceptance of the Terms of Use
+    ご利用規約への同意
 </h3>
 <p>
     本規約は、お客様と、エストニア国法に基づき正式に組織され、有効に存在し、以下の所在地に主たる営業所を有する有限責任会社 <b>CyberBit OÜ</b>, との間に締結されます。 Harju maakond、Tallinn、Kesklinna linnaosa、Pärnu mnt 158、11317、Estonia、 以下 <b>「当社」</b>、<b>「私たちは」</b>、または<b>「私たちを」</b>といいます）。
