@@ -46,8 +46,18 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     email: '',
   };
 
+  forceUpdateComponent = () =>
+    this.props.navigation.addListener('focus', () => {
+      this.setState({ email: '' });
+    });
+
   componentDidMount() {
     this.props.setError('');
+    this.forceUpdateComponent();
+  }
+
+  componentWillUnmount() {
+    this.forceUpdateComponent();
   }
 
   setEmail = (email: string): void => {
