@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/react-native';
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { View, StyleSheet, LogBox } from 'react-native';
+import { isEmulator } from 'react-native-device-info';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -33,7 +34,9 @@ export default class App extends React.PureComponent {
   };
 
   componentDidMount() {
-    new SmartlookApp().init();
+    if (!isEmulator && !__DEV__) {
+      new SmartlookApp().init();
+    }
   }
 
   lockScreen = () => {
