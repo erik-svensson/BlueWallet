@@ -18,8 +18,12 @@ import {
   SubscribeWalletActionCreator,
   SetErrorActionCreator,
   setError as setErrorAction,
+  startResend as startResendAction,
+  resetResendTime as resetResendTimeAction,
+  ResetResendTimeAction,
+  StartResendAction,
 } from 'app/state/notifications/actions';
-import { sessionToken, readableError, storedEmail } from 'app/state/notifications/selectors';
+import * as notificationsSelectors from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -36,7 +40,10 @@ interface Props {
   storedEmail: string;
   storedPin: string;
   error: string;
+  resendStartTime: number;
   setError: SetErrorActionCreator;
+  startResend: () => StartResendAction;
+  resetResendTime: () => ResetResendTimeAction;
 }
 
 interface State {
@@ -49,6 +56,11 @@ class ConfirmEmailScreen extends Component<Props, State> {
   };
 
   componentDidMount() {
+    this.props.setError('');
+    this.props.resetResendTime();
+  }
+
+  componentWillUnmount() {
     this.props.setError('');
   }
 
@@ -193,32 +205,35 @@ class ConfirmEmailScreen extends Component<Props, State> {
           </>
         }
       >
-        <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{this.infoContainerContent.title}</Text>
-          <Text style={styles.infoDescription}>
-            {this.infoContainerContent.description}
-            <Text style={styles.email}>{email}</Text>
-          </Text>
-        </View>
-        <View style={styles.inputItemContainer}>
-          <CodeInput
-            testID="verify-action-code-input"
-            value={this.state.code}
-            onTextChange={this.onChange}
-            isError={!!notificationError}
-          />
-          {!!notificationError && <Text style={styles.error}>{notificationError}</Text>}
-        </View>
+        <>
+          <View style={styles.infoContainer}>
+            <Text style={typography.headline4}>{this.infoContainerContent.title}</Text>
+            <Text style={styles.infoDescription}>
+              {this.infoContainerContent.description}
+              <Text style={styles.email}>{email}</Text>
+            </Text>
+          </View>
+          <View style={styles.inputItemContainer}>
+            <CodeInput
+              testID="verify-action-code-input"
+              value={this.state.code}
+              onTextChange={this.onChange}
+              isError={!!notificationError}
+            />
+            {!!notificationError && <Text style={styles.error}>{notificationError}</Text>}
+          </View>
+        </>
       </ScreenTemplate>
     );
   }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  sessionToken: sessionToken(state),
-  notificationError: readableError(state),
-  storedEmail: storedEmail(state),
-  error: readableError(state),
+  sessionToken: notificationsSelectors.sessionToken(state),
+  notificationError: notificationsSelectors.readableError(state),
+  storedEmail: notificationsSelectors.storedEmail(state),
+  error: notificationsSelectors.readableError(state),
+  resendStartTime: notificationsSelectors.resendStartTime(state),
 });
 
 const mapDispatchToProps = {
@@ -227,6 +242,8 @@ const mapDispatchToProps = {
   unsubscribe: unsubscribeWallet,
   authenticate: authenticateEmail,
   setError: setErrorAction,
+  startResend: startResendAction,
+  resetResendTime: resetResendTimeAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmailScreen);

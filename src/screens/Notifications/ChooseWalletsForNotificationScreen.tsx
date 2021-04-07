@@ -36,6 +36,12 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
     wallets: [],
   };
 
+  componentDidMount() {
+    if (this.props.route.params?.wallet) {
+      this.setState((state: State) => ({ wallets: [...state.wallets, this.props.route.params?.wallet] }));
+    }
+  }
+
   addWallet = (wallet: Wallet) => this.setState((state: State) => ({ wallets: [...state.wallets, wallet] }));
 
   removeWallet = (selectingWallet: Wallet) =>

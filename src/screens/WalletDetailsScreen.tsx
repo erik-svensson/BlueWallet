@@ -213,7 +213,10 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
     if (!wallet) return;
     if (!email) {
-      return navigation.navigate(Route.Notifications, { onBackArrow: () => this.navigateBackToScreen() });
+      return navigation.navigate(Route.Notifications, {
+        onBackArrow: () => this.navigateBackToScreen(),
+        wallet,
+      });
     }
 
     if (!isSubscribed) {

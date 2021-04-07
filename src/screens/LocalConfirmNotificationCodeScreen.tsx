@@ -13,6 +13,10 @@ import {
   VerifyNotificationEmailActionCreator,
   SetErrorActionCreator,
   setError as setErrorAction,
+  startResend as startResendAction,
+  resetResendTime as resetResendTimeAction,
+  ResetResendTimeAction,
+  StartResendAction,
 } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
 
@@ -31,6 +35,9 @@ interface Props {
   email: string;
   setError: SetErrorActionCreator;
   verifyNotificationEmail: VerifyNotificationEmailActionCreator;
+  resendStartTime: number;
+  startResend: () => StartResendAction;
+  resetResendTime: () => ResetResendTimeAction;
 }
 
 class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
@@ -38,6 +45,10 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     userCode: '',
     numberAttempt: 0,
   };
+
+  componentDidMount() {
+    this.props.resetResendTime();
+  }
 
   componentWillUnmount() {
     this.props.setError('');
@@ -98,6 +109,10 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     }
   };
 
+  setResentTIme = () => {
+    this.props.startResend();
+  };
+
   render() {
     const { userCode, numberAttempt } = this.state;
     const { error } = this.props;
@@ -141,11 +156,14 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
   pin: notificationSelectors.pin(state),
   error: notificationSelectors.readableError(state),
+  resendStartTime: notificationSelectors.resendStartTime(state),
 });
 
 const mapDispatchToProps = {
   verifyNotificationEmail: verifyNotificationEmailAction,
   setError: setErrorAction,
+  startResend: startResendAction,
+  resetResendTime: resetResendTimeAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocalConfirmNotificationCodeScreen);

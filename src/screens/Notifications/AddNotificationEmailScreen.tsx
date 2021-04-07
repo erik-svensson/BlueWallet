@@ -31,6 +31,7 @@ interface Props {
   setError: SetErrorActionCreator;
   verifyNotificationEmail: VerifyNotificationEmailActionCreator;
   wallets: Wallet[];
+  wallet: Wallet;
   error: string;
   isLoading: boolean;
   checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
@@ -63,32 +64,29 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
     const { email } = this.state;
 
-    verifyNotificationEmail(email, {
+    verifyNotificationEmail(email);
+    navigation.navigate(Route.LocalConfirmNotificationCode, {
+      children: (
+        <View style={styles.infoContainer}>
+          <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+          <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
+          <Text style={typography.headline5}>{email}</Text>
+        </View>
+      ),
+      title,
       onSuccess: () => {
-        navigation.navigate(Route.LocalConfirmNotificationCode, {
-          children: (
-            <View style={styles.infoContainer}>
-              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
-              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
-              <Text style={typography.headline5}>{email}</Text>
-            </View>
-          ),
-          title,
-          onSuccess: () => {
-            createNotificationEmail(email, {
-              onSuccess,
-            });
-          },
-          email,
+        createNotificationEmail(email, {
+          onSuccess,
         });
       },
+      email,
     });
   };
 
   onConfirm = () => {
     const { email } = this.state;
     const { navigation, route, checkSubscription, wallets, setError } = this.props;
-    const { onSuccess } = route.params;
+    const { onSuccess, wallet } = route.params;
 
     if (!isEmail(email)) {
       return setError(i18n.notifications.invalidAddressError);
@@ -109,6 +107,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           description: i18n.notifications.chooseWalletsDescription,
           email,
           onSuccess,
+          wallet,
           wallets: walletsToSubscribe,
           onSkip: this.goToLocalEmailConfirm,
         });

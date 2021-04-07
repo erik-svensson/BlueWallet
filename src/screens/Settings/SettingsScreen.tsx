@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { Image, ScreenTemplate, Header, ListItem } from 'app/components';
-import { Route, MainTabNavigatorParams, RootStackParams } from 'app/consts';
+import { Route, MainTabNavigatorParams, RootStackParams, Wallet } from 'app/consts';
 import { logoSource } from 'app/helpers/images';
 import { BiometricService, AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
@@ -28,6 +28,9 @@ export const SettingsScreen = (props: Props) => {
   const { isBiometricsEnabled } = useSelector((state: ApplicationState) => ({
     isBiometricsEnabled: state.appSettings.isBiometricsEnabled,
   }));
+  const { language } = useSelector((state: ApplicationState) => ({
+    language: state.appSettings.language,
+  }));
   const [biometryTypeAvailable, setBiometryTypeAvailable] = useState(false);
 
   useEffect(() => {
@@ -38,7 +41,7 @@ export const SettingsScreen = (props: Props) => {
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
 
-  const navigateToTermsConditions = () => navigation.navigate(Route.TermsConditions);
+  const navigateToTermsConditions = () => navigation.navigate(Route.TermsConditions, { language });
 
   const navigateToSelectLanguage = () => navigation.navigate(Route.SelectLanguage);
 
@@ -46,6 +49,7 @@ export const SettingsScreen = (props: Props) => {
 
   const onNotificationsOptionsChange = () =>
     navigation.navigate(Route.Notifications, {
+      wallet: {} as Wallet,
       onBackArrow: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings }),
     });
 
