@@ -46,8 +46,17 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     email: '',
   };
 
+  focusHandler = () => {
+    this.setState({ email: '' });
+  };
+
   componentDidMount() {
     this.props.setError('');
+    this.props.navigation.addListener('focus', this.focusHandler);
+  }
+
+  componentWillUnmount() {
+    this.props.navigation.removeListener('focus', this.focusHandler);
   }
 
   setEmail = (email: string): void => {
@@ -127,6 +136,17 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     });
   };
 
+  onBackArrow = () => {
+    const { navigation, wallet } = this.props;
+
+    navigation.navigate(Route.Notifications, {
+      onBackArrow: () => {
+        navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings });
+      },
+      wallet,
+    });
+  };
+
   render() {
     const { email } = this.state;
     const { error, route, isLoading } = this.props;
@@ -157,7 +177,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
             )}
           </>
         }
-        header={<Header title={title} isBackArrow={isBackArrow} />}
+        header={<Header title={title} isBackArrow={isBackArrow} onBackArrow={this.onBackArrow} />}
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.notifications.addYourEmailFor}</Text>
