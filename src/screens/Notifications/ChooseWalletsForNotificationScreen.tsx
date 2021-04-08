@@ -4,7 +4,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Header, ScreenTemplate, Button, FlatButton, CheckBox } from 'app/components';
+import { Header, ScreenTemplate, Button, FlatButton, CheckBox, EllipsisText } from 'app/components';
 import { Route, RootStackParams, Wallet, ConfirmAddressFlowType } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import {
@@ -69,7 +69,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
             containerStyle={styles.checkBox}
           />
           <View>
-            <Text style={styles.walletName}>{item.label}</Text>
+            <EllipsisText style={styles.walletName}>{item.label}</EllipsisText>
             <Text style={styles.caption}>{item.getAddressForTransaction()}</Text>
           </View>
         </View>
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     padding: 0,
   },
-  walletName: { ...typography.subtitle6 },
+  walletName: { ...typography.subtitle6, paddingRight: 50 },
   caption: { ...typography.warning, color: palette.textGrey },
   listHeader: {
     marginTop: 24,
