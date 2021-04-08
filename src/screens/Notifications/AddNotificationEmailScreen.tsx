@@ -56,10 +56,6 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     this.handlerResetStateOnNavigationFocus();
   }
 
-  componentWillUnmount() {
-    this.handlerResetStateOnNavigationFocus();
-  }
-
   setEmail = (email: string): void => {
     !!this.props.error && this.props.setError('');
     this.setState({
