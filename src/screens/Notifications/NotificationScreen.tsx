@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image } from 'app/components';
+import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image, EllipsisText } from 'app/components';
 import { Route, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
@@ -137,7 +137,7 @@ export class NotificationScreen extends Component<Props> {
       onPress={() => this.goToWalletDetails(item.id)}
     >
       <View style={styles.row}>
-        <Text style={styles.walletName}>{item.label}</Text>
+        <EllipsisText style={styles.walletName}>{item.label}</EllipsisText>
         <Image source={images.backArrow} style={styles.arrow} resizeMode="contain" />
       </View>
       <Text style={styles.caption}>{item.getAddressForTransaction()}</Text>
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginBottom: 7,
   },
-  walletName: { ...typography.subtitle6 },
+  walletName: { ...typography.subtitle6, paddingRight: 40 },
   caption: { ...typography.warning, color: palette.textGrey },
   arrow: {
     width: 8,
@@ -263,6 +263,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingRight: 20,
   },
   itemRow: {
     marginVertical: 8,
