@@ -81,7 +81,7 @@
     "test:ci": "CI=true yarn jest --forceExit --collectCoverage",
     "test:detox": "detox test",
     "test:detox:ios:stage": "detox test -c ios.sim.prod.staging",
-    "test:detox:ios:debug": "detox test -c ios.sim.prod.debug",
+    "test:detox:ios:debug": "detox test -c ios.sim.prod.staging",
     "jest": "node node_modules/jest/bin/jest.js tests/*",
     "lint": "eslint '**/*.{js,ts,tsx}'",
     "lint:fix": "yarn lint --fix",

@@ -20,7 +20,7 @@ describe('Adding wallet', () => {
     });
 
     describe('Create', () => {
-      describe('@android @ios @smoke', () => {
+      describe('@android @ios @smoke @mail', () => {
         //FIX EMAIL FETCH AFTER FINAL TEMPLATE AGREED
         xit('should be possible to create a new 3-Key Vault wallet', async () => {
           await app.dashboard.dashboardScreen.tapOnAddButton();

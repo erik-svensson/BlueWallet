@@ -24,8 +24,8 @@ const path = require('path');
 
 const EMAIL_NOTIFICATIONS_SENDER = 'postmaster@btcv-notifcations-email.rnd.land';
 //TODO: Change Subjects after final form is agreed upon
-const SUBSCRIBE_TO_NOTIFICATIONS_SUBJECT = 'Subscribe to BTCV Notifications';
-const CONFIRM_EMAIL_ADDRESS_SUBJECT = 'Confirm your email for BTCV Notifications';
+const SUBSCRIBE_TO_NOTIFICATIONS_SUBJECT = 'BTCV Team: you requested to subscribe to BTCV Email Notifications';
+const CONFIRM_EMAIL_ADDRESS_SUBJECT = 'BTCV Team: you requested to add an email for BTCV Email Notifications';
 
 // The file credential.json stores user's credentials that are require to
 // recreate token.json if it's missing.
@@ -116,7 +116,7 @@ const getEmailVerificationCode = async (auth: OAuth2Client, emailId: string) => 
   const body: string = await getDecodedEmailBody(auth, emailId);
 
   // TODO: Do it better later on.
-  const startPincodeIndex = body.indexOf('Verification code: ') + 'Verification code: '.length;
+  const startPincodeIndex = body.indexOf('<span id="id_pincode">') + '<span id="id_pincode">'.length;
 
   if (startPincodeIndex === -1) {
     throw new Error(`Couldn't extract a Verification code from the email body: ${body}`);
@@ -129,7 +129,7 @@ const getActionVerificationCode = async (auth: OAuth2Client, emailId: string) =>
   const body = await getDecodedEmailBody(auth, emailId);
 
   // TODO: Do it better later on.
-  const startPincodeIndex = body.indexOf('<b>') + '<b>'.length;
+  const startPincodeIndex = body.indexOf('<span id="id_pincode">') + '<span id="id_pincode">'.length;
 
   if (startPincodeIndex === -1) {
     throw new Error(`Couldn't extract a pincode from the email body: ${body}`);
