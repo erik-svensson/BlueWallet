@@ -60,7 +60,7 @@ export const en = `<!DOCTYPE html>
     Who may use our Website and any Product, incl. Applications
 </h3>
 <p>
-    The Website is offered and available to users who are of legal age (i) in Poland (18 years or older) and (ii) in the users’ jurisdiction or place of residence. By using the Website and any Products, you represent and warrant that you (i) are 18 years of age or older, (ii) are of legal age in your jurisdiction or place or residence, (iii) not barred to use the Website and any Products under any applicable law, order, directive, regulation, or sanction list and (iii) are using the Website and any Products only for a lawful purpose. 
+    The Website is offered and available to users who are of legal age (i) in Poland (18 years or older) and (ii) in the users’ jurisdiction or place of residence. By using the Website and any Products, you represent and warrant that you (i) are 18 years of age or older, (ii) are of legal age in your jurisdiction or place of residence, (iii) not barred to use the Website and any Products under any applicable law, order, directive, regulation, or sanction list and (iii) are using the Website and any Products only for a lawful purpose. 
 If you are using our Website or Products on behalf of a legal entity, you further represent and warrant that: (a) the legal entity is duly organized and validly existing under the applicable laws of the jurisdiction of its organization; and (b) you are duly authorized by such legal entity to act on its behalf. 
 </p>
 <p>
@@ -248,7 +248,7 @@ You should use caution when inputting personal information on to the Websites on
     THE COMPANY HEREBY DISCLAIMS ALL WARRANTIES OF ANY KIND, WHETHER EXPRESS OR IMPLIED, STATUTORY OR OTHERWISE, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, NONINFRINGEMENT AND FITNESS FOR PARTICULAR PURPOSE. 
 </p>
 <p>
-    SOME JURISDICTIONS DO NOT ALLOW EXCLUSION OF WARRIANTIES OR LIMITATIONS ON THE DURATION OF IMPLIED WARRANTIES, SO THE ABOVE DISCLAIMERS MAY NOT APPLY TO YOU IN THEIR ENTIRETY, BUT WILL APPLY TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW.
+    SOME JURISDICTIONS DO NOT ALLOW EXCLUSION OF WARRANTIES OR LIMITATIONS ON THE DURATION OF IMPLIED WARRANTIES, SO THE ABOVE DISCLAIMERS MAY NOT APPLY TO YOU IN THEIR ENTIRETY, BUT WILL APPLY TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW.
 </p>
 <h3>
     Limitation on Liability
@@ -269,7 +269,7 @@ You should use caution when inputting personal information on to the Websites on
     TIME LIMITATION ON CLAIMS
 </h3>
 <p>
-    You agree that any claim you may have arising out of or related to your relationship with us must be filed within one year after such claim arises, otherwise, your claim in permanently barred.
+    You agree that any claim you may have arising out of or related to your relationship with us must be filed within one year after such claim arises, otherwise, your claim is permanently barred.
 </p>
 <h3>
     PRIVACY PROTECTION
