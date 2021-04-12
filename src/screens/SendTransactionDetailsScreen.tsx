@@ -27,7 +27,7 @@ export class SendTransactionDetailsScreen extends PureComponent<Props> {
       recipients: [recipient],
     } = params;
     const txSize = Math.round(tx.length / 2);
-    const amount = recipient.amount || satoshiToBtc(recipient.value).toString();
+    const amount = recipient.amount?.toFixed(8).replace(/0+$/, '') || satoshiToBtc(recipient.value).toString();
 
     return (
       <ScreenTemplate header={<Header title={i18n.transactions.details.details} isBackArrow />}>

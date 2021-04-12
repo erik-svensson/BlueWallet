@@ -20,6 +20,7 @@ export const CopyButton: React.FunctionComponent<Props> = ({ textToCopy, testID,
     setIsCopied(true);
     Clipboard.setString(textToCopy);
   };
+
   return (
     <FlatButton
       testID={testID}

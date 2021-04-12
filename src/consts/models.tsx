@@ -46,8 +46,13 @@ export const CONST = {
   tcVersion: 'tcVersion',
   emailCodeErrorMax: 3,
   walletsDefaultGapLimit: 20,
+  walletsDefaultAddressRange: '20/0',
+  walletsDefaultDerivationPath: 'm/0',
   userVersion: 'userVersion',
   newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
+  buttonTimeoutSeconds: 30,
+  notificationCodeInputRegex: /^[A-Za-z0-9]*$/,
+  maxCoinsInput: 21000000,
 };
 
 export const ADDRESSES_TYPES = {
@@ -95,7 +100,7 @@ export enum TransactionStatus {
   PENDING = 'PENDING',
   DONE = 'DONE',
   CANCELED = 'CANCELED',
-  'CANCELED-DONE' = 'CANCELED-DONE',
+  CANCELED_DONE = 'CANCELED_DONE',
 }
 
 enum AdditionalTags {
@@ -168,7 +173,7 @@ export enum Route {
   Notifications = 'Notifications',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
-  ChangeEmail = 'ChangeEmail',
+  UpdateEmailNotification = 'UpdateEmailNotification',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -226,7 +231,8 @@ export interface Wallet {
 export interface WalletPayload {
   name: string;
   gap_limit: number;
-  derivation_path?: Record<string, unknown>;
+  address_range: string;
+  derivation_path?: string;
   xpub: string;
   address_type: string;
   instant_public_key?: string;
@@ -254,12 +260,10 @@ export enum TxType {
 }
 
 export enum ConfirmAddressFlowType {
-  FIRST_ADDRESS = 'FIRST_ADDRESS',
-  CURRENT_ADDRESS = 'CURRENT_ADDRESS',
-  NEW_ADDRESS = 'NEW_ADDRESS',
-  DELETE_ADDRESS = 'DELETE_ADDRESS',
   SUBSCRIBE = 'SUBSCRIBE',
   UNSUBSCRIBE = 'UNSUBSCRIBE',
+  UPDATE_CURRENT = 'UPDATE_CURRENT',
+  UPDATE_NEW = 'UPDATE_NEW',
 }
 
 export interface InfoContainerContent {
@@ -373,9 +377,12 @@ export type MainTabNavigatorParams = {
 export interface AddNotificationEmailParams {
   title: string;
   onSuccess: () => void;
+  wallet: Wallet;
   isBackArrow: boolean;
   description: string;
   onSkipSuccess?: () => void;
+  inputAutofocus: boolean;
+  additionalContent?: React.ReactNode;
 }
 
 export type RootStackParams = {
@@ -390,6 +397,7 @@ export type RootStackParams = {
     value?: string;
     inputTestID?: string;
     submitButtonTestID?: string;
+    validateName?: boolean;
     validate?: (value: string) => string | undefined;
     validateOnSave?: (value: string) => void;
     keyboardType?: KeyboardType;
@@ -438,6 +446,7 @@ export type RootStackParams = {
     subtitle: string;
     description: string;
     email: string;
+    wallet: Wallet;
     onSuccess: () => void;
     onSkip: () => void;
     wallets: Wallet[];
@@ -485,7 +494,7 @@ export type RootStackParams = {
   };
   [Route.SelectLanguage]: undefined;
   [Route.AboutUs]: undefined;
-  [Route.TermsConditions]: undefined;
+  [Route.TermsConditions]: { language: string };
   [Route.AdvancedOptions]: undefined;
   [Route.CurrentPin]: undefined;
   [Route.ConfirmPin]: {
@@ -502,6 +511,7 @@ export type RootStackParams = {
     onBack?: () => void;
     children: React.ReactNode;
     isBackArrow?: boolean;
+    gestureEnabled?: boolean;
   };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
@@ -520,17 +530,22 @@ export type RootStackParams = {
     chunksQuantity: string;
     onScanned: () => void;
   };
-  [Route.Notifications]: undefined;
+  [Route.Notifications]: {
+    onBackArrow: () => void;
+    wallet: Wallet;
+  };
   [Route.ConfirmEmail]: {
     email: string;
     newAddress?: string;
+    wallets?: Wallet[];
     flowType: ConfirmAddressFlowType;
-    walletsToSubscribe?: Wallet[];
     onBack?: () => void;
-    onSuccess: () => void;
+    onSuccess: (arg?: any) => void;
+    onResend: () => void;
   };
-  [Route.ChangeEmail]: {
-    email: string;
+  [Route.UpdateEmailNotification]: {
+    subscribedWallets: Wallet[];
+    wallet: Wallet;
   };
 };
 
@@ -548,3 +563,5 @@ export interface Authenticator {
 }
 
 export type GlobalParams = RootStackParams & MainTabNavigatorParams;
+
+export type MasterPublicKey = 'xpub' | 'ypub' | 'Ypub' | 'Zpub' | 'zpub';

@@ -24,6 +24,7 @@ export class DeleteContactScreen extends React.PureComponent<Props> {
     this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.ContactList });
   deleteContact = () => {
     const { contact } = this.props.route.params;
+
     this.props.deleteContact(contact as Contact);
     CreateMessage({
       title: i18n.contactDelete.success,
@@ -38,6 +39,7 @@ export class DeleteContactScreen extends React.PureComponent<Props> {
 
   render() {
     const { contact } = this.props.route.params;
+
     return (
       <ScreenTemplate
         footer={

@@ -45,6 +45,7 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
 
     const path = this.getDerivationPath();
     const child = root.derivePath(path).neutered();
+
     this._xpub = child.toBase58();
     return this._xpub;
   }
@@ -82,11 +83,13 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
 
   async generateAddresses() {
     const node = bitcoin.bip32.fromBase58(await this.getXpub(), config.network);
+
     for (let index = 0; index < this.num_addresses; index++) {
       const address = bitcoin.payments.p2pkh({
         pubkey: node.derive(index).publicKey,
         network: config.network,
       }).address;
+
       this._address.push(address);
       this._address_to_wif_cache[address] = await this._getWIFByIndex(index);
       this._addr_balances[address] = {
@@ -99,11 +102,13 @@ export class HDLegacyP2PKHWallet extends AbstractHDWallet {
 
   createTx(utxos, amount, fee, address) {
     const newUtxos = cloneDeep(utxos);
+
     for (const utxo of newUtxos) {
       utxo.wif = this._getWifForAddress(utxo.address);
     }
 
     const amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
+
     return signer.createHDTransaction(newUtxos, address, amountPlusFee, fee, this.getAddressForTransaction());
   }
 }

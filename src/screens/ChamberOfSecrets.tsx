@@ -64,6 +64,15 @@ const ChamberOfSecrets = (props: Props) => {
     credentials = { pin: '1234', password: 'qwertyui' },
   } = props;
 
+  /** Edits email address to include a wildcard. Output: email+{randomNumber}@domain.com */
+  const randomizeEmailAddress = (email: string) => {
+    const randomNumberString = Math.floor(Math.random() * 1000000000).toString();
+    const atIndex = email.indexOf('@');
+
+    return email.substr(0, atIndex) + `+${randomNumberString}` + email.substr(atIndex);
+  };
+
+  const [emailAddress, setEmailAddress] = useState(randomizeEmailAddress('cloudbest.qa@gmail.com'));
   const [isAddWalletChecked, setIsAddWalletChecked] = useState(false);
   const [walletOptions, setWalletOptions] = useState({
     type: 'Standard',
@@ -85,8 +94,8 @@ const ChamberOfSecrets = (props: Props) => {
     handleButtonPress();
   };
 
-  const onPressSkipOnboardingButton = () => {
-    createNotificationEmail('', {
+  const onPressSkipOnboardingWithEmailButton = () => {
+    createNotificationEmail(emailAddress, {
       onSuccess: () => {
         createPin(credentials.pin);
         createTxPassword(credentials.password, { onSuccess: () => createTc() });
@@ -95,6 +104,15 @@ const ChamberOfSecrets = (props: Props) => {
 
     handleButtonPress();
   };
+
+  const onPressSkipOnboardingButton = () => {
+    createPin(credentials.pin);
+    createTxPassword(credentials.password, { onSuccess: () => createTc() });
+
+    handleButtonPress();
+  };
+
+  const onEmailAddressChange = (email: string) => setEmailAddress(email);
 
   const onWalletTypeSelect = (type: ImportWalletType) => setWalletOptions({ ...walletOptions, type });
 
@@ -126,7 +144,7 @@ const ChamberOfSecrets = (props: Props) => {
         onPress={onPressSkipTermsConditionsButton}
         linearGradientProps={buttonLinearGradientProps}
         buttonStyle={styles.button}
-      ></Button>
+      />
 
       <Button
         testID="skip-onboarding-button"
@@ -134,7 +152,15 @@ const ChamberOfSecrets = (props: Props) => {
         onPress={onPressSkipOnboardingButton}
         linearGradientProps={buttonLinearGradientProps}
         buttonStyle={styles.button}
-      ></Button>
+      />
+
+      <Button
+        testID="skip-onboarding-with-email-button"
+        title="Skip Onboarding with Email Address"
+        onPress={onPressSkipOnboardingWithEmailButton}
+        linearGradientProps={buttonLinearGradientProps}
+        buttonStyle={styles.button}
+      />
 
       <Button
         testID="close-chamber-button"
@@ -142,7 +168,19 @@ const ChamberOfSecrets = (props: Props) => {
         onPress={() => handleButtonPress()}
         linearGradientProps={buttonLinearGradientProps}
         buttonStyle={styles.button}
-      ></Button>
+      />
+
+      <InputItem
+        testID="email-address-input"
+        multiline
+        value={emailAddress}
+        setValue={onEmailAddressChange}
+        autoCapitalize="none"
+        onSubmitEditing={() => {
+          Keyboard.dismiss();
+        }}
+        label="Email address"
+      />
 
       <CheckBox
         containerStyle={styles.checkboxContainer}

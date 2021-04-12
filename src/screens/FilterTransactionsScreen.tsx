@@ -71,7 +71,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
         text: i18n.filterTransactions.status.done,
       },
       {
-        tag: Tags['CANCELED-DONE'],
+        tag: Tags.CANCELED_DONE,
         text: i18n.filterTransactions.status.canceledDone,
       },
       {
@@ -134,6 +134,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
 
   validateAmount = (amount?: string) => {
     const a = Number(amount);
+
     if (Number.isNaN(a)) {
       return i18n._.invalid;
     }
@@ -147,6 +148,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
 
   renderCommonCardContent = () => {
     const { fromDate, toDate, fromAmount, toAmount } = this.props.filters;
+
     return (
       <>
         <View style={styles.spacing10}>
@@ -156,6 +158,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
               <View key={Index.From}>
                 <InputItem
                   key={Index.From}
+                  testID="filter-by-from-sender-input"
                   editable={false}
                   label={i18n.filterTransactions.fromDate}
                   value={fromDate}
@@ -163,6 +166,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
                 />
                 <TouchableOpacity
                   key={`TouchableOpacity-${Index.From}`}
+                  testID="filter-by-from-date-input"
                   onPress={() => this.showCalendar(Index.From)}
                   style={styles.buttonOverlay}
                 />
@@ -174,7 +178,11 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
               </View>,
               <View key={Index.To}>
                 <InputItem label={i18n.filterTransactions.toDate} value={toDate} editable={false} />
-                <TouchableOpacity onPress={() => this.showCalendar(Index.To)} style={styles.buttonOverlay} />
+                <TouchableOpacity
+                  testID="filter-by-to-date-input"
+                  onPress={() => this.showCalendar(Index.To)}
+                  style={styles.buttonOverlay}
+                />
                 {!!toDate && (
                   <TouchableOpacity style={styles.clearButton} onPress={() => this.props.updateToDate('')}>
                     <Image source={images.closeInverted} style={styles.clearImage} />
@@ -189,6 +197,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
             items={[
               <InputItem
                 key={Index.From}
+                testID="filter-by-from-amount-input"
                 value={fromAmount}
                 error={this.validateAmount(fromAmount)}
                 setValue={text => this.props.updateFromAmount(checkZero(text))}
@@ -199,6 +208,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
               />,
               <InputItem
                 key={Index.To}
+                testID="filter-by-to-amount-input"
                 value={toAmount}
                 error={this.validateAmount(toAmount)}
                 setValue={text => this.props.updateToAmount(checkZero(text))}
@@ -215,10 +225,12 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
           <View style={styles.statusesContainer}>
             {this.transactionTagsList.map(({ tag, text }) => {
               const isActive = this.isTagActive(tag);
+
               return (
                 <TouchableOpacity
-                  onPress={() => this.props.toggleTransactionTag(tag)}
                   key={tag}
+                  testID={`filter-by-${tag}-option`}
+                  onPress={() => this.props.toggleTransactionTag(tag)}
                   style={styles.statusContainer}
                   activeOpacity={1}
                 >
@@ -234,6 +246,7 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
 
   onContactPress = (data: string) => {
     const addressData = processAddressData(data);
+
     this.setAddress(addressData.address);
   };
 
@@ -269,8 +282,13 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
       <ScreenTemplate
         footer={
           <>
-            <Button title={i18n.filterTransactions.filter} onPress={this.onFilterButtonPress} />
+            <Button
+              testID="apply-filters-button"
+              title={i18n.filterTransactions.filter}
+              onPress={this.onFilterButtonPress}
+            />
             <FlatButton
+              testID="clear-filters-button"
               containerStyle={styles.flatButton}
               title={i18n.filterTransactions.clearAll}
               onPress={this.clearFilters}
@@ -291,8 +309,16 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
           }
           label={i18n.filterTransactions.transactionType}
           cards={[
-            { title: i18n.filterTransactions.received, content: this.renderCardContent(i18n.filterTransactions.from) },
-            { title: i18n.filterTransactions.sent, content: this.renderCardContent(i18n.filterTransactions.to) },
+            {
+              title: i18n.filterTransactions.received,
+              testID: 'filter-by-received-option',
+              content: this.renderCardContent(i18n.filterTransactions.from),
+            },
+            {
+              title: i18n.filterTransactions.sent,
+              testID: 'filter-by-sent-option',
+              content: this.renderCardContent(i18n.filterTransactions.to),
+            },
           ]}
           activeTitle={
             this.props.filters.transactionType === CONST.receive

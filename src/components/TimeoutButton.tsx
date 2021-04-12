@@ -1,27 +1,49 @@
-import React, { useState, FC } from 'react';
+import React, { useState, useEffect, FC } from 'react';
 import { StyleSheet, GestureResponderEvent, ViewStyle, StyleProp } from 'react-native';
+import BackgroundTimer from 'react-native-background-timer';
 
-import { useInterval } from 'app/helpers/useInterval';
+import { CONST } from 'app/consts';
 import { typography } from 'app/styles';
 
 import { FlatButton } from './FlatButton';
 
 interface Props {
-  timeoutSeconds: number;
+  timeoutSeconds?: number;
   title: string;
   testID?: string;
   onPress: (e?: GestureResponderEvent) => void;
   containerStyle?: StyleProp<ViewStyle>;
+  timeInBackground?: number;
 }
 
-export const TimeoutButton: FC<Props> = ({ title, testID, timeoutSeconds, onPress, containerStyle }) => {
+export const TimeoutButton: FC<Props> = ({
+  title,
+  testID,
+  timeoutSeconds = CONST.buttonTimeoutSeconds,
+  onPress,
+  containerStyle,
+}) => {
   const [seconds, setSeconds] = useState(0);
-  useInterval(
-    () => {
-      setSeconds(seconds - 1);
-    },
-    seconds > 0 ? 1000 : null,
-  );
+  const [timerOn, setTimerOn] = useState(false);
+
+  const startTimer = () => {
+    BackgroundTimer.runBackgroundTimer(() => {
+      setSeconds(secs => {
+        return secs > 0 ? secs - 1 : 0;
+      });
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (timerOn) {
+      startTimer();
+    } else {
+      BackgroundTimer.stopBackgroundTimer();
+    }
+    return () => {
+      BackgroundTimer.stopBackgroundTimer();
+    };
+  }, [timerOn]);
 
   const getTimeout = () => {
     if (seconds <= 0) {
@@ -33,6 +55,7 @@ export const TimeoutButton: FC<Props> = ({ title, testID, timeoutSeconds, onPres
 
   const onButtonPress = (e: GestureResponderEvent) => {
     setSeconds(timeoutSeconds);
+    setTimerOn(true);
     onPress(e);
   };
 

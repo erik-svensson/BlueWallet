@@ -5,11 +5,12 @@ import { palette, typography } from 'app/styles';
 
 interface Props {
   title: string;
+  testID?: string;
   onPress?: (event: GestureResponderEvent) => void;
 }
 
-export const StyledText = ({ title, onPress }: Props) => (
-  <Text style={styles.styledText} onPress={onPress}>
+export const StyledText = ({ title, testID, onPress }: Props) => (
+  <Text testID={testID} style={styles.styledText} onPress={onPress}>
     {title}
   </Text>
 );

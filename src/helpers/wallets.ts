@@ -1,4 +1,3 @@
-import b58 from 'bs58check';
 import sha256 from 'crypto-js/sha256';
 
 import { Wallet, CONST, WALLETS_ADDRESSES_TYPES, WalletPayload } from 'app/consts';
@@ -22,7 +21,8 @@ export const walletToAddressesGenerationBase = async (wallet: Wallet): Promise<W
   return {
     name: wallet.label,
     gap_limit: CONST.walletsDefaultGapLimit,
-    derivation_path: {},
+    address_range: CONST.walletsDefaultAddressRange,
+    derivation_path: CONST.walletsDefaultDerivationPath,
     xpub: await wallet.getXpub(),
     address_type: WALLETS_ADDRESSES_TYPES[wallet.type],
     ...(instant_public_key && { instant_public_key }),
@@ -37,5 +37,7 @@ export const getWalletHashedPublicKeys = async (wallet: Wallet): Promise<string>
       .reverse()
       .join('') || '';
   const xpub = await wallet.getXpub();
-  return sha256(`${xpub}${encodedPubKeys}`).toString();
+  const walletType = WALLETS_ADDRESSES_TYPES[wallet.type];
+
+  return sha256(`${walletType}${xpub}${encodedPubKeys}`).toString();
 };

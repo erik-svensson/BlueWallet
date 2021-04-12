@@ -54,6 +54,7 @@ class TransactionDetailsScreen extends Component<Props> {
       transaction: { hash },
     } = this.props.route.params;
     const trimmedNote = note.trim();
+
     if (!this.props.note) {
       this.props.createTransactionNoteSuccess(hash, trimmedNote);
     } else {
@@ -63,6 +64,7 @@ class TransactionDetailsScreen extends Component<Props> {
 
   get isMinusValue() {
     const { transaction } = this.props.route.params;
+
     return transaction.valueWithoutFee < 0;
   }
 
@@ -79,7 +81,9 @@ class TransactionDetailsScreen extends Component<Props> {
               resizeMode="contain"
             />
             <Image source={icons.wallet} style={styles.walletIcon} resizeMode="contain" />
-            <EllipsisText style={styles.walletLabel}>{transaction.walletLabel}</EllipsisText>
+            <EllipsisText testID="transaction-details-header" style={styles.walletLabel}>
+              {transaction.walletLabel}
+            </EllipsisText>
           </View>
           {transaction.toExternalAddress !== undefined && (
             <View style={styles.rowWrapper}>
@@ -99,7 +103,11 @@ class TransactionDetailsScreen extends Component<Props> {
             transaction.toExternalAddress ? styles.lightGrayText : null,
           ]}
         >
-          {formatToBtcvWithoutUnit(satoshiToBtc(transaction.valueWithoutFee).toNumber())}
+          {formatToBtcvWithoutUnit(
+            satoshiToBtc(transaction.valueWithoutFee)
+              .toFixed(8)
+              .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1'),
+          )}
         </Text>
         <Text style={styles.unit}>{CONST.preferredBalanceUnit}</Text>
         <TransactionLabelStatus status={transaction.status} />
@@ -154,6 +162,7 @@ class TransactionDetailsScreen extends Component<Props> {
   editNote = () => {
     const { transaction } = this.props.route.params;
     const { note } = this.props;
+
     this.props.navigation.navigate(Route.EditText, {
       title: transaction.time ? dayjs.unix(transaction.time).format('lll') : '',
       label: i18n.transactions.details.note,
@@ -197,8 +206,10 @@ class TransactionDetailsScreen extends Component<Props> {
     const fromValue = this.getAddresses('inputs');
     const toValue = this.getAddresses('outputs');
     const splitForm = fromValue.split(',')[0];
+
     return (
       <ScreenTemplate
+        testID="transction-details-screen"
         header={
           <Header
             isBackArrow
@@ -226,7 +237,7 @@ class TransactionDetailsScreen extends Component<Props> {
         <View style={styles.contentRowContainer}>
           <View style={styles.row}>
             <Text style={styles.contentRowTitle}>{i18n.transactions.details.from}</Text>
-            <CopyButton textToCopy={splitForm} />
+            <CopyButton testID="from-address-copy-button" textToCopy={splitForm} />
           </View>
           <Text style={styles.contentRowBody}>{fromValue}</Text>
           <StyledText
@@ -239,20 +250,22 @@ class TransactionDetailsScreen extends Component<Props> {
         <View style={styles.contentRowContainer}>
           <View style={styles.row}>
             <Text style={styles.contentRowTitle}>{i18n.transactions.details.to}</Text>
-            <CopyButton textToCopy={toValue.split(',')[0]} />
+            <CopyButton testID="to-address-copy-button" textToCopy={toValue.split(',')[0]} />
           </View>
           <Text style={styles.contentRowBody}>{toValue}</Text>
         </View>
         <View style={styles.contentRowContainer}>
           <View style={styles.row}>
             <Text style={styles.contentRowTitle}>{i18n.transactions.details.transactionId}</Text>
-            <CopyButton textToCopy={transaction.txid} />
+            <CopyButton testID="txid-copy-button" textToCopy={transaction.txid} />
           </View>
           <Text style={styles.contentRowBody}>{transaction.txid}</Text>
           <StyledText
+            testID="view-in-block-explorer-button"
             title={i18n.transactions.details.viewInBlockRxplorer}
             onPress={() => {
               const url = `${config.explorerUrl}/tx/${transaction.txid}`;
+
               Linking.canOpenURL(url).then(supported => {
                 if (supported) {
                   Linking.openURL(url);
@@ -288,6 +301,7 @@ const mapStateToProps = (state: ApplicationState & reducer.TransactionsNotesStat
   const {
     transaction: { hash },
   } = props.route.params;
+
   return {
     note: selectors.getTxNoteByHash(state, hash),
   };

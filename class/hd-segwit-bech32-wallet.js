@@ -4,7 +4,7 @@ import b58 from 'bs58check';
 import { NativeModules } from 'react-native';
 
 import config from '../src/config';
-import { electrumVaultMnemonicToSeed } from '../utils/crypto';
+import { electrumVaultMnemonicToSeed, getMasterPublicKeyPrefix } from '../utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
@@ -81,6 +81,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       RNRandomBytes.randomBytes(HDSegwitBech32Wallet.randomBytesSize, async (err, bytes) => {
         if (err) throw new Error(err);
         const b = Buffer.from(bytes, 'base64').toString('hex');
+
         await this.setSecret(bip39.entropyToMnemonic(b));
         resolve();
       });
@@ -109,6 +110,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     const root = HDNode.fromSeed(this.seed, config.network);
     const path = this._getPath(`/0/${index}`);
     const child = root.derivePath(path);
+
     return child.toWIF();
   }
 
@@ -120,11 +122,18 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   async generateAddresses() {
     if (!this._node0) {
       const xpub = this.constructor._zpubToXpub(await this.getXpub());
-      const hdNode = HDNode.fromBase58(xpub);
-      this._node0 = hdNode.derive(0);
+
+      try {
+        const hdNode = HDNode.fromBase58(xpub);
+
+        this._node0 = hdNode.derive(0);
+      } catch (error) {
+        throw error;
+      }
     }
     for (let index = 0; index < this.num_addresses; index++) {
       const address = this.constructor._nodeToBech32SegwitAddress(this._node0.derive(index));
+
       this._address.push(address);
       this._address_to_wif_cache[address] = await this._getWIFByIndex(index);
       this._addr_balances[address] = {
@@ -141,6 +150,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     if (!this._node0) {
       const xpub = this.constructor._zpubToXpub(await this.getXpub());
       const hdNode = HDNode.fromBase58(xpub);
+
       this._node0 = hdNode.derive(0);
     }
     return this._node0.derive(index).publicKey;
@@ -166,8 +176,9 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
 
     // bitcoinjs does not support zpub yet, so we just convert it from xpub
     let data = b58.decode(xpub);
+
     data = data.slice(4);
-    data = Buffer.concat([Buffer.from('04b24746', 'hex'), data]);
+    data = Buffer.concat([Buffer.from(getMasterPublicKeyPrefix('zpub'), 'hex'), data]);
     this._xpub = b58.encode(data);
 
     return this._xpub;
@@ -177,12 +188,14 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     const path = this._getPath('/0/');
 
     const index = this._address.indexOf(address);
+
     if (index === -1) return false;
     return path + index;
   }
 
   _getPubkeyByAddress(address) {
     const index = this._address.indexOf(address);
+
     if (index === -1) return false;
     return this._getNodePubkeyByIndex(index);
   }
@@ -208,6 +221,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     if (!changeAddress) throw new Error('No change address provided');
     sequence = sequence || HDSegwitBech32Wallet.defaultRBFSequence;
     let algo = coinSelectAccumulative;
+
     if (targets.length === 1 && targets[0] && !targets[0].value) {
       // we want to send MAX
       algo = coinSelectSplit;
@@ -228,6 +242,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     for (let i = 0; i < inputs.length; i++) {
       const input = inputs[i];
       let keyPair;
+
       if (!skipSigning) {
         // skiping signing related stuff
 
@@ -247,6 +262,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       // should be from root. basically, fingerprint should be provided from outside  by user when importing zpub
       const path = this._getDerivationPathByAddress(input.address);
       const p2wpkh = bitcoin.payments.p2wpkh({ pubkey, network: config.network });
+
       psbt.addInput({
         hash: input.txid,
         index: input.vout,
@@ -269,6 +285,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
       const output = outputs[k];
       // if output has no address - this is change output
       let change = false;
+
       if (!output.address) {
         change = true;
         output.address = changeAddress;
@@ -306,6 +323,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
     }
 
     let tx;
+
     if (!skipSigning) {
       tx = psbt.finalizeAllInputs().extractTransaction();
     }
@@ -324,6 +342,7 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
   combinePsbt(base64one, base64two) {
     const final1 = bitcoin.Psbt.fromBase64(base64one, { network: config.network });
     const final2 = bitcoin.Psbt.fromBase64(base64two, { network: config.network });
+
     final1.combine(final2);
     return final1.finalizeAllInputs().extractTransaction();
   }
@@ -349,7 +368,11 @@ export class HDSegwitBech32Wallet extends AbstractHDWallet {
    */
   static _zpubToXpub(zpub) {
     let data = b58.decode(zpub);
+
+    if (data.readUInt32BE() !== Number(`0x${getMasterPublicKeyPrefix('zpub')}`))
+      throw new Error('Not a valid zpub extended key!');
     data = data.slice(4);
+    // WARNING: don't replace for dynamic type since this will not working in development environment
     data = Buffer.concat([Buffer.from('0488b21e', 'hex'), data]);
 
     return b58.encode(data);

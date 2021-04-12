@@ -6,7 +6,7 @@ import { NativeModules } from 'react-native';
 import { BitcoinUnit } from '../models/bitcoinUnits';
 import config from '../src/config';
 import { ELECTRUM_VAULT_SEED_PREFIXES } from '../src/consts';
-import { electrumVaultMnemonicToSeed, isElectrumVaultMnemonic } from '../utils/crypto';
+import { electrumVaultMnemonicToSeed, isElectrumVaultMnemonic, getMasterPublicKeyPrefix } from '../utils/crypto';
 import { AbstractHDWallet } from './abstract-hd-wallet';
 
 const HDNode = require('bip32');
@@ -23,8 +23,11 @@ const { RNRandomBytes } = NativeModules;
  */
 function ypubToXpub(ypub) {
   let data = b58.decode(ypub);
-  if (data.readUInt32BE() !== 0x049d7cb2) throw new Error('Not a valid ypub extended key!');
+
+  if (data.readUInt32BE() !== Number(`0x${getMasterPublicKeyPrefix('ypub')}`))
+    throw new Error('Not a valid ypub extended key!');
   data = data.slice(4);
+  // WARNING: don't replace for dynamic type since this will not working in development environment
   data = Buffer.concat([Buffer.from('0488b21e', 'hex'), data]);
 
   return b58.encode(data);
@@ -113,6 +116,7 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
       RNRandomBytes.randomBytes(AbstractHDSegwitP2SHWallet.randomBytesSize, async (err, bytes) => {
         if (err) throw new Error(err);
         const b = Buffer.from(bytes, 'base64').toString('hex');
+
         try {
           await this.setSecret(bip39.entropyToMnemonic(b));
         } catch (error) {
@@ -145,6 +149,7 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
     const root = bitcoin.bip32.fromSeed(this.seed, config.network);
     const path = this._getPath(`/0/${index}`);
     const child = root.derivePath(path);
+
     return bitcoin.ECPair.fromPrivateKey(child.privateKey, { network: config.network }).toWIF();
   }
 
@@ -167,8 +172,9 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
 
     // bitcoinjs does not support ypub yet, so we just convert it from xpub
     let data = b58.decode(xpub);
+
     data = data.slice(4);
-    data = Buffer.concat([Buffer.from('049d7cb2', 'hex'), data]);
+    data = Buffer.concat([Buffer.from(getMasterPublicKeyPrefix('ypub'), 'hex'), data]);
     this._xpub = b58.encode(data);
 
     return this._xpub;
@@ -178,6 +184,7 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
     if (!this._node0) {
       const xpub = ypubToXpub(await this.getXpub());
       const hdNode = HDNode.fromBase58(xpub);
+
       this._node0 = hdNode.derive(0);
     }
     return this._node0;
@@ -197,6 +204,7 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
 
     for (let index = 0; index < this.num_addresses; index++) {
       const address = this.nodeToAddress(node0.derive(index));
+
       this._address.push(address);
       this._address_to_wif_cache[address] = await this._getWIFByIndex(index);
       this._addr_balances[address] = {

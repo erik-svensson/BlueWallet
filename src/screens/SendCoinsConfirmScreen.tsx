@@ -21,7 +21,7 @@ const i18n = require('../../loc');
 const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void, buttonTitle?: string) => (
   <View style={styles.footer}>
     <Button
-      testID="send-coins-confirmation-button"
+      testID="transaction-confirmation-button"
       title={buttonTitle || i18n.send.confirm.sendNow}
       containerStyle={styles.buttonContainer}
       onPress={onSendPress}
@@ -43,6 +43,7 @@ interface Props {
 class SendCoinsConfirmScreen extends Component<Props> {
   getAmountByTx = (txDecoded: Transaction): { my: number; foreign: number } => {
     const { fromWallet } = this.props.route.params;
+
     return txDecoded.outs.reduce(
       (amount: { my: number; foreign: number }, out: { value: number; script: Uint8Array }) => {
         if (fromWallet.isOutputScriptMine(out.script)) {
@@ -65,6 +66,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const balance = fromWallet.balance;
     const incomingBalance = fromWallet.incoming_balance;
     const amount = this.getAmountByTx(txDecoded);
+
     if (isAlert) {
       return {
         availableBalance: satoshiToBtc(balance - amount.my - amount.foreign).toNumber() - fee,
@@ -74,6 +76,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
     if (pendingAmountDecrease !== undefined) {
       const decreasePending = roundBtcToSatoshis(pendingAmountDecrease);
+
       return {
         availableBalance: satoshiToBtc(balance + amount.my),
         pendingBalance: satoshiToBtc(incomingBalance).toNumber() - decreasePending,
@@ -160,6 +163,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
   shouldRenderNewBalances = () => {
     const { fromWallet } = this.props.route.params;
+
     return !!(fromWallet.balance !== undefined && fromWallet.incoming_balance !== undefined);
   };
 
@@ -170,6 +174,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const { fromWallet, isAlert } = params;
 
     const { availableBalance, pendingBalance } = this.getNewBalances();
+
     return (
       <View style={styles.balancesContainer}>
         {isAlert && <Warning />}
@@ -206,8 +211,8 @@ class SendCoinsConfirmScreen extends Component<Props> {
           <View>
             <View style={styles.chooseWalletButton}>
               <Text style={typography.headline4}>
-                {roundBtcToSatoshis(item.amount) || satoshiToBtc(item.value).toString()}{' '}
-                {fromWallet.preferredBalanceUnit}
+                {`${item.amount?.toFixed(8).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') ||
+                  satoshiToBtc(item.value).toString()} ${fromWallet.preferredBalanceUnit}`}
               </Text>
             </View>
             <View style={styles.descriptionContainer}>

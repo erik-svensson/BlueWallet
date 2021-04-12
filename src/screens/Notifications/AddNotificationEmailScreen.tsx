@@ -14,23 +14,24 @@ import {
   verifyNotificationEmail as verifyNotificationEmailAction,
   checkSubscription as checkSubscriptionAction,
   CheckSubscriptionAction,
-  VerifyNotificationEmailActionFunction,
-  SetErrorActionFunction,
+  VerifyNotificationEmailActionCreator,
+  SetErrorActionCreator,
   setError as setErrorAction,
-  CreateNotificationEmailActionFunction,
+  CreateNotificationEmailActionCreator,
 } from 'app/state/notifications/actions';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
-const i18n = require('../../loc');
+const i18n = require('../../../loc');
 
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.AddNotificationEmail>;
   route: RouteProp<RootStackParams, Route.AddNotificationEmail>;
-  createNotificationEmail: CreateNotificationEmailActionFunction;
-  setError: SetErrorActionFunction;
-  verifyNotificationEmail: VerifyNotificationEmailActionFunction;
+  createNotificationEmail: CreateNotificationEmailActionCreator;
+  setError: SetErrorActionCreator;
+  verifyNotificationEmail: VerifyNotificationEmailActionCreator;
   wallets: Wallet[];
+  wallet: Wallet;
   error: string;
   isLoading: boolean;
   checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
@@ -45,11 +46,21 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     email: '',
   };
 
+  focusHandler = () => {
+    this.setState({ email: '' });
+  };
+
   componentDidMount() {
     this.props.setError('');
+    this.props.navigation.addListener('focus', this.focusHandler);
+  }
+
+  componentWillUnmount() {
+    this.props.navigation.removeListener('focus', this.focusHandler);
   }
 
   setEmail = (email: string): void => {
+    !!this.props.error && this.props.setError('');
     this.setState({
       email,
     });
@@ -62,34 +73,32 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
     const { email } = this.state;
 
-    verifyNotificationEmail(email, {
-      onSuccess: () =>
-        navigation.navigate(Route.LocalConfirmNotificationCode, {
-          children: (
-            <View style={styles.infoContainer}>
-              <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
-              <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
-              <Text style={typography.headline5}>{email}</Text>
-            </View>
-          ),
-          title,
-          onSuccess: () => {
-            createNotificationEmail(email, {
-              onSuccess,
-            });
-          },
-          email,
-        }),
+    verifyNotificationEmail(email);
+    navigation.navigate(Route.LocalConfirmNotificationCode, {
+      children: (
+        <View style={styles.infoContainer}>
+          <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+          <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
+          <Text style={typography.headline5}>{email}</Text>
+        </View>
+      ),
+      title,
+      onSuccess: () => {
+        createNotificationEmail(email, {
+          onSuccess,
+        });
+      },
+      email,
     });
   };
 
   onConfirm = () => {
     const { email } = this.state;
     const { navigation, route, checkSubscription, wallets, setError } = this.props;
-    const { onSuccess } = route.params;
+    const { onSuccess, wallet } = route.params;
 
     if (!isEmail(email)) {
-      return setError(i18n.onboarding.emailValidation);
+      return setError(i18n.notifications.invalidAddressError);
     }
     if (!wallets.length) {
       return this.goToLocalEmailConfirm();
@@ -97,6 +106,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     checkSubscription(wallets, email, {
       onSuccess: (ids: string[]) => {
         const walletsToSubscribe = wallets.filter(w => !ids.includes(w.id));
+
         if (!walletsToSubscribe.length) {
           return this.goToLocalEmailConfirm();
         }
@@ -106,8 +116,9 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           description: i18n.notifications.chooseWalletsDescription,
           email,
           onSuccess,
+          wallet,
           wallets: walletsToSubscribe,
-          onSkip: () => this.goToLocalEmailConfirm(),
+          onSkip: this.goToLocalEmailConfirm,
         });
       },
     });
@@ -118,7 +129,21 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { onSkipSuccess } = route.params;
 
     createNotificationEmail('', {
-      onSuccess: onSkipSuccess,
+      onSuccess: () => {
+        this.props.navigation.popToTop();
+        onSkipSuccess?.();
+      },
+    });
+  };
+
+  onBackArrow = () => {
+    const { navigation, wallet } = this.props;
+
+    navigation.navigate(Route.Notifications, {
+      onBackArrow: () => {
+        navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings });
+      },
+      wallet,
     });
   };
 
@@ -126,7 +151,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { email } = this.state;
     const { error, route, isLoading } = this.props;
 
-    const { onSkipSuccess, title, isBackArrow, description } = route.params;
+    const { onSkipSuccess, title, isBackArrow, description, inputAutofocus } = route.params;
 
     return (
       <ScreenTemplate
@@ -136,22 +161,23 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           <>
             <Button
               title={i18n._.confirm}
-              testID="submit-notification-email"
+              testID="submit-add-email-button"
               onPress={this.onConfirm}
               disabled={email.length === 0}
               loading={isLoading}
             />
             {onSkipSuccess && (
               <FlatButton
-                testID="skip-notification-email"
+                testID="skip-adding-email-button"
                 containerStyle={styles.skipButton}
                 title={i18n._.skip}
+                loading={isLoading}
                 onPress={this.skipAddEmail}
               />
             )}
           </>
         }
-        header={<Header title={title} isBackArrow={isBackArrow} />}
+        header={<Header title={title} isBackArrow={isBackArrow} onBackArrow={this.onBackArrow} />}
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.notifications.addYourEmailFor}</Text>
@@ -161,9 +187,9 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
           <InputItem
             value={email}
             label={i18n._.email}
-            testID="confirm-notification-email"
+            testID="add-email-input"
             setValue={this.setEmail}
-            autoFocus={true}
+            autoFocus={inputAutofocus}
             error={error}
             secureTextEntry={false}
             autoCapitalize="none"
@@ -183,9 +209,9 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state: ApplicationState) => ({
-  wallets: walletsSelectors.subscribableWallets(state),
+  wallets: walletsSelectors.wallets(state),
   isLoading: notificationsSelectors.isLoading(state),
-  error: notificationsSelectors.notificationError(state),
+  error: notificationsSelectors.readableError(state),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNotificationEmailScreen);

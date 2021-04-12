@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import JailMonkey from 'jail-monkey';
 import React from 'react';
@@ -9,6 +9,7 @@ import config from 'app/config';
 import { CONST, USER_VERSIONS } from 'app/consts';
 import { Toasts } from 'app/containers';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
+import { BlueApp } from 'app/legacy';
 import { RootNavigator } from 'app/navigators';
 import { UnlockScreen, TermsConditionsScreen, ConnectionIssuesScreen } from 'app/screens';
 import { BetaVersionScreen } from 'app/screens/BetaVersionScreen';
@@ -51,7 +52,7 @@ interface MapStateToProps {
   userVersion: USER_VERSIONS;
 }
 
-interface ActionsDisptach {
+interface ActionsDispatch {
   checkCredentials: Function;
   startElectrumXListeners: () => StartListenersAction;
   updateSelectedLanguage: Function;
@@ -64,7 +65,7 @@ interface OwnProps {
   unlockKey: string;
 }
 
-type Props = MapStateToProps & ActionsDisptach & OwnProps;
+type Props = MapStateToProps & ActionsDispatch & OwnProps;
 
 interface State {
   isBetaVersionRiskAccepted: boolean;
@@ -79,8 +80,11 @@ class Navigator extends React.Component<Props, State> {
     isChamberOfSecretsClosed: false,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const { checkCredentials, startElectrumXListeners, checkTc, checkConnection, checkUserVersion } = this.props;
+
+    await BlueApp.startAndDecrypt();
+
     checkUserVersion();
     checkTc();
     checkCredentials();
@@ -129,6 +133,15 @@ class Navigator extends React.Component<Props, State> {
     return !isAuthenticated && isTxPasswordSet && isPinSet;
   };
 
+  shouldRenderConnectionIssues = () => {
+    const { hasConnectedToServerAtLeaseOnce } = this.props;
+
+    if (this.shouldRenderUnlockScreen()) {
+      return false;
+    }
+    return !hasConnectedToServerAtLeaseOnce && !this.shouldRenderCredentialsCreation();
+  };
+
   preventOpenAppWithRootedPhone = () => {
     if (isIos()) {
       return RenderMessage({
@@ -154,14 +167,7 @@ class Navigator extends React.Component<Props, State> {
   };
 
   renderRoutes = () => {
-    const {
-      isLoading,
-      unlockKey,
-      isAuthenticated,
-      hasConnectedToServerAtLeaseOnce,
-      isTcAccepted,
-      userVersion,
-    } = this.props;
+    const { isLoading, unlockKey, isAuthenticated, isTcAccepted, userVersion } = this.props;
 
     if (isLoading) {
       return null;
@@ -183,20 +189,15 @@ class Navigator extends React.Component<Props, State> {
       return <BetaVersionScreen onButtonPress={this.handleAcceptBetaVersionRisk} />;
     }
 
-    const _shouldRenderCredentialsCreation = this.shouldRenderCredentialsCreation();
-
-    if (!hasConnectedToServerAtLeaseOnce && !_shouldRenderCredentialsCreation) {
-      return <ConnectionIssuesScreen />;
-    }
-
     return (
       <>
         <RootNavigator
-          shouldRenderCredentialsCreation={_shouldRenderCredentialsCreation}
+          shouldRenderCredentialsCreation={this.shouldRenderCredentialsCreation()}
           shouldRenderNotification={this.shouldRenderNotification()}
           userVersion={userVersion}
         />
         {isAuthenticated && <Toasts />}
+        {this.shouldRenderConnectionIssues() && <ConnectionIssuesScreen />}
         {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
       </>
     );
@@ -224,7 +225,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   hasConnectedToServerAtLeaseOnce: electrumXSelectors.hasConnectedToServerAtLeaseOnce(state),
 });
 
-const mapDispatchToProps: ActionsDisptach = {
+const mapDispatchToProps: ActionsDispatch = {
   checkCredentials: checkCredentialsAction,
   checkTc: checkTcAction,
   startElectrumXListeners: startListeners,

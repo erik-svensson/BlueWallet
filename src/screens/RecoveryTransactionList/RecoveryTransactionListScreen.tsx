@@ -46,6 +46,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
       selectedIndex,
       onPress: (index: number) => {
         const newWallet = wallets[index];
+
         this.setState({ selectedTransactions: [] }, () => {
           navigation.setParams({ wallet: newWallet });
         });
@@ -62,11 +63,11 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
     );
   };
 
-  addTranscation = (transaction: Transaction) => {
+  addTransaction = (transaction: Transaction) => {
     this.setState((state: State) => ({ selectedTransactions: [...state.selectedTransactions, transaction] }));
   };
 
-  removeTranscation = (transaction: Transaction) => {
+  removeTransaction = (transaction: Transaction) => {
     this.setState((state: State) => ({
       selectedTransactions: state.selectedTransactions.filter(t => t.hash !== transaction.hash),
     }));
@@ -101,6 +102,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 
   canSubmit = () => {
     const { selectedTransactions } = this.state;
+
     return !!selectedTransactions.length;
   };
 
@@ -113,17 +115,18 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
   };
 
   toggleTransaction = (isChecked: boolean, transaction: Transaction) => () =>
-    isChecked ? this.removeTranscation(transaction) : this.addTranscation(transaction);
+    isChecked ? this.removeTransaction(transaction) : this.addTransaction(transaction);
 
   renderItem = ({ item: transaction }: { item: Transaction }) => {
     const isChecked = this.isChecked(transaction);
     const toggle = this.toggleTransaction(isChecked, transaction);
+
     return (
       <View style={styles.itemWrapper}>
         <View style={styles.transactionItemContainer}>
           <TransactionItem onPress={toggle} item={transaction} />
         </View>
-        <CheckBox onPress={toggle} right checked={isChecked} />
+        <CheckBox testID={`transaction-item-${transaction.note}-checkbox`} onPress={toggle} right checked={isChecked} />
       </View>
     );
   };
@@ -166,7 +169,12 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />
+          <Button
+            testID="cancel-transaction-next-button"
+            onPress={this.submit}
+            disabled={!this.canSubmit()}
+            title={i18n.send.details.next}
+          />
         </View>
       </View>
     );
@@ -175,6 +183,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState & WalletsState, props: Props): MapStateProps => {
   const { wallet } = props.route.params;
+
   return {
     wallets: selectors.walletsWithRecoveryTransaction(state),
     transactions: selectors.getTransactionsToRecoverByWalletId(state, wallet.id),

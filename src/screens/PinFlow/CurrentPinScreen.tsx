@@ -71,9 +71,11 @@ class CurrentPinScreen extends PureComponent<Props, State> {
 
   updatePin = (pin: string) => {
     const { setFailedAttempts, setFailedAttemptStep } = this.props;
+
     this.setState({ pin }, async () => {
       if (this.state.pin.length === CONST.pinCodeLength) {
         const setPin = await SecureStorageService.getSecuredValue(CONST.pin);
+
         if (setPin === this.state.pin) {
           setFailedAttempts(0);
           setFailedAttemptStep(0);
@@ -83,6 +85,7 @@ class CurrentPinScreen extends PureComponent<Props, State> {
         } else {
           const increasedFailedAttemptStep = this.props.timeCounter.failedAttemptStep + 1;
           const failedTimesError = this.handleFailedAttempt(increasedFailedAttemptStep);
+
           this.setState({
             error: i18n.onboarding.pinDoesNotMatch + failedTimesError,
             pin: '',
@@ -112,6 +115,7 @@ class CurrentPinScreen extends PureComponent<Props, State> {
 
   render() {
     const { error } = this.state;
+
     if (this.isTimeCounterVisible()) {
       return <TimeCounterScreen onTryAgain={this.onTryAgain} timestamp={this.props.timeCounter.timestamp} />;
     }

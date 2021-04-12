@@ -1,15 +1,17 @@
-import React from 'react';
-import { Text, StyleSheet, View, Linking, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { Text, StyleSheet, View, Linking, Dimensions, Platform } from 'react-native';
 import { getApplicationName, getVersion, getBundleId, getBuildNumber } from 'react-native-device-info';
 import Rate, { AndroidMarket } from 'react-native-rate';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
+import config from 'app/config';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 export const AboutUsScreen = () => {
+  const [rate, setRate] = useState<boolean>(false);
   const libraries = [
     'React Native',
     'React Native Elements',
@@ -23,21 +25,26 @@ export const AboutUsScreen = () => {
 
   const getBuildData = () => {
     const { width, height } = Dimensions.get('window');
+
     return `${getApplicationName()} ver. ${getVersion()} (build ${getBuildNumber()}) \n ${getBundleId()} \n w, h = ${width.toFixed(
       0,
     )}, ${height.toFixed(0)}`;
   };
 
   const handleRateButtonPress = () => {
+    setRate(true);
+
     const options = {
       AppleAppID: '1515116464',
-      GooglePackageName: 'io.goldwallet.wallet',
+      GooglePackageName: config.applicationId,
       preferredAndroidMarket: AndroidMarket.Google,
-      preferInApp: true,
-      openAppStoreIfInAppFails: true,
+      inAppDelay: 0,
       fallbackPlatformURL: 'https://bitcoinvault.global',
     };
-    Rate.rate(options);
+
+    Rate.rate(options, () => {
+      setRate(false);
+    });
   };
 
   const goToGithub = () => {
@@ -61,6 +68,7 @@ export const AboutUsScreen = () => {
         source={icons.star}
         title={i18n.aboutUs.rateGoldWallet}
         containerStyle={styles.buttonContainer}
+        loading={rate}
       />
       <View style={styles.buildWithContainer}>
         <Text style={styles.title}>{i18n.aboutUs.buildWithAwesome}</Text>

@@ -9,13 +9,12 @@ import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, WalletDropdown } from 'app/components';
 import { CopyButton } from 'app/components/CopyButton';
-import { Route, RootStackParams, Wallet } from 'app/consts';
+import { Route, RootStackParams, Wallet, CONST } from 'app/consts';
 import { checkZero } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
 import { selectors, reducer } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
-import BlueApp from '../../BlueApp';
 import logger from '../../logger';
 
 const i18n = require('../../loc');
@@ -27,7 +26,7 @@ interface Props {
   wallets: Wallet[];
 }
 interface State {
-  amount: number;
+  amount: number | string;
 }
 
 class ReceiveCoinsScreen extends Component<Props, State> {
@@ -40,6 +39,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
   get bip21encoded() {
     const { amount } = this.state;
     const { wallet } = this.props;
+
     if (!wallet) {
       return;
     }
@@ -48,13 +48,21 @@ class ReceiveCoinsScreen extends Component<Props, State> {
 
   updateAmount = (amount: string) => {
     const parsedAmount = amount;
+
     this.setState({
-      amount: parseFloat(parsedAmount),
+      amount: parseFloat(parsedAmount.replace(',', '.'))
+        .toFixed(8)
+        .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1'),
     });
   };
 
   validate = (value: string): string | undefined =>
-    !Number(value.replace(',', '.')) && i18n.send.details.amount_field_is_not_valid;
+    (!Number(value.replace(',', '.')) && i18n.send.details.amount_field_is_not_valid) ||
+    (Number(value.replace(',', '.')) > CONST.maxCoinsInput &&
+      i18n.formatString(i18n.send.details.amount_is_too_high, {
+        maxCoinsInput: CONST.maxCoinsInput.toLocaleString(),
+      })) ||
+    (Number(value.replace(',', '.')) < 0 && i18n.send.details.amount_is_negative);
 
   editAmount = () => {
     this.props.navigation.navigate(Route.EditText, {
@@ -72,6 +80,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
 
   get message(): string {
     const { wallet } = this.props;
+
     if (!wallet) {
       return '';
     }
@@ -81,6 +90,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
 
   share = () => {
     const message = this.message;
+
     if (this.qrCodeSVG === undefined) {
       Share.open({
         message,
@@ -94,6 +104,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
             message,
             url: `data:image/png;base64,${data}`,
           };
+
           Share.open(shareImageBase64).catch(error => {
             logger.warn('ReceiveCoins', error.message);
           });
@@ -106,6 +117,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
     const { wallets, navigation } = this.props;
 
     const wallet = wallets[index];
+
     navigation.setParams({ id: wallet.id });
   };
 
@@ -118,6 +130,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
     } = this.props;
 
     const selectedIndex = wallets.findIndex(wallet => wallet.id === id);
+
     this.props.navigation.navigate(Route.ActionSheet, {
       wallets,
       selectedIndex,
@@ -175,6 +188,7 @@ class ReceiveCoinsScreen extends Component<Props, State> {
 
 const mapStateToProps = (state: ApplicationState & reducer.WalletsState, props: Props) => {
   const { id } = props.route.params;
+
   return {
     wallet: selectors.getById(state, id),
     wallets: selectors.wallets(state),

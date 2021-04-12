@@ -10,9 +10,13 @@ import { ApplicationState } from 'app/state';
 import { selectors as notificationSelectors } from 'app/state/notifications';
 import {
   verifyNotificationEmail as verifyNotificationEmailAction,
-  VerifyNotificationEmailActionFunction,
-  SetErrorActionFunction,
+  VerifyNotificationEmailActionCreator,
+  SetErrorActionCreator,
   setError as setErrorAction,
+  startResend as startResendAction,
+  resetResendTime as resetResendTimeAction,
+  ResetResendTimeAction,
+  StartResendAction,
 } from 'app/state/notifications/actions';
 import { palette, typography } from 'app/styles';
 
@@ -29,8 +33,11 @@ interface Props {
   pin: string;
   error: string;
   email: string;
-  setError: SetErrorActionFunction;
-  verifyNotificationEmail: VerifyNotificationEmailActionFunction;
+  setError: SetErrorActionCreator;
+  verifyNotificationEmail: VerifyNotificationEmailActionCreator;
+  resendStartTime: number;
+  startResend: () => StartResendAction;
+  resetResendTime: () => ResetResendTimeAction;
 }
 
 class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
@@ -39,11 +46,16 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     numberAttempt: 0,
   };
 
+  componentDidMount() {
+    this.props.resetResendTime();
+  }
+
   componentWillUnmount() {
     this.props.setError('');
   }
 
   setCode = (userCode: string) => {
+    this.props.error && this.props.setError('');
     this.setState({ userCode });
   };
 
@@ -65,12 +77,13 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
   onError = () => {
     const { numberAttempt } = this.state;
     const numberFail = numberAttempt + 1;
+
     if (numberFail === CONST.emailCodeErrorMax) {
-      this.resendCode(i18n.onboarding.resendCodeError);
+      this.resendCode(i18n.notifications.codeFinalError);
     } else {
       this.props.setError(
-        i18n.formatString(i18n.onboarding.validationCodeError, {
-          numberAttempt: CONST.emailCodeErrorMax - numberFail,
+        i18n.formatString(i18n.notifications.codeError, {
+          attemptsLeft: CONST.emailCodeErrorMax - numberFail,
         }),
       );
       this.setState({
@@ -96,11 +109,16 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
     }
   };
 
+  setResentTIme = () => {
+    this.props.startResend();
+  };
+
   render() {
     const { userCode, numberAttempt } = this.state;
     const { error } = this.props;
     const { children, title } = this.props.route.params;
     const allowConfirm = numberAttempt < CONST.emailCodeErrorMax;
+
     return (
       <ScreenTemplate
         noScroll
@@ -109,16 +127,15 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
         footer={
           <>
             <Button
+              testID="confirm-code-email-button"
               title={i18n._.confirm}
-              testID="confirm-code-email"
               onPress={this.onConfirm}
               disabled={allowConfirm && userCode.length < CONST.codeLength}
             />
             <TimeoutButton
-              testID="resend-code-email"
+              testID="resend-code-email-button"
               containerStyle={styles.resendButton}
               title={i18n.notifications.resend}
-              timeoutSeconds={30}
               onPress={() => this.resendCode()}
             />
           </>
@@ -126,8 +143,8 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
       >
         {children}
         <View style={styles.codeContainer}>
-          <CodeInput value={this.state.userCode} testID="confirm-code" onTextChange={this.setCode} />
-          <Text testID="invalid-code-message" style={styles.errorText}>
+          <CodeInput value={this.state.userCode} testID="confirm-code-input" onTextChange={this.setCode} />
+          <Text testID="confirm-code-input-validation-error" style={styles.errorText}>
             {error}
           </Text>
         </View>
@@ -139,11 +156,14 @@ class LocalConfirmNotificationCodeScreen extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
   pin: notificationSelectors.pin(state),
   error: notificationSelectors.readableError(state),
+  resendStartTime: notificationSelectors.resendStartTime(state),
 });
 
 const mapDispatchToProps = {
   verifyNotificationEmail: verifyNotificationEmailAction,
   setError: setErrorAction,
+  startResend: startResendAction,
+  resetResendTime: resetResendTimeAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LocalConfirmNotificationCodeScreen);

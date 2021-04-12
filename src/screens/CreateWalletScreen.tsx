@@ -17,7 +17,11 @@ import {
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
-import { storedEmail } from 'app/state/notifications/selectors';
+import {
+  subscribeWallet as subscribeWalletAction,
+  SubscribeWalletActionCreator,
+} from 'app/state/notifications/actions';
+import { storedEmail, readableError } from 'app/state/notifications/selectors';
 import { selectors as walletsSelector } from 'app/state/wallets';
 import { createWallet as createWalletAction, CreateWalletAction } from 'app/state/wallets/actions';
 import { palette, typography } from 'app/styles';
@@ -29,8 +33,10 @@ interface Props {
   route: RouteProp<RootStackParams, Route.CreateWallet>;
   appSettings: AppSettingsState;
   createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
+  subscribe: SubscribeWalletActionCreator;
   walletsLabels: string[];
   email: string;
+  error: string;
 }
 
 interface State {
@@ -54,8 +60,10 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     const { navigation } = this.props;
 
     const onError = () => this.showAlert(() => this.navigateToIntegrateRecoveryPublicKeyForAR());
+
     try {
       const wallet = new HDSegwitP2SHArWallet([recoveryPublicKey]);
+
       navigation.goBack();
       this.createWalletMessage(wallet, onError);
     } catch (_) {
@@ -88,6 +96,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   navigateToSuccesfullNotificationSubscriptionMessage = () => {
     const { navigation } = this.props;
+
     CreateMessage({
       title: i18n.contactDelete.success,
       description: i18n.message.successSubscription,
@@ -105,13 +114,17 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     navigation.navigate(Route.Confirm, {
       title: i18n.notifications.notifications,
       children: this.renderConfirmScreenContent(),
-      onConfirm: () =>
+      gestureEnabled: false,
+      onConfirm: () => {
+        this.props.subscribe([wallet], email);
         navigation.navigate(Route.ConfirmEmail, {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
-          walletsToSubscribe: [wallet],
+          wallets: [wallet],
           onSuccess: this.navigateToSuccesfullNotificationSubscriptionMessage,
-        }),
+          onResend: () => this.props.subscribe([wallet], email),
+        });
+      },
       onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
       isBackArrow: false,
     });
@@ -120,6 +133,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
     const { navigation, createWallet, email } = this.props;
+
     wallet.setLabel(label);
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
@@ -149,6 +163,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       this.showAlert(() => {
         this.navigateToIntegrateRecoveryPublicKeyForAIR(wallet);
       }, error);
+
     try {
       wallet.addPublicKey(recoveryPublicKey);
       navigation.goBack();
@@ -174,6 +189,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   navigateToIntegrateRecoveryPublicKeyForAR = () => {
     const { navigation } = this.props;
+
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: recoveryPublicKey => this.createARWallet(recoveryPublicKey),
       headerTitle: i18n.wallets.add.title,
@@ -188,6 +204,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   navigateToIntegrateInstantPublicKeyForAIR = () => {
     const { navigation } = this.props;
     const wallet = new HDSegwitP2SHAirWallet();
+
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: instantPublicKey => {
         try {
@@ -230,6 +247,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       this.showAlert(() => {
         navigation.navigate(Route.CreateWallet);
       }, i18n.wallets.add.failed);
+
     this.createWalletMessage(wallet, onError);
   };
 
@@ -239,6 +257,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   get validationError(): string | undefined {
     const { walletsLabels } = this.props;
+
     if (walletsLabels.includes(this.state.label.trim())) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
@@ -373,10 +392,12 @@ const mapStateToProps = (state: ApplicationState) => ({
   appSettings: state.appSettings,
   walletsLabels: walletsSelector.getWalletsLabels(state),
   email: storedEmail(state),
+  error: readableError(state),
 });
 
 const mapDispatchToProps = {
   createWallet: createWalletAction,
+  subscribe: subscribeWalletAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateWalletScreen);

@@ -6,4 +6,6 @@ export default {
   requestFailed5XX: 'Request failed with status code 5',
   alreadySubscribed: "{'hash': [ErrorDetail(string='wallet with this hash already exists.', code='unique')]}",
   invalidEmail: "Bad request: {'email': [ErrorDetail(string='Enter a valid email address.', code='invalid')]}",
+  wrongPIN: 'Wrong pin',
+  invalidEmail2: "Bad request: {'new_email': [ErrorDetail(string='Enter a valid email address.', code='invalid')]}",
 };

@@ -14,14 +14,16 @@ interface Props {
   children?: React.ReactNode;
   variant: GradientVariant;
   style?: StyleProp<ViewStyle>;
+  testID?: string;
 }
 
 export class GradientView extends PureComponent<Props> {
   static Variant = GradientVariant;
   render() {
-    const { variant, style, children } = this.props;
+    const { variant, style, children, testID } = this.props;
+
     return (
-      <LinearGradient {...gradients[variant]} style={style} {...this.props}>
+      <LinearGradient testID={testID} {...gradients[variant]} style={style} {...this.props}>
         {children}
       </LinearGradient>
     );

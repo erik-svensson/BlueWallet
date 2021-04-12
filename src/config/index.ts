@@ -14,5 +14,5 @@ export default {
   electrumXProtocolVersion: Config.ELECTRUM_X_PROTOCOL_VERSION,
   explorerUrl: Config.EXPLORER_URL,
   sentryDsn: Config.SENTRY_DSN,
-  emailNotificationsURL: Config.NOTIFICATION_EMAIL_URL,
+  emailNotificationsApi: Config.EMAIL_NOTIFICATIONS_API,
 };

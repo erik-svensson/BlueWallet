@@ -43,6 +43,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
   setWordInMnemonic = (word: string, index: number) => {
     const { mnemonic } = this.state;
     const newMnemonic = [...mnemonic];
+
     newMnemonic[index - 1] = word.trim().toLocaleLowerCase();
     this.setState({ mnemonic: newMnemonic });
   };
@@ -57,9 +58,11 @@ export class RecoverySeedScreen extends Component<Props, State> {
 
   renderInputs = () => {
     const { mnemonic } = this.state;
+
     return compose(
       map((index: number) => (
         <InputItem
+          testID={`cancel-seed-phrase-${index}-input`}
           key={index.toString()}
           label={`${index}.`}
           value={mnemonic[index - 1]}
@@ -73,6 +76,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
 
   canSubmit = () => {
     const { mnemonic, isLoading } = this.state;
+
     return mnemonic.every(word => word !== '') && !isLoading;
   };
 
@@ -109,6 +113,7 @@ export class RecoverySeedScreen extends Component<Props, State> {
         setTimeout(async () => {
           try {
             const keyPair = await mnemonicToKeyPair(mnemonic.join(' '));
+
             this.setState({ isLoading: false }, () => {
               onSubmit(keyPair, mnemonic);
             });
@@ -125,12 +130,20 @@ export class RecoverySeedScreen extends Component<Props, State> {
     const { subtitle, buttonText, description, onBackArrow } = this.props.route.params;
 
     const { isLoading } = this.state;
+
     return (
       <ScreenTemplate
+        testID="cancel-seed-phrase-screen"
         header={<Header onBackArrow={onBackArrow} isBackArrow title={i18n.send.recovery.recover} />}
         footer={
           <>
-            <Button loading={isLoading} disabled={!this.canSubmit()} title={buttonText} onPress={this.submit} />
+            <Button
+              testID={'seed-phrase-cancel-button'}
+              loading={isLoading}
+              disabled={!this.canSubmit()}
+              title={buttonText}
+              onPress={this.submit}
+            />
             <FlatButton
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}

@@ -3,33 +3,33 @@ import { by, element } from 'detox';
 import actions from '../../actions';
 import MessageScreen from '../common/MessageScreen';
 
-const Onboarding = () => {
-  const BetaVersionScreen = () => ({
+const Onboarding = () => ({
+  betaVersionScreen: {
     closeButton: element(by.id('close-beta-version-screen')),
 
     async close(): Promise<void> {
       await actions.tap(this.closeButton);
     },
-  });
+  },
 
-  const CreatePinScreen = () => ({
+  createPinScreen: {
     pinInput: element(by.id('create-pin-input')),
 
     async typePin(value: string): Promise<void> {
       await actions.typeText(this.pinInput, value);
     },
-  });
+  },
 
-  const ConfirmPinScreen = () => ({
+  confirmPinScreen: {
     pinInput: element(by.id('confirm-pin-input')),
     pinValidationError: element(by.id('confirm-pin-input-validation-error')),
 
     async typePin(value: string): Promise<void> {
       await actions.typeText(this.pinInput, value);
     },
-  });
+  },
 
-  const CreatePasswordScreen = () => ({
+  createPasswordScreen: {
     passowrdInput: element(by.id('create-transaction-password')),
     submitButton: element(by.id('submit-create-transaction-password')),
 
@@ -40,9 +40,9 @@ const Onboarding = () => {
     async submit(): Promise<void> {
       await actions.tap(this.submitButton);
     },
-  });
+  },
 
-  const ConfirmPasswordScreen = () => ({
+  confirmPasswordScreen: {
     passowrdInput: element(by.id('confirm-transaction-password')),
     passwordValidationError: element(by.id('confirm-transaction-password-validation-error')),
     submitButton: element(by.id('submit-transaction-password-confirmation')),
@@ -54,47 +54,49 @@ const Onboarding = () => {
     async submit(): Promise<void> {
       await actions.tap(this.submitButton);
     },
-  });
+  },
 
-  const AddEmailNotificationScreen = () => ({
-    skipEmailNotificationButton: element(by.id('skip-notification-email')),
+  addEmailNotificationScreen: {
+    emailInput: element(by.id('add-email-input')),
+    emailValidationError: element(by.id('add-email-input-validation-error')),
 
-    async skipEmailNotification(): Promise<void> {
+    submitButton: element(by.id('submit-add-email-button')),
+    skipEmailNotificationButton: element(by.id('skip-adding-email-button')),
+
+    async typeEmailAddress(value: string) {
+      await actions.typeText(this.emailInput, value);
+    },
+
+    async submit() {
+      await actions.tap(this.submitButton);
+    },
+
+    async skip() {
       await actions.tap(this.skipEmailNotificationButton);
     },
-  });
+  },
 
-  const betaVersionScreen = BetaVersionScreen();
-  const createPinScreen = CreatePinScreen();
-  const confirmPinScreen = ConfirmPinScreen();
-  const createPasswordScreen = CreatePasswordScreen();
-  const confirmPasswordScreen = ConfirmPasswordScreen();
-  const successScreen = MessageScreen('success');
-  const addEmailNotificationScreen = AddEmailNotificationScreen();
+  confirmEmailAddressScreen: {
+    pincode: element(by.id('confirm-code-input')),
+    pincodeValidationError: element(by.id('confirm-code-input-validation-error')),
 
-  const passThrough = async function(pin: string, password: string) {
-    await createPinScreen.typePin(pin);
-    await confirmPinScreen.typePin(pin);
+    submitButton: element(by.id('confirm-code-email-button')),
+    resendButton: element(by.id('resend-code-email-button')),
 
-    await createPasswordScreen.typePassword(password);
-    await createPasswordScreen.submit();
+    async typeCode(value: string) {
+      await actions.typeText(this.pincode, value);
+    },
 
-    await confirmPasswordScreen.typePassword(password);
-    await confirmPasswordScreen.submit();
+    async submit() {
+      await actions.tap(this.submitButton);
+    },
 
-    await successScreen.close();
-  };
+    async tapOnResendButton() {
+      await actions.tap(this.resendButton);
+    },
+  },
 
-  return {
-    betaVersionScreen,
-    createPinScreen,
-    confirmPinScreen,
-    createPasswordScreen,
-    confirmPasswordScreen,
-    successScreen,
-    passThrough,
-    addEmailNotificationScreen,
-  };
-};
+  successScreen: MessageScreen('success'),
+});
 
 export default Onboarding;

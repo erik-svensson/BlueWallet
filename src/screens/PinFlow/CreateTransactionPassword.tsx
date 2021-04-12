@@ -58,7 +58,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
     this.inputRef.current?.focus();
   };
 
-  changeVisability = () => {
+  changeVisibility = () => {
     this.setState({
       isVisible: !this.state.isVisible,
     });
@@ -66,6 +66,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
 
   render() {
     const { isVisible, password } = this.state;
+
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps="always"
@@ -84,7 +85,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
           <Text style={styles.pinDescription}>{i18n.onboarding.createPasswordDescription}</Text>
         </View>
         <View style={styles.inputItemContainer}>
-          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisability}>
+          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisibility}>
             <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem

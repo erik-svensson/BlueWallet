@@ -21,8 +21,13 @@ import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
-import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
-import { isNotificationEmailSet, storedEmail } from 'app/state/notifications/selectors';
+import {
+  checkSubscription,
+  CheckSubscriptionAction,
+  subscribeWallet as subscribeWalletAction,
+  SubscribeWalletActionCreator,
+} from 'app/state/notifications/actions';
+import { isNotificationEmailSet, storedEmail, readableError } from 'app/state/notifications/selectors';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { importWallet as importWalletAction, ImportWalletAction } from 'app/state/wallets/actions';
 import { typography, palette } from 'app/styles';
@@ -48,6 +53,9 @@ interface Props {
   wallets: Wallet[];
   isNotificationEmailSet: boolean;
   email: string;
+  subscribe: SubscribeWalletActionCreator;
+  error: string;
+
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
   checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
 }
@@ -133,6 +141,7 @@ export class ImportWalletScreen extends Component<Props, State> {
           ? i18n.wallets.importWallet.walletInUseValidationError
           : i18n.wallets.importWallet.allWalletsValidationError
         : '';
+
     this.setState({
       label: value,
       validationError,
@@ -141,7 +150,7 @@ export class ImportWalletScreen extends Component<Props, State> {
 
   onScanQrCodeButtonPress = () => {
     return this.props.navigation.navigate(Route.ScanQrCode, {
-      onBarCodeScan: (mnemonic: string) => this.importMnemonic(mnemonic),
+      onBarCodeScan: (mnemonic: string) => this.setState({ text: mnemonic }),
     });
   };
 
@@ -165,20 +174,26 @@ export class ImportWalletScreen extends Component<Props, State> {
     navigation.navigate(Route.Confirm, {
       title: i18n.notifications.notifications,
       children: this.renderConfirmScreenContent(),
-      onConfirm: () =>
+      gestureEnabled: false,
+      onConfirm: () => {
+        this.props.subscribe([wallet], email);
         navigation.navigate(Route.ConfirmEmail, {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
-          walletsToSubscribe: [wallet],
+          wallets: [wallet],
           onSuccess: this.showSuccessImportMessageScreen,
-        }),
-      onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+          onResend: () => this.props.subscribe([wallet], email),
+        });
+      },
+
+      onBack: () => this.showSuccessImportMessageScreen(),
       isBackArrow: false,
     });
   };
 
   importWallet = (wallet: Wallet, onSuccess: () => void) => {
     const { importWallet } = this.props;
+
     importWallet(wallet, {
       onSuccess,
       onFailure: (error: string) =>
@@ -190,6 +205,7 @@ export class ImportWalletScreen extends Component<Props, State> {
 
   saveWallet = async (newWallet: any) => {
     const { wallets, email, checkSubscription } = this.props;
+
     if (wallets.some(wallet => wallet.secret === newWallet.secret)) {
       return this.showErrorMessageScreen({
         title: i18n.wallets.importWallet.walletInUseValidationError,
@@ -199,19 +215,22 @@ export class ImportWalletScreen extends Component<Props, State> {
       });
     }
     newWallet.setLabel(this.state.label);
-    if (email) {
-      return checkSubscription([newWallet], email, {
-        onSuccess: (ids: string[]) => {
-          const isWalletSubscribed = ids.some(id => id === newWallet.id);
-          this.importWallet(newWallet, () => {
+
+    this.importWallet(newWallet, () => {
+      if (email) {
+        return checkSubscription([newWallet], email, {
+          onSuccess: (ids: string[]) => {
+            const isWalletSubscribed = ids.some(id => id === newWallet.id);
+
             isWalletSubscribed
               ? this.showSuccessImportMessageScreen()
               : this.navigateToConfirmEmailSubscription(newWallet);
-          });
-        },
-      });
-    }
-    this.importWallet(newWallet, () => {
+          },
+          onFailure: () => {
+            this.showSuccessImportMessageScreen();
+          },
+        });
+      }
       this.showSuccessImportMessageScreen();
     });
   };
@@ -236,6 +255,7 @@ export class ImportWalletScreen extends Component<Props, State> {
   createARWallet = (mnemonic: string) => {
     try {
       const wallet = new HDSegwitP2SHArWallet();
+
       wallet.setMnemonic(mnemonic);
       this.props.navigation.navigate(Route.IntegrateKey, {
         onBarCodeScan: (key: string) => {
@@ -260,6 +280,7 @@ export class ImportWalletScreen extends Component<Props, State> {
 
   navigateToImportWallet = () => {
     const { navigation, route } = this.props;
+
     navigation.navigate(Route.ImportWallet, { walletType: route.params.walletType });
   };
 
@@ -289,6 +310,7 @@ export class ImportWalletScreen extends Component<Props, State> {
   createAIRWallet = (mnemonic: string) => {
     try {
       const wallet = new HDSegwitP2SHAirWallet();
+
       wallet.setMnemonic(mnemonic);
       this.addInstantPublicKey(wallet);
     } catch (e) {
@@ -309,6 +331,7 @@ export class ImportWalletScreen extends Component<Props, State> {
     try {
       const { customWords, hasCustomWords } = this.state;
       const trimmedCustomWords = customWords.trim();
+
       if (hasCustomWords) {
         wallet.setPassword(trimmedCustomWords);
       }
@@ -382,6 +405,7 @@ export class ImportWalletScreen extends Component<Props, State> {
     try {
       if (isElectrumVaultMnemonic(trimmedMnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX_SW)) {
         const electrumHDSegwitBech32Wallet = new HDSegwitBech32Wallet({ isElectrumVault: true });
+
         if (hasCustomWords) {
           electrumHDSegwitBech32Wallet.setPassword(trimmedCustomWords);
         }
@@ -393,6 +417,7 @@ export class ImportWalletScreen extends Component<Props, State> {
       }
 
       const segwitWallet = new SegwitP2SHWallet();
+
       segwitWallet.setSecret(trimmedMnemonic);
       if (segwitWallet.getAddress()) {
         // ok its a valid WIF
@@ -405,6 +430,7 @@ export class ImportWalletScreen extends Component<Props, State> {
       // case - WIF is valid, just has uncompressed pubkey
 
       const legacyWallet = new LegacyWallet();
+
       legacyWallet.setSecret(trimmedMnemonic);
       if (legacyWallet.getAddress()) {
         await legacyWallet.fetchTransactions();
@@ -416,6 +442,7 @@ export class ImportWalletScreen extends Component<Props, State> {
       // if we're here - nope, its not a valid WIF
 
       const hdSegwitP2SH = new HDSegwitP2SHWallet();
+
       await hdSegwitP2SH.setSecret(trimmedMnemonic);
       if (hdSegwitP2SH.validateMnemonic()) {
         await hdSegwitP2SH.fetchTransactions();
@@ -425,6 +452,7 @@ export class ImportWalletScreen extends Component<Props, State> {
       }
 
       const hdSegwitBech32 = new HDSegwitBech32Wallet();
+
       await hdSegwitBech32.setSecret(trimmedMnemonic);
       if (hdSegwitBech32.validateMnemonic()) {
         await hdSegwitBech32.fetchTransactions();
@@ -434,6 +462,7 @@ export class ImportWalletScreen extends Component<Props, State> {
       }
 
       const hdLegactP2PKH = new HDLegacyP2PKHWallet();
+
       if (hasCustomWords) {
         hdLegactP2PKH.setPassword(trimmedCustomWords);
       }
@@ -447,6 +476,7 @@ export class ImportWalletScreen extends Component<Props, State> {
       }
 
       const watchOnly = new WatchOnlyWallet();
+
       watchOnly.setSecret(trimmedMnemonic);
       if (watchOnly.valid()) {
         await watchOnly.fetchTransactions();
@@ -496,17 +526,13 @@ export class ImportWalletScreen extends Component<Props, State> {
 
   executeWithNetworkConnectionCheck = (callback: () => void) => () => {
     const { checkNetworkConnection } = this.props;
+
     checkNetworkConnection(() => callback());
   };
 
-  get canScan() {
-    const { validationError, label } = this.state;
-
-    return label.trim() && !!!validationError;
-  }
-
   render() {
     const { validationError, text, label, hasCustomWords, customWords } = this.state;
+
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps={'always'}
@@ -520,11 +546,9 @@ export class ImportWalletScreen extends Component<Props, State> {
             />
             <FlatButton
               testID="scan-import-wallet-qr-code-button"
-              disabled={!label || !!validationError}
               containerStyle={styles.scanQRCodeButtonContainer}
               title={i18n.wallets.importWallet.scanQrCode}
               onPress={this.executeWithNetworkConnectionCheck(this.onScanQrCodeButtonPress)}
-              disabledTitleStyle={{ color: palette.grey }}
             />
           </>
         }
@@ -537,6 +561,7 @@ export class ImportWalletScreen extends Component<Props, State> {
             testID="import-wallet-seed-phrase-input"
             error={validationError}
             autoCapitalize="none"
+            value={text}
             onChangeText={this.onChangeText}
             placeholder={i18n.wallets.importWallet.placeholder}
             style={styles.textArea}
@@ -569,11 +594,13 @@ const mapStateToProps = (state: ApplicationState) => ({
   wallets: walletsSelectors.wallets(state),
   isNotificationEmailSet: isNotificationEmailSet(state),
   email: storedEmail(state),
+  error: readableError(state),
 });
 
 const mapDispatchToProps = {
   importWallet: importWalletAction,
   checkSubscription,
+  subscribe: subscribeWalletAction,
 };
 
 export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(ImportWalletScreen);

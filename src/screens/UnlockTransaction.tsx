@@ -33,11 +33,13 @@ class UnlockTransaction extends PureComponent<Props, State> {
 
   onConfirmWithNetworkConnectionCheck = () => {
     const { checkNetworkConnection } = this.props;
+
     checkNetworkConnection(this.onConfirm);
   };
 
   onConfirm = () => {
     const { onSuccess } = this.props.route.params;
+
     this.setState(
       {
         isLoading: true,
@@ -71,6 +73,7 @@ class UnlockTransaction extends PureComponent<Props, State> {
 
   render() {
     const { error, password, isVisible, isLoading } = this.state;
+
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps="always"
@@ -92,7 +95,7 @@ class UnlockTransaction extends PureComponent<Props, State> {
             <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem
-            testID="confirm-transaction-password-input"
+            testID="transaction-password-input"
             value={password}
             setValue={this.updatePassword}
             autoFocus={true}

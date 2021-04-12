@@ -1,9 +1,10 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class StoreService {
   async getStoreValue(key: string): Promise<string> {
     try {
       const value = (await AsyncStorage.getItem(key)) || '';
+
       return value;
     } catch (_) {
       return '';

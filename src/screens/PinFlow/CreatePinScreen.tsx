@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { Header, PinInput, ScreenTemplate } from 'app/components';
 import { Route, CONST, FlowType, RootStackParams } from 'app/consts';
 import { noop } from 'app/helpers/helpers';
-import { setUserVersion as setUserVersionAction, SetUserVersionActionFunction } from 'app/state/authentication/actions';
+import { setUserVersion as setUserVersionAction, SetUserVersionActionCreator } from 'app/state/authentication/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -18,7 +18,7 @@ interface Props {
   appSettings: {
     isPinSet: boolean;
   };
-  setUserVersion: SetUserVersionActionFunction;
+  setUserVersion: SetUserVersionActionCreator;
 }
 
 interface State {

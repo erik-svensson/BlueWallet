@@ -12,6 +12,7 @@ export interface NotificationState {
   isLoading: boolean;
   sessionToken: string;
   subscribedIds: string[];
+  resendStartTime: number;
 }
 
 const initialState: NotificationState = {
@@ -22,6 +23,7 @@ const initialState: NotificationState = {
   isLoading: false,
   sessionToken: '',
   subscribedIds: [],
+  resendStartTime: 0,
 };
 
 const reducer = (state = initialState, action: NotificationActionType): NotificationState => {
@@ -35,12 +37,25 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         isLoading: false,
         pin: '',
       };
+    case NotificationAction.UnsubscribeWalletAction:
+    case NotificationAction.SubscribeWalletAction:
+    case NotificationAction.UpdateNotificationEmailAction:
+      return {
+        ...state,
+        isLoading: true,
+      };
     case NotificationAction.SubscribeWalletFailureAction:
     case NotificationAction.UnsubscribeWalletFailureAction:
-    case NotificationAction.AuthenticateEmailFailureAction:
     case NotificationAction.CheckSubscriptionFailureAction:
     case NotificationAction.CreateNotificationEmailFailure:
     case NotificationAction.VerifyNotificationEmailActionFailure:
+    case NotificationAction.UpdateNotificationEmailFailureAction:
+      return {
+        ...state,
+        error: action.error,
+        isLoading: false,
+      };
+    case NotificationAction.AuthenticateEmailFailureAction:
       return {
         ...state,
         error: action.error,
@@ -51,6 +66,7 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         ...state,
         email: '',
         pin: '',
+        subscribedIds: [],
       };
     case NotificationAction.CheckSubscriptionAction:
     case NotificationAction.VerifyNotificationEmailAction:
@@ -67,16 +83,16 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
       };
     case NotificationAction.SubscribeWalletSuccessAction:
     case NotificationAction.UnsubscribeWalletSuccessAction:
+    case NotificationAction.UpdateNotificationEmailSuccessAction:
       return {
         ...state,
-        error: '',
+        isLoading: false,
         sessionToken: action.payload.sessionToken,
       };
     case NotificationAction.AuthenticateEmailSuccessAction:
       return {
         ...state,
         error: '',
-        sessionToken: '',
       };
     case NotificationAction.SetErrorAction:
       return {
@@ -91,6 +107,18 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         isLoading: false,
       };
     }
+    case NotificationAction.StartResendAction: {
+      return {
+        ...state,
+        resendStartTime: new Date().getTime(),
+      };
+    }
+    case NotificationAction.ResetResendTimeAction: {
+      return {
+        ...state,
+        resendStartTime: 0,
+      };
+    }
     default:
       return state;
   }
@@ -98,5 +126,5 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
 
 export const notificationReducer = createPersistReducer(reducer, {
   key: NOTIFICATIONS_REDUCER_NAME,
-  whitelist: ['email', 'isNotificationEmailSet'],
+  whitelist: ['email', 'isNotificationEmailSet', 'resendStartTime'],
 });

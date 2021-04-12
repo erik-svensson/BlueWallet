@@ -11,8 +11,15 @@ import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
 import { reducer as notificationReducer } from 'app/state/notifications';
-import { checkSubscription, CheckSubscriptionAction } from 'app/state/notifications/actions';
-import { isWalletSubscribed, storedEmail, isLoading } from 'app/state/notifications/selectors';
+import {
+  checkSubscription,
+  CheckSubscriptionAction,
+  subscribeWallet as subscribeWalletAction,
+  unsubscribeWallet as unsubscribeWalletAction,
+  SubscribeWalletActionCreator,
+  UnsubscribeWalletActionCreator,
+} from 'app/state/notifications/actions';
+import { isWalletSubscribed, storedEmail, isLoading, readableError } from 'app/state/notifications/selectors';
 import { reducer as walletReducer } from 'app/state/wallets';
 import {
   updateWallet as updateWalletAction,
@@ -31,8 +38,11 @@ interface Props {
   updateWallet: (wallet: Wallet) => UpdateWalletAction;
   navigation: StackNavigationProp<RootStackParams, Route.WalletDetails>;
   wallet?: Wallet;
+  error: string;
   deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
+  subscribe: SubscribeWalletActionCreator;
+  unsubscribe: UnsubscribeWalletActionCreator;
   route: RouteProp<RootStackParams, Route.WalletDetails>;
   walletsLabels: string[];
   email: string;
@@ -42,20 +52,28 @@ interface Props {
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
   componentDidMount() {
-    const { wallet, email, checkSubscription } = this.props;
-    if (!email || !wallet) return;
-    checkSubscription([wallet], email);
+    this.checkSubscription();
   }
+
+  checkSubscription = () => {
+    const { wallet, email, checkSubscription } = this.props;
+
+    if (wallet) {
+      checkSubscription([wallet], email);
+    }
+  };
 
   validationError = (value: string): string | undefined => {
     const trimmedValue = value.trim();
     const checkAllWallets =
       value.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase() || value === CONST.allWallets;
     const { walletsLabels, wallet } = this.props;
+
     if (!wallet) {
       return;
     }
     const allOtherWalletLabels = walletsLabels.filter((label: string) => label !== wallet.label);
+
     if (allOtherWalletLabels.includes(trimmedValue)) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
@@ -79,6 +97,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   navigateToDeleteWallet = () => {
     const { deleteWallet, navigation, wallet } = this.props;
+
     if (!wallet) {
       return;
     }
@@ -107,6 +126,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   navigateWithWallet = (route: Route.ExportWalletXpub | Route.ExportWallet) => {
     const { navigation, wallet } = this.props;
+
     if (!wallet) {
       return;
     }
@@ -118,20 +138,25 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   setLabel = (label: string) => {
     const trimmedlabel = label.trim();
     const { wallet, updateWallet } = this.props;
+
     if (!wallet) {
       return;
     }
     const updatedWallet = cloneDeep(wallet);
+
     updatedWallet.setLabel(trimmedlabel);
     updateWallet(updatedWallet);
   };
 
   editAmount = () => {
     const { wallet, navigation } = this.props;
+
     if (!wallet) {
       return;
     }
     navigation.navigate(Route.EditText, {
+      inputTestID: 'wallet-name-input',
+      submitButtonTestID: 'submit-wallet-name-button',
       title: i18n.wallets.details.nameEdit,
       label: i18n.wallets.details.nameLabel,
       onSave: this.setLabel,
@@ -141,14 +166,14 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     });
   };
 
-  confirmEmail = (flowType: ConfirmAddressFlowType) => {
+  confirmEmail = (flowType: ConfirmAddressFlowType, onResend: () => void) => {
     const { email, navigation, wallet } = this.props;
 
     wallet &&
       navigation.navigate(Route.ConfirmEmail, {
         email,
         flowType,
-        walletsToSubscribe: [wallet],
+        wallets: [wallet],
         onSuccess: () => {
           CreateMessage({
             title: i18n.message.success,
@@ -156,50 +181,85 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             type: MessageType.success,
             buttonProps: {
               title: i18n.message.goToWalletDetails,
-              onPress: () => navigation.navigate(Route.WalletDetails, { id: wallet.id }),
+              onPress: () => {
+                this.navigateBackToScreen();
+                this.checkSubscription();
+              },
             },
           });
         },
+        onResend,
       });
+  };
+
+  navigateBackToScreen = () => {
+    const { navigation, wallet } = this.props;
+
+    wallet && navigation.navigate(Route.WalletDetails, { id: wallet.id });
+  };
+
+  subscribe = (wallet: Wallet, email: string) => {
+    this.props.subscribe([wallet], email);
+    this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE, () => this.props.subscribe([wallet], email));
+  };
+
+  unSubscribe = (wallet: Wallet, email: string) => {
+    this.props.unsubscribe([wallet], email);
+    this.confirmEmail(ConfirmAddressFlowType.UNSUBSCRIBE, () => this.props.unsubscribe([wallet], email));
   };
 
   onSubscribeButtonPress = () => {
     const { email, navigation, wallet, isSubscribed } = this.props;
+
     if (!wallet) return;
     if (!email) {
-      return navigation.navigate(Route.Notifications);
+      return navigation.navigate(Route.Notifications, {
+        onBackArrow: () => this.navigateBackToScreen(),
+        wallet,
+      });
     }
 
     if (!isSubscribed) {
-      return this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE);
+      return this.subscribe(wallet, email);
     }
 
-    return this.confirmEmail(ConfirmAddressFlowType.UNSUBSCRIBE);
+    return this.unSubscribe(wallet, email);
   };
 
   render() {
     const { wallet, isSubscribed, isLoading } = this.props;
+
     if (!wallet) {
       return null;
     }
     const isWatchOnly = wallet.type === WatchOnlyWallet.type;
+
     return (
       <ScreenTemplate
         footer={
           <>
-            {!isWatchOnly && <Button onPress={this.navigateToWalletExport} title={i18n.wallets.details.exportWallet} />}
+            {!isWatchOnly && (
+              <Button
+                testID="export-wallet-button"
+                onPress={this.navigateToWalletExport}
+                title={i18n.wallets.details.exportWallet}
+              />
+            )}
             <Button
+              testID="show-xpub-button"
               onPress={this.navigateToWalletXpub}
               title={i18n.wallets.details.showWalletXPUB}
               containerStyle={styles.button}
             />
             <Button
+              testID="manage-email-notifications-subscription-button"
               onPress={this.onSubscribeButtonPress}
               title={isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
               containerStyle={styles.button}
               loading={isLoading}
             />
             <FlatButton
+              testID="delete-wallet-button"
               onPress={this.navigateToDeleteWallet}
               title={i18n.wallets.details.deleteWallet}
               containerStyle={styles.deleteWalletButtonContainer}
@@ -215,14 +275,16 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
         <View style={styles.nameInputContainer}>
           <View style={styles.labelInput}>
             <Text style={styles.typeLabel}>{i18n.wallets.details.nameLabel}</Text>
-            <Text style={styles.label} onPress={this.editAmount}>
+            <Text testID="wallet-name-text" style={styles.label} onPress={this.editAmount}>
               {wallet.label}
             </Text>
           </View>
         </View>
         <View style={styles.typeContainer}>
           <Text style={styles.typeLabel}>{i18n.wallets.details.typeLabel}</Text>
-          <Text style={styles.typeValue}>{wallet.typeReadable}</Text>
+          <Text testID="wallet-type-text" style={styles.typeValue}>
+            {wallet.typeReadable}
+          </Text>
         </View>
       </ScreenTemplate>
     );
@@ -234,18 +296,22 @@ const mapStateToProps = (
   props: Props,
 ) => {
   const { id } = props.route.params;
+
   return {
     wallet: getById(state, id),
     walletsLabels: getWalletsLabels(state),
     email: storedEmail(state),
     isLoading: isLoading(state),
     isSubscribed: isWalletSubscribed(state, id),
+    error: readableError(state),
   };
 };
 
 const mapDispatchToProps = {
   updateWallet: updateWalletAction,
   deleteWallet: deleteWalletAction,
+  subscribe: subscribeWalletAction,
+  unsubscribe: unsubscribeWalletAction,
   checkSubscription,
 };
 

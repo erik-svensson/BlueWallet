@@ -16,9 +16,11 @@ const renderArrowIcon = (value: number) => (
   <Image source={value > 0 ? icons.arrowRight : icons.arrowLeft} style={styles.arrow} resizeMode="contain" />
 );
 
-const renderCofirmations = (txType: TxType, confirmations: number) =>
+const renderConfirmations = (txType: TxType, confirmations: number) =>
   txType !== TxType.ALERT_RECOVERED && (
-    <Text style={styles.label}>{`${i18n.transactions.list.conf}: ${getConfirmationsText(txType, confirmations)}`}</Text>
+    <Text testID={`transaction-${confirmations}-text`} style={styles.label}>{`${
+      i18n.transactions.list.conf
+    }: ${getConfirmationsText(txType, confirmations)}`}</Text>
   );
 
 interface Props {
@@ -45,7 +47,7 @@ export const TransactionItem = ({ item, onPress, testID }: Props) => {
       <Text style={styles.label}>
         {item.time ? dayjs(item.received).format('LT') : i18n.transactions.details.timePending}
       </Text>
-      {renderCofirmations(item.tx_type, item.confirmations)}
+      {renderConfirmations(item.tx_type, item.confirmations)}
       <View style={styles.rowWrapper}>
         <TransactionLabelStatus status={item.status} />
         <Text
@@ -55,7 +57,11 @@ export const TransactionItem = ({ item, onPress, testID }: Props) => {
             item.toExternalAddress ? styles.label : null,
           ]}
         >
-          {formatToBtcv(satoshiToBtc(item.valueWithoutFee).toNumber())}
+          {formatToBtcv(
+            satoshiToBtc(item.valueWithoutFee)
+              .toFixed(8)
+              .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1'),
+          )}
         </Text>
       </View>
       {item.blockedAmount !== undefined && (

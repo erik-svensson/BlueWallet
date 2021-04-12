@@ -78,10 +78,9 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
 
   scanQRCode = () => {
     const { navigation } = this.props;
+
     navigation.navigate(Route.ScanQrCode, {
-      onBarCodeScan: (data: string) => {
-        this.createImportMessage(() => this.createAuthenticatorScan(data));
-      },
+      onBarCodeScan: (data: string) => this.setMnemonic(data),
     });
   };
 
@@ -110,6 +109,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
   createAuthenticator = (mnemonic: string) => {
     const { navigation, createAuthenticator } = this.props;
     const { name } = this.state;
+
     createAuthenticator(
       { mnemonic, name: name.trim() },
       {
@@ -142,16 +142,19 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
 
   createAuthenticatorForm = () => {
     const { mnemonic } = this.state;
+
     this.createImportMessage(() => this.createAuthenticator(mnemonic));
   };
 
   get validationError(): string | undefined {
     const { authenticators } = this.props;
     const { name, nameError } = this.state;
+
     if (nameError) {
       return nameError;
     }
     const authenticatorsLabels = authenticators.map(a => a.name);
+
     if (authenticatorsLabels.includes(name.trim())) {
       return i18n.authenticators.import.inUseValidationError;
     }
@@ -159,23 +162,27 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
 
   hasErrors = () => {
     const { mnemonicError } = this.state;
+
     return !!(this.validationError || mnemonicError);
   };
 
   canSubmit = () => {
     const { name, mnemonic } = this.state;
+
     return !!(name && mnemonic && !this.hasErrors());
   };
 
   sendFeedback = () => {
     const { name } = this.state;
+
     if (!!!name.trim()) {
       this.setState({ nameError: i18n.authenticators.errors.noEmpty });
     }
   };
 
   render() {
-    const { mnemonicError, name } = this.state;
+    const { mnemonicError, mnemonic } = this.state;
+
     return (
       <ScreenTemplate
         footer={
@@ -194,7 +201,6 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
                 containerStyle={styles.scanQRCodeButtonContainer}
                 title={i18n.wallets.importWallet.scanQrCode}
                 onPress={this.scanQRCode}
-                disabled={!name || !!this.validationError}
               />
             </TouchableHighlight>
           </>
@@ -218,6 +224,7 @@ class ImportAuthenticatorScreen extends Component<Props, State> {
             testID="import-authenticator-seed-phrase"
             autoCapitalize={'none'}
             error={mnemonicError}
+            value={mnemonic}
             onChangeText={this.setMnemonic}
             placeholder={i18n.authenticators.import.textAreaPlaceholder}
             style={styles.textArea}
