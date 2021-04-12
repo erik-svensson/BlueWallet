@@ -279,7 +279,7 @@ export const tr = `<!DOCTYPE html>
         Verilerinizi, Avrupa Parlamentosu ve Konseyinin kişisel verilerin işlenmesine ve bu verilerin serbest dolaşımına ilişkin olarak gerçek şahısların koruması hakkındaki ve 95/46/EC Yönergesini ilga eden 2016/679 sayılı ve 27 Nisan 2016 tarihli buradan itibaren “GVKY” olarak anılacak olan Genel Veri Koruma Yönetmeliği, yani Yönetmelik (AB) uyarınca işlemekteyiz.
     </li>
     <li>
-        Kişisel verilerinizin veri denetleyicisi Şirkettir. contact@bitcoinvault.global adresine e-posta göndererek bizimle iletişime geçebilirsiniz.
+        Kişisel verilerinizin veri denetleyicisi Şirkettir. <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a> adresine e-posta göndererek bizimle iletişime geçebilirsiniz.
     </li>
     <li>
         E-posta adresinizde e-posta bildirimleri almaya yönelik onayınıza bağlı olarak bize doğrudan sağladığınız bilgileri toplarız. Ayrıca işletmemize ve size hizmet sunmamıza yardımcı olması için çerezler kullanarak bazı teknik bilgileri de topluyoruz. Çerezler, anonim benzersiz bir tanımlayıcı içerebilen, küçük miktar veriye sahip dosyalardır. Çerezler bir websitesinden tarayıcınıza gönderilir ve bilgisayarınızın hard diskinde depolanır. Tarayıcınıza tüm çerezleri reddetme ya da çerezin ne zaman gönderildiğini göstermesi talimatı verebilirsiniz. Bununla birlikte, çerezleri kabul etmezseniz internet sitemizin bazı kısımlarını kullanamayabilirsiniz.

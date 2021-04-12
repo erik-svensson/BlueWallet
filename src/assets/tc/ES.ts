@@ -279,7 +279,7 @@ Presta atención al proporcionar información personal en las Páginas web desde
         Procesamos tus datos personales de conformidad con la Normativa General de Protección de Datos, es decir, la Normativa (EU) 2016/679 del Parlamento Europeo y del Consejo del 27 de abril de 2016) sobre la protección de las personas en relación con el procesamiento de sus datos personales y de la libre circulación de dichos datos, y el Reglamento 95/46/EC de derogación denominado a continuación como «RGPD».
     </li>
     <li>
-        El controlador de datos de tus datos personales es la Empresa. Puedes contactarnos por correo electrónico a contact@bitcoinvault.global
+        El controlador de datos de tus datos personales es la Empresa. Puedes contactarnos por correo electrónico a <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
     </li>
     <li>
         Recopilamos la información que nos proporciones directamente al consentir recibir notificaciones por correo electrónico a tu dirección de correo. Adicionalmente, recopilamos cierta información técnica usando cookies que nos ayudan a funcionar y ofrecerte nuestros servicios. Las cookies son archivos con una pequeña cantidad de datos, que pueden incluir identificadores anónimos únicos. Las cookies se envían a tu navegador desde un sitio web y se almacenan en el disco duro de tu ordenador. Puede cambiar la configuración de su navegador para rechazar todas las cookies o indicar cuando se envíe una cookie. No obstante, si no acepta las cookies, es posible que no pueda utilizar partes de nuestro sitio web.

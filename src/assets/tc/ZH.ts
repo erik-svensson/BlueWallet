@@ -300,7 +300,7 @@ export const zh = `
             条例（《关于涉及个人数据处理的个人保护及此类数据自由流动的指令》）处理您的个人数据，并废除指令 95/46 / EC（以下简称“GDPR”）。
         </li>
         <li>
-            2. 您的个人数据的数据控制者是“公司”。您可以通过电子邮件联系我们 contact@bitcoinvault.global
+            2. 您的个人数据的数据控制者是“公司”。您可以通过电子邮件联系我们 <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
         </li>
         <li>
             鉴于您同意接收我们向您的电子邮件地址发送的电子邮件通知，我们将收集您直接提供给我们的信息。另外，我们使用 cookie 收集某些技术信息，以帮助我们运营并向您提供服务。cookie
