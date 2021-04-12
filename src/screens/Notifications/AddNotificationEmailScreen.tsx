@@ -180,7 +180,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
         header={<Header title={title} isBackArrow={isBackArrow} onBackArrow={this.onBackArrow} />}
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.notifications.addYourEmailFor}</Text>
+          <Text style={[typography.headline4, { textAlign: 'center' }]}>{i18n.notifications.addYourEmailFor}</Text>
           <Text style={styles.pinDescription}>{description}</Text>
         </View>
         <View style={styles.inputItemContainer}>
