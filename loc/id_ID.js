@@ -252,7 +252,7 @@ module.exports = {
   },
   notifications: {
     addYourAddress: 'Tambahkan alamat email Anda',
-    addYourEmailFor: 'Tambahkan alamat email Anda untuk menerima notifikasi',
+    addYourEmailFor: 'Tambahkan alamat email Anda untuk \nmenerima notifikasi',
     addEmail: 'Tambahkan email',
     addYourAddressDescription: 'email digunakan untuk mengirimi Anda notifikasi transaksi dari dompet yang dipilih.',
     addYourEmailForDescription:
@@ -286,7 +286,7 @@ module.exports = {
     emailChangedSuccessMessage: 'Hore! \nAnda telah berhasil memperbarui alamat email Anda.',
     updateNotificationPreferences: 'Hore! \nAnda telah berhasil memperbarui pengaturan notifikasi Anda.',
     verifyAction: 'Verifikasi aksi',
-    verifyActionDescription: 'Untuk mengkonfirmasi permintaan, mohon masukkan kode yang kami kirim ke',
+    verifyActionDescription: 'Untuk mengkonfirmasi permintaan, mohon masukkan kode yang kami kirim ke \n',
     deleteEmail: 'Hapus alamat email',
     deleteYourEmail: 'Hapus email Anda',
     deleteYourEmailDescription: 'Alamat Email Anda',

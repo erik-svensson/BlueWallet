@@ -279,7 +279,7 @@ Deve ter cuidado ao introduzir informações pessoais nos sites num computador p
         Tratamos os seus dados pessoais em conformidade com o Regulamento Geral sobre a Proteção de Dados, ou seja, o Regulamento (UE) 2016/679 do Parlamento Europeu e do Conselho, de 27 de abril de 2016, relativo à proteção das pessoas singulares no que diz respeito ao tratamento de dados pessoais e à livre circulação desses dados, e que revoga a Diretiva 95/46/CE, a seguir designado por “RGPD”.
     </li>
     <li>
-        O responsável pelo tratamento dos seus dados pessoais é a Empresa. Pode contactar-nos por e-mail para contact@bitcoinvault.global
+        O responsável pelo tratamento dos seus dados pessoais é a Empresa. Pode contactar-nos por e-mail para <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
     </li>
     <li>
         Recolhemos informações que nos fornece diretamente devido ao seu consentimento para receber notificações por correio eletrónico para o seu endereço eletrónico. Além disso, recolhemos determinadas informações técnicas utilizando cookies para nos ajudar a colocar em funcionamento e a levar até si os nossos serviços. Os cookies são ficheiros com uma pequena quantidade de dados, que podem incluir um identificador anónimo único. Os cookies são enviados para o seu navegador a partir de um site e armazenados no disco rígido do seu computador. Pode configurar o seu navegador de modo a recusar todos os cookies ou a indicar-lhe quando um cookie lhe está a ser enviado. No entanto, se não aceitar cookies, poderá não conseguir utilizar algumas partes do nosso site.

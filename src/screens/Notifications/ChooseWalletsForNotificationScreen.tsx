@@ -1,5 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { isEmpty } from 'lodash/fp';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { connect } from 'react-redux';
@@ -37,7 +38,7 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
   };
 
   componentDidMount() {
-    if (this.props.route.params?.wallet) {
+    if (this.props.route.params?.wallet && !isEmpty(this.props.route.params?.wallet)) {
       this.setState((state: State) => ({ wallets: [...state.wallets, this.props.route.params?.wallet] }));
     }
   }

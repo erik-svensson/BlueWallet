@@ -279,7 +279,7 @@ Anda harus berhati-hati saat memasukkan informasi pribadi ke Situs Web di komput
         Kami memproses data pribadi Anda sesuai dengan Peraturan Perlindungan Data Umum, yakni Peraturan (UE) 2016/679 dari Parlemen Eropa dan Dewan pada 27 April 2016) terkait perlindungan orang perseorangan sehubungan dengan pemrosesan data pribadi dan pergerakan bebas data tersebut, dan pencabutan Arahan 95/46/EC, yang selanjutnya disebut sebagai “GDPR”.
     </li>
     <li>
-        Pengendali data untuk data pribadi Anda adalah Perusahaan. Anda dapat menghubungi kami dengan email di contact@bitcoinvault.global
+        Pengendali data untuk data pribadi Anda adalah Perusahaan. Anda dapat menghubungi kami dengan email di <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
     </li>
     <li>
         Kami mengumpulkan informasi yang Anda berikan secara langsung kepada kami karena Anda setuju untuk menerima pemberitahuan email ke alamat email Anda. Selain itu, kami mengumpulkan informasi teknis tertentu menggunakan cookie yang membantu kami mengoperasikan dan menyediakan layanan bagi Anda. Cookie adalah file data berukuran kecil yang mungkin mencakup pengidentifikasi unik anonim. Cookie dikirim ke peramban Anda dari situs web dan disimpan pada hard drive komputer Anda. Anda dapat mengatur peramban Anda untuk menolak semua cookie atau memberi tahu Anda saat cookie dikirim. Namun demikian, jika Anda tidak menerima cookie, Anda mungkin tidak dapat menggunakan beberapa bagian situs web kami.
