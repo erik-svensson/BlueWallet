@@ -21,8 +21,7 @@ describe('Adding wallet', () => {
 
     describe('Create', () => {
       describe('@android @ios @smoke @mail', () => {
-        //FIX EMAIL FETCH AFTER FINAL TEMPLATE AGREED
-        xit('should be possible to create a new 3-Key Vault wallet', async () => {
+        it('should be possible to create a new 3-Key Vault wallet', async () => {
           await app.dashboard.dashboardScreen.tapOnAddButton();
 
           await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
