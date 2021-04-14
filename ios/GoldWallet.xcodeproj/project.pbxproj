@@ -733,7 +733,7 @@
 				CODE_SIGN_ENTITLEMENTS = GoldWallet/GoldWallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M3A8VW38MH;
 				HEADER_SEARCH_PATHS = (
@@ -750,7 +750,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 6.0.2;
+				MARKETING_VERSION = 6.2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -834,7 +834,7 @@
 				CODE_SIGN_ENTITLEMENTS = GoldWallet/GoldWallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M3A8VW38MH;
 				HEADER_SEARCH_PATHS = (
@@ -936,7 +936,7 @@
 				CODE_SIGN_ENTITLEMENTS = GoldWallet/GoldWallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M3A8VW38MH;
 				HEADER_SEARCH_PATHS = (
@@ -979,7 +979,7 @@
 				CODE_SIGN_ENTITLEMENTS = GoldWallet/GoldWallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M3A8VW38MH;
 				HEADER_SEARCH_PATHS = (
