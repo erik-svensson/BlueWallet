@@ -117,12 +117,13 @@ const getEmailVerificationCode = async (auth: OAuth2Client, emailId: string) => 
 
   // TODO: Do it better later on.
   const startPincodeIndex = body.indexOf('<span id="id_pincode">') + '<span id="id_pincode">'.length;
+  const decodedPIN = body.substr(startPincodeIndex, 4);
 
-  if (startPincodeIndex === -1) {
-    throw new Error(`Couldn't extract a Verification code from the email body: ${body}`);
+  if (decodedPIN.length < 4) {
+    throw new Error(`Couldn't extract a Verification code from the email body: ${body}, got ${decodedPIN} as PIN`);
   }
 
-  return body.substr(startPincodeIndex, 4);
+  return decodedPIN;
 };
 
 const getActionVerificationCode = async (auth: OAuth2Client, emailId: string) => {
@@ -130,12 +131,13 @@ const getActionVerificationCode = async (auth: OAuth2Client, emailId: string) =>
 
   // TODO: Do it better later on.
   const startPincodeIndex = body.indexOf('<span id="id_pincode">') + '<span id="id_pincode">'.length;
+  const decodedPIN = body.substr(startPincodeIndex, 4);
 
-  if (startPincodeIndex === -1) {
-    throw new Error(`Couldn't extract a pincode from the email body: ${body}`);
+  if (decodedPIN.length < 4) {
+    throw new Error(`Couldn't extract a Verification code from the email body: ${body}, got ${decodedPIN} as PIN`);
   }
 
-  return body.substr(startPincodeIndex, 4);
+  return decodedPIN;
 };
 
 /** Marks an email as read  */
