@@ -1,21 +1,17 @@
-import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
-import { Text, StyleSheet, View, Linking, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { Text, StyleSheet, View, Linking, Dimensions, Platform } from 'react-native';
 import { getApplicationName, getVersion, getBundleId, getBuildNumber } from 'react-native-device-info';
 import Rate, { AndroidMarket } from 'react-native-rate';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
-import { Route, MainCardStackNavigatorParams } from 'app/consts';
+import config from 'app/config';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
-interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.AboutUs>;
-}
-
-export const AboutUsScreen = (props: Props) => {
+export const AboutUsScreen = () => {
+  const [rate, setRate] = useState<boolean>(false);
   const libraries = [
     'React Native',
     'React Native Elements',
@@ -29,21 +25,26 @@ export const AboutUsScreen = (props: Props) => {
 
   const getBuildData = () => {
     const { width, height } = Dimensions.get('window');
+
     return `${getApplicationName()} ver. ${getVersion()} (build ${getBuildNumber()}) \n ${getBundleId()} \n w, h = ${width.toFixed(
       0,
     )}, ${height.toFixed(0)}`;
   };
 
   const handleRateButtonPress = () => {
+    setRate(true);
+
     const options = {
       AppleAppID: '1515116464',
-      GooglePackageName: 'io.goldwallet.wallet',
+      GooglePackageName: config.applicationId,
       preferredAndroidMarket: AndroidMarket.Google,
-      preferInApp: true,
-      openAppStoreIfInAppFails: true,
+      inAppDelay: 0,
       fallbackPlatformURL: 'https://bitcoinvault.global',
     };
-    Rate.rate(options);
+
+    Rate.rate(options, () => {
+      setRate(false);
+    });
   };
 
   const goToGithub = () => {
@@ -51,21 +52,23 @@ export const AboutUsScreen = (props: Props) => {
   };
 
   return (
-    // @ts-ignore
-    <ScreenTemplate header={<Header isBackArrow={true} navigation={props.navigation} title={i18n.aboutUs.header} />}>
+    <ScreenTemplate header={<Header isBackArrow={true} title={i18n.aboutUs.header} />}>
       <Text style={styles.title}>{i18n.aboutUs.title}</Text>
       <Text style={styles.description}>{i18n.aboutUs.alwaysBackupYourKeys}</Text>
       <Button
+        testID="go-to-github-button"
         source={icons.github}
         onPress={goToGithub}
         title={i18n.aboutUs.goToOurGithub}
         containerStyle={styles.buttonContainer}
       />
       <Button
+        testID="rate-us-button"
         onPress={handleRateButtonPress}
         source={icons.star}
         title={i18n.aboutUs.rateGoldWallet}
         containerStyle={styles.buttonContainer}
+        loading={rate}
       />
       <View style={styles.buildWithContainer}>
         <Text style={styles.title}>{i18n.aboutUs.buildWithAwesome}</Text>

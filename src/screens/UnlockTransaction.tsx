@@ -1,19 +1,19 @@
 import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 
 import { icons } from 'app/assets';
 import { Header, InputItem, ScreenTemplate, Button } from 'app/components';
 import { CONST, RootStackParams, Route } from 'app/consts';
+import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { SecureStorageService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParams, Route.UnlockTransaction>;
   route: RouteProp<RootStackParams, Route.UnlockTransaction>;
+  checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
 };
 
 interface State {
@@ -23,7 +23,7 @@ interface State {
   isLoading: boolean;
 }
 
-export class UnlockTransaction extends PureComponent<Props, State> {
+class UnlockTransaction extends PureComponent<Props, State> {
   state = {
     password: '',
     error: '',
@@ -31,17 +31,27 @@ export class UnlockTransaction extends PureComponent<Props, State> {
     isLoading: false,
   };
 
-  inputRef: any = React.createRef();
+  onConfirmWithNetworkConnectionCheck = () => {
+    const { checkNetworkConnection } = this.props;
+
+    checkNetworkConnection(this.onConfirm);
+  };
 
   onConfirm = () => {
     const { onSuccess } = this.props.route.params;
+
     this.setState(
       {
         isLoading: true,
       },
       async () => {
         if (await SecureStorageService.checkSecuredPassword(CONST.transactionPassword, this.state.password)) {
-          onSuccess();
+          try {
+            this.setState({ isLoading: false });
+            await onSuccess();
+          } catch (_) {
+            this.setState({ isLoading: false });
+          }
         } else {
           this.setState({
             isLoading: false,
@@ -63,18 +73,20 @@ export class UnlockTransaction extends PureComponent<Props, State> {
 
   render() {
     const { error, password, isVisible, isLoading } = this.state;
+
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps="always"
         footer={
           <Button
+            testID="confirm-transaction-confirm-button"
             title={i18n._.confirm}
             loading={isLoading}
-            onPress={this.onConfirm}
+            onPress={this.onConfirmWithNetworkConnectionCheck}
             disabled={isLoading || password.length < CONST.transactionMinPasswordLength}
           />
         }
-        header={<Header navigation={this.props.navigation} title={i18n.unlockTransaction.headerText} isBackArrow />}
+        header={<Header title={i18n.unlockTransaction.headerText} isBackArrow />}
       >
         <Text style={styles.title}>{i18n.unlockTransaction.title}</Text>
         <Text style={styles.description}>{i18n.unlockTransaction.description}</Text>
@@ -83,8 +95,8 @@ export class UnlockTransaction extends PureComponent<Props, State> {
             <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem
+            testID="transaction-password-input"
             value={password}
-            ref={this.inputRef}
             setValue={this.updatePassword}
             autoFocus={true}
             secureTextEntry={!isVisible}
@@ -95,6 +107,8 @@ export class UnlockTransaction extends PureComponent<Props, State> {
     );
   }
 }
+
+export default withCheckNetworkConnection(UnlockTransaction);
 
 const styles = StyleSheet.create({
   title: {

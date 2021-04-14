@@ -5,7 +5,7 @@ import { Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, Mnemonic } from 'app/components';
-import { Route, Authenticator, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, Authenticator, RootStackParams } from 'app/consts';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
@@ -19,8 +19,8 @@ interface MapStateProps {
 }
 
 interface Props extends MapStateProps {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CreateAuthenticatorSuccess>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.CreateAuthenticatorSuccess>;
+  navigation: StackNavigationProp<RootStackParams, Route.CreateAuthenticatorSuccess>;
+  route: RouteProp<RootStackParams, Route.CreateAuthenticatorSuccess>;
 }
 class CreateAuthenticatorSuccessScreen extends Component<Props> {
   componentDidMount() {
@@ -33,19 +33,26 @@ class CreateAuthenticatorSuccessScreen extends Component<Props> {
 
   navigate = () => {
     const { navigation } = this.props;
-    navigation.navigate(Route.AuthenticatorList);
+
+    navigation.navigate(Route.MainTabStackNavigator, { screen: Route.AuthenticatorList });
   };
 
   render() {
-    const { authenticator, navigation } = this.props;
+    const { authenticator } = this.props;
 
     if (!authenticator) {
       return null;
     }
     return (
       <ScreenTemplate
-        footer={<Button onPress={this.navigate} title={i18n.wallets.addSuccess.okButton} />}
-        header={<Header navigation={navigation} isBackArrow={false} title={i18n.authenticators.add.title} />}
+        footer={
+          <Button
+            testID="seed-phrase-proceed-button"
+            onPress={this.navigate}
+            title={i18n.wallets.addSuccess.okButton}
+          />
+        }
+        header={<Header isBackArrow={false} title={i18n.authenticators.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.authenticators.add.successTitle}</Text>
         <Text style={styles.description}>{i18n.authenticators.add.successDescription}</Text>
@@ -57,6 +64,7 @@ class CreateAuthenticatorSuccessScreen extends Component<Props> {
 
 const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: Props): MapStateProps => {
   const { id } = props.route.params;
+
   return {
     authenticator: selectors.getById(state, id),
   };

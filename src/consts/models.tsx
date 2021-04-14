@@ -1,13 +1,31 @@
 import { VaultTxType, Transaction as BtcTransaction, ECPair } from 'bitcoinjs-lib';
 import { Dayjs } from 'dayjs';
+import { last } from 'lodash';
 import React from 'react';
-import { KeyboardType, StyleProp, ViewStyle, Platform } from 'react-native';
+import { KeyboardType, StyleProp, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
+import { ImageStyle } from 'react-native-fast-image';
 
 import { FastImageSource } from 'app/components';
 
+import {
+  HDSegwitP2SHAirWallet,
+  HDSegwitP2SHArWallet,
+  HDSegwitBech32Wallet,
+  SegwitP2SHWallet,
+  HDSegwitP2SHWallet,
+  HDLegacyP2PKHWallet,
+} from '../../class';
+
+// don't change the order when addign the new version, the oldest user version is on the top, the newest on the bottom
+export enum USER_VERSIONS {
+  BEFORE_NOTIFICATIONS_WERE_ADDED = 'BEFORE_NOTIFICATIONS_WERE_ADDED',
+  AFTER_NOTIFICATIONS_WERE_ADDED = 'AFTER_NOTIFICATIONS_WERE_ADDED',
+}
+
 export const CONST = {
   pinCodeLength: 4,
+  codeLength: 4,
   transactionMinPasswordLength: 8,
   allWallets: 'All wallets',
   receive: 'receive',
@@ -24,8 +42,33 @@ export const CONST = {
   pin: 'pin',
   defaultLanguage: 'en',
   maxAddressLength: 48,
-  tcVersionRequired: 1,
+  tcVersionRequired: 2,
   tcVersion: 'tcVersion',
+  emailCodeErrorMax: 3,
+  walletsDefaultGapLimit: 20,
+  walletsDefaultAddressRange: '20/0',
+  walletsDefaultDerivationPath: 'm/0',
+  userVersion: 'userVersion',
+  newestUserVersion: last(Object.keys(USER_VERSIONS)) as USER_VERSIONS,
+  buttonTimeoutSeconds: 30,
+  notificationCodeInputRegex: /^[A-Za-z0-9]*$/,
+  maxCoinsInput: 21000000,
+};
+
+export const ADDRESSES_TYPES = {
+  p2wsh_p2sh: 'p2wsh-p2sh',
+  p2pkh: 'p2pkh',
+  p2wpkh: 'p2wpkh',
+  p2wpkh_p2sh: 'p2wpkh-p2sh',
+};
+
+export const WALLETS_ADDRESSES_TYPES = {
+  [HDSegwitP2SHArWallet?.type]: ADDRESSES_TYPES.p2wsh_p2sh,
+  [HDSegwitP2SHAirWallet?.type]: ADDRESSES_TYPES.p2wsh_p2sh,
+  [HDLegacyP2PKHWallet?.type]: ADDRESSES_TYPES.p2pkh,
+  [HDSegwitBech32Wallet?.type]: ADDRESSES_TYPES.p2wpkh,
+  [HDSegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
+  [SegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
 };
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
@@ -37,6 +80,7 @@ export interface SocketOptions {
 }
 
 export type SocketCallback = (address: string) => void;
+
 export const ELECTRUM_VAULT_SEED_PREFIXES = {
   SEED_PREFIX: '01', // Standard wallet
   SEED_PREFIX_SW: '100', // Segwit wallet
@@ -44,11 +88,18 @@ export const ELECTRUM_VAULT_SEED_PREFIXES = {
   SEED_PREFIX_2FA_SW: '102', // Two-factor auth, using segwit
 };
 
+export interface Toast {
+  title: string;
+  description: string;
+  duration: number;
+  id: string;
+}
+
 export enum TransactionStatus {
   PENDING = 'PENDING',
   DONE = 'DONE',
   CANCELED = 'CANCELED',
-  'CANCELED-DONE' = 'CANCELED-DONE',
+  CANCELED_DONE = 'CANCELED_DONE',
 }
 
 enum AdditionalTags {
@@ -68,7 +119,6 @@ export enum FlowType {
 }
 
 export enum Route {
-  PasswordNavigator = 'PasswordNavigator',
   Dashboard = 'Dashboard',
   RecoverySend = 'RecoverySend',
   RecoverySeed = 'RecoverySeed',
@@ -77,7 +127,7 @@ export enum Route {
   ImportAuthenticator = 'ImportAuthenticator',
   OptionsAuthenticator = 'OptionsAuthenticator',
   CreateWalletSuccess = 'CreateWalletSuccess',
-  DeleteEntity = 'DeleteEntity',
+  Confirm = 'Confirm',
   CreateAuthenticatorPublicKey = 'CreateAuthenticatorPublicKey',
   CreateAuthenticatorSuccess = 'CreateAuthenticatorSuccess',
   CreateAuthenticator = 'CreateAuthenticator',
@@ -92,7 +142,6 @@ export enum Route {
   CreateWallet = 'CreateWallet',
   ImportWallet = 'ImportWallet',
   ExportWallet = 'ExportWallet',
-  DeleteWallet = 'DeleteWallet',
   ExportWalletXpub = 'ExportWalletXub',
   TransactionDetails = 'TransactionDetails',
   ReceiveCoins = 'ReceiveCoins',
@@ -100,26 +149,38 @@ export enum Route {
   SendCoinsConfirm = 'SendCoinsConfirm',
   EditText = 'EditText',
   AboutUs = 'AboutUs',
+  TermsConditions = 'TermsConditions',
   SelectLanguage = 'SelectLanguage',
-  ReleaseNotes = 'ReleaseNotes',
   ActionSheet = 'ActionSheet',
   SendTransactionDetails = 'SendTransactionDetailsScreen',
   ScanQrCode = 'ScanQrCode',
   ChooseContactList = 'ChooseContactList',
-  MainCardStackNavigator = 'MainCardStackNavigator',
+  MainTabStackNavigator = 'MainTabStackNavigator',
   CurrentPin = 'CurrentPin',
   CreatePin = 'CreatePin',
   ConfirmPin = 'ConfirmPin',
+  AddNotificationEmail = 'AddNotificationEmail',
+  LocalConfirmNotificationCode = 'LocalConfirmNotificationCode',
   CreateTransactionPassword = 'CreateTransactionPassword',
   ConfirmTransactionPassword = 'ConfirmTransactionPassword',
   AdvancedOptions = 'AdvancedOptions',
   UnlockTransaction = 'UnlockTransaction',
   FilterTransactions = 'FilterTransactions',
-  Unlock = 'Unlock',
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
+  Notifications = 'Notifications',
+  ConfirmEmail = 'ConfirmEmail',
+  ChooseWalletsForNotification = 'ChooseWalletsForNotification',
+  UpdateEmailNotification = 'UpdateEmailNotification',
 }
+
+/** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
+export type ImportWalletType = '3-Key Vault' | '2-Key Vault' | 'Standard';
+
+export type WalletType = typeof HDSegwitP2SHAirWallet | typeof HDSegwitP2SHArWallet | StandardWalletType;
+
+export type StandardWalletType = typeof HDSegwitP2SHWallet | typeof SegwitP2SHWallet | typeof HDSegwitBech32Wallet;
 
 export interface Wallet {
   balance: number;
@@ -139,6 +200,7 @@ export interface Wallet {
   address?: string;
   secret: string;
   type: string;
+  hash?: string;
   typeReadable: string;
   unconfirmed_balance: number;
   confirmed_balance: number;
@@ -151,7 +213,6 @@ export interface Wallet {
   isInvoiceGeneratedByWallet?: (clipboard: string) => void;
   getPreferredBalanceUnit: () => string;
   isOutputScriptMine: (script: Uint8Array) => boolean;
-  broadcastTx: (txHex: string) => { code: number; message: string } | string;
   setMnemonic: (mnemonic: string) => void;
   generate: () => void;
   fetchBalance: () => void;
@@ -162,6 +223,19 @@ export interface Wallet {
   getScriptHashes: () => string[];
   getAddressForTransaction: () => string;
   password?: string;
+  pubKeys?: Buffer[];
+  getDerivationPath: () => string;
+}
+
+export interface WalletPayload {
+  name: string;
+  gap_limit: number;
+  address_range: string;
+  derivation_path?: string;
+  xpub: string;
+  address_type: string;
+  instant_public_key?: string;
+  recovery_public_key?: string;
 }
 
 export interface ActionMeta {
@@ -183,6 +257,21 @@ export enum TxType {
   INSTANT = 'INSTANT',
   RECOVERY = 'RECOVERY',
 }
+
+export enum ConfirmAddressFlowType {
+  SUBSCRIBE = 'SUBSCRIBE',
+  UNSUBSCRIBE = 'UNSUBSCRIBE',
+  UPDATE_CURRENT = 'UPDATE_CURRENT',
+  UPDATE_NEW = 'UPDATE_NEW',
+}
+
+export interface InfoContainerContent {
+  title?: string;
+  description?: string;
+  onInit?: () => void;
+  onCodeConfirm?: () => void;
+}
+
 export interface Transaction {
   hash: string;
   txid: string;
@@ -214,7 +303,7 @@ export interface EnhancedTransaction extends Transaction {
   walletPreferredBalanceUnit: string;
   walletId: string;
   walletLabel: string;
-  walletTypeReadable: string;
+  walletTypeReadable?: string;
 }
 
 export interface AppSettings {
@@ -281,38 +370,52 @@ export type MainTabNavigatorParams = {
   [Route.Dashboard]: undefined;
   [Route.AuthenticatorList]: undefined;
   [Route.ContactList]: undefined;
-  [Route.Settings]: undefined;
+  [Route.Settings]: { screen: keyof RootStackParams };
 };
 
+export interface AddNotificationEmailParams {
+  title: string;
+  onSuccess: () => void;
+  wallet: Wallet;
+  isBackArrow: boolean;
+  description: string;
+  onSkipSuccess?: () => void;
+  inputAutofocus: boolean;
+  additionalContent?: React.ReactNode;
+}
+
 export type RootStackParams = {
-  [Route.MainCardStackNavigator]: undefined;
+  [Route.MainTabStackNavigator]: { screen: keyof MainTabNavigatorParams };
   [Route.ActionSheet]: { wallets: Wallet[]; selectedIndex: number; onPress: (index: number) => void };
   [Route.UnlockTransaction]: { onSuccess: () => void };
-  [Route.PasswordNavigator]: undefined;
   [Route.EditText]: {
     title: string;
     onSave: (value: string) => void;
     label: string;
     header?: React.ReactNode;
     value?: string;
+    inputTestID?: string;
+    submitButtonTestID?: string;
+    validateName?: boolean;
     validate?: (value: string) => string | undefined;
     validateOnSave?: (value: string) => void;
     keyboardType?: KeyboardType;
     maxLength?: number;
     emptyValueAllowed?: boolean;
+    checkZero?: (value: string) => string | undefined;
   };
   [Route.Message]: {
     title: string;
     source: FastImageSource;
     description: string;
+    testID?: string;
     buttonProps?: ButtonProps;
-    imageStyle?: StyleProp<ViewStyle>;
+    imageStyle?: StyleProp<ImageStyle>;
     asyncTask?: () => void;
   };
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
   [Route.DeleteContact]: { contact?: Contact };
-  [Route.MainCardStackNavigator]: undefined;
   [Route.SendTransactionDetails]: {
     fee: number;
     recipients: any;
@@ -322,9 +425,6 @@ export type RootStackParams = {
     size: number;
     feeSatoshi: number;
   };
-};
-
-export type PasswordNavigatorParams = {
   [Route.CreatePin]: {
     flowType: string;
   };
@@ -332,26 +432,30 @@ export type PasswordNavigatorParams = {
     flowType: string;
     pin: string;
   };
-  [Route.Message]: {
-    title: string;
-    source: FastImageSource;
-    description: string;
-    buttonProps?: ButtonProps;
-    imageStyle?: StyleProp<ViewStyle>;
-    asyncTask?: () => void;
-  };
   [Route.CreateTransactionPassword]: undefined;
   [Route.ConfirmTransactionPassword]: { setPassword: string };
-};
-
-export type MainCardStackNavigatorParams = {
-  [Route.Dashboard]: { activeWallet?: Wallet } | undefined;
-  [Route.MainCardStackNavigator]: undefined;
+  [Route.LocalConfirmNotificationCode]: {
+    children: React.ReactNode;
+    onSuccess: () => void;
+    title: string;
+    email: string;
+  };
+  [Route.ChooseWalletsForNotification]: {
+    flowType: ConfirmAddressFlowType;
+    subtitle: string;
+    description: string;
+    email: string;
+    wallet: Wallet;
+    onSuccess: () => void;
+    onSkip: () => void;
+    wallets: Wallet[];
+  };
+  [Route.AddNotificationEmail]: AddNotificationEmailParams;
   [Route.CreateWallet]: undefined;
-  [Route.ImportWallet]: { walletType: string };
+  [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
   [Route.WalletDetails]: { id: string };
-  [Route.CreateContact]: { address?: string };
+  [Route.CreateContact]: { address?: string } | undefined;
   [Route.ContactDetails]: { contact: Contact };
   [Route.ContactQRCode]: { contact: Contact };
   [Route.TransactionDetails]: { transaction: EnhancedTransaction };
@@ -387,13 +491,10 @@ export type MainCardStackNavigatorParams = {
     onContactPress?: (data: string) => void;
     title?: string;
   };
-  [Route.Settings]: undefined;
   [Route.SelectLanguage]: undefined;
   [Route.AboutUs]: undefined;
+  [Route.TermsConditions]: { language: string };
   [Route.AdvancedOptions]: undefined;
-  [Route.CreatePin]: {
-    flowType: string;
-  };
   [Route.CurrentPin]: undefined;
   [Route.ConfirmPin]: {
     flowType: string;
@@ -401,13 +502,19 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.FilterTransactions]: { onFilterPress: () => void };
   [Route.CreateAuthenticator]: undefined;
-  [Route.AuthenticatorList]: undefined;
   [Route.CreateAuthenticatorPublicKey]: { id: string };
   [Route.CreateAuthenticatorSuccess]: { id: string };
-  [Route.DeleteEntity]: { onConfirm: () => void; name: string | undefined; subtitle: string; title: string };
+  [Route.Confirm]: {
+    onConfirm: () => void;
+    title: string;
+    onBack?: () => void;
+    children: React.ReactNode;
+    isBackArrow?: boolean;
+    gestureEnabled?: boolean;
+  };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
-  [Route.CreateWalletSuccess]: { secret: string };
+  [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: () => void };
   [Route.IntegrateKey]: {
     onBarCodeScan: (text: string) => void;
     title: string;
@@ -418,11 +525,29 @@ export type MainCardStackNavigatorParams = {
   };
   [Route.ImportWalletChooseType]: undefined;
   [Route.ChunkedQrCode]: {
-    chunkNo: number;
-    chunksQuantity: number;
+    chunkNo: string;
+    chunksQuantity: string;
     onScanned: () => void;
   };
+  [Route.Notifications]: {
+    onBackArrow: () => void;
+    wallet: Wallet;
+  };
+  [Route.ConfirmEmail]: {
+    email: string;
+    newAddress?: string;
+    wallets?: Wallet[];
+    flowType: ConfirmAddressFlowType;
+    onBack?: () => void;
+    onSuccess: (arg?: any) => void;
+    onResend: () => void;
+  };
+  [Route.UpdateEmailNotification]: {
+    subscribedWallets: Wallet[];
+    wallet: Wallet;
+  };
 };
+
 export type DateType = Date | Dayjs;
 export interface Authenticator {
   keyPair: ECPair.ECPairInterface | null;
@@ -436,7 +561,6 @@ export interface Authenticator {
   createdAt: Dayjs;
 }
 
-export interface ActionMeta {
-  onSuccess?: Function;
-  onFailure?: Function;
-}
+export type GlobalParams = RootStackParams & MainTabNavigatorParams;
+
+export type MasterPublicKey = 'xpub' | 'ypub' | 'Ypub' | 'Zpub' | 'zpub';

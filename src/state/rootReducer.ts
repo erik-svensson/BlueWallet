@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { Filters } from 'app/consts';
+import { createPersistReducer } from 'app/helpers/reduxPersist';
 
 import { appSettingsReducer, AppSettingsState } from './appSettings/reducer';
 import { AuthenticationState, authenticationReducer } from './authentication/reducer';
@@ -8,7 +9,9 @@ import { AuthenticatorsState, authenticatorsReducer } from './authenticators/red
 import { contactsReducer, ContactsState } from './contacts/reducer';
 import { ElectrumXState, electrumXReducer } from './electrumX/reducer';
 import { filtersReducer } from './filters/reducer';
+import { NotificationState, notificationReducer, NOTIFICATIONS_REDUCER_NAME } from './notifications/reducer';
 import { TimeCounterState, timeCounterReducer } from './timeCounter/reducer';
+import { ToastMessagesState, toastMessageReducer } from './toastMessages/reducer';
 import { transactionsNotesReducer, TransactionsNotesState } from './transactionsNotes/reducer';
 import { WalletsState, walletsReducer } from './wallets/reducer';
 
@@ -23,9 +26,24 @@ export interface ApplicationState {
   authenticators: AuthenticatorsState;
   authentication: AuthenticationState;
   filters: Filters;
+  toastMessages: ToastMessagesState;
+  notifications: NotificationState;
 }
 
-export const rootReducer = combineReducers({
+const persistConfig = {
+  key: 'root',
+  blacklist: [
+    'wallets',
+    'authenticators',
+    'authentication',
+    'electrumX',
+    'filters',
+    'toastMessages',
+    NOTIFICATIONS_REDUCER_NAME,
+  ],
+};
+
+const rootReducer = combineReducers({
   contacts: contactsReducer,
   transactions: transactionsNotesReducer,
   appSettings: appSettingsReducer,
@@ -35,4 +53,8 @@ export const rootReducer = combineReducers({
   authenticators: authenticatorsReducer,
   authentication: authenticationReducer,
   filters: filtersReducer,
+  toastMessages: toastMessageReducer,
+  [NOTIFICATIONS_REDUCER_NAME]: notificationReducer,
 });
+
+export const persistedReducer = createPersistReducer(rootReducer, persistConfig);

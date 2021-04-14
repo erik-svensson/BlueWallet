@@ -1,11 +1,11 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ListEmptyState, SearchBar, ScreenTemplate } from 'app/components';
-import { Route, Contact, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, Contact, MainTabNavigatorParams, RootStackParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 
 import { ContactList } from './ContactList';
@@ -14,8 +14,11 @@ import { ContactListHeader } from './ContactListHeader';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ChooseContactList>;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ChooseContactList>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
+    StackNavigationProp<RootStackParams, Route.ChooseContactList>
+  >;
+  route: RouteProp<RootStackParams, Route.ChooseContactList>;
   contacts: Contact[];
 }
 
@@ -35,11 +38,11 @@ export class ContactListScreen extends PureComponent<Props, State> {
     query: '',
   };
 
-  // @ts-ignore - TODO: fix it later
   navigateToAddContact = () => this.props.navigation.navigate(Route.CreateContact);
 
   navigateToContactDetails = (contact: Contact) => {
     const { navigation, route } = this.props;
+
     if (route.params?.onContactPress) {
       route.params?.onContactPress(contact.address);
       return navigation.goBack();
@@ -62,6 +65,7 @@ export class ContactListScreen extends PureComponent<Props, State> {
       contacts,
       route: { params },
     } = this.props;
+
     return (
       <ScreenTemplate
         header={
@@ -70,7 +74,7 @@ export class ContactListScreen extends PureComponent<Props, State> {
             onBackArrowPress={params?.onContactPress && this.goBack}
             title={params?.title}
           >
-            <SearchBar query={this.state.query} setQuery={this.setQuery} />
+            <SearchBar testID="contacts-searchbar" query={this.state.query} setQuery={this.setQuery} />
           </ContactListHeader>
         }
       >
@@ -82,7 +86,11 @@ export class ContactListScreen extends PureComponent<Props, State> {
             navigateToContactDetails={this.navigateToContactDetails}
           />
         ) : (
-          <ListEmptyState variant={ListEmptyState.Variant.ContactList} onPress={this.navigateToAddContact} />
+          <ListEmptyState
+            testID="no-contacts-icon"
+            variant={ListEmptyState.Variant.ContactList}
+            onPress={this.navigateToAddContact}
+          />
         )}
       </ScreenTemplate>
     );

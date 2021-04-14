@@ -1,32 +1,41 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, BackHandler, NativeEventSubscription } from 'react-native';
 
 import { ScreenTemplate, FlatButton, Header, Button } from 'app/components';
-import { Route, MainTabNavigatorParams, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, RootStackParams } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParams, Route.AuthenticatorList>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.ChunkedQrCode>
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ChunkedQrCode>;
+  navigation: StackNavigationProp<RootStackParams, Route.ChunkedQrCode>;
+  route: RouteProp<RootStackParams, Route.ChunkedQrCode>;
 }
 
 export class ChunkedQrCode extends Component<Props> {
-  goBack = () => this.props.navigation.navigate(Route.AuthenticatorList);
+  backHandler?: NativeEventSubscription;
+
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
+
+    this.props.navigation.setOptions({
+      gestureEnabled: false,
+    });
+  }
+
+  componentWillUnmount() {
+    this.backHandler && this.backHandler.remove();
+  }
+
+  goBack = () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.AuthenticatorList });
   render() {
     const { chunkNo, chunksQuantity, onScanned } = this.props.route.params;
 
     return (
       <ScreenTemplate
-        header={<Header title={i18n._.scan} isBackArrow onBackArrow={this.goBack} />}
-        // @ts-ignore
-        navigation={this.props.navigation}
+        header={<Header title={i18n._.scan} />}
         footer={
           <>
             <Button title={i18n.authenticators.import.scanNext} onPress={onScanned} />

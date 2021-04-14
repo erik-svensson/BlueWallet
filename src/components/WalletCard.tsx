@@ -26,14 +26,20 @@ interface Props {
 export class WalletCard extends React.Component<Props> {
   goToWalletDetails = () => {
     const { wallet } = this.props;
+
     NavigationService.navigate(Route.WalletDetails, { id: wallet.id });
   };
 
   render() {
     const { showEditButton, wallet, containerStyle } = this.props;
     const isAllWallets = wallet.label !== CONST.allWallets;
+
     return (
-      <GradientView style={[styles.itemContainer, containerStyle]} variant={GradientView.Variant.Primary}>
+      <GradientView
+        testID={isAllWallets ? `wallet-${wallet.getLabel()}-card` : `wallet-${CONST.allWallets}-card`}
+        style={[styles.itemContainer, containerStyle]}
+        variant={GradientView.Variant.Primary}
+      >
         <>
           <Image source={images.coinLogoInCircle} style={styles.iconInCircle} resizeMode="contain" />
           <View style={styles.cardContent}>
@@ -42,7 +48,11 @@ export class WalletCard extends React.Component<Props> {
                 {isAllWallets ? wallet.getLabel() : `${i18n.wallets.dashboard.allWallets}`}
               </EllipsisText>
               {showEditButton && isAllWallets && (
-                <StyledText title={i18n.wallets.details.details} onPress={this.goToWalletDetails} />
+                <StyledText
+                  testID={`show-${wallet.getLabel()}-details-button`}
+                  title={i18n.wallets.details.details}
+                  onPress={this.goToWalletDetails}
+                />
               )}
             </View>
 

@@ -4,14 +4,14 @@ import { Text, StyleSheet, View, TouchableOpacity, BackHandler, NativeEventSubsc
 
 import { icons } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
-import { Route, CONST, PasswordNavigatorParams } from 'app/consts';
+import { Route, CONST, RootStackParams } from 'app/consts';
 import { noop } from 'app/helpers/helpers';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<PasswordNavigatorParams, Route.CreateTransactionPassword>;
+  navigation: StackNavigationProp<RootStackParams, Route.CreateTransactionPassword>;
 }
 
 interface State {
@@ -58,7 +58,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
     this.inputRef.current?.focus();
   };
 
-  changeVisability = () => {
+  changeVisibility = () => {
     this.setState({
       isVisible: !this.state.isVisible,
     });
@@ -66,6 +66,7 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
 
   render() {
     const { isVisible, password } = this.state;
+
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps="always"
@@ -77,15 +78,14 @@ export class CreateTransactionPassword extends PureComponent<Props, State> {
             disabled={password.length < CONST.transactionMinPasswordLength}
           />
         }
-        // @ts-ignore
-        header={<Header navigation={this.props.navigation} title={i18n.onboarding.onboarding} />}
+        header={<Header title={i18n.onboarding.onboarding} />}
       >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.onboarding.createPassword}</Text>
           <Text style={styles.pinDescription}>{i18n.onboarding.createPasswordDescription}</Text>
         </View>
         <View style={styles.inputItemContainer}>
-          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisability}>
+          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisibility}>
             <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem

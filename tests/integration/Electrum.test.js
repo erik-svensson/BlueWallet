@@ -1,4 +1,4 @@
-import config from '../../config';
+import config from '../../src/config';
 
 /* global it, describe, afterAll, beforeAll, jasmine */
 const assert = require('assert');
@@ -58,6 +58,7 @@ describe('Electrum', () => {
       const start = new Date().getTime();
       let balance = await mainClient.blockchainScripthash_getBalance(reversedHash.toString('hex'));
       const end = new Date().getTime();
+
       console.warn(peer.host, 'took', (end - start) / 1000, 'seconds to fetch balance');
       assert.ok(balance.confirmed > 0);
 
@@ -77,6 +78,7 @@ describe('Electrum', () => {
   it('BlueElectrum can do getBalanceByAddress()', async function() {
     const address = 'RAvAthYyPGVEUMWRHBwod63XSKYcx6aF28';
     const balance = await BlueElectrum.getBalanceByAddress(address);
+
     assert.strictEqual(balance.confirmed, 52500000000);
     assert.strictEqual(balance.unconfirmed, 0);
     assert.strictEqual(balance.addr, address);
@@ -84,6 +86,7 @@ describe('Electrum', () => {
 
   xit('BlueElectrum can do getTransactionsByAddress()', async function() {
     const txs = await BlueElectrum.getTransactionsByAddress('royale1q3c4dwjwr4k9f40tdy373zy4mmuwd52p95ell7u');
+
     assert.strictEqual(txs.length, 1);
     assert.strictEqual(txs[0].tx_hash, '99a385c93ccca11c10a61517c7a61c35c3c4b81c3e02a8deadc277d4b66eb47a');
     assert.strictEqual(txs[0].height, 24100);
@@ -91,6 +94,7 @@ describe('Electrum', () => {
 
   xit('BlueElectrum can do getTransactionsFullByAddress()', async function() {
     const txs = await BlueElectrum.getTransactionsFullByAddress('royale1q3c4dwjwr4k9f40tdy373zy4mmuwd52p95ell7u');
+
     for (const tx of txs) {
       assert.ok(tx.txid);
       assert.ok(tx.confirmations);
@@ -136,6 +140,7 @@ describe('Electrum', () => {
       ],
       3,
     );
+
     assert.ok(Object.keys(utxos).length >= 1248);
     assert.ok(utxos[0].value > 0);
   });
@@ -202,6 +207,7 @@ describe('Electrum', () => {
     const txdatas = await BlueElectrum.multiGetTransactionByTxid([
       '9a3d2f1e7c0cf4d9d5f7576ea793a0add94dc71891e31d9be18fca5a78629480',
     ]);
+
     assert.ok(txdatas['9a3d2f1e7c0cf4d9d5f7576ea793a0add94dc71891e31d9be18fca5a78629480']);
   });
 

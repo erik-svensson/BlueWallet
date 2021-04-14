@@ -1,4 +1,4 @@
-import config from '../config';
+import config from '../src/config';
 import { addressToScriptHash } from '../utils/bitcoin';
 import { LegacyWallet } from './legacy-wallet';
 
@@ -23,8 +23,10 @@ export class SegwitBech32Wallet extends LegacyWallet {
   getAddress() {
     if (this._address) return this._address;
     let address;
+
     try {
       const keyPair = bitcoin.ECPair.fromWIF(this.secret, config.network);
+
       address = bitcoin.payments.p2wpkh({
         pubkey: keyPair.publicKey,
         network: config.network,
@@ -39,6 +41,7 @@ export class SegwitBech32Wallet extends LegacyWallet {
 
   static witnessToAddress(witness) {
     const pubKey = Buffer.from(witness, 'hex');
+
     return bitcoin.payments.p2wpkh({
       pubkey: pubKey,
       network: config.network,
@@ -54,6 +57,7 @@ export class SegwitBech32Wallet extends LegacyWallet {
   static scriptPubKeyToAddress(scriptPubKey) {
     const scriptPubKey2 = Buffer.from(scriptPubKey, 'hex');
     let ret;
+
     try {
       ret = bitcoin.payments.p2wpkh({
         output: scriptPubKey2,

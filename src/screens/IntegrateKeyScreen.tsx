@@ -1,23 +1,17 @@
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Linking } from 'react-native';
 
 import { ScreenTemplate, Text, Header, Button } from 'app/components';
-import { Route, CONST, MainTabNavigatorParams, RootStackParams, MainCardStackNavigatorParams } from 'app/consts';
+import { Route, CONST, RootStackParams } from 'app/consts';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
-    CompositeNavigationProp<
-      StackNavigationProp<RootStackParams, Route.DeleteContact>,
-      StackNavigationProp<MainCardStackNavigatorParams, Route.IntegrateKey>
-    >
-  >;
-  route: RouteProp<MainCardStackNavigatorParams, Route.IntegrateKey>;
+  navigation: StackNavigationProp<RootStackParams, Route.IntegrateKey>;
+  route: RouteProp<RootStackParams, Route.IntegrateKey>;
 }
 export class IntegrateKeyScreen extends React.PureComponent<Props> {
   scanKey = () => {
@@ -43,7 +37,6 @@ export class IntegrateKeyScreen extends React.PureComponent<Props> {
 
   render() {
     const {
-      navigation,
       route: {
         params: { title, description, onBackArrow, withLink = true, headerTitle },
       },
@@ -51,9 +44,10 @@ export class IntegrateKeyScreen extends React.PureComponent<Props> {
 
     return (
       <ScreenTemplate
-        footer={<Button onPress={this.scanKey} title={i18n.wallets.publicKey.scan} />}
-        // @ts-ignore
-        header={<Header navigation={navigation} onBackArrow={onBackArrow} isBackArrow title={headerTitle} />}
+        footer={
+          <Button testID="scan-public-key-code-button" onPress={this.scanKey} title={i18n.wallets.publicKey.scan} />
+        }
+        header={<Header onBackArrow={onBackArrow} isBackArrow title={headerTitle} />}
       >
         <Text style={styles.subtitle}>{title}</Text>
         <Text style={styles.description}>{description}</Text>

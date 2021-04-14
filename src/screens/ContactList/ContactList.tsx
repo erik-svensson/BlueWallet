@@ -17,10 +17,12 @@ interface Props {
 export class ContactList extends React.PureComponent<Props> {
   get sections(): ReadonlyArray<SectionListData<Contact>> {
     const sections = {};
+
     this.props.contacts
       .sort((a, b) => a.name.localeCompare(b.name))
       .forEach(contact => {
         const firstLetter = contact.name.charAt(0);
+
         if (sections[firstLetter]) {
           sections[firstLetter].push(contact);
         } else {
@@ -34,7 +36,11 @@ export class ContactList extends React.PureComponent<Props> {
   }
 
   renderItem = ({ item }: { item: Contact }) => (
-    <TouchableOpacity style={styles.contact} onPress={() => this.props.navigateToContactDetails(item)}>
+    <TouchableOpacity
+      testID={`contact-${item.name}`}
+      style={styles.contact}
+      onPress={() => this.props.navigateToContactDetails(item)}
+    >
       <Text style={styles.contactName}>{item.name}</Text>
     </TouchableOpacity>
   );
@@ -44,7 +50,7 @@ export class ContactList extends React.PureComponent<Props> {
   );
 
   renderListEmpty = () => (
-    <View style={styles.listEmptyContainer}>
+    <View testID="no-contacts-found-icon" style={styles.listEmptyContainer}>
       <Image source={images.addressBookNotFound} style={styles.listEmptyImage} />
       <Text style={styles.listEmptyText}>{`${i18n.contactList.noResults}"${this.props.query}"`}</Text>
     </View>

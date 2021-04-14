@@ -16,16 +16,25 @@ const renderArrowIcon = (value: number) => (
   <Image source={value > 0 ? icons.arrowRight : icons.arrowLeft} style={styles.arrow} resizeMode="contain" />
 );
 
-const renderCofirmations = (txType: TxType, confirmations: number) =>
+const renderConfirmations = (txType: TxType, confirmations: number) =>
   txType !== TxType.ALERT_RECOVERED && (
-    <Text style={styles.label}>{`${i18n.transactions.list.conf}: ${getConfirmationsText(txType, confirmations)}`}</Text>
+    <Text testID={`transaction-${confirmations}-text`} style={styles.label}>{`${
+      i18n.transactions.list.conf
+    }: ${getConfirmationsText(txType, confirmations)}`}</Text>
   );
 
-export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress: (item: any) => void }) => {
+interface Props {
+  item: Transaction;
+  onPress: (item: any) => void;
+  testID?: string;
+}
+
+export const TransactionItem = ({ item, onPress, testID }: Props) => {
   const isMinusValue = item.valueWithoutFee < 0;
 
   return (
     <TouchableOpacity
+      testID={testID}
       style={[styles.container, item.isRecoveredAlertToMe ? styles.opacity : null]}
       onPress={() => onPress(item)}
     >
@@ -38,7 +47,7 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
       <Text style={styles.label}>
         {item.time ? dayjs(item.received).format('LT') : i18n.transactions.details.timePending}
       </Text>
-      {renderCofirmations(item.tx_type, item.confirmations)}
+      {renderConfirmations(item.tx_type, item.confirmations)}
       <View style={styles.rowWrapper}>
         <TransactionLabelStatus status={item.status} />
         <Text
@@ -48,7 +57,11 @@ export const TransactionItem = ({ item, onPress }: { item: Transaction; onPress:
             item.toExternalAddress ? styles.label : null,
           ]}
         >
-          {formatToBtcv(satoshiToBtc(item.valueWithoutFee).toNumber())}
+          {formatToBtcv(
+            satoshiToBtc(item.valueWithoutFee)
+              .toFixed(8)
+              .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1'),
+          )}
         </Text>
       </View>
       {item.blockedAmount !== undefined && (

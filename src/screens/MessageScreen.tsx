@@ -11,10 +11,11 @@ interface Props {
 }
 
 export const MessageScreen = (props: Props) => {
-  const { title, source, description, buttonProps, imageStyle, asyncTask } = props.route.params;
+  const { title, source, description, buttonProps, imageStyle, asyncTask, testID } = props.route.params;
 
   useEffect(() => {
     const onBackPress = () => true;
+
     BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
     if (asyncTask) {
@@ -22,6 +23,7 @@ export const MessageScreen = (props: Props) => {
         await asyncTask();
       };
       // hack for creating message screen immediately
+
       setTimeout(() => asynchrousTask(), 0);
     }
 
@@ -34,9 +36,9 @@ export const MessageScreen = (props: Props) => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <Text style={styles.title}>{title}</Text>
-      <Image source={source} style={[styles.image, imageStyle]} resizeMode="contain" />
+      <Image testID={testID} source={source} style={[styles.image, imageStyle]} resizeMode="contain" />
       <Text style={styles.description}>{description}</Text>
-      {buttonProps && <Button testID="close-button" {...buttonProps} />}
+      {buttonProps && <Button testID="message-close-button" {...buttonProps} />}
     </View>
   );
 };

@@ -20,14 +20,26 @@
       "jsx": true
     }
   },
-  "plugins": ["@typescript-eslint", "react", "react-native", "react-hooks", "import", "prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-native",
+    "react-hooks",
+    "import",
+    "prettier"
+  ],
   "settings": {
     "react": {
       "version": "detect"
     },
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
       }
     }
   },
@@ -47,6 +59,7 @@
     "no-async-promise-executor": "warn",
     "no-case-declarations": "off",
     "no-prototype-builtins": "off",
+    "newline-after-var": "warn",
     "no-empty": [
       "error",
       {
@@ -57,7 +70,9 @@
     "no-shadow": [
       "off",
       {
-        "allow": ["done"]
+        "allow": [
+          "done"
+        ]
       }
     ],
     "@typescript-eslint/ban-types": [
@@ -76,7 +91,7 @@
     "prettier/prettier": "error",
     "prefer-const": "warn",
     "react/display-name": "off",
-    "react/prop-types": "warn",
+    "react/prop-types": "off",
     "react/no-unescaped-entities": "warn",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
@@ -90,8 +105,17 @@
       "error",
       {
         "groups": [
-          ["builtin", "external"],
-          ["internal", "parent", "sibling", "index", "unknown"]
+          [
+            "builtin",
+            "external"
+          ],
+          [
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+            "unknown"
+          ]
         ],
         "pathGroups": [
           {
@@ -100,7 +124,9 @@
             "position": "before"
           }
         ],
-        "pathGroupsExcludedImportTypes": ["builtin"],
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ],
         "alphabetize": {
           "order": "asc"
         },

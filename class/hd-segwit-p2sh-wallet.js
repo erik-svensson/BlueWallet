@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 
-import config from '../config';
 import signer from '../models/signer';
+import config from '../src/config';
 import { AbstractHDSegwitP2SHWallet } from './abstract-hd-segwit-p2sh-wallet';
 
 const bitcoin = require('bitcoinjs-lib');
@@ -18,6 +18,7 @@ export class HDSegwitP2SHWallet extends AbstractHDSegwitP2SHWallet {
       redeem: bitcoin.payments.p2wpkh({ pubkey: hdNode.publicKey, network: config.network }),
       network: config.network,
     });
+
     return address;
   }
 
@@ -31,6 +32,7 @@ export class HDSegwitP2SHWallet extends AbstractHDSegwitP2SHWallet {
    */
   createTx(utxos, amount, fee, address) {
     const newUtxos = cloneDeep(utxos);
+
     for (const utxo of newUtxos) {
       utxo.wif = this._getWifForAddress(utxo.address);
     }

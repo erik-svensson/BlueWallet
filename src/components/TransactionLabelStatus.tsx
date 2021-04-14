@@ -14,8 +14,9 @@ export const TransactionLabelStatus = ({ status }: { status: TransactionStatus }
     [TransactionStatus.PENDING]: i18n.transactions.label.pending,
     [TransactionStatus.CANCELED]: i18n.transactions.label.canceled,
     [TransactionStatus.DONE]: i18n.transactions.label.done,
-    [TransactionStatus['CANCELED-DONE']]: i18n.transactions.label.canceledDone,
+    [TransactionStatus.CANCELED_DONE]: i18n.transactions.label.canceledDone,
   };
+
   return readableTransactionStatus[status] ? (
     <Label labelStyle={styles[status]}>{readableTransactionStatus[status]}</Label>
   ) : null;

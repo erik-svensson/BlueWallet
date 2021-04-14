@@ -59,11 +59,13 @@ class UnlockScreen extends PureComponent<Props, State> {
 
   unlockWithBiometrics = async () => {
     const { setIsAuthenticated, isBiometricsEnabled } = this.props;
+
     if (!isBiometricsEnabled) {
       return;
     }
     if (!!BiometricService.biometryType) {
       const result = await BiometricService.unlockWithBiometrics();
+
       if (result) {
         setIsAuthenticated(true);
       }
@@ -100,6 +102,7 @@ class UnlockScreen extends PureComponent<Props, State> {
 
   updatePin = (pin: string) => {
     const { setFailedAttempts, setFailedAttemptStep, authenticate } = this.props;
+
     if (this.state.pin.length < CONST.pinCodeLength) {
       this.setState({ pin: this.state.pin + pin }, async () => {
         if (this.state.pin.length === CONST.pinCodeLength) {
@@ -111,6 +114,7 @@ class UnlockScreen extends PureComponent<Props, State> {
             onFailure: () => {
               const increasedFailedAttemptStep = this.props.timeCounter.failedAttemptStep + 1;
               const failedTimesError = this.handleFailedAttempt(increasedFailedAttemptStep);
+
               this.setState({
                 error: i18n.onboarding.pinDoesNotMatch + failedTimesError,
                 pin: '',
@@ -138,6 +142,7 @@ class UnlockScreen extends PureComponent<Props, State> {
 
   render() {
     const { error, pin } = this.state;
+
     if (this.isTimeCounterVisible()) {
       return (
         <View style={styles.container}>
@@ -150,7 +155,7 @@ class UnlockScreen extends PureComponent<Props, State> {
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
         <View style={styles.imageContainer}>
-          <Image source={images.portraitLogo} style={styles.logo} resizeMode="contain" />
+          <Image testID="unlock-screen-logo" source={images.portraitLogo} style={styles.logo} resizeMode="contain" />
         </View>
         <PinView value={pin} length={CONST.pinCodeLength} />
         <Text style={styles.errorText}>{error}</Text>

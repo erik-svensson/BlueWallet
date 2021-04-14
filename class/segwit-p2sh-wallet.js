@@ -1,4 +1,4 @@
-import config from '../config';
+import config from '../src/config';
 import { addressToScriptHash } from '../utils/bitcoin';
 import { LegacyWallet } from './legacy-wallet';
 
@@ -18,6 +18,7 @@ function pubkeyToP2shSegwitAddress(pubkey) {
     redeem: bitcoin.payments.p2wpkh({ pubkey, network: config.network }),
     network: config.network,
   });
+
   return address;
 }
 
@@ -31,6 +32,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
 
   static witnessToAddress(witness) {
     const pubKey = Buffer.from(witness, 'hex');
+
     return pubkeyToP2shSegwitAddress(pubKey);
   }
 
@@ -43,6 +45,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
   static scriptPubKeyToAddress(scriptPubKey) {
     const scriptPubKey2 = Buffer.from(scriptPubKey, 'hex');
     let ret;
+
     try {
       ret = bitcoin.payments.p2sh({
         output: scriptPubKey2,
@@ -70,9 +73,11 @@ export class SegwitP2SHWallet extends LegacyWallet {
   getAddress() {
     if (this._address) return this._address;
     let address;
+
     try {
       const keyPair = bitcoin.ECPair.fromWIF(this.secret, config.network);
       const pubKey = keyPair.publicKey;
+
       if (!keyPair.compressed) {
         return false;
       }
@@ -105,6 +110,7 @@ export class SegwitP2SHWallet extends LegacyWallet {
 
     const amountPlusFee = parseFloat(new BigNumber(amount).plus(fee).toString(10));
     // to compensate that module substracts fee from amount
+
     return signer.createSegwitTransaction(
       utxos,
       address,

@@ -1,4 +1,4 @@
-import { ActionMeta } from 'app/consts';
+import { ActionMeta, USER_VERSIONS } from 'app/consts';
 
 export enum AuthenticationAction {
   Authenticate = 'Authenticate',
@@ -17,6 +17,11 @@ export enum AuthenticationAction {
   CreateTxPasswordFailure = 'CreateTxPasswordFailure',
   SetIsAuthenticated = 'SetIsAuthenticated',
   SetIsTcAccepted = 'SetIsTcAccepted',
+  CheckUserV = 'SetIsAuthenticated',
+  SetUserVersion = 'SetUserVersion',
+  SetUserVersionSuccess = 'SetUserVersionSuccess',
+  SetUserVersionFailure = 'SetUserVersionFailure',
+  CheckUserVersion = 'CheckUserVersion',
 }
 
 interface CheckCredentials {
@@ -39,6 +44,29 @@ export interface AuthenticateSuccessAction {
 export interface AuthenticateFailureAction {
   type: AuthenticationAction.AuthenticateFailure;
   error: string;
+}
+
+export interface SetUserVersionAction {
+  type: AuthenticationAction.SetUserVersion;
+  payload: {
+    userVersion: USER_VERSIONS;
+  };
+}
+
+export interface SetUserVersionSuccessAction {
+  type: AuthenticationAction.SetUserVersionSuccess;
+  payload: {
+    userVersion: USER_VERSIONS;
+  };
+}
+
+export interface SetUserVersionFailureAction {
+  type: AuthenticationAction.SetUserVersionFailure;
+  error: string;
+}
+
+export interface CheckUserVersionAction {
+  type: AuthenticationAction.CheckUserVersion;
 }
 
 export interface CheckTcAction {
@@ -125,7 +153,11 @@ export type AuthenticationActionType =
   | CreateTxPasswordSuccessAction
   | CreateTxPasswordFailureAction
   | SetIsTcAcceptedAction
-  | SetIsAuthenticatedAction;
+  | SetIsAuthenticatedAction
+  | SetUserVersionAction
+  | SetUserVersionSuccessAction
+  | SetUserVersionFailureAction
+  | CheckUserVersionAction;
 
 export const authenticate = (pin: string, meta?: ActionMeta): AuthenticateAction => ({
   type: AuthenticationAction.Authenticate,
@@ -203,4 +235,28 @@ export const setIsAuthenticated = (isAuthenticated: boolean): SetIsAuthenticated
 export const setIsTcAccepted = (isTcAccepted: boolean): SetIsTcAcceptedAction => ({
   type: AuthenticationAction.SetIsTcAccepted,
   isTcAccepted,
+});
+
+export const checkUserVersion = (): CheckUserVersionAction => ({
+  type: AuthenticationAction.CheckUserVersion,
+});
+
+export type SetUserVersionActionCreator = (userVersion: USER_VERSIONS) => SetUserVersionAction;
+export const setUserVersion: SetUserVersionActionCreator = userVersion => ({
+  type: AuthenticationAction.SetUserVersion,
+  payload: {
+    userVersion,
+  },
+});
+
+export const setUserVersionSuccess = (userVersion: USER_VERSIONS): SetUserVersionSuccessAction => ({
+  type: AuthenticationAction.SetUserVersionSuccess,
+  payload: {
+    userVersion,
+  },
+});
+
+export const setUserVersionFailure = (error: string): SetUserVersionFailureAction => ({
+  type: AuthenticationAction.SetUserVersionFailure,
+  error,
 });

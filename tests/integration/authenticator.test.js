@@ -1,8 +1,9 @@
 import { Authenticator } from '../../class';
-import config from '../../config';
+import config from '../../src/config';
 
 const assert = require('assert');
 const bitcoinjs = require('bitcoinjs-lib');
+
 global.crypto = require('crypto'); // shall be used by tests under nodejs CLI, but not in RN environment
 
 global.net = require('net'); // needed by Electrum client. For RN it is proviced in shim.js
@@ -28,14 +29,17 @@ describe('authenticator', () => {
 
     beforeAll(() => {
       const arPrivateKey = Buffer.from('79d6d5075b87e759c955d413bff5065f0156b275ece1e500e37bf36f6a186543', 'hex');
+
       arAuthenticator.keyPair = bitcoinjs.ECPair.fromPrivateKey(arPrivateKey, {
         network: config.network,
       });
       const airPrivateKey = Buffer.from('0cc52b3faa941f13d3ea4b2fea29a2259b58ffca1ddf3069ab2d21d7f793a960', 'hex');
+
       airAuthenticator.keyPair = bitcoinjs.ECPair.fromPrivateKey(airPrivateKey, {
         network: config.network,
       });
       const foreignPrivateKey = Buffer.from('915dc1ac477d1fe606cd4deeba7b297669d374354f6f866f021633b340a2acdb', 'hex');
+
       foreignAuthenticator.keyPair = bitcoinjs.ECPair.fromPrivateKey(foreignPrivateKey, {
         network: config.network,
       });

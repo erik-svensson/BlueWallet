@@ -15,6 +15,7 @@ import {
 } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
+import { transactionNotes } from 'app/state/transactionsNotes/selectors';
 
 import logger from '../../../logger';
 import { roundBtcToSatoshis, btcToSatoshi, satoshiToBtc } from '../../../utils/bitcoin';
@@ -22,6 +23,8 @@ import { selectors as electrumXSelectors } from '../electrumX';
 import { WalletsState } from './reducer';
 
 const local = (state: ApplicationState): WalletsState => state.wallets;
+const store = (state: ApplicationState) => state;
+const subscribedIds = createSelector(store, state => state.notifications.subscribedIds);
 
 export const wallets = createSelector(local, state => {
   return state.wallets.map(wallet => {
@@ -99,6 +102,14 @@ export const allWallets = createSelector(wallets, allWallet, (walletsList, aw) =
   return walletsList;
 });
 
+export const subscribedWallets = createSelector(subscribedIds, wallets, (ids, walletsList) =>
+  walletsList.filter(wallet => ids.some(id => id === wallet.id)),
+);
+
+export const unSubscribedWallets = createSelector(subscribedIds, wallets, (ids, walletsList) =>
+  walletsList.filter(wallet => !ids.some(id => id === wallet.id)),
+);
+
 type TxEntity = TransactionInput | TransactionOutput;
 const getMyAmount = (wallet: Wallet, entities: TxEntity[]) =>
   entities.reduce((amount: number, entity: TxEntity) => {
@@ -108,7 +119,7 @@ const getMyAmount = (wallet: Wallet, entities: TxEntity[]) =>
     return amount;
   }, 0);
 
-const getTranasctionStatus = (tx: Transaction, confirmations: number): TransactionStatus => {
+const getTransactionStatus = (tx: Transaction, confirmations: number): TransactionStatus => {
   switch (tx.tx_type) {
     case TxType.NONVAULT:
     case TxType.INSTANT:
@@ -120,7 +131,7 @@ const getTranasctionStatus = (tx: Transaction, confirmations: number): Transacti
     case TxType.ALERT_CONFIRMED:
       return TransactionStatus.DONE;
     case TxType.RECOVERY:
-      return TransactionStatus['CANCELED-DONE'];
+      return TransactionStatus.CANCELED_DONE;
     default:
       logger.error('wallets selectors', `couldn't find status for tx ${JSON.stringify(tx)}`);
       throw new Error(`Unkown tx_type: ${tx.tx_type}`);
@@ -129,6 +140,7 @@ const getTranasctionStatus = (tx: Transaction, confirmations: number): Transacti
 
 const getTranasctionTags = (tx: Transaction): TagsType[] => {
   const tags: TagsType[] = [tx.status];
+
   if (tx.unblockedAmount !== undefined) {
     tags.push(Tags.UNBLOCKED);
   }
@@ -144,6 +156,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
       const walletBalanceUnit = wallet.getPreferredBalanceUnit();
       const walletLabel = wallet.getLabel();
       const id = wallet.id;
+
       return wallet.transactions.map(transaction => {
         const { height } = transaction;
         // blockHeight + 1 -> we add 1, because when the transaction height is equal blockheight the transaction has 1 confirmation
@@ -162,11 +175,13 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
         const myBalanceChangeSatoshi = btcToSatoshi(outputsMyAmount - inputsMyAmount, 0);
 
         let blockedAmount;
+
         if ([TxType.ALERT_PENDING, TxType.ALERT_CONFIRMED, TxType.ALERT_RECOVERED].includes(transaction.tx_type)) {
           blockedAmount = outputsMyAmount < 0 ? 0 : -roundBtcToSatoshis(outputsMyAmount);
         }
 
         let unblockedAmount;
+
         if ([TxType.ALERT_CONFIRMED].includes(transaction.tx_type) && blockedAmount !== undefined) {
           unblockedAmount = blockedAmount === 0 ? 0 : -blockedAmount;
         }
@@ -194,7 +209,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
           confirmations,
           walletPreferredBalanceUnit: walletBalanceUnit,
           walletId: id,
-          status: getTranasctionStatus(transaction, confirmations),
+          status: getTransactionStatus(transaction, confirmations),
           walletLabel,
           walletTypeReadable: wallet.typeReadable,
         };
@@ -296,17 +311,21 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
     .map(tx => ({ ...tx, tags: getTranasctionTags(tx) }));
 });
 
-export const getTranasctionsByWalletId = createSelector(
-  transactions,
+export const transactionsWithNotes = createSelector(transactions, transactionNotes, (transactions, notes) =>
+  transactions.map(tran => (notes[tran.hash] ? { ...tran, note: notes[tran.hash] } : tran)),
+);
+
+export const getTransactionsByWalletId = createSelector(
+  transactionsWithNotes,
   (_: WalletsState, id: string) => id,
   (txs, id) => txs.filter(t => t.walletId === id),
 );
 
-export const getRecoveryTransactions = createSelector(getTranasctionsByWalletId, txs =>
+export const getRecoveryTransactionsWithNotes = createSelector(getTransactionsByWalletId, txs =>
   txs.filter(t => t.tx_type === TxType.RECOVERY),
 );
 
-export const getAlertPendingTransactions = createSelector(getTranasctionsByWalletId, txs =>
+export const getAlertPendingTransactions = createSelector(getTransactionsByWalletId, txs =>
   txs.filter(t => t.tx_type === TxType.ALERT_PENDING),
 );
 
@@ -317,3 +336,5 @@ export const getTransactionsToRecoverByWalletId = createSelector(getAlertPending
 export const hasWallets = createSelector(wallets, walletsList => walletsList.length > 0);
 
 export const isLoading = createSelector(local, state => state.isLoading);
+
+export const isInitialized = createSelector(local, state => state.isInitialized);

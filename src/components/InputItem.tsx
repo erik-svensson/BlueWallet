@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import { StyleSheet, TextInput as BaseTextInput, View, Text, Animated, TextInputProps } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, TextInput as BaseTextInput, View, Text, Animated, TextInputProps, Keyboard } from 'react-native';
 
 import { defaultKeyboardType } from 'app/consts';
 import { palette, typography, fonts } from 'app/styles';
@@ -13,6 +13,7 @@ interface Props extends TextInputProps {
   autoFocus?: boolean;
   setValue?: (value: string) => void;
   focused?: boolean;
+  onBlur?: () => void;
 }
 
 interface State {
@@ -22,7 +23,7 @@ interface State {
   height: number;
 }
 
-export class InputItem extends PureComponent<Props, State> {
+export class InputItem extends Component<Props, State> {
   inputItemRef = React.createRef<BaseTextInput>();
 
   constructor(props: Props) {
@@ -35,8 +36,17 @@ export class InputItem extends PureComponent<Props, State> {
     };
   }
 
+  shouldComponentUpdate(nextProps: Props) {
+    return (
+      this.props.value !== nextProps.value ||
+      this.props.error !== nextProps.error ||
+      this.props.secureTextEntry !== nextProps.secureTextEntry
+    );
+  }
+
   onFocus = () => {
     const { onFocus } = this.props;
+
     if (onFocus) {
       return onFocus();
     }
@@ -58,6 +68,8 @@ export class InputItem extends PureComponent<Props, State> {
     this.setState({
       isActive: false,
     });
+    const { onBlur } = this.props;
+
     if (!this.state.value) {
       Animated.timing(this.state.isAnimatedFocused, {
         toValue: 0,
@@ -65,6 +77,7 @@ export class InputItem extends PureComponent<Props, State> {
         useNativeDriver: false,
       }).start();
     }
+    !!onBlur && onBlur();
   };
 
   componentDidUpdate() {
@@ -102,7 +115,7 @@ export class InputItem extends PureComponent<Props, State> {
 
   render() {
     const { isAnimatedFocused, isActive, height } = this.state;
-    const { label, suffix, error, secureTextEntry } = this.props;
+    const { label, suffix, error, secureTextEntry, autoCapitalize } = this.props;
     const keyboardType = secureTextEntry ? 'default' : defaultKeyboardType;
 
     const top = this.state.isAnimatedFocused.interpolate({
@@ -137,12 +150,15 @@ export class InputItem extends PureComponent<Props, State> {
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChangeText={this.onChangeText}
+          onSubmitEditing={() => {
+            Keyboard.dismiss();
+          }}
           onContentSizeChange={event => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
         />
         {!!error && (
-          <Text testID="validation-error-message" style={styles.error}>
+          <Text testID={`${this.props.testID}-validation-error`} style={styles.error}>
             {error}
           </Text>
         )}

@@ -1,11 +1,11 @@
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
-import { Route, CONST, FlowType, MainCardStackNavigatorParams, RootStackParams } from 'app/consts';
+import { Route, CONST, FlowType, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { createPin as createPinAction } from 'app/state/authentication/actions';
 import { palette, typography } from 'app/styles';
@@ -19,12 +19,9 @@ type State = {
 };
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
-    StackNavigationProp<MainCardStackNavigatorParams, Route.ConfirmPin>
-  >;
+  navigation: StackNavigationProp<RootStackParams, Route.ConfirmPin>;
   createPin: Function;
-  route: RouteProp<MainCardStackNavigatorParams, Route.ConfirmPin>;
+  route: RouteProp<RootStackParams, Route.ConfirmPin>;
 }
 
 class ConfirmPinScreen extends PureComponent<Props, State> {
@@ -42,9 +39,11 @@ class ConfirmPinScreen extends PureComponent<Props, State> {
 
   updatePin = (pin: string) => {
     const { createPin } = this.props;
-    this.setState({ pin }, async () => {
+
+    this.setState({ pin }, () => {
       if (this.state.pin.length === CONST.pinCodeLength) {
         const setPin = this.props.route.params.pin;
+
         if (setPin === this.state.pin) {
           createPin(setPin, {
             onSuccess: () => {
@@ -56,7 +55,7 @@ class ConfirmPinScreen extends PureComponent<Props, State> {
                   buttonProps: {
                     title: i18n.onboarding.successButtonChangedPin,
                     onPress: () => {
-                      this.props.navigation.navigate(Route.MainCardStackNavigator);
+                      this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings });
                     },
                   },
                 });
@@ -77,13 +76,12 @@ class ConfirmPinScreen extends PureComponent<Props, State> {
 
   render() {
     const { error } = this.state;
+
     return (
       <ScreenTemplate
         noScroll
         header={
           <Header
-            // @ts-ignore
-            navigation={this.props.navigation}
             isBackArrow
             title={
               this.props.route.params?.flowType === FlowType.newPin
@@ -100,14 +98,8 @@ class ConfirmPinScreen extends PureComponent<Props, State> {
           <Text style={styles.pinDescription}>{i18n.onboarding.createPinDescription}</Text>
         </View>
         <View style={styles.pinContainer}>
-          <PinInput
-            value={this.state.pin}
-            testID="confirm-pin"
-            onTextChange={this.updatePin}
-            // @ts-ignore - TODO: fix it later
-            navigation={this.props.navigation}
-          />
-          <Text testID="invalid-pin-message" style={styles.errorText}>
+          <PinInput value={this.state.pin} testID="confirm-pin-input" onTextChange={this.updatePin} />
+          <Text testID="confirm-pin-input-validation-error" style={styles.errorText}>
             {error}
           </Text>
         </View>
