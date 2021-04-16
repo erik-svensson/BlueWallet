@@ -287,7 +287,7 @@ module.exports = {
     emailChangedSuccessMessage: '¡Hurra!\n Ha actualizado correctamente su dirección de correo electrónico.',
     updateNotificationPreferences: '¡Hurra!\n Ha actualizado correctamente sus preferencias de notificación.',
     verifyAction: 'Verificar esta acción ',
-    verifyActionDescription: 'Para confirmar la solicitud, introduzca el código que hemos enviado a  ',
+    verifyActionDescription: 'Para confirmar la solicitud, introduzca el código que hemos enviado a\n',
     deleteEmail: 'Eliminar la dirección de correo electrónico ',
     deleteYourEmail: 'Borrar su correo electrónico ',
     deleteYourEmailDescription: 'su dirección de correo electrónico ',
