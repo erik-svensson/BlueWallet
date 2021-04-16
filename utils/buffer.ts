@@ -1,6 +1,5 @@
 export const bitsToBytes = (bits: string): Buffer => {
   const bytes = bits.match(/.{1,8}/g);
-
   if (bytes === null) {
     throw new Error('Couldn`t find bits');
   }

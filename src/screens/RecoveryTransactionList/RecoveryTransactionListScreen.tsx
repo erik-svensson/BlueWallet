@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, SectionList, SectionListData } from 'react-native';
@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, Image, TransactionItem, Button, CheckBox, WalletDropdown } from 'app/components';
-import { Route, RootStackParams, Transaction, Wallet } from 'app/consts';
+import { MainCardStackNavigatorParams, Route, RootStackParams, Transaction, Wallet } from 'app/consts';
 import { getGroupedTransactions } from 'app/helpers/transactions';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
@@ -16,8 +16,12 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface NavigationProps {
-  navigation: StackNavigationProp<RootStackParams, Route.RecoveryTransactionList>;
-  route: RouteProp<RootStackParams, Route.RecoveryTransactionList>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.RecoveryTransactionList>
+  >;
+
+  route: RouteProp<MainCardStackNavigatorParams, Route.RecoveryTransactionList>;
 }
 
 interface MapStateProps {
@@ -46,7 +50,6 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
       selectedIndex,
       onPress: (index: number) => {
         const newWallet = wallets[index];
-
         this.setState({ selectedTransactions: [] }, () => {
           navigation.setParams({ wallet: newWallet });
         });
@@ -63,11 +66,11 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
     );
   };
 
-  addTransaction = (transaction: Transaction) => {
+  addTranscation = (transaction: Transaction) => {
     this.setState((state: State) => ({ selectedTransactions: [...state.selectedTransactions, transaction] }));
   };
 
-  removeTransaction = (transaction: Transaction) => {
+  removeTranscation = (transaction: Transaction) => {
     this.setState((state: State) => ({
       selectedTransactions: state.selectedTransactions.filter(t => t.hash !== transaction.hash),
     }));
@@ -102,7 +105,6 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 
   canSubmit = () => {
     const { selectedTransactions } = this.state;
-
     return !!selectedTransactions.length;
   };
 
@@ -115,18 +117,17 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
   };
 
   toggleTransaction = (isChecked: boolean, transaction: Transaction) => () =>
-    isChecked ? this.removeTransaction(transaction) : this.addTransaction(transaction);
+    isChecked ? this.removeTranscation(transaction) : this.addTranscation(transaction);
 
   renderItem = ({ item: transaction }: { item: Transaction }) => {
     const isChecked = this.isChecked(transaction);
     const toggle = this.toggleTransaction(isChecked, transaction);
-
     return (
       <View style={styles.itemWrapper}>
         <View style={styles.transactionItemContainer}>
           <TransactionItem onPress={toggle} item={transaction} />
         </View>
-        <CheckBox testID={`transaction-item-${transaction.note}-checkbox`} onPress={toggle} right checked={isChecked} />
+        <CheckBox onPress={toggle} right checked={isChecked} />
       </View>
     );
   };
@@ -138,14 +139,16 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
   isEmptyList = () => !!!this.props.transactions.length;
 
   render() {
-    const { route, transactions } = this.props;
+    const { navigation, route, transactions } = this.props;
     const { wallet } = route.params;
     const areAllTransactionsSelected = this.areAllTransactionsSelected();
     const toggleAll = this.toggleAllTransactions(areAllTransactionsSelected);
 
     return (
       <View style={styles.container}>
-        <Header title={i18n.send.recovery.recover} isBackArrow />
+        {/**
+         // @ts-ignore */}
+        <Header title={i18n.send.recovery.recover} isBackArrow navigation={navigation} />
         <View style={styles.contentContainer}>
           <WalletDropdown
             onSelectPress={this.showModal}
@@ -169,12 +172,7 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <Button
-            testID="cancel-transaction-next-button"
-            onPress={this.submit}
-            disabled={!this.canSubmit()}
-            title={i18n.send.details.next}
-          />
+          <Button onPress={this.submit} disabled={!this.canSubmit()} title={i18n.send.details.next} />
         </View>
       </View>
     );
@@ -183,7 +181,6 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState & WalletsState, props: Props): MapStateProps => {
   const { wallet } = props.route.params;
-
   return {
     wallets: selectors.walletsWithRecoveryTransaction(state),
     transactions: selectors.getTransactionsToRecoverByWalletId(state, wallet.id),

@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ECPair, address as btcAddress, payments, Transaction } from 'bitcoinjs-lib';
 import { map, compose, flatten } from 'lodash/fp';
@@ -7,13 +7,20 @@ import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { images, icons } from 'app/assets';
 import { Header, ScreenTemplate, Button, InputItem, Image, WalletDropdown } from 'app/components';
-import config from 'app/config';
-import { CONST, Transaction as ITransaction, Route, RootStackParams, TransactionInput } from 'app/consts';
+import {
+  CONST,
+  Transaction as ITransaction,
+  MainCardStackNavigatorParams,
+  Route,
+  RootStackParams,
+  TransactionInput,
+} from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { loadTransactionsFees } from 'app/helpers/fees';
 import { typography, palette } from 'app/styles';
 
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from '../../../class';
+import config from '../../../config';
 import { btcToSatoshi, satoshiToBtc } from '../../../utils/bitcoin';
 
 const BigNumber = require('bignumber.js');
@@ -21,8 +28,12 @@ const BigNumber = require('bignumber.js');
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.RecoverySend>;
-  route: RouteProp<RootStackParams, Route.RecoverySend>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.RecoverySend>
+  >;
+
+  route: RouteProp<MainCardStackNavigatorParams, Route.RecoverySend>;
 }
 
 interface State {
@@ -42,7 +53,6 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   async componentDidMount() {
     const fee = await loadTransactionsFees();
-
     if (fee) {
       this.setState({ fee });
     }
@@ -66,7 +76,6 @@ export class RecoverySendScreen extends Component<Props, State> {
     }
     if (address) {
       const addr = address.trim().toLowerCase();
-
       if (addr.startsWith('lnb') || addr.startsWith('lightning:lnb')) {
         return i18n.send.transaction.lightningError;
       }
@@ -109,7 +118,6 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   getTransactionsAmount = () => {
     const { transactions } = this.props.route.params;
-
     return transactions.reduce(
       (amount, transaction) => amount + transaction.inputs.reduce((inputsSum, input) => inputsSum + input.value, 0),
       0,
@@ -118,7 +126,6 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   getTransactionsPendingAmount = () => {
     const { transactions } = this.props.route.params;
-
     return transactions.reduce((sum: number, t: ITransaction) => sum + t.value, 0);
   };
 
@@ -198,7 +205,6 @@ export class RecoverySendScreen extends Component<Props, State> {
           keyPairs,
           vaultTxType: payments.VaultTxType.Recovery,
         });
-
         tx = txHex;
         fee = satoshiToBtc(feeSatoshi).toNumber();
 
@@ -221,7 +227,6 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   createRecoveryForAr = () => {
     const { navigation } = this.props;
-
     navigation.navigate(Route.RecoverySeed, {
       onSubmit: (keyPair: ECPair.ECPairInterface) => this.createRecoveryTransaction([keyPair]),
       buttonText: i18n.send.recovery.recover,
@@ -233,7 +238,6 @@ export class RecoverySendScreen extends Component<Props, State> {
   navigateToProvideFirstRecoverySeedForAIR = (mnemonic?: Array<string>) => {
     const { navigation } = this.props;
     const { wallet, transactions } = this.props.route.params;
-
     navigation.navigate(Route.RecoverySeed, {
       onSubmit: (firstKeyPair: ECPair.ECPairInterface, receivedMnemonic: Array<string>) =>
         this.navigateToProvideSecondRecoverySeedForAIR(firstKeyPair, receivedMnemonic),
@@ -247,7 +251,6 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   navigateToProvideSecondRecoverySeedForAIR = (firstKeyPair: ECPair.ECPairInterface, mnemonic: Array<string>) => {
     const { navigation } = this.props;
-
     navigation.goBack();
 
     navigation.navigate(Route.RecoverySeed, {
@@ -280,7 +283,6 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   renderFeeInput = () => {
     const { fee } = this.state;
-
     return (
       <InputItem
         label={i18n.transactions.details.transactioFee}
@@ -289,7 +291,6 @@ export class RecoverySendScreen extends Component<Props, State> {
         value={fee.toString()}
         setValue={text => {
           const newFee = Number(text.replace(',', ''));
-
           this.setState({ fee: newFee });
         }}
       />
@@ -305,10 +306,8 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   renderAddressInput = () => {
     const { address } = this.state;
-
     return (
       <InputItem
-        testID="cancel-transaction-wallet-address-input"
         multiline
         maxLength={CONST.maxAddressLength}
         label={i18n.contactDetails.addressLabel}
@@ -321,13 +320,11 @@ export class RecoverySendScreen extends Component<Props, State> {
 
   setCurrentWalletAddress = () => {
     const { wallet } = this.props.route.params;
-
     this.setState({ address: wallet.getAddressForTransaction() });
   };
 
   canSubmit = () => {
     const { address, fee } = this.state;
-
     return !!(address && fee);
   };
 
@@ -338,14 +335,14 @@ export class RecoverySendScreen extends Component<Props, State> {
       <ScreenTemplate
         footer={
           <Button
-            testID="cancel-transaction-wallet-details-next-button"
             title={i18n.send.details.next}
             onPress={this.submit}
             disabled={!this.canSubmit()}
             containerStyle={styles.buttonContainer}
           />
         }
-        header={<Header isBackArrow title={i18n.send.recovery.recover} />}
+        // @ts-ignore
+        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.send.recovery.recover} />}
       >
         <WalletDropdown balance={wallet.balance} label={wallet.label} unit={wallet.preferredBalanceUnit} />
         <View style={styles.inputsContainer}>
@@ -375,7 +372,7 @@ export class RecoverySendScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
           <View style={styles.useOwnAddressContainer}>
-            <TouchableOpacity testID={'use-address-of-this-wallet-item'} onPress={this.setCurrentWalletAddress}>
+            <TouchableOpacity onPress={this.setCurrentWalletAddress}>
               <Text style={styles.useOwnAddressText}>{i18n.send.recovery.useWalletAddress}</Text>
             </TouchableOpacity>
           </View>

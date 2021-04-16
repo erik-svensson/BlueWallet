@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import RNSecureKeyStore, { ACCESSIBLE } from 'react-native-secure-key-store';
 
 import logger from '../logger';
@@ -29,6 +29,32 @@ export class AppStorage {
     this.authenticators = [];
     this.tx_metadata = {};
     this.cachedPassword = false;
+    this.settings = {
+      brandingColor: '#ffffff',
+      foregroundColor: '#0c2550',
+      buttonBackgroundColor: '#ccddf9',
+      buttonTextColor: '#0c2550',
+      buttonAlternativeTextColor: '#2f5fb3',
+      buttonDisabledBackgroundColor: '#eef0f4',
+      buttonDisabledTextColor: '#9aa0aa',
+      inputBorderColor: '#d2d2d2',
+      inputBackgroundColor: '#f5f5f5',
+      alternativeTextColor: '#9aa0aa',
+      alternativeTextColor2: '#0f5cc0',
+      buttonBlueBackgroundColor: '#ccddf9',
+      incomingBackgroundColor: '#d2f8d6',
+      incomingForegroundColor: '#37c0a1',
+      outgoingBackgroundColor: '#f8d2d2',
+      outgoingForegroundColor: '#d0021b',
+      successColor: '#37c0a1',
+      failedColor: '#ff0000',
+      shadowColor: '#000000',
+      inverseForegroundColor: '#ffffff',
+      hdborderColor: '#68BBE1',
+      hdbackgroundColor: '#ECF9FF',
+      lnborderColor: '#F7C056',
+      lnbackgroundColor: '#FFFAEF',
+    };
   }
 
   /**
@@ -66,7 +92,6 @@ export class AppStorage {
 
   async storageIsEncrypted() {
     let data;
-
     try {
       data = await this.getItem(AppStorage.FLAG_ENCRYPTED);
     } catch (error) {
@@ -86,7 +111,6 @@ export class AppStorage {
   decryptData(data, password) {
     data = JSON.parse(data);
     let decrypted;
-
     for (const value of data) {
       try {
         decrypted = encryption.decrypt(value, password);
@@ -109,7 +133,6 @@ export class AppStorage {
     // TODO: refactor ^^^ (should not save & load to fetch data)
 
     const encrypted = encryption.encrypt(data, password);
-
     data = [];
     data.push(encrypted); // putting in array as we might have many buckets with storages
     data = JSON.stringify(data);
@@ -134,12 +157,10 @@ export class AppStorage {
     };
 
     let buckets = await this.getItem('data');
-
     buckets = JSON.parse(buckets);
     buckets.push(encryption.encrypt(JSON.stringify(data), fakePassword));
     this.cachedPassword = fakePassword;
     const bucketsString = JSON.stringify(buckets);
-
     await this.setItem('data', bucketsString);
     return (await this.getItem('data')) === bucketsString;
   }
@@ -165,17 +186,14 @@ export class AppStorage {
       if (data !== null) {
         data = JSON.parse(data);
         const { authenticators } = data;
-
         this.authenticators = authenticators?.map(a => Authenticator.fromJson(a)) || [];
 
         if (!data.wallets) return false;
         const wallets = data.wallets;
-
         for (const key of wallets) {
           // deciding which type is wallet and instatiating correct object
           const tempObj = JSON.parse(key);
           let unserializedWallet;
-
           switch (tempObj.type) {
             case SegwitBech32Wallet.type:
               unserializedWallet = SegwitBech32Wallet.fromJson(key);
@@ -249,7 +267,6 @@ export class AppStorage {
   }
   updateAuthenticator(authenticatorUpdate) {
     let updatedAuthenticator = null;
-
     this.authenticators = this.authenticators.map(authenticator => {
       if (authenticator.id === authenticatorUpdate.id) {
         updatedAuthenticator = authenticatorUpdate;
@@ -269,7 +286,6 @@ export class AppStorage {
 
   updateWallet(walletUpdate) {
     let updatedWallet = null;
-
     this.wallets = this.wallets.map(wallet => {
       if (wallet.id === walletUpdate.id) {
         updatedWallet = walletUpdate;
@@ -285,7 +301,6 @@ export class AppStorage {
 
   stringifyArray(data) {
     const arr = [];
-
     for (const key of data) {
       if (typeof key === 'boolean') continue;
       if (key.prepareForSerialization) key.prepareForSerialization();
@@ -314,13 +329,10 @@ export class AppStorage {
     if (this.cachedPassword) {
       // should find the correct bucket, encrypt and then save
       let buckets = await this.getItem('data');
-
       buckets = JSON.parse(buckets);
       const newData = [];
-
       for (const bucket of buckets) {
         const decrypted = encryption.decrypt(bucket, this.cachedPassword);
-
         if (!decrypted) {
           // no luck decrypting, its not our bucket
           newData.push(bucket);
@@ -373,7 +385,6 @@ export class AppStorage {
 
   removeAuthenticatorById(id) {
     let authenticator = null;
-
     this.authenticators = this.authenticators.filter(a => {
       if (a.id === id) {
         authenticator = a;
@@ -389,7 +400,6 @@ export class AppStorage {
 
   removeWalletById(id) {
     let wallet = null;
-
     this.wallets = this.wallets.filter(w => {
       if (w.id === id) {
         wallet = w;

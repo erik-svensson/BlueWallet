@@ -17,7 +17,6 @@ enum ImageVariant {
 interface Props {
   variant: ImageVariant;
   onPress: () => void;
-  testID?: string;
 }
 
 export class ListEmptyState extends PureComponent<Props> {
@@ -86,11 +85,10 @@ export class ListEmptyState extends PureComponent<Props> {
 
   render() {
     const { variant } = this.props;
-
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{this.renderTitle()}</Text>
-        <Image testID={this.props.testID} source={images[variant]} style={styles.image} resizeMode="contain" />
+        <Image source={images[variant]} style={styles.image} resizeMode="contain" />
         {this.renderDescription()}
       </View>
     );

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2019",
-    "module": "CommonJS",
+    "module": "esnext",
     "jsx": "react-native",
     "noEmit": true,
     "allowJs": true,
@@ -9,24 +9,26 @@
     "suppressImplicitAnyIndexErrors": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "esModuleInterop": true,
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
     "resolveJsonModule": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "baseUrl": "./src",
     "skipLibCheck": true,
     "paths": {
-      "app/*": ["./*"]
+      "app/*": [
+        "./*"
+      ]
     }
   },
   "exclude": [
     "node_modules",
     "babel.config.js",
     "jest.config.js",
-    "scripts",
-    "sourcemap.ios.js",
-    "sourcemap.android.js"
+    "scripts"
   ]
 }

@@ -6,7 +6,7 @@ import Share from 'react-native-share';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, TextAreaItem, FlatButton } from 'app/components';
-import { Route, Authenticator, RootStackParams } from 'app/consts';
+import { Route, Authenticator, MainCardStackNavigatorParams } from 'app/consts';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/authenticators';
@@ -20,8 +20,8 @@ interface MapStateProps {
 }
 
 interface Props extends MapStateProps {
-  navigation: StackNavigationProp<RootStackParams, Route.CreateAuthenticatorPublicKey>;
-  route: RouteProp<RootStackParams, Route.CreateAuthenticatorPublicKey>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CreateAuthenticatorPublicKey>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.CreateAuthenticatorPublicKey>;
 }
 class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
   componentDidMount() {
@@ -34,7 +34,6 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 
   navigate = () => {
     const { navigation, authenticator } = this.props;
-
     if (!authenticator) {
       return;
     }
@@ -43,12 +42,11 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 
   share = () => {
     const { authenticator } = this.props;
-
     Share.open({ message: authenticator?.publicKey });
   };
 
   render() {
-    const { authenticator } = this.props;
+    const { authenticator, navigation } = this.props;
 
     if (!authenticator) {
       return null;
@@ -56,19 +54,14 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 
     return (
       <ScreenTemplate
-        footer={
-          <Button
-            testID="public-key-proceed-button"
-            onPress={this.navigate}
-            title={i18n.authenticators.publicKey.okButton}
-          />
-        }
-        header={<Header isBackArrow={false} title={i18n.authenticators.add.title} />}
+        footer={<Button onPress={this.navigate} title={i18n.authenticators.publicKey.okButton} />}
+        // @ts-ignore
+        header={<Header navigation={navigation} isBackArrow={false} title={i18n.authenticators.add.title} />}
       >
         <Text style={styles.subtitle}>{i18n.authenticators.publicKey.title}</Text>
         <Text style={styles.description}>{i18n.authenticators.publicKey.subtitle}</Text>
         <TextAreaItem style={styles.textArea} value={authenticator.publicKey} editable={false} />
-        <FlatButton testID="share-public-key-button" onPress={this.share} title={i18n.receive.details.share} />
+        <FlatButton onPress={this.share} title={i18n.receive.details.share} />
       </ScreenTemplate>
     );
   }
@@ -76,7 +69,6 @@ class CreateAuthenticatorPublicKeyScreen extends Component<Props> {
 
 const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: Props): MapStateProps => {
   const { id } = props.route.params;
-
   return {
     authenticator: selectors.getById(state, id),
   };

@@ -31,7 +31,6 @@ export const contactsReducer = (state = initialState, action: ContactsActionType
     case ContactsAction.DeleteContact:
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [action.contact.id]: deleted, ...contacts } = state.contacts;
-
       return {
         ...state,
         contacts,

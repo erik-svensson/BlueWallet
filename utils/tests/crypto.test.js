@@ -48,7 +48,6 @@ describe('Utils crypto', () => {
     it('should throw error when mnemonic has too much words', async () => {
       jasmine.DEFAULT_TIMEOUT_INTERVAL = 30 * 1000;
       const mnemonic = 'print crystal program squirrel before fault cause face play inherit minor bean bean';
-
       try {
         await mnemonicToKeyPair(mnemonic);
       } catch (e) {
@@ -65,7 +64,6 @@ describe('Utils crypto', () => {
       jasmine.DEFAULT_TIMEOUT_INTERVAL = 30 * 1000;
       const nonExistingWord = 'nonExistingWord';
       const mnemonic = `print ${nonExistingWord} program squirrel before fault cause face play inherit minor bean`;
-
       try {
         await mnemonicToKeyPair(mnemonic);
       } catch (e) {
@@ -84,7 +82,6 @@ describe('Utils crypto', () => {
       const mnemonic = 'cram swing cover prefer miss modify ritual silly deliver chunk behind inform able';
 
       const res = isElectrumVaultMnemonic(mnemonic, ELECTRUM_VAULT_SEED_PREFIXES.SEED_PREFIX);
-
       expect(res).toBe(true);
     });
 

@@ -1,15 +1,19 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { Text, View, StyleSheet, NativeScrollEvent, TouchableOpacity, Linking } from 'react-native';
 import RNExitApp from 'react-native-exit-app';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 
 import { en, zh, es, id, pt, jp, ko, tr, vi } from 'app/assets/tc/';
-import { Button, CustomModal, Header, ScreenTemplate, CheckBox } from 'app/components';
+import { Button, CustomModal, Header, ScreenTemplate } from 'app/components';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
 import { selectors as authenticationSelectors } from 'app/state/authentication';
-import { createTc as createTcAction } from 'app/state/authentication/actions';
+import {
+  setIsTcAccepted as setIsTcAcceptedAction,
+  SetIsTcAcceptedAction,
+  createTc as createTcAction,
+} from 'app/state/authentication/actions';
 import { fonts, palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -21,6 +25,7 @@ interface MapStateToProps {
 }
 
 interface Props {
+  setIsTcAccepted: (isTcAccepted: boolean) => SetIsTcAcceptedAction;
   createTc: () => void;
   isPinSet: boolean;
   isTcAccepted?: boolean;
@@ -28,33 +33,17 @@ interface Props {
   language: string;
 }
 
-interface State {
-  showWarring: boolean;
-  height: number;
-  isWebViewLoaded: boolean;
-  agreedToTermsAndConditions: boolean;
-  agreedToPrivacyPolicy: boolean;
-}
-
-export class TermsConditionsScreen extends React.PureComponent<Props, State> {
+export class TermsConditionsScreen extends React.PureComponent<Props> {
   state = {
+    canGo: false,
     showWarring: false,
     height: 500,
-    isWebViewLoaded: false,
-    agreedToTermsAndConditions: false,
-    agreedToPrivacyPolicy: false,
   };
 
-  toggleAgreementToTermsAndConditions = () => {
-    const { agreedToTermsAndConditions } = this.state;
-
-    this.setState({ agreedToTermsAndConditions: !agreedToTermsAndConditions });
-  };
-
-  toggleAgreementToPrivacyPolicy = () => {
-    const { agreedToPrivacyPolicy } = this.state;
-
-    this.setState({ agreedToPrivacyPolicy: !agreedToPrivacyPolicy });
+  handleCanGo = () => {
+    this.setState({
+      canGo: true,
+    });
   };
 
   handleNoButton = () => {
@@ -76,14 +65,22 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
   };
 
   agreeAction = () => {
-    const { createTc } = this.props;
+    const { isTxPasswordSet, isPinSet, setIsTcAccepted, createTc } = this.props;
 
-    createTc();
+    if (isTxPasswordSet && isPinSet) {
+      createTc();
+    } else {
+      setIsTcAccepted(true);
+    }
+  };
+
+  isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
   };
 
   get langVersion() {
     const { language } = this.props;
-
     switch (language) {
       case 'zh':
         return zh;
@@ -123,35 +120,25 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
     );
   };
 
-  get canAgree() {
-    const { agreedToTermsAndConditions, agreedToPrivacyPolicy } = this.state;
-
-    return agreedToTermsAndConditions && agreedToPrivacyPolicy;
-  }
-
   render() {
-    const { showWarring, agreedToTermsAndConditions, agreedToPrivacyPolicy } = this.state;
-
-    const termsAndConditionsMarginBottom = 32;
-
+    const { canGo, showWarring } = this.state;
     return (
       <ScreenTemplate
-        testID={'terms-conditions-screen'}
+        isCloseToBottom={this.isCloseToBottom}
+        allowedUserClick={this.handleCanGo}
         footer={
           <View style={styles.buttonContainer}>
             <Button
               title={i18n.termsConditions.buttons.disagree}
               onPress={this.disagreeAction}
               type="outline"
-              testID="disagree-button"
               containerStyle={styles.disagreeButton}
             />
             <Button
               title={i18n.termsConditions.buttons.agree}
               onPress={this.agreeAction}
-              testID="agree-button"
               containerStyle={styles.agreeButton}
-              disabled={!this.canAgree}
+              disabled={!canGo}
             />
           </View>
         }
@@ -166,13 +153,10 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
           scrollEnabled={false}
           automaticallyAdjustContentInsets={true}
           contentInset={{ top: 0, left: 0 }}
-          onLoad={() => {
-            this.setState({ isWebViewLoaded: true });
-          }}
           onNavigationStateChange={event => {
             if (event.title !== undefined) {
               this.setState({
-                height: parseInt(event.title) + termsAndConditionsMarginBottom,
+                height: parseInt(event.title) + 60,
               });
             }
           }}
@@ -184,27 +168,6 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
             return true;
           }}
         />
-        {this.state.isWebViewLoaded && (
-          <>
-            <CheckBox
-              onPress={this.toggleAgreementToTermsAndConditions}
-              containerStyle={styles.checkbox}
-              left
-              testID="terms-and-conditions-checkbox"
-              checked={agreedToTermsAndConditions}
-              title={<Text style={styles.checkboxText}>{i18n.termsConditions.readTermsConditions}</Text>}
-            />
-            <CheckBox
-              onPress={this.toggleAgreementToPrivacyPolicy}
-              containerStyle={styles.checkbox}
-              testID="privacy-policy-checkbox"
-              left
-              checked={agreedToPrivacyPolicy}
-              title={<Text style={styles.checkboxText}>{i18n.termsConditions.readPrivacyPolicy}</Text>}
-            />
-          </>
-        )}
-
         <CustomModal show={showWarring}>{this.renderContent()}</CustomModal>
       </ScreenTemplate>
     );
@@ -218,6 +181,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
 });
 
 const mapDispatchToProps = {
+  setIsTcAccepted: setIsTcAcceptedAction,
   createTc: createTcAction,
 };
 
@@ -228,15 +192,6 @@ const styles = StyleSheet.create({
     ...typography.headline4,
     marginTop: 16,
     textAlign: 'center',
-  },
-  checkbox: {
-    marginLeft: 0,
-    backgroundColor: palette.white,
-    borderWidth: 0,
-  },
-  checkboxText: {
-    ...typography.headline5,
-    marginLeft: 12,
   },
   text: {
     marginTop: 25,

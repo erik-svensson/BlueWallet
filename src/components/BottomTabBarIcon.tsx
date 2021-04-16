@@ -10,7 +10,6 @@ export interface BottomTabBarIconProps {
 export class BottomTabBarIcon extends React.PureComponent<BottomTabBarIconProps> {
   render() {
     const { source } = this.props;
-
     return <Image source={source} style={styles.image} />;
   }
 }

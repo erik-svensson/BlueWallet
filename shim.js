@@ -9,7 +9,6 @@ if (typeof process === 'undefined') {
   global.process = require('process');
 } else {
   const bProcess = require('process');
-
   for (const p in bProcess) {
     if (!(p in process)) {
       process[p] = bProcess[p];

@@ -1,4 +1,4 @@
-import config from '../src/config';
+import config from '../config';
 import { addressToScriptHash } from '../utils/bitcoin';
 import { HDLegacyP2PKHWallet } from './hd-legacy-p2pkh-wallet';
 import { HDSegwitBech32Wallet } from './hd-segwit-bech32-wallet';
@@ -62,7 +62,6 @@ export class WatchOnlyWallet extends LegacyWallet {
    */
   async init() {
     let hdWalletInstance;
-
     if (this.secret.startsWith('xpub')) hdWalletInstance = new HDLegacyP2PKHWallet();
     else if (this.secret.startsWith('ypub')) hdWalletInstance = new HDSegwitP2SHWallet();
     else if (this.secret.startsWith('zpub')) hdWalletInstance = new HDSegwitBech32Wallet();
@@ -129,10 +128,6 @@ export class WatchOnlyWallet extends LegacyWallet {
     }
   }
 
-  getXpub() {
-    return this._address;
-  }
-
   async fetchUtxos() {
     if (this._hdWalletInstance) return this._hdWalletInstance.fetchUtxos();
     throw new Error('Not initialized');
@@ -145,6 +140,11 @@ export class WatchOnlyWallet extends LegacyWallet {
 
   combinePsbt(base64one, base64two) {
     if (this._hdWalletInstance) return this._hdWalletInstance.combinePsbt(base64one, base64two);
+    throw new Error('Not initialized');
+  }
+
+  broadcastTx(hex) {
+    if (this._hdWalletInstance) return this._hdWalletInstance.broadcastTx(hex);
     throw new Error('Not initialized');
   }
 

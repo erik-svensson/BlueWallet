@@ -17,14 +17,12 @@ async function startAndDecrypt(retry) {
     return;
   }
   let password = false;
-
   if (await BlueApp.storageIsEncrypted()) {
     do {
       password = await prompt((retry && loc._.bad_password) || loc._.enter_password, loc._.storage_is_encrypted, false);
     } while (!password);
   }
   const success = await BlueApp.loadFromDisk(password);
-
   if (success) {
     logger.info('BlueApp', `loaded from disk`);
 

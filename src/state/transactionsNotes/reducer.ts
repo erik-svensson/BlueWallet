@@ -32,7 +32,6 @@ export const transactionsNotesReducer = (
     case TransactionsAction.DeleteTransactionNote:
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [action.txHash]: deleted, ...transactionNotes } = state.transactionNotes;
-
       return {
         ...state,
         transactionNotes,

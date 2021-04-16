@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -12,7 +12,6 @@ import { CONST } from '../src/consts';
 const BigNumber = require('bignumber.js');
 
 let strings;
-
 dayjs.extend(relativeTime);
 dayjs.extend(localeData);
 
@@ -24,7 +23,6 @@ dayjs.extend(localeData);
   // let lang = await AsyncStorage.getItem('lang');
   const lang =
     (await AsyncStorage.getItem('lang')) || RNLocalize.getLocales()[0]?.languageCode || CONST.defaultLanguage;
-
   await strings.saveLanguage(lang);
 })();
 
@@ -32,7 +30,6 @@ const init = async lang => {
   if (lang) {
     strings.setLanguage(lang);
     let dayJsLangName = lang;
-
     switch (lang) {
       case 'zh':
         dayJsLangName = 'zh-cn';
@@ -91,7 +88,6 @@ strings.transactionTimeToReadable = time => {
     return strings._.never;
   }
   let timejs;
-
   try {
     timejs = dayjs(time).format('YYYY-MM-DD, HH:mm:ss');
   } catch (_) {
@@ -102,7 +98,6 @@ strings.transactionTimeToReadable = time => {
 
 strings.getListOfMonthsAndWeekdays = () => {
   const dayjsLocaleData = dayjs.localeData();
-
   return {
     monthNames: dayjsLocaleData.months(),
     monthNamesShort: dayjsLocaleData.monthsShort(),
@@ -135,7 +130,6 @@ strings.formatBalance = (balance, toUnit, withFormatting = false) => {
   }
   if (toUnit === BitcoinUnit.BTC) {
     const value = new BigNumber(balance).dividedBy(100000000).toFixed(8);
-
     return removeTrailingZeros(value) + ' ' + BitcoinUnit.BTC;
   } else if (toUnit === BitcoinUnit.SATS) {
     return (
@@ -163,7 +157,6 @@ strings.formatBalanceWithoutSuffix = (balance = 0, toUnit, withFormatting = fals
   if (balance !== 0) {
     if (toUnit === BitcoinUnit.BTC) {
       const value = new BigNumber(balance).dividedBy(100000000).toFixed(8);
-
       return removeTrailingZeros(value);
     } else if (toUnit === BitcoinUnit.SATS) {
       return (

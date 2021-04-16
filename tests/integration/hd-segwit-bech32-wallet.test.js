@@ -25,7 +25,6 @@ describe('Bech32 Segwit HD (BIP84)', () => {
 
     const mnemonic = 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about';
     const hd = new HDSegwitBech32Wallet();
-
     await hd.setSecret(mnemonic);
 
     assert.strictEqual(true, hd.validateMnemonic());
@@ -61,7 +60,6 @@ describe('Bech32 Segwit HD (BIP84)', () => {
       return;
     }
     let hd = new HDSegwitBech32Wallet();
-
     hd.setSecret(process.env.HD_MNEMONIC);
     assert.ok(hd.validateMnemonic());
 
@@ -99,7 +97,6 @@ describe('Bech32 Segwit HD (BIP84)', () => {
       return;
     }
     const hd = new HDSegwitBech32Wallet();
-
     hd.setSecret(process.env.HD_MNEMONIC);
     assert.ok(hd.validateMnemonic());
 
@@ -128,14 +125,12 @@ describe('Bech32 Segwit HD (BIP84)', () => {
       return;
     }
     const hd = new HDSegwitBech32Wallet();
-
     hd.setSecret(process.env.HD_MNEMONIC);
     assert.ok(hd.validateMnemonic());
 
     await hd.fetchBalance();
     await hd.fetchUtxos();
     const utxo = hd.getUtxos();
-
     assert.strictEqual(utxo.length, 4);
     assert.ok(utxo[0].txId);
     assert.ok(utxo[0].vout === 0 || utxo[0].vout === 1);
@@ -147,7 +142,6 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     const zpub =
       'zpub6qV8gC8H2NR4zcdP5rvnTpY7xZw3H3Samf8XuoeJdKDvF4UCJzeaj7DjwSYdj5A6wdmt6qVHqbnonjQXZA56Ecs1QTe4ug6gPRBwYnMiW2s';
     const hd = new HDSegwitBech32Wallet();
-
     hd._xpub = zpub;
     hd.generateAddresses();
     assert.strictEqual(hd.getAddress()[0], 'royale1qs79r2xk6nhr8ce9ae6rexrtprms3cr7yggm3dt');
@@ -160,11 +154,9 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     jest.setTimeout(60000);
     const hd = new HDSegwitBech32Wallet();
     const hashmap = {};
-
     for (let c = 0; c < 10; c++) {
       await hd.generate();
       const secret = hd.getSecret();
-
       if (hashmap[secret]) {
         throw new Error('Duplicate secret generated!');
       }
@@ -173,7 +165,6 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     }
 
     const hd2 = new HDSegwitBech32Wallet();
-
     hd2.setSecret(hd.getSecret());
     assert.ok(hd2.validateMnemonic());
   });
@@ -185,7 +176,6 @@ describe('Bech32 Segwit HD (BIP84)', () => {
       return;
     }
     const hd = new HDSegwitBech32Wallet();
-
     hd._xpub = process.env.FAULTY_ZPUB;
 
     await hd.fetchBalance();
@@ -201,7 +191,6 @@ describe('Bech32 Segwit HD (BIP84)', () => {
       return;
     }
     const hd = new HDSegwitBech32Wallet();
-
     hd.setSecret(process.env.HD_MNEMONIC_BIP84);
     assert.ok(hd.validateMnemonic());
     assert.strictEqual(
@@ -210,10 +199,8 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     );
 
     let start = new Date().getTime();
-
     await hd.fetchBalance();
     let end = new Date().getTime();
-
     end - start > 5000 && console.warn('fetchBalance took', (end - start) / 1000, 'sec');
 
     assert.ok(hd.next_free_change_address_index > 0);
@@ -236,7 +223,6 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     end - start > 2000 && console.warn('warm fetchTransactions took', (end - start) / 1000, 'sec');
 
     let txFound = 0;
-
     for (const tx of hd.getTransactions()) {
       if (tx.hash === 'e9ef58baf4cff3ad55913a360c2fa1fd124309c59dcd720cdb172ce46582097b') {
         assert.strictEqual(tx.value, -129545);
@@ -264,7 +250,6 @@ describe('Bech32 Segwit HD (BIP84)', () => {
 
     await hd.fetchUtxos();
     const changeAddress = await hd.getChangeAddressAsync();
-
     assert.ok(changeAddress && changeAddress.startsWith('bc1'));
 
     const { tx, inputs, outputs, fee } = hd.createTransaction(
@@ -277,14 +262,12 @@ describe('Bech32 Segwit HD (BIP84)', () => {
     assert.strictEqual(Math.round(fee / tx.byteLength()), 13);
 
     let totalInput = 0;
-
     for (const inp of inputs) {
       totalInput += inp.value;
     }
 
     assert.strictEqual(outputs.length, 2);
     let totalOutput = 0;
-
     for (const outp of outputs) {
       totalOutput += outp.value;
     }

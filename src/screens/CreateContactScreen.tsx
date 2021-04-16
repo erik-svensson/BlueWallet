@@ -1,13 +1,13 @@
-import { RouteProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { Keyboard, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
 import { icons } from 'app/assets';
 import { Button, Header, InputItem, ScreenTemplate, Text, Image } from 'app/components';
-import { Contact, Route, RootStackParams, CONST } from 'app/consts';
+import { Contact, Route, MainTabNavigatorParams, MainCardStackNavigatorParams, CONST } from 'app/consts';
 import { checkAddress } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { createContact, CreateContactAction } from 'app/state/contacts/actions';
@@ -16,8 +16,14 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.CreateContact>;
-  route: RouteProp<RootStackParams, Route.CreateContact>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainCardStackNavigatorParams, Route.CreateContact>,
+    CompositeNavigationProp<
+      StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
+      StackNavigationProp<MainCardStackNavigatorParams, Route.ScanQrCode>
+    >
+  >;
+  route: RouteProp<MainCardStackNavigatorParams, Route.CreateContact>;
   createContact: (contact: Contact) => CreateContactAction;
 }
 
@@ -55,12 +61,10 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   }
 
   get canCreateContact(): boolean {
-    return !!this.state.address.value && !!this.state.name.value && !this.state.name.error && !this.state.address.error;
+    return !!this.state.address && !!this.state.name;
   }
 
-  setName = (value: string): void => {
-    this.setState({ name: { value, error: this.validateName(value.trim()) } });
-  };
+  setName = (value: string): void => this.setState({ name: { value, error: '' } });
 
   setAddress = (value: string): void => this.setState({ address: { value, error: '' } });
 
@@ -70,12 +74,8 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
 
   createContact = () => {
     const { name, address } = this.state;
-
-    const trimmedName = name.value.trim();
-    const trimmedAddress = address.value.trim();
-
-    const nameError = this.validateName(trimmedName);
-    const addressError = this.validateAddress(trimmedAddress);
+    const nameError = this.validateName();
+    const addressError = this.validateAddress();
 
     if (addressError || nameError) {
       this.setState({
@@ -86,8 +86,8 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
     }
     this.props.createContact({
       id: uuidv4(),
-      name: trimmedName,
-      address: trimmedAddress,
+      name: name.value.trim(),
+      address: address.value.trim(),
     });
     this.setState(
       {
@@ -98,24 +98,26 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
     );
   };
 
-  validateAddress = (value: string) => {
+  validateAddress = () => {
+    let error = '';
     try {
-      checkAddress(value);
+      checkAddress(this.state.address.value);
     } catch (_) {
-      return i18n.send.details.address_field_is_not_valid;
+      error = i18n.send.details.address_field_is_not_valid;
     }
-
-    return '';
+    return error;
   };
 
-  validateName = (value: string) => {
-    if (value.match(/[@'|"“”‘|’„”,.;]/g)?.length) {
-      return i18n.contactCreate.nameCannotContainSpecialCharactersError;
+  validateName = () => {
+    const { name } = this.state;
+    let error = '';
+    if (name.value.match(/[!@#$%^&*()\[\]\\\/,.?":{}|<>]/g)?.length) {
+      error = i18n.contactCreate.nameCannotContainSpecialCharactersError;
     }
-    if (!!!value.length) {
-      return i18n.contactCreate.nameCannotEmpty;
+    if (!name.value.match(/\w/)?.length) {
+      error = i18n.contactCreate.nameMissingAlphanumericCharacterError;
     }
-    return '';
+    return error;
   };
 
   onScanQrCodePress = () => {
@@ -132,53 +134,38 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
       buttonProps: {
         title: i18n.contactCreate.successButton,
         onPress: () => {
-          this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.ContactList });
+          this.props.navigation.navigate(Route.ContactList);
         },
       },
     });
 
   render() {
     const { address, name } = this.state;
-
     return (
       <ScreenTemplate
         footer={
           <Button
-            testID="new-contact-submit-button"
             disabled={!this.canCreateContact}
             onPress={this.createContact}
             title={i18n.contactCreate.buttonLabel}
           />
         }
-        header={<Header isBackArrow title={i18n.contactCreate.screenTitle} />}
+        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.contactCreate.screenTitle} />}
       >
         <Text style={styles.subtitle}>{i18n.contactCreate.subtitle}</Text>
         <Text style={styles.description}>{i18n.contactCreate.description}</Text>
-        <InputItem
-          testID="new-contact-name-input"
-          setValue={this.setName}
-          label={i18n.contactCreate.nameLabel}
-          error={name.error}
-        />
-        <View>
+        <InputItem setValue={this.setName} label={i18n.contactCreate.nameLabel} error={name.error} />
+        <View style={styles.inputContainer}>
           <InputItem
-            testID="new-contact-address-input"
             error={address.error}
             focused={!!address.value}
             value={address.value}
             multiline
-            onSubmitEditing={() => {
-              Keyboard.dismiss();
-            }}
             maxLength={CONST.maxAddressLength}
             setValue={this.setAddress}
             label={i18n.contactCreate.addressLabel}
           />
-          <TouchableOpacity
-            testID="new-contact-qr-code-button"
-            style={styles.scanQRCodeButton}
-            onPress={this.onScanQrCodePress}
-          >
+          <TouchableOpacity style={styles.scanQRCodeButton} onPress={this.onScanQrCodePress}>
             <Image style={styles.qrCodeImage} source={icons.qrCode} />
           </TouchableOpacity>
         </View>
@@ -210,6 +197,9 @@ const styles = StyleSheet.create({
     right: 0,
     top: 20,
     padding: 8,
+  },
+  inputContainer: {
+    height: 100,
   },
   qrCodeImage: {
     width: 24,

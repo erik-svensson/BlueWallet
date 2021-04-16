@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Authenticator as IAuthenticator, FinalizedPSBT } from 'app/consts';
 
-import config from '../src/config';
+import config from '../config';
 import {
   bytesToMnemonic,
   mnemonicToKeyPair,
@@ -71,7 +71,6 @@ export class Authenticator implements IAuthenticator {
   async signAndFinalizePSBT(encodedPSBT: string): Promise<FinalizedPSBT> {
     let tx, fee;
     let vaultTxType = VaultTxType.Recovery;
-
     try {
       ({ tx, fee } = signer.signAndFinalizePSBT(encodedPSBT, [this.keyPair], vaultTxType));
     } catch (_) {

@@ -1,17 +1,16 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { icons } from 'app/assets';
+import { icons, images } from 'app/assets';
 import { Header, InputItem, Image, ScreenTemplate, Button } from 'app/components';
-import { Route, CONST, RootStackParams } from 'app/consts';
-import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { getOnboardingAddEmailParams } from 'app/helpers/notifications';
+import { Route, CONST, PasswordNavigatorParams, MainTabNavigatorParams } from 'app/consts';
 import {
   createTxPassword as createTxPasswordAction,
   setIsAuthenticated as setIsAuthenticatedAction,
+  createTc as createTcAction,
   SetIsAuthenticatedAction,
 } from 'app/state/authentication/actions';
 import { typography, palette } from 'app/styles';
@@ -19,10 +18,14 @@ import { typography, palette } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.ConfirmTransactionPassword>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<MainTabNavigatorParams, Route.ContactList>,
+    StackNavigationProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>
+  >;
   createTxPassword: Function;
   setIsAuthenticated: (isAuthenticated: boolean) => SetIsAuthenticatedAction;
-  route: RouteProp<RootStackParams, Route.ConfirmTransactionPassword>;
+  route: RouteProp<PasswordNavigatorParams, Route.ConfirmTransactionPassword>;
+  createTc: () => void;
 }
 
 type State = {
@@ -38,14 +41,24 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
     isVisible: false,
   };
 
-  onSave = () => {
-    const { createTxPassword, navigation } = this.props;
+  onSave = async () => {
+    const { createTxPassword, navigation, createTc } = this.props;
     const { setPassword } = this.props.route.params;
-
     if (setPassword === this.state.password) {
+      createTc();
       createTxPassword(setPassword, {
         onSuccess: () => {
-          navigation.navigate(Route.AddNotificationEmail, getOnboardingAddEmailParams());
+          navigation.navigate(Route.Message, {
+            title: i18n.contactCreate.successTitle,
+            description: i18n.onboarding.successDescription,
+            source: images.success,
+            buttonProps: {
+              title: i18n.onboarding.successButton,
+              onPress: () => {
+                navigation.pop();
+              },
+            },
+          });
         },
       });
     } else {
@@ -60,7 +73,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
     this.setState({ password });
   };
 
-  changeVisibility = () => {
+  changeVisability = () => {
     this.setState({
       isVisible: !this.state.isVisible,
     });
@@ -68,31 +81,31 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
 
   render() {
     const { password, error, isVisible } = this.state;
-
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps="always"
         footer={
           <Button
-            testID="submit-transaction-password-confirmation"
             title={i18n._.save}
+            testID="submit-transaction-password-confirmation"
             onPress={this.onSave}
             disabled={password.length < CONST.transactionMinPasswordLength}
           />
         }
-        header={<Header isBackArrow title={i18n.onboarding.onboarding} />}
+        // @ts-ignore
+        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.onboarding.confirmPassword} />}
       >
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.onboarding.confirmPassword}</Text>
+          <Text style={typography.headline4}>{i18n.onboarding.createPassword}</Text>
           <Text style={styles.pinDescription}>{i18n.onboarding.createPasswordDescription}</Text>
         </View>
         <View style={styles.inputItemContainer}>
-          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisibility}>
+          <TouchableOpacity style={styles.visibilityIcon} onPress={this.changeVisability}>
             <Image style={styles.icon} source={!isVisible ? icons.visibilityOn : icons.visibilityOff} />
           </TouchableOpacity>
           <InputItem
-            testID="confirm-transaction-password"
             value={password}
+            testID="confirm-transaction-password"
             setValue={this.updatePassword}
             autoFocus={true}
             error={error}
@@ -106,6 +119,7 @@ class ConfirmTransactionPasswordScreen extends PureComponent<Props, State> {
 
 const mapDispatchToProps = {
   createTxPassword: createTxPasswordAction,
+  createTc: createTcAction,
   setIsAuthenticated: setIsAuthenticatedAction,
 };
 

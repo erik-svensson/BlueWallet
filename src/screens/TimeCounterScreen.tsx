@@ -23,7 +23,6 @@ export const TimeCounterScreen = (props: Props) => {
   const onTryAgain = propOnTryAgain;
   const getLeftSeconds = () => {
     const currentTimestamp = dayjs().unix();
-
     return timestamp > currentTimestamp ? parseInt((timestamp - currentTimestamp).toFixed(0)) : 0;
   };
   const [seconds, setSeconds] = useState(getLeftSeconds());
@@ -69,9 +68,7 @@ export const TimeCounterScreen = (props: Props) => {
     >
       <AppStateManager handleAppComesToForeground={setCurrentLeftSeconds} />
       <View style={styles.descriptionContainer}>
-        <Text testID="application-blocked-screen-header" style={styles.title}>
-          {i18n.timeCounter.title}
-        </Text>
+        <Text style={styles.title}>{i18n.timeCounter.title}</Text>
         <Text style={styles.description}>{i18n.timeCounter.description}</Text>
       </View>
       <View style={styles.timerContainer}>

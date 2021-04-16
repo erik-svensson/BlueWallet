@@ -6,7 +6,7 @@ import { WalletCard } from 'app/components';
 import { Wallet } from 'app/consts';
 
 interface Props {
-  data: Wallet[];
+  data: any;
   keyExtractor: (item: Wallet, index: number) => string;
   getIndex: (index: number) => void;
 }
@@ -30,11 +30,9 @@ export class WalletsCarousel extends Component<Props> {
 
   render() {
     const { getIndex } = this.props;
-
     return (
       <View>
         <Carousel
-          testID="wallets-carousel"
           {...this.props}
           ref={this.carouselRef}
           renderItem={this.renderItem}

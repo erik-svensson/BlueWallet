@@ -17,17 +17,14 @@ interface Props {
 export class DashboardHeader extends React.PureComponent<Props> {
   render() {
     const { onAddPress, onFilterPress } = this.props;
-
     return (
       <GradientView variant={GradientView.Variant.Primary} style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity testID="filter-transactions-button" style={styles.leftElement} onPress={onFilterPress}>
+          <TouchableOpacity style={styles.leftElement} onPress={onFilterPress}>
             <Image style={styles.icon} source={icons.filter} />
           </TouchableOpacity>
-          <Text testID="dashboard-header" style={styles.title}>
-            {i18n.wallets.dashboard.title}
-          </Text>
-          <TouchableOpacity testID="add-wallet-button" style={styles.rightElement} onPress={onAddPress}>
+          <Text style={styles.title}>{i18n.wallets.dashboard.title}</Text>
+          <TouchableOpacity style={styles.rightElement} onPress={onAddPress}>
             <Image source={icons.addIcon} style={styles.icon} />
           </TouchableOpacity>
         </View>

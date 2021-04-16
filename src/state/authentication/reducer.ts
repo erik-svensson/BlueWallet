@@ -1,5 +1,3 @@
-import { USER_VERSIONS } from 'app/consts';
-
 import { AuthenticationAction, AuthenticationActionType } from './actions';
 
 export interface AuthenticationState {
@@ -9,7 +7,6 @@ export interface AuthenticationState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string;
-  userVersion: USER_VERSIONS;
 }
 
 const initialState: AuthenticationState = {
@@ -19,7 +16,6 @@ const initialState: AuthenticationState = {
   isAuthenticated: false,
   isLoading: true,
   error: '',
-  userVersion: USER_VERSIONS.BEFORE_NOTIFICATIONS_WERE_ADDED,
 };
 
 export const authenticationReducer = (state = initialState, action: AuthenticationActionType): AuthenticationState => {
@@ -35,6 +31,7 @@ export const authenticationReducer = (state = initialState, action: Authenticati
         isAuthenticated: action.isAuthenticated,
       };
     case AuthenticationAction.CheckCredentials:
+    case AuthenticationAction.CreateTxPassword:
       return {
         ...state,
         isLoading: true,
@@ -71,17 +68,11 @@ export const authenticationReducer = (state = initialState, action: Authenticati
     case AuthenticationAction.CheckCredentialsFailure:
     case AuthenticationAction.AuthenticateFailure:
     case AuthenticationAction.CreatePinFailure:
-    case AuthenticationAction.SetUserVersionFailure:
       return {
         ...state,
         isAuthenticated: false,
         error: action.error,
         isLoading: false,
-      };
-    case AuthenticationAction.SetUserVersionSuccess:
-      return {
-        ...state,
-        userVersion: action.payload.userVersion,
       };
     default:
       return state;

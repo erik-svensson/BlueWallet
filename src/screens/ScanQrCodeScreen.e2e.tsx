@@ -1,16 +1,18 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { Keyboard, StatusBar, StyleSheet, View } from 'react-native';
+import { Image, View, TouchableOpacity, StatusBar, StyleSheet, Dimensions } from 'react-native';
 
+import { icons } from 'app/assets';
 import { Button, InputItem, ScreenTemplate } from 'app/components';
-import { RootStackParams, Route } from 'app/consts';
+import { MainCardStackNavigatorParams, Route } from 'app/consts';
 
+const { width } = Dimensions.get('window');
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.ScanQrCode>;
-  route: RouteProp<RootStackParams, Route.ScanQrCode>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.ScanQrCode>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.ScanQrCode>;
 }
 
 export default class ScanQrCodeScreen extends React.PureComponent<Props> {
@@ -21,8 +23,8 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
   goBack = () => this.props.navigation.goBack();
 
   onButtonClicked = (data: string) => {
-    this.goBack();
     this.onBarCodeScanned(data);
+    this.goBack();
   };
 
   onBarCodeScanned = (data: string) => {
@@ -36,8 +38,8 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
   setCustomString = (value: string): void => this.setState({ customString: value });
 
   onSubmitCustomStringButtonClicked = () => {
-    this.goBack();
     this.onBarCodeScanned(this.state.customString);
+    this.goBack();
   };
 
   mockedQrCodeData = {
@@ -52,13 +54,13 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
 
   render() {
     return (
-      <ScreenTemplate keyboardShouldPersistTaps="always" contentContainer={styles.container}>
+      <ScreenTemplate contentContainer={styles.container}>
         <StatusBar hidden />
         <Button
           onPress={() => {
             this.onButtonClicked(this.mockedQrCodeData.keyGeneratorPublicKey1);
           }}
-          title="Public Key 1"
+          title={'Public Key 1'}
           testID="scan-public-key-one-button"
           containerStyle={styles.button}
         />
@@ -66,7 +68,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
           onPress={() => {
             this.onButtonClicked(this.mockedQrCodeData.keyGeneratorPublicKey2);
           }}
-          title="Public Key 2"
+          title={'Public Key 2'}
           testID="scan-public-key-two-button"
           containerStyle={styles.button}
         />
@@ -74,7 +76,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
           onPress={() => {
             this.onButtonClicked(this.mockedQrCodeData.keyGeneratorPrivateKey);
           }}
-          title="Private Key"
+          title={'Private Key'}
           testID="scan-private-key-button"
           containerStyle={styles.button}
         />
@@ -82,7 +84,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
           onPress={() => {
             this.onButtonClicked(this.mockedQrCodeData.keyGeneratorSeedPhrase);
           }}
-          title="Seed phrase"
+          title={'Seed phrase'}
           testID="scan-phrase-seed-button"
           containerStyle={styles.button}
         />
@@ -90,7 +92,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
           onPress={() => {
             this.onButtonClicked(this.mockedQrCodeData.dummy);
           }}
-          title="Dummy QR code"
+          title={'Dummy QR code'}
           testID="scan-dummy-button"
           containerStyle={styles.button}
         />
@@ -99,21 +101,17 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
           <InputItem
             focused={!!this.state.customString}
             multiline
-            onSubmitEditing={() => {
-              Keyboard.dismiss();
-            }}
             setValue={this.setCustomString}
             testID="custom-string-input"
             label={i18n.contactCreate.addressLabel}
           />
-          <Button
-            onPress={() => {
-              this.onSubmitCustomStringButtonClicked();
-            }}
-            title="Submit custom string"
+          <TouchableOpacity
             testID="custom-string-submit-button"
-            containerStyle={styles.button}
-          />
+            style={styles.submitCustomStringButton}
+            onPress={this.onSubmitCustomStringButtonClicked}
+          >
+            <Image style={styles.submitCustomStringImage} source={icons.arrowRight} />
+          </TouchableOpacity>
         </View>
       </ScreenTemplate>
     );
@@ -123,6 +121,17 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
 const styles = StyleSheet.create({
   container: {
     marginTop: 50,
+  },
+  submitCustomStringButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 20,
+    padding: 8,
+  },
+  submitCustomStringImage: {
+    width: 24,
+    height: 24,
+    padding: 8,
   },
   button: {
     marginTop: 15,

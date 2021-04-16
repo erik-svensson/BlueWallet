@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, TextInput as BaseTextInput, StyleProp, ViewStyle, Text, Keyboard } from 'react-native';
+import { StyleSheet, TextInput as BaseTextInput, StyleProp, ViewStyle, Text } from 'react-native';
 
 import { defaultKeyboardType } from 'app/consts';
 import { palette, typography } from 'app/styles';
@@ -12,7 +12,6 @@ interface Props {
   value?: string;
   editable?: boolean;
   autoCapitalize?: 'none';
-  testID?: string;
 }
 
 interface State {
@@ -27,9 +26,8 @@ export class TextAreaItem extends PureComponent<Props, State> {
   onBlur = () => this.setState({ isActive: false });
 
   render() {
-    const { style, placeholder, onChangeText, error, value, editable, autoCapitalize, testID } = this.props;
+    const { style, placeholder, onChangeText, error, value, editable, autoCapitalize } = this.props;
     const { isActive } = this.state;
-
     return (
       <>
         <BaseTextInput
@@ -43,20 +41,12 @@ export class TextAreaItem extends PureComponent<Props, State> {
           value={value}
           editable={editable}
           multiline={true}
-          testID={testID}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChangeText={onChangeText}
-          onSubmitEditing={() => {
-            Keyboard.dismiss();
-          }}
           autoCapitalize={autoCapitalize}
         />
-        {!!error && (
-          <Text testID={`${testID}-validation-error`} style={styles.error}>
-            {error}
-          </Text>
-        )}
+        {!!error && <Text style={styles.error}>{error}</Text>}
       </>
     );
   }

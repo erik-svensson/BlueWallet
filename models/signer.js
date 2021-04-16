@@ -8,7 +8,7 @@
  **/
 import * as bitcoinjs from 'bitcoinjs-lib';
 
-import config from '../src/config';
+import config from '../config';
 import { btcToSatoshi } from '../utils/bitcoin';
 import {
   getUtxosWithMinimumRest,
@@ -30,7 +30,6 @@ exports.createHDTransaction = async function(utxos, toAddress, amount, fixedFee,
   const feeInSatoshis = btcToSatoshi(fixedFee, 0);
   const amountToOutputSatoshi = btcToSatoshi(amount - fixedFee, 0); // how much payee should get
   const txb = new bitcoinjs.TransactionBuilder(config.network);
-
   txb.setVersion(1);
   let unspentAmountSatoshi = 0;
   const ourOutputs = {};
@@ -63,7 +62,6 @@ exports.createHDTransaction = async function(utxos, toAddress, amount, fixedFee,
     const restValue = unspentAmountSatoshi - amountToOutputSatoshi - feeInSatoshis;
     const dustValue = await BlueElectrum.getDustValue();
     // sending less than we have, so the rest should go back
-
     if (restValue > dustValue) {
       finalRestValueSatoshi += restValue;
       txb.addOutput(changeAddress, restValue);
@@ -92,7 +90,6 @@ exports.createHDSegwitTransaction = async function(utxos, toAddress, amount, fix
   const feeInSatoshis = btcToSatoshi(fixedFee, 0);
   const amountToOutputSatoshi = btcToSatoshi(amount - fixedFee, 0); // how much payee should get
   const psbt = new bitcoinjs.Psbt({ network: config.network });
-
   psbt.setVersion(1);
   let unspentAmountSatoshi = 0;
   const ourOutputs = [];
@@ -114,7 +111,6 @@ exports.createHDSegwitTransaction = async function(utxos, toAddress, amount, fix
     const p2sh = _p2sh({
       redeem: p2wpkh,
     });
-
     psbt.addInput({
       hash: unspent.txid,
       index: unspent.vout,
@@ -149,7 +145,6 @@ exports.createHDSegwitTransaction = async function(utxos, toAddress, amount, fix
     const restValue = unspentAmountSatoshi - amountToOutputSatoshi - feeInSatoshis;
     const dustValue = await BlueElectrum.getDustValue();
     // sending less than we have, so the rest should go back
-
     if (restValue > dustValue) {
       finalRestValueSatoshi += restValue;
       psbt.addOutput({
@@ -166,7 +161,6 @@ exports.createHDSegwitTransaction = async function(utxos, toAddress, amount, fix
   }
 
   const tx = psbt.finalizeAllInputs().extractTransaction();
-
   return {
     tx: tx.toHex(),
     fee: getFeeValue({ utxosAmount, amountSend: amountToOutputSatoshi, restValue: finalRestValueSatoshi }),
@@ -187,7 +181,6 @@ exports.createHDSegwitVaultTransaction = async function({
   const feeInSatoshis = btcToSatoshi(fixedFee, 0);
   const amountToOutputSatoshi = btcToSatoshi(amount - fixedFee, 0); // how much payee should get
   const psbt = new bitcoinjs.Psbt({ network: config.network });
-
   psbt.setVersion(1);
   let unspentAmountSatoshi = 0;
   const inputKeyPairs = [];
@@ -253,7 +246,6 @@ exports.createHDSegwitVaultTransaction = async function({
   });
 
   let finalRestValueSatoshi = 0;
-
   if (amountToOutputSatoshi + feeInSatoshis < unspentAmountSatoshi) {
     const restValue = unspentAmountSatoshi - amountToOutputSatoshi - feeInSatoshis;
 
@@ -300,7 +292,6 @@ exports.createSegwitTransaction = async function(utxos, toAddress, amount, fixed
   });
 
   const psbt = new bitcoinjs.Psbt({ network: config.network });
-
   psbt.setVersion(1);
   const unspentUtxos = getUtxosFromMinToMax(utxos, btcToSatoshi(amount, 0));
 
@@ -311,7 +302,6 @@ exports.createSegwitTransaction = async function(utxos, toAddress, amount, fixed
   const utxosAmount = getUtxosAmount(unspentUtxos);
 
   let unspentAmount = 0;
-
   for (const unspent of unspentUtxos) {
     psbt.addInput({
       hash: unspent.txid,
@@ -352,7 +342,6 @@ exports.createSegwitTransaction = async function(utxos, toAddress, amount, fixed
     psbt.signInput(c, keyPair);
   }
   const tx = psbt.finalizeAllInputs().extractTransaction();
-
   return {
     tx: tx.toHex(),
     fee: getFeeValue({ utxosAmount, amountSend: amountToOutput, restValue: finalRestValueSatoshi }),
@@ -377,7 +366,6 @@ exports.generateNewSegwitAddress = function() {
 
 exports.URI = function(paymentInfo) {
   let uri = 'bitcoin:';
-
   uri += paymentInfo.address;
   uri += '?amount=';
   uri += parseFloat(paymentInfo.amount / 100000000);
@@ -393,7 +381,6 @@ exports.URI = function(paymentInfo) {
 
 exports.WIF2segwitAddress = function(WIF) {
   const keyPair = bitcoinjs.ECPair.fromWIF(WIF, config.network);
-
   return bitcoinjs.payments.p2sh({
     network: config.network,
     redeem: bitcoinjs.payments.p2wpkh({
@@ -408,7 +395,6 @@ exports.createTransaction = async function(utxos, toAddress, _amount, _fixedFee,
   const amountToOutput = btcToSatoshi(_amount - _fixedFee, 0);
   const pk = bitcoinjs.ECPair.fromWIF(WIF, config.network); // eslint-disable-line new-cap
   const txb = new bitcoinjs.TransactionBuilder(config.network);
-
   txb.setVersion(1);
   let unspentAmount = 0;
   const unspentUtxos = getUtxosFromMinToMax(utxos, btcToSatoshi(_amount, 0));
@@ -430,7 +416,6 @@ exports.createTransaction = async function(utxos, toAddress, _amount, _fixedFee,
     const restValue = unspentAmount - amountToOutput - fixedFee;
     const dustValue = await BlueElectrum.getDustValue();
     // sending less than we have, so the rest should go back
-
     if (restValue > dustValue) {
       finalRestValueSatoshi += restValue;
       txb.addOutput(fromAddress, restValue);

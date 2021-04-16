@@ -2,23 +2,20 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, StyleSheet, BackHandler, View, NativeEventSubscription } from 'react-native';
-import { connect } from 'react-redux';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
-import { Route, CONST, FlowType, RootStackParams } from 'app/consts';
+import { Route, CONST, FlowType, MainCardStackNavigatorParams } from 'app/consts';
 import { noop } from 'app/helpers/helpers';
-import { setUserVersion as setUserVersionAction, SetUserVersionActionCreator } from 'app/state/authentication/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.CreatePin>;
-  route: RouteProp<RootStackParams, Route.CreatePin>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CreatePin>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.CreatePin>;
   appSettings: {
     isPinSet: boolean;
   };
-  setUserVersion: SetUserVersionActionCreator;
 }
 
 interface State {
@@ -27,7 +24,7 @@ interface State {
   flowType: string;
 }
 
-class CreatePinScreen extends PureComponent<Props, State> {
+export class CreatePinScreen extends PureComponent<Props, State> {
   state = {
     pin: '',
     focused: false,
@@ -39,16 +36,11 @@ class CreatePinScreen extends PureComponent<Props, State> {
   focusListener: Function = noop;
 
   componentDidMount() {
-    const flowType = this.props.route.params?.flowType || '';
-
-    if (flowType !== FlowType.newPin) {
-      this.props.setUserVersion(CONST.newestUserVersion);
-    }
     this.props.navigation.setOptions({
       gestureEnabled: false,
     });
     this.setState({
-      flowType,
+      flowType: this.props.route.params?.flowType || '',
     });
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.backAction);
     this.focusListener = this.props.navigation.addListener('focus', this.openKeyboard);
@@ -60,9 +52,7 @@ class CreatePinScreen extends PureComponent<Props, State> {
   }
 
   backAction = () => {
-    this.state.flowType === FlowType.newPin
-      ? this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Settings })
-      : BackHandler.exitApp();
+    this.state.flowType === FlowType.newPin ? this.props.navigation.navigate(Route.Settings) : BackHandler.exitApp();
     return true;
   };
 
@@ -92,6 +82,7 @@ class CreatePinScreen extends PureComponent<Props, State> {
       <ScreenTemplate
         header={
           <Header
+            navigation={this.props.navigation}
             isBackArrow={this.props.route.params?.flowType === FlowType.newPin}
             onBackArrow={() => this.props.navigation.popToTop()}
             title={
@@ -110,17 +101,18 @@ class CreatePinScreen extends PureComponent<Props, State> {
           <Text style={styles.pinDescription}>{i18n.onboarding.createPinDescription}</Text>
         </View>
         <View style={styles.pinContainer}>
-          <PinInput value={pin} testID={'create-pin-input'} onTextChange={this.updatePin} ref={this.pinInputRef} />
+          <PinInput
+            value={pin}
+            testID={'create-pin'}
+            onTextChange={this.updatePin}
+            ref={this.pinInputRef}
+            navigation={this.props.navigation}
+          />
         </View>
       </ScreenTemplate>
     );
   }
 }
-const mapDispatchToProps = {
-  setUserVersion: setUserVersionAction,
-};
-
-export default connect(null, mapDispatchToProps)(CreatePinScreen);
 
 const styles = StyleSheet.create({
   pinContainer: {

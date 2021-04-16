@@ -1,9 +1,8 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as bitcoin from 'bitcoinjs-lib';
-import { compose } from 'lodash/fp';
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Alert, Keyboard } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { images, icons } from 'app/assets';
@@ -14,22 +13,21 @@ import {
   InputItem,
   StyledText,
   Image,
+  RadioGroup,
   RadioButton,
   WalletDropdown,
   Warning,
 } from 'app/components';
-import config from 'app/config';
-import { CONST, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
+import { CONST, MainCardStackNavigatorParams, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadTransactionsFees } from 'app/helpers/fees';
-import { checkMinSatoshi, checkZero } from 'app/helpers/helpers';
-import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
 import { HDSegwitBech32Wallet, HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet, WatchOnlyWallet } from '../../class';
+import config from '../../config';
 import { BitcoinTransaction } from '../../models/bitcoinTransactionInfo';
 import { btcToSatoshi, satoshiToBtc } from '../../utils/bitcoin';
 
@@ -38,10 +36,12 @@ const BigNumber = require('bignumber.js');
 const i18n = require('../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.SendCoins>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.SendCoins>
+  >;
   wallets: Wallet[];
-  route: RouteProp<RootStackParams, Route.SendCoins>;
-  checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
+  route: RouteProp<MainCardStackNavigatorParams, Route.SendCoins>;
 }
 
 interface State {
@@ -62,7 +62,7 @@ class SendCoinsScreen extends Component<Props, State> {
 
     this.state = {
       isLoading: false,
-      amount: 1,
+      amount: 0,
       wallet: fromWallet || wallets[0],
       transaction: new BitcoinTransaction(toAddress),
       memo: '',
@@ -73,7 +73,6 @@ class SendCoinsScreen extends Component<Props, State> {
 
   async componentDidMount() {
     const fee = await loadTransactionsFees();
-
     if (fee) {
       this.setState({ fee });
     }
@@ -83,7 +82,6 @@ class SendCoinsScreen extends Component<Props, State> {
     const { wallets } = this.props;
 
     const wallet = wallets[index];
-
     this.setState({
       wallet,
     });
@@ -93,7 +91,6 @@ class SendCoinsScreen extends Component<Props, State> {
     const { wallets } = this.props;
     const { wallet } = this.state;
     const selectedIndex = wallets.findIndex((w: Wallet) => w.label === wallet.label);
-
     this.props.navigation.navigate(Route.ActionSheet, {
       wallets,
       selectedIndex,
@@ -112,15 +109,10 @@ class SendCoinsScreen extends Component<Props, State> {
     </View>
   );
 
-  validate = (value: string): string | undefined =>
-    !Number(value.replace(',', '.')) && i18n.send.details.amount_field_is_not_valid;
-
   setTransactionFee = () => {
     this.props.navigation.navigate(Route.EditText, {
       title: i18n.send.create.fee,
-      keyboardType: 'number-pad',
       label: i18n.send.create.amount,
-      validate: this.validate,
       onSave: this.saveTransactionFee,
       value: this.state.amount?.toString(),
       header: this.renderSetTransactionFeeHeader(),
@@ -165,7 +157,6 @@ class SendCoinsScreen extends Component<Props, State> {
     if (!amount) amount = 0;
     if (!fee) fee = 0;
     let availableBalance;
-
     try {
       availableBalance = new BigNumber(balance);
       availableBalance = availableBalance.div(CONST.satoshiInBtc); // sat2btc
@@ -186,9 +177,6 @@ class SendCoinsScreen extends Component<Props, State> {
 
     const numAmount = this.toNumber(transaction.amount);
 
-    if (checkMinSatoshi(numAmount)) {
-      return i18n.send.details.amount_field_is_less_than_minSatoshi;
-    }
     if (!numAmount || numAmount <= 0) {
       return i18n.send.details.amount_field_is_not_valid;
     }
@@ -204,7 +192,6 @@ class SendCoinsScreen extends Component<Props, State> {
     }
     if (transaction.address) {
       const address = transaction.address.trim().toLowerCase();
-
       if (address.startsWith('lnb') || address.startsWith('lightning:lnb')) {
         return i18n.send.transaction.lightningError;
       }
@@ -248,7 +235,6 @@ class SendCoinsScreen extends Component<Props, State> {
   isAlert = (wallet: Wallet) => {
     const { type } = wallet;
     const { vaultTxType } = this.state;
-
     switch (type) {
       case HDSegwitP2SHArWallet.type:
         return true;
@@ -262,7 +248,6 @@ class SendCoinsScreen extends Component<Props, State> {
   isFastTx = (wallet: Wallet) => {
     const { type } = wallet;
     const { vaultTxType } = this.state;
-
     switch (type) {
       case HDSegwitP2SHAirWallet.type:
         return vaultTxType === bitcoin.payments.VaultTxType.Instant;
@@ -315,7 +300,6 @@ class SendCoinsScreen extends Component<Props, State> {
         fee,
         transaction.address,
       );
-
       tx = txHex;
 
       fee = satoshiToBtc(feeSatoshi).toNumber();
@@ -336,7 +320,6 @@ class SendCoinsScreen extends Component<Props, State> {
 
   navigateToScanInstantPrivateKey = (onBarCodeScanned: (privateKey: string) => void) => {
     const { navigation } = this.props;
-
     navigation.navigate(Route.IntegrateKey, {
       onBarCodeScan: scannedKey => {
         CreateMessage({
@@ -355,7 +338,6 @@ class SendCoinsScreen extends Component<Props, State> {
 
   createTransactionByWallet = async (wallet: any) => {
     const { type } = wallet;
-
     switch (type) {
       case HDSegwitP2SHArWallet.type:
         return this.createStandardTransaction((utxos: Utxo[], amount: number, fee: number, address: string) =>
@@ -369,7 +351,6 @@ class SendCoinsScreen extends Component<Props, State> {
         );
       case HDSegwitP2SHAirWallet.type:
         const { vaultTxType } = this.state;
-
         if (vaultTxType === bitcoin.payments.VaultTxType.Alert) {
           return this.createStandardTransaction((utxos: Utxo[], amount: number, fee: number, address: string) =>
             wallet.createTx({
@@ -440,16 +421,14 @@ class SendCoinsScreen extends Component<Props, State> {
 
   renderAmountInput = () => {
     const { transaction } = this.state;
-
     return (
       <InputItem
-        testID="send-coins-amount-input"
         label={i18n.transactions.details.amount}
         suffix="BTCV"
         keyboardType="numeric"
         value={transaction.amount}
         setValue={text => {
-          this.setState({ transaction: { ...transaction, amount: checkZero(text) } });
+          this.setState({ transaction: { ...transaction, amount: text } });
         }}
       />
     );
@@ -457,18 +436,13 @@ class SendCoinsScreen extends Component<Props, State> {
 
   renderAddressInput = () => {
     const { transaction } = this.state;
-
     return (
       <InputItem
-        testID="send-coins-wallet-address-input"
         label={i18n.contactDetails.addressLabel}
         style={styles.addressInput}
         value={transaction.address}
         setValue={text => this.processAddressData(text.trim())}
         multiline
-        onSubmitEditing={() => {
-          Keyboard.dismiss();
-        }}
         maxLength={CONST.maxAddressLength}
       />
     );
@@ -492,11 +466,10 @@ class SendCoinsScreen extends Component<Props, State> {
 
   shouldShowVaultTransaction = () => {
     const { wallet } = this.state;
-
     return wallet.type === HDSegwitP2SHAirWallet.type;
   };
 
-  onVaultTransactionSelect = (vaultTxType: number) => {
+  onVaultTranscationSelect = (index: number, vaultTxType: number) => {
     this.setState({ vaultTxType });
   };
 
@@ -504,48 +477,42 @@ class SendCoinsScreen extends Component<Props, State> {
     return (
       <View>
         <Text style={styles.radioButtonsTitle}>{i18n.send.transaction.type}</Text>
-
-        <RadioButton
-          testID="send-coins-secure-transaction-type-radio"
-          title={i18n.send.transaction.alert}
-          subtitle={i18n.send.transaction.alertDesc}
-          value={bitcoin.payments.VaultTxType.Alert}
-          checked={this.state.vaultTxType === bitcoin.payments.VaultTxType.Alert}
-          onPress={this.onVaultTransactionSelect}
-        />
-        <RadioButton
-          testID="send-coins-secure-fast-transaction-type-radio"
-          title={i18n.send.transaction.instant}
-          subtitle={i18n.send.transaction.instantDesc}
-          value={bitcoin.payments.VaultTxType.Instant}
-          checked={this.state.vaultTxType === bitcoin.payments.VaultTxType.Instant}
-          onPress={this.onVaultTransactionSelect}
-        />
+        <RadioGroup
+          color={palette.secondary}
+          onSelect={this.onVaultTranscationSelect}
+          selectedIndex={this.state.vaultTxType}
+        >
+          <RadioButton style={styles.radioButton} value={bitcoin.payments.VaultTxType.Alert}>
+            <View style={styles.radioButtonContent}>
+              <Text style={styles.radioButtonTitle}>{i18n.send.transaction.alert}</Text>
+              <Text style={styles.radioButtonSubtitle}>{i18n.send.transaction.alertDesc}</Text>
+            </View>
+          </RadioButton>
+          <RadioButton style={styles.radioButton} value={bitcoin.payments.VaultTxType.Instant}>
+            <View style={styles.radioButtonContent}>
+              <Text style={styles.radioButtonTitle}>{i18n.send.transaction.instant}</Text>
+              <Text style={styles.radioButtonSubtitle}>{i18n.send.transaction.instantDesc}</Text>
+            </View>
+          </RadioButton>
+        </RadioGroup>
       </View>
     );
   };
 
-  confirmTransactionWithNetworkConnectionCheck = () => {
-    const { checkNetworkConnection } = this.props;
-
-    checkNetworkConnection(this.confirmTransaction);
-  };
-
   render() {
     const { wallet, fee, isLoading } = this.state;
-
     return (
       <ScreenTemplate
         footer={
           <Button
-            testID="send-coins-next-button"
             title={i18n.send.details.next}
-            onPress={this.confirmTransactionWithNetworkConnectionCheck}
+            onPress={this.confirmTransaction}
             containerStyle={styles.buttonContainer}
             disabled={isLoading}
           />
         }
-        header={<Header isBackArrow title={i18n.send.header} />}
+        // @ts-ignore
+        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.send.header} />}
       >
         <WalletDropdown
           onSelectPress={this.showModal}
@@ -585,11 +552,7 @@ class SendCoinsScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
 
-          <InputItem
-            testID="send-coins-note-input"
-            label={i18n.send.details.note}
-            setValue={memo => this.setState({ memo })}
-          />
+          <InputItem label={i18n.send.details.note} setValue={memo => this.setState({ memo })} />
 
           {this.shouldShowVaultTransaction() && this.renderVaultTransactions()}
         </View>
@@ -602,7 +565,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   wallets: selectors.wallets(state),
 });
 
-export default compose(withCheckNetworkConnection, connect(mapStateToProps))(SendCoinsScreen);
+export default connect(mapStateToProps)(SendCoinsScreen);
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -635,6 +598,22 @@ const styles = StyleSheet.create({
   },
   addressInput: {
     paddingEnd: 100,
+  },
+  radioButton: {
+    paddingStart: 0,
+    paddingVertical: 8,
+  },
+  radioButtonContent: {
+    paddingStart: 10,
+    top: -3,
+  },
+  radioButtonTitle: {
+    ...typography.caption,
+    marginBottom: 2,
+  },
+  radioButtonSubtitle: {
+    ...typography.overline,
+    color: palette.textGrey,
   },
   radioButtonsTitle: {
     ...typography.overline,

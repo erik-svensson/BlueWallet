@@ -20,7 +20,6 @@ export default class BiometricService {
   setBiometricsAvailability = async () => {
     const biometricsResult = await ReactNativeBiometrics.isSensorAvailable();
     const { available, biometryType } = biometricsResult;
-
     if (!available) {
       this.biometryType = undefined;
     } else {
@@ -35,7 +34,6 @@ export default class BiometricService {
         cancelButtonText: i18n.unlock.enter,
       });
       const { success } = checkResult;
-
       logger.info('BiometricSerivce', 'cancelled by user');
       if (success) {
         return success;

@@ -1,14 +1,11 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { compose } from 'lodash/fp';
 import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity, SectionList } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
-import { Wallet, Route, EnhancedTransaction, CONST, MainTabNavigatorParams, RootStackParams } from 'app/consts';
+import { Wallet, Route, EnhancedTransaction, CONST } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
-import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
 import { clearFilters, ClearFiltersAction } from 'app/state/filters/actions';
 import * as transactionsNotesSelectors from 'app/state/transactionsNotes/selectors';
@@ -24,10 +21,7 @@ import { WalletsCarousel } from './WalletsCarousel';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParams, Route.Settings>,
-    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
-  >;
+  navigation: StackNavigationProp<any, Route.Dashboard>;
   wallets: Wallet[];
   isLoading: boolean;
   allTransactions: EnhancedTransaction[];
@@ -36,7 +30,6 @@ interface Props {
   loadWallets: () => LoadWalletsAction;
   clearFilters: () => ClearFiltersAction;
   isFilteringOn?: boolean;
-  checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
 }
 
 interface State {
@@ -59,7 +52,7 @@ class DashboardScreen extends Component<Props, State> {
   }
 
   refreshTransactions = () => {
-    this.props.checkNetworkConnection(() => this.props.loadWallets());
+    this.props.loadWallets();
   };
 
   chooseItemFromModal = (index: number) => {
@@ -74,13 +67,11 @@ class DashboardScreen extends Component<Props, State> {
   getActiveWallet = () => {
     const { lastSnappedTo } = this.state;
     const { wallets } = this.props;
-
     return wallets[lastSnappedTo] || wallets[wallets.length - 1];
   };
 
   sendCoins = () => {
     const actionWallet = this.getActiveWallet();
-
     this.props.navigation.navigate(Route.SendCoins, {
       fromAddress: actionWallet.getAddress(),
       fromSecret: actionWallet.getSecret(),
@@ -90,7 +81,6 @@ class DashboardScreen extends Component<Props, State> {
 
   receiveCoins = () => {
     const actionWallet = this.getActiveWallet();
-
     this.props.navigation.navigate(Route.ReceiveCoins, {
       id: actionWallet.id,
     });
@@ -98,7 +88,6 @@ class DashboardScreen extends Component<Props, State> {
 
   recoverCoins = () => {
     const actionWallet = this.getActiveWallet();
-
     this.props.navigation.navigate(Route.RecoveryTransactionList, {
       wallet: actionWallet,
     });
@@ -107,7 +96,6 @@ class DashboardScreen extends Component<Props, State> {
   showModal = () => {
     const { lastSnappedTo } = this.state;
     const { wallets } = this.props;
-
     this.props.navigation.navigate(Route.ActionSheet, {
       wallets,
       selectedIndex: lastSnappedTo,
@@ -136,7 +124,6 @@ class DashboardScreen extends Component<Props, State> {
 
   hasWallets = () => {
     const { wallets } = this.props;
-
     return wallets.length > 0;
   };
 
@@ -162,7 +149,6 @@ class DashboardScreen extends Component<Props, State> {
     return (
       <Header
         title={i18n.wallets.dashboard.title}
-        addButtonTestID="add-wallet-button"
         addFunction={() => this.props.navigation.navigate(Route.CreateWallet)}
       />
     );
@@ -176,7 +162,6 @@ class DashboardScreen extends Component<Props, State> {
       <View
         onLayout={event => {
           const { height } = event.nativeEvent.layout;
-
           this.setState({
             contentdHeaderHeight: height,
           });
@@ -213,6 +198,7 @@ class DashboardScreen extends Component<Props, State> {
 
   getTransactions = () => {
     const { allTransactions } = this.props;
+
     const activeWallet = this.getActiveWallet();
 
     return isAllWallets(activeWallet) ? allTransactions : allTransactions.filter(t => t.walletId === activeWallet.id);
@@ -240,7 +226,6 @@ class DashboardScreen extends Component<Props, State> {
     }
     return (
       <ListEmptyState
-        testID="no-wallets-icon"
         variant={ListEmptyState.Variant.Dashboard}
         onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
       />
@@ -265,7 +250,7 @@ class DashboardScreen extends Component<Props, State> {
         {!!this.props.isFilteringOn && (
           <View style={styles.clearFiltersButtonContainer}>
             <TouchableOpacity onPress={this.resetFilters} style={styles.clearFiltersButton}>
-              <StyledText testID="clear-all-filters-button" title={i18n.filterTransactions.clearFilters} />
+              <StyledText title={i18n.filterTransactions.clearFilters} />
             </TouchableOpacity>
           </View>
         )}
@@ -288,7 +273,8 @@ const mapDispatchToProps = {
   clearFilters,
 };
 
-export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(DashboardScreen);
+// @ts-ignore - TODO: fix it later
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardScreen);
 
 const styles = StyleSheet.create({
   loadingIndicatorContainer: {

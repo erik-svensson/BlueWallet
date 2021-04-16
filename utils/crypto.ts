@@ -9,8 +9,8 @@ import { NativeModules } from 'react-native';
 
 const { RNRandomBytes } = NativeModules;
 
-import config from '../src/config';
-import { ELECTRUM_VAULT_SEED_KEY, MasterPublicKey } from '../src/consts';
+import config from '../config';
+import { ELECTRUM_VAULT_SEED_KEY } from '../src/consts';
 import { bytesToBits, bitsToBytes } from './buffer';
 
 const i18n = require('../loc');
@@ -53,19 +53,16 @@ export const privateKeyToPublicKey = (privateKey: Buffer) =>
 const create132BitKeyWithSha256 = (bytes: Buffer, random128bits: string) => {
   const SALT_LENGHT = 4;
   const sha256Bits = bytesToBits(crypto.sha256(bytes));
-
   return sha256Bits.slice(0, SALT_LENGHT) + random128bits;
 };
 
 const generateWordsFromBytes = (random132bits: string) => {
   const dividedBits = random132bits.match(/.{1,11}/g);
-
   if (dividedBits === null) {
     throw new Error('Couldn`t parse bits');
   }
   return dividedBits.map(bit => {
     const index = parseInt(bit, 2);
-
     return bip39.wordlists.english[index];
   });
 };
@@ -73,7 +70,6 @@ const generateWordsFromBytes = (random132bits: string) => {
 export const bytesToMnemonic = (bytes: Buffer): string => {
   const random128bits = bytesToBits(bytes);
   const random132bits = create132BitKeyWithSha256(bytes, random128bits);
-
   return generateWordsFromBytes(random132bits).join(' ');
 };
 
@@ -82,7 +78,6 @@ export const mnemonicToBits = (mnemonic: string) => {
 
   return mnemonic.split(' ').reduce((bits, word) => {
     const index = bip39.wordlists.english.indexOf(word);
-
     if (index === -1) {
       throw new Error(
         i18n.formatString(i18n.wallets.errors.noIndexForWord, {
@@ -97,7 +92,6 @@ export const mnemonicToBits = (mnemonic: string) => {
 export const mnemonicToEntropy = (mnemonic: string) => {
   const SALT_LENGHT = 4;
   const bits128 = mnemonicToBits(mnemonic).slice(SALT_LENGHT);
-
   return bitsToBytes(bits128);
 };
 
@@ -140,7 +134,6 @@ export const mnemonicToKeyPair = async (mnemonic: string) => {
 export const isElectrumVaultMnemonic = (mnemonic: string, prefix: string): boolean => {
   const hmac = hmacSHA512(mnemonic, ELECTRUM_VAULT_SEED_KEY);
   const hex = hmac.toString(CryptoJS.enc.Hex);
-
   return hex.startsWith(prefix);
 };
 
@@ -151,7 +144,6 @@ export const getRandomBytes = (byteSize: number): Promise<Buffer> =>
         reject(err);
       }
       const buffer = Buffer.from(bytes, 'base64');
-
       resolve(buffer);
     });
   });
@@ -164,22 +156,3 @@ export const electrumVaultMnemonicToSeed = (mnemonic: string, password = '') =>
     keylen: 64,
     digest: 'sha512',
   });
-
-export const getMasterPublicKeyPrefix = (header: MasterPublicKey) => {
-  const headersTestnet = {
-    xpub: '043587cf',
-    ypub: '044a5262',
-    Ypub: '024289ef',
-    zpub: '045f1cf6',
-    Zpub: '02575483',
-  };
-  const headersMainnet = {
-    xpub: '0488b21e',
-    ypub: '049d7cb2',
-    Ypub: '0295b43f',
-    zpub: '04b24746',
-    Zpub: '02aa7ed3',
-  };
-
-  return config.networkName === 'bitcoinvault' ? headersMainnet[header] : headersTestnet[header];
-};

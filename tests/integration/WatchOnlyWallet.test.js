@@ -21,7 +21,6 @@ beforeAll(async () => {
 describe('Watch only wallet', () => {
   it('can fetch balance', async () => {
     const w = new WatchOnlyWallet();
-
     w.setSecret('RAvAthYyPGVEUMWRHBwod63XSKYcx6aF28');
     await w.fetchBalance();
     assert.ok(w.getBalance() > 0);
@@ -43,7 +42,6 @@ describe('Watch only wallet', () => {
   it('can fetch complex TXs', async () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 120 * 1000;
     const w = new WatchOnlyWallet();
-
     w.setSecret('YRMrqNUKAfA2bQ7RmSz1hLYCeGAtci8NkT');
     await w.fetchTransactions();
     for (const tx of w.getTransactions()) {
@@ -53,7 +51,6 @@ describe('Watch only wallet', () => {
 
   it('can validate address', async () => {
     const w = new WatchOnlyWallet();
-
     w.setSecret('12eQ9m4sgAwTSQoNXkRABKhCXCsjm2jdVG');
     assert.ok(!w.valid());
     w.setSecret('YRMrqNUKAfA2bQ7RmSz1hLYCeGAtci8NkT');
@@ -78,7 +75,6 @@ describe('Watch only wallet', () => {
   it.skip('can fetch balance & transactions from zpub HD', async () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 100 * 1000;
     const w = new WatchOnlyWallet();
-
     w.setSecret(
       'zpub6r7jhKKm7BAVx3b3nSnuadY1WnshZYkhK8gKFoRLwK9rF3Mzv28BrGcCGA3ugGtawi1WLb2vyjQAX9ZTDGU5gNk2bLdTc3iEXr6tzR1ipNP',
     );
@@ -91,7 +87,6 @@ describe('Watch only wallet', () => {
 
   it('can create PSBT base64 without signature for HW wallet', async () => {
     const w = new WatchOnlyWallet();
-
     await w.setSecret(
       'zpub6rjLjQVqVnj7crz9E4QWj4WgczmEseJq22u2B6k2HZr6NE2PQx3ZYg8BnbjN9kCfHymSeMd2EpwpM5iiz5Nrb3TzvddxW2RMcE3VXdVaXHk',
     );
@@ -125,7 +120,6 @@ describe('Watch only wallet', () => {
 
   it('can combine signed PSBT and prepare it for broadcast', async () => {
     const w = new WatchOnlyWallet();
-
     await w.setSecret(
       'zpub6rjLjQVqVnj7crz9E4QWj4WgczmEseJq22u2B6k2HZr6NE2PQx3ZYg8BnbjN9kCfHymSeMd2EpwpM5iiz5Nrb3TzvddxW2RMcE3VXdVaXHk',
     );
@@ -146,7 +140,6 @@ describe('Watch only wallet', () => {
   xit('can fetch balance & transactions from ypub HD', async () => {
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 100 * 1000;
     const w = new WatchOnlyWallet();
-
     w.setSecret(
       'ypub6Wj9dHZAtSM3DQB6kG37aK5i1yJbBoM2d1W57aMkyLx4cNyGqWYpGvL194zA4HSxWpQyoPrsXE2PP4pNUqu5cvvHUK2ZpfUeHFmuK4THAD3',
     );

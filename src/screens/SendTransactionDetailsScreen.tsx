@@ -1,4 +1,5 @@
 import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
 import { Text, View, StyleSheet, Linking, Clipboard } from 'react-native';
 
@@ -12,12 +13,14 @@ import { satoshiToBtc } from '../../utils/bitcoin';
 const i18n = require('../../loc');
 
 interface Props {
+  navigation: StackNavigationProp<RootStackParams, Route.SendTransactionDetails>;
   route: RouteProp<RootStackParams, Route.SendTransactionDetails>;
 }
 
 export class SendTransactionDetailsScreen extends PureComponent<Props> {
   render() {
     const {
+      navigation,
       route: { params },
     } = this.props;
     const {
@@ -27,10 +30,12 @@ export class SendTransactionDetailsScreen extends PureComponent<Props> {
       recipients: [recipient],
     } = params;
     const txSize = Math.round(tx.length / 2);
-    const amount = recipient.amount?.toFixed(8).replace(/0+$/, '') || satoshiToBtc(recipient.value).toString();
+    const amount = recipient.amount || satoshiToBtc(recipient.value).toString();
 
     return (
-      <ScreenTemplate header={<Header title={i18n.transactions.details.details} isBackArrow />}>
+      <ScreenTemplate
+        header={<Header title={i18n.transactions.details.details} isCancelButton={true} navigation={navigation} />}
+      >
         <View style={styles.upperContainer}>
           <Text style={styles.title}>{i18n.transactions.details.transactionHex}</Text>
           <Text style={styles.description}>{i18n.transactions.details.transactionHexDescription}</Text>

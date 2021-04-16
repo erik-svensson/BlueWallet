@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { cloneDeep } from 'lodash';
 import React from 'react';
@@ -6,28 +6,17 @@ import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Button, FlatButton, Header, ScreenTemplate, WalletCard, ButtonType, Text } from 'app/components';
-import { Wallet, Route, RootStackParams, ActionMeta, CONST, ConfirmAddressFlowType } from 'app/consts';
+import { Wallet, Route, MainCardStackNavigatorParams, RootStackParams, ActionMeta, CONST } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
-import { reducer as notificationReducer } from 'app/state/notifications';
-import {
-  checkSubscription,
-  CheckSubscriptionAction,
-  subscribeWallet as subscribeWalletAction,
-  unsubscribeWallet as unsubscribeWalletAction,
-  SubscribeWalletActionCreator,
-  UnsubscribeWalletActionCreator,
-} from 'app/state/notifications/actions';
-import { isWalletSubscribed, storedEmail, isLoading, readableError } from 'app/state/notifications/selectors';
-import { reducer as walletReducer } from 'app/state/wallets';
+import { selectors, reducer } from 'app/state/wallets';
 import {
   updateWallet as updateWalletAction,
   UpdateWalletAction,
   deleteWallet as deleteWalletAction,
   DeleteWalletAction,
 } from 'app/state/wallets/actions';
-import { getById, getWalletsLabels } from 'app/state/wallets/selectors';
 import { palette, typography } from 'app/styles';
 
 import { WatchOnlyWallet } from '../../class';
@@ -36,44 +25,26 @@ const i18n = require('../../loc');
 
 interface Props {
   updateWallet: (wallet: Wallet) => UpdateWalletAction;
-  navigation: StackNavigationProp<RootStackParams, Route.WalletDetails>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.WalletDetails>
+  >;
   wallet?: Wallet;
-  error: string;
   deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
-  checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
-  subscribe: SubscribeWalletActionCreator;
-  unsubscribe: UnsubscribeWalletActionCreator;
-  route: RouteProp<RootStackParams, Route.WalletDetails>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.WalletDetails>;
   walletsLabels: string[];
-  email: string;
-  isSubscribed: boolean;
-  isLoading: boolean;
 }
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
-  componentDidMount() {
-    this.checkSubscription();
-  }
-
-  checkSubscription = () => {
-    const { wallet, email, checkSubscription } = this.props;
-
-    if (wallet) {
-      checkSubscription([wallet], email);
-    }
-  };
-
   validationError = (value: string): string | undefined => {
     const trimmedValue = value.trim();
     const checkAllWallets =
       value.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase() || value === CONST.allWallets;
     const { walletsLabels, wallet } = this.props;
-
     if (!wallet) {
       return;
     }
     const allOtherWalletLabels = walletsLabels.filter((label: string) => label !== wallet.label);
-
     if (allOtherWalletLabels.includes(trimmedValue)) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
@@ -86,24 +57,15 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   navigateToWalletXpub = () => this.navigateWithWallet(Route.ExportWalletXpub);
 
-  renderConfirmScreenContent = () => (
-    <>
-      <Text style={styles.confirmTitle}>{i18n.wallets.deleteWallet.title}</Text>
-      <Text
-        style={styles.confirmDescription}
-      >{`${i18n.wallets.deleteWallet.description1} ${this.props.wallet?.label}${i18n.wallets.deleteWallet.description2}`}</Text>
-    </>
-  );
-
   navigateToDeleteWallet = () => {
     const { deleteWallet, navigation, wallet } = this.props;
-
     if (!wallet) {
       return;
     }
-    navigation.navigate(Route.Confirm, {
+    navigation.navigate(Route.DeleteEntity, {
+      name: wallet.label,
       title: i18n.wallets.deleteWallet.header,
-      children: this.renderConfirmScreenContent(),
+      subtitle: i18n.wallets.deleteWallet.title,
       onConfirm: () => {
         deleteWallet(wallet.id, {
           onSuccess: () => {
@@ -113,7 +75,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               type: MessageType.success,
               buttonProps: {
                 title: i18n.message.returnToDashboard,
-                onPress: this.goToDashboard,
+                onPress: () => navigation.navigate(Route.Dashboard),
               },
             });
           },
@@ -122,11 +84,8 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     });
   };
 
-  goToDashboard = () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
-
   navigateWithWallet = (route: Route.ExportWalletXpub | Route.ExportWallet) => {
     const { navigation, wallet } = this.props;
-
     if (!wallet) {
       return;
     }
@@ -138,25 +97,20 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
   setLabel = (label: string) => {
     const trimmedlabel = label.trim();
     const { wallet, updateWallet } = this.props;
-
     if (!wallet) {
       return;
     }
-    const updatedWallet = cloneDeep(wallet);
-
-    updatedWallet.setLabel(trimmedlabel);
-    updateWallet(updatedWallet);
+    const updatedWalelt = cloneDeep(wallet);
+    updatedWalelt.setLabel(trimmedlabel);
+    updateWallet(updatedWalelt);
   };
 
   editAmount = () => {
     const { wallet, navigation } = this.props;
-
     if (!wallet) {
       return;
     }
     navigation.navigate(Route.EditText, {
-      inputTestID: 'wallet-name-input',
-      submitButtonTestID: 'submit-wallet-name-button',
       title: i18n.wallets.details.nameEdit,
       label: i18n.wallets.details.nameLabel,
       onSave: this.setLabel,
@@ -166,100 +120,23 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
     });
   };
 
-  confirmEmail = (flowType: ConfirmAddressFlowType, onResend: () => void) => {
-    const { email, navigation, wallet } = this.props;
-
-    wallet &&
-      navigation.navigate(Route.ConfirmEmail, {
-        email,
-        flowType,
-        wallets: [wallet],
-        onSuccess: () => {
-          CreateMessage({
-            title: i18n.message.success,
-            description: i18n.notifications.updateNotificationPreferences,
-            type: MessageType.success,
-            buttonProps: {
-              title: i18n.message.goToWalletDetails,
-              onPress: () => {
-                this.navigateBackToScreen();
-                this.checkSubscription();
-              },
-            },
-          });
-        },
-        onResend,
-      });
-  };
-
-  navigateBackToScreen = () => {
-    const { navigation, wallet } = this.props;
-
-    wallet && navigation.navigate(Route.WalletDetails, { id: wallet.id });
-  };
-
-  subscribe = (wallet: Wallet, email: string) => {
-    this.props.subscribe([wallet], email);
-    this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE, () => this.props.subscribe([wallet], email));
-  };
-
-  unSubscribe = (wallet: Wallet, email: string) => {
-    this.props.unsubscribe([wallet], email);
-    this.confirmEmail(ConfirmAddressFlowType.UNSUBSCRIBE, () => this.props.unsubscribe([wallet], email));
-  };
-
-  onSubscribeButtonPress = () => {
-    const { email, navigation, wallet, isSubscribed } = this.props;
-
-    if (!wallet) return;
-    if (!email) {
-      return navigation.navigate(Route.Notifications, {
-        onBackArrow: () => this.navigateBackToScreen(),
-        wallet,
-      });
-    }
-
-    if (!isSubscribed) {
-      return this.subscribe(wallet, email);
-    }
-
-    return this.unSubscribe(wallet, email);
-  };
-
   render() {
-    const { wallet, isSubscribed, isLoading } = this.props;
-
+    const { wallet } = this.props;
     if (!wallet) {
       return null;
     }
     const isWatchOnly = wallet.type === WatchOnlyWallet.type;
-
     return (
       <ScreenTemplate
         footer={
           <>
-            {!isWatchOnly && (
-              <Button
-                testID="export-wallet-button"
-                onPress={this.navigateToWalletExport}
-                title={i18n.wallets.details.exportWallet}
-              />
-            )}
+            {!isWatchOnly && <Button onPress={this.navigateToWalletExport} title={i18n.wallets.details.exportWallet} />}
             <Button
-              testID="show-xpub-button"
               onPress={this.navigateToWalletXpub}
               title={i18n.wallets.details.showWalletXPUB}
-              containerStyle={styles.button}
-            />
-            <Button
-              testID="manage-email-notifications-subscription-button"
-              onPress={this.onSubscribeButtonPress}
-              title={isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
-              containerStyle={styles.button}
-              loading={isLoading}
+              containerStyle={styles.showWalletXPUBContainer}
             />
             <FlatButton
-              testID="delete-wallet-button"
               onPress={this.navigateToDeleteWallet}
               title={i18n.wallets.details.deleteWallet}
               containerStyle={styles.deleteWalletButtonContainer}
@@ -267,7 +144,8 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
             />
           </>
         }
-        header={<Header isBackArrow title={wallet.label} onBackArrow={this.goToDashboard} />}
+        // @ts-ignore
+        header={<Header navigation={this.props.navigation} isBackArrow title={wallet.label} />}
       >
         <View style={styles.walletContainer}>
           <WalletCard wallet={wallet} containerStyle={styles.walletContainerInner} />
@@ -275,50 +153,37 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
         <View style={styles.nameInputContainer}>
           <View style={styles.labelInput}>
             <Text style={styles.typeLabel}>{i18n.wallets.details.nameLabel}</Text>
-            <Text testID="wallet-name-text" style={styles.label} onPress={this.editAmount}>
+            <Text style={styles.label} onPress={this.editAmount}>
               {wallet.label}
             </Text>
           </View>
         </View>
         <View style={styles.typeContainer}>
           <Text style={styles.typeLabel}>{i18n.wallets.details.typeLabel}</Text>
-          <Text testID="wallet-type-text" style={styles.typeValue}>
-            {wallet.typeReadable}
-          </Text>
+          <Text style={styles.typeValue}>{wallet.typeReadable}</Text>
         </View>
       </ScreenTemplate>
     );
   }
 }
 
-const mapStateToProps = (
-  state: ApplicationState & walletReducer.WalletsState & notificationReducer.NotificationState,
-  props: Props,
-) => {
+const mapStateToProps = (state: ApplicationState & reducer.WalletsState, props: Props) => {
   const { id } = props.route.params;
-
   return {
-    wallet: getById(state, id),
-    walletsLabels: getWalletsLabels(state),
-    email: storedEmail(state),
-    isLoading: isLoading(state),
-    isSubscribed: isWalletSubscribed(state, id),
-    error: readableError(state),
+    wallet: selectors.getById(state, id),
+    walletsLabels: selectors.getWalletsLabels(state),
   };
 };
 
 const mapDispatchToProps = {
   updateWallet: updateWalletAction,
   deleteWallet: deleteWalletAction,
-  subscribe: subscribeWalletAction,
-  unsubscribe: unsubscribeWalletAction,
-  checkSubscription,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(WalletDetailsScreen);
 
 const styles = StyleSheet.create({
-  button: {
+  showWalletXPUBContainer: {
     marginTop: 20,
   },
   deleteWalletButtonContainer: {
@@ -352,12 +217,4 @@ const styles = StyleSheet.create({
     marginTop: 4,
     ...typography.caption,
   },
-  confirmDescription: {
-    ...typography.caption,
-    color: palette.textGrey,
-    textAlign: 'center',
-    lineHeight: 19,
-    marginTop: 18,
-  },
-  confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });

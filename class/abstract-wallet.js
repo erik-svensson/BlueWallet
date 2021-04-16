@@ -1,8 +1,8 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import { v4 as uuidv4 } from 'uuid';
 
+import config from '../config';
 import { BitcoinUnit, Chain } from '../models/bitcoinUnits';
-import config from '../src/config';
 
 const createHash = require('create-hash');
 
@@ -13,7 +13,6 @@ export class AbstractWallet {
   static fromJson(obj) {
     const obj2 = JSON.parse(obj);
     const temp = new this();
-
     for (const key2 of Object.keys(obj2)) {
       temp[key2] = obj2[key2];
     }
@@ -171,10 +170,6 @@ export class AbstractWallet {
   }
 
   getAddress() {
-    throw Error('not implemented');
-  }
-
-  getDerivationPath() {
     throw Error('not implemented');
   }
 

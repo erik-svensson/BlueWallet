@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Transaction } from 'bitcoinjs-lib';
 import { round } from 'lodash';
@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, StyledText, Image, Text, Warning, EllipsisText } from 'app/components';
-import { Route, RootStackParams, ActionMeta } from 'app/consts';
+import { Route, MainCardStackNavigatorParams, RootStackParams, ActionMeta } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import * as txNotesActions from 'app/state/transactionsNotes/actions';
 import * as walletsActions from 'app/state/wallets/actions';
@@ -21,7 +21,6 @@ const i18n = require('../../loc');
 const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void, buttonTitle?: string) => (
   <View style={styles.footer}>
     <Button
-      testID="transaction-confirmation-button"
       title={buttonTitle || i18n.send.confirm.sendNow}
       containerStyle={styles.buttonContainer}
       onPress={onSendPress}
@@ -31,19 +30,21 @@ const ScreenFooter = (onSendPress: () => void, onDetailsPress: () => void, butto
 );
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.SendCoinsConfirm>;
+  navigation: CompositeNavigationProp<
+    StackNavigationProp<RootStackParams, Route.MainCardStackNavigator>,
+    StackNavigationProp<MainCardStackNavigatorParams, Route.SendCoinsConfirm>
+  >;
   createTransactionNote: (txid: string, note: string) => txNotesActions.CreateTransactionNoteAction;
   sendTransaction: (
     { txDecoded }: { txDecoded: Transaction },
     meta?: ActionMeta,
   ) => walletsActions.SendTransactionAction;
-  route: RouteProp<RootStackParams, Route.SendCoinsConfirm>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.SendCoinsConfirm>;
 }
 
 class SendCoinsConfirmScreen extends Component<Props> {
   getAmountByTx = (txDecoded: Transaction): { my: number; foreign: number } => {
     const { fromWallet } = this.props.route.params;
-
     return txDecoded.outs.reduce(
       (amount: { my: number; foreign: number }, out: { value: number; script: Uint8Array }) => {
         if (fromWallet.isOutputScriptMine(out.script)) {
@@ -66,7 +67,6 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const balance = fromWallet.balance;
     const incomingBalance = fromWallet.incoming_balance;
     const amount = this.getAmountByTx(txDecoded);
-
     if (isAlert) {
       return {
         availableBalance: satoshiToBtc(balance - amount.my - amount.foreign).toNumber() - fee,
@@ -76,7 +76,6 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
     if (pendingAmountDecrease !== undefined) {
       const decreasePending = roundBtcToSatoshis(pendingAmountDecrease);
-
       return {
         availableBalance: satoshiToBtc(balance + amount.my),
         pendingBalance: satoshiToBtc(incomingBalance).toNumber() - decreasePending,
@@ -89,54 +88,49 @@ class SendCoinsConfirmScreen extends Component<Props> {
     };
   };
 
-  navgitateToMainCard = () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
+  navgitateToMainCard = () => this.props.navigation.navigate(Route.MainCardStackNavigator);
 
-  broadcast = () =>
-    new Promise<void>((resolve, reject) => {
-      const {
-        createTransactionNote,
-        sendTransaction,
-        route: {
-          params: { txDecoded, successMsgDesc, memo },
+  broadcast = () => {
+    const {
+      createTransactionNote,
+      sendTransaction,
+      route: {
+        params: { txDecoded, successMsgDesc, memo },
+      },
+      navigation,
+    } = this.props;
+
+    sendTransaction(
+      { txDecoded },
+      {
+        onSuccess: (txid: string) => {
+          const trimmedMemo = memo?.trim();
+
+          if (trimmedMemo) {
+            createTransactionNote(txid, trimmedMemo);
+          }
+
+          CreateMessage({
+            title: i18n.message.hooray,
+            description: successMsgDesc || i18n.send.success.description,
+            type: MessageType.success,
+            buttonProps: {
+              title: i18n.message.returnToDashboard,
+              onPress: this.navgitateToMainCard,
+            },
+          });
         },
-        navigation,
-      } = this.props;
-
-      sendTransaction(
-        { txDecoded },
-        {
-          onSuccess: (txid: string) => {
-            const trimmedMemo = memo?.trim();
-
-            if (trimmedMemo) {
-              createTransactionNote(txid, trimmedMemo);
-            }
-
-            CreateMessage({
-              title: i18n.message.hooray,
-              description: successMsgDesc || i18n.send.success.description,
-              type: MessageType.success,
-              buttonProps: {
-                title: i18n.message.returnToDashboard,
-                onPress: () => {
-                  this.navgitateToMainCard();
-                  resolve();
-                },
-              },
-            });
-          },
-          onFailure: (error: string) => {
-            Alert.alert(i18n.send.error.title, error, [
-              {
-                text: 'OK',
-                onPress: () => navigation.goBack(),
-              },
-            ]);
-            reject(error);
-          },
+        onFailure: (error: string) => {
+          Alert.alert('ERROR', error, [
+            {
+              text: 'OK',
+              onPress: () => navigation.goBack(),
+            },
+          ]);
         },
-      );
-    });
+      },
+    );
+  };
 
   goToDetails = () => {
     const { fee, recipients, txDecoded, satoshiPerByte, fromWallet } = this.props.route.params;
@@ -163,7 +157,6 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
   shouldRenderNewBalances = () => {
     const { fromWallet } = this.props.route.params;
-
     return !!(fromWallet.balance !== undefined && fromWallet.incoming_balance !== undefined);
   };
 
@@ -174,7 +167,6 @@ class SendCoinsConfirmScreen extends Component<Props> {
     const { fromWallet, isAlert } = params;
 
     const { availableBalance, pendingBalance } = this.getNewBalances();
-
     return (
       <View style={styles.balancesContainer}>
         {isAlert && <Warning />}
@@ -196,6 +188,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
   render() {
     const {
+      navigation,
       route: { params },
     } = this.props;
     const { fromWallet, recipients, satoshiPerByte, headerTitle, buttonTitle } = params;
@@ -205,14 +198,15 @@ class SendCoinsConfirmScreen extends Component<Props> {
     return (
       <ScreenTemplate
         footer={ScreenFooter(this.goToUnlockScreen, this.goToDetails, buttonTitle)}
-        header={<Header isBackArrow title={headerTitle || i18n.send.header} />}
+        // @ts-ignore
+        header={<Header navigation={navigation} isBackArrow title={headerTitle || i18n.send.header} />}
       >
         <View style={styles.container}>
           <View>
             <View style={styles.chooseWalletButton}>
               <Text style={typography.headline4}>
-                {`${item.amount?.toFixed(8).replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1') ||
-                  satoshiToBtc(item.value).toString()} ${fromWallet.preferredBalanceUnit}`}
+                {roundBtcToSatoshis(item.amount) || satoshiToBtc(item.value).toString()}{' '}
+                {fromWallet.preferredBalanceUnit}
               </Text>
             </View>
             <View style={styles.descriptionContainer}>

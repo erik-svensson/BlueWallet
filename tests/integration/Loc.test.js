@@ -5,7 +5,6 @@ describe('Localization', () => {
   xit('has all keys in all locales', async () => {
     const en = require('../../loc/en');
     let noErrors = true;
-
     for (const key1 of Object.keys(en)) {
       for (const key2 of Object.keys(en[key1])) {
         // iterating all keys and subkeys in EN locale, which is main

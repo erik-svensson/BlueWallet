@@ -4,63 +4,42 @@ The first ever Bitcoin Vault wallet.
 
 [![Playstore](https://bluewallet.io/img/play-store-badge.svg)](https://play.google.com/store/apps/details?id=io.goldwallet.wallet)
 
-## Prerequisites
 
-* Node.js v.12.14.1 or greater is required
-* For Android: 
-    * version 8 of the Java SE Development Kit (JDK)
-    * Android SDK
-    * Android SDK Platform
-    * Android Virtual Device
-* For iOS: 
-    * Xcode
-    * [CocoaPods](https://cocoapods.org/)
+## BUILD & RUN IT
 
-**If you haven't launched any React Native projects before, you should check [Setting up the development environment · React Native](https://reactnative.dev/docs/environment-setup) to set up your local development environment correctly.**
+* In your console:
 
-## Installation
-
-```sh
-$ git clone https://github.com/bitcoinvault/GoldWallet.git
-$ cd GoldWallet
-$ yarn install
+```
+git clone https://github.com/bitcoinvault/GoldWallet.git
+cd GoldWallet
+npm install
 ```
 
-To run iOS app you also need to install Swift project's dependencies:
+* Add files for firebase:
 
-```sh
-$ cd ios
-$ pod install
+For iOS:
+GoogleService-Info.plist into directory /ios/
+
+For android:
+google-services.json into directory /android/app/
+
+* Create .env file:
+
+Create .env file in root directory. Check the .env.example file for a template
+
+* To run on Android:
+
+```
+npm start android
 ```
 
-To build a binary of any variant, you must have `sentry.properties` files created in root, `./ios`, and `./android`. You can create them by executing `create-sentry-properties.sh` script with the valid Sentry Auth token:
+* To run on iOS:
 
-```sh
-$ SENTRY_AUTH_TOKEN=${TOKEN} bash ./create-sentry-properties.sh  
 ```
-
-But to run the app with Metro server, this step isn't required.
-
-## Running the app
-
-You can launch the Android app in two variants - `prod` and `beta`:
-
-```sh
-$ yarn run android:prod
-$ yarn run android:beta
-```
-
-as well as iOS:
-
-```sh
-$ yarn run ios:prod
-$ yarn run ios:beta
-```
-
-by default, the app runs in `Debug` type which means you must run React packager/server first
-
-```sh
-$ yarn start
+cd ios
+pod install
+cd ..
+npm start ios
 ```
 
 ## Testing
@@ -68,36 +47,56 @@ $ yarn start
 To run unit and integration tests:
 
 ```bash
-$ yarn run test
+npm run test
 ```
 
 To run [Detox](https://github.com/wix/Detox) (end-to-end) tests, please follow the [Install platform-specific dependencies, tools and dev-kits](https://github.com/wix/Detox/blob/master/docs/Introduction.GettingStarted.md#install-platform-specific-dependencies-tools-and-dev-kits) guideline to make sure you have everything configured correctly. Especially the part about [Android (AOSP) Emulators](https://github.com/wix/Detox/blob/master/docs/Introduction.AndroidDevEnv.md) is important.
 
-Build the app for Detox:
+At first, you need to install `detox-cli` globally:
 
 ```sh
-$ yarn build:detox -- -c ${CONFIGURATION}
+npm install -g detox-cli
+```
+
+Once it's done, build the app:
+
+```sh
+detox build -c ${CONFIGURATION}
 ```
 
 Start react-native packager:
 
 ```sh
-$ yarn start:detox
+npm run start
 ```
 
 And then run the tests:
 ```sh
-$ yarn test:detox -- -c ${CONFIGRURATION} 
+detox test -c ${CONFIGRURATION} 
 ```
 
-Check `.detoxrc.json` file to see all available configurations
+Whether you want to test Beta version (testnet) or Prod version (mainnet) of the app, use one of the following configurations:
+
+- Prod: `android.emu.prod`, `ios.sim.prod`
+
+- Beta: `android.emu.beta`, `ios.sim.beta`
 
 To control what tests should be executed use the Jest's `-t` flag:
 
 ```sh
-$ yarn test:detox -- -c ${CONFIGRURATION} -t ${REGEX}
+detox test -c ${CONFIGRURATION} -t ${REGEX}
 ```
+
 
 ## LICENSE
 
 MIT
+
+
+
+
+
+
+**Make sure that firewall doesn't block local TCP/UDP communication. If tests execution stuck on launching, it might be the case.**
+
+https://stackoverflow.com/questions/62094629/emulator-emulator-error-adbhostserver-cpp102-unable-to-connect-to-adb-daemo

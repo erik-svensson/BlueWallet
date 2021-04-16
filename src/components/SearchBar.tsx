@@ -12,7 +12,6 @@ const i18n = require('../../loc');
 
 interface Props {
   query: string;
-  testID?: string;
   setQuery: (query: string) => void;
   onFocus?: () => void;
 }
@@ -41,7 +40,6 @@ export class SearchBar extends React.PureComponent<Props, State> {
 
   render() {
     const { focused } = this.state;
-
     return (
       <View style={styles.container}>
         <View style={styles.inputContainer}>
@@ -54,14 +52,13 @@ export class SearchBar extends React.PureComponent<Props, State> {
             style={styles.textInput}
             onFocus={this.focus}
             onBlur={this.blur}
-            testID={this.props.testID}
             placeholderTextColor={palette.textWhiteMuted}
             placeholder={i18n.contactList.search}
             keyboardType={defaultKeyboardType}
             autoCapitalize="none"
           />
           {!!this.props.query && (
-            <TouchableOpacity testID="searchbar-clear-button" style={styles.clearButton} onPress={this.clear}>
+            <TouchableOpacity style={styles.clearButton} onPress={this.clear}>
               <Image source={images.cancelSmall} style={styles.clearImage} />
             </TouchableOpacity>
           )}

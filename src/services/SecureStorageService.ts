@@ -5,7 +5,6 @@ export default class SecureStorageService {
   async getSecuredValue(key: string): Promise<string> {
     try {
       const value = await RNSecureKeyStore.get(key);
-
       return value;
     } catch (_) {
       return '';
@@ -23,7 +22,6 @@ export default class SecureStorageService {
 
   async checkSecuredPassword(key: string, value: string) {
     const securedStoredPassword = await RNSecureKeyStore.get(key);
-
     return sha256(value).toString() === securedStoredPassword;
   }
 }

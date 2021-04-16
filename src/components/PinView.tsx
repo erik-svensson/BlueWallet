@@ -11,13 +11,11 @@ interface Props {
 export class PinView extends Component<Props> {
   render() {
     const { value, length } = this.props;
-
     return (
       <View style={styles.container}>
         {[...Array(length)].map((el, index) => {
           const isFocused = !value[index] && (value[index - 1] || index === 0);
           const isFilled = value[index];
-
           return (
             <View
               key={index}

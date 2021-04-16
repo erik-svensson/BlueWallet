@@ -1,9 +1,11 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Header, Image } from 'app/components';
+import { Route, MainCardStackNavigatorParams } from 'app/consts';
 import { selectors } from 'app/state/appSettings';
 import { updateSelectedLanguage } from 'app/state/appSettings/actions';
 import { typography } from 'app/styles';
@@ -16,24 +18,19 @@ export interface Language {
 }
 
 interface LanguageItemProps {
-  testID: string;
   selectedLanguage: Language;
   selectedLanguageValue: string;
   onLanguageSelect: (value: string) => void;
 }
 
-const LanguageItem = (props: LanguageItemProps) => {
-  const { testID, selectedLanguage, selectedLanguageValue, onLanguageSelect } = props;
+interface SelectLanguageScreenProps {
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.SelectLanguage>;
+}
 
+const LanguageItem = ({ selectedLanguage, selectedLanguageValue, onLanguageSelect }: LanguageItemProps) => {
   const handleLanguageSelect = () => onLanguageSelect(selectedLanguage.value);
-
   return (
-    <TouchableOpacity
-      testID={testID}
-      key={selectedLanguage.value}
-      onPress={handleLanguageSelect}
-      style={styles.langaugeItemContainer}
-    >
+    <TouchableOpacity key={selectedLanguage.value} onPress={handleLanguageSelect} style={styles.langaugeItemContainer}>
       <Text style={styles.languageItem}>{selectedLanguage.label}</Text>
       {selectedLanguage.value === selectedLanguageValue && (
         <View style={styles.successImageContainer}>
@@ -44,7 +41,7 @@ const LanguageItem = (props: LanguageItemProps) => {
   );
 };
 
-export const SelectLanguageScreen = () => {
+export const SelectLanguageScreen = (props: SelectLanguageScreenProps) => {
   const language = useSelector(selectors.language);
   const dispatch = useDispatch();
 
@@ -82,10 +79,12 @@ export const SelectLanguageScreen = () => {
   };
 
   return (
-    <ScreenTemplate header={<Header isBackArrow={true} title={i18n.selectLanguage.header} />}>
+    <ScreenTemplate
+      // @ts-ignore
+      header={<Header isBackArrow={true} navigation={props.navigation} title={i18n.selectLanguage.header} />}
+    >
       {availableLanguages.map(item => (
         <LanguageItem
-          testID={`language-item-${item.value}`}
           selectedLanguage={item}
           selectedLanguageValue={language}
           onLanguageSelect={onLanguageSelect}

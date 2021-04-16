@@ -40,10 +40,8 @@ end
 
 target 'GoldWallet' do
   sharedPods
-  pod 'react-native-config', :path => '../node_modules/react-native-config'
-
 end
 
-target 'GoldWallet Beta' do
+target 'GoldWallet beta' do
   sharedPods
 end

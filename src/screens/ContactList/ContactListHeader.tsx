@@ -18,7 +18,6 @@ interface Props {
 export class ContactListHeader extends React.PureComponent<Props> {
   render() {
     const { onAddButtonPress, onBackArrowPress, title } = this.props;
-
     return (
       <GradientView variant={GradientView.Variant.Primary} style={styles.container}>
         <View style={styles.header}>
@@ -29,7 +28,7 @@ export class ContactListHeader extends React.PureComponent<Props> {
           )}
           <Text style={styles.title}>{title ? title : i18n.contactList.screenTitle}</Text>
           {!!onAddButtonPress && (
-            <TouchableOpacity testID="create-contact-button" style={styles.rightElement} onPress={onAddButtonPress}>
+            <TouchableOpacity style={styles.rightElement} onPress={onAddButtonPress}>
               <Image source={icons.addIcon} style={styles.addIcon} />
             </TouchableOpacity>
           )}

@@ -4,6 +4,7 @@ import {
   StatusBar,
   StyleSheet,
   KeyboardAvoidingView,
+  Platform,
   StyleProp,
   ViewStyle,
   View,
@@ -11,6 +12,7 @@ import {
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { CONST } from 'app/consts';
 import { palette } from 'app/styles';
 import { ifIphoneX, isIos } from 'app/styles/helpers';
 
@@ -27,7 +29,6 @@ interface Props {
   contentContainer?: StyleProp<ViewStyle>;
   refreshControl?: React.ReactElement;
   noScroll?: boolean;
-  testID?: string;
   isCloseToBottom?: (nativeElement: NativeScrollEvent) => boolean;
   allowedUserClick?: () => void;
   keyboardShouldPersistTaps?: 'always' | 'never' | 'handled';
@@ -51,20 +52,17 @@ export class ScreenTemplate extends React.PureComponent<Props> {
       contentContainer,
       refreshControl,
       noScroll,
-      testID,
       isCloseToBottom,
       allowedUserClick,
       keyboardShouldPersistTaps,
     } = this.props;
     const Container = noScroll ? View : ScrollView;
-
     return (
       <SafeAreaProvider style={styles.container}>
         <StatusBar barStyle={statusBarStyle} />
         {header}
         <Container
           ref={this.scrollRef}
-          testID={testID}
           style={[noScroll && styles.contentContainer, noScroll && contentContainer]}
           contentContainerStyle={[styles.contentContainer, contentContainer]}
           refreshControl={refreshControl}

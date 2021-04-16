@@ -40,7 +40,6 @@ export const DashboardContentHeader = ({
   return (
     <View style={styles.header}>
       <Dropdown
-        testID="dashboard-wallets-dropdown"
         title={i18n.formatBalance(Number(balance), unit, true)}
         label={<Text style={styles.buttonDescription}>{i18n.wallets.dashboard.availableBalance}</Text>}
         onSelectPress={onSelectPress}
@@ -69,16 +68,16 @@ export const DashboardContentHeader = ({
       </View>
       {onReceivePress && onSelectPress && !isAllWallets ? (
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity testID="send-coins-button" style={styles.circleButton} onPress={onSendPress}>
+          <TouchableOpacity style={styles.circleButton} onPress={onSendPress}>
             <Image source={images.yellowMinus} style={styles.circleButtonImage} />
             <Text style={styles.circleButtonText}>{i18n.wallets.dashboard.send}</Text>
           </TouchableOpacity>
-          <TouchableOpacity testID="receive-coins-button" style={styles.circleButton} onPress={onReceivePress}>
+          <TouchableOpacity style={styles.circleButton} onPress={onReceivePress}>
             <Image source={images.yellowPlus} style={styles.circleButtonImage} />
             <Text style={styles.circleButtonText}>{i18n.wallets.dashboard.receive}</Text>
           </TouchableOpacity>
           {!!type && shouldRenderRecover(type) && (
-            <TouchableOpacity testID="recover-coins-button" style={styles.circleButton} onPress={onRecoveryPress}>
+            <TouchableOpacity style={styles.circleButton} onPress={onRecoveryPress}>
               <Image source={images.cancel} style={styles.circleButtonImage} />
               <Text style={styles.circleButtonText}>{i18n.wallets.dashboard.recover}</Text>
             </TouchableOpacity>

@@ -8,7 +8,7 @@ import Share from 'react-native-share';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, FlatButton, Separator, TextAreaItem, Mnemonic, InputItem } from 'app/components';
-import { Authenticator, RootStackParams, Route } from 'app/consts';
+import { Authenticator, MainCardStackNavigatorParams, Route } from 'app/consts';
 import { maxAuthenticatorNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { formatDate } from 'app/helpers/date';
@@ -31,8 +31,8 @@ interface ActionProps {
 }
 
 interface NavigationProps {
-  navigation: StackNavigationProp<RootStackParams, Route.OptionsAuthenticator>;
-  route: RouteProp<RootStackParams, Route.OptionsAuthenticator>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.OptionsAuthenticator>;
+  route: RouteProp<MainCardStackNavigatorParams, Route.OptionsAuthenticator>;
 }
 
 interface State {
@@ -46,22 +46,13 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
     name: this.props.authenticator?.name || '',
   };
 
-  renderConfirmScreenContent = () => (
-    <>
-      <Text style={styles.confirmTitle}>{i18n.authenticators.delete.subtitle}</Text>
-      <Text
-        style={styles.confirmDescription}
-      >{`${i18n.wallets.deleteWallet.description1} ${this.props.authenticator?.name}${i18n.wallets.deleteWallet.description2}`}</Text>
-    </>
-  );
-
   onDelete = () => {
     const { deleteAuthenticator, navigation, authenticator } = this.props;
-
     authenticator &&
-      navigation.navigate(Route.Confirm, {
-        children: this.renderConfirmScreenContent(),
+      navigation.navigate(Route.DeleteEntity, {
+        name: authenticator?.name,
         title: i18n.authenticators.delete.title,
+        subtitle: i18n.authenticators.delete.subtitle,
         onConfirm: () => {
           deleteAuthenticator(authenticator.id, {
             onSuccess: () => {
@@ -71,7 +62,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
                 type: MessageType.success,
                 buttonProps: {
                   title: i18n.message.returnToAuthenticators,
-                  onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.AuthenticatorList }),
+                  onPress: () => navigation.navigate(Route.AuthenticatorList),
                 },
               });
             },
@@ -82,7 +73,6 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
 
   share = () => {
     const { authenticator } = this.props;
-
     Share.open({ message: authenticator?.publicKey });
   };
 
@@ -93,7 +83,6 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
     const { name } = this.state;
     const trimmedName = name.trim();
     const authenticatorsLabels = authenticators.map(a => a.name);
-
     if (trimmedName?.length === 0) {
       return i18n.authenticators.errors.noEmpty;
     }
@@ -109,33 +98,29 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
   saveNameAuthenticator = () => {
     const { authenticator, updateAuthenticator } = this.props;
     const { name } = this.state;
-
     if (!!this.validationError || !authenticator) {
       return;
     }
 
     const updatedAuthenticator = cloneDeep(authenticator);
-
     updatedAuthenticator.name = name.trim();
     updateAuthenticator(updatedAuthenticator);
   };
 
   render() {
-    const { authenticator } = this.props;
+    const { authenticator, navigation } = this.props;
 
     if (!authenticator) {
       return null;
     }
     return (
       <ScreenTemplate
-        testID={'authenticator-details-screen'}
         contentContainer={styles.contentContainer}
-        header={<Header isBackArrow title={i18n._.details} />}
+        // @ts-ignore
+        header={<Header navigation={navigation} isBackArrow title={i18n.authenticators.options.title} />}
       >
         <View>
-          <Text testID="authenticator-name" style={styles.subtitle}>
-            {authenticator.name}
-          </Text>
+          <Text style={styles.subtitle}>{authenticator.name}</Text>
           <Text style={[styles.desc, styles.center]}>
             {i18n._.created} {formatDate(authenticator.createdAt)}
           </Text>
@@ -147,13 +132,12 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
               value={this.state.name}
               error={this.validationError}
               setValue={this.setName}
-              testID="rename-authenticator"
               label={i18n.wallets.add.inputLabel}
               maxLength={maxAuthenticatorNameLength}
             />
             <Text style={styles.subtitlePairKey}>{i18n.authenticators.publicKey.title}</Text>
             <TextAreaItem value={authenticator.publicKey} editable={false} style={styles.textArea} />
-            <FlatButton testID="share-public-key-button" onPress={this.share} title={i18n.receive.details.share} />
+            <FlatButton onPress={this.share} title={i18n.receive.details.share} />
             <Text style={styles.subtitle}>{i18n.wallets.exportWallet.title}</Text>
             <View style={styles.qrCodeContainer}>
               <QRCode quietZone={10} value={authenticator.QRCode} size={140} ecl={'H'} />
@@ -161,7 +145,7 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
             <Mnemonic mnemonic={authenticator.secret} />
           </View>
         </View>
-        <TouchableOpacity testID="delete-authenticator" style={styles.deleteWrapper} onPress={this.onDelete}>
+        <TouchableOpacity style={styles.deleteWrapper} onPress={this.onDelete}>
           <Text style={styles.delete}>{i18n.authenticators.options.delete}</Text>
         </TouchableOpacity>
       </ScreenTemplate>
@@ -171,7 +155,6 @@ class OptionsAuthenticatorScreen extends Component<Props, State> {
 
 const mapStateToProps = (state: ApplicationState & AuthenticatorsState, props: Props): MapStateProps => {
   const { id } = props.route.params;
-
   return {
     authenticator: selectors.getById(state, id),
     authenticators: selectors.list(state),
@@ -226,12 +209,4 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
     alignItems: 'center',
   },
-  confirmDescription: {
-    ...typography.caption,
-    color: palette.textGrey,
-    textAlign: 'center',
-    lineHeight: 19,
-    marginTop: 18,
-  },
-  confirmTitle: { ...typography.headline4, marginTop: 16, textAlign: 'center' },
 });

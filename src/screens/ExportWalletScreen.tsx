@@ -1,4 +1,5 @@
 import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
@@ -11,10 +12,11 @@ import { typography } from 'app/styles';
 const i18n = require('../../loc');
 
 interface Props {
+  navigation: StackNavigationProp<RootStackParams, Route.ExportWallet>;
   route: RouteProp<RootStackParams, Route.ExportWallet>;
 }
 
-export const ExportWalletScreen = ({ route }: Props) => {
+export const ExportWalletScreen = ({ route, navigation }: Props) => {
   const { wallet } = route.params;
   const secret = wallet.getSecret();
 
@@ -27,12 +29,14 @@ export const ExportWalletScreen = ({ route }: Props) => {
   }, []);
 
   return (
-    <ScreenTemplate header={<Header title={i18n.wallets.exportWallet.header} isBackArrow />}>
+    <ScreenTemplate
+      header={<Header title={i18n.wallets.exportWallet.header} isCancelButton={true} navigation={navigation} />}
+    >
       <Text style={styles.title}>{i18n.wallets.exportWallet.title}</Text>
-      <View testID="export-wallet-qr-code" style={styles.qrCodeContainer}>
+      <View style={styles.qrCodeContainer}>
         {secret && <QRCode quietZone={10} value={secret} size={140} ecl={'H'} />}
       </View>
-      <Mnemonic testID="export-wallet-seed-phrase" mnemonic={secret} />
+      <Mnemonic mnemonic={secret} />
 
       {wallet.password && (
         <View>

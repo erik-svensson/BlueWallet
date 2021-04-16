@@ -5,7 +5,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, PinInput, ScreenTemplate } from 'app/components';
-import { Route, CONST, FlowType, RootStackParams, finalAttempt } from 'app/consts';
+import { Route, CONST, FlowType, MainCardStackNavigatorParams, finalAttempt } from 'app/consts';
 import { noop } from 'app/helpers/helpers';
 import { TimeCounterScreen } from 'app/screens';
 import { SecureStorageService } from 'app/services';
@@ -17,7 +17,7 @@ import { palette, typography } from 'app/styles';
 const i18n = require('../../../loc');
 
 interface Props {
-  navigation: StackNavigationProp<RootStackParams, Route.CurrentPin>;
+  navigation: StackNavigationProp<MainCardStackNavigatorParams, Route.CurrentPin>;
   appSettings: {
     isPinSet: boolean;
   };
@@ -71,11 +71,9 @@ class CurrentPinScreen extends PureComponent<Props, State> {
 
   updatePin = (pin: string) => {
     const { setFailedAttempts, setFailedAttemptStep } = this.props;
-
     this.setState({ pin }, async () => {
       if (this.state.pin.length === CONST.pinCodeLength) {
         const setPin = await SecureStorageService.getSecuredValue(CONST.pin);
-
         if (setPin === this.state.pin) {
           setFailedAttempts(0);
           setFailedAttemptStep(0);
@@ -85,7 +83,6 @@ class CurrentPinScreen extends PureComponent<Props, State> {
         } else {
           const increasedFailedAttemptStep = this.props.timeCounter.failedAttemptStep + 1;
           const failedTimesError = this.handleFailedAttempt(increasedFailedAttemptStep);
-
           this.setState({
             error: i18n.onboarding.pinDoesNotMatch + failedTimesError,
             pin: '',
@@ -115,20 +112,21 @@ class CurrentPinScreen extends PureComponent<Props, State> {
 
   render() {
     const { error } = this.state;
-
     if (this.isTimeCounterVisible()) {
       return <TimeCounterScreen onTryAgain={this.onTryAgain} timestamp={this.props.timeCounter.timestamp} />;
     }
     return (
-      <ScreenTemplate noScroll header={<Header isBackArrow title={i18n.onboarding.changePin} />}>
+      <ScreenTemplate
+        noScroll
+        // @ts-ignore
+        header={<Header navigation={this.props.navigation} isBackArrow title={i18n.onboarding.changePin} />}
+      >
         <View style={styles.infoContainer}>
           <Text style={typography.headline4}>{i18n.onboarding.currentPin}</Text>
         </View>
         <View style={styles.pinContainer}>
-          <PinInput testID="current-pin-input" value={this.state.pin} onTextChange={this.updatePin} />
-          <Text testID="current-pin-input-validation-error" style={styles.errorText}>
-            {error}
-          </Text>
+          <PinInput value={this.state.pin} onTextChange={this.updatePin} navigation={this.props.navigation} />
+          <Text style={styles.errorText}>{error}</Text>
         </View>
       </ScreenTemplate>
     );

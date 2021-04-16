@@ -46,12 +46,10 @@ const filterByToDate = (transactions: Transaction[], toDate: string): Transactio
 const fileterByFromAmount = (transactions: Transaction[], fromAmount: string): Transaction[] => {
   return transactions.filter(transaction => {
     const amount = Number(fromAmount);
-
     if (Number.isNaN(amount)) {
       return true;
     }
     const val = satoshiToBtc(transaction.value).toNumber();
-
     return Math.abs(val) >= Math.abs(amount);
   });
 };
@@ -59,12 +57,10 @@ const fileterByFromAmount = (transactions: Transaction[], fromAmount: string): T
 const fileterByToAmount = (transactions: Transaction[], toAmount: string): Transaction[] => {
   return transactions.filter(transaction => {
     const amount = Number(toAmount);
-
     if (Number.isNaN(amount)) {
       return true;
     }
     const val = satoshiToBtc(transaction.value).toNumber();
-
     return Math.abs(val) <= Math.abs(amount);
   });
 };
@@ -73,7 +69,6 @@ export const filterBySearch = (search: string, transactions: Transaction[]): Tra
   transactions.filter(transaction => {
     const inputs: string[] = [];
     const outputs: string[] = [];
-
     transaction.inputs.filter(input => {
       inputs.push(...input.addresses);
     });
@@ -114,6 +109,5 @@ export const filterTransaction = (filters: Filters, transactions: Transaction[])
     : fileteredByFromAmount;
   const tags =
     filters.transactionType === CONST.receive ? filters.transactionReceivedTags : filters.transactionSentTags;
-
   return tags.length === 0 ? fileteredByToAmount : filterByTags(fileteredByToAmount, tags);
 };

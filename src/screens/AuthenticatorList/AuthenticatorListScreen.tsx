@@ -1,21 +1,12 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import * as bitcoin from 'bitcoinjs-lib';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, FlatList } from 'react-native';
+import { NavigationInjectedProps } from 'react-navigation';
 import { connect } from 'react-redux';
 
 import { icons, images } from 'app/assets';
 import { Header, Image, ListEmptyState, ScreenTemplate, EllipsisText } from 'app/components';
-import {
-  Route,
-  Authenticator,
-  FinalizedPSBT,
-  CONST,
-  MainTabNavigatorParams,
-  RootStackParams,
-  Wallet,
-} from 'app/consts';
+import { Route, Authenticator, FinalizedPSBT, CONST } from 'app/consts';
 import { formatDate } from 'app/helpers/date';
 import { isCodeChunked } from 'app/helpers/helpers';
 import { ApplicationState } from 'app/state';
@@ -24,6 +15,7 @@ import { palette, typography } from 'app/styles';
 
 const BigNumber = require('bignumber.js');
 
+const BlueElectrum = require('../../../BlueElectrum');
 const i18n = require('../../../loc');
 
 interface MapStateProps {
@@ -40,14 +32,7 @@ interface State {
   codeValue: string;
 }
 
-interface OwnProps {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<MainTabNavigatorParams, Route.AuthenticatorList>,
-    StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
-  >;
-}
-
-type Props = OwnProps & MapStateProps & ActionProps;
+type Props = NavigationInjectedProps & MapStateProps & ActionProps;
 
 class AuthenticatorListScreen extends Component<Props, State> {
   state = {
@@ -55,7 +40,6 @@ class AuthenticatorListScreen extends Component<Props, State> {
   };
   componentDidMount() {
     const { loadAuthenticators } = this.props;
-
     loadAuthenticators();
   }
 
@@ -64,13 +48,11 @@ class AuthenticatorListScreen extends Component<Props, State> {
 
   readPsbt = () => {
     const { navigation } = this.props;
-
     navigation.navigate(Route.ScanQrCode, {
       onBarCodeScan: (psbt: string) => {
         if (isCodeChunked(psbt)) {
           const [chunkNo, chunksQuantity, codeValue] = psbt.split(';');
           const newCodeValue = this.state.codeValue.concat(codeValue);
-
           return this.setState({ codeValue: newCodeValue }, () => {
             if (chunkNo === chunksQuantity) {
               this.signTransaction(this.state.codeValue);
@@ -91,7 +73,6 @@ class AuthenticatorListScreen extends Component<Props, State> {
 
   signTransaction = (psbt: string) => {
     const { navigation, signTransaction } = this.props;
-
     signTransaction(psbt, {
       onSuccess: ({
         finalizedPsbt: { recipients, tx, fee, vaultTxType },
@@ -104,14 +85,14 @@ class AuthenticatorListScreen extends Component<Props, State> {
           vaultTxType === bitcoin.payments.VaultTxType.Recovery
             ? i18n.message.cancelTxSuccess
             : i18n.send.transaction.fastSuccess;
-
         navigation.navigate(Route.SendCoinsConfirm, {
           fee,
-          // dirty hack, pretending that we are sending from real wallet
+          // pretending that we are sending from real wallet
           fromWallet: {
             label: authenticator.name,
             preferredBalanceUnit: CONST.preferredBalanceUnit,
-          } as Wallet,
+            broadcastTx: BlueElectrum.broadcast,
+          },
           txDecoded: tx,
           recipients,
           successMsgDesc,
@@ -129,11 +110,7 @@ class AuthenticatorListScreen extends Component<Props, State> {
   };
 
   renderItem = ({ item }: { item: Authenticator }) => (
-    <TouchableOpacity
-      testID={`authenticator-${item.name}`}
-      style={styles.authenticatorWrapper}
-      onPress={() => this.navigateToOptions(item.id)}
-    >
+    <TouchableOpacity style={styles.authenticatorWrapper} onPress={() => this.navigateToOptions(item.id)}>
       <View style={styles.authenticatorLeftColumn}>
         <EllipsisText style={styles.name}>{item.name}</EllipsisText>
         <Text style={styles.date}>
@@ -162,7 +139,6 @@ class AuthenticatorListScreen extends Component<Props, State> {
 
   renderEmptyList = () => (
     <ListEmptyState
-      testID="no-authenticators-icon"
       variant={ListEmptyState.Variant.Authenticators}
       onPress={() => this.props.navigation.navigate(Route.CreateAuthenticator)}
     />
@@ -170,27 +146,25 @@ class AuthenticatorListScreen extends Component<Props, State> {
 
   hasAuthenticators = () => {
     const { authenticators } = this.props;
-
     return !!authenticators.length;
   };
 
   getAuthenticatorsList = () => {
     const { authenticators } = this.props;
-
     return authenticators.sort((a, b) => b.createdAt.valueOf() - a.createdAt.valueOf());
   };
 
   render() {
     const { navigation, loadAuthenticators, isLoading } = this.props;
-
     return (
       <ScreenTemplate
         noScroll={true}
         header={
           <Header
+            // @ts-ignore
+            navigation={navigation}
             isBackArrow={false}
             title={i18n.tabNavigator.authenticators}
-            addButtonTestID="create-authenticator-button"
             addFunction={() => navigation.navigate(Route.CreateAuthenticator)}
           />
         }

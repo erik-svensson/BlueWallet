@@ -1,22 +1,11 @@
 apply plugin: "com.android.application"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 crashlytics {
   enableNdk true
 }
 import com.android.build.OutputFile
-
-project.ext.envConfigFiles = [
-    // requires lowercase
-    proddebug: ".env.testnet",
-    betadebug: ".env.beta.testnet",
-    prodstagingrelease: ".env.testnet",
-    betastagingrelease: ".env.beta.testnet",
-    prodrelease: ".env.mainnet",
-    betarelease: ".env.beta.mainnet",
-]
-
-apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -98,11 +87,6 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
-apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
-
-project.ext.sentryCli = [
-    logLevel: "debug"
-]
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -131,11 +115,9 @@ def useIntlJsc = false
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     flavorDimensions "default" 
-
     lintOptions {
         checkReleaseBuilds false
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -146,14 +128,13 @@ android {
         resValue "string", "build_config_package", "io.goldwallet.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
-        versionName "6.2.0"
+        versionCode 4
+        versionName "6.0.1"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
-
     splits {
         abi {
             reset()
@@ -162,42 +143,23 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
-    
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
         }
-
-        stagingRelease {
-            initWith release
-            matchingFallbacks = ['release', 'staging', 'debug']
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
-        }
-
-        debug {
-            debuggable true
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
-        }
     }
     productFlavors {
-        beta {
-            minSdkVersion rootProject.ext.minSdkVersion
-            applicationId 'io.goldwallet.wallet.beta'
-            targetSdkVersion rootProject.ext.targetSdkVersion
-            resValue "string", "build_config_package", "io.goldwallet.wallet"
-        }
-
         prod {
             minSdkVersion rootProject.ext.minSdkVersion
             applicationId 'io.goldwallet.wallet'
             targetSdkVersion rootProject.ext.targetSdkVersion
-            resValue "string", "build_config_package", "io.goldwallet.wallet"
+        }
+        beta {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId 'io.goldwallet.wallet.testnet'
+            targetSdkVersion rootProject.ext.targetSdkVersion
         }
     }
     // applicationVariants are e.g. debug, release
@@ -217,12 +179,10 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(':react-native-config')
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-    implementation project(':react-native-config')
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation project(path: ":@react-native-firebase_analytics")
-    implementation project(':@sentry_react-native')
     androidTestImplementation('com.wix:detox:+')
     // JSC from node_modules
     if (useIntlJsc) {
