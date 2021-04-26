@@ -750,7 +750,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 6.0.2;
+				MARKETING_VERSION = 6.2.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

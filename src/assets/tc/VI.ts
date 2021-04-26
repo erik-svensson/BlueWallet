@@ -470,7 +470,7 @@ export const vi = `
         </li>
         <li>
             Bên kiểm soát dữ liệu đối với dữ liệu cá nhân của quý vị là Công ty. Quý vị có thể liên hệ với chúng tôi
-            qua email tại địa chỉ contact@bitcoinvault.global
+            qua email tại địa chỉ <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
         </li>
         <li>
             Chúng tôi thu thập các thông tin mà quý vị cung cấp trực tiếp cho chúng tôi do quý vị chấp thuận nhận
