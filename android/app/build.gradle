@@ -8,10 +8,12 @@ import com.android.build.OutputFile
 
 project.ext.envConfigFiles = [
     // requires lowercase
-    proddebug: ".env.testnet",
+    devdebug: ".env.dev.testnet",
+    stagedebug: ".env.stage.mainnet",
+    proddebug: ".env.mainnet",
     betadebug: ".env.beta.testnet",
-    prodstagingrelease: ".env.testnet",
-    betastagingrelease: ".env.beta.testnet",
+    devrelease: ".env.dev.testnet",
+    stagerelease: ".env.stage.mainnet",
     prodrelease: ".env.mainnet",
     betarelease: ".env.beta.mainnet",
 ]
@@ -170,14 +172,6 @@ android {
             proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
         }
 
-        stagingRelease {
-            initWith release
-            matchingFallbacks = ['release', 'staging', 'debug']
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
-        }
-
         debug {
             debuggable true
             minifyEnabled enableProguardInReleaseBuilds
@@ -192,7 +186,18 @@ android {
             targetSdkVersion rootProject.ext.targetSdkVersion
             resValue "string", "build_config_package", "io.goldwallet.wallet"
         }
-
+        dev {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId 'io.goldwallet.wallet.dev'
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "io.goldwallet.wallet"
+        }
+        stage {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId 'io.goldwallet.wallet.stage'
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "io.goldwallet.wallet"
+        }
         prod {
             minSdkVersion rootProject.ext.minSdkVersion
             applicationId 'io.goldwallet.wallet'

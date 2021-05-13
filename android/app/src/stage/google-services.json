@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1017042422982",
+    "project_id": "gold-wallet-stage",
+    "storage_bucket": "gold-wallet-stage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017042422982:android:0393ebe759b739c8971bc7",
+        "android_client_info": {
+          "package_name": "io.goldwallet.wallet.stage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1017042422982-s1bluduhcfbejosmeuqlamgcbp7ucq6a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBDuhj-7T7uz6ALYaytoKZ28-sosUFigQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1017042422982-s1bluduhcfbejosmeuqlamgcbp7ucq6a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1017042422982-pmovg9eup9710u48kqrso2h4k9otvd79.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.minebest.goldwalletbtcv.stage"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
