@@ -510,10 +510,10 @@
 				B53FB7B9264C3EF000463BE5 /* Resources */,
 				B53FB7C3264C3EF000463BE5 /* Bundle React Native code and images */,
 				B53FB7C4264C3EF000463BE5 /* Embed Watch Content */,
+				CE685CA3265D204300FDB9CE /* Firebase */,
 				B53FB7C5264C3EF000463BE5 /* [CP] Copy Pods Resources */,
 				B53FB7C6264C3EF000463BE5 /* Embed App Extensions */,
 				B53FB7C7264C3EF000463BE5 /* [CP-User] [RNFB] Core Configuration */,
-				CE685CA3265D204300FDB9CE /* Firebase */,
 				B53FB7C8264C3EF000463BE5 /* [CP-User] [RNFB] Crashlytics Configuration */,
 				B53FB7C9264C3EF000463BE5 /* Upload Debug Symbols to Sentry */,
 			);
