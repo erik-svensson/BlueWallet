@@ -461,6 +461,7 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				B40D4E2D225841C300428FCC /* Embed Watch Content */,
+				CE685CA4265D3BF000FDB9CE /* Firebase */,
 				791C03B6EF06B63A39F55115 /* [CP] Copy Pods Resources */,
 				3271B0B6236E2E0700DA766F /* Embed App Extensions */,
 				2E266C02CB669B237C891CCC /* [CP-User] [RNFB] Core Configuration */,
@@ -536,6 +537,7 @@
 				B57F8EE7264A847500D41CF9 /* Resources */,
 				B57F8EF1264A847500D41CF9 /* Bundle React Native code and images */,
 				B57F8EF2264A847500D41CF9 /* Embed Watch Content */,
+				CE685CA5265D3C4800FDB9CE /* Firebase */,
 				B57F8EF4264A847500D41CF9 /* Embed App Extensions */,
 				B57F8EF7264A847500D41CF9 /* Upload Debug Symbols to Sentry */,
 				10AE7495979FC764B7DC21E1 /* [CP] Copy Pods Resources */,
@@ -1146,6 +1148,42 @@
 			shellPath = /bin/sh;
 			shellScript = "GOOGLE_SERVICE_INFO_PLIST_FROM=\"${PROJECT_DIR}/${FIREBASE_CONFIG_FILE}.plist\"\nBUILD_APP_DIR=\"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\"\nGOOGLE_SERVICE_INFO_PLIST_TO=\"${BUILD_APP_DIR}/GoogleService-Info.plist\"\ncp \"${GOOGLE_SERVICE_INFO_PLIST_FROM}\" \"${GOOGLE_SERVICE_INFO_PLIST_TO}\" \n";
 		};
+		CE685CA4265D3BF000FDB9CE /* Firebase */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Firebase;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "GOOGLE_SERVICE_INFO_PLIST_FROM=\"${PROJECT_DIR}/${FIREBASE_CONFIG_FILE}.plist\"\nBUILD_APP_DIR=\"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\"\nGOOGLE_SERVICE_INFO_PLIST_TO=\"${BUILD_APP_DIR}/GoogleService-Info.plist\"\ncp \"${GOOGLE_SERVICE_INFO_PLIST_FROM}\" \"${GOOGLE_SERVICE_INFO_PLIST_TO}\" \n";
+		};
+		CE685CA5265D3C4800FDB9CE /* Firebase */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Firebase;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nGOOGLE_SERVICE_INFO_PLIST_FROM=\"${PROJECT_DIR}/${FIREBASE_CONFIG_FILE}.plist\"\nBUILD_APP_DIR=\"${BUILT_PRODUCTS_DIR}/${FULL_PRODUCT_NAME}\"\nGOOGLE_SERVICE_INFO_PLIST_TO=\"${BUILD_APP_DIR}/GoogleService-Info.plist\"\ncp \"${GOOGLE_SERVICE_INFO_PLIST_FROM}\" \"${GOOGLE_SERVICE_INFO_PLIST_TO}\" \n";
+		};
 		E62B42E818C9D896A52721FA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1227,6 +1265,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M3A8VW38MH;
+				FIREBASE_CONFIG_FILE = "GoogleService-Info-prod";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
@@ -1460,6 +1499,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M3A8VW38MH;
+				FIREBASE_CONFIG_FILE = "GoogleService-Info-dev";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
@@ -1504,6 +1544,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M3A8VW38MH;
+				FIREBASE_CONFIG_FILE = "GoogleService-Info-dev";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
@@ -1606,6 +1647,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M3A8VW38MH;
+				FIREBASE_CONFIG_FILE = "GoogleService-Info-prod";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
