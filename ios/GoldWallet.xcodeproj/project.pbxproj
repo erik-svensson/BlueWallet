@@ -37,7 +37,8 @@
 		A2986450243B5FDD00A8F351 /* Ubuntu-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644C243B5FDD00A8F351 /* Ubuntu-Light.ttf */; };
 		A2986451243B5FDD00A8F351 /* Ubuntu-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644D243B5FDD00A8F351 /* Ubuntu-Bold.ttf */; };
 		A2986452243B5FDD00A8F351 /* Ubuntu-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A298644E243B5FDD00A8F351 /* Ubuntu-Regular.ttf */; };
-		B5110A6D264C2F510048A80D /* GoogleService-Info-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5110A6C264C2F510048A80D /* GoogleService-Info-dev.plist */; };
+		B519CCDD2660E6FB00E4A69C /* GoogleService-Info-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5110A6C264C2F510048A80D /* GoogleService-Info-dev.plist */; };
+		B519CCE82660E76800E4A69C /* GoldWalletStage-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B519CCE72660E76800E4A69C /* GoldWalletStage-Info.plist */; };
 		B53FB7B0264C3EF000463BE5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		B53FB7B1264C3EF000463BE5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		B53FB7B2264C3EF000463BE5 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5A3292334450100F8D608 /* Bridge.swift */; };
@@ -51,7 +52,6 @@
 		B53FB7BF264C3EF000463BE5 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3208E93822F63279007F5A27 /* AppCenter-Config.plist */; };
 		B53FB7C1264C3EF000463BE5 /* Launch Screen beta.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A23B9D982538F3B4000E53DE /* Launch Screen beta.storyboard */; };
 		B53FB7C2264C3EF000463BE5 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A23B9D962538E569000E53DE /* Launch Screen.storyboard */; };
-		B53FB7D8264C402400463BE5 /* GoldWalletStage-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B53FB7D7264C402400463BE5 /* GoldWalletStage-Info.plist */; };
 		B57F8EE0264A847500D41CF9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		B57F8EE1264A847500D41CF9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		B57F8EE2264A847500D41CF9 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5A3292334450100F8D608 /* Bridge.swift */; };
@@ -220,8 +220,8 @@
 		B43D046E22584C1B00FBAA95 /* libRNWatch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNWatch.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4D3235A177F4580BA52F2F9 /* libRNCSlider.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCSlider.a; sourceTree = "<group>"; };
 		B5110A6C264C2F510048A80D /* GoogleService-Info-dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-dev.plist"; sourceTree = "<group>"; };
+		B519CCE72660E76800E4A69C /* GoldWalletStage-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoldWalletStage-Info.plist"; sourceTree = "<group>"; };
 		B53FB7CD264C3EF000463BE5 /* GoldWallet Stage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GoldWallet Stage.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B53FB7D7264C402400463BE5 /* GoldWalletStage-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoldWalletStage-Info.plist"; sourceTree = "<group>"; };
 		B57F8EFB264A847500D41CF9 /* GoldWallet Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GoldWallet Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B58BE196264A86ED004E02CD /* GoldWalletDev-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoldWalletDev-Info.plist"; sourceTree = "<group>"; };
 		B58BE1A0264A8700004E02CD /* GoldWallet-beta.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoldWallet-beta.plist"; sourceTree = "<group>"; };
@@ -302,7 +302,7 @@
 		13B07FAE1A68108700A75B9A /* GoldWallet */ = {
 			isa = PBXGroup;
 			children = (
-				B53FB7D7264C402400463BE5 /* GoldWalletStage-Info.plist */,
+				B519CCE72660E76800E4A69C /* GoldWalletStage-Info.plist */,
 				B58BE1A0264A8700004E02CD /* GoldWallet-beta.plist */,
 				B58BE196264A86ED004E02CD /* GoldWalletDev-Info.plist */,
 				A23B9D962538E569000E53DE /* Launch Screen.storyboard */,
@@ -641,8 +641,8 @@
 				B53FB7BA264C3EF000463BE5 /* Ubuntu-Bold.ttf in Resources */,
 				B53FB7BB264C3EF000463BE5 /* Images.xcassets in Resources */,
 				B53FB7BC264C3EF000463BE5 /* Ubuntu-Light.ttf in Resources */,
+				B519CCE82660E76800E4A69C /* GoldWalletStage-Info.plist in Resources */,
 				B53FB7BD264C3EF000463BE5 /* Ubuntu-Medium.ttf in Resources */,
-				B53FB7D8264C402400463BE5 /* GoldWalletStage-Info.plist in Resources */,
 				B53FB7BE264C3EF000463BE5 /* Ubuntu-Regular.ttf in Resources */,
 				B53FB7BF264C3EF000463BE5 /* AppCenter-Config.plist in Resources */,
 				B53FB7C1264C3EF000463BE5 /* Launch Screen beta.storyboard in Resources */,
@@ -655,7 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B57F8EE8264A847500D41CF9 /* Ubuntu-Bold.ttf in Resources */,
-				B5110A6D264C2F510048A80D /* GoogleService-Info-dev.plist in Resources */,
+				B519CCDD2660E6FB00E4A69C /* GoogleService-Info-dev.plist in Resources */,
 				B58BE197264A86ED004E02CD /* GoldWalletDev-Info.plist in Resources */,
 				B57F8EE9264A847500D41CF9 /* Images.xcassets in Resources */,
 				B57F8EEA264A847500D41CF9 /* Ubuntu-Light.ttf in Resources */,
