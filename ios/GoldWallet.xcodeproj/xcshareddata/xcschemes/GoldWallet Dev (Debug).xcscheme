@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
+   LastUpgradeVersion = "1240"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -10,13 +10,13 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "cp &quot;${PROJECT_DIR}/../.env.prod.mainnet&quot; &quot;${PROJECT_DIR}/../.env&quot;&#10;cp -r &quot;${PROJECT_DIR}/GoogleService-Info-prod.plist&quot; &quot;${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist&quot;&#10;">
+               scriptText = "cp &quot;${PROJECT_DIR}/../.env.stage.mainnet&quot; &quot;${PROJECT_DIR}/../.env&quot;&#10;cp -r &quot;${PROJECT_DIR}/GoogleService-Info-dev.plist&quot; &quot;${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist&quot;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-                     BuildableName = "GoldWallet.app"
-                     BlueprintName = "GoldWallet"
+                     BlueprintIdentifier = "B57F8EDD264A847500D41CF9"
+                     BuildableName = "GoldWallet Dev.app"
+                     BlueprintName = "GoldWallet Dev"
                      ReferencedContainer = "container:GoldWallet.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
@@ -32,9 +32,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "GoldWallet.app"
-               BlueprintName = "GoldWallet"
+               BlueprintIdentifier = "B57F8EDD264A847500D41CF9"
+               BuildableName = "GoldWallet Dev.app"
+               BlueprintName = "GoldWallet Dev"
                ReferencedContainer = "container:GoldWallet.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,15 +45,6 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "GoldWallet.app"
-            BlueprintName = "GoldWallet"
-            ReferencedContainer = "container:GoldWallet.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <Testables>
       </Testables>
    </TestAction>
@@ -71,15 +62,15 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "GoldWallet.app"
-            BlueprintName = "GoldWallet"
+            BlueprintIdentifier = "B57F8EDD264A847500D41CF9"
+            BuildableName = "GoldWallet Dev.app"
+            BlueprintName = "GoldWallet Dev"
             ReferencedContainer = "container:GoldWallet.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -88,9 +79,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "GoldWallet.app"
-            BlueprintName = "GoldWallet"
+            BlueprintIdentifier = "B57F8EDD264A847500D41CF9"
+            BuildableName = "GoldWallet Dev.app"
+            BlueprintName = "GoldWallet Dev"
             ReferencedContainer = "container:GoldWallet.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -99,7 +90,7 @@
       buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

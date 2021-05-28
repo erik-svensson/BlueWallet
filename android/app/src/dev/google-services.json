@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "937383826733",
+    "project_id": "gold-wallet-dev-744bb",
+    "storage_bucket": "gold-wallet-dev-744bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:937383826733:android:f0aa82926cb3a9b23befa4",
+        "android_client_info": {
+          "package_name": "io.goldwallet.wallet.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "937383826733-62rue66845kbamfibnaib7ro7ca80ahs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJMC4MbxaWLm30-joJQTl6sON73Kay8bA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "937383826733-62rue66845kbamfibnaib7ro7ca80ahs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

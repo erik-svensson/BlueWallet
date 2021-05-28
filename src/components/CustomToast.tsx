@@ -13,7 +13,7 @@ interface Props {
   onClose: () => void;
 }
 
-export const CustomToast = ({ toast: { title, description, duration }, onClose }: Props) => {
+export const CustomToast = ({ toast: { title, description, duration, icon }, onClose }: Props) => {
   const [closedClicked, setClosedClicked] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -52,9 +52,11 @@ export const CustomToast = ({ toast: { title, description, duration }, onClose }
     }, animationDuration);
   };
 
+  const iconState = icon ? icons.successState : icons.warning;
+
   return (
     <Animated.View style={[{ opacity: fadeAnim }, styles.container]}>
-      <Image source={icons.warning} style={styles.warningIcon} />
+      <Image source={iconState} style={styles.warningIcon} />
       <View style={{ flex: 1, paddingLeft: 10 }}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
