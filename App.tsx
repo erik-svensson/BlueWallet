@@ -7,6 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { Navigator } from 'app/navigators';
 import { AppStateManager } from 'app/services';
+import NotificationsServices from 'app/services/NotificationServices';
 import { AuthenticationAction } from 'app/state/authentication/actions';
 import { persistor, store } from 'app/state/store';
 
@@ -56,6 +57,7 @@ export default class App extends React.PureComponent {
             <View style={styles.wrapper}>
               <Navigator unlockKey={this.state.unlockKey} />
             </View>
+            <NotificationsServices />
           </PersistGate>
         </Provider>
       </I18nextProvider>

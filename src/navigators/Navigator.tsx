@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 import { NavigationContainer } from '@react-navigation/native';
 import JailMonkey from 'jail-monkey';
 import React from 'react';
@@ -6,7 +7,7 @@ import { isEmulator } from 'react-native-device-info';
 import { connect } from 'react-redux';
 
 import config from 'app/config';
-import { CONST, USER_VERSIONS } from 'app/consts';
+import { CONST, USER_VERSIONS, Route, EnhancedTransaction } from 'app/consts';
 import { Toasts } from 'app/containers';
 import { RenderMessage, MessageType } from 'app/helpers/MessageCreator';
 import { BlueApp } from 'app/legacy';
@@ -35,6 +36,7 @@ import {
 } from 'app/state/electrumX/actions';
 import { selectors as notificationSelectors } from 'app/state/notifications';
 import { selectors as walletsSelectors } from 'app/state/wallets';
+import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
 import { isAndroid, isIos } from 'app/styles';
 
 const i18n = require('../../loc');
@@ -50,6 +52,8 @@ interface MapStateToProps {
   isInitialized: boolean;
   hasConnectedToServerAtLeaseOnce: boolean;
   userVersion: USER_VERSIONS;
+  isToast: boolean;
+  allTransactions: EnhancedTransaction[];
 }
 
 interface ActionsDispatch {
@@ -59,6 +63,7 @@ interface ActionsDispatch {
   checkTc: Function;
   checkConnection: () => CheckConnectionAction;
   checkUserVersion: () => CheckUserVersionAction;
+  loadWallets: () => LoadWalletsAction;
 }
 
 interface OwnProps {
@@ -91,6 +96,41 @@ class Navigator extends React.Component<Props, State> {
     startElectrumXListeners();
     checkConnection();
     this.initLanguage();
+
+    // messaging().onNotificationOpenedApp(remoteMessage => {
+    //   console.log('Notification caused app to open from background state:', remoteMessage.notification);
+    //   //TODO
+    //   this.props.loadWallets();
+    //   setTimeout(() => {
+    //     this.handleClickToast(remoteMessage.data?.tx);
+    //   }, 3000);
+    // });
+
+    // messaging()
+    //   .getInitialNotification()
+    //   .then(async remoteMessage => {
+    //     if (remoteMessage) {
+    //       console.log('Notification caused app to open from quit state:', remoteMessage);
+    //       if (remoteMessage.messageId) {
+    //         //TODO
+    //         this.props.loadWallets();
+
+    //         setTimeout(() => {
+    //           this.handleClickToast(remoteMessage.data?.tx);
+    //         }, 2000);
+    //       }
+    //     }
+    //   });
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+      if (remoteMessage.messageId) {
+        this.props.loadWallets();
+        setTimeout(() => {
+          this.handleClickToast(remoteMessage.data?.tx);
+        }, 2000);
+      }
+    });
 
     isEmulator().then(isEmulator => {
       this.setState({
@@ -127,9 +167,9 @@ class Navigator extends React.Component<Props, State> {
   shouldRenderUnlockScreen = () => {
     const { isPinSet, isTxPasswordSet, isAuthenticated } = this.props;
 
-    if (__DEV__) {
-      return false;
-    }
+    // if (__DEV__) {
+    //   return false;
+    // }
     return !isAuthenticated && isTxPasswordSet && isPinSet;
   };
 
@@ -166,8 +206,17 @@ class Navigator extends React.Component<Props, State> {
     this.setState({ isChamberOfSecretsClosed: true });
   };
 
+  handleClickToast = (id: string | undefined) => {
+    const { allTransactions } = this.props;
+    const selectedTransaction = allTransactions.filter(t => t.txid === id);
+
+    if (navigationRef.current) {
+      navigationRef.current?.navigate(Route.TransactionDetails, { transaction: selectedTransaction[0] });
+    }
+  };
+
   renderRoutes = () => {
-    const { isLoading, unlockKey, isAuthenticated, isTcAccepted, userVersion } = this.props;
+    const { isLoading, unlockKey, isAuthenticated, isTcAccepted, userVersion, isToast } = this.props;
 
     if (isLoading) {
       return null;
@@ -188,7 +237,6 @@ class Navigator extends React.Component<Props, State> {
     if (!__DEV__ && config.isBeta && !this.state.isBetaVersionRiskAccepted) {
       return <BetaVersionScreen onButtonPress={this.handleAcceptBetaVersionRisk} />;
     }
-
     return (
       <>
         <RootNavigator
@@ -197,6 +245,7 @@ class Navigator extends React.Component<Props, State> {
           userVersion={userVersion}
         />
         {isAuthenticated && <Toasts />}
+        {isToast && <Toasts onClick={this.handleClickToast} />}
         {this.shouldRenderConnectionIssues() && <ConnectionIssuesScreen />}
         {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
       </>
@@ -221,8 +270,10 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isNotificationEmailSet: notificationSelectors.isNotificationEmailSet(state),
   isAuthenticated: authenticationSelectors.isAuthenticated(state),
   language: appSettingsSelectors.language(state),
+  isToast: appSettingsSelectors.isToast(state),
   isInitialized: walletsSelectors.isInitialized(state),
   hasConnectedToServerAtLeaseOnce: electrumXSelectors.hasConnectedToServerAtLeaseOnce(state),
+  allTransactions: walletsSelectors.transactions(state),
 });
 
 const mapDispatchToProps: ActionsDispatch = {
@@ -232,6 +283,7 @@ const mapDispatchToProps: ActionsDispatch = {
   updateSelectedLanguage: updateSelectedLanguageAction,
   checkConnection: checkConnectionAction,
   checkUserVersion: checkUserVersionAction,
+  loadWallets,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigator);

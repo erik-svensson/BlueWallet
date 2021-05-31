@@ -19,6 +19,7 @@ import { ApplicationState } from 'app/state';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
 import {
   subscribeWallet as subscribeWalletAction,
+  subscribeDeviceToken as subscribeDeviceTokenAction,
   SubscribeWalletActionCreator,
 } from 'app/state/notifications/actions';
 import { storedEmail, readableError } from 'app/state/notifications/selectors';
@@ -34,6 +35,7 @@ interface Props {
   appSettings: AppSettingsState;
   createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
   subscribe: SubscribeWalletActionCreator;
+  subscribeFcmToken: (wallet: Wallet[]) => void;
   walletsLabels: string[];
   email: string;
   error: string;
@@ -94,9 +96,11 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     </>
   );
 
-  navigateToSuccesfullNotificationSubscriptionMessage = () => {
+  navigateToSuccesfullNotificationSubscriptionMessage = (wallet: Wallet) => {
     const { navigation } = this.props;
+    //TODO:
 
+    this.props.subscribeFcmToken([wallet]);
     CreateMessage({
       title: i18n.contactDelete.success,
       description: i18n.message.successSubscription,
@@ -121,7 +125,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
           wallets: [wallet],
-          onSuccess: this.navigateToSuccesfullNotificationSubscriptionMessage,
+          onSuccess: () => this.navigateToSuccesfullNotificationSubscriptionMessage(wallet),
           onResend: () => this.props.subscribe([wallet], email),
         });
       },
@@ -398,6 +402,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   createWallet: createWalletAction,
   subscribe: subscribeWalletAction,
+  subscribeFcmToken: subscribeDeviceTokenAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateWalletScreen);

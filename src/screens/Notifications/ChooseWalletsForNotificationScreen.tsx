@@ -12,6 +12,7 @@ import {
   subscribeWallet as subscribeWalletAction,
   SubscribeWalletActionCreator,
   unsubscribeWallet as unsubscribeWalletAction,
+  subscribeDeviceToken as subscribeDeviceTokenAction,
   UnsubscribeWalletActionCreator,
 } from 'app/state/notifications/actions';
 import { isLoading, readableError } from 'app/state/notifications/selectors';
@@ -23,6 +24,7 @@ interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.ChooseWalletsForNotification>;
   route: RouteProp<RootStackParams, Route.ChooseWalletsForNotification>;
   subscribe: SubscribeWalletActionCreator;
+  subscribeFcmToken: (wallet: Wallet[]) => void;
   unsubscribe: UnsubscribeWalletActionCreator;
   error: string;
   isLoading: boolean;
@@ -111,6 +113,8 @@ export class ChooseWalletsForNotificationScreen extends PureComponent<Props, Sta
 
     if (params.flowType === ConfirmAddressFlowType.SUBSCRIBE) {
       this.props.subscribe(this.state.wallets, params.email);
+      //TODO:
+      this.props.subscribeFcmToken(this.state.wallets);
       return navigation.navigate(Route.ConfirmEmail, {
         email: params.email,
         flowType: params.flowType,
@@ -189,6 +193,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   subscribe: subscribeWalletAction,
   unsubscribe: unsubscribeWalletAction,
+  subscribeFcmToken: subscribeDeviceTokenAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChooseWalletsForNotificationScreen);

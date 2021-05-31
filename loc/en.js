@@ -295,6 +295,10 @@ module.exports = {
     noteSecond: 'If you want to change your email address you can do it later in Settings.',
     noSubscriptionDescription: 'You are not subscribed to any notifications.',
     genericError: "Something went wrong. We're sorry.",
+    pushnotificationsSettings: {
+      title: 'Allow app notifications',
+      label: 'Settings',
+    },
   },
   onboarding: {
     changePin: 'Change PIN',
