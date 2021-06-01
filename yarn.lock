@@ -1732,30 +1732,30 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-2.0.0-rc.1.tgz#78ac885550bf88b10be7dcd983d0a270c336452e"
   integrity sha512-hdqQavGovI5M9NjCj4q4SPXyYOEHpBGXLIHBFETyL0S/B96hb09MXZAhOxsPYYs8KamYSKh2IYKwZ8yEiikNSg==
 
-"@react-native-firebase/analytics@^7.6.2":
-  version "7.6.10"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-7.6.10.tgz#1c8cd7b31cebed53aeacd177bb01fead5f733738"
-  integrity sha512-Qok1s8oY1Gy3VHcCUSKK2oFc8ExghyKhf/KIjI/3gDVW6WDCB9eTGw/QmI5+br6nhZTKhWAgGfnToEQweJ24ig==
+"@react-native-firebase/analytics@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-12.0.0.tgz#25543adc04591f53d9278902462798d795acb40f"
+  integrity sha512-dBkKkGwyAS2QPanjJvMMPb2+PA7FAihIOwRriWW0OwfCm6FJpLDU/VpzsFsLmTL3qIgyaGijmF3HQXJ9SKOmCQ==
 
-"@react-native-firebase/app@^8.4.2":
-  version "8.4.7"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-8.4.7.tgz#7393ba7af36bd815bd5af7c64a20b0dd8a7e3341"
-  integrity sha512-jN788Q17aMOHc49wKc74RC3iZNhFoS+yTZhMBHFVyytf64uK3ofYAk3hjvukkylUTKF0Ni/L+04M0IDv8kStKg==
+"@react-native-firebase/app@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-12.0.0.tgz#52b647a8fc65695eeec89f45bcd7538d727d5864"
+  integrity sha512-ONIQUOiApnCwN/Xxnl6o9305hsuUsQaCWOp8JdlIniNM7QkkIlGqYgnvPowjEXEJVhMVME/B6NSNSidnOd/hHw==
   dependencies:
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
-"@react-native-firebase/crashlytics@^8.4.4":
-  version "8.5.2"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-8.5.2.tgz#6d49a24f0a4f1b3e26d589ed525cde2ffb53932b"
-  integrity sha512-7wZiaHapsXEhTljGE86/lGVWbDUsZrI4PPNLiTx4+ovt8aKSwPrb9h35VGo0dEtlpU0x/ahB1IJ+TxFLqFDeXw==
+"@react-native-firebase/crashlytics@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-12.0.0.tgz#a846798137d0215a34c40d3080616524cb209a8f"
+  integrity sha512-JQK/7ED09blkEJ1nl2ryv5ZVufmF4orkqbD4w9q+OQBqgeuXROsQFLr72vkxQr9+uGOh/eNMCdB0x4wy8g42jQ==
   dependencies:
     stacktrace-js "^2.0.0"
 
-"@react-native-firebase/messaging@^11.5.0":
-  version "11.5.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-11.5.0.tgz#724a65683a23e40fd4a36553198f27227cfe78fd"
-  integrity sha512-bjsoJByiNtikNLCf5RMmUdIj3uH8Uf0eeyM9PdqfNRB1mtVaYrU8AmXnzbSd5SqJ/sxqwyZVuxzWNEJrcOnhZw==
+"@react-native-firebase/messaging@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-12.0.0.tgz#6146b9572a289ffc7f89abd9c2b58d013ed36a22"
+  integrity sha512-rxanSjTfub75g5KgEtnmW7pFHNy5M0iEw+xCtlb/NLCQ4C9asCH3TGCAUqel9NbgsFzUv67WxrVOFRKHHrb4TA==
 
 "@react-navigation/bottom-tabs@^5.6.0":
   version "5.11.3"
