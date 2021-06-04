@@ -186,6 +186,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               onPress: () => {
                 this.navigateBackToScreen();
                 this.checkSubscription();
+                this.props.subscribeFcmToken([wallet]);
               },
             },
           });
@@ -202,8 +203,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   subscribe = (wallet: Wallet, email: string) => {
     this.props.subscribe([wallet], email);
-    //TODO:
-    this.props.subscribeFcmToken([wallet]);
+
     this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE, () => this.props.subscribe([wallet], email));
   };
 

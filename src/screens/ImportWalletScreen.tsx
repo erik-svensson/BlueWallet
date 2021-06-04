@@ -25,6 +25,7 @@ import {
   checkSubscription,
   CheckSubscriptionAction,
   subscribeWallet as subscribeWalletAction,
+  subscribeDeviceToken as subscribeDeviceTokenAction,
   SubscribeWalletActionCreator,
 } from 'app/state/notifications/actions';
 import { isNotificationEmailSet, storedEmail, readableError } from 'app/state/notifications/selectors';
@@ -53,9 +54,9 @@ interface Props {
   wallets: Wallet[];
   isNotificationEmailSet: boolean;
   email: string;
+  subscribeFcmToken: (wallet: Wallet[]) => void;
   subscribe: SubscribeWalletActionCreator;
   error: string;
-
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
   checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
 }
@@ -110,7 +111,11 @@ export class ImportWalletScreen extends Component<Props, State> {
       },
     });
 
-  showSuccessImportMessageScreen = () =>
+  showSuccessImportMessageScreen = (wallet?: Wallet) => {
+    if (wallet) {
+      this.props.subscribeFcmToken([wallet]);
+    }
+
     CreateMessage({
       title: i18n.message.hooray,
       description: i18n.message.successfullWalletImport,
@@ -120,6 +125,7 @@ export class ImportWalletScreen extends Component<Props, State> {
         onPress: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
       },
     });
+  };
 
   onImportButtonPress = () => {
     Keyboard.dismiss();
@@ -181,7 +187,7 @@ export class ImportWalletScreen extends Component<Props, State> {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
           wallets: [wallet],
-          onSuccess: this.showSuccessImportMessageScreen,
+          onSuccess: () => this.showSuccessImportMessageScreen(wallet),
           onResend: () => this.props.subscribe([wallet], email),
         });
       },
@@ -601,6 +607,7 @@ const mapDispatchToProps = {
   importWallet: importWalletAction,
   checkSubscription,
   subscribe: subscribeWalletAction,
+  subscribeFcmToken: subscribeDeviceTokenAction,
 };
 
 export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(ImportWalletScreen);
