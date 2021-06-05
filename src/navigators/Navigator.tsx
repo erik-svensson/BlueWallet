@@ -19,7 +19,7 @@ import { navigationRef } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
-import { updateSelectedLanguage as updateSelectedLanguageAction } from 'app/state/appSettings/actions';
+import { updateSelectedLanguage as updateSelectedLanguageAction, setIsToast } from 'app/state/appSettings/actions';
 import { selectors as authenticationSelectors } from 'app/state/authentication';
 import {
   checkCredentials as checkCredentialsAction,
@@ -35,6 +35,7 @@ import {
   CheckConnectionAction,
 } from 'app/state/electrumX/actions';
 import { selectors as notificationSelectors } from 'app/state/notifications';
+import { addToastMessage } from 'app/state/toastMessages/actions';
 import { selectors as walletsSelectors } from 'app/state/wallets';
 import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
 import { isAndroid, isIos } from 'app/styles';
@@ -64,6 +65,8 @@ interface ActionsDispatch {
   checkConnection: () => CheckConnectionAction;
   checkUserVersion: () => CheckUserVersionAction;
   loadWallets: () => LoadWalletsAction;
+  setIsToast: Function;
+  addToastMessage: Function;
 }
 
 interface OwnProps {
@@ -96,41 +99,7 @@ class Navigator extends React.Component<Props, State> {
     startElectrumXListeners();
     checkConnection();
     this.initLanguage();
-
-    // messaging().onNotificationOpenedApp(remoteMessage => {
-    //   console.log('Notification caused app to open from background state:', remoteMessage.notification);
-    //   //TODO
-    //   this.props.loadWallets();
-    //   setTimeout(() => {
-    //     this.handleClickToast(remoteMessage.data?.tx);
-    //   }, 3000);
-    // });
-
-    // messaging()
-    //   .getInitialNotification()
-    //   .then(async remoteMessage => {
-    //     if (remoteMessage) {
-    //       console.log('Notification caused app to open from quit state:', remoteMessage);
-    //       if (remoteMessage.messageId) {
-    //         //TODO
-    //         this.props.loadWallets();
-
-    //         setTimeout(() => {
-    //           this.handleClickToast(remoteMessage.data?.tx);
-    //         }, 2000);
-    //       }
-    //     }
-    //   });
-
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-      if (remoteMessage.messageId) {
-        this.props.loadWallets();
-        setTimeout(() => {
-          this.handleClickToast(remoteMessage.data?.tx);
-        }, 2000);
-      }
-    });
+    this.handleNotification();
 
     isEmulator().then(isEmulator => {
       this.setState({
@@ -142,6 +111,51 @@ class Navigator extends React.Component<Props, State> {
       }
     });
   }
+
+  handleNotification = () => {
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      if (remoteMessage.data) {
+        this.props.loadWallets();
+      }
+    });
+
+    messaging().onMessage(async remoteMessage => {
+      this.props.loadWallets();
+      if (remoteMessage.messageId) {
+        this.props.loadWallets();
+        this.props.setIsToast(true);
+        setTimeout(() => {
+          this.props.addToastMessage({
+            title: remoteMessage.notification?.title || '',
+            description: remoteMessage.notification?.body || '',
+            id: remoteMessage.data?.tx,
+            status: remoteMessage.data?.failed,
+          });
+        }, 10000);
+      }
+    });
+  };
+
+  componentDidUpdate = (prevProps: Props, prevState: State) => {
+    if (prevProps.isAuthenticated !== this.props.isAuthenticated) {
+      messaging()
+        .getInitialNotification()
+        .then(async remoteMessage => {
+          if (remoteMessage) {
+            if (remoteMessage.messageId) {
+              this.props.loadWallets();
+              this.handleClickToast(remoteMessage.data?.tx);
+            }
+          }
+        });
+
+      messaging().onNotificationOpenedApp(remoteMessage => {
+        if (remoteMessage.data) {
+          this.handleClickToast(remoteMessage.data?.tx);
+        }
+      });
+    }
+  };
 
   initLanguage = async () => {
     const { language, updateSelectedLanguage } = this.props;
@@ -210,7 +224,7 @@ class Navigator extends React.Component<Props, State> {
     const { allTransactions } = this.props;
     const selectedTransaction = allTransactions.filter(t => t.txid === id);
 
-    if (navigationRef.current) {
+    if (!!navigationRef.current) {
       navigationRef.current?.navigate(Route.TransactionDetails, { transaction: selectedTransaction[0] });
     }
   };
@@ -284,6 +298,8 @@ const mapDispatchToProps: ActionsDispatch = {
   checkConnection: checkConnectionAction,
   checkUserVersion: checkUserVersionAction,
   loadWallets,
+  setIsToast,
+  addToastMessage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigator);
