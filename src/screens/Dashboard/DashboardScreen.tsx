@@ -268,17 +268,21 @@ class DashboardScreen extends Component<Props, State> {
           header={this.renderHeader()}
           footer={
             <>
-              <Button
-                onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
-                title={i18n.wallets.add.createWalletButton}
-                testID="create-wallet-button"
-              />
-              <FlatButton
-                onPress={() => this.props.navigation.navigate(Route.ImportWalletChooseType)}
-                containerStyle={styles.importButtonContainer}
-                title={i18n.wallets.add.importWalletButton}
-                testID="import-wallet-button"
-              />
+              {!this.hasWallets() && (
+                <>
+                  <Button
+                    onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
+                    title={i18n.wallets.add.createWalletButton}
+                    testID="create-wallet-button"
+                  />
+                  <FlatButton
+                    onPress={() => this.props.navigation.navigate(Route.ImportWalletChooseType)}
+                    containerStyle={styles.importButtonContainer}
+                    title={i18n.wallets.add.importWalletButton}
+                    testID="import-wallet-button"
+                  />
+                </>
+              )}
             </>
           }
         >
