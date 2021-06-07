@@ -5,7 +5,16 @@ import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity, SectionList } from 'react-native';
 import { connect } from 'react-redux';
 
-import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
+import {
+  ListEmptyState,
+  WalletCard,
+  ScreenTemplate,
+  Header,
+  SearchBar,
+  StyledText,
+  Button,
+  FlatButton,
+} from 'app/components';
 import { Wallet, Route, EnhancedTransaction, CONST, MainTabNavigatorParams, RootStackParams } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
@@ -159,13 +168,7 @@ class DashboardScreen extends Component<Props, State> {
         </DashboardHeader>
       );
     }
-    return (
-      <Header
-        title={i18n.wallets.dashboard.title}
-        addButtonTestID="add-wallet-button"
-        addFunction={() => this.props.navigation.navigate(Route.CreateWallet)}
-      />
-    );
+    return <Header title={i18n.wallets.dashboard.title} addButtonTestID="add-wallet-button" />;
   };
 
   renderWallets = () => {
@@ -259,7 +262,26 @@ class DashboardScreen extends Component<Props, State> {
     }
     return (
       <>
-        <ScreenTemplate noScroll contentContainer={styles.contentContainer} header={this.renderHeader()}>
+        <ScreenTemplate
+          noScroll
+          contentContainer={styles.contentContainer}
+          header={this.renderHeader()}
+          footer={
+            <>
+              <Button
+                onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
+                title={i18n.wallets.add.createWalletButton}
+                testID="create-wallet-button"
+              />
+              <FlatButton
+                onPress={() => this.props.navigation.navigate(Route.ImportWalletChooseType)}
+                containerStyle={styles.importButtonContainer}
+                title={i18n.wallets.add.importWalletButton}
+                testID="import-wallet-button"
+              />
+            </>
+          }
+        >
           {this.renderContent()}
         </ScreenTemplate>
         {!!this.props.isFilteringOn && (
@@ -307,5 +329,8 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 0,
+  },
+  importButtonContainer: {
+    marginTop: 12,
   },
 });

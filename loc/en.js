@@ -557,6 +557,7 @@ module.exports = {
   },
   wallets: {
     add: {
+      createWalletButton: 'Create new wallet',
       addWalletButton: 'Add new wallet',
       advancedOptions: 'Advanced options',
       air: 'Makes Secure, Cancel, and Secure Fast transactions.',
@@ -593,7 +594,7 @@ module.exports = {
       availableBalance: 'Available balance',
       noTransactions: 'No transactions to show.',
       noWallets: 'No wallets',
-      noWalletsDesc1: 'No wallets to show.',
+      noWalletsDesc1: 'Nothing to show. \nAdd your first wallet.',
       noWalletsDesc2: 'to add your first wallet.',
       receive: 'Receive',
       recover: 'Cancel',
