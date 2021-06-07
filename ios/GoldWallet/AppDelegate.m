@@ -43,4 +43,12 @@
 }
 
 
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+// delete the badge
+   [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+// delete the notifications
+  [[UNUserNotificationCenter currentNotificationCenter] removeAllDeliveredNotifications];
+}
+
+
 @end
