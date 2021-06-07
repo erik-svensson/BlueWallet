@@ -186,7 +186,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               onPress: () => {
                 this.navigateBackToScreen();
                 this.checkSubscription();
-                this.props.subscribeFcmToken([wallet]);
+                flowType === ConfirmAddressFlowType.SUBSCRIBE && this.props.subscribeFcmToken([wallet]);
               },
             },
           });
