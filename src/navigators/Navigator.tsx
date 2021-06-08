@@ -136,7 +136,7 @@ class Navigator extends React.Component<Props, State> {
     });
   };
 
-  componentDidUpdate = (prevProps: Props, prevState: State) => {
+  async componentDidUpdate(prevProps: Props, prevState: State) {
     if (prevProps.isAuthenticated !== this.props.isAuthenticated) {
       messaging()
         .getInitialNotification()
@@ -144,7 +144,13 @@ class Navigator extends React.Component<Props, State> {
           if (remoteMessage) {
             if (remoteMessage.messageId) {
               this.props.loadWallets();
-              this.handleClickToast(remoteMessage.data?.tx);
+              if (isIos()) {
+                setTimeout(() => {
+                  this.handleClickToast(remoteMessage.data?.tx);
+                }, 1000);
+              } else {
+                this.handleClickToast(remoteMessage.data?.tx);
+              }
             }
           }
         });
@@ -155,7 +161,7 @@ class Navigator extends React.Component<Props, State> {
         }
       });
     }
-  };
+  }
 
   initLanguage = async () => {
     const { language, updateSelectedLanguage } = this.props;
@@ -224,7 +230,7 @@ class Navigator extends React.Component<Props, State> {
     const { allTransactions } = this.props;
     const selectedTransaction = allTransactions.filter(t => t.txid === id);
 
-    if (!!navigationRef.current) {
+    if (!!navigationRef.current && selectedTransaction.length) {
       navigationRef.current?.navigate(Route.TransactionDetails, { transaction: selectedTransaction[0] });
     }
   };

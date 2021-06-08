@@ -30,8 +30,8 @@ module.exports = {
     readTermsConditions: 'He leído la Política de Privacidad ',
     readPrivacyPolicy: 'Estoy de acuerdo ',
     buttons: {
-      agree: 'No estoy de acuerdo ',
-      disagree: '¿Está seguro? ',
+      agree: 'Está de acuerdo',
+      disagree: 'No estoy de acuerdo',
     },
     modal: {
       header:
