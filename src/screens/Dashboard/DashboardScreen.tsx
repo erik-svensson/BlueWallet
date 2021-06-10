@@ -1,3 +1,4 @@
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { compose } from 'lodash/fp';
@@ -19,6 +20,7 @@ import { Wallet, Route, EnhancedTransaction, CONST, MainTabNavigatorParams, Root
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
+import { clearBadge } from 'app/state/appSettings/actions';
 import { clearFilters, ClearFiltersAction } from 'app/state/filters/actions';
 import * as transactionsNotesSelectors from 'app/state/transactionsNotes/selectors';
 import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
@@ -45,6 +47,7 @@ interface Props {
   loadWallets: () => LoadWalletsAction;
   clearFilters: () => ClearFiltersAction;
   isFilteringOn?: boolean;
+  clearBadge: Function;
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
 }
 
@@ -64,6 +67,7 @@ class DashboardScreen extends Component<Props, State> {
   walletCarouselRef = React.createRef<WalletsCarousel>();
   transactionListRef = React.createRef<SectionList>();
   componentDidMount() {
+    this.props.clearBadge();
     this.props.loadWallets();
   }
 
@@ -312,6 +316,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   loadWallets,
   clearFilters,
+  clearBadge,
 };
 
 export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(DashboardScreen);

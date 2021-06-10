@@ -462,7 +462,7 @@ class SendCoinsScreen extends Component<Props, State> {
       <InputItem
         testID="send-coins-wallet-address-input"
         label={i18n.contactDetails.addressLabel}
-        style={styles.addressInput}
+        style={[styles.addressInput, { paddingBottom: 3 }]}
         value={transaction.address}
         setValue={text => this.processAddressData(text.trim())}
         multiline
@@ -624,7 +624,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   addressContainer: {
-    marginTop: 40,
+    marginTop: 45,
   },
   qrCodeIcon: { position: 'absolute', right: 0, bottom: 25 },
   addressBookIcon: { position: 'absolute', right: 40, bottom: 25 },

@@ -5,6 +5,8 @@ export enum AppSettingsAction {
   UpdateSelectedLanguage = 'UpdateSelectedLanguage',
   SetIsToast = 'SetIsToast',
   SetFCMToken = 'SetFCMToken',
+  CountBadge = 'CountBadge',
+  ClearBadge = 'ClearBadge',
 }
 
 export interface UpdateBiometricSettingAction {
@@ -32,6 +34,15 @@ export interface SetFCMTokenAction {
   value: string;
 }
 
+export interface CountBadgeAction {
+  type: AppSettingsAction.CountBadge;
+  value: number;
+}
+
+export interface ClearBadgeAction {
+  type: AppSettingsAction.ClearBadge;
+}
+
 export interface UpdateSelectedLanguageAction {
   type: AppSettingsAction.UpdateSelectedLanguage;
   value: string;
@@ -43,7 +54,9 @@ export type AppSettingsActionType =
   | UpdateAdvancedOptionsAction
   | UpdateSelectedLanguageAction
   | SetIsToastAction
-  | SetFCMTokenAction;
+  | SetFCMTokenAction
+  | CountBadgeAction
+  | ClearBadgeAction;
 
 export const updateBiometricSetting = (value: boolean): UpdateBiometricSettingAction => ({
   type: AppSettingsAction.UpdateBiometricSetting,
@@ -73,4 +86,13 @@ export const setIsToast = (value: boolean): SetIsToastAction => ({
 export const setFCMToken = (value: string): SetFCMTokenAction => ({
   type: AppSettingsAction.SetFCMToken,
   value,
+});
+
+export const countBadge = (value: number): CountBadgeAction => ({
+  type: AppSettingsAction.CountBadge,
+  value,
+});
+
+export const clearBadge = (): ClearBadgeAction => ({
+  type: AppSettingsAction.ClearBadge,
 });

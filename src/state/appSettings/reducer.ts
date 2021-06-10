@@ -9,6 +9,7 @@ export interface AppSettingsState {
   language: string;
   isToast: boolean;
   fcmToken: string;
+  badge: number;
 }
 
 const initialState: AppSettingsState = {
@@ -18,6 +19,7 @@ const initialState: AppSettingsState = {
   language: CONST.defaultLanguage,
   isToast: false,
   fcmToken: '',
+  badge: 0,
 };
 
 export const appSettingsReducer = (state = initialState, action: AppSettingsActionType): AppSettingsState => {
@@ -46,6 +48,16 @@ export const appSettingsReducer = (state = initialState, action: AppSettingsActi
       return {
         ...state,
         fcmToken: action.value,
+      };
+    case AppSettingsAction.CountBadge:
+      return {
+        ...state,
+        badge: action.value,
+      };
+    case AppSettingsAction.ClearBadge:
+      return {
+        ...state,
+        badge: 0,
       };
     case AppSettingsAction.UpdateSelectedLanguage:
       return {

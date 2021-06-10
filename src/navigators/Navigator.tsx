@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import messaging from '@react-native-firebase/messaging';
 import { NavigationContainer } from '@react-navigation/native';
 import JailMonkey from 'jail-monkey';
@@ -19,7 +20,11 @@ import { navigationRef } from 'app/services';
 import { checkDeviceSecurity } from 'app/services/DeviceSecurityService';
 import { ApplicationState } from 'app/state';
 import { selectors as appSettingsSelectors } from 'app/state/appSettings';
-import { updateSelectedLanguage as updateSelectedLanguageAction, setIsToast } from 'app/state/appSettings/actions';
+import {
+  updateSelectedLanguage as updateSelectedLanguageAction,
+  setIsToast,
+  countBadge,
+} from 'app/state/appSettings/actions';
 import { selectors as authenticationSelectors } from 'app/state/authentication';
 import {
   checkCredentials as checkCredentialsAction,
@@ -55,6 +60,7 @@ interface MapStateToProps {
   userVersion: USER_VERSIONS;
   isToast: boolean;
   allTransactions: EnhancedTransaction[];
+  badge: number;
 }
 
 interface ActionsDispatch {
@@ -67,6 +73,7 @@ interface ActionsDispatch {
   loadWallets: () => LoadWalletsAction;
   setIsToast: Function;
   addToastMessage: Function;
+  countBadge: (val: number) => void;
 }
 
 interface OwnProps {
@@ -114,7 +121,10 @@ class Navigator extends React.Component<Props, State> {
 
   handleNotification = () => {
     messaging().setBackgroundMessageHandler(async remoteMessage => {
+      PushNotificationIOS.setApplicationIconBadgeNumber(this.props.badge + 1);
+      this.props.countBadge(this.props.badge + 1);
       if (remoteMessage.data) {
+        console.log(remoteMessage);
         this.props.loadWallets();
       }
     });
@@ -187,9 +197,10 @@ class Navigator extends React.Component<Props, State> {
   shouldRenderUnlockScreen = () => {
     const { isPinSet, isTxPasswordSet, isAuthenticated } = this.props;
 
-    // if (__DEV__) {
-    //   return false;
-    // }
+    if (__DEV__) {
+      return false;
+    }
+
     return !isAuthenticated && isTxPasswordSet && isPinSet;
   };
 
@@ -294,6 +305,7 @@ const mapStateToProps = (state: ApplicationState): MapStateToProps => ({
   isInitialized: walletsSelectors.isInitialized(state),
   hasConnectedToServerAtLeaseOnce: electrumXSelectors.hasConnectedToServerAtLeaseOnce(state),
   allTransactions: walletsSelectors.transactions(state),
+  badge: state.appSettings.badge,
 });
 
 const mapDispatchToProps: ActionsDispatch = {
@@ -306,6 +318,7 @@ const mapDispatchToProps: ActionsDispatch = {
   loadWallets,
   setIsToast,
   addToastMessage,
+  countBadge,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigator);

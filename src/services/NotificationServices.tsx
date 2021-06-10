@@ -16,7 +16,7 @@ const NotificationsServices = () => {
   }, [dispatch]);
 
   const requestUserPermission = useCallback(async () => {
-    const authStatus = await messaging().requestPermission({ sound: false, announcement: true, badge: true });
+    const authStatus = await messaging().requestPermission({ sound: true, badge: true });
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
