@@ -1,4 +1,3 @@
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { compose } from 'lodash/fp';
@@ -53,21 +52,20 @@ interface Props {
 
 interface State {
   query: string;
-  contentdHeaderHeight: number;
+  contentHeaderHeight: number;
   lastSnappedTo: number;
 }
 
 class DashboardScreen extends Component<Props, State> {
   state: State = {
     query: '',
-    contentdHeaderHeight: 0,
+    contentHeaderHeight: 0,
     lastSnappedTo: 0,
   };
 
   walletCarouselRef = React.createRef<WalletsCarousel>();
   transactionListRef = React.createRef<SectionList>();
   componentDidMount() {
-    this.props.clearBadge();
     this.props.loadWallets();
   }
 
@@ -139,7 +137,7 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   scrollToTransactionList = () => {
-    this.scrollTo(this.state.contentdHeaderHeight + 24);
+    this.scrollTo(this.state.contentHeaderHeight + 24);
   };
 
   resetFilters = () => {
@@ -185,7 +183,7 @@ class DashboardScreen extends Component<Props, State> {
           const { height } = event.nativeEvent.layout;
 
           this.setState({
-            contentdHeaderHeight: height,
+            contentHeaderHeight: height,
           });
         }}
       >
@@ -241,7 +239,7 @@ class DashboardScreen extends Component<Props, State> {
           transactions={this.getTransactions()}
           transactionNotes={this.props.transactionNotes}
           label={activeWallet.label}
-          headerHeight={this.state.contentdHeaderHeight}
+          headerHeight={this.state.contentHeaderHeight}
         />
       );
     }

@@ -138,7 +138,7 @@
     "frisbee": "2.0.9",
     "intl": "1.2.5",
     "lodash": "^4.17.19",
-    "lottie-react-native": "3.1.1",
+    "lottie-react-native": "^4.0.2",
     "node-libs-react-native": "1.0.3",
     "path-browserify": "1.0.0",
     "pbkdf2": "^3.1.1",

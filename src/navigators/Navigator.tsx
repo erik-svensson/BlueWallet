@@ -124,7 +124,6 @@ class Navigator extends React.Component<Props, State> {
       PushNotificationIOS.setApplicationIconBadgeNumber(this.props.badge + 1);
       this.props.countBadge(this.props.badge + 1);
       if (remoteMessage.data) {
-        console.log(remoteMessage);
         this.props.loadWallets();
       }
     });

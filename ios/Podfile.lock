@@ -136,10 +136,10 @@ PODS:
   - libwebp/mux (1.2.0):
     - libwebp/demux
   - libwebp/webp (1.2.0)
-  - lottie-ios (3.0.7)
-  - lottie-react-native (3.1.1):
-    - lottie-ios (~> 3.0.3)
-    - React
+  - lottie-ios (3.1.9)
+  - lottie-react-native (4.0.2):
+    - lottie-ios (~> 3.1.8)
+    - React-Core
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -748,8 +748,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: f8a43108b38a68eebe8b3540e1f4f2d28843ce20
   jail-monkey: 80c9e34da2cd54023e5ad08bf7051ec75bd43d5b
   libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
-  lottie-ios: c38c3178ae8c4a8f200661aa5f80b9f1ca7f56b3
-  lottie-react-native: d8caf2aa9ab8bb76312e44997c1c91804a23d44d
+  lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
+  lottie-react-native: 4dff8fe8d10ddef9e7880e770080f4a56121397e
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   RCTRequired: 48884c74035a0b5b76dbb7a998bd93bcfc5f2047
