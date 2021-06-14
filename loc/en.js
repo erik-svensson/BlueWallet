@@ -457,6 +457,7 @@ module.exports = {
   settings: {
     about: 'About',
     terms: 'Terms & Privacy',
+    factory: 'Factory reset',
     aboutUs: 'About us',
     advancedOptions: 'Advanced options',
     Biometrics: 'Allow biometrics',

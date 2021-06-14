@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { icons } from 'app/assets';
-import { Image, ScreenTemplate, Header, ListItem } from 'app/components';
+import { Image, ScreenTemplate, Header, ListItem, CustomModal } from 'app/components';
 import { Route, MainTabNavigatorParams, RootStackParams, Wallet } from 'app/consts';
 import { logoSource } from 'app/helpers/images';
 import { BiometricService, AppStateManager } from 'app/services';
@@ -32,6 +32,7 @@ export const SettingsScreen = (props: Props) => {
     language: state.appSettings.language,
   }));
   const [biometryTypeAvailable, setBiometryTypeAvailable] = useState(false);
+  const [showWarring, setShowWarring] = useState(false);
 
   useEffect(() => {
     refreshBiometricsAvailability();
@@ -79,6 +80,15 @@ export const SettingsScreen = (props: Props) => {
     navigation.navigate(Route.CurrentPin);
   };
 
+  const handleResetFactory = () => {
+    //TODO:
+  };
+
+  const renderContent = () => {
+    //TODO:
+    return null;
+  };
+
   const refreshBiometricsAvailability = async () => {
     await BiometricService.setBiometricsAvailability();
     setBiometryTypeAvailable(BiometricService.biometryType !== undefined);
@@ -118,6 +128,7 @@ export const SettingsScreen = (props: Props) => {
         source={icons.infoIcon}
       />
       <ListItem onPress={navigateToTermsConditions} title={i18n.settings.terms} source={icons.termsIcon} />
+      <ListItem onPress={handleResetFactory} title={i18n.settings.factory} source={icons.resetFactory} />
     </>
   );
 
@@ -130,6 +141,7 @@ export const SettingsScreen = (props: Props) => {
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.security}>{renderSecuritySettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.about}>{renderAboutSettings()}</LabeledSettingsRow>
+        <CustomModal show={showWarring}>{renderContent()}</CustomModal>
       </ScreenTemplate>
     </>
   );
