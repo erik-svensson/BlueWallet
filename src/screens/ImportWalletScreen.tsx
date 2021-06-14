@@ -122,7 +122,9 @@ export class ImportWalletScreen extends Component<Props, State> {
       type: MessageType.success,
       buttonProps: {
         title: i18n.message.returnToDashboard,
-        onPress: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+        onPress: () => {
+          this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
+        },
       },
     });
   };
@@ -229,7 +231,7 @@ export class ImportWalletScreen extends Component<Props, State> {
             const isWalletSubscribed = ids.some(id => id === newWallet.id);
 
             isWalletSubscribed
-              ? this.showSuccessImportMessageScreen()
+              ? this.showSuccessImportMessageScreen(newWallet)
               : this.navigateToConfirmEmailSubscription(newWallet);
           },
           onFailure: () => {
