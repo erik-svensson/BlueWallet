@@ -1,7 +1,7 @@
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { icons } from 'app/assets';
@@ -11,6 +11,7 @@ import { logoSource } from 'app/helpers/images';
 import { BiometricService, AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { updateBiometricSetting } from 'app/state/appSettings/actions';
+import { fonts, palette, typography } from 'app/styles';
 
 import { LabeledSettingsRow } from './LabeledSettingsRow';
 
@@ -80,13 +81,35 @@ export const SettingsScreen = (props: Props) => {
     navigation.navigate(Route.CurrentPin);
   };
 
-  const handleResetFactory = () => {
-    //TODO:
+  const renderContent = () => (
+    <View style={styles.content}>
+      <Text style={styles.modalTitle}>{i18n.settings.factory.title}</Text>
+      <Text style={styles.modalText}>{i18n.settings.factory.text}</Text>
+      <View style={styles.buttonWrapper}>
+        <TouchableOpacity onPress={handleNoButton}>
+          <Text style={styles.modalButton}>{`${i18n.settings.factory.noButton}`.toUpperCase()}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleYesButton}>
+          <Text style={styles.modalButton}>{`${i18n.settings.factory.yesButton}`.toUpperCase()}</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  const toggleModal = () => {
+    setShowWarring(!showWarring);
   };
 
-  const renderContent = () => {
-    //TODO:
-    return null;
+  const handleResetFactory = () => {
+    toggleModal();
+  };
+
+  const handleNoButton = () => {
+    toggleModal();
+  };
+
+  const handleYesButton = () => {
+    setShowWarring(false);
   };
 
   const refreshBiometricsAvailability = async () => {
@@ -128,7 +151,7 @@ export const SettingsScreen = (props: Props) => {
         source={icons.infoIcon}
       />
       <ListItem onPress={navigateToTermsConditions} title={i18n.settings.terms} source={icons.termsIcon} />
-      <ListItem onPress={handleResetFactory} title={i18n.settings.factory} source={icons.resetFactory} />
+      <ListItem onPress={handleResetFactory} title={i18n.settings.factoryReset} source={icons.resetFactory} />
     </>
   );
 
@@ -152,5 +175,40 @@ const styles = StyleSheet.create({
     height: 82,
     width: '100%',
     paddingTop: 3,
+  },
+  content: {
+    backgroundColor: palette.background,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    borderRadius: 4,
+    borderColor: palette.textBlack,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: fonts.ubuntu.bold,
+    marginTop: 16,
+    marginHorizontal: 23,
+  },
+  modalText: {
+    fontFamily: fonts.ubuntu.regular,
+    fontSize: 15,
+    lineHeight: 22.5,
+    color: palette.textGrey,
+    marginHorizontal: 23,
+    marginTop: 10,
+  },
+  buttonWrapper: {
+    paddingTop: 15,
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+  },
+  modalButton: {
+    ...typography.button,
+    paddingVertical: 10,
+    textAlign: 'right',
+    color: palette.secondary,
+    marginHorizontal: 23,
   },
 });

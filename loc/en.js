@@ -457,7 +457,7 @@ module.exports = {
   settings: {
     about: 'About',
     terms: 'Terms & Privacy',
-    factory: 'Factory reset',
+    factoryReset: 'Factory reset',
     aboutUs: 'About us',
     advancedOptions: 'Advanced options',
     Biometrics: 'Allow biometrics',
@@ -472,6 +472,13 @@ module.exports = {
     notSupportedFingerPrint: 'Your device does not support fingerprint',
     security: 'Security',
     TouchID: 'Allow fingerprint',
+    factory: {
+      title: 'Factory reset',
+      text:
+        'Your wallets*, authenticators, address book, password and PIN will be lost. Are you sure you want to reset your Gold Wallet settings? \n \n* you will not lose your BTCV, but you will have to re-import your wallets',
+      noButton: 'No',
+      yesButton: 'Yes',
+    },
   },
   tabNavigator: {
     addressBook: 'Address book',
