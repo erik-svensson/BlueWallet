@@ -89,11 +89,12 @@ export const ELECTRUM_VAULT_SEED_PREFIXES = {
 };
 
 export interface Toast {
-  title: string;
+  title: string | undefined;
   icon?: string;
-  description: string;
+  description: string | undefined;
   duration: number;
   id: string;
+  status?: string;
 }
 
 export enum TransactionStatus {

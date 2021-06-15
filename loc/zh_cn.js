@@ -285,6 +285,10 @@ module.exports = {
     noteSecond: '如果您想更改您的电子邮件地址，可以稍后在“设置”中进行更改。',
     noSubscriptionDescription: '您尚未订阅任何通知。',
     genericError: '出了些问题。 我们很抱歉。',
+    pushnotificationsSettings: {
+      title: '允许应用通知',
+      label: '设置 ',
+    },
   },
   onboarding: {
     changePin: '更改PIN码',
@@ -534,6 +538,7 @@ module.exports = {
   },
   wallets: {
     add: {
+      createWalletButton: '创建新钱包',
       addWalletButton: '添加新钱包',
       advancedOptions: '高级选项',
       air: '进行安全，取消和安全快速交易。',
@@ -569,7 +574,7 @@ module.exports = {
       availableBalance: '可用余额',
       noTransactions: '没有交易可显示。',
       noWallets: '没有钱包',
-      noWalletsDesc1: '没有钱包可显示。',
+      noWalletsDesc1: '没有钱包可显示。\n添加您的第一个钱包。',
       noWalletsDesc2: '添加您的第一个钱包。',
       receive: '收到',
       recover: '取消',

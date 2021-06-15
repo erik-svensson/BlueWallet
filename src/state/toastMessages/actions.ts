@@ -23,11 +23,19 @@ interface AddToastMessage {
   title: string;
   description: string;
   duration?: number;
+  id?: string;
+  status?: string;
 }
 
-export const addToastMessage = ({ title, description, duration = 5500 }: AddToastMessage): AddToastMessageAction => ({
+export const addToastMessage = ({
+  title,
+  description,
+  duration = 5500,
+  id,
+  status,
+}: AddToastMessage): AddToastMessageAction => ({
   type: ToastMessageAction.AddToastMessage,
-  payload: { title, description, duration, id: uuidv4() },
+  payload: { title, description, duration, id: id || uuidv4(), status },
 });
 
 export const hideToastMessage = (payload: Toast): HideToastMessageAction => ({

@@ -49,3 +49,7 @@ export const checkSubscriptionEmail = (data: CheckSubscriptionPayload): Promise<
 
 export const verifyEmail = (data: VerifyEmailPayload): Promise<VerifyEmailResponse> =>
   httpClient.post(`/verify_email/`, data);
+
+export const subscribeDeviceFCM = (data: any): Promise<any> => httpClient.post(`/push/`, data);
+
+export const removeDeviceFCM = (data: any): Promise<any> => httpClient.put(`/push/`, data);

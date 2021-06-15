@@ -5,11 +5,21 @@ import React, { Component } from 'react';
 import { View, StyleSheet, ActivityIndicator, TouchableOpacity, SectionList } from 'react-native';
 import { connect } from 'react-redux';
 
-import { ListEmptyState, WalletCard, ScreenTemplate, Header, SearchBar, StyledText } from 'app/components';
+import {
+  ListEmptyState,
+  WalletCard,
+  ScreenTemplate,
+  Header,
+  SearchBar,
+  StyledText,
+  Button,
+  FlatButton,
+} from 'app/components';
 import { Wallet, Route, EnhancedTransaction, CONST, MainTabNavigatorParams, RootStackParams } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
+import { clearBadge } from 'app/state/appSettings/actions';
 import { clearFilters, ClearFiltersAction } from 'app/state/filters/actions';
 import * as transactionsNotesSelectors from 'app/state/transactionsNotes/selectors';
 import { loadWallets, LoadWalletsAction } from 'app/state/wallets/actions';
@@ -36,19 +46,20 @@ interface Props {
   loadWallets: () => LoadWalletsAction;
   clearFilters: () => ClearFiltersAction;
   isFilteringOn?: boolean;
+  clearBadge: Function;
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
 }
 
 interface State {
   query: string;
-  contentdHeaderHeight: number;
+  contentHeaderHeight: number;
   lastSnappedTo: number;
 }
 
 class DashboardScreen extends Component<Props, State> {
   state: State = {
     query: '',
-    contentdHeaderHeight: 0,
+    contentHeaderHeight: 0,
     lastSnappedTo: 0,
   };
 
@@ -126,7 +137,7 @@ class DashboardScreen extends Component<Props, State> {
   };
 
   scrollToTransactionList = () => {
-    this.scrollTo(this.state.contentdHeaderHeight + 24);
+    this.scrollTo(this.state.contentHeaderHeight + 24);
   };
 
   resetFilters = () => {
@@ -159,13 +170,7 @@ class DashboardScreen extends Component<Props, State> {
         </DashboardHeader>
       );
     }
-    return (
-      <Header
-        title={i18n.wallets.dashboard.title}
-        addButtonTestID="add-wallet-button"
-        addFunction={() => this.props.navigation.navigate(Route.CreateWallet)}
-      />
-    );
+    return <Header title={i18n.wallets.dashboard.title} addButtonTestID="add-wallet-button" />;
   };
 
   renderWallets = () => {
@@ -178,7 +183,7 @@ class DashboardScreen extends Component<Props, State> {
           const { height } = event.nativeEvent.layout;
 
           this.setState({
-            contentdHeaderHeight: height,
+            contentHeaderHeight: height,
           });
         }}
       >
@@ -234,7 +239,7 @@ class DashboardScreen extends Component<Props, State> {
           transactions={this.getTransactions()}
           transactionNotes={this.props.transactionNotes}
           label={activeWallet.label}
-          headerHeight={this.state.contentdHeaderHeight}
+          headerHeight={this.state.contentHeaderHeight}
         />
       );
     }
@@ -259,7 +264,30 @@ class DashboardScreen extends Component<Props, State> {
     }
     return (
       <>
-        <ScreenTemplate noScroll contentContainer={styles.contentContainer} header={this.renderHeader()}>
+        <ScreenTemplate
+          noScroll
+          contentContainer={styles.contentContainer}
+          header={this.renderHeader()}
+          footer={
+            <>
+              {!this.hasWallets() && (
+                <>
+                  <Button
+                    onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
+                    title={i18n.wallets.add.createWalletButton}
+                    testID="create-wallet-button"
+                  />
+                  <FlatButton
+                    onPress={() => this.props.navigation.navigate(Route.ImportWalletChooseType)}
+                    containerStyle={styles.importButtonContainer}
+                    title={i18n.wallets.add.importWalletButton}
+                    testID="import-wallet-button"
+                  />
+                </>
+              )}
+            </>
+          }
+        >
           {this.renderContent()}
         </ScreenTemplate>
         {!!this.props.isFilteringOn && (
@@ -286,6 +314,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   loadWallets,
   clearFilters,
+  clearBadge,
 };
 
 export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(DashboardScreen);
@@ -307,5 +336,8 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 0,
+  },
+  importButtonContainer: {
+    marginTop: 12,
   },
 });

@@ -305,6 +305,10 @@ module.exports = {
     noteSecond: 'Apabila Anda ingin mengubah alamat email, Anda dapat melakukannya nanti di Pengaturan.',
     noSubscriptionDescription: 'Anda tidak terdaftar ke notifikasi manapun.',
     genericError: 'Nampaknya ada yang salah.\nKami mohon maaf.',
+    pushnotificationsSettings: {
+      title: 'Ijinkan notifikasi aplikasi',
+      label: 'Pengaturan',
+    },
   },
   onboarding: {
     changePin: 'Ubah PIN',
@@ -568,6 +572,7 @@ module.exports = {
   },
   wallets: {
     add: {
+      createWalletButton: 'Buat dompet baru',
       addWalletButton: 'Tambahkan dompet baru',
       advancedOptions: 'Opsi lanjutan',
       air: 'Buat transaksi Aman, Pembatalan, dan Aman Cepat',
@@ -604,7 +609,7 @@ module.exports = {
       availableBalance: 'Saldo Tersedia',
       noTransactions: 'Tidak ada transaksi yang dapat ditunjukkan',
       noWallets: 'Tidak ada dompet ',
-      noWalletsDesc1: 'Tidak ada dompet yang dapat ditunjukkan.',
+      noWalletsDesc1: 'Tidak ada dompet yang dapat ditunjukkan.\nTambahkan dompet pertama Anda.',
       noWalletsDesc2: 'untuk menambahkan dompet pertama Anda.',
       receive: 'Terima',
       recover: 'Batalkan',

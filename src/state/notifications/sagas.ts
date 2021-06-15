@@ -7,6 +7,8 @@ import {
   checkSubscriptionEmail,
   unsubscribeEmail,
   modifyEmail,
+  subscribeDeviceFCM,
+  removeDeviceFCM,
 } from 'app/api/emailNotifications/client';
 import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
@@ -36,6 +38,7 @@ import {
   UpdateNotificationEmailAction,
   updateNotificationEmailSuccess,
   updateNotificationEmailFailure,
+  SubscribeDeviceTokenAction,
 } from './actions';
 
 export function* createNotificationEmailSaga(action: CreateNotificationEmailAction | unknown) {
@@ -212,6 +215,30 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   }
 }
 
+export function* unsubscribeDeviceTokenSaga() {
+  const fcm = yield select(appSettingsSelectors.fcmToken);
+
+  yield call(removeDeviceFCM, { fcm });
+}
+
+export function* subscribeDeviceTokenSaga(action: SubscribeDeviceTokenAction) {
+  const { payload: wallets } = action;
+
+  const fcm = yield select(appSettingsSelectors.fcmToken);
+  const language = yield select(appSettingsSelectors.language);
+  const isPushnotificationsEnabled = yield select(appSettingsSelectors.pushnotificationsEnabled);
+
+  if (isPushnotificationsEnabled) {
+    const hashes = yield all(wallets.wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
+
+    yield call(subscribeDeviceFCM, {
+      fcm,
+      wallets: hashes,
+      language,
+    });
+  }
+}
+
 export default [
   takeEvery(NotificationAction.CheckSubscriptionAction, checkSubscriptionSaga),
   takeEvery(NotificationAction.CreateNotificationEmail, createNotificationEmailSaga),
@@ -220,4 +247,6 @@ export default [
   takeEvery(NotificationAction.AuthenticateEmailAction, authenticateEmailSaga),
   takeEvery(NotificationAction.UnsubscribeWalletAction, unsubscribeWalletSaga),
   takeLatest(NotificationAction.UpdateNotificationEmailAction, updateEmailSaga),
+  takeEvery(NotificationAction.UnsubscribeDeviceTokenAction, unsubscribeDeviceTokenSaga),
+  takeEvery(NotificationAction.SubscribeDeviceTokenAction, subscribeDeviceTokenSaga),
 ];

@@ -5,7 +5,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, Button, CodeInput, TimeoutButton } from 'app/components';
-import { Route, RootStackParams, ConfirmAddressFlowType, CONST, InfoContainerContent } from 'app/consts';
+import { Route, RootStackParams, ConfirmAddressFlowType, CONST, InfoContainerContent, Wallet } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import {
   authenticateEmail,
@@ -20,6 +20,7 @@ import {
   setError as setErrorAction,
   startResend as startResendAction,
   resetResendTime as resetResendTimeAction,
+  subscribeDeviceToken as subscribeDeviceTokenAction,
   ResetResendTimeAction,
   StartResendAction,
 } from 'app/state/notifications/actions';
@@ -44,6 +45,7 @@ interface Props {
   setError: SetErrorActionCreator;
   startResend: () => StartResendAction;
   resetResendTime: () => ResetResendTimeAction;
+  subscribeFcmToken: (wallet: Wallet[]) => void;
 }
 
 interface State {
@@ -84,7 +86,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
       createNotificationEmail,
       storedEmail,
       route: {
-        params: { email, onSuccess },
+        params: { email, onSuccess, wallets },
       },
     } = this.props;
 
@@ -96,6 +98,9 @@ class ConfirmEmailScreen extends Component<Props, State> {
           return onSuccess();
         }
         createNotificationEmail(email, { onSuccess });
+        if (wallets) {
+          this.props.subscribeFcmToken(wallets);
+        }
       },
     };
   };
@@ -151,7 +156,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
     }
   };
 
-  onConfirm = () => {
+  onConfirm = async () => {
     const { sessionToken } = this.props;
     const { code } = this.state;
 
@@ -244,6 +249,7 @@ const mapDispatchToProps = {
   setError: setErrorAction,
   startResend: startResendAction,
   resetResendTime: resetResendTimeAction,
+  subscribeFcmToken: subscribeDeviceTokenAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmailScreen);

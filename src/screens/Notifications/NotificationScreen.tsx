@@ -5,15 +5,19 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
-import { Header, ScreenTemplate, Button, FlatButton, ButtonType, Image, EllipsisText } from 'app/components';
+import { Header, ScreenTemplate, Button, FlatButton, ListItem, ButtonType, Image, EllipsisText } from 'app/components';
 import { Route, RootStackParams, ConfirmAddressFlowType, Wallet } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
+import { updatePushnotificationsSetting as updatePushnotificationsSettingsAction } from 'app/state/appSettings/actions';
+import { pushnotificationsEnabled } from 'app/state/appSettings/selectors';
 import {
   DeleteNotificationEmailAction,
   deleteNotificationEmail as deleteNotificationEmailAction,
   CheckSubscriptionAction,
   checkSubscription as checkSubscriptionAction,
+  unsubscribeDeviceToken as unsubscribeDeviceTokenAction,
+  subscribeDeviceToken as subscribeDeviceTokenAction,
 } from 'app/state/notifications/actions';
 import { storedEmail } from 'app/state/notifications/selectors';
 import { subscribedWallets, wallets } from 'app/state/wallets/selectors';
@@ -26,9 +30,13 @@ interface Props {
   route: RouteProp<RootStackParams, Route.Notifications>;
   email: string;
   deleteNotificationEmail: () => DeleteNotificationEmailAction;
+  updatePushnotificationsSettings: (value: boolean) => void;
+  unsubscribeDeviceToken: () => void;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
   subscribedWallets: Wallet[];
   wallets: Wallet[];
+  isPushnotificationsEnabled: boolean;
+  subscribeFcmToken: (wallet: Wallet[]) => void;
 }
 export class NotificationScreen extends Component<Props> {
   componentDidMount() {
@@ -148,6 +156,15 @@ export class NotificationScreen extends Component<Props> {
     this.props.navigation.navigate(Route.WalletDetails, { id });
   };
 
+  onPushnotificationsLoginChange = (value: boolean) => {
+    this.props.updatePushnotificationsSettings(value);
+    if (!value) {
+      this.props.unsubscribeDeviceToken();
+    } else {
+      this.props.subscribeFcmToken(this.props.subscribedWallets);
+    }
+  };
+
   renderFooter = () =>
     this.props.email ? (
       <>
@@ -167,6 +184,7 @@ export class NotificationScreen extends Component<Props> {
   render() {
     const {
       subscribedWallets,
+      isPushnotificationsEnabled,
       email,
       route: {
         params: { onBackArrow },
@@ -197,7 +215,19 @@ export class NotificationScreen extends Component<Props> {
                   renderItem={item => this.renderItem(item.item)}
                   keyExtractor={item => item.id}
                   showsVerticalScrollIndicator={false}
+                  style={{ flexGrow: 0 }}
                 />
+                <>
+                  <Text style={styles.listTitle}>{i18n.notifications.pushnotificationsSettings.label}</Text>
+                  <ListItem
+                    testID="pushnotification-settings-item"
+                    title={i18n.notifications.pushnotificationsSettings.title}
+                    switchTestID="pushnotification-switch"
+                    switchValue={isPushnotificationsEnabled}
+                    onSwitchValueChange={this.onPushnotificationsLoginChange}
+                    containerStyle={{ marginLeft: -20 }}
+                  />
+                </>
               </>
             ) : (
               <Text style={styles.noSubscriptionDescription}>{i18n.notifications.noSubscriptionDescription}</Text>
@@ -219,11 +249,15 @@ const mapStateToProps = (state: ApplicationState) => ({
   email: storedEmail(state),
   subscribedWallets: subscribedWallets(state),
   wallets: wallets(state),
+  isPushnotificationsEnabled: pushnotificationsEnabled(state),
 });
 
 const mapDispatchToProps = {
   deleteNotificationEmail: deleteNotificationEmailAction,
   checkSubscription: checkSubscriptionAction,
+  updatePushnotificationsSettings: updatePushnotificationsSettingsAction,
+  unsubscribeDeviceToken: unsubscribeDeviceTokenAction,
+  subscribeFcmToken: subscribeDeviceTokenAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationScreen);

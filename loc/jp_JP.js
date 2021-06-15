@@ -295,6 +295,10 @@ module.exports = {
     noteSecond: 'メールアドレスは、後から「設定」で変更できます。',
     noSubscriptionDescription: '登録している通知はありません。',
     genericError: '問題が発生しました。\n申し訳ございません。',
+    pushnotificationsSettings: {
+      title: 'アプリの通知を許可する',
+      label: '設定',
+    },
   },
   onboarding: {
     changePin: 'PINコードの変更',
@@ -552,6 +556,7 @@ module.exports = {
   },
   wallets: {
     add: {
+      createWalletButton: '新しいウォレットを作成',
       addWalletButton: '新しいウォレットの追加',
       advancedOptions: '詳細設定',
       air: '保安取引、キャンセル取引、保安・クイック取引が可能です。',
@@ -588,7 +593,7 @@ module.exports = {
       availableBalance: '利用可能な残高',
       noTransactions: '表示できる取引がありません。',
       noWallets: 'ウォレットがありません',
-      noWalletsDesc1: '表示できるウォレットがありません。',
+      noWalletsDesc1: '表示できるウォレットがありません。\n最初のウォレットを追加してください。',
       noWalletsDesc2: '最初のウォレットを追加する。',
       receive: '受取',
       recover: 'キャンセル',

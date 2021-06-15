@@ -27,6 +27,8 @@ export enum NotificationAction {
   UpdateNotificationEmailFailureAction = 'UpdateNotificationEmailFailureAction',
   StartResendAction = 'StartResendAction',
   ResetResendTimeAction = 'ResetResendTimeAction',
+  UnsubscribeDeviceTokenAction = 'UnsubscribeDeviceTokenAction',
+  SubscribeDeviceTokenAction = 'SubscribeDeviceTokenAction',
 }
 
 export interface SetErrorAction {
@@ -168,6 +170,15 @@ export interface ResetResendTimeAction {
   type: NotificationAction.ResetResendTimeAction;
 }
 
+export interface UnsubscribeDeviceTokenAction {
+  type: NotificationAction.UnsubscribeDeviceTokenAction;
+}
+
+export interface SubscribeDeviceTokenAction {
+  type: NotificationAction.SubscribeDeviceTokenAction;
+  payload: { wallets: Wallet[] };
+}
+
 export type NotificationActionType =
   | CreateNotificationEmailAction
   | CreateNotificationEmailSuccessAction
@@ -193,7 +204,9 @@ export type NotificationActionType =
   | UpdateNotificationEmailSuccessAction
   | UpdateNotificationEmailFailureAction
   | StartResendAction
-  | ResetResendTimeAction;
+  | ResetResendTimeAction
+  | UnsubscribeDeviceTokenAction
+  | SubscribeDeviceTokenAction;
 
 export type CreateNotificationEmailActionCreator = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 export const createNotificationEmail: CreateNotificationEmailActionCreator = (email, meta) => ({
@@ -369,4 +382,13 @@ export const startResend = (): StartResendAction => ({
 
 export const resetResendTime = (): ResetResendTimeAction => ({
   type: NotificationAction.ResetResendTimeAction,
+});
+
+export const unsubscribeDeviceToken = (): UnsubscribeDeviceTokenAction => ({
+  type: NotificationAction.UnsubscribeDeviceTokenAction,
+});
+
+export const subscribeDeviceToken = (wallets: Wallet[]): SubscribeDeviceTokenAction => ({
+  type: NotificationAction.SubscribeDeviceTokenAction,
+  payload: { wallets },
 });

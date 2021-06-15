@@ -30,8 +30,8 @@ module.exports = {
     readTermsConditions: 'He leído la Política de Privacidad ',
     readPrivacyPolicy: 'Estoy de acuerdo ',
     buttons: {
-      agree: 'No estoy de acuerdo ',
-      disagree: '¿Está seguro? ',
+      agree: 'Está de acuerdo',
+      disagree: 'No estoy de acuerdo',
     },
     modal: {
       header:
@@ -306,6 +306,10 @@ module.exports = {
     noteSecond: 'Si quiere cambiar su dirección de correo electrónico puede hacerlo más tarde en Configuración. ',
     noSubscriptionDescription: 'No está suscrito a ninguna notificación. ',
     genericError: 'Algo ha ido mal. Lo sentimos. ',
+    pushnotificationsSettings: {
+      title: 'Permitir notificaciones de la aplicación.',
+      label: 'Configuración.',
+    },
   },
   onboarding: {
     changePin: 'Cambiar el PIN ',
@@ -569,6 +573,7 @@ module.exports = {
   },
   wallets: {
     add: {
+      createWalletButton: 'Crear un nuevo monedero',
       addWalletButton: 'Añadir nuevo monedero ',
       advancedOptions: 'Opciones avanzadas ',
       air: 'Realiza transacciones Seguras, de Cancelación y Seguras y Rápidas. ',
@@ -607,7 +612,7 @@ module.exports = {
       availableBalance: 'Saldo disponible ',
       noTransactions: 'No hay transacciones para mostrar ',
       noWallets: 'No hay monederos ',
-      noWalletsDesc1: 'No hay monederos para mostrar. ',
+      noWalletsDesc1: 'No hay monederos para mostrar.\nAñadir su primer monedero. ',
       noWalletsDesc2: 'para añadir su primer monedero. ',
       receive: 'Recibir ',
       recover: 'Cancelar ',
