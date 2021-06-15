@@ -28,7 +28,7 @@ const createWallet = async (options: CreateWalletOptions) => {
 
   await app.navigationBar.changeTab('wallets');
 
-  await app.dashboard.dashboardScreen.tapOnAddButton();
+  await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
   await app.wallets.addNewWallet.createScreen.typeName(name);
   await app.wallets.addNewWallet.createScreen.chooseType(type);
   await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
@@ -66,7 +66,7 @@ const importWallet = async (options: ImportWalletOptions) => {
 
   await app.navigationBar.changeTab('wallets');
 
-  await app.dashboard.dashboardScreen.tapOnAddButton();
+  await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
   await app.wallets.addNewWallet.createScreen.tapOnImportButton();
   await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(type);
   await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();

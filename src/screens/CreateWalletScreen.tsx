@@ -365,13 +365,13 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
               disabled={!this.canCreateWallet}
               onPress={this.setupWallet}
               title={i18n.wallets.add.addWalletButton}
-              testID="create-wallet-button"
+              testID="creates-wallet-button"
             />
             <FlatButton
               onPress={this.navigateToImportWallet}
               containerStyle={styles.importButtonContainer}
               title={i18n.wallets.add.importWalletButton}
-              testID="import-wallet-button"
+              testID="imports-wallet-button"
             />
           </>
         }
