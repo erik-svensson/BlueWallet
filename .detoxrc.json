@@ -3,7 +3,7 @@
   "runnerConfig": "tests/e2e/config.json",
   "configurations": {
     "ios.sim.dev.debug": {
-      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet.app",
+      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet Dev.app",
       "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Dev (Release)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
       "type": "ios.simulator",
       "device": {
@@ -11,7 +11,7 @@
       }
     },
     "ios.sim.dev.staging": {
-      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet.app",
+      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet Stage.app",
       "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Stage (Release)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
       "type": "ios.simulator",
       "device": {
