@@ -8,6 +8,7 @@ beforeEach(async () => {
   await device.launchApp({
     newInstance: true,
     delete: true,
+    //permissions: { notifications: 'YES' },
   });
 });
 
