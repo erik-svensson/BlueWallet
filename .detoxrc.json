@@ -15,7 +15,7 @@
       "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Stage (Release)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
       "type": "ios.simulator",
       "device": {
-        "type": "iPhone 12"
+        "type": "iPhone 11"
       }
     },
     "android.emu.prod.debug": {
