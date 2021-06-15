@@ -4,7 +4,7 @@
   "configurations": {
     "ios.sim.dev.debug": {
       "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/GoldWallet Dev.app",
-      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -scheme \"GoldWallet Dev (Debug)\" -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -quiet",
+      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -scheme \"GoldWallet Dev (Release)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
       "type": "ios.simulator",
       "device": {
         "type": "iPhone 11"
@@ -12,7 +12,7 @@
     },
     "ios.sim.dev.staging": {
       "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet Stage.app",
-      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -scheme \"GoldWallet Stage (Debug)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
+      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -scheme \"GoldWallet Stage (Release)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
       "type": "ios.simulator",
       "device": {
         "type": "iPhone 11"
