@@ -300,6 +300,10 @@ module.exports = {
     noteSecond: 'Email adresinizi değiştirmek \nisterseniz bu işlemi sonradan Ayarlardan yapabilirsiniz.',
     noSubscriptionDescription: 'Hiçbir bildirim aboneliğiniz \nbulunmuyor.',
     genericError: 'Bir şeyler yanlış gitti. Üzgünüz.',
+    pushnotificationsSettings: {
+      title: 'Uygulama bildirimlerine izin ver',
+      label: 'Ayarlar',
+    },
   },
   onboarding: {
     changePin: "PIN'i değiştirin",
@@ -558,6 +562,7 @@ module.exports = {
   },
   wallets: {
     add: {
+      createWalletButton: 'Yeni cüzdan oluştur',
       addWalletButton: 'Yeni cüzdan ekle',
       advancedOptions: 'Gelişmiş seçenekler',
       air: 'Güvenli, İptal ve Güvenli ve Hızlı \nişlemleri yapar.',
@@ -594,7 +599,7 @@ module.exports = {
       availableBalance: 'Mevcut bakiye',
       noTransactions: 'Gösterilecek işlem yok.',
       noWallets: 'Cüzdan yok',
-      noWalletsDesc1: 'Gösterilecek cüzdan yok.',
+      noWalletsDesc1: 'Gösterilecek cüzdan yok.\nİlk cüzdanınızı ekleyin.',
       noWalletsDesc2: 'ilk cüzdanınıza eklenecek.',
       receive: 'Al',
       recover: 'İptal',

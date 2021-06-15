@@ -300,6 +300,10 @@ module.exports = {
     noteSecond: 'Nếu bạn muốn thay đổi địa chỉ email của bạn, bạn có thể làm điều đó sau trong Cài đặt.',
     noSubscriptionDescription: 'Bạn chưa đăng ký bất kỳ thông báo.',
     genericError: 'Có cái gì đó đã sai. Chúng tôi xin lỗi.',
+    pushnotificationsSettings: {
+      title: 'Cho phép ứng dụng gửi thông báo.',
+      label: 'Cài đặt',
+    },
   },
   onboarding: {
     changePin: 'Thay đổi pin',
@@ -559,6 +563,7 @@ module.exports = {
   },
   wallets: {
     add: {
+      createWalletButton: 'Tạo ví mới',
       addWalletButton: 'Thêm ví mới',
       advancedOptions: 'Tùy chọn nâng cao',
       air: 'Thực hiện giao dịch An toàn, Hủy, và Nhanh An toàn',
@@ -595,7 +600,7 @@ module.exports = {
       availableBalance: 'Số dư có sẵn',
       noTransactions: 'Không có giao dịch để hiển thị.',
       noWallets: 'không có ví',
-      noWalletsDesc1: 'Không có ví để hiển thị.',
+      noWalletsDesc1: 'Không có ví để hiển thị.\nThêm ví đầu tiên của bạn.',
       noWalletsDesc2: 'Thêm ví đầu tiên của bạn.',
       receive: 'Nhận được',
       recover: 'Hủy bỏ',
