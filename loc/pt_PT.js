@@ -308,6 +308,10 @@ module.exports = {
     noteSecond: 'Se desejar alterar o seu endereço de e-mail, pode fazê-lo mais tarde em Definições.',
     noSubscriptionDescription: 'Não subscreveu nenhuma notificação.',
     genericError: 'Alguma coisa correu mal. Pedimos desculpa.',
+    pushnotificationsSettings: {
+      title: 'Permitir notificações da aplicação',
+      label: 'Definições',
+    },
   },
   onboarding: {
     changePin: 'Alterar PIN',
@@ -569,6 +573,7 @@ module.exports = {
   },
   wallets: {
     add: {
+      createWalletButton: 'Criar nova carteira',
       addWalletButton: 'Adicionar nova carteira',
       advancedOptions: 'Opções avançadas',
       air: 'Faz transações Seguras, de Cancelamento, Seguras e Rápidas.',
@@ -607,7 +612,7 @@ module.exports = {
       availableBalance: 'Saldo disponível',
       noTransactions: 'Não há transações a mostrar.',
       noWallets: 'Sem carteiras',
-      noWalletsDesc1: 'Não há carteiras para mostrar.',
+      noWalletsDesc1: 'Não há carteiras para mostrar.\nAdicione a sua primeira carteira.',
       noWalletsDesc2: 'para adicionar a sua primeira carteira.',
       receive: 'Receber',
       recover: 'Cancelar',

@@ -16,7 +16,7 @@ describe('Adding wallet', () => {
     describe('Create', () => {
       describe('@android @ios @smoke', () => {
         it('should be possible to create a new 3-Key Vault wallet', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
 
           await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
           await app.wallets.addNewWallet.createScreen.chooseType('3-Key Vault');
@@ -116,7 +116,7 @@ describe('Adding wallet', () => {
     describe('Import', () => {
       describe('@android @ios @smoke', () => {
         it('should be possible to import an existing 3-Key Vault wallet by typing seed phrase', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
           await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('3-Key Vault');

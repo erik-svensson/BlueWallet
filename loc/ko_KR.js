@@ -295,6 +295,10 @@ module.exports = {
     noteSecond: '사용자 이메일 주소를 변경하려면 나중에 설정에서 변경할 수 있습니다.',
     noSubscriptionDescription: '설정한 알림이 없습니다.',
     genericError: '문제가 발생했습니다. 죄송합니다.',
+    pushnotificationsSettings: {
+      title: '앱 알림 허용',
+      label: '설정',
+    },
   },
   onboarding: {
     changePin: 'PIN 변경',
@@ -549,7 +553,7 @@ module.exports = {
   },
   wallets: {
     add: {
-      addWalletButton: '새 지갑 추가',
+      createWalletButton: '새로운 지갑 생성하기',
       advancedOptions: '고급 옵션',
       air: '보안 거래, 취소 거래, 보안 고속 거래를 진행합니다.',
       ar: '보안 거래, 취소 거래를 진행합니다.',
@@ -584,7 +588,7 @@ module.exports = {
       availableBalance: '사용 가능 잔액',
       noTransactions: '표시할 거래 없음',
       noWallets: '지갑 없음',
-      noWalletsDesc1: '표시할 지갑 없음.',
+      noWalletsDesc1: '표시할 지갑 없음.\n첫 지갑 추가하기',
       noWalletsDesc2: '첫 번째 지갑 추가',
       receive: '수신',
       recover: '취소',
