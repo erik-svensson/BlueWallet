@@ -145,6 +145,46 @@ export class AppStorage {
   }
 
   /**
+   * Remove all keys in storage
+   *
+   * @returns {Promise} Result of storage save
+   */
+  async purgeStore() {
+    let data = {
+      wallets: [],
+      authenticators: [],
+      tx_metadata: {},
+    };
+
+    if (this.cachedPassword) {
+      // should find the correct bucket, encrypt and then save
+      let buckets = await this.getItem('data');
+
+      buckets = JSON.parse(buckets);
+      const newData = [];
+
+      for (const bucket of buckets) {
+        const decrypted = encryption.decrypt(bucket, this.cachedPassword);
+
+        if (!decrypted) {
+          // no luck decrypting, its not our bucket
+          newData.push(bucket);
+        } else {
+          // decrypted ok, this is our bucket
+          // we serialize our object's data, encrypt it, and add it to buckets
+          newData.push(encryption.encrypt(JSON.stringify(data), this.cachedPassword));
+          await this.setItem(AppStorage.FLAG_ENCRYPTED, '1');
+        }
+      }
+      data = newData;
+    } else {
+      await this.setItem(AppStorage.FLAG_ENCRYPTED, ''); // drop the flag
+    }
+
+    return this.setItem('data', JSON.stringify(data));
+  }
+
+  /**
    * Loads from storage all wallets and
    * maps them to `this.wallets`
    *
