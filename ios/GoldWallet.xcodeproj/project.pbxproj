@@ -12,11 +12,9 @@
 		30CFD19F92C51B23CB0C72C1 /* libPods-GoldWallet Dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF03D929CCD83ED66518457F /* libPods-GoldWallet Dev.a */; };
 		3208E93922F63279007F5A27 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3208E93822F63279007F5A27 /* AppCenter-Config.plist */; };
 		32B5A32A2334450100F8D608 /* Bridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5A3292334450100F8D608 /* Bridge.swift */; };
-		372E90F713C87C8396C41DF7 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		764B49B1420D4AEB8109BF62 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B468CC34D5B41F3950078EF /* libsqlite3.0.tbd */; };
 		782F075B5DD048449E2DECE9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B9D9B3A7B2CB4255876B67AF /* libz.tbd */; };
 		78925956E12CD3FA0802A262 /* libPods-GoldWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4096D421FA31FAE705B61BDB /* libPods-GoldWallet.a */; };
-		906451CAD44154C2950030EC /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		A23B9D952538E4B5000E53DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		A23B9D972538E569000E53DE /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A23B9D962538E569000E53DE /* Launch Screen.storyboard */; };
 		A23B9D992538F3B4000E53DE /* Launch Screen beta.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A23B9D982538F3B4000E53DE /* Launch Screen beta.storyboard */; };
@@ -70,7 +68,6 @@
 		B5AA4167265D0AEA002709BD /* GoogleService-Info-stage.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5D3AF05264C3D7A00D78133 /* GoogleService-Info-stage.plist */; };
 		B5D3AF0C264C3D9200D78133 /* GoogleService-Info-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5D3AF0B264C3D9200D78133 /* GoogleService-Info-prod.plist */; };
 		B62F7DC00D62AB9CCBB4D4E1 /* libPods-GoldWallet Stage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 01E359F56ABC538E479E023C /* libPods-GoldWallet Stage.a */; };
-		E88A24F9BBBF810B6395D790 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		E9D5F4AACC65A6D4D06C1894 /* libPods-GoldWallet Beta.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06A3718E6B755FC6AD7DA906 /* libPods-GoldWallet Beta.a */; };
 /* End PBXBuildFile section */
 
@@ -257,11 +254,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				906451CAD44154C2950030EC /* BuildFile in Frameworks */,
 				782F075B5DD048449E2DECE9 /* libz.tbd in Frameworks */,
 				764B49B1420D4AEB8109BF62 /* libsqlite3.0.tbd in Frameworks */,
-				E88A24F9BBBF810B6395D790 /* BuildFile in Frameworks */,
-				372E90F713C87C8396C41DF7 /* BuildFile in Frameworks */,
 				78925956E12CD3FA0802A262 /* libPods-GoldWallet.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1292,7 +1286,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 6.2.0;
+				MARKETING_VERSION = 6.3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1393,6 +1387,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				MARKETING_VERSION = 6.3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1437,7 +1432,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 6.2.0;
+				MARKETING_VERSION = 6.3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1482,6 +1477,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				MARKETING_VERSION = 6.3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1526,7 +1522,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 6.2.0;
+				MARKETING_VERSION = 6.3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1571,6 +1567,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				MARKETING_VERSION = 6.3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1674,6 +1671,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				MARKETING_VERSION = 6.3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1717,6 +1715,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				MARKETING_VERSION = 6.3.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
