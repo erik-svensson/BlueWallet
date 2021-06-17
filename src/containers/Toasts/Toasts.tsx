@@ -1,18 +1,30 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Pressable, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { CustomToast } from 'app/components';
+import { Toast } from 'app/consts';
 import { selectors, actions } from 'app/state/toastMessages';
 
-export const Toasts = () => {
+interface Props {
+  onClick?: (id: string) => void;
+}
+
+export const Toasts = ({ onClick }: Props) => {
   const toastMessages = useSelector(selectors.toastMessages);
   const dispatch = useDispatch();
+
+  const handleClick = (toast: Toast) => {
+    onClick && onClick(toast.id);
+    dispatch(actions.hideToastMessage(toast));
+  };
 
   return (
     <View style={styles.outerContainer}>
       {toastMessages.map(toast => (
-        <CustomToast key={toast.id} toast={toast} onClose={() => dispatch(actions.hideToastMessage(toast))} />
+        <Pressable key={toast.id} onPress={() => handleClick(toast)}>
+          <CustomToast toast={toast} onClose={() => dispatch(actions.hideToastMessage(toast))} />
+        </Pressable>
       ))}
     </View>
   );

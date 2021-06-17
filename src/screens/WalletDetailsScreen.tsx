@@ -16,6 +16,7 @@ import {
   CheckSubscriptionAction,
   subscribeWallet as subscribeWalletAction,
   unsubscribeWallet as unsubscribeWalletAction,
+  subscribeDeviceToken as subscribeDeviceTokenAction,
   SubscribeWalletActionCreator,
   UnsubscribeWalletActionCreator,
 } from 'app/state/notifications/actions';
@@ -42,6 +43,7 @@ interface Props {
   deleteWallet: (id: string, meta?: ActionMeta) => DeleteWalletAction;
   checkSubscription: (wallets: Wallet[], email: string) => CheckSubscriptionAction;
   subscribe: SubscribeWalletActionCreator;
+  subscribeFcmToken: (wallet: Wallet[]) => void;
   unsubscribe: UnsubscribeWalletActionCreator;
   route: RouteProp<RootStackParams, Route.WalletDetails>;
   walletsLabels: string[];
@@ -184,6 +186,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               onPress: () => {
                 this.navigateBackToScreen();
                 this.checkSubscription();
+                flowType === ConfirmAddressFlowType.SUBSCRIBE && this.props.subscribeFcmToken([wallet]);
               },
             },
           });
@@ -200,6 +203,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
 
   subscribe = (wallet: Wallet, email: string) => {
     this.props.subscribe([wallet], email);
+
     this.confirmEmail(ConfirmAddressFlowType.SUBSCRIBE, () => this.props.subscribe([wallet], email));
   };
 
@@ -312,6 +316,7 @@ const mapDispatchToProps = {
   deleteWallet: deleteWalletAction,
   subscribe: subscribeWalletAction,
   unsubscribe: unsubscribeWalletAction,
+  subscribeFcmToken: subscribeDeviceTokenAction,
   checkSubscription,
 };
 

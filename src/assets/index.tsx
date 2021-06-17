@@ -73,4 +73,6 @@ export const icons = {
   export: require('./images/export3x.png'),
   warning: require('./images/warning.png'),
   bell: require('./images/bell.png'),
+  successNotification: require('./images/successNotify.png'),
+  failNotification: require('./images/failNotify.png'),
 };

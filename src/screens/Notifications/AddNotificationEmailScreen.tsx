@@ -77,7 +77,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     navigation.navigate(Route.LocalConfirmNotificationCode, {
       children: (
         <View style={styles.infoContainer}>
-          <Text style={typography.headline4}>{i18n.notifications.confirmEmail}</Text>
+          <Text style={[typography.headline4, { textAlign: 'center' }]}>{i18n.notifications.confirmEmail}</Text>
           <Text style={styles.codeDescription}>{i18n.notifications.pleaseEnter}</Text>
           <Text style={typography.headline5}>{email}</Text>
         </View>

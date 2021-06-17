@@ -19,8 +19,8 @@ const Wallets = () => {
         'Standard HD SegWit': element(by.id('create-hd-segwit-p2sh-radio')),
       },
 
-      createWalletButton: element(by.id('create-wallet-button')),
-      importWalletButton: element(by.id('import-wallet-button')),
+      createWalletButton: element(by.id('creates-wallet-button')),
+      importWalletButton: element(by.id('imports-wallet-button')),
 
       async typeName(value: string) {
         await actions.typeText(this.nameInput, value, { closeKeyboard: true });
