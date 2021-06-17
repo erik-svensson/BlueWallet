@@ -58,7 +58,6 @@ export const icons = {
   github: require('./images/github.png'),
   star: require('./images/star.png'),
   success: require('./images/success.png'),
-  successState: require('./images/successState.png'),
   radioButtonChecked: require('./images/radioButtonChecked.png'),
   radioButtonUnchecked: require('./images/radioButtonUnchecked.png'),
   visibilityOn: require('./images/visibilityOn.png'),
@@ -74,4 +73,6 @@ export const icons = {
   export: require('./images/export3x.png'),
   warning: require('./images/warning.png'),
   bell: require('./images/bell.png'),
+  successNotification: require('./images/successNotify.png'),
+  failNotification: require('./images/failNotify.png'),
 };

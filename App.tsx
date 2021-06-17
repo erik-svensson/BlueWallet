@@ -7,6 +7,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { Navigator } from 'app/navigators';
 import { AppStateManager } from 'app/services';
+import NotificationsServices from 'app/services/NotificationServices';
+import { AppSettingsAction } from 'app/state/appSettings/actions';
 import { AuthenticationAction } from 'app/state/authentication/actions';
 import { persistor, store } from 'app/state/store';
 
@@ -42,6 +44,9 @@ export default class App extends React.PureComponent {
     this.setState({
       unlockKey: getNewKey(),
     });
+    store.dispatch({
+      type: AppSettingsAction.ClearBadge,
+    });
   };
 
   render() {
@@ -56,6 +61,7 @@ export default class App extends React.PureComponent {
             <View style={styles.wrapper}>
               <Navigator unlockKey={this.state.unlockKey} />
             </View>
+            <NotificationsServices />
           </PersistGate>
         </Provider>
       </I18nextProvider>

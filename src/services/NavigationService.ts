@@ -4,7 +4,6 @@ import { createRef } from 'react';
 import { GlobalParams, Route } from 'app/consts';
 
 export const navigationRef = createRef<NavigationContainerRef>();
-
 export default class NavigationService {
   goBack() {
     navigationRef.current?.goBack();

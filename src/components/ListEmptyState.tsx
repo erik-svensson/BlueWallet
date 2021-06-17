@@ -26,10 +26,6 @@ export class ListEmptyState extends PureComponent<Props> {
   renderDashboardDescription = () => (
     <>
       <Text style={styles.description}>{i18n.wallets.dashboard.noWalletsDesc1}</Text>
-      <Text style={styles.description}>
-        <StyledText onPress={this.props.onPress} title={`${i18n._.click} `} />
-        {i18n.wallets.dashboard.noWalletsDesc2}
-      </Text>
     </>
   );
 
