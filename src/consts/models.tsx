@@ -175,6 +175,7 @@ export enum Route {
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   UpdateEmailNotification = 'UpdateEmailNotification',
+  SeedPhraseConfirm = 'SeedPhraseConfirm',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -548,6 +549,7 @@ export type RootStackParams = {
     subscribedWallets: Wallet[];
     wallet: Wallet;
   };
+  [Route.SeedPhraseConfirm]: { secret: string };
 };
 
 export type DateType = Date | Dayjs;

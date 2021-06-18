@@ -53,6 +53,7 @@ import {
   LocalConfirmNotificationCodeScreen,
   AddNotificationEmailScreen,
   UpdateEmailNotificationScreen,
+  SeedPhraseConfirmScreen,
 } from 'app/screens';
 
 import { MainTabNavigator } from './MainTabNavigator';
@@ -124,6 +125,7 @@ export const RootNavigator: FC<Props> = ({
       />
 
       <Stack.Screen name={Route.CreateWallet} component={CreateWalletScreen} />
+      <Stack.Screen name={Route.SeedPhraseConfirm} component={SeedPhraseConfirmScreen} />
       <Stack.Screen name={Route.ImportWallet} component={ImportWalletScreen} />
       <Stack.Screen name={Route.WalletDetails} component={WalletDetailsScreen} />
       <Stack.Screen name={Route.CreateContact} component={CreateContactScreen} />

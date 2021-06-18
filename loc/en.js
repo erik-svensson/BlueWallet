@@ -590,6 +590,13 @@ module.exports = {
       title: 'Add new wallet',
       walletType: 'Wallet type',
     },
+    confirmSeed: {
+      header: 'Confirm seed phrase',
+      title: 'Lorem ipsum',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget ut condimentum ut tellus pulvinar vel dui. ',
+      button: 'Confirm',
+    },
     addSuccess: {
       description:
         "Write down this seed phrase somewhere safe. It's your backup in case you need to restore your wallet.",

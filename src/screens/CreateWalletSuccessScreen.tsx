@@ -29,11 +29,11 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
     const {
       navigation,
       route: {
-        params: { onButtonPress },
+        params: { secret, onButtonPress },
       },
     } = this.props;
 
-    onButtonPress ? onButtonPress() : navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
+    onButtonPress ? onButtonPress() : navigation.navigate(Route.SeedPhraseConfirm, { secret });
   };
 
   render() {
