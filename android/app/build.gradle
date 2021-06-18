@@ -10,11 +10,11 @@ project.ext.envConfigFiles = [
     // requires lowercase
     devdebug: ".env.dev.testnet",
     stagedebug: ".env.stage.mainnet",
-    proddebug: ".env.mainnet",
+    proddebug: ".env.prod.mainnet",
     betadebug: ".env.beta.testnet",
     devrelease: ".env.dev.testnet",
     stagerelease: ".env.stage.mainnet",
-    prodrelease: ".env.mainnet",
+    prodrelease: ".env.prod.mainnet",
     betarelease: ".env.beta.mainnet",
 ]
 
@@ -148,8 +148,8 @@ android {
         resValue "string", "build_config_package", "io.goldwallet.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
-        versionName "6.2.0"
+        versionCode 12
+        versionName "6.3.0"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
