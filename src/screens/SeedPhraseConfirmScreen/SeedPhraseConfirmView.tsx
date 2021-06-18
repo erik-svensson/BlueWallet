@@ -1,13 +1,31 @@
-// import React, { FC } from 'react';
-// import { StyleSheet, View } from 'react-native';
+import React, { FC } from 'react';
+import { StyleSheet, View } from 'react-native';
 
-// export interface Props {}
+import { palette, typography } from 'app/styles';
 
-// const SeedPhraseConfirmView: FC<Props> = ({}) => (
-//   <>
-//     <View style={styles.mnemonicPhraseContainer}></View>
-//     <View style={styles.mnemonicPhraseUnselectedContainer}></View>
-//   </>
-// );
+export interface Props {
+  secret: string;
+}
 
-// export default SeedPhraseConfirmView;
+export const SeedPhraseConfirmView: FC<Props> = ({ secret }) => {
+  //TODO
+
+  return (
+    <>
+      <View style={styles.mnemonicPhraseContainer}></View>
+      <View style={styles.mnemonicPhraseUnselectedContainer}></View>
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  mnemonicPhraseContainer: {
+    flex: 1,
+    borderColor: palette.border,
+    borderWidth: 1,
+    borderRadius: 20,
+  },
+  mnemonicPhraseUnselectedContainer: {
+    flex: 1,
+  },
+});
