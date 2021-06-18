@@ -1,6 +1,9 @@
+import { shuffle } from 'lodash/fp';
 import React, { FC } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import { AnimatedMnemonic } from 'app/components';
+import { mnemonicWordsToKeyedMnemonic } from 'app/helpers/helpers';
 import { palette, typography } from 'app/styles';
 
 export interface Props {
@@ -12,8 +15,12 @@ export const SeedPhraseConfirmView: FC<Props> = ({ secret }) => {
 
   return (
     <>
-      <View style={styles.mnemonicPhraseContainer}></View>
-      <View style={styles.mnemonicPhraseUnselectedContainer}></View>
+      <View style={styles.mnemonicPhraseContainer}>
+        <AnimatedMnemonic mnemonic={mnemonicWordsToKeyedMnemonic(secret)} />
+      </View>
+      <View style={styles.mnemonicPhraseUnselectedContainer}>
+        <AnimatedMnemonic mnemonic={shuffle(mnemonicWordsToKeyedMnemonic(secret))} />
+      </View>
     </>
   );
 };

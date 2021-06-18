@@ -1,3 +1,5 @@
+import { Animated } from 'react-native';
+
 export { BottomTabBarIcon } from './BottomTabBarIcon';
 export { BottomTabBarComponent } from './BottomTabBarComponent';
 export { GradientView } from './GradientView';
@@ -41,3 +43,4 @@ export { CardGroup } from './CardGroup';
 export { RowTemplate } from './RowTemplate';
 export { CodeInput } from './CodeInput';
 export { TimeoutButton } from './TimeoutButton';
+export { AnimatedMnemonic } from './AnimatedMnemonic';
