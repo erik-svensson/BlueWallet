@@ -278,7 +278,7 @@ class DashboardScreen extends Component<Props, State> {
                     testID="create-wallet-button"
                   />
                   <FlatButton
-                    onPress={() => this.props.navigation.navigate(Route.ImportWalletChooseType)}
+                    onPress={() => this.props.navigation.navigate(Route.ImportWalletChooseType, { error: false })}
                     containerStyle={styles.importButtonContainer}
                     title={i18n.wallets.add.importWalletButton}
                     testID="import-wallet-button"

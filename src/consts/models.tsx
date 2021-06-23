@@ -275,6 +275,11 @@ export interface InfoContainerContent {
   onCodeConfirm?: () => void;
 }
 
+export interface WordWithKey {
+  word: string;
+  key: string;
+}
+
 export interface Transaction {
   hash: string;
   txid: string;
@@ -526,7 +531,7 @@ export type RootStackParams = {
     headerTitle?: string;
     onBackArrow?: () => void;
   };
-  [Route.ImportWalletChooseType]: undefined;
+  [Route.ImportWalletChooseType]: { error?: boolean };
   [Route.ChunkedQrCode]: {
     chunkNo: string;
     chunksQuantity: string;

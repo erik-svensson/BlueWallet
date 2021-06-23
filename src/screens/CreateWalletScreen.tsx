@@ -56,7 +56,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   setLabel = (label: string) => this.setState({ label: label.trim() });
 
-  navigateToImportWallet = () => this.props.navigation.navigate(Route.ImportWalletChooseType);
+  navigateToImportWallet = () => this.props.navigation.navigate(Route.ImportWalletChooseType, { error: false });
 
   createARWallet = (recoveryPublicKey: string) => {
     const { navigation } = this.props;
