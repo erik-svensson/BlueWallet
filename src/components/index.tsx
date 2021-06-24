@@ -43,4 +43,5 @@ export { CardGroup } from './CardGroup';
 export { RowTemplate } from './RowTemplate';
 export { CodeInput } from './CodeInput';
 export { TimeoutButton } from './TimeoutButton';
-export { AnimatedMnemonic } from './AnimatedMnemonic';
+export { Tags } from './Tags';
+export { Tag } from './Tag';

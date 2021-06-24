@@ -1,10 +1,13 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { shuffle } from 'lodash/fp';
+import React, { FC, useState, useEffect, useMemo, useCallback } from 'react';
+import { StyleSheet } from 'react-native';
 
 import { ScreenTemplate, Header, Button, Text } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
+import { WordWithKey } from 'app/consts/models';
+import { mnemonicWordsToKeyedMnemonic } from 'app/helpers/helpers';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { palette, typography } from 'app/styles';
 
@@ -18,56 +21,90 @@ interface Props {
   secret: string[];
 }
 
-class SeedPhraseConfirmScreen extends Component<Props> {
-  state = {
-    unorderedSeed: this.props.route.params.secret,
-  };
-  componentDidMount() {
+const SeedPhraseConfirmScreen: FC<Props> = props => {
+  const [orderedMnemonics, setOrderedMnemonics] = useState<WordWithKey[]>([]);
+  const [unorderedMnemonics, setUnorderedMnemonics] = useState<WordWithKey[]>([]);
+  const [isError, setIsError] = useState(false);
+
+  const {
+    route: {
+      params: { secret },
+    },
+  } = props;
+
+  const keyedMnemonics = useMemo(() => shuffle(mnemonicWordsToKeyedMnemonic(secret)), [secret]);
+
+  useEffect(() => {
     preventScreenshots();
-  }
+    setUnorderedMnemonics(shuffle(keyedMnemonics));
+    return () => {
+      allowScreenshots();
+    };
+  }, [keyedMnemonics]);
 
-  componentWillUnmount() {
-    allowScreenshots();
-  }
-  get canSubmit(): boolean {
-    return false;
-  }
+  const canSubmit = () => {
+    return keyedMnemonics.length !== orderedMnemonics.length;
+  };
 
-  handleConfirm = () => {
-    const { navigation } = this.props;
+  const handleNextButtonPress = useCallback(() => {
+    const { navigation } = props;
 
     navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
-  };
+  }, [props]);
 
-  render() {
-    const {
-      route: {
-        params: { secret },
-      },
-    } = this.props;
+  const onSeedOrderChange = useCallback((reordered: WordWithKey[]) => {
+    setIsError(false);
+    setOrderedMnemonics(reordered);
+  }, []);
 
-    return (
-      <ScreenTemplate
-        keyboardShouldPersistTaps={'always'}
-        footer={
-          <>
-            <Button
-              disabled={!this.canSubmit}
-              onPress={this.handleConfirm}
-              title={i18n.wallets.confirmSeed.button}
-              testID="creates-wallet-button"
-            />
-          </>
-        }
-        header={<Header isBackArrow title={i18n.wallets.confirmSeed.header} />}
-      >
-        <Text style={styles.subtitle}>{i18n.wallets.confirmSeed.title}</Text>
-        <Text style={styles.description}>{i18n.wallets.confirmSeed.description}</Text>
-        <SeedPhraseConfirmView secret={secret} />
-      </ScreenTemplate>
-    );
-  }
-}
+  const handleRemovePress = useCallback(
+    (keyedWord: WordWithKey) => {
+      setIsError(false);
+      setOrderedMnemonics(orderedMnemonics.filter((wordWithKey: WordWithKey) => wordWithKey.key !== keyedWord.key));
+      setUnorderedMnemonics([...unorderedMnemonics, keyedWord]);
+    },
+    [orderedMnemonics, unorderedMnemonics],
+  );
+
+  const handleTagTouch = useCallback(
+    (keyedWord: WordWithKey) => {
+      const newOrder = [...orderedMnemonics, keyedWord];
+
+      setUnorderedMnemonics(unorderedMnemonics.filter((wordWithKey: WordWithKey) => wordWithKey.key !== keyedWord.key));
+
+      setOrderedMnemonics(newOrder);
+    },
+    [unorderedMnemonics, orderedMnemonics],
+  );
+
+  return (
+    <ScreenTemplate
+      keyboardShouldPersistTaps={'always'}
+      footer={
+        <>
+          <Button
+            disabled={!canSubmit}
+            onPress={handleNextButtonPress}
+            title={i18n.wallets.confirmSeed.button}
+            testID="creates-wallet-button"
+          />
+        </>
+      }
+      header={<Header isBackArrow title={i18n.wallets.confirmSeed.header} />}
+    >
+      <Text style={styles.subtitle}>{i18n.wallets.confirmSeed.title}</Text>
+      <Text style={styles.description}>{i18n.wallets.confirmSeed.description}</Text>
+      <SeedPhraseConfirmView
+        unorderedMnemonics={unorderedMnemonics}
+        orderedMnemonics={orderedMnemonics}
+        onSeedOrderChange={onSeedOrderChange}
+        onSeedRemovePress={handleRemovePress}
+        error={isError}
+        onTouch={handleTagTouch}
+      />
+    </ScreenTemplate>
+  );
+};
 
 export default SeedPhraseConfirmScreen;
 

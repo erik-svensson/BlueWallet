@@ -475,7 +475,7 @@ module.exports = {
     factory: {
       title: 'Factory reset',
       text:
-        'Your wallets*, authenticators, address book, password and PIN will be lost. Are you sure you want to reset your Gold Wallet settings? \n \n* you will not lose your BTCV, but you will have to re-import your wallets',
+        'Are you sure you want to restore the Gold Wallet to its factory settings? All of your wallets and data will be deleted. Remember that you will have to import your wallets all over again.',
       noButton: 'No',
       yesButton: 'Yes',
     },
@@ -592,9 +592,8 @@ module.exports = {
     },
     confirmSeed: {
       header: 'Confirm seed phrase',
-      title: 'Lorem ipsum',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Eget ut condimentum ut tellus pulvinar vel dui. ',
+      title: 'Confirm backup phrase',
+      description: 'Click up the words in the correct order to confirm your backup.',
       button: 'Confirm',
     },
     addSuccess: {
