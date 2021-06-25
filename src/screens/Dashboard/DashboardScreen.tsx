@@ -266,7 +266,7 @@ class DashboardScreen extends Component<Props, State> {
       <>
         <ScreenTemplate noScroll contentContainer={styles.contentContainer} header={this.renderHeader()}>
           {this.renderContent()}
-          <View style={{ marginHorizontal: 25 }}>
+          <View style={styles.footer}>
             {!this.hasWallets() && (
               <>
                 <Button
@@ -333,5 +333,8 @@ const styles = StyleSheet.create({
   },
   importButtonContainer: {
     marginTop: 12,
+  },
+  footer: {
+    marginHorizontal: 25,
   },
 });
