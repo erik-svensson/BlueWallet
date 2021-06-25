@@ -244,11 +244,13 @@ class DashboardScreen extends Component<Props, State> {
       );
     }
     return (
-      <ListEmptyState
-        testID="no-wallets-icon"
-        variant={ListEmptyState.Variant.Dashboard}
-        onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
-      />
+      <View style={{ flex: 1 }}>
+        <ListEmptyState
+          testID="no-wallets-icon"
+          variant={ListEmptyState.Variant.Dashboard}
+          onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
+        />
+      </View>
     );
   };
 
