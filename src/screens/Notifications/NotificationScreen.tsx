@@ -184,7 +184,7 @@ export class NotificationScreen extends Component<Props> {
   render() {
     const {
       subscribedWallets,
-      isPushnotificationsEnabled,
+      isPushnotificationsEnabled = true,
       email,
       route: {
         params: { onBackArrow },
