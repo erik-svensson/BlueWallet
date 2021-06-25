@@ -7,6 +7,7 @@ import { StyleSheet } from 'react-native';
 import { ScreenTemplate, Header, Button, Text } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
 import { WordWithKey } from 'app/consts/models';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { mnemonicWordsToKeyedMnemonic } from 'app/helpers/helpers';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { palette, typography } from 'app/styles';
@@ -56,8 +57,15 @@ const SeedPhraseConfirmScreen: FC<Props> = props => {
       setIsError(true);
       return;
     } else {
-      navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
-      return;
+      return CreateMessage({
+        title: i18n.message.hooray,
+        description: i18n.message.creatingWalletSuccess,
+        type: MessageType.success,
+        buttonProps: {
+          title: i18n.onboarding.successCompletedButton,
+          onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+        },
+      });
     }
   }, [props, secret, orderedMnemonics]);
 

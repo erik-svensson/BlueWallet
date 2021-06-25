@@ -216,6 +216,7 @@ module.exports = {
     creatingAuthenticator: 'Creating your authenticator',
     creatingAuthenticatorDescription: 'Please be patient while we create your authenticator.\n It may take a while.',
     creatingWallet: 'Creating your wallet',
+    creatingWalletSuccess: 'You have successfully created your wallet.',
     creatingWalletDescription: 'Please be patient while we create your wallet.\n It may take a while.',
     generateAddressesError: 'Couldn`t generate addresses',
     hooray: 'Hooray!',
