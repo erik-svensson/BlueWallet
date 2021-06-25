@@ -50,30 +50,27 @@ export const Tags: FC<Props> = ({ words, removable, onRemove, touchable, onTouch
   return (
     <View style={styles.container}>
       {onTagsOrderChange ? (
-        <View style={styles.dragContainer}>
-          <DragSortableView
-            dataSource={words}
-            parentWidth={VIEW_WIDTH}
-            childrenWidth={tagStyles.width}
-            childrenHeight={tagStyles.height}
-            keyExtractor={(item: WordWithKey) => item.key}
-            marginChildrenBottom={tagStyles.margin}
-            marginChildrenRight={tagStyles.margin}
-            marginChildrenLeft={tagStyles.margin}
-            onDataChange={(tags: WordWithKey[]) => {
-              onTagsOrderChange(tags);
-            }}
-            onClickItem={(all: WordWithKey[], wordWithKey: WordWithKey) => {
-              console.log('>>@@@');
-              if (onRemove) {
-                onRemove(wordWithKey);
-              }
-            }}
-            renderItem={(wordWithKey: WordWithKey, index: number) => (
-              <Tag keyedWord={wordWithKey} index={index} removable={removable} />
-            )}
-          />
-        </View>
+        <DragSortableView
+          dataSource={words}
+          parentWidth={VIEW_WIDTH}
+          childrenWidth={tagStyles.width}
+          childrenHeight={tagStyles.height}
+          keyExtractor={(item: WordWithKey) => item.key}
+          marginChildrenBottom={tagStyles.margin}
+          marginChildrenRight={tagStyles.margin}
+          marginChildrenLeft={tagStyles.margin}
+          onDataChange={(tags: WordWithKey[]) => {
+            onTagsOrderChange(tags);
+          }}
+          onClickItem={(all: WordWithKey[], wordWithKey: WordWithKey) => {
+            if (onRemove) {
+              onRemove(wordWithKey);
+            }
+          }}
+          renderItem={(wordWithKey: WordWithKey, index: number) => (
+            <Tag keyedWord={wordWithKey} index={index} removable={removable} />
+          )}
+        />
       ) : (
         words.map((wordWithKey: WordWithKey, index: number) => (
           <Tag

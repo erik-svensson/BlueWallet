@@ -595,6 +595,7 @@ module.exports = {
       title: 'Confirm backup phrase',
       description: 'Click up the words in the correct order to confirm your backup.',
       button: 'Confirm',
+      error: 'The seed phrase order is incorrect.',
     },
     addSuccess: {
       description:

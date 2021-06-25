@@ -43,14 +43,23 @@ const SeedPhraseConfirmScreen: FC<Props> = props => {
   }, [keyedMnemonics]);
 
   const canSubmit = () => {
-    return keyedMnemonics.length !== orderedMnemonics.length;
+    return keyedMnemonics.length === orderedMnemonics.length;
   };
 
   const handleNextButtonPress = useCallback(() => {
     const { navigation } = props;
+    const arraySecret = secret.split(' ');
+    const isOrderCorrect =
+      JSON.stringify(arraySecret) === JSON.stringify(orderedMnemonics.map(keyedWord => keyedWord.word));
 
-    navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
-  }, [props]);
+    if (!isOrderCorrect) {
+      setIsError(true);
+      return;
+    } else {
+      navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
+      return;
+    }
+  }, [props, secret, orderedMnemonics]);
 
   const onSeedOrderChange = useCallback((reordered: WordWithKey[]) => {
     setIsError(false);
@@ -79,11 +88,12 @@ const SeedPhraseConfirmScreen: FC<Props> = props => {
 
   return (
     <ScreenTemplate
+      noScroll
       keyboardShouldPersistTaps={'always'}
       footer={
         <>
           <Button
-            disabled={!canSubmit}
+            disabled={!canSubmit()}
             onPress={handleNextButtonPress}
             title={i18n.wallets.confirmSeed.button}
             testID="creates-wallet-button"
