@@ -264,31 +264,25 @@ class DashboardScreen extends Component<Props, State> {
     }
     return (
       <>
-        <ScreenTemplate
-          noScroll
-          contentContainer={styles.contentContainer}
-          header={this.renderHeader()}
-          footer={
-            <>
-              {!this.hasWallets() && (
-                <>
-                  <Button
-                    onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
-                    title={i18n.wallets.add.createWalletButton}
-                    testID="create-wallet-button"
-                  />
-                  <FlatButton
-                    onPress={() => this.props.navigation.navigate(Route.ImportWalletChooseType)}
-                    containerStyle={styles.importButtonContainer}
-                    title={i18n.wallets.add.importWalletButton}
-                    testID="import-wallet-button"
-                  />
-                </>
-              )}
-            </>
-          }
-        >
+        <ScreenTemplate noScroll contentContainer={styles.contentContainer} header={this.renderHeader()}>
           {this.renderContent()}
+          <View style={{ marginHorizontal: 25 }}>
+            {!this.hasWallets() && (
+              <>
+                <Button
+                  onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
+                  title={i18n.wallets.add.createWalletButton}
+                  testID="create-wallet-button"
+                />
+                <FlatButton
+                  onPress={() => this.props.navigation.navigate(Route.ImportWalletChooseType)}
+                  containerStyle={styles.importButtonContainer}
+                  title={i18n.wallets.add.importWalletButton}
+                  testID="import-wallet-button"
+                />
+              </>
+            )}
+          </View>
         </ScreenTemplate>
         {!!this.props.isFilteringOn && (
           <View style={styles.clearFiltersButtonContainer}>
