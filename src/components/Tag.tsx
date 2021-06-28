@@ -10,14 +10,13 @@ export interface Props {
   onRemove?: (keyedWord: WordWithKey) => void;
   touchable?: boolean;
   onTouch?: (keyedWord: WordWithKey) => void;
-  index?: number;
 }
 export const SCREEN_CONTAINER_MARGIN = 20;
 
-export const Tag: FC<Props> = ({ keyedWord, removable, onRemove, index, touchable, onTouch }) => {
+export const Tag: FC<Props> = ({ keyedWord, removable, onRemove, touchable, onTouch }) => {
   let wordComponent = (
     <View style={styles.chipContainer}>
-      <Chip label={`${keyedWord.word}`} />
+      <Chip label={`${keyedWord.word}`} removable={removable} />
     </View>
   );
 

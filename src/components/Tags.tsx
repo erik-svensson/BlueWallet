@@ -16,22 +16,22 @@ export interface Props {
 }
 
 export const SCREEN_CONTAINER_MARGIN = 20;
-const MARGIN_INSIDE_CARD = 26;
-const MAXIMUM_WORD_WIDTH = 120;
+const MARGIN_INSIDE_CARD = 22;
+const MAXIMUM_WORD_WIDTH = 100;
 const WORDS_LENGTH_INSIDE_COLUMN = 3;
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const SCREEN_HORIZONTAL_MARGIN = 34;
+const SCREEN_HORIZONTAL_MARGIN = 28;
 const VIEW_WIDTH = SCREEN_WIDTH - SCREEN_HORIZONTAL_MARGIN * 2;
 
 const getWordWidth = () => {
   /**
    * Sums results times two because of both sides of edges
    */
-  const sumOfGlassCardMargin = MARGIN_INSIDE_CARD * 2;
+  const sumOfCardMargin = MARGIN_INSIDE_CARD * 2;
   const sumOfScreenContainerMargin = SCREEN_CONTAINER_MARGIN * 2;
   const sumOfWordsMargin = MARGIN_INSIDE_CARD * WORDS_LENGTH_INSIDE_COLUMN * 2;
 
-  const widthWithoutWords = sumOfGlassCardMargin + sumOfScreenContainerMargin + sumOfWordsMargin;
+  const widthWithoutWords = sumOfCardMargin + sumOfScreenContainerMargin + sumOfWordsMargin;
   const windowWidth = SCREEN_WIDTH;
   const leftSpaceForWords = windowWidth - widthWithoutWords;
   const oneWordSpace = Math.floor(leftSpaceForWords / WORDS_LENGTH_INSIDE_COLUMN);
@@ -67,19 +67,16 @@ export const Tags: FC<Props> = ({ words, removable, onRemove, touchable, onTouch
               onRemove(wordWithKey);
             }
           }}
-          renderItem={(wordWithKey: WordWithKey, index: number) => (
-            <Tag keyedWord={wordWithKey} index={index} removable={removable} />
-          )}
+          renderItem={(wordWithKey: WordWithKey) => <Tag keyedWord={wordWithKey} removable={removable} />}
         />
       ) : (
-        words.map((wordWithKey: WordWithKey, index: number) => (
+        words.map((wordWithKey: WordWithKey) => (
           <Tag
             key={wordWithKey.key}
             keyedWord={wordWithKey}
             onTouch={onTouch || undefined}
             touchable={touchable}
             onRemove={onRemove || undefined}
-            index={index}
           />
         ))
       )}
@@ -95,10 +92,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     flexWrap: 'wrap',
-  },
-  dragContainer: {
-    justifyContent: 'center',
-    paddingVertical: 20,
-    alignContent: 'center',
   },
 });
