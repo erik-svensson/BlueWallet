@@ -143,7 +143,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
           secret: w.getSecret(),
-          onButtonPress: !!email ? () => this.navigateToConfirmEmailSubscription(wallet) : undefined,
+          handleNavigationSubscription: !!email ? () => this.navigateToConfirmEmailSubscription(wallet) : undefined,
         });
       },
       onFailure: () => onError(),

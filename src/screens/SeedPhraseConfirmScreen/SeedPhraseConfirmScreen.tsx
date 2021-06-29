@@ -48,7 +48,12 @@ const SeedPhraseConfirmScreen: FC<Props> = props => {
   };
 
   const handleNextButtonPress = useCallback(() => {
-    const { navigation } = props;
+    const {
+      navigation,
+      route: {
+        params: { handleNavigationSubscription },
+      },
+    } = props;
     const arraySecret = secret.split(' ');
     const isOrderCorrect =
       JSON.stringify(arraySecret) === JSON.stringify(orderedMnemonics.map(keyedWord => keyedWord.word));
@@ -57,6 +62,10 @@ const SeedPhraseConfirmScreen: FC<Props> = props => {
       setIsError(true);
       return;
     } else {
+      if (handleNavigationSubscription) {
+        handleNavigationSubscription();
+        return;
+      }
       return CreateMessage({
         title: i18n.message.hooray,
         description: i18n.message.creatingWalletSuccess,

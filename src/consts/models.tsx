@@ -522,7 +522,7 @@ export type RootStackParams = {
   };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
-  [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: () => void };
+  [Route.CreateWalletSuccess]: { secret: string; handleNavigationSubscription?: () => void };
   [Route.IntegrateKey]: {
     onBarCodeScan: (text: string) => void;
     title: string;
@@ -554,7 +554,7 @@ export type RootStackParams = {
     subscribedWallets: Wallet[];
     wallet: Wallet;
   };
-  [Route.SeedPhraseConfirm]: { secret: string };
+  [Route.SeedPhraseConfirm]: { secret: string; handleNavigationSubscription?: () => void };
 };
 
 export type DateType = Date | Dayjs;
