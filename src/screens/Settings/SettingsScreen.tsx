@@ -2,18 +2,16 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import RNExitApp from 'react-native-exit-app';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { Image, ScreenTemplate, Header, ListItem, CustomModal } from 'app/components';
-import { Route, MainTabNavigatorParams, RootStackParams, Wallet, CONST } from 'app/consts';
+import { Route, MainTabNavigatorParams, RootStackParams, Wallet } from 'app/consts';
+import { factoryReset } from 'app/helpers/factoryReset';
 import { logoSource } from 'app/helpers/images';
-import { BlueApp } from 'app/legacy';
-import { BiometricService, AppStateManager, SecureStorageService, StoreService } from 'app/services';
+import { BiometricService, AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { updateBiometricSetting } from 'app/state/appSettings/actions';
-import { persistor, store } from 'app/state/store';
 import { fonts, palette, typography } from 'app/styles';
 
 import { LabeledSettingsRow } from './LabeledSettingsRow';
@@ -99,6 +97,10 @@ export const SettingsScreen = (props: Props) => {
     </View>
   );
 
+  const closeModals = () => {
+    setShowWarring(false);
+  };
+
   const toggleModal = () => {
     setShowWarring(!showWarring);
   };
@@ -112,28 +114,7 @@ export const SettingsScreen = (props: Props) => {
   };
 
   const handleYesButton = () => {
-    persistor
-      .purge()
-      .then(async () => {
-        await BlueApp.purgeStore();
-        return persistor.flush();
-      })
-      .then(() => {
-        return persistor.pause();
-      })
-      .then(async () => {
-        BiometricService.deleteBiometrics();
-        StoreService.wipeStore();
-        SecureStorageService.removeSecuredPassword(CONST.pin);
-        SecureStorageService.removeSecuredPassword(CONST.transactionPassword);
-        return;
-      })
-      .then(() => {
-        store.dispatch({
-          type: 'RESET',
-        });
-        return RNExitApp.exitApp();
-      });
+    factoryReset();
   };
 
   const refreshBiometricsAvailability = async () => {
@@ -181,7 +162,10 @@ export const SettingsScreen = (props: Props) => {
 
   return (
     <>
-      <AppStateManager handleAppComesToForeground={refreshBiometricsAvailability} />
+      <AppStateManager
+        handleAppComesToForeground={refreshBiometricsAvailability}
+        handleAppComesToBackground={closeModals}
+      />
       <Header title={i18n.settings.header} />
       <ScreenTemplate>
         <Image testID="goldwallet-logo" source={logoSource} style={styles.logo} resizeMode="contain" />
