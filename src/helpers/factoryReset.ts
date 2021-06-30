@@ -3,11 +3,9 @@ import RNExitApp from 'react-native-exit-app';
 import { CONST } from 'app/consts';
 import { BlueApp } from 'app/legacy';
 import { BiometricService, SecureStorageService, StoreService } from 'app/services';
-import { NotificationAction } from 'app/state/notifications/actions';
 import { persistor, store } from 'app/state/store';
 
 export const factoryReset = () => {
-  store.dispatch({ type: NotificationAction.UnsubscribeDeviceTokenAction });
   persistor
     .purge()
     .then(async () => {

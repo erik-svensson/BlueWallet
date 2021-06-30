@@ -12,6 +12,7 @@ import { logoSource } from 'app/helpers/images';
 import { BiometricService, AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { updateBiometricSetting } from 'app/state/appSettings/actions';
+import { unsubscribeDeviceToken } from 'app/state/notifications/actions';
 import { fonts, palette, typography } from 'app/styles';
 
 import { LabeledSettingsRow } from './LabeledSettingsRow';
@@ -26,6 +27,7 @@ interface Props {
 }
 
 export const SettingsScreen = (props: Props) => {
+  const dispatch = useDispatch();
   const { navigation } = props;
   const { isBiometricsEnabled } = useSelector((state: ApplicationState) => ({
     isBiometricsEnabled: state.appSettings.isBiometricsEnabled,
@@ -39,8 +41,6 @@ export const SettingsScreen = (props: Props) => {
   useEffect(() => {
     refreshBiometricsAvailability();
   }, [biometryTypeAvailable]);
-
-  const dispatch = useDispatch();
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
 
@@ -114,6 +114,7 @@ export const SettingsScreen = (props: Props) => {
   };
 
   const handleYesButton = () => {
+    dispatch(unsubscribeDeviceToken());
     factoryReset();
   };
 
