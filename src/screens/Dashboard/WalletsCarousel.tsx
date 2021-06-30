@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 
 import { WalletCard } from 'app/components';
-import { Wallet } from 'app/consts';
+import { Wallet, dimensions } from 'app/consts';
 
 interface Props {
   data: Wallet[];
@@ -11,7 +11,7 @@ interface Props {
   getIndex: (index: number) => void;
 }
 
-const SCREEN_WIDTH = Dimensions.get('window').width;
+const ITEM_WIDTH = dimensions.width * 0.82;
 
 export class WalletsCarousel extends Component<Props> {
   carouselRef = React.createRef<any>();
@@ -38,8 +38,8 @@ export class WalletsCarousel extends Component<Props> {
           {...this.props}
           ref={this.carouselRef}
           renderItem={this.renderItem}
-          sliderWidth={SCREEN_WIDTH}
-          itemWidth={SCREEN_WIDTH * 0.82}
+          sliderWidth={dimensions.width}
+          itemWidth={ITEM_WIDTH}
           onSnapToItem={index => getIndex(index)}
         />
       </View>

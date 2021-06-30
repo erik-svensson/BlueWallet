@@ -1,3 +1,5 @@
+import { default as LockIconGrey } from './images/lockIconGrey.svg';
+
 export const images = {
   Dashboard: require('./images/dashboard.png'),
   DashboardInactive: require('./images/dashboardInactive.png'),
@@ -17,6 +19,7 @@ export const images = {
   dashboardNoWallet: require('./images/bvWalletIconNoCards.png'),
   addressBookNoContacts: require('./images/addressBookNoContacts.png'),
   addressBookNotFound: require('./images/bvAppIconsSearchx2.png'),
+  forwardArrow: require('./images/forwardArrow.png'),
   backArrow: require('./images/navigationBarBackArrow.png'),
   nextBlackArrow: require('./images/navigationBarBackArrowCopy.png'),
   successBadge: require('./images/groupCopy2.png'),
@@ -40,10 +43,12 @@ export const images = {
   portraitLogo: require('./images/portraitLogo.png'),
   noAuthenticators: require('./images/shield3x.png'),
   loader: require('./images/loader.png'),
+  airdrop: require('./images/airdrop.png'),
   bigBell: require('./images/bigBell.png'),
 };
 
 export const icons = {
+  LockIconGrey,
   iconDropdown: require('./images/iconDropdown.png'),
   termsIcon: require('./images/terms.png'),
   search: require('./images/iconSearch.png'),
@@ -66,12 +71,17 @@ export const icons = {
   filter: require('./images/filter.png'),
   scan: require('./images/scan.png'),
   tick: require('./images/tick.png'),
+  roundTick: require('./images/successState.png'),
   arrowLeft: require('./images/arrowLeft.png'),
   arrowRight: require('./images/arrowRight.png'),
   wallet: require('./images/wallet.png'),
   pair: require('./images/pair3x.png'),
   export: require('./images/export3x.png'),
   warning: require('./images/warning.png'),
+  airdropFloating: require('./images/airdropFloatingButton.png'),
+  airdrop: require('./images/airdropIcon.png'),
+  facebook: require('./images/facebook.png'),
+  twitter: require('./images/twitter.png'),
   bell: require('./images/bell.png'),
   successNotification: require('./images/successNotify.png'),
   failNotification: require('./images/failNotify.png'),

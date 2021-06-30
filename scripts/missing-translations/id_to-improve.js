@@ -33,15 +33,18 @@ const id = {
     title: 'GoldWallet adalah dompet Bitcoin Vault gratis dan sumber terbuka. Dilisensi MIT.',
   },
   advancedOptions: {
-    description: 'Mengaktifkan opsi Lanjutan akan memungkinkan Anda untuk memilih dari jenis dompet yang tercantum di bawah ini:\n  P2SH, HD P2SH, HD segwit.',
+    description:
+      'Mengaktifkan opsi Lanjutan akan memungkinkan Anda untuk memilih dari jenis dompet yang tercantum di bawah ini:\n  P2SH, HD P2SH, HD segwit.',
     title: 'Konfigurasikan opsi lanjutan',
   },
   authenticators: {
     add: {
-      description: 'Hal ini akan diperlukan untuk menyambungkan Gold Wallet dengan aplikasi desktop Electrum Vault. Ini digunakan sebagai autentikasi dua-faktor.',
+      description:
+        'Hal ini akan diperlukan untuk menyambungkan Gold Wallet dengan aplikasi desktop Electrum Vault. Ini digunakan sebagai autentikasi dua-faktor.',
       subdescription: 'Anda juga dapat mengimpor authenticator dengan memilih opsi di bawah.',
       subtitle: 'Buat authenticator baru',
-      successDescription: 'Tuliskan frasa benih ini di suatu tempat yang aman. Untuk berjaga-jaga seandainya Anda perlu memulihkan pengautentikasi. Ingat bahwa pengautentikasi diperlukan untuk mengonfirmasi transaksi Cepat dan Pembatalan.',
+      successDescription:
+        'Tuliskan frasa benih ini di suatu tempat yang aman. Untuk berjaga-jaga seandainya Anda perlu memulihkan pengautentikasi. Ingat bahwa pengautentikasi diperlukan untuk mengonfirmasi transaksi Cepat dan Pembatalan.',
       successTitle: 'Authenticator Anda siap!',
       title: 'Tambahkan authenticator baru',
     },
@@ -66,7 +69,8 @@ const id = {
       desc2: 'pindai kode QR dengan mengklik tombol “atau pindai kode QR” di bawah',
       inUseValidationError: 'Nama harus unik. Mohon masukkan nama yang valid.',
       mnemonicLength: 'Mnemonik harus teridiri dari 12 kata.',
-      multipleQrCodesDescription: 'Beberapa transaksi memiliki lebih dari 1 kode QR. Pastikan bahwa Anda telah memindai semua kode dari aplikasi Electrum Vault.',
+      multipleQrCodesDescription:
+        'Beberapa transaksi memiliki lebih dari 1 kode QR. Pastikan bahwa Anda telah memindai semua kode dari aplikasi Electrum Vault.',
       multipleQrCodesTitle: 'Pindai kode QR lain',
       scanNext: 'Pindai selanjutnya',
       subtitle: 'Impor authenticator Anda',
@@ -90,14 +94,16 @@ const id = {
     },
     pair: {
       descPin: 'Gunakan PIN ini untuk mengonfirmasi penyandingan authenticator di aplikasi desktop.',
-      descPublicKey: 'Anda dapat menggunakan Kunci Publik ini untuk mengimpor authenticator di aplikasi desktop saat proses pembuatan dompet dengan opsi GoldWallet.',
+      descPublicKey:
+        'Anda dapat menggunakan Kunci Publik ini untuk mengimpor authenticator di aplikasi desktop saat proses pembuatan dompet dengan opsi GoldWallet.',
       pin: 'PIN',
       publicKey: 'Kunci Publik',
       title: 'Sandingkan authenticator',
     },
     publicKey: {
       okButton: 'OK, Saya mengerti',
-      subtitle: 'Anda dapat menggunakan Kunci Publik ini untuk mengimpor autentikator Anda ke aplikasi desktop Electrum Vault selama proses pembuatan dompet 2FA.',
+      subtitle:
+        'Anda dapat menggunakan Kunci Publik ini untuk mengimpor autentikator Anda ke aplikasi desktop Electrum Vault selama proses pembuatan dompet 2FA.',
       title: 'Kunci Publik',
     },
     sign: {
@@ -106,7 +112,8 @@ const id = {
   },
   betaVersion: {
     button: 'Saya mengerti dan menerima risikonya',
-    description: 'Aplikasi masih akan menjalani pengujian akhir sebelum perilisan resmi. Aplikasi mobile dan semua yang konten yang Anda temukan didalamnya disediakan dalam basis \"apa adanya\" dan \"ketika tersedia\". Risiko penggunaan perangkat lunak ditanggung langsung oleh pengguna.',
+    description:
+      'Aplikasi masih akan menjalani pengujian akhir sebelum perilisan resmi. Aplikasi mobile dan semua yang konten yang Anda temukan didalamnya disediakan dalam basis "apa adanya" dan "ketika tersedia". Risiko penggunaan perangkat lunak ditanggung langsung oleh pengguna.',
     title: 'Versi ini merupakan GoldWallet versi beta',
   },
   contactCreate: {
@@ -154,7 +161,8 @@ const id = {
   },
   electrumServer: {
     connectionError: 'Tidak dapat terhubung ke server Electrum yang tersedia',
-    description: 'Anda dapat merubah alamat server yang akan digunakan aplikasi Anda untuk menyambungkan diri. Alamat default direkomendasikan.',
+    description:
+      'Anda dapat merubah alamat server yang akan digunakan aplikasi Anda untuk menyambungkan diri. Alamat default direkomendasikan.',
     header: 'Server Electrum',
     host: 'host',
     port: 'port',
@@ -194,11 +202,13 @@ const id = {
     creatingAuthenticator: 'authenticator Anda sedang dibuat',
     creatingAuthenticatorDescription: 'Harap bersabar selagi kami membuat authenticator Anda.\n  Mungkin perlu waktu.',
     creatingWallet: 'Membuat dompet Anda',
-    creatingWalletDescription: 'Mohon kesabaran Anda sementara kami membuat dompet Anda. Ini mungkin membutuhkan waktu.',
+    creatingWalletDescription:
+      'Mohon kesabaran Anda sementara kami membuat dompet Anda. Ini mungkin membutuhkan waktu.',
     generateAddressesError: 'Tidak bisa membuat alamat',
     hooray: 'Hore!',
     importingAuthenticator: 'Mengimpor authenticator Anda',
-    importingAuthenticatorDescription: 'Harap bersabar selagi kami mengimpor authenticator Anda.\n  Mungkin perlu waktu.',
+    importingAuthenticatorDescription:
+      'Harap bersabar selagi kami mengimpor authenticator Anda.\n  Mungkin perlu waktu.',
     noTransactions: 'Transaksi tidak ditemukan di dompet',
     noTransactionsDesc: 'Anda mungkin mencoba mengimpor dompet yang belum pernah digunakan',
     processing: 'Pengolahan',
@@ -207,12 +217,14 @@ const id = {
     returnToWalletChoose: 'Kembali ke pemilihan tipe dompet',
     returnToWalletImport: 'Kembali ke impor dompet',
     somethingWentWrong: 'Terjadi kesalahan',
-    somethingWentWrongWhileCreatingWallet: 'Terjadi kesalahan saat kami membuat dompet Anda. Silakan kembali ke Dasbor dan coba lagi.',
+    somethingWentWrongWhileCreatingWallet:
+      'Terjadi kesalahan saat kami membuat dompet Anda. Silakan kembali ke Dasbor dan coba lagi.',
     success: 'Berhasil',
     successfullWalletDelete: 'Dompet Anda berhasil dihapus. Anda sekarang dapat kembali ke Dasbor.',
     successfullWalletImport: 'Dompet Anda berhasil diimpor. Anda sekarang dapat kembali ke Dasbor.',
     wrongMnemonic: 'Mnemonik salah',
-    wrongMnemonicDesc: 'Mnemonik tidak sesuai dengan dompet apa pun yang didukung. Anda mencoba mengimpor mnemonik yang tidak valid atau dompet belum pernah digunakan',
+    wrongMnemonicDesc:
+      'Mnemonik tidak sesuai dengan dompet apa pun yang didukung. Anda mencoba mengimpor mnemonik yang tidak valid atau dompet belum pernah digunakan',
   },
   onboarding: {
     changePin: 'Ubah PIN',
@@ -221,9 +233,11 @@ const id = {
     confirmPin: 'Konfirmasi PIN',
     createNewPin: 'PIN Baru',
     createPassword: 'Buat sandi transaksi',
-    createPasswordDescription: 'Kata Sandi Transaksi Anda akan digunakan untuk memverifikasi semua transaksi. Anda tidak dapat melakukan perubahan setelah ini. Sandi Transaksi harus paling tidak terdiri dari 8 karakter alfanumerik.',
+    createPasswordDescription:
+      'Kata Sandi Transaksi Anda akan digunakan untuk memverifikasi semua transaksi. Anda tidak dapat melakukan perubahan setelah ini. Sandi Transaksi harus paling tidak terdiri dari 8 karakter alfanumerik.',
     createPin: 'Buat PIN',
-    createPinDescription: 'PIN Anda kan digunakan untuk masuk ke aplikasi. Anda dapat melakukan perubahan nanti di bagian pengaturan.',
+    createPinDescription:
+      'PIN Anda kan digunakan untuk masuk ke aplikasi. Anda dapat melakukan perubahan nanti di bagian pengaturan.',
     currentPin: 'PIN Sekarang',
     failedTimes: 'Percobaan gagal',
     failedTimesErrorInfo: 'Setelah tiga percobaan yang gagal, Anda akan diblokir masuk selama',
@@ -245,7 +259,8 @@ const id = {
     details: {
       amount: 'Jumlah',
       receiveWithAmount: 'Terima dengan jumlah',
-      receiveWithAmountSubtitle: 'Masukkan jumlah yang ingin Anda terima. Kode QR akan diperbarui sesuai dengan jumlah yang Anda masukkan.',
+      receiveWithAmountSubtitle:
+        'Masukkan jumlah yang ingin Anda terima. Kode QR akan diperbarui sesuai dengan jumlah yang Anda masukkan.',
       share: 'Bagikan',
       shareWalletAddress: 'Bagikan alamat dompet',
     },
@@ -259,9 +274,12 @@ const id = {
     permissionTitle: 'Izin untuk menggunakan kamera',
   },
   security: {
-    jailBrokenPhone: 'Perangkat Anda tampak sudah di-jailbreak. Ini dapat menyebabkan masalah keamanan, kerusakan, atau masalah lainnya. Kami tidak menyarankan penggunaan GoldWallet di perangkat yang sudah di-jailbreak.',
-    noPinOrFingerprintSet: 'Nampaknya perangkat Anda tidak diamankan menggunakan PIN ataupun sidik jari. Kami tidak merekomendasikan untuk menggunakan GoldWallet di perangkat yang tidak diamankan.',
-    rootedPhone: 'Perangkat Anda tampaknya sudah di-root. Ini dapat menyebabkan masalah keamanan, kerusakan, atau masalah lainnya. Kami tidak menyarankan penggunaan GoldWallet di perangkat yang sudah di-root.',
+    jailBrokenPhone:
+      'Perangkat Anda tampak sudah di-jailbreak. Ini dapat menyebabkan masalah keamanan, kerusakan, atau masalah lainnya. Kami tidak menyarankan penggunaan GoldWallet di perangkat yang sudah di-jailbreak.',
+    noPinOrFingerprintSet:
+      'Nampaknya perangkat Anda tidak diamankan menggunakan PIN ataupun sidik jari. Kami tidak merekomendasikan untuk menggunakan GoldWallet di perangkat yang tidak diamankan.',
+    rootedPhone:
+      'Perangkat Anda tampaknya sudah di-root. Ini dapat menyebabkan masalah keamanan, kerusakan, atau masalah lainnya. Kami tidak menyarankan penggunaan GoldWallet di perangkat yang sudah di-root.',
     title: 'Masalah keamanan',
   },
   selectLanguage: {
@@ -270,7 +288,8 @@ const id = {
     confirm: 'Konfirmasi',
     confirmation: 'Konfirmasi',
     header: 'Bahasa',
-    restartInfo: 'Saat memilih bahasa baru, mungkin dibutuhkan pemulaian ulang/restart GoldWallet agar perubahan berlaku',
+    restartInfo:
+      'Saat memilih bahasa baru, mungkin dibutuhkan pemulaian ulang/restart GoldWallet agar perubahan berlaku',
   },
   send: {
     confirm: {
@@ -282,7 +301,8 @@ const id = {
     create: {
       amount: 'Jumlah',
       fee: 'Biaya',
-      headerText: 'Jika ada sejumlah besar transaksi tertunda di jaringan (>1500), biaya lebih tinggi akan membuat transaksi Anda diproses lebih cepat. Nilai biasanya adalah 1-500 sat/b',
+      headerText:
+        'Jika ada sejumlah besar transaksi tertunda di jaringan (>1500), biaya lebih tinggi akan membuat transaksi Anda diproses lebih cepat. Nilai biasanya adalah 1-500 sat/b',
       setTransactionFee: 'Atur biaya transaksi',
     },
     details: {
@@ -314,11 +334,14 @@ const id = {
     header: 'Kirim koin',
     recovery: {
       confirmFirstSeed: 'Konfirmasi dengan Frasa Benih Pembatalan',
-      confirmFirstSeedDesc: 'Buka dokumen PDF pertama yang Anda buat saat membuat dompet, lalu tuliskan frasa benih Kunci Privat dengan urutan yang sama.',
+      confirmFirstSeedDesc:
+        'Buka dokumen PDF pertama yang Anda buat saat membuat dompet, lalu tuliskan frasa benih Kunci Privat dengan urutan yang sama.',
       confirmSecondSeed: 'Konfirmasi dengan Frasa Benih Cepat',
-      confirmSecondSeedDesc: 'Buka dokumen PDF kedua yang Anda buat saat membuat dompet, lalu tuliskan frasa benih Kunci Privat dengan urutan yang sama.',
+      confirmSecondSeedDesc:
+        'Buka dokumen PDF kedua yang Anda buat saat membuat dompet, lalu tuliskan frasa benih Kunci Privat dengan urutan yang sama.',
       confirmSeed: 'Konfirmasi dengan Frasa Benih Pembatalan',
-      confirmSeedDesc: 'Buka dokumen PDF yang Anda buat saat membuat dompet, lalu tuliskan frasa benih Kunci Privat dengan urutan yang sama.',
+      confirmSeedDesc:
+        'Buka dokumen PDF yang Anda buat saat membuat dompet, lalu tuliskan frasa benih Kunci Privat dengan urutan yang sama.',
       recover: 'Batal',
       useWalletAddress: 'Gunakan alamat dompet ini',
     },
@@ -330,18 +353,22 @@ const id = {
     },
     transaction: {
       alert: 'Aman',
-      alertDesc: 'Transaksi ini perlu 144 blok atau sekitar 24 jam untuk dikonfirmasi. Anda dapat membatalkannya selama waktu ini.',
+      alertDesc:
+        'Transaksi ini perlu 144 blok atau sekitar 24 jam untuk dikonfirmasi. Anda dapat membatalkannya selama waktu ini.',
       fastSuccess: 'Anda berhasil membuat transaksi cepat.',
       instant: 'Cepat Aman',
       instantDesc: 'Transaksi ini akan segera dikonfirmasi. Gunakan dengan sangat hati-hati.',
-      lightningError: 'Alamat ini tampaknya merupakan faktur Lightning. Buka dompet Lightning Anda untuk melakukan pembayaran untuk faktur ini.',
-      scanInstantKeyDesc: 'Buka dokumen PDF yang Anda buat saat membuat dompet, lalu pindai kode QR Kunci Privat untuk mengirim transaksi.',
+      lightningError:
+        'Alamat ini tampaknya merupakan faktur Lightning. Buka dompet Lightning Anda untuk melakukan pembayaran untuk faktur ini.',
+      scanInstantKeyDesc:
+        'Buka dokumen PDF yang Anda buat saat membuat dompet, lalu pindai kode QR Kunci Privat untuk mengirim transaksi.',
       scanInstantKeyTitle: 'Pindai Kunci Cepat',
       type: 'Tipe transaksi',
       watchOnlyError: 'Dompet lihat saja/watch only tidak dapat mengirim transaksi',
     },
     warning: 'Peringatan:',
-    warningGeneral: 'Peringatan: Mohon diingat bahwa dalam proses menggunakan fitur Transaksi Aman, sebagian dari saldo yang tersisa di saldo dompet Anda memilki kemungkinan untuk diblokir secara sementara. Hal ini merupakan bagian dari prosedur umum yang berkaitan dengan UTXO dan parameter blockchain dari dompet Bitcoin Vault. Saldo Anda akan kembali dibuka ketika transaksi Anda diverifikasi (kurang lebih setelah sekitar 24 jam) atau dibatalkan (dalam waktu 24 jam).',
+    warningGeneral:
+      'Peringatan: Mohon diingat bahwa dalam proses menggunakan fitur Transaksi Aman, sebagian dari saldo yang tersisa di saldo dompet Anda memilki kemungkinan untuk diblokir secara sementara. Hal ini merupakan bagian dari prosedur umum yang berkaitan dengan UTXO dan parameter blockchain dari dompet Bitcoin Vault. Saldo Anda akan kembali dibuka ketika transaksi Anda diverifikasi (kurang lebih setelah sekitar 24 jam) atau dibatalkan (dalam waktu 24 jam).',
   },
   settings: {
     about: 'Tentang',
@@ -367,7 +394,8 @@ const id = {
   },
   timeCounter: {
     closeTheApp: 'Tutup aplikasi',
-    description: 'Aplikasi Anda telah diblokir karena percobaan masuk yang tidak berhasil. Tunggu selama waktu yang dibutuhkan untuk mencoba lagi.',
+    description:
+      'Aplikasi Anda telah diblokir karena percobaan masuk yang tidak berhasil. Tunggu selama waktu yang dibutuhkan untuk mencoba lagi.',
     title: 'Aplikasi diblokir',
     tryAgain: 'Coba lagi',
   },
@@ -436,7 +464,7 @@ const id = {
     confirmButton: 'Konfirmasi sidik jari Anda untuk melanjutkan.',
     enter: 'Masukkan PIN',
     title: 'Buka Kunci',
-    touchID: 'Touch ID untuk \"Gold Wallet\"',
+    touchID: 'Touch ID untuk "Gold Wallet"',
   },
   unlockTransaction: {
     description: 'Konfirmasi Kata Sandi Transaksi untuk melanjutkan transaksi.',
@@ -463,14 +491,16 @@ const id = {
       legacyTitle: 'Standar',
       multipleAddresses: 'Mengandung sebuah pohon alamat P2SH dari sebuah seed satuan 12-kata',
       publicKeyError: 'Kunci publik yang disediakan tidak valid',
-      segwidAddress: 'Alamat ini mengandung sebuah pohon dari alamat segwit native, yang dihasilkan oleh sebuah benih tunggal 12-kata',
+      segwidAddress:
+        'Alamat ini mengandung sebuah pohon dari alamat segwit native, yang dihasilkan oleh sebuah benih tunggal 12-kata',
       singleAddress: 'Mengandung satu alamat P2SH',
       subtitle: 'Namai dompet Anda',
       title: 'Tambah dompet baru',
       walletType: 'Tipe dompet',
     },
     addSuccess: {
-      description: 'Dompet Anda telah dibuat. Luangkan waktu sebentar untuk menulis frasa mnemonik ini di selembar kertas sebagai cadangan/backup. Anda dapat menggunakannya untuk memulihkan dompet di perangkat lain.',
+      description:
+        'Dompet Anda telah dibuat. Luangkan waktu sebentar untuk menulis frasa mnemonik ini di selembar kertas sebagai cadangan/backup. Anda dapat menggunakannya untuk memulihkan dompet di perangkat lain.',
       okButton: 'Oke, saya sudah menuliskannya!',
       subtitle: 'Dompet Anda sudah siap!\n\nDopet Anda telah dibuat!',
       title: 'Tambah dompet baru',
@@ -530,7 +560,8 @@ const id = {
     import: {
       do_import: 'Impor',
       error: 'Gagal mengimpor. Harap pastikan data yang diberikan valid.',
-      explanation: 'Tuliskan di sini mnemonik, kunci privat, WIF, atau apa pun yang Anda punya. GoldWallet akan berusaha sebaik mungkin untuk menebak format yang tepat dan mengimpor dompet Anda',
+      explanation:
+        'Tuliskan di sini mnemonik, kunci privat, WIF, atau apa pun yang Anda punya. GoldWallet akan berusaha sebaik mungkin untuk menebak format yang tepat dan mengimpor dompet Anda',
       imported: 'Diimpor',
       scan_qr: 'atau pindai kode QR?',
       success: 'Berhasil',
@@ -547,20 +578,25 @@ const id = {
       placeholder: 'Frasa benih (seed), kunci pribadi, WIF',
       scanCancelPubKey: 'Pindai kode QR Kunci Pembatalan',
       scanFastPubKey: 'Pindai kode QR Kunci Cepat',
-      scanPublicKeyDescription: 'Buka dokumen PDF pertama yang Anda buat saat Anda membuat dompet yang ingin diimpor, lalu gunakan aplikasi ini untuk memindai kode QR Kunci Publik.',
+      scanPublicKeyDescription:
+        'Buka dokumen PDF pertama yang Anda buat saat Anda membuat dompet yang ingin diimpor, lalu gunakan aplikasi ini untuk memindai kode QR Kunci Publik.',
       scanQrCode: 'atau pindai kode QR',
       scanWalletAddress: 'Pindai alamat dompet',
       scanWalletAddressDescription: 'Pindai kode QR Alamat Publik untuk memulai integrasi dengan GoldWallet.',
-      subtitle: 'Tuliskan di sini mnemonik, kunci privat, WIF, atau apa pun yang Anda punya. GoldWallet akan berusaha sebaik mungkin untuk menebak format yang tepat dan mengimpor dompet Anda.',
+      subtitle:
+        'Tuliskan di sini mnemonik, kunci privat, WIF, atau apa pun yang Anda punya. GoldWallet akan berusaha sebaik mungkin untuk menebak format yang tepat dan mengimpor dompet Anda.',
       title: 'Impor dompet Anda',
-      unsupportedElectrumVaultMnemonic: 'Benih ini berasal dari Electrum Vault dan belum didukung. Akan didukung di masa yang akan datang.',
+      unsupportedElectrumVaultMnemonic:
+        'Benih ini berasal dari Electrum Vault dan belum didukung. Akan didukung di masa yang akan datang.',
       walletInUseValidationError: 'Dompet sudah digunakan. Masukkan dompet yang valid.',
-      allWalletsValidationError: 'Anda tidak bisa memasukkan nama \"Semua dompet\"',
+      allWalletsValidationError: 'Anda tidak bisa memasukkan nama "Semua dompet"',
     },
     publicKey: {
-      instantDescription: 'Buka Pembuat Kunci web di perangkat terpisah, lalu gunakan aplikasi ini untuk memindai kode QR Kunci Publik. Mohon untuk mengekspor kunci Anda sebagai PDF!',
+      instantDescription:
+        'Buka Pembuat Kunci web di perangkat terpisah, lalu gunakan aplikasi ini untuk memindai kode QR Kunci Publik. Mohon untuk mengekspor kunci Anda sebagai PDF!',
       instantSubtitle: 'Tambahkan Kunci Cepat',
-      recoveryDescription: 'Buka Pembuat Kunci web di perangkat terpisah, lalu gunakan aplikasi ini untuk memindai kode QR Kunci Publik. Mohon untuk mengekspor kunci Anda sebagai PDF!',
+      recoveryDescription:
+        'Buka Pembuat Kunci web di perangkat terpisah, lalu gunakan aplikasi ini untuk memindai kode QR Kunci Publik. Mohon untuk mengekspor kunci Anda sebagai PDF!',
       recoverySubtitle: 'Tambahkan Kunci Pembatalan',
       scan: 'Pindai',
       webKeyGenerator: 'Pembuat Kunci Web:',
@@ -590,4 +626,4 @@ const id = {
       wallets: 'Dompet',
     },
   },
-}
+};

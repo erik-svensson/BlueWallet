@@ -33,15 +33,18 @@ const jo = {
     title: 'GoldWalletは無料オープンソースのBitcoin Vaultウォレットです。MITライセンス承認。',
   },
   advancedOptions: {
-    description: '詳細オプションを有効にすると、以下にリストされているウォレットタイプから選択できます：P2SH、 HD P2SH、 HD segwit',
+    description:
+      '詳細オプションを有効にすると、以下にリストされているウォレットタイプから選択できます：P2SH、 HD P2SH、 HD segwit',
     title: '詳細オプションの設定',
   },
   authenticators: {
     add: {
-      description: 'GoldWalletをデスクトップアプリケーションであるElectrumVaultとペアリングするために必要になります。 これは、２段階認証システムとして機能します。',
+      description:
+        'GoldWalletをデスクトップアプリケーションであるElectrumVaultとペアリングするために必要になります。 これは、２段階認証システムとして機能します。',
       subdescription: '以下のオプションを選択して、認証システムを登録することができます。',
       subtitle: '認証システムの生成',
-      successDescription: 'このシードフレーズを安全な場所に記録してください。これは、認証システムを復元する場合に必要なバックアップです。 クイック取引および取引キャンセルを確認する際に、認証システムが必要になることをご注意ください。',
+      successDescription:
+        'このシードフレーズを安全な場所に記録してください。これは、認証システムを復元する場合に必要なバックアップです。 クイック取引および取引キャンセルを確認する際に、認証システムが必要になることをご注意ください。',
       successTitle: '認証システムが完了しました。',
       title: '新しい認証システムの追加',
     },
@@ -66,7 +69,8 @@ const jo = {
       desc2: '下段の[QRコードをスキャン]でQRコードをスキャンできます。',
       inUseValidationError: '使用中の名前です。他の名前を入力してください。',
       mnemonicLength: 'シードフレーズには12個の単語が必要です。',
-      multipleQrCodesDescription: '一部の取引は複数のQRコードを生成します。 Electrum Vaultアプリケーションからすべてのコードをスキャンしてください。',
+      multipleQrCodesDescription:
+        '一部の取引は複数のQRコードを生成します。 Electrum Vaultアプリケーションからすべてのコードをスキャンしてください。',
       multipleQrCodesTitle: '他のQRコードをスキャン',
       scanNext: '次をスキャン',
       subtitle: '認証システムを登録',
@@ -90,14 +94,16 @@ const jo = {
     },
     pair: {
       descPin: 'このPINを使用して、デスクトップ・アプリケーションでの認証システムのペアリングを確認します。',
-      descPublicKey: 'GoldWalletオプションでのウォレット生成中に、この公開キーを使用してデスクトップ・アプリケーションに認証システムを登録できます。',
+      descPublicKey:
+        'GoldWalletオプションでのウォレット生成中に、この公開キーを使用してデスクトップ・アプリケーションに認証システムを登録できます。',
       pin: 'PIN',
       publicKey: '公開キー',
       title: '認証システムのペアリング',
     },
     publicKey: {
       okButton: 'はい、理解しました。',
-      subtitle: '2段階認証ウォレットの生成中に、この公開キーを使用してデスクトップ・アプリケーションであるElectrum Vaultに認証システムを登録できます。',
+      subtitle:
+        '2段階認証ウォレットの生成中に、この公開キーを使用してデスクトップ・アプリケーションであるElectrum Vaultに認証システムを登録できます。',
       title: '公開キー',
     },
     sign: {
@@ -106,7 +112,8 @@ const jo = {
   },
   betaVersion: {
     button: '私はリスクを認識しています',
-    description: '本アプリは正式リリース以前の最終テスト中にあります。このモバイルアプリおよびアプリ上の全てのコンテンツは「現状有姿」および「利用可能な範囲」のみで提供されます。ソフトウェアの使用は、ユーザーの自己責任で行ってください。',
+    description:
+      '本アプリは正式リリース以前の最終テスト中にあります。このモバイルアプリおよびアプリ上の全てのコンテンツは「現状有姿」および「利用可能な範囲」のみで提供されます。ソフトウェアの使用は、ユーザーの自己責任で行ってください。',
     title: 'GoldWalletのベータ版です',
   },
   contactCreate: {
@@ -154,7 +161,8 @@ const jo = {
   },
   electrumServer: {
     connectionError: '提供されたElectrumサーバーに接続できません。',
-    description: 'アプリケーションが接続するサーバーのアドレスを変更できます。 デフォルトのアドレスをそのままご利用することをお勧めします。',
+    description:
+      'アプリケーションが接続するサーバーのアドレスを変更できます。 デフォルトのアドレスをそのままご利用することをお勧めします。',
     header: 'Electrumサーバー',
     host: 'ホスト',
     port: 'ポート',
@@ -192,13 +200,15 @@ const jo = {
     bePatient: '時間がかかる場合がありますので、しばらくお待ちください。',
     cancelTxSuccess: '取引のキャンセルが正常に完了しました。\n  コインは間もなく返金されます。',
     creatingAuthenticator: '認証システムを生成中です。',
-    creatingAuthenticatorDescription: '認証システムを生成しています。しばらくお待ちください。\n  しばらく時間がかかる場合があります。',
+    creatingAuthenticatorDescription:
+      '認証システムを生成しています。しばらくお待ちください。\n  しばらく時間がかかる場合があります。',
     creatingWallet: 'ウォレットを生成中です。',
     creatingWalletDescription: 'ウォレットの生成には時間がかかる場合がありますので、\n しばらくお待ちください。',
     generateAddressesError: 'アドレスを生成できません',
     hooray: 'おめでとうございます!',
     importingAuthenticator: '認証システムを登録しています',
-    importingAuthenticatorDescription: '認証システムを登録しています。しばらくお待ちください。\n  しばらく時間がかかる場合があります。',
+    importingAuthenticatorDescription:
+      '認証システムを登録しています。しばらくお待ちください。\n  しばらく時間がかかる場合があります。',
     noTransactions: 'このウォレットには取引がありません。',
     noTransactionsDesc: '使用したことのないウォレットを登録しようとしている可能性があります',
     processing: '処理中',
@@ -207,12 +217,14 @@ const jo = {
     returnToWalletChoose: 'ウォレットタイプの選択に戻る',
     returnToWalletImport: 'ウォレットの登録に戻る',
     somethingWentWrong: '問題が発生しました',
-    somethingWentWrongWhileCreatingWallet: 'ウォレットの生成中に問題が発生しました。ダッシュボードに戻って、再度お試しください。',
+    somethingWentWrongWhileCreatingWallet:
+      'ウォレットの生成中に問題が発生しました。ダッシュボードに戻って、再度お試しください。',
     success: '成功',
     successfullWalletDelete: 'ウォレットの削除に成功しました。ダッシュボードに戻ります。',
     successfullWalletImport: 'ウォレットの登録に成功しました。ウォレットを使用できます。',
     wrongMnemonic: 'ニーモニックが間違っています。',
-    wrongMnemonicDesc: '指定されたニーモニックと一致するウォレットがありません。\n  無効なニーモニックまたは未使用のウォレットである可能性があります。',
+    wrongMnemonicDesc:
+      '指定されたニーモニックと一致するウォレットがありません。\n  無効なニーモニックまたは未使用のウォレットである可能性があります。',
   },
   onboarding: {
     changePin: 'PINコードの変更',
@@ -221,7 +233,8 @@ const jo = {
     confirmPin: 'PINコードの確認',
     createNewPin: '新しいPINコード',
     createPassword: '取引パスワードの生成',
-    createPasswordDescription: '取引パスワードは、すべての取引を確認するために使用されます。 後で変更することはできません。 取引パスワードは、少なくとも8文字の英数字が含まれている必要があります。',
+    createPasswordDescription:
+      '取引パスワードは、すべての取引を確認するために使用されます。 後で変更することはできません。 取引パスワードは、少なくとも8文字の英数字が含まれている必要があります。',
     createPin: 'PINコードの生成',
     createPinDescription: 'PINコードはアプリケーションのログインに利用されます。設定メニューから変更が可能です。',
     currentPin: '現在のPINコード',
@@ -259,9 +272,12 @@ const jo = {
     permissionTitle: 'カメラへのアクセス許可',
   },
   security: {
-    jailBrokenPhone: 'デバイスがジェイルブレイクされているようです。 これにより、セキュリティの問題、クラッシュ、またはその他の問題が発生する可能性があります。 ジェイルブレイクされたデバイスでGoldWalletを使用することはお勧めしません。',
-    noPinOrFingerprintSet: 'デバイスにPINコードまたは指紋が設定されていないようです。 安全でないデバイスでGoldWalletを使用することはお勧めしません。',
-    rootedPhone: 'お使いのデバイスはルート化されているようです。 これにより、セキュリティの問題、クラッシュ、またはその他の問題が発生する可能性があります。 ルート権限を取得されたデバイスでGoldWalletを使用することはお勧めしません。',
+    jailBrokenPhone:
+      'デバイスがジェイルブレイクされているようです。 これにより、セキュリティの問題、クラッシュ、またはその他の問題が発生する可能性があります。 ジェイルブレイクされたデバイスでGoldWalletを使用することはお勧めしません。',
+    noPinOrFingerprintSet:
+      'デバイスにPINコードまたは指紋が設定されていないようです。 安全でないデバイスでGoldWalletを使用することはお勧めしません。',
+    rootedPhone:
+      'お使いのデバイスはルート化されているようです。 これにより、セキュリティの問題、クラッシュ、またはその他の問題が発生する可能性があります。 ルート権限を取得されたデバイスでGoldWalletを使用することはお勧めしません。',
     title: 'セキュリティ問題',
   },
   selectLanguage: {
@@ -282,7 +298,8 @@ const jo = {
     create: {
       amount: '金額',
       fee: '手数料',
-      headerText: 'ネットワーク上に保留中の取引が多数ある場合（>1500）、取引の処理を早めるため、手数料が高く策定されます。 一般的な値は1〜500 sat/bです。',
+      headerText:
+        'ネットワーク上に保留中の取引が多数ある場合（>1500）、取引の処理を早めるため、手数料が高く策定されます。 一般的な値は1〜500 sat/bです。',
       setTransactionFee: '取引手数料の設定',
     },
     details: {
@@ -314,11 +331,14 @@ const jo = {
     header: 'コインの送金',
     recovery: {
       confirmFirstSeed: 'キャンセル・シードフレーズ確定',
-      confirmFirstSeedDesc: 'ウォレットの作成時に生成された最初のPDFドキュメントを開き、個人キーのシードフレーズを同じ順序で書き取ってください。',
+      confirmFirstSeedDesc:
+        'ウォレットの作成時に生成された最初のPDFドキュメントを開き、個人キーのシードフレーズを同じ順序で書き取ってください。',
       confirmSecondSeed: 'クイック・シードフレーズ確定',
-      confirmSecondSeedDesc: 'ウォレットの作成時に生成された2番目のPDFドキュメントを開き、個人キーのシードフレーズを同じ順序で書き取ってください。',
+      confirmSecondSeedDesc:
+        'ウォレットの作成時に生成された2番目のPDFドキュメントを開き、個人キーのシードフレーズを同じ順序で書き取ってください。',
       confirmSeed: 'キャンセル・シードフレーズ確定',
-      confirmSeedDesc: 'ウォレットの作成時に生成されたPDFドキュメントを開き、個人キーのシードフレーズを同じ順序で書き取ってください。',
+      confirmSeedDesc:
+        'ウォレットの作成時に生成されたPDFドキュメントを開き、個人キーのシードフレーズを同じ順序で書き取ってください。',
       recover: 'キャンセル',
       useWalletAddress: 'このウォレットのアドレスを使用',
     },
@@ -334,14 +354,17 @@ const jo = {
       fastSuccess: 'クイック取引が正常に完了しました。',
       instant: '保安・クイック',
       instantDesc: 'この取引は、ただちに確定されます。細心の注意を払った上でご利用ください。',
-      lightningError: 'このアドレスは、Lightning用の請求書のようです。 この請求書の支払いを行うには、Lightningウォレットにアクセスしてください。',
-      scanInstantKeyDesc: 'ウォレットの作成時に生成したPDFドキュメントを開き、個人キーのQRコードをスキャンして送金してください。',
+      lightningError:
+        'このアドレスは、Lightning用の請求書のようです。 この請求書の支払いを行うには、Lightningウォレットにアクセスしてください。',
+      scanInstantKeyDesc:
+        'ウォレットの作成時に生成したPDFドキュメントを開き、個人キーのQRコードをスキャンして送金してください。',
       scanInstantKeyTitle: 'クイックキーをスキャンする',
       type: '取引タイプ',
       watchOnlyError: '送金できないウォレットだけを表示する',
     },
     warning: '警告:',
-    warningGeneral: '警告：保安取引機能を使用する過程で、ウォレットに残っている資金の一部がブロックされる可能性があることに注意してください。 これは、UTXOとBitcoin Vaultウォレットのブロックチェーンパラメータにリンクされた通常の手順です。 取引が確認（約24時間後）、またはキャンセルされると（24時間以内）、資金のブロックが解除されます。',
+    warningGeneral:
+      '警告：保安取引機能を使用する過程で、ウォレットに残っている資金の一部がブロックされる可能性があることに注意してください。 これは、UTXOとBitcoin Vaultウォレットのブロックチェーンパラメータにリンクされた通常の手順です。 取引が確認（約24時間後）、またはキャンセルされると（24時間以内）、資金のブロックが解除されます。',
   },
   settings: {
     about: '紹介',
@@ -367,7 +390,8 @@ const jo = {
   },
   timeCounter: {
     closeTheApp: 'アプリケーションを閉じる',
-    description: 'ログインに失敗したため、アプリケーションがブロックされました。 再試行するには、しばらくお待ちください。',
+    description:
+      'ログインに失敗したため、アプリケーションがブロックされました。 再試行するには、しばらくお待ちください。',
     title: 'アプリケーションがブロックされました',
     tryAgain: 'もう一度お試しください',
   },
@@ -470,7 +494,8 @@ const jo = {
       walletType: 'ウォレットタイプ',
     },
     addSuccess: {
-      description: 'このシードフレーズを安全な場所に書き取ってください。 ウォレットを復元する場合に必要なバックアップです。',
+      description:
+        'このシードフレーズを安全な場所に書き取ってください。 ウォレットを復元する場合に必要なバックアップです。',
       okButton: 'はい、これを書き取りました！',
       subtitle: 'ウォレットの生成を完了しました！',
       title: '新しいウォレットの追加',
@@ -510,7 +535,8 @@ const jo = {
     errors: {
       duplicatedPublicKey: 'この公開キーはすでに追加されています。',
       invalidMnemonic: '無効なニーモニック',
-      invalidMnemonicWordsNumber: '{receivedWordsNumber}文字が入力されました。{expectedWordsNumber}文字を入力してください。',
+      invalidMnemonicWordsNumber:
+        '{receivedWordsNumber}文字が入力されました。{expectedWordsNumber}文字を入力してください。',
       invalidPrivateKey: '無効な個人キー',
       invalidPublicKey: '無効な公開キー',
       invalidQrCode: '無効なQRコード',
@@ -530,7 +556,8 @@ const jo = {
     import: {
       do_import: '登録',
       error: '登録に失敗しました。提供されたデータが有効であるかを確認してください。',
-      explanation: 'ここに、ニーモニック、個人キー、WIFまたはお客様が持っているものをすべて書き込んでください。 GoldWalletは、正しい形式を推測してウォレットを登録するため最善を尽くします。',
+      explanation:
+        'ここに、ニーモニック、個人キー、WIFまたはお客様が持っているものをすべて書き込んでください。 GoldWalletは、正しい形式を推測してウォレットを登録するため最善を尽くします。',
       imported: '登録完了',
       scan_qr: 'またはQRコードをスキャンしますか？',
       success: '成功',
@@ -547,20 +574,25 @@ const jo = {
       placeholder: 'シードフレーズ、個人キー、WIF',
       scanCancelPubKey: 'キャンセルキーのQRコードをスキャンする',
       scanFastPubKey: 'クイックキーのQRコードをスキャンする',
-      scanPublicKeyDescription: '登録するウォレットを作成したときに生成された最初のPDFドキュメントを開き、このアプリで公開キーのQRコードをスキャンしてください。',
+      scanPublicKeyDescription:
+        '登録するウォレットを作成したときに生成された最初のPDFドキュメントを開き、このアプリで公開キーのQRコードをスキャンしてください。',
       scanQrCode: 'またはQRコードをスキャンする',
       scanWalletAddress: 'ウォレットアドレスをスキャンする',
       scanWalletAddressDescription: '公開アドレスのQRコードをスキャンして、GoldWalletとの統合を開始します。',
-      subtitle: 'ここに、ニーモニック、個人キー、WIFまたはお客様が持っているものをすべて書き込んでください。 GoldWalletは、正しい形式を推測してウォレットを登録するため最善を尽くします。',
+      subtitle:
+        'ここに、ニーモニック、個人キー、WIFまたはお客様が持っているものをすべて書き込んでください。 GoldWalletは、正しい形式を推測してウォレットを登録するため最善を尽くします。',
       title: 'ウォレットの登録',
-      unsupportedElectrumVaultMnemonic: 'これはElectrum Vaultのシードです。このシードは現在サポートされていません。間もなくサポートを開始する予定です。',
+      unsupportedElectrumVaultMnemonic:
+        'これはElectrum Vaultのシードです。このシードは現在サポートされていません。間もなくサポートを開始する予定です。',
       walletInUseValidationError: 'このウォレットはすでに使用されています。有効なウォレットを入力してください。',
       allWalletsValidationError: '「全てのウォレット」という名前は入力できません',
     },
     publicKey: {
-      instantDescription: '別のデバイスでWebKey Generatorに再度アクセスし、ページを更新した後、このアプリで新しい公開キーのQRコードをスキャンしてください。 キーをPDFとしてエクスポートすることを忘れないでください！',
+      instantDescription:
+        '別のデバイスでWebKey Generatorに再度アクセスし、ページを更新した後、このアプリで新しい公開キーのQRコードをスキャンしてください。 キーをPDFとしてエクスポートすることを忘れないでください！',
       instantSubtitle: 'クイックキーの追加',
-      recoveryDescription: '別のデバイスでWebKey Generatorに再度アクセスし、このアプリで新しい公開キーのQRコードをスキャンしてください。 キーをPDFとしてエクスポートすることを忘れないでください！',
+      recoveryDescription:
+        '別のデバイスでWebKey Generatorに再度アクセスし、このアプリで新しい公開キーのQRコードをスキャンしてください。 キーをPDFとしてエクスポートすることを忘れないでください！',
       recoverySubtitle: 'キャンセルキーの追加',
       scan: 'スキャン',
       webKeyGenerator: 'Webキー・ジェネレーター：',
@@ -590,4 +622,4 @@ const jo = {
       wallets: 'ウォレット',
     },
   },
-}
+};

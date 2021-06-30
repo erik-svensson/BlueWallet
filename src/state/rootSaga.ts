@@ -1,5 +1,6 @@
 import { all } from 'redux-saga/effects';
 
+import { sagas as airdropSagas } from './airdrop';
 import { sagas as authenticationSagas } from './authentication';
 import { sagas as authenticatorsSagas } from './authenticators';
 import { sagas as electrumXSagas } from './electrumX';
@@ -17,5 +18,6 @@ export function* rootSaga() {
     ...electrumXSagas,
     ...toastMessagesSagas,
     ...notificationSagas,
+    ...airdropSagas,
   ]);
 }

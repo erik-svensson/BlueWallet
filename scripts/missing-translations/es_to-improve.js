@@ -33,15 +33,18 @@ const es = {
     title: 'Gold Wallet es un monedero de Bitcoin Vault gratuito y de código abierto. Con licencia MIT.',
   },
   advancedOptions: {
-    description: 'Al activar las opciones avanzadas, podrá elegir entre los tipos de monedero enumerados a continuación: \n  P2SH, HD P2SH, HD segwit.',
+    description:
+      'Al activar las opciones avanzadas, podrá elegir entre los tipos de monedero enumerados a continuación: \n  P2SH, HD P2SH, HD segwit.',
     title: 'Configurar opciones avanzadas',
   },
   authenticators: {
     add: {
-      description: 'Tendrá que emaprejar Gold Wallet con la aplicación de escritorio Electrum Vault. Servirá como autenticación de dos factores.',
+      description:
+        'Tendrá que emaprejar Gold Wallet con la aplicación de escritorio Electrum Vault. Servirá como autenticación de dos factores.',
       subdescription: 'También puede importar su autenticador al escoger la siguiente opción.',
       subtitle: 'Crear un nuevo autenticador',
-      successDescription: 'Escriba esta frase mnemotécnica en un lugar seguro. Es su copia de seguridad en caso de que necesite recuperar su autenticador. Recuerde que se necesita el autenticador para confirmar transacciones rápidas y de cancelación.',
+      successDescription:
+        'Escriba esta frase mnemotécnica en un lugar seguro. Es su copia de seguridad en caso de que necesite recuperar su autenticador. Recuerde que se necesita el autenticador para confirmar transacciones rápidas y de cancelación.',
       successTitle: '¡Su autenticador está listo!',
       title: 'Agregar un autenticador nuevo',
     },
@@ -51,7 +54,8 @@ const es = {
       title: 'Eliminar autenticador',
     },
     enterPIN: {
-      description: 'Introduzca este PIN en la aplicación de escritorio Electrum Vault para terminar el proceso de emparejamiento.',
+      description:
+        'Introduzca este PIN en la aplicación de escritorio Electrum Vault para terminar el proceso de emparejamiento.',
       subtitle: 'Introduzca el PIN',
     },
     errors: {
@@ -63,10 +67,11 @@ const es = {
     import: {
       code: 'Código:',
       desc1: 'Escriba la frase mnemotécnica o escanee el código QR del autenticador que desea importar.',
-      desc2: 'escanee el código QR al hacer clic en \"o escanee el código QR\" debajo',
+      desc2: 'escanee el código QR al hacer clic en "o escanee el código QR" debajo',
       inUseValidationError: 'El nombre debe ser único. Por favor, introduzca un nombre válido.',
       mnemonicLength: 'La mnemotecnia debe tener 12 palabras',
-      multipleQrCodesDescription: 'Algunas transacciones generan múltiples códigos QR. Asegúrese de escanearlos todos desde la aplicación Electrum Vault.',
+      multipleQrCodesDescription:
+        'Algunas transacciones generan múltiples códigos QR. Asegúrese de escanearlos todos desde la aplicación Electrum Vault.',
       multipleQrCodesTitle: 'Escanee otro código QR',
       scanNext: 'Escanee el siguiente',
       subtitle: 'Importe su autenticador',
@@ -90,14 +95,16 @@ const es = {
     },
     pair: {
       descPin: 'Use este PIN para confirmar el emparejamiento del autenticador en su aplicación de escritorio.',
-      descPublicKey: 'Puede usar esta clave pública para importar su autenticador en la aplicación de escritorio durante el proceso de creación del monedero con la opción de GoldWallet.',
+      descPublicKey:
+        'Puede usar esta clave pública para importar su autenticador en la aplicación de escritorio durante el proceso de creación del monedero con la opción de GoldWallet.',
       pin: 'PIN',
       publicKey: 'Clave púbica',
       title: 'Emparejar autenticador',
     },
     publicKey: {
       okButton: 'Bien, entendido.',
-      subtitle: 'Puede usar esta Clave Pública para importar su autentificador a la aplicación de escritorio Electrum Vault durante la creación del monedero de 2FA.',
+      subtitle:
+        'Puede usar esta Clave Pública para importar su autentificador a la aplicación de escritorio Electrum Vault durante la creación del monedero de 2FA.',
       title: 'Clave Pública',
     },
     sign: {
@@ -106,7 +113,8 @@ const es = {
   },
   betaVersion: {
     button: 'Acepto el riesgo',
-    description: 'Aún está en fase de pruebas finales antes de su lanzamiento oficial. La aplicación móvil y todo el contenido que se encuentra en ella se proporciona \"tal como está\" y según \"esté disponible\". El uso del programa se realiza por cuenta y riesgo del usuario.',
+    description:
+      'Aún está en fase de pruebas finales antes de su lanzamiento oficial. La aplicación móvil y todo el contenido que se encuentra en ella se proporciona "tal como está" y según "esté disponible". El uso del programa se realiza por cuenta y riesgo del usuario.',
     title: 'Es versión beta de GoldWallet',
   },
   contactCreate: {
@@ -129,7 +137,8 @@ const es = {
     no: 'No',
     success: 'Completado',
     successButton: 'Volver a la libreta de direcciones',
-    successDescription: 'Su contacto ha sido eliminado correctamente.\n  Ahora puede volver a la libreta de direcciones.',
+    successDescription:
+      'Su contacto ha sido eliminado correctamente.\n  Ahora puede volver a la libreta de direcciones.',
     title: 'Eliminar su contacto',
     yes: 'Sí',
   },
@@ -154,12 +163,14 @@ const es = {
   },
   electrumServer: {
     connectionError: 'No se puede conectar al servidor Electrum proporcionado',
-    description: 'Puede cambiar la dirección del servidor al que se conectará su aplicación. Se recomienda la dirección predeterminada.',
+    description:
+      'Puede cambiar la dirección del servidor al que se conectará su aplicación. Se recomienda la dirección predeterminada.',
     header: 'Servidor Electrum',
     host: 'host',
     port: 'puerto',
     save: 'Guardar',
-    successfullSave: 'Sus cambios se han guardado correctamente. Puede ser necesario reiniciar para que los cambios surtan efecto.',
+    successfullSave:
+      'Sus cambios se han guardado correctamente. Puede ser necesario reiniciar para que los cambios surtan efecto.',
     title: 'Cambiar servidor electrum',
     useDefault: 'Usar predeterminado',
   },
@@ -198,7 +209,8 @@ const es = {
     generateAddressesError: 'No se ha podido generar la dirección',
     hooray: '¡Hurra!',
     importingAuthenticator: 'Importando su autentificador',
-    importingAuthenticatorDescription: 'Tenga paciencia mientras se importa su autenticador.\n Puede tardar un momento.',
+    importingAuthenticatorDescription:
+      'Tenga paciencia mientras se importa su autenticador.\n Puede tardar un momento.',
     noTransactions: 'No se ha encontrado ninguna transacción en el monedero',
     noTransactionsDesc: 'Es probable que esté intentando importar un monedero que nunca se ha usado',
     processing: 'Procesando',
@@ -207,12 +219,14 @@ const es = {
     returnToWalletChoose: 'Volver a selección del tipo de monedero',
     returnToWalletImport: 'Volver a importar el monedero',
     somethingWentWrong: 'Algo salió mal',
-    somethingWentWrongWhileCreatingWallet: 'Algo salió mal mientras estábamos creando su monedero. Vuelva al Panel e inténtelo nuevamente.',
+    somethingWentWrongWhileCreatingWallet:
+      'Algo salió mal mientras estábamos creando su monedero. Vuelva al Panel e inténtelo nuevamente.',
     success: 'Completado',
     successfullWalletDelete: 'Su monedero ha sido eliminado correctamente. Ahora puede volver al Panel.',
     successfullWalletImport: 'Su monedero ha sido importado correctamente. Está listo para ser usado.',
     wrongMnemonic: 'Frase mnemotécnica incorrecta',
-    wrongMnemonicDesc: 'Su frase mnemotécnica no coincide con ningún monedero compatible. Está intentado importar una frase mnemotécnica no válida o un monedero que nunca se ha usado.',
+    wrongMnemonicDesc:
+      'Su frase mnemotécnica no coincide con ningún monedero compatible. Está intentado importar una frase mnemotécnica no válida o un monedero que nunca se ha usado.',
   },
   onboarding: {
     changePin: 'Cambiar PIN',
@@ -221,9 +235,11 @@ const es = {
     confirmPin: 'Confirmar PIN',
     createNewPin: 'Nuevo PIN',
     createPassword: 'Crear contraseña de transacción',
-    createPasswordDescription: 'Su contraseña de transacción se utilizará para verificar todas las transacciones. No podrá cambiarla más tarde. La contraseña de transacción debe contener al menos 8 caracteres alfanuméricos.',
+    createPasswordDescription:
+      'Su contraseña de transacción se utilizará para verificar todas las transacciones. No podrá cambiarla más tarde. La contraseña de transacción debe contener al menos 8 caracteres alfanuméricos.',
     createPin: 'Crear PIN',
-    createPinDescription: 'Su PIN se utilizará para acceder a la aplicación. Puede cambiarlo más tarde en la sección de Configuración.',
+    createPinDescription:
+      'Su PIN se utilizará para acceder a la aplicación. Puede cambiarlo más tarde en la sección de Configuración.',
     currentPin: 'PIN actual',
     failedTimes: 'Intentos fallidos',
     failedTimesErrorInfo: 'Después de tres intentos sin éxito, se bloqueará el acceso para',
@@ -245,7 +261,8 @@ const es = {
     details: {
       amount: 'Monto',
       receiveWithAmount: 'Recibir un monto de',
-      receiveWithAmountSubtitle: 'Introduzca el monto que desea recibir. El código QR se actualizará en consecuencia para incluir ese monto.',
+      receiveWithAmountSubtitle:
+        'Introduzca el monto que desea recibir. El código QR se actualizará en consecuencia para incluir ese monto.',
       share: 'Compartir',
       shareWalletAddress: 'Compartir la dirección del monedero',
     },
@@ -259,9 +276,12 @@ const es = {
     permissionTitle: 'Permiso para usar la cámara',
   },
   security: {
-    jailBrokenPhone: 'Su dispositivo parece estar desbloqueado. Esto puede producir riesgos de seguridad, errores u otros problemas. No recomendamos usar GoldWallet en un dispositivo desbloqueado.',
-    noPinOrFingerprintSet: 'Parece que su dispositivo no tiene PIN o huella dactilar configurada. No recomendamos usar el Monedero de Oro en un dispositivo no asegurado.',
-    rootedPhone: 'Su dispositivo parece estar enraizado. Esto puede riesgos de seguridad, errores u otros problemas. No recomendamos usar GoldWallet con un dispositivo enraizado.',
+    jailBrokenPhone:
+      'Su dispositivo parece estar desbloqueado. Esto puede producir riesgos de seguridad, errores u otros problemas. No recomendamos usar GoldWallet en un dispositivo desbloqueado.',
+    noPinOrFingerprintSet:
+      'Parece que su dispositivo no tiene PIN o huella dactilar configurada. No recomendamos usar el Monedero de Oro en un dispositivo no asegurado.',
+    rootedPhone:
+      'Su dispositivo parece estar enraizado. Esto puede riesgos de seguridad, errores u otros problemas. No recomendamos usar GoldWallet con un dispositivo enraizado.',
     title: 'Problema de seguridad',
   },
   selectLanguage: {
@@ -270,7 +290,8 @@ const es = {
     confirm: 'Confirmar',
     confirmation: 'Confirmación',
     header: 'Idioma',
-    restartInfo: 'Al seleccionar un nuevo idioma, puede ser necesario reiniciar GoldWallet para que el cambio surta efecto',
+    restartInfo:
+      'Al seleccionar un nuevo idioma, puede ser necesario reiniciar GoldWallet para que el cambio surta efecto',
   },
   send: {
     confirm: {
@@ -282,7 +303,8 @@ const es = {
     create: {
       amount: 'Monto',
       fee: 'Comisión',
-      headerText: 'Cuando hay una gran cantidad de transacciones pendientes en la red (> 1500), la tarifa más alta hará que su transacción se procese más rápido. Los valores típicos son de 1-500 sat/b',
+      headerText:
+        'Cuando hay una gran cantidad de transacciones pendientes en la red (> 1500), la tarifa más alta hará que su transacción se procese más rápido. Los valores típicos son de 1-500 sat/b',
       setTransactionFee: 'Establezca una comisión de transacción',
     },
     details: {
@@ -314,11 +336,14 @@ const es = {
     header: 'Enviar monedas',
     recovery: {
       confirmFirstSeed: 'Confirmar con Frase Mnemotécnica de Cancelación',
-      confirmFirstSeedDesc: 'Abra el primer documento PDF que generó al crear su monedero y escriba la frase mnemotécnica de la clave privada en el mismo orden',
+      confirmFirstSeedDesc:
+        'Abra el primer documento PDF que generó al crear su monedero y escriba la frase mnemotécnica de la clave privada en el mismo orden',
       confirmSecondSeed: 'Confirmar con Frase Mnemotécnica Rápida',
-      confirmSecondSeedDesc: 'Abre el segundo documento PDF que generó al crear su monedero y escriba la frase mnemotécnica de la clave privada en el mismo orden.',
+      confirmSecondSeedDesc:
+        'Abre el segundo documento PDF que generó al crear su monedero y escriba la frase mnemotécnica de la clave privada en el mismo orden.',
       confirmSeed: 'Confirmar con Frase Mnemotécnica de Cancelación',
-      confirmSeedDesc: 'Abra el documento PDF que generó al crear su monedero y escriba la frase mnemotécnica de la clave privada en el mismo orden.',
+      confirmSeedDesc:
+        'Abra el documento PDF que generó al crear su monedero y escriba la frase mnemotécnica de la clave privada en el mismo orden.',
       recover: 'Cancelar',
       useWalletAddress: 'Usar la dirección de este monedero',
     },
@@ -330,18 +355,22 @@ const es = {
     },
     transaction: {
       alert: 'Estándar',
-      alertDesc: 'Esta transacción necesita 144 bloques o unas 24 horas para confirmarse. Puede cancelarla durante este tiempo.',
+      alertDesc:
+        'Esta transacción necesita 144 bloques o unas 24 horas para confirmarse. Puede cancelarla durante este tiempo.',
       fastSuccess: 'Su transacción rápida se ha realizado correctamente.',
       instant: 'Rápida y Segura',
       instantDesc: 'Esta transacción será confirmada inmediatamente. Úsela con extrema precaución.',
-      lightningError: 'Esta dirección parece corresponder a una factura de Lightning. Vaya a su monedero de Lightning para realizar el pago de esa factura.',
-      scanInstantKeyDesc: 'Abra el documento PDF que generó al crear su monedero y escanee el código QR de la clave privada para enviar la transacción.',
+      lightningError:
+        'Esta dirección parece corresponder a una factura de Lightning. Vaya a su monedero de Lightning para realizar el pago de esa factura.',
+      scanInstantKeyDesc:
+        'Abra el documento PDF que generó al crear su monedero y escanee el código QR de la clave privada para enviar la transacción.',
       scanInstantKeyTitle: 'Escanee la Clave Rápida',
       type: 'Tipo de transacción',
       watchOnlyError: 'Los monederos que sean solo de lectura no pueden enviar transacciones',
     },
     warning: 'Aviso:',
-    warningGeneral: 'Aviso: Tenga en cuenta que en el proceso de utilizar la función de Transacción Segura, una parte de los fondos dejados en su monedero puede quedarse bloqueada. Es un procedimiento normal vinculado con UTXO y con los parámetros de la Blockchain del monedero de Bitcoin Vault. Sus fondos serán desbloqueados una vez la transacción se haya verificado (después de unas 24 horas) o cancelado (dentro de las 24 horas).',
+    warningGeneral:
+      'Aviso: Tenga en cuenta que en el proceso de utilizar la función de Transacción Segura, una parte de los fondos dejados en su monedero puede quedarse bloqueada. Es un procedimiento normal vinculado con UTXO y con los parámetros de la Blockchain del monedero de Bitcoin Vault. Sus fondos serán desbloqueados una vez la transacción se haya verificado (después de unas 24 horas) o cancelado (dentro de las 24 horas).',
   },
   settings: {
     about: 'Sobre',
@@ -367,7 +396,8 @@ const es = {
   },
   timeCounter: {
     closeTheApp: 'Cerrar la aplicación',
-    description: 'Se ha bloqueado su aplicación debido a los intentos fallidos de iniciar sesión. Por favor, espere el tiempo necesario para volver a intentarlo.',
+    description:
+      'Se ha bloqueado su aplicación debido a los intentos fallidos de iniciar sesión. Por favor, espere el tiempo necesario para volver a intentarlo.',
     title: 'Aplicación bloqueada',
     tryAgain: 'Volver a intentar',
   },
@@ -454,23 +484,28 @@ const es = {
       importWalletButton: 'Importar monedero',
       inputLabel: 'Nombre',
       legacy: 'Realiza tipos de transacciones predeterminadas.',
-      legacyHDP2SH: 'Contiene un árbol de direcciones P2SH generado a partir de una sola frase mnemotécnica de 12 palabras',
+      legacyHDP2SH:
+        'Contiene un árbol de direcciones P2SH generado a partir de una sola frase mnemotécnica de 12 palabras',
       legacyHDP2SHTitle: 'Estándar HD P2SH',
-      LegacyHDSegWit: 'Contiene un árbol de direcciones de segwit nativas, generado a partir de una sola frase mnemotécnica de 12 palabras',
+      LegacyHDSegWit:
+        'Contiene un árbol de direcciones de segwit nativas, generado a partir de una sola frase mnemotécnica de 12 palabras',
       legacyHDSegWitTitle: 'EstándarHD SegWit',
       LegacyP2SH: 'Contiene una sola dirección P2SH',
       legacyP2SHTitle: 'Estándar P2SH',
       legacyTitle: 'Estándar',
-      multipleAddresses: 'Contiene un árbol de direcciones P2SH generado a partir de una sola frase mnemotécnica de 12 palabras',
+      multipleAddresses:
+        'Contiene un árbol de direcciones P2SH generado a partir de una sola frase mnemotécnica de 12 palabras',
       publicKeyError: 'La clave pública proporcionada no es válida',
-      segwidAddress: 'Contiene un árbol de direcciones SegWit nativas, generado a partir de una sola frase mnemotécnica de 12 palabras',
+      segwidAddress:
+        'Contiene un árbol de direcciones SegWit nativas, generado a partir de una sola frase mnemotécnica de 12 palabras',
       singleAddress: 'Dirección única',
       subtitle: 'Ponga un nombre a su monedero',
       title: 'Agregar un monedero nuevo',
       walletType: 'Tipo de monedero',
     },
     addSuccess: {
-      description: 'Apunte esta frase mnemotécnica en algún lugar seguro. Es su copia de seguridad en caso de que necesite restaurar su monedero.',
+      description:
+        'Apunte esta frase mnemotécnica en algún lugar seguro. Es su copia de seguridad en caso de que necesite restaurar su monedero.',
       okButton: 'De acuerdo, ¡lo he apuntado!',
       subtitle: '¡Su monedero está listo! \n¡Ha creado su monedero!',
       title: 'Agregar un monedero nuevo',
@@ -510,7 +545,8 @@ const es = {
     errors: {
       duplicatedPublicKey: 'Ya se ha agregado la clave pública',
       invalidMnemonic: 'Frase mnemotécnica no válida',
-      invalidMnemonicWordsNumber: 'Palabras proporcionadas {receivedWordsNumber} palabras esperadas {expectedWordsNumber}',
+      invalidMnemonicWordsNumber:
+        'Palabras proporcionadas {receivedWordsNumber} palabras esperadas {expectedWordsNumber}',
       invalidPrivateKey: 'Clave privada no válida',
       invalidPublicKey: 'Clave pública no válida',
       invalidQrCode: 'Código QR no válido',
@@ -530,7 +566,8 @@ const es = {
     import: {
       do_import: 'Importar',
       error: 'Error al importar. Asegúrese de que los datos proporcionados son válidos.',
-      explanation: 'Escriba aquí su frase mnemotécnica, clave privada, WIF o cualquier cosa que tenga. GoldWallet hará todo lo posible para adivinar el formato correcto e importar su monedero',
+      explanation:
+        'Escriba aquí su frase mnemotécnica, clave privada, WIF o cualquier cosa que tenga. GoldWallet hará todo lo posible para adivinar el formato correcto e importar su monedero',
       imported: 'Importado',
       scan_qr: 'o escanear el código QR en su lugar?',
       success: 'Completado',
@@ -547,20 +584,26 @@ const es = {
       placeholder: 'Frase mnemotécnica, clave privada, WIF',
       scanCancelPubKey: 'Escanee el código QR de la clave de Cancelación',
       scanFastPubKey: 'Escanee el código QR de la Clave Rápida',
-      scanPublicKeyDescription: 'Abra el primer documento PDF que generó cuando creó el monedero que desea importar y use esta aplicación para escanear el código QR de la clave pública.',
+      scanPublicKeyDescription:
+        'Abra el primer documento PDF que generó cuando creó el monedero que desea importar y use esta aplicación para escanear el código QR de la clave pública.',
       scanQrCode: 'o escanear el código QR',
       scanWalletAddress: 'Escanee la dirección del monedero',
-      scanWalletAddressDescription: 'Escanee el código QR de la dirección pública para iniciar la integración con GoldWallet.',
-      subtitle: 'Escriba aquí su frase mnemotécnica, clave privada, WIF o cualquier dato que tenga. GoldWallet hará todo lo posible para adivinar el formato correcto e importar su monedero.',
+      scanWalletAddressDescription:
+        'Escanee el código QR de la dirección pública para iniciar la integración con GoldWallet.',
+      subtitle:
+        'Escriba aquí su frase mnemotécnica, clave privada, WIF o cualquier dato que tenga. GoldWallet hará todo lo posible para adivinar el formato correcto e importar su monedero.',
       title: 'Importe su monedero',
-      unsupportedElectrumVaultMnemonic: 'Esta frase mnemotécnica es de Electrum Vault y actualmente no es aspoyada. Será apoyada en un futuro próximo.',
+      unsupportedElectrumVaultMnemonic:
+        'Esta frase mnemotécnica es de Electrum Vault y actualmente no es aspoyada. Será apoyada en un futuro próximo.',
       walletInUseValidationError: 'El monedero ya está en uso. Introduzca un monedero válido.',
-      allWalletsValidationError: 'No puede introducir el nombre \"Todos monederos\"',
+      allWalletsValidationError: 'No puede introducir el nombre "Todos monederos"',
     },
     publicKey: {
-      instantDescription: 'Vaya al Generador de Claves web en un dispositivo diferente, refresque la página y use esta aplicación para escanear el nuevo código QR de clave pública. ¡Recuerde exportar sus claves como PDF!',
+      instantDescription:
+        'Vaya al Generador de Claves web en un dispositivo diferente, refresque la página y use esta aplicación para escanear el nuevo código QR de clave pública. ¡Recuerde exportar sus claves como PDF!',
       instantSubtitle: 'Agregar Clave Rápida',
-      recoveryDescription: 'Vaya al Generador de Claves web en un dispositivo diferente y use esta aplicación para escanear el código QR de clave pública. ¡Recuerde exportar sus claves como PDF!',
+      recoveryDescription:
+        'Vaya al Generador de Claves web en un dispositivo diferente y use esta aplicación para escanear el código QR de clave pública. ¡Recuerde exportar sus claves como PDF!',
       recoverySubtitle: 'Agregar Clave de Cancelación',
       scan: 'Escanear',
       webKeyGenerator: 'Generador de claves web:',
@@ -590,4 +633,4 @@ const es = {
       wallets: 'Monederos',
     },
   },
-}
+};

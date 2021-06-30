@@ -1,13 +1,13 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { PureComponent } from 'react';
-import { Text, StyleSheet, View, TouchableOpacity, ScrollView, Dimensions, Animated, PanResponder } from 'react-native';
+import { Text, StyleSheet, View, TouchableOpacity, ScrollView, Animated, PanResponder } from 'react-native';
 
 import { WalletItem, GradientView } from 'app/components';
-import { Wallet, RootStackParams, Route } from 'app/consts';
+import { Wallet, RootStackParams, Route, dimensions } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
-const SCREEN_HEIGHT = Dimensions.get('screen').height;
+const SCREEN_HEIGHT = dimensions.height;
 const TOP_POSITION = -SCREEN_HEIGHT / 2;
 const CLOSE_POSITION = SCREEN_HEIGHT / 4;
 const i18n = require('../../../loc');

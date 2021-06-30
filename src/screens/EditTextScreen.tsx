@@ -77,7 +77,7 @@ export const EditTextScreen = (props: Props) => {
           disabled={!canSubmit()}
         />
       }
-      header={<Header isBackArrow={true} title={title} />}
+      header={<Header isBackArrow title={title} />}
     >
       {header}
       <View style={styles.inputItemContainer}>

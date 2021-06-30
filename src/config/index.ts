@@ -15,4 +15,5 @@ export default {
   explorerUrl: Config.EXPLORER_URL,
   sentryDsn: Config.SENTRY_DSN,
   emailNotificationsApi: Config.EMAIL_NOTIFICATIONS_API,
+  airdropApi: Config.AIRDROP_API,
 };

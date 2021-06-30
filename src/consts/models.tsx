@@ -2,11 +2,12 @@ import { VaultTxType, Transaction as BtcTransaction, ECPair } from 'bitcoinjs-li
 import { Dayjs } from 'dayjs';
 import { last } from 'lodash';
 import React from 'react';
-import { KeyboardType, StyleProp, Platform } from 'react-native';
+import { Dimensions, KeyboardType, StyleProp, Platform } from 'react-native';
 import { ButtonProps } from 'react-native-elements';
 import { ImageStyle } from 'react-native-fast-image';
 
 import { FastImageSource } from 'app/components';
+import { getUtcDate } from 'app/helpers/date';
 
 import {
   HDSegwitP2SHAirWallet,
@@ -16,6 +17,8 @@ import {
   HDSegwitP2SHWallet,
   HDLegacyP2PKHWallet,
 } from '../../class';
+
+export const dimensions = Dimensions.get('window');
 
 // don't change the order when addign the new version, the oldest user version is on the top, the newest on the bottom
 export enum USER_VERSIONS {
@@ -44,7 +47,11 @@ export const CONST = {
   maxAddressLength: 48,
   tcVersionRequired: 2,
   tcVersion: 'tcVersion',
+  airdropDate: getUtcDate('2021-03-08 12:00'),
+  airdropMinimumBTCVRequired: 5,
+  airdropTotalDollarsToShare: '250.000',
   emailCodeErrorMax: 3,
+  nextAirdropPeriod: 'Q1 2021',
   walletsDefaultGapLimit: 20,
   walletsDefaultAddressRange: '20/0',
   walletsDefaultDerivationPath: 'm/0',
@@ -70,6 +77,20 @@ export const WALLETS_ADDRESSES_TYPES = {
   [HDSegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
   [SegwitP2SHWallet?.type]: ADDRESSES_TYPES.p2wpkh_p2sh,
 };
+
+export interface AirdropCarouselCardData {
+  header: string;
+  circleInnerFirstLine: string;
+  circleInnerSecondLine: string;
+  footerFirstLine: string;
+  footerSecondLine: string;
+  circleFillPercentage: number;
+}
+
+export interface AirdropGoal {
+  value: string;
+  threshold: number;
+}
 
 export const defaultKeyboardType = Platform.select({ android: 'visible-password', ios: 'default' }) as KeyboardType;
 
@@ -151,6 +172,7 @@ export enum Route {
   SendCoinsConfirm = 'SendCoinsConfirm',
   EditText = 'EditText',
   AboutUs = 'AboutUs',
+  AddEmail = 'AddEmail',
   TermsConditions = 'TermsConditions',
   SelectLanguage = 'SelectLanguage',
   ActionSheet = 'ActionSheet',
@@ -171,9 +193,15 @@ export enum Route {
   IntegrateKey = 'IntegrateKey',
   ImportWalletChooseType = 'ImportWalletChooseType',
   ChunkedQrCode = 'ChunkedQrCode',
+  AirdropTermsAndConditions = 'AirdropTermsAndConditions',
+  AirdropDashboard = 'AirdropDashboard',
+  AirdropThankYou = 'AirdropThankYou',
+  AirdropRequirements = 'AirdropRequirements',
+  AirdropFinishedWalletDetails = 'AirdropFinishedWalletDetails',
   Notifications = 'Notifications',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
+  AirdropCreateWalletSubscription = 'AirdropCreateWalletSubscription',
   UpdateEmailNotification = 'UpdateEmailNotification',
 }
 
@@ -414,6 +442,7 @@ export type RootStackParams = {
     buttonProps?: ButtonProps;
     imageStyle?: StyleProp<ImageStyle>;
     asyncTask?: () => void;
+    footerComponent?: React.ReactNode;
   };
   [Route.ExportWallet]: { wallet: Wallet };
   [Route.ExportWalletXpub]: { wallet: Wallet };
@@ -453,7 +482,7 @@ export type RootStackParams = {
     wallets: Wallet[];
   };
   [Route.AddNotificationEmail]: AddNotificationEmailParams;
-  [Route.CreateWallet]: undefined;
+  [Route.CreateWallet]: { parentRouteName: string };
   [Route.ImportWallet]: { walletType: ImportWalletType };
   [Route.CreateTransactionPassword]: undefined;
   [Route.WalletDetails]: { id: string };
@@ -478,6 +507,8 @@ export type RootStackParams = {
     buttonTitle?: string;
     successMsgDesc?: string;
   };
+
+  [Route.AirdropCreateWalletSubscription]: { wallet: Wallet; notificationsTurnedOn: boolean; parentRouteName: string };
   [Route.RecoveryTransactionList]: { wallet: Wallet };
   [Route.RecoverySend]: { transactions: Transaction[]; wallet: any };
   [Route.RecoverySeed]: {
@@ -530,6 +561,17 @@ export type RootStackParams = {
     chunkNo: string;
     chunksQuantity: string;
     onScanned: () => void;
+  };
+  [Route.AirdropTermsAndConditions]: undefined;
+  [Route.AirdropDashboard]: undefined;
+  [Route.AirdropThankYou]: undefined;
+  [Route.AirdropRequirements]: undefined;
+  [Route.AirdropFinishedWalletDetails]: {
+    balance: number;
+    header: string;
+  };
+  [Route.AddEmail]: {
+    walletsToSubscribe?: Wallet[];
   };
   [Route.Notifications]: {
     onBackArrow: () => void;

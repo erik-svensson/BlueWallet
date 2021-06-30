@@ -188,7 +188,6 @@ class AuthenticatorListScreen extends Component<Props, State> {
         noScroll={true}
         header={
           <Header
-            isBackArrow={false}
             title={i18n.tabNavigator.authenticators}
             addButtonTestID="create-authenticator-button"
             addFunction={() => navigation.navigate(Route.CreateAuthenticator)}

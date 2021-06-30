@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View, Linking, Dimensions, Platform } from 'react-native';
+import { Text, StyleSheet, View, Linking, Platform } from 'react-native';
 import { getApplicationName, getVersion, getBundleId, getBuildNumber } from 'react-native-device-info';
 import Rate, { AndroidMarket } from 'react-native-rate';
 
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
 import config from 'app/config';
+import { dimensions } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -24,7 +25,7 @@ export const AboutUsScreen = () => {
   ];
 
   const getBuildData = () => {
-    const { width, height } = Dimensions.get('window');
+    const { width, height } = dimensions;
 
     return `${getApplicationName()} ver. ${getVersion()} (build ${getBuildNumber()}) \n ${getBundleId()} \n w, h = ${width.toFixed(
       0,
@@ -34,16 +35,24 @@ export const AboutUsScreen = () => {
   const handleRateButtonPress = () => {
     setRate(true);
 
+    const openAppStoreIfInAppFails = Platform.select({ android: true, ios: false }) as boolean;
+    const preferInApp = Platform.select({ android: false, ios: true }) as boolean;
+
     const options = {
       AppleAppID: '1515116464',
       GooglePackageName: config.applicationId,
       preferredAndroidMarket: AndroidMarket.Google,
+      preferInApp,
+      openAppStoreIfInAppFails,
       inAppDelay: 0,
       fallbackPlatformURL: 'https://bitcoinvault.global',
     };
 
     Rate.rate(options, () => {
-      setRate(false);
+      setRate(true);
+      setTimeout(() => {
+        setRate(false);
+      }, 5000);
     });
   };
 
@@ -52,7 +61,7 @@ export const AboutUsScreen = () => {
   };
 
   return (
-    <ScreenTemplate header={<Header isBackArrow={true} title={i18n.aboutUs.header} />}>
+    <ScreenTemplate header={<Header isBackArrow title={i18n.aboutUs.header} />}>
       <Text style={styles.title}>{i18n.aboutUs.title}</Text>
       <Text style={styles.description}>{i18n.aboutUs.alwaysBackupYourKeys}</Text>
       <Button
@@ -64,6 +73,7 @@ export const AboutUsScreen = () => {
       />
       <Button
         testID="rate-us-button"
+        disabled={rate}
         onPress={handleRateButtonPress}
         source={icons.star}
         title={i18n.aboutUs.rateGoldWallet}

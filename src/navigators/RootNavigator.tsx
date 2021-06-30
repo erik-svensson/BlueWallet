@@ -41,6 +41,11 @@ import {
   IntegrateKeyScreen,
   RecoveryTransactionListScreen,
   RecoverySendScreen,
+  AirdropTermsAndConditionsScreen,
+  AirdropDashboardScreen,
+  AirdropThankYouScreen,
+  AirdropRequirementsScreen,
+  AirdropFinishedWalletDetailsScreen,
   RecoverySeedScreen,
   ImportWalletChooseTypeScreen,
   OptionsAuthenticatorScreen,
@@ -52,6 +57,7 @@ import {
   ConfirmTransactionPassword,
   LocalConfirmNotificationCodeScreen,
   AddNotificationEmailScreen,
+  AirdropCreateWalletSubscription,
   UpdateEmailNotificationScreen,
 } from 'app/screens';
 
@@ -168,6 +174,12 @@ export const RootNavigator: FC<Props> = ({
       <Stack.Screen name={Route.ChunkedQrCode} component={ChunkedQrCode} />
       <Stack.Screen name={Route.Notifications} component={NotificationScreen} />
       <Stack.Screen name={Route.ConfirmEmail} component={ConfirmEmailScreen} />
+      <Stack.Screen name={Route.AirdropTermsAndConditions} component={AirdropTermsAndConditionsScreen} />
+      <Stack.Screen name={Route.AirdropDashboard} component={AirdropDashboardScreen} />
+      <Stack.Screen name={Route.AirdropThankYou} component={AirdropThankYouScreen} />
+      <Stack.Screen name={Route.AirdropFinishedWalletDetails} component={AirdropFinishedWalletDetailsScreen} />
+      <Stack.Screen name={Route.AirdropRequirements} component={AirdropRequirementsScreen} />
+      <Stack.Screen name={Route.AirdropCreateWalletSubscription} component={AirdropCreateWalletSubscription} />
       <Stack.Screen name={Route.UpdateEmailNotification} component={UpdateEmailNotificationScreen} />
     </Stack.Navigator>
   );

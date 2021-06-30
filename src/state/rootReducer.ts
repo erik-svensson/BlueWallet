@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { Filters } from 'app/consts';
 import { createPersistReducer } from 'app/helpers/reduxPersist';
 
+import { AirdropState, airdropReducer } from './airdrop/reducer';
 import { appSettingsReducer, AppSettingsState } from './appSettings/reducer';
 import { AuthenticationState, authenticationReducer } from './authentication/reducer';
 import { AuthenticatorsState, authenticatorsReducer } from './authenticators/reducer';
@@ -17,6 +18,7 @@ import { WalletsState, walletsReducer } from './wallets/reducer';
 
 export { actions, selectors } from './authenticators';
 export interface ApplicationState {
+  airdrop: AirdropState;
   contacts: ContactsState;
   transactions: TransactionsNotesState;
   appSettings: AppSettingsState;
@@ -44,6 +46,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
+  airdrop: airdropReducer,
   contacts: contactsReducer,
   transactions: transactionsNotesReducer,
   appSettings: appSettingsReducer,

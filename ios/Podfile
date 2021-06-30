@@ -32,7 +32,8 @@ def sharedPods
   pod 'React-callinvoker', :path => "../node_modules/react-native/ReactCommon/callinvoker"
   pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
   pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
-
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+  pod 'react-native-config', :path => '../node_modules/react-native-config'
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
@@ -40,8 +41,6 @@ end
 
 target 'GoldWallet' do
   sharedPods
-  pod 'react-native-config', :path => '../node_modules/react-native-config'
-
 end
 
 target 'GoldWallet Beta' do

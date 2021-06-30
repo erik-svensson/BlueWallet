@@ -1,4 +1,4 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { compose } from 'lodash/fp';
 import React, { Component } from 'react';
@@ -14,11 +14,13 @@ import {
   StyledText,
   Button,
   FlatButton,
+  AirdropFloatingButton,
 } from 'app/components';
-import { Wallet, Route, EnhancedTransaction, CONST, MainTabNavigatorParams, RootStackParams } from 'app/consts';
+import { Wallet, EnhancedTransaction, CONST, MainTabNavigatorParams, RootStackParams, Route } from 'app/consts';
 import { isAllWallets } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
+import * as airdropSelectors from 'app/state/airdrop/selectors';
 import { clearBadge } from 'app/state/appSettings/actions';
 import { clearFilters, ClearFiltersAction } from 'app/state/filters/actions';
 import * as transactionsNotesSelectors from 'app/state/transactionsNotes/selectors';
@@ -38,11 +40,14 @@ interface Props {
     StackNavigationProp<MainTabNavigatorParams, Route.Settings>,
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
   >;
+  route: RouteProp<MainTabNavigatorParams, Route.Dashboard>;
   wallets: Wallet[];
   isLoading: boolean;
   allTransactions: EnhancedTransaction[];
   transactionNotes: Record<string, string>;
   isInitialized: boolean;
+  airdropThankYouFlowCompleted: boolean;
+  thankYouSeen: boolean;
   loadWallets: () => LoadWalletsAction;
   clearFilters: () => ClearFiltersAction;
   isFilteringOn?: boolean;
@@ -151,6 +156,10 @@ class DashboardScreen extends Component<Props, State> {
     return wallets.length > 0;
   };
 
+  navigateToWalletCreate = () => {
+    this.props.navigation.navigate(Route.CreateWallet, { parentRouteName: this.props.route.name });
+  };
+
   renderHeader = () => {
     const { query } = this.state;
 
@@ -162,9 +171,7 @@ class DashboardScreen extends Component<Props, State> {
               onFilterPress: this.scrollToTransactionList,
             });
           }}
-          onAddPress={() => {
-            this.props.navigation.navigate(Route.CreateWallet);
-          }}
+          onAddPress={this.navigateToWalletCreate}
         >
           <SearchBar query={query} setQuery={this.setQuery} onFocus={this.scrollToTransactionList} />
         </DashboardHeader>
@@ -248,14 +255,14 @@ class DashboardScreen extends Component<Props, State> {
         <ListEmptyState
           testID="no-wallets-icon"
           variant={ListEmptyState.Variant.Dashboard}
-          onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
+          onPress={() => this.props.navigation.navigate(Route.CreateWallet, { parentRouteName: '' })}
         />
       </View>
     );
   };
 
   render() {
-    const { isInitialized } = this.props;
+    const { isInitialized, airdropThankYouFlowCompleted, thankYouSeen, navigation } = this.props;
 
     if (!isInitialized) {
       return (
@@ -272,7 +279,7 @@ class DashboardScreen extends Component<Props, State> {
             {!this.hasWallets() && (
               <>
                 <Button
-                  onPress={() => this.props.navigation.navigate(Route.CreateWallet)}
+                  onPress={() => this.props.navigation.navigate(Route.CreateWallet, { parentRouteName: '' })}
                   title={i18n.wallets.add.createWalletButton}
                   testID="create-wallet-button"
                 />
@@ -293,6 +300,11 @@ class DashboardScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         )}
+        <AirdropFloatingButton
+          thankYouSeen={thankYouSeen}
+          thankYouFlowCompleted={airdropThankYouFlowCompleted}
+          navigation={navigation}
+        />
       </>
     );
   }
@@ -305,6 +317,8 @@ const mapStateToProps = (state: ApplicationState) => ({
   allTransactions: walletsSelectors.transactions(state),
   transactionNotes: transactionsNotesSelectors.transactionNotes(state),
   isFilteringOn: state.filters.isFilteringOn,
+  airdropThankYouFlowCompleted: airdropSelectors.thankYouFlowCompleted(state),
+  thankYouSeen: airdropSelectors.thankYouSeen(state),
 });
 
 const mapDispatchToProps = {

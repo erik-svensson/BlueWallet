@@ -1,13 +1,15 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import { StyleSheet, Alert, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioButton } from 'app/components';
+import { icons } from 'app/assets';
+import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioButton, Image } from 'app/components';
 import { Route, Wallet, RootStackParams, ActionMeta, CONST, WalletType, ConfirmAddressFlowType } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
+import { isAfterAirdrop } from 'app/helpers/airdrop';
 import {
   HDSegwitBech32Wallet,
   HDSegwitP2SHWallet,
@@ -112,6 +114,13 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     });
   };
 
+  navigateToAirdropWalletSubscription = (wallet: Wallet, notificationsTurnedOn = false) => {
+    const { navigation } = this.props;
+    const { parentRouteName } = this.props.route.params;
+
+    navigation.navigate(Route.AirdropCreateWalletSubscription, { wallet, notificationsTurnedOn, parentRouteName });
+  };
+
   navigateToConfirmEmailSubscription = (wallet: Wallet) => {
     const { navigation, email } = this.props;
 
@@ -119,31 +128,39 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       title: i18n.notifications.notifications,
       children: this.renderConfirmScreenContent(),
       gestureEnabled: false,
+      isBackArrow: false,
       onConfirm: () => {
         this.props.subscribe([wallet], email);
         navigation.navigate(Route.ConfirmEmail, {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
           wallets: [wallet],
-          onSuccess: () => this.navigateToSuccesfullNotificationSubscriptionMessage(wallet),
+          onSuccess: isAfterAirdrop()
+            ? this.navigateToSuccesfullNotificationSubscriptionMessage
+            : () => this.navigateToAirdropWalletSubscription(wallet, true),
           onResend: () => this.props.subscribe([wallet], email),
         });
       },
-      onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
-      isBackArrow: false,
+      onBack: () =>
+        isAfterAirdrop()
+          ? this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard })
+          : this.navigateToAirdropWalletSubscription(wallet),
     });
   };
 
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
-    const { navigation, createWallet, email } = this.props;
+    const { navigation, createWallet } = this.props;
 
     wallet.setLabel(label);
+
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
           secret: w.getSecret(),
-          onButtonPress: !!email ? () => this.navigateToConfirmEmailSubscription(wallet) : undefined,
+          onButtonPress: true
+            ? () => this.navigateToConfirmEmailSubscription(wallet)
+            : () => (isAfterAirdrop() ? undefined : this.navigateToAirdropWalletSubscription(wallet)),
         });
       },
       onFailure: () => onError(),
@@ -200,7 +217,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       title: i18n.wallets.publicKey.recoverySubtitle,
       description: i18n.wallets.publicKey.recoveryDescription,
       onBackArrow: () => {
-        navigation.navigate(Route.CreateWallet);
+        navigation.navigate(Route.CreateWallet, { parentRouteName: this.props.route.name });
       },
     });
   };
@@ -222,7 +239,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       headerTitle: i18n.wallets.add.title,
       description: i18n.wallets.publicKey.recoveryDescription,
       onBackArrow: () => {
-        navigation.navigate(Route.CreateWallet);
+        navigation.navigate(Route.CreateWallet, { parentRouteName: this.props.route.name });
       },
     });
   };
@@ -249,7 +266,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
     const onError = () =>
       this.showAlert(() => {
-        navigation.navigate(Route.CreateWallet);
+        navigation.navigate(Route.CreateWallet, { parentRouteName: this.props.route.name });
       }, i18n.wallets.add.failed);
 
     this.createWalletMessage(wallet, onError);
@@ -265,6 +282,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     if (walletsLabels.includes(this.state.label.trim())) {
       return i18n.wallets.importWallet.walletInUseValidationError;
     }
+
     if (
       this.state.label.toLowerCase() === i18n.wallets.dashboard.allWallets.toLowerCase() ||
       this.state.label === CONST.allWallets
@@ -276,63 +294,40 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   renderAdvancedSection() {
     const { isAdvancedOptionsEnabled } = this.props.appSettings;
 
+    const isNotAfterAirdrop = !isAfterAirdrop();
+
     return (
       <>
         <Text style={styles.advancedOptionsLabel}>{i18n.wallets.add.walletType}</Text>
-
-        {!isAdvancedOptionsEnabled ? (
+        <RadioButton
+          testID="create-2-key-vault-radio"
+          title={HDSegwitP2SHArWallet.typeReadable}
+          subtitle={i18n.wallets.add.ar}
+          value={HDSegwitP2SHArWallet}
+          checked={this.state.WalletClass === HDSegwitP2SHArWallet}
+          onPress={this.onSelect}
+        />
+        <View style={isNotAfterAirdrop && styles.frame}>
+          <RadioButton
+            testID="create-3-key-vault-radio"
+            title={HDSegwitP2SHAirWallet.typeReadable}
+            subtitle={i18n.wallets.add.air}
+            value={HDSegwitP2SHAirWallet}
+            checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
+            onPress={this.onSelect}
+          />
+          {isNotAfterAirdrop && <Image source={icons.airdrop} style={styles.airdropIcon} />}
+        </View>
+        <RadioButton
+          testID="create-hd-p2sh-radio"
+          title={isAdvancedOptionsEnabled ? i18n.wallets.add.legacyHDP2SHTitle : i18n.wallets.add.legacyTitle}
+          subtitle={isAdvancedOptionsEnabled ? i18n.wallets.add.legacyHDP2SH : i18n.wallets.add.legacy}
+          value={HDSegwitP2SHWallet}
+          checked={this.state.WalletClass === HDSegwitP2SHWallet}
+          onPress={this.onSelect}
+        />
+        {isAdvancedOptionsEnabled && (
           <>
-            <RadioButton
-              testID="create-2-key-vault-radio"
-              title={HDSegwitP2SHArWallet.typeReadable}
-              subtitle={i18n.wallets.add.ar}
-              value={HDSegwitP2SHArWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHArWallet}
-              onPress={this.onSelect}
-            />
-            <RadioButton
-              testID="create-3-key-vault-radio"
-              title={HDSegwitP2SHAirWallet.typeReadable}
-              subtitle={i18n.wallets.add.air}
-              value={HDSegwitP2SHAirWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
-              onPress={this.onSelect}
-            />
-            <RadioButton
-              testID="create-hd-p2sh-radio"
-              title={i18n.wallets.add.legacyTitle}
-              subtitle={i18n.wallets.add.legacy}
-              value={HDSegwitP2SHWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHWallet}
-              onPress={this.onSelect}
-            />
-          </>
-        ) : (
-          <>
-            <RadioButton
-              testID="create-2-key-vault-radio"
-              title={HDSegwitP2SHArWallet.typeReadable}
-              subtitle={i18n.wallets.add.ar}
-              value={HDSegwitP2SHArWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHArWallet}
-              onPress={this.onSelect}
-            />
-            <RadioButton
-              testID="create-3-key-vault-radio"
-              title={HDSegwitP2SHAirWallet.typeReadable}
-              subtitle={i18n.wallets.add.air}
-              value={HDSegwitP2SHAirWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
-              onPress={this.onSelect}
-            />
-            <RadioButton
-              testID="create-hd-p2sh-radio"
-              title={i18n.wallets.add.legacyHDP2SHTitle}
-              subtitle={i18n.wallets.add.legacyHDP2SH}
-              value={HDSegwitP2SHWallet}
-              checked={this.state.WalletClass === HDSegwitP2SHWallet}
-              onPress={this.onSelect}
-            />
             <RadioButton
               testID="create-segwit-p2sh-radio"
               title={i18n.wallets.add.legacyP2SHTitle}
@@ -426,6 +421,21 @@ const styles = StyleSheet.create({
   },
   importButtonContainer: {
     marginTop: 12,
+  },
+  frame: {
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 7,
+    paddingHorizontal: 4,
+    borderColor: palette.secondary,
+    position: 'relative',
+  },
+  airdropIcon: {
+    width: 13,
+    height: 12,
+    position: 'absolute',
+    right: 7,
+    top: 7,
   },
   notificationDescription: {
     ...typography.caption,

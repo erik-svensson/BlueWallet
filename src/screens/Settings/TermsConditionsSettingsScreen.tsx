@@ -51,7 +51,7 @@ export class TermsConditionsSettingsScreen extends React.PureComponent<Props> {
     return (
       <ScreenTemplate
         testID={'terms-conditions-settings-screen'}
-        header={<Header isBackArrow={true} title={i18n.termsConditions.header} />}
+        header={<Header isBackArrow title={i18n.termsConditions.header} />}
       >
         <Text style={styles.title}>{i18n.termsConditions.title}</Text>
         <WebView

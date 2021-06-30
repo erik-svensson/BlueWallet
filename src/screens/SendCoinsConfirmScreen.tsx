@@ -3,12 +3,12 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Transaction } from 'bitcoinjs-lib';
 import { round } from 'lodash';
 import React, { Component } from 'react';
-import { View, StyleSheet, Alert, Dimensions } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Header, ScreenTemplate, Button, StyledText, Image, Text, Warning, EllipsisText } from 'app/components';
-import { Route, RootStackParams, ActionMeta } from 'app/consts';
+import { Route, RootStackParams, ActionMeta, dimensions } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import * as txNotesActions from 'app/state/transactionsNotes/actions';
 import * as walletsActions from 'app/state/wallets/actions';
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     paddingVertical: '3%',
   },
   balancesContainer: {
-    width: Dimensions.get('window').width,
+    width: dimensions.width,
     alignSelf: 'center',
     paddingVertical: '4%',
     marginTop: 20,

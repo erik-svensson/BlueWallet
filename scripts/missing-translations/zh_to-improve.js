@@ -38,10 +38,12 @@ const zh = {
   },
   authenticators: {
     add: {
-      description: '打开 Electrum Vault 桌面应用程序，并新建钱包。执行屏幕上的步骤，直至看到二维（QR）码。用该应用程序进行扫描，以继续。',
+      description:
+        '打开 Electrum Vault 桌面应用程序，并新建钱包。执行屏幕上的步骤，直至看到二维（QR）码。用该应用程序进行扫描，以继续。',
       subdescription: '您还可以通过选择以下选项导入验证器。',
       subtitle: '配对验证器',
-      successDescription: '在安全地方写下该助记词。这是您的备份，用于恢复验证器。记住，确认“快速与取消”交易需要使用验证器。',
+      successDescription:
+        '在安全地方写下该助记词。这是您的备份，用于恢复验证器。记住，确认“快速与取消”交易需要使用验证器。',
       successTitle: '您的验证器已就绪！',
       title: '添加新验证器',
     },
@@ -66,7 +68,8 @@ const zh = {
       desc2: '通过点击下面的“或扫描 二维（QR）码”扫描二维（QR）码',
       inUseValidationError: '名字必须是唯一的。请输入一个有效的名字。',
       mnemonicLength: '助记符应该有 12 个字符',
-      multipleQrCodesDescription: '有些交易会产生多个二维（QR）码。请确保从 Electrum Vault 应用程序中扫描所有的二维（QR）码。',
+      multipleQrCodesDescription:
+        '有些交易会产生多个二维（QR）码。请确保从 Electrum Vault 应用程序中扫描所有的二维（QR）码。',
       multipleQrCodesTitle: '扫描二维（QR）码',
       scanNext: '扫描下一个',
       subtitle: '导入您的验证器',
@@ -106,7 +109,8 @@ const zh = {
   },
   betaVersion: {
     button: '我同意承担风险',
-    description: '在正式发布之前，GoldWallet 仍在接受最终测试。 该移动应用程序及程序上所有内容均基于“按原样 ”和“可使用”呈现。 使用该程序的风险由用户自行承担。',
+    description:
+      '在正式发布之前，GoldWallet 仍在接受最终测试。 该移动应用程序及程序上所有内容均基于“按原样 ”和“可使用”呈现。 使用该程序的风险由用户自行承担。',
     title: '这是 GoldWallet 钱包的测试版',
   },
   contactCreate: {
@@ -221,7 +225,8 @@ const zh = {
     confirmPin: '确认 PIN',
     createNewPin: '新的 PIN',
     createPassword: '创建交易密码',
-    createPasswordDescription: '您的交易密码将用于验证所有交易。您之后将无法更改。交易密码必须包含至少 8 位字母数字字符。',
+    createPasswordDescription:
+      '您的交易密码将用于验证所有交易。您之后将无法更改。交易密码必须包含至少 8 位字母数字字符。',
     createPin: '创建 PIN',
     createPinDescription: '您的 PIN 将用于登录应用。您之后可在设置一栏更改。',
     currentPin: '现用 PIN',
@@ -259,9 +264,11 @@ const zh = {
     permissionTitle: '允许使用相机',
   },
   security: {
-    jailBrokenPhone: '您的设备似乎越狱了。这可能会出现安全问题、死机或其它问题。我们不建议在已越狱的设备上使用 GoldWallet。',
+    jailBrokenPhone:
+      '您的设备似乎越狱了。这可能会出现安全问题、死机或其它问题。我们不建议在已越狱的设备上使用 GoldWallet。',
     noPinOrFingerprintSet: '您的设备未设置 PIN 密码或指纹登录。 不建议在不安全的设备上使用 GoldWallet。',
-    rootedPhone: '您的设备似乎取得了 root 权限。这可能会出现安全问题、死机或其它问题。我们不建议在取得 root 权限的设备上使用 GoldWallet。',
+    rootedPhone:
+      '您的设备似乎取得了 root 权限。这可能会出现安全问题、死机或其它问题。我们不建议在取得 root 权限的设备上使用 GoldWallet。',
     title: '安全问题',
   },
   selectLanguage: {
@@ -341,7 +348,8 @@ const zh = {
       watchOnlyError: '仅查看钱包不能发送交易',
     },
     warning: '警告:',
-    warningGeneral: '警告：请注意，在使用安全交易功能的过程中，您钱包中剩余的部分资金可能会被冻结。 这是与 UTXO 和比特币 Vault 钱包的区块链参数的常规过程。 当交易通过验证（大约 24 小时后）或交易被取消（24 小时内）后，资金冻结将被解除。',
+    warningGeneral:
+      '警告：请注意，在使用安全交易功能的过程中，您钱包中剩余的部分资金可能会被冻结。 这是与 UTXO 和比特币 Vault 钱包的区块链参数的常规过程。 当交易通过验证（大约 24 小时后）或交易被取消（24 小时内）后，资金冻结将被解除。',
   },
   settings: {
     about: '关于',
@@ -470,7 +478,8 @@ const zh = {
       walletType: '钱包类型',
     },
     addSuccess: {
-      description: '您的钱包已创建。请花费一点时间在纸上写下这个助记词。这是您的备份。您可以在其它设备上使用备份来恢复钱包。',
+      description:
+        '您的钱包已创建。请花费一点时间在纸上写下这个助记词。这是您的备份。您可以在其它设备上使用备份来恢复钱包。',
       okButton: '好的，我写完了！',
       subtitle: '您的钱包已完成！\n 您已经创建了您的地址！',
       title: '添加新的钱包',
@@ -558,9 +567,11 @@ const zh = {
       allWalletsValidationError: '您不能输入名称“所有钱包”',
     },
     publicKey: {
-      instantDescription: '转到另一设备上的 web 密钥生成器，并使用该应用程序扫描公钥二维（QR）码。记得将密钥导出为 PDF！',
+      instantDescription:
+        '转到另一设备上的 web 密钥生成器，并使用该应用程序扫描公钥二维（QR）码。记得将密钥导出为 PDF！',
       instantSubtitle: '添加快速键',
-      recoveryDescription: '转到另一设备上的 web 密钥生成器，并使用该应用程序扫描公钥二维（QR）码。记得将密钥导出为 PDF！',
+      recoveryDescription:
+        '转到另一设备上的 web 密钥生成器，并使用该应用程序扫描公钥二维（QR）码。记得将密钥导出为 PDF！',
       recoverySubtitle: '添加取消键',
       scan: '扫描',
       webKeyGenerator: 'Web 密钥生成器：',
@@ -590,4 +601,4 @@ const zh = {
       wallets: '钱包',
     },
   },
-}
+};
