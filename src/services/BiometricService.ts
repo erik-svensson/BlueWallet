@@ -44,4 +44,8 @@ export default class BiometricService {
       logger.error('BiometricSerivce', `cancelled by user: ${e.message}`);
     }
   };
+
+  deleteBiometrics = async () => {
+    ReactNativeBiometrics.deleteKeys();
+  };
 }

@@ -15,4 +15,9 @@ export default class StoreService {
     await AsyncStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
     return;
   }
+
+  async wipeStore() {
+    await AsyncStorage.clear();
+    return;
+  }
 }

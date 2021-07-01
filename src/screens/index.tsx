@@ -62,3 +62,4 @@ export {
   AddNotificationEmailScreen,
   UpdateEmailNotificationScreen,
 } from './Notifications';
+export { default as SeedPhraseConfirmScreen } from './SeedPhraseConfirmScreen';

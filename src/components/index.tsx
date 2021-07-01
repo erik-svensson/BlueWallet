@@ -1,3 +1,5 @@
+import { Animated } from 'react-native';
+
 export { BottomTabBarIcon } from './BottomTabBarIcon';
 export { BottomTabBarComponent } from './BottomTabBarComponent';
 export { GradientView } from './GradientView';
@@ -51,3 +53,5 @@ export { CodeInput } from './CodeInput';
 export { AirdropStayTuned } from './AirdropStayTuned';
 export { AirdropWalletsList } from './AirdropWalletsList';
 export { TimeoutButton } from './TimeoutButton';
+export { Tags } from './Tags';
+export { Tag } from './Tag';

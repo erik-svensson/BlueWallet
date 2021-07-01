@@ -315,6 +315,7 @@ module.exports = {
     creatingAuthenticator: 'Creating your authenticator',
     creatingAuthenticatorDescription: 'Please be patient while we create your authenticator.\n It may take a while.',
     creatingWallet: 'Creating your wallet',
+    creatingWalletSuccess: 'You have successfully created your wallet.',
     creatingWalletDescription: 'Please be patient while we create your wallet.\n It may take a while.',
     generateAddressesError: 'Couldn`t generate addresses',
     hooray: 'Hooray!',
@@ -556,6 +557,7 @@ module.exports = {
   settings: {
     about: 'About',
     terms: 'Terms & Privacy',
+    factoryReset: 'Factory reset',
     aboutUs: 'About us',
     advancedOptions: 'Advanced options',
     Biometrics: 'Allow biometrics',
@@ -570,6 +572,13 @@ module.exports = {
     notSupportedFingerPrint: 'Your device does not support fingerprint',
     security: 'Security',
     TouchID: 'Allow fingerprint',
+    factory: {
+      title: 'Factory reset',
+      text:
+        'Are you sure you want to restore the Gold Wallet to its factory settings? All of your wallets and data will be deleted. Remember that you will have to import your wallets all over again.',
+      noButton: 'No',
+      yesButton: 'Yes',
+    },
   },
   tabNavigator: {
     addressBook: 'Address book',
@@ -680,6 +689,13 @@ module.exports = {
       subtitle: 'Name your wallet',
       title: 'Add new wallet',
       walletType: 'Wallet type',
+    },
+    confirmSeed: {
+      header: 'Confirm seed phrase',
+      title: 'Confirm backup phrase',
+      description: 'Click up the words in the correct order to confirm your backup.',
+      button: 'Confirm',
+      error: 'The seed phrase order is incorrect.',
     },
     addSuccess: {
       description:

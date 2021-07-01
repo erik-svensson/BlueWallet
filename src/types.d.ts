@@ -11,3 +11,4 @@ declare module '*.svg' {
 }
 
 declare module 'bip21';
+declare module 'redux-reset';

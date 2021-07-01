@@ -1,3 +1,6 @@
+import { compose, map, split } from 'lodash/fp';
+import { v4 as uuidv4 } from 'uuid';
+
 import { CONST, Wallet, TxType } from 'app/consts';
 
 import { decryptCode } from './decode';
@@ -55,3 +58,12 @@ export const agreedCode = (userCode: string, email: string, pin: string) => {
 
   return tempDecryptedCode === userCode;
 };
+
+/**
+ * Add uniq keys to mnemonic words
+ */
+export const mnemonicWordsToKeyedMnemonic = (mnemonicWords: string) =>
+  compose(
+    map(word => ({ key: uuidv4(), word })),
+    split(' '),
+  )(mnemonicWords);
