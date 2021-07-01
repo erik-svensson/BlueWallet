@@ -293,6 +293,12 @@ class DashboardScreen extends Component<Props, State> {
             )}
           </View>
         </ScreenTemplate>
+        <AirdropFloatingButton
+          thankYouSeen={thankYouSeen}
+          thankYouFlowCompleted={airdropThankYouFlowCompleted}
+          navigation={navigation}
+          position={!this.hasWallets()}
+        />
         {!!this.props.isFilteringOn && (
           <View style={styles.clearFiltersButtonContainer}>
             <TouchableOpacity onPress={this.resetFilters} style={styles.clearFiltersButton}>
@@ -300,11 +306,6 @@ class DashboardScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
         )}
-        <AirdropFloatingButton
-          thankYouSeen={thankYouSeen}
-          thankYouFlowCompleted={airdropThankYouFlowCompleted}
-          navigation={navigation}
-        />
       </>
     );
   }

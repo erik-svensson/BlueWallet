@@ -11,13 +11,19 @@ import { isAfterAirdrop } from 'app/helpers/airdrop';
 type Props = {
   thankYouSeen: boolean;
   thankYouFlowCompleted: boolean;
+  position: boolean;
   navigation: CompositeNavigationProp<
     StackNavigationProp<MainTabNavigatorParams, Route.Settings>,
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>
   >;
 };
 
-export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, thankYouSeen, navigation }: Props) => {
+export const AirdropFloatingButton: FC<Props> = ({
+  thankYouFlowCompleted,
+  thankYouSeen,
+  navigation,
+  position,
+}: Props) => {
   // TODO: this implementation doesn't work.
   // As discussed with Paweł, We have to merge PasswordNavigator with MainStackNavigator, otherwise it fails miserably.
   useEffect(() => {
@@ -38,7 +44,7 @@ export const AirdropFloatingButton: FC<Props> = ({ thankYouFlowCompleted, thankY
   };
 
   return (
-    <TouchableOpacity style={styles.clearButton} onPress={onButtonPress}>
+    <TouchableOpacity style={[styles.clearButton, { bottom: position ? 100 : 0 }]} onPress={onButtonPress}>
       <Image source={icons.airdropFloating} style={styles.airdropIcon} />
     </TouchableOpacity>
   );
@@ -49,8 +55,8 @@ const styles = StyleSheet.create({
     height: 66,
     width: 66,
     position: 'absolute',
-    bottom: -10,
     right: 2,
+    zIndex: 10,
   },
   airdropIcon: {
     width: 66,

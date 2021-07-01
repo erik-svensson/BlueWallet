@@ -47,7 +47,7 @@ export const CONST = {
   maxAddressLength: 48,
   tcVersionRequired: 2,
   tcVersion: 'tcVersion',
-  airdropDate: getUtcDate('2021-03-08 12:00'),
+  airdropDate: getUtcDate('2021-10-08 12:00'),
   airdropMinimumBTCVRequired: 5,
   airdropTotalDollarsToShare: '250.000',
   emailCodeErrorMax: 3,
