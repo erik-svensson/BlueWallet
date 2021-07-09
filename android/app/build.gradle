@@ -1,9 +1,7 @@
 apply plugin: "com.android.application"
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
-crashlytics {
-  enableNdk true
-}
+
 import com.android.build.OutputFile
 
 project.ext.envConfigFiles = [
@@ -156,6 +154,7 @@ dependencies {
     implementation project(':react-native-config')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation project(path: ":@react-native-firebase_analytics")
+    implementation platform('com.google.firebase:firebase-bom:28.2.0')
     implementation project(':@sentry_react-native')
     androidTestImplementation('com.wix:detox:+')
     // JSC from node_modules
