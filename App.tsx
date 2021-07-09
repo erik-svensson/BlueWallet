@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/react-native';
 import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { View, StyleSheet, LogBox } from 'react-native';
+import codePush from 'react-native-code-push';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -28,7 +29,13 @@ if (!__DEV__) {
 
 const getNewKey = () => new Date().toISOString();
 
-export default class App extends React.PureComponent {
+const codePushOptions = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+  installMode: codePush.InstallMode.ON_NEXT_RESUME,
+  minimumBackgroundDuration: 30 * 60, // 30 minutes
+};
+
+class App extends React.PureComponent {
   state = {
     unlockKey: getNewKey(),
   };
@@ -68,6 +75,8 @@ export default class App extends React.PureComponent {
     );
   }
 }
+
+export default codePush(codePushOptions)(App);
 
 const styles = StyleSheet.create({
   wrapper: {

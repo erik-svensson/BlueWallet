@@ -118,21 +118,18 @@ android {
         dev {
             minSdkVersion rootProject.ext.minSdkVersion
             applicationId 'io.goldwallet.wallet.dev'
-            //resValue "string", "CodePushDeploymentKey", project.env.get("CODEPUSH_DEPLOYMENT_KEY_ANDROID") ?: "''"
             targetSdkVersion rootProject.ext.targetSdkVersion
             resValue "string", "build_config_package", "io.goldwallet.wallet"
         }
         stage {
             minSdkVersion rootProject.ext.minSdkVersion
             applicationId 'io.goldwallet.wallet.stage'
-            //resValue "string", "CodePushDeploymentKey", project.env.get("CODEPUSH_DEPLOYMENT_KEY_ANDROID") ?: "''"
             targetSdkVersion rootProject.ext.targetSdkVersion
             resValue "string", "build_config_package", "io.goldwallet.wallet"
         }
         prod {
             minSdkVersion rootProject.ext.minSdkVersion
             applicationId 'io.goldwallet.wallet'
-            //resValue "string", "CodePushDeploymentKey", project.env.get("CODEPUSH_DEPLOYMENT_KEY_ANDROID") ?: "''"
             targetSdkVersion rootProject.ext.targetSdkVersion
             resValue "string", "build_config_package", "io.goldwallet.wallet"
         }
@@ -177,4 +174,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
