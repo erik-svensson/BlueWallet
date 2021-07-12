@@ -215,7 +215,6 @@ describe('Dashboard', () => {
   describe('Transaction details', () => {
     describe('@android @ios @smoke', () => {
       it('should be displayed all transaction details ', async () => {
-        // TODO: Cannot import wallet on android - no transactions error
         await steps.importWallet({
           type: '3-Key Vault',
           name: 'Main',
