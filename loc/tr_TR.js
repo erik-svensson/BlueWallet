@@ -223,6 +223,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       'Kimlik doğrulayıcınız \noluşturulurken lütfen bekleyin. \nBu biraz zaman alabilir.',
     creatingWallet: 'Cüzdanınız oluşturuluyor',
+    creatingWalletSuccess: 'You have successfully created your wallet.',
     creatingWalletDescription: 'Cüzdanınız oluşturulurken lütfen\nbekleyin. Bu biraz zaman alabilir.',
     generateAddressesError: 'Adresler oluşturulamadı',
     hooray: 'İşte bu!',
@@ -460,6 +461,7 @@ module.exports = {
   settings: {
     about: 'Hakkında',
     terms: 'Hüküm & Koşullar',
+    factoryReset: 'Fabrika ayarlarına sıfırla',
     aboutUs: 'Hakkımızda',
     advancedOptions: 'Hakkımızda',
     Biometrics: 'Biyometriğe izin ver',
@@ -474,6 +476,13 @@ module.exports = {
     notSupportedFingerPrint: 'Cihazınız parmak izini \ndesteklemiyor',
     security: 'Güvenlik',
     TouchID: 'Parmak izine izin ver',
+    factory: {
+      title: 'Fabrika ayarlarına sıfırla',
+      text:
+        'Gold Wallet ı fabrika ayarlarına sıfırlamak istediğinizden emin misiniz? Tüm cüzdanlarınız ve verileriniz silinecektir. Cüzdanlarınızı tekrar içe aktarmanız gerekeceğini belirtiriz.',
+      noButton: 'Hayır',
+      yesButton: 'Evet',
+    },
   },
   tabNavigator: {
     addressBook: 'Adres defteri',
@@ -586,6 +595,13 @@ module.exports = {
       subtitle: 'Cüzdanınıza isim verin',
       title: 'Yeni cüzdan ekleyin',
       walletType: 'Cüzdan türü',
+    },
+    confirmSeed: {
+      header: 'Confirm seed phrase',
+      title: 'Yedek kelime dizisini onaylayın',
+      description: 'Yedeklemeyi onaylamak için kelimelere doğru sırada tıklayın',
+      button: 'Confirm',
+      error: 'The seed phrase order is incorrect.',
     },
     addSuccess: {
       description:

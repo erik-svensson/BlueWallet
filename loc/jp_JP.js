@@ -221,6 +221,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       '認証システムを生成しています。しばらくお待ちください。\n時間がかかる場合があります。',
     creatingWallet: 'ウォレットを生成中です。',
+    creatingWalletSuccess: 'You have successfully created your wallet.',
     creatingWalletDescription: 'ウォレットの生成には時間がかかる場合がありますので、\n しばらくお待ちください。',
     generateAddressesError: 'アドレスを生成できません',
     hooray: 'おめでとうございます!',
@@ -454,6 +455,7 @@ module.exports = {
   settings: {
     about: '紹介',
     terms: '規約とプライバシー',
+    factoryReset: 'ファクトリー・リセット',
     aboutUs: '会社紹介',
     advancedOptions: '詳細設定',
     Biometrics: '生体認証を許可する',
@@ -468,6 +470,13 @@ module.exports = {
     notSupportedFingerPrint: 'このデバイスでは指紋が認識できません。',
     security: 'セキュリティ',
     TouchID: '指紋認識を許可する',
+    factory: {
+      title: 'ファクトリー・リセット',
+      text:
+        '本当にGold Walletを工場出荷時の状態に戻してよろしいですか？ウォレットとデータは全て削除され、再びウォレットを最初からインポートする必要があります。',
+      noButton: 'いいえ',
+      yesButton: 'はい',
+    },
   },
   tabNavigator: {
     addressBook: 'アドレス帳',
@@ -580,6 +589,13 @@ module.exports = {
       subtitle: 'ウォレットに名前を付ける',
       title: '新しいウォレットの追加',
       walletType: 'ウォレットタイプ',
+    },
+    confirmSeed: {
+      header: 'Confirm seed phrase',
+      title: 'バックアップ・フレーズを確認する',
+      description: 'バックアップを確認するには、正しい順序で単語をクリックしてください。',
+      button: 'Confirm',
+      error: 'The seed phrase order is incorrect.',
     },
     addSuccess: {
       description:

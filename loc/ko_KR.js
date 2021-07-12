@@ -221,6 +221,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       '사용자 인증기를 생성하는 동안 잠시만 기다려 주십시오.\n시간이 다소 소요될 수 있습니다.',
     creatingWallet: '사용자 지갑 생성 중',
+    creatingWalletSuccess: 'You have successfully created your wallet.',
     creatingWalletDescription: '사용자 지갑을 생성하는 동안 잠시만 기다려 주십시오.\n시간이 다소 소요될 수 있습니다.',
     generateAddressesError: '주소를 생성할 수 없습니다',
     hooray: '만세!',
@@ -452,6 +453,7 @@ module.exports = {
   settings: {
     about: '소개',
     terms: '이용약관',
+    factoryReset: '공장 초기화',
     aboutUs: '회사 소개',
     advancedOptions: '고급 옵션',
     Biometrics: '생체 인식 허용',
@@ -466,6 +468,13 @@ module.exports = {
     notSupportedFingerPrint: '사용자 장치가 지문 인식을 지원하지 않습니다.',
     security: '보안',
     TouchID: '지문 인식 허용',
+    factory: {
+      title: '공장 초기화',
+      text:
+        'Gold Wallet을 공장 초기화 하시겠습니까? 사용자의 모든 지갑과 데이터가 모두 삭제됩니다. 사용자의 지갑을 전부 다시 가져와야 한다는 것을 명심하십시오.',
+      noButton: '아니요',
+      yesButton: '네',
+    },
   },
   tabNavigator: {
     addressBook: '주소록',
@@ -576,6 +585,13 @@ module.exports = {
       subtitle: '지갑 이름 설정',
       title: '새로운 지갑 추가',
       walletType: '지갑 유형',
+    },
+    confirmSeed: {
+      header: 'Confirm seed phrase',
+      title: '백업 문구를 확인하십시오',
+      description: '올바른 순서대로 단어를 클릭하여 사용자 백업을 확인하십시오.',
+      button: 'Confirm',
+      error: 'The seed phrase order is incorrect.',
     },
     addSuccess: {
       description: '이 시드 문구를 안전한 곳에 적어두십시오. 지갑을 복구해야 할 경우를 대비한 백업입니다.',
