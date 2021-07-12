@@ -1,7 +1,9 @@
 apply plugin: "com.android.application"
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
-
+crashlytics {
+  enableNdk true
+}
 import com.android.build.OutputFile
 
 project.ext.envConfigFiles = [
