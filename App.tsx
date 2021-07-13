@@ -22,7 +22,7 @@ LogBox.ignoreAllLogs(process.env.LOG_BOX_IGNORE === 'true');
 if (!__DEV__) {
   Sentry.init({
     dsn: config.sentryDsn,
-    debug: config.environment !== 'production',
+    debug: config.environment === 'dev',
     environment: config.environment,
   });
 }
