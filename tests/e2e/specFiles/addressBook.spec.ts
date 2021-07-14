@@ -50,7 +50,7 @@ describe('Address book', () => {
       it('should be possible to create a new contact by typing address manually', async () => {
         await app.addressBook.contactsScreen.tapOnCreateButton();
         await app.addressBook.newContact.addNewContactScreen.typeName(`Heisenberg`);
-        await app.addressBook.newContact.addNewContactScreen.typeAddress('2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+        await app.addressBook.newContact.addNewContactScreen.typeAddress('2NA5kx7ztNhCBVogN2kLtNPBMXA3fdkX2Cc');
         await app.addressBook.newContact.addNewContactScreen.submit();
         await expect(app.addressBook.newContact.successScreen.icon).toBeVisible();
       });
@@ -83,7 +83,7 @@ describe('Address book', () => {
     const contactName = 'Heisenberg';
 
     beforeEach(async () => {
-      await createNewContact(contactName, '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+      await createNewContact(contactName, '2NA5kx7ztNhCBVogN2kLtNPBMXA3fdkX2Cc');
       await app.addressBook.contactsScreen.tapOnContact('Heisenberg');
     });
 
