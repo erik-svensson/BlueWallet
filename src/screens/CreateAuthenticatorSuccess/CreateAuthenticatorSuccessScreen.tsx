@@ -56,7 +56,7 @@ class CreateAuthenticatorSuccessScreen extends Component<Props> {
       >
         <Text style={styles.subtitle}>{i18n.authenticators.add.successTitle}</Text>
         <Text style={styles.description}>{i18n.authenticators.add.successDescription}</Text>
-        <Mnemonic mnemonic={authenticator.secret} />
+        <Mnemonic mnemonic={authenticator.secret} testID="authenticator-mnemonic" />
       </ScreenTemplate>
     );
   }

@@ -1,5 +1,5 @@
 /** A set of functions being a wrapper on the Detox's native methods to make developing tests even easier */
-import Detox, { by, device, waitFor } from 'detox';
+import Detox, { by, waitFor } from 'detox';
 
 import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers/consts';
 
@@ -11,6 +11,8 @@ interface TypeTextOptions {
 interface ScrollToElementOptions {
   pixels: number;
   direction: Detox.Direction;
+  startX: number;
+  startY: number;
 }
 
 const Actions = () => {
@@ -27,17 +29,11 @@ const Actions = () => {
       await target.clearText();
     }
 
-    await target.typeText(text);
-
     if (options?.closeKeyboard) {
-      if (device.getPlatform() === 'android') {
-        await device.pressBack();
-      }
-
-      if (device.getPlatform() === 'ios') {
-        await target.tapReturnKey();
-      }
+      text = `${text}\n`;
     }
+
+    await target.typeText(text);
   };
 
   /** Pastes the whole string without typing. Use only during non-user behaviour testing. */
@@ -48,17 +44,11 @@ const Actions = () => {
       await target.clearText();
     }
 
-    await target.replaceText(text);
-
     if (options?.closeKeyboard) {
-      if (device.getPlatform() === 'android') {
-        await device.pressBack();
-      }
-
-      if (device.getPlatform() === 'ios') {
-        await target.tapReturnKey();
-      }
+      text = `${text}\n`;
     }
+
+    await target.replaceText(text);
   };
 
   const tap = async (target: Detox.DetoxAny) => {
@@ -71,13 +61,17 @@ const Actions = () => {
     await target.multiTap(times);
   };
 
-  const scrollToElement = async (target: Detox.DetoxAny, scrollable: string, options?: ScrollToElementOptions) => {
-    const { pixels, direction } = options || { pixels: 100, direction: 'down' };
+  const scrollToElement = async (
+    target: Detox.DetoxAny,
+    scrollable: string,
+    options?: Partial<ScrollToElementOptions>,
+  ) => {
+    const { pixels = 100, direction = 'down', startX = NaN, startY = NaN } = options ?? {};
 
     await waitFor(target)
       .toBeVisible()
       .whileElement(by.id(scrollable))
-      .scroll(pixels, direction);
+      .scroll(pixels, direction, startX, startY);
   };
 
   const swipeCarousel = async (carousel: Detox.DetoxAny, direction: 'left' | 'right') => {

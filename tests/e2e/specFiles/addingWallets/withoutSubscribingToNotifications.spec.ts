@@ -1,4 +1,4 @@
-import { waitFor } from 'detox';
+import { expect, waitFor } from 'detox';
 
 import { ECDSA_KEYS, WALLETS } from '../../helpers/consts';
 import { isBeta } from '../../helpers/utils';
@@ -16,9 +16,11 @@ describe('Adding wallet', () => {
     describe('Create', () => {
       describe('@android @ios @smoke', () => {
         it('should be possible to create a new 3-Key Vault wallet', async () => {
+          const walletName = 'My Wallet';
+
           await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
 
-          await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
+          await app.wallets.addNewWallet.createScreen.typeName(walletName);
           await app.wallets.addNewWallet.createScreen.chooseType('3-Key Vault');
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
@@ -28,12 +30,10 @@ describe('Adding wallet', () => {
           await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY);
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
-
+          await app.wallets.addNewWallet.successScreen.waitUntilDisplayed();
           await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
       });
 
@@ -116,13 +116,15 @@ describe('Adding wallet', () => {
     describe('Import', () => {
       describe('@android @ios @smoke', () => {
         it('should be possible to import an existing 3-Key Vault wallet by typing seed phrase', async () => {
+          const walletName = 'My Imported Wallet';
+
           await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
           await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('3-Key Vault');
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
-          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
+          await app.wallets.importWallet.importScreen.typeName(walletName);
           await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['3-Key Vault'].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
@@ -137,9 +139,8 @@ describe('Adding wallet', () => {
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
           await app.wallets.importWallet.successScreen.close();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
       });
 

@@ -78,3 +78,5 @@ sourcemap.android.js
 # Gmail API
 credentials.json
 token.json
+
+*.vim

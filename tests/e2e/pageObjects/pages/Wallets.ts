@@ -1,4 +1,4 @@
-import { by, element } from 'detox';
+import { by, element, waitFor } from 'detox';
 
 import actions from '../../actions';
 import MessageScreen from '../common/MessageScreen';
@@ -62,6 +62,12 @@ const Wallets = () => {
 
       async tapOnCloseButton() {
         await actions.tap(this.closeButton);
+      },
+
+      async waitUntilDisplayed(timeout = 120 * 1000) {
+        await waitFor(this.mnemonic)
+          .toBeVisible()
+          .withTimeout(timeout);
       },
     });
 

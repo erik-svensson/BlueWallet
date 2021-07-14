@@ -111,6 +111,14 @@ const Dashboard = () => {
     async scrollToCancelButton() {
       await actions.scrollToElement(this.cancelButton, this.self, { pixels: 200, direction: 'up' });
     },
+
+    async scrollToWallet(walletName: string) {
+      await actions.scrollToElement(this.getWalletCardElement(walletName), this.self, {
+        pixels: 200,
+        direction: 'down',
+        startY: 0.5,
+      });
+    },
   });
 
   return { dashboardScreen: DashboardScreen() };
