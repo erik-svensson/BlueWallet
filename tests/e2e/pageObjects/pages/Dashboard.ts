@@ -82,7 +82,7 @@ const Dashboard = () => {
       await actions.tap(this.getTransactionElement(transaction));
     },
 
-    async scrollTo(element: Detox.DetoxAny) {
+    async scrollTo(element: Detox.IndexableNativeElement) {
       await actions.scrollToElement(element, this.self);
     },
 
