@@ -221,7 +221,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       '認証システムを生成しています。しばらくお待ちください。\n時間がかかる場合があります。',
     creatingWallet: 'ウォレットを生成中です。',
-    creatingWalletSuccess: 'You have successfully created your wallet.',
+    creatingWalletSuccess: 'ウォレットの作成が完了しました。',
     creatingWalletDescription: 'ウォレットの生成には時間がかかる場合がありますので、\n しばらくお待ちください。',
     generateAddressesError: 'アドレスを生成できません',
     hooray: 'おめでとうございます!',
@@ -591,11 +591,11 @@ module.exports = {
       walletType: 'ウォレットタイプ',
     },
     confirmSeed: {
-      header: 'Confirm seed phrase',
+      header: 'シードフレーズを確認',
       title: 'バックアップ・フレーズを確認する',
       description: 'バックアップを確認するには、正しい順序で単語をクリックしてください。',
-      button: 'Confirm',
-      error: 'The seed phrase order is incorrect.',
+      button: '確認',
+      error: 'シードフレーズの順番が正しくありません。',
     },
     addSuccess: {
       description:

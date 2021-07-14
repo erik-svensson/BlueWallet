@@ -225,7 +225,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       'Mohon bersabar sembari kami menyiapkan autentikator Anda. Proses ini dapat memakan waktu.',
     creatingWallet: 'Menyiapkan dompet Anda',
-    creatingWalletSuccess: 'You have successfully created your wallet.',
+    creatingWalletSuccess: 'Dompet Anda telah berhasil dibuat.',
     creatingWalletDescription: 'Mohon bersabar sembari kami menyiapkan dompet Anda. Proses ini dapat memakan waktu.',
     generateAddressesError: 'Alamat tidak dapat dibuat ',
     hooray: 'Hore!',
@@ -607,12 +607,12 @@ module.exports = {
       walletType: 'Tipe dompet',
     },
     confirmSeed: {
-      header: 'Confirm seed phrase',
+      header: 'Konfirmasi Frasa Benih',
       title: 'Konfirmasi frase cadangan',
       description:
         'Klik kata-kata yang ditunjukkan dengan urutan yang tepat untuk mengkonfirmasi data cadangan/backup Anda.',
-      button: 'Confirm',
-      error: 'The seed phrase order is incorrect.',
+      button: 'Konfirmasi',
+      error: 'Urutan frasa benih salah',
     },
     addSuccess: {
       description:

@@ -225,7 +225,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       'Por favor, tenga paciencia mientras creamos su autentificador.\n Puede tardar un poco. ',
     creatingWallet: 'Creando su monedero ',
-    creatingWalletSuccess: 'You have successfully created your wallet.',
+    creatingWalletSuccess: 'Ha creado correctamente su billetera.',
     creatingWalletDescription: 'Por favor, tenga paciencia mientras creamos su monedero.\n Puede tardar un poco.',
     generateAddressesError: 'No se pueden generar direcciones ',
     hooray: '¡Hurra! ',
@@ -610,11 +610,11 @@ module.exports = {
       walletType: 'Tipo de monedero ',
     },
     confirmSeed: {
-      header: 'Confirm seed phrase',
+      header: 'Confirmar frase semilla',
       title: 'Confirme la frase de respaldo',
       description: 'Pulse las palabras en el orden correcto para confirmar su respaldo de seguridad.',
-      button: 'Confirm',
-      error: 'The seed phrase order is incorrect.',
+      button: 'Confirmar',
+      error: 'El orden de la frase semilla es incorrecto.',
     },
     addSuccess: {
       description:

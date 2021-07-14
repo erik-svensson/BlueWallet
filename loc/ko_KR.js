@@ -221,7 +221,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       '사용자 인증기를 생성하는 동안 잠시만 기다려 주십시오.\n시간이 다소 소요될 수 있습니다.',
     creatingWallet: '사용자 지갑 생성 중',
-    creatingWalletSuccess: 'You have successfully created your wallet.',
+    creatingWalletSuccess: '지갑을 성공적으로 생성되었습니다.',
     creatingWalletDescription: '사용자 지갑을 생성하는 동안 잠시만 기다려 주십시오.\n시간이 다소 소요될 수 있습니다.',
     generateAddressesError: '주소를 생성할 수 없습니다',
     hooray: '만세!',
@@ -587,11 +587,11 @@ module.exports = {
       walletType: '지갑 유형',
     },
     confirmSeed: {
-      header: 'Confirm seed phrase',
+      header: '시드 문구 확인',
       title: '백업 문구를 확인하십시오',
       description: '올바른 순서대로 단어를 클릭하여 사용자 백업을 확인하십시오.',
-      button: 'Confirm',
-      error: 'The seed phrase order is incorrect.',
+      button: '확인',
+      error: '시드 문구 순서가 올바르지 않습니다.',
     },
     addSuccess: {
       description: '이 시드 문구를 안전한 곳에 적어두십시오. 지갑을 복구해야 할 경우를 대비한 백업입니다.',

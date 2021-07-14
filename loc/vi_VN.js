@@ -224,7 +224,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       'Xin hãy kiên nhẫn trong khi chúng tôi tạo ra xác thực cho bạn.\nNó có thể mất một thời gian.',
     creatingWallet: 'Tạo ví của bạn',
-    creatingWalletSuccess: 'You have successfully created your wallet.',
+    creatingWalletSuccess: 'Bạn đã tạo ví thành công. ',
     creatingWalletDescription: 'Xin hãy kiên nhẫn trong khi chúng tôi tạo ví cho bạn.\nNó có thể mất một thời gian.',
     generateAddressesError: 'không thể tạo địa chỉ',
     hooray: 'Hoan hô!',
@@ -598,11 +598,11 @@ module.exports = {
       walletType: 'Loại Ví',
     },
     confirmSeed: {
-      header: 'Confirm seed phrase',
+      header: 'Xác nhận cụm từ hạt giống',
       title: 'Xác nhận giai đoạn sao lưu',
       description: 'Nhấp chọn các từ theo đúng thứ tự để xác nhận bản sao lưu của bạn.',
-      button: 'Confirm',
-      error: 'The seed phrase order is incorrect.',
+      button: 'Xác nhận',
+      error: 'Thứ tự của cụm từ hạt giống không chính xác.',
     },
     addSuccess: {
       description:

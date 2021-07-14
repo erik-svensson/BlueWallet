@@ -223,7 +223,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       'Kimlik doğrulayıcınız \noluşturulurken lütfen bekleyin. \nBu biraz zaman alabilir.',
     creatingWallet: 'Cüzdanınız oluşturuluyor',
-    creatingWalletSuccess: 'You have successfully created your wallet.',
+    creatingWalletSuccess: 'Cüzdanınızı başarıyla oluşturdunuz.',
     creatingWalletDescription: 'Cüzdanınız oluşturulurken lütfen\nbekleyin. Bu biraz zaman alabilir.',
     generateAddressesError: 'Adresler oluşturulamadı',
     hooray: 'İşte bu!',
@@ -597,11 +597,11 @@ module.exports = {
       walletType: 'Cüzdan türü',
     },
     confirmSeed: {
-      header: 'Confirm seed phrase',
+      header: 'Anahtar kelime dizisini onayla',
       title: 'Yedek kelime dizisini onaylayın',
       description: 'Yedeklemeyi onaylamak için kelimelere doğru sırada tıklayın',
-      button: 'Confirm',
-      error: 'The seed phrase order is incorrect.',
+      button: 'Onayla',
+      error: 'Anahtar kelime dizisinin sırası yanlış.',
     },
     addSuccess: {
       description:

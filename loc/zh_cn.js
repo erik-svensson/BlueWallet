@@ -215,7 +215,7 @@ module.exports = {
     creatingAuthenticator: '创建您的身份验证器',
     creatingAuthenticatorDescription: '在创建您的身份验证器时，请耐心等待。可能要花一点时间。',
     creatingWallet: '创建您的钱包',
-    creatingWalletSuccess: 'You have successfully created your wallet.',
+    creatingWalletSuccess: '您已成功创建您的钱包。',
     creatingWalletDescription: '在创建您的钱包时，请耐心等待。\n可能要花一点时间。',
     generateAddressesError: '无法生成地址',
     hooray: '太棒啦！',
@@ -573,11 +573,11 @@ module.exports = {
       walletType: '钱包类型',
     },
     confirmSeed: {
-      header: 'Confirm seed phrase',
+      header: '确认密语种子',
       title: '确认备份短语',
       description: '按正确顺序单击单词以确认您的备份。',
-      button: 'Confirm',
-      error: 'The seed phrase order is incorrect.',
+      button: '确认',
+      error: '密语种子顺序不正确。',
     },
     addSuccess: {
       description: '在安全的地方写下这个种子短语。 如果您需要恢复钱包，这是您的备份。',
