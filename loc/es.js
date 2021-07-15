@@ -491,8 +491,8 @@ module.exports = {
       title: 'Restablecer la configuración de fábrica',
       text:
         '¿Está seguro de que quiere restaurar Gold Wallet a su configuración de fábrica? Todos tus monederos y datos serán borrados. Recuerde que tendrá que importar sus monederos de nuevo.',
-      noButton: 'No ',
-      yesButton: 'Sí ',
+      noButton: 'No',
+      yesButton: 'Sí',
     },
   },
   tabNavigator: {
