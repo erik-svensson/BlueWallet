@@ -175,6 +175,7 @@ export enum Route {
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   UpdateEmailNotification = 'UpdateEmailNotification',
+  SeedPhraseConfirm = 'SeedPhraseConfirm',
 }
 
 /** Only for strongly typed RadioButton's values in ImportWalletChooseTypeScreen */
@@ -272,6 +273,11 @@ export interface InfoContainerContent {
   description?: string;
   onInit?: () => void;
   onCodeConfirm?: () => void;
+}
+
+export interface WordWithKey {
+  word: string;
+  key: string;
 }
 
 export interface Transaction {
@@ -516,7 +522,7 @@ export type RootStackParams = {
   };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
-  [Route.CreateWalletSuccess]: { secret: string; onButtonPress?: () => void };
+  [Route.CreateWalletSuccess]: { secret: string; handleNavigationSubscription?: () => void };
   [Route.IntegrateKey]: {
     onBarCodeScan: (text: string) => void;
     title: string;
@@ -525,7 +531,7 @@ export type RootStackParams = {
     headerTitle?: string;
     onBackArrow?: () => void;
   };
-  [Route.ImportWalletChooseType]: undefined;
+  [Route.ImportWalletChooseType]: { error?: boolean };
   [Route.ChunkedQrCode]: {
     chunkNo: string;
     chunksQuantity: string;
@@ -548,6 +554,7 @@ export type RootStackParams = {
     subscribedWallets: Wallet[];
     wallet: Wallet;
   };
+  [Route.SeedPhraseConfirm]: { secret: string; handleNavigationSubscription?: () => void };
 };
 
 export type DateType = Date | Dayjs;

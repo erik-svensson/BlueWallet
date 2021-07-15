@@ -215,6 +215,7 @@ module.exports = {
     creatingAuthenticator: '创建您的身份验证器',
     creatingAuthenticatorDescription: '在创建您的身份验证器时，请耐心等待。可能要花一点时间。',
     creatingWallet: '创建您的钱包',
+    creatingWalletSuccess: '您已成功创建您的钱包。',
     creatingWalletDescription: '在创建您的钱包时，请耐心等待。\n可能要花一点时间。',
     generateAddressesError: '无法生成地址',
     hooray: '太棒啦！',
@@ -437,6 +438,7 @@ module.exports = {
   settings: {
     about: '关于',
     terms: '条款和隐私',
+    factoryReset: '恢复出厂设置',
     aboutUs: '关于我们',
     advancedOptions: '高级选项',
     Biometrics: '允许生物识别',
@@ -451,6 +453,13 @@ module.exports = {
     notSupportedFingerPrint: '您的设备不支持指纹识别',
     security: '安全',
     TouchID: '允许指纹识别',
+    factory: {
+      title: '恢复出厂设置',
+      text:
+        '您确定要将 Gold Wallet 恢复到出厂设置吗？ 您的所有钱包和数据都将被删除。 温馨提示，恢复出厂设置后，您需重新导入钱包。',
+      noButton: '不',
+      yesButton: '是',
+    },
   },
   tabNavigator: {
     addressBook: '地址簿',
@@ -562,6 +571,13 @@ module.exports = {
       subtitle: '为您的钱包命名',
       title: '新增钱包',
       walletType: '钱包类型',
+    },
+    confirmSeed: {
+      header: '确认密语种子',
+      title: '确认备份短语',
+      description: '按正确顺序单击单词以确认您的备份。',
+      button: '确认',
+      error: '密语种子顺序不正确。',
     },
     addSuccess: {
       description: '在安全的地方写下这个种子短语。 如果您需要恢复钱包，这是您的备份。',

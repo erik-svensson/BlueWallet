@@ -30,8 +30,13 @@ describe('Adding wallet', () => {
           await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY);
 
-          await app.wallets.addNewWallet.successScreen.waitUntilDisplayed();
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+          const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
+
+          await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+          await app.wallets.addNewWallet.successScreen.close();
+
           await app.dashboard.dashboardScreen.scrollToWallet(walletName);
           await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
@@ -50,7 +55,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
           await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
             .toBeVisible()
             .withTimeout(20000);
@@ -65,7 +70,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
           await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
             .toBeVisible()
             .withTimeout(20000);
@@ -89,7 +94,7 @@ describe('Adding wallet', () => {
 
             await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
 
-            await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+            await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
             await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
               .toBeVisible()
               .withTimeout(20000);
@@ -104,7 +109,7 @@ describe('Adding wallet', () => {
 
             await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
 
-            await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+            await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
             await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
               .toBeVisible()
               .withTimeout(20000);

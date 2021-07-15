@@ -75,4 +75,6 @@ export const icons = {
   bell: require('./images/bell.png'),
   successNotification: require('./images/successNotify.png'),
   failNotification: require('./images/failNotify.png'),
+  resetFactory: require('./images/reset-factory.png'),
+  blackCross: require('./images/black-cross.png'),
 };

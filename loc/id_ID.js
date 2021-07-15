@@ -225,6 +225,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       'Mohon bersabar sembari kami menyiapkan autentikator Anda. Proses ini dapat memakan waktu.',
     creatingWallet: 'Menyiapkan dompet Anda',
+    creatingWalletSuccess: 'Dompet Anda telah berhasil dibuat.',
     creatingWalletDescription: 'Mohon bersabar sembari kami menyiapkan dompet Anda. Proses ini dapat memakan waktu.',
     generateAddressesError: 'Alamat tidak dapat dibuat ',
     hooray: 'Hore!',
@@ -469,6 +470,7 @@ module.exports = {
   settings: {
     about: 'Tentang',
     terms: 'Syarat dan Privasi',
+    factoryReset: 'Factory reset',
     aboutUs: 'Tentang kami',
     advancedOptions: 'Opsi Lanjutan',
     Biometrics: 'Ijinkan Biometrik',
@@ -483,6 +485,13 @@ module.exports = {
     notSupportedFingerPrint: 'Perangkat Anda tidak mendukung sidik jari',
     security: 'Keamanan',
     TouchID: 'Izinkan Sidik Jadi',
+    factory: {
+      title: 'Factory reset',
+      text:
+        'Apakah Anda benar-benar ingin memulihkan Gold Wallet ke pengaturan awal? Semua dompet dan data Anda akan dihapus. Mohon diingat bahwa Anda harus mengimpor dompet Anda dari awal.',
+      noButton: 'Tidak',
+      yesButton: 'Ya',
+    },
   },
   tabNavigator: {
     addressBook: 'Buku Alamat',
@@ -596,6 +605,14 @@ module.exports = {
       subtitle: 'Nama dompet Anda ',
       title: 'Tambahkan dompet baru',
       walletType: 'Tipe dompet',
+    },
+    confirmSeed: {
+      header: 'Konfirmasi Frasa Benih',
+      title: 'Konfirmasi frase cadangan',
+      description:
+        'Klik kata-kata yang ditunjukkan dengan urutan yang tepat untuk mengkonfirmasi data cadangan/backup Anda.',
+      button: 'Konfirmasi',
+      error: 'Urutan frasa benih salah',
     },
     addSuccess: {
       description:
