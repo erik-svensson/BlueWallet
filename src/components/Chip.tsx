@@ -12,13 +12,16 @@ interface Props {
   textStyle?: StyleProp<TextStyle>;
   containerStyle?: StyleProp<ViewStyle>;
   removable?: boolean;
+  testID?: string;
 }
 
 export class Chip extends React.PureComponent<Props> {
   render() {
     return (
       <View style={[styles.container, this.props.containerStyle]}>
-        <Text style={[styles.label, this.props.textStyle]}>{this.props.label}</Text>
+        <Text style={[styles.label, this.props.textStyle]} testID={this.props.testID}>
+          {this.props.label}
+        </Text>
         {this.props.removable && <Image source={icons.blackCross} style={styles.icon} />}
       </View>
     );

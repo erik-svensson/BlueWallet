@@ -37,7 +37,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
           await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
           const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
@@ -64,7 +64,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
           await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
           const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
@@ -86,7 +86,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
           await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
           const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
