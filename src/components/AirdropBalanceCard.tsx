@@ -43,6 +43,8 @@ const styles = StyleSheet.create({
     ...typography.headline5,
     textAlign: 'center',
     color: palette.textSecondary,
+    paddingRight: 10,
+    paddingLeft: 10,
   },
   yourBalanceText: {
     fontSize: 11,

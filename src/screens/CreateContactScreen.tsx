@@ -55,10 +55,12 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   }
 
   get canCreateContact(): boolean {
-    return !!this.state.address && !!this.state.name;
+    return !!this.state.address.value && !!this.state.name.value && !this.state.name.error && !this.state.address.error;
   }
 
-  setName = (value: string): void => this.setState({ name: { value, error: '' } });
+  setName = (value: string): void => {
+    this.setState({ name: { value, error: this.validateName(value.trim()) } });
+  };
 
   setAddress = (value: string): void => this.setState({ address: { value, error: '' } });
 
@@ -107,14 +109,9 @@ export class CreateContactScreen extends React.PureComponent<Props, State> {
   };
 
   validateName = (value: string) => {
-    if (value.match(/[!@#$%^&*()\[\]\\\/,.?":{}|<>]/g)?.length) {
+    if (value.match(/[@'|"“”‘|’„”,.;]/g)?.length) {
       return i18n.contactCreate.nameCannotContainSpecialCharactersError;
     }
-
-    if (!value.match(/\w/)?.length) {
-      return i18n.contactCreate.nameMissingAlphanumericCharacterError;
-    }
-
     return '';
   };
 

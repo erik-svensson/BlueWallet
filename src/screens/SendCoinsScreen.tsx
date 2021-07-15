@@ -23,7 +23,7 @@ import { CONST, Route, RootStackParams, Utxo, Wallet } from 'app/consts';
 import { processAddressData } from 'app/helpers/DataProcessing';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { loadTransactionsFees } from 'app/helpers/fees';
-import { checkZero } from 'app/helpers/helpers';
+import { checkMinSatoshi, checkZero } from 'app/helpers/helpers';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { ApplicationState } from 'app/state';
 import { selectors } from 'app/state/wallets';
@@ -186,6 +186,9 @@ class SendCoinsScreen extends Component<Props, State> {
 
     const numAmount = this.toNumber(transaction.amount);
 
+    if (checkMinSatoshi(numAmount)) {
+      return i18n.send.details.amount_field_is_less_than_minSatoshi;
+    }
     if (!numAmount || numAmount <= 0) {
       return i18n.send.details.amount_field_is_not_valid;
     }
@@ -493,7 +496,7 @@ class SendCoinsScreen extends Component<Props, State> {
     return wallet.type === HDSegwitP2SHAirWallet.type;
   };
 
-  onVaultTranscationSelect = (vaultTxType: number) => {
+  onVaultTransactionSelect = (vaultTxType: number) => {
     this.setState({ vaultTxType });
   };
 
@@ -508,7 +511,7 @@ class SendCoinsScreen extends Component<Props, State> {
           subtitle={i18n.send.transaction.alertDesc}
           value={bitcoin.payments.VaultTxType.Alert}
           checked={this.state.vaultTxType === bitcoin.payments.VaultTxType.Alert}
-          onPress={this.onVaultTranscationSelect}
+          onPress={this.onVaultTransactionSelect}
         />
         <RadioButton
           testID="send-coins-secure-fast-transaction-type-radio"
@@ -516,7 +519,7 @@ class SendCoinsScreen extends Component<Props, State> {
           subtitle={i18n.send.transaction.instantDesc}
           value={bitcoin.payments.VaultTxType.Instant}
           checked={this.state.vaultTxType === bitcoin.payments.VaultTxType.Instant}
-          onPress={this.onVaultTranscationSelect}
+          onPress={this.onVaultTransactionSelect}
         />
       </View>
     );

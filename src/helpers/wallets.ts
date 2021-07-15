@@ -22,7 +22,8 @@ export const walletToAddressesGenerationBase = async (wallet: Wallet): Promise<W
   return {
     name: wallet.label,
     gap_limit: CONST.walletsDefaultGapLimit,
-    derivation_path: {},
+    address_range: CONST.walletsDefaultAddressRange,
+    derivation_path: CONST.walletsDefaultDerivationPath,
     xpub: await wallet.getXpub(),
     address_type: WALLETS_ADDRESSES_TYPES[wallet.type],
     ...(instant_public_key && { instant_public_key }),

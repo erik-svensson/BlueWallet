@@ -8,13 +8,14 @@ import { typography } from 'app/styles';
 interface Props {
   title: string;
   label: React.ReactNode;
+  testID?: string;
   onSelectPress?: () => void;
 }
 
-export const Dropdown = ({ title, label, onSelectPress }: Props) => {
+export const Dropdown = ({ title, label, testID, onSelectPress }: Props) => {
   return (
     <View style={styles.header}>
-      <TouchableOpacity style={styles.chooseWalletButton} onPress={onSelectPress}>
+      <TouchableOpacity testID={testID} style={styles.chooseWalletButton} onPress={onSelectPress}>
         <Text style={styles.chooseWalletButtonText}>{title}</Text>
         {onSelectPress && <Image source={icons.iconDropdown} style={styles.icon} />}
       </TouchableOpacity>

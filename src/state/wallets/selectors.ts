@@ -15,6 +15,7 @@ import {
 } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
 import { ApplicationState } from 'app/state';
+import { transactionNotes } from 'app/state/transactionsNotes/selectors';
 
 import logger from '../../../logger';
 import { roundBtcToSatoshis, btcToSatoshi, satoshiToBtc } from '../../../utils/bitcoin';
@@ -118,7 +119,7 @@ const getMyAmount = (wallet: Wallet, entities: TxEntity[]) =>
     return amount;
   }, 0);
 
-const getTranasctionStatus = (tx: Transaction, confirmations: number): TransactionStatus => {
+const getTransactionStatus = (tx: Transaction, confirmations: number): TransactionStatus => {
   switch (tx.tx_type) {
     case TxType.NONVAULT:
     case TxType.INSTANT:
@@ -130,7 +131,7 @@ const getTranasctionStatus = (tx: Transaction, confirmations: number): Transacti
     case TxType.ALERT_CONFIRMED:
       return TransactionStatus.DONE;
     case TxType.RECOVERY:
-      return TransactionStatus['CANCELED-DONE'];
+      return TransactionStatus.CANCELED_DONE;
     default:
       logger.error('wallets selectors', `couldn't find status for tx ${JSON.stringify(tx)}`);
       throw new Error(`Unkown tx_type: ${tx.tx_type}`);
@@ -208,7 +209,7 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
           confirmations,
           walletPreferredBalanceUnit: walletBalanceUnit,
           walletId: id,
-          status: getTranasctionStatus(transaction, confirmations),
+          status: getTransactionStatus(transaction, confirmations),
           walletLabel,
           walletTypeReadable: wallet.typeReadable,
         };
@@ -310,17 +311,21 @@ export const transactions = createSelector(wallets, electrumXSelectors.blockHeig
     .map(tx => ({ ...tx, tags: getTranasctionTags(tx) }));
 });
 
-export const getTranasctionsByWalletId = createSelector(
-  transactions,
+export const transactionsWithNotes = createSelector(transactions, transactionNotes, (transactions, notes) =>
+  transactions.map(tran => (notes[tran.hash] ? { ...tran, note: notes[tran.hash] } : tran)),
+);
+
+export const getTransactionsByWalletId = createSelector(
+  transactionsWithNotes,
   (_: WalletsState, id: string) => id,
   (txs, id) => txs.filter(t => t.walletId === id),
 );
 
-export const getRecoveryTransactions = createSelector(getTranasctionsByWalletId, txs =>
+export const getRecoveryTransactionsWithNotes = createSelector(getTransactionsByWalletId, txs =>
   txs.filter(t => t.tx_type === TxType.RECOVERY),
 );
 
-export const getAlertPendingTransactions = createSelector(getTranasctionsByWalletId, txs =>
+export const getAlertPendingTransactions = createSelector(getTransactionsByWalletId, txs =>
   txs.filter(t => t.tx_type === TxType.ALERT_PENDING),
 );
 

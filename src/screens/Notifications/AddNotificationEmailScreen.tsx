@@ -88,7 +88,7 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
     const { onSuccess } = route.params;
 
     if (!isEmail(email)) {
-      return setError(i18n.onboarding.emailValidation);
+      return setError(i18n.notifications.invalidAddressError);
     }
     if (!wallets.length) {
       return this.goToLocalEmailConfirm();

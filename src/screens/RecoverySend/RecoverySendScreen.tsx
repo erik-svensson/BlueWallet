@@ -308,6 +308,7 @@ export class RecoverySendScreen extends Component<Props, State> {
 
     return (
       <InputItem
+        testID="cancel-transaction-wallet-address-input"
         multiline
         maxLength={CONST.maxAddressLength}
         label={i18n.contactDetails.addressLabel}
@@ -337,6 +338,7 @@ export class RecoverySendScreen extends Component<Props, State> {
       <ScreenTemplate
         footer={
           <Button
+            testID="cancel-transaction-wallet-details-next-button"
             title={i18n.send.details.next}
             onPress={this.submit}
             disabled={!this.canSubmit()}
@@ -373,7 +375,7 @@ export class RecoverySendScreen extends Component<Props, State> {
             </TouchableOpacity>
           </View>
           <View style={styles.useOwnAddressContainer}>
-            <TouchableOpacity onPress={this.setCurrentWalletAddress}>
+            <TouchableOpacity testID={'use-address-of-this-wallet-item'} onPress={this.setCurrentWalletAddress}>
               <Text style={styles.useOwnAddressText}>{i18n.send.recovery.useWalletAddress}</Text>
             </TouchableOpacity>
           </View>

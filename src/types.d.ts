@@ -9,3 +9,4 @@ declare module '*.svg' {
 
   export default content;
 }
+declare module 'bip21';

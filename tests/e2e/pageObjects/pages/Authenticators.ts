@@ -125,21 +125,11 @@ const Authenticators = () => {
     };
   };
 
-  const dashboardScreen = DashboardScreen();
-  const addNewAuthenticator = AddNewAuthenticator();
-  const details = Details();
-
-  const createAuthenticator = async function(name: string) {
-    await dashboardScreen.tapOnAddButton();
-
-    await addNewAuthenticator.createScreen.typeName(name);
-    await addNewAuthenticator.createScreen.submit();
-    await addNewAuthenticator.loadingScreen.waitUntilEnded();
-    await addNewAuthenticator.publicKeyScreen.proceed();
-    await addNewAuthenticator.seedPhraseScreen.proceed();
+  return {
+    dashboardScreen: DashboardScreen(),
+    addNewAuthenticator: AddNewAuthenticator(),
+    details: Details(),
   };
-
-  return { dashboardScreen, addNewAuthenticator, details, createAuthenticator };
 };
 
 export default Authenticators;
