@@ -522,7 +522,7 @@ export type RootStackParams = {
   };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
-  [Route.CreateWalletSuccess]: { secret: string; handleNavigationSubscription?: () => void };
+  [Route.CreateWalletSuccess]: { secret: string; handleNavigationSubscription?: () => void; isP2SH?: boolean };
   [Route.IntegrateKey]: {
     onBarCodeScan: (text: string) => void;
     title: string;
