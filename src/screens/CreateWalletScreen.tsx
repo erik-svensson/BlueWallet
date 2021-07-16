@@ -142,6 +142,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
+          isP2SH: this.state.WalletClass === SegwitP2SHWallet,
           secret: w.getSecret(),
           handleNavigationSubscription: !!email ? () => this.navigateToConfirmEmailSubscription(wallet) : undefined,
         });
