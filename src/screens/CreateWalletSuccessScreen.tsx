@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { Button, Header, ScreenTemplate, Text, Mnemonic } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
+import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { palette, typography } from 'app/styles';
 
@@ -35,8 +36,20 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
     } = this.props;
 
     //TODO: till we don't know what we have to do with seed phrase for P2SH
-    if (isP2SH && handleNavigationSubscription) {
-      handleNavigationSubscription();
+    if (isP2SH) {
+      if (handleNavigationSubscription) {
+        handleNavigationSubscription();
+      } else {
+        CreateMessage({
+          title: i18n.message.hooray,
+          description: i18n.message.creatingWalletSuccess,
+          type: MessageType.success,
+          buttonProps: {
+            title: i18n.onboarding.successCompletedButton,
+            onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+          },
+        });
+      }
     } else {
       navigation.navigate(Route.SeedPhraseConfirm, { secret, handleNavigationSubscription });
     }
