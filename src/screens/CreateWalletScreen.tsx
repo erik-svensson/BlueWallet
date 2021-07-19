@@ -129,7 +129,16 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           onResend: () => this.props.subscribe([wallet], email),
         });
       },
-      onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+      onBack: () =>
+        CreateMessage({
+          title: i18n.message.hooray,
+          description: i18n.message.creatingWalletSuccess,
+          type: MessageType.success,
+          buttonProps: {
+            title: i18n.onboarding.successCompletedButton,
+            onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+          },
+        }),
       isBackArrow: false,
     });
   };
