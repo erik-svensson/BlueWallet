@@ -65,6 +65,7 @@ ios/Pods/
 # Testing
 coverage
 artifacts
+.dccache
 
 # Sentry
 sentry.properties
