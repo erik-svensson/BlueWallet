@@ -43,8 +43,12 @@ const createWallet = async (options: CreateWalletOptions) => {
     await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
   }
 
-  await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
-  await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+  await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+  const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
+
+  await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+  await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+  await app.wallets.addNewWallet.successScreen.close();
 
   if (emailAddress) {
     await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
@@ -101,7 +105,6 @@ const createAuthenticator = async (name: string) => {
 
   await app.authenticators.addNewAuthenticator.createScreen.typeName(name);
   await app.authenticators.addNewAuthenticator.createScreen.submit();
-  await app.authenticators.addNewAuthenticator.loadingScreen.waitUntilEnded();
   await app.authenticators.addNewAuthenticator.publicKeyScreen.proceed();
   await app.authenticators.addNewAuthenticator.seedPhraseScreen.proceed();
 };

@@ -9,7 +9,7 @@ import { SupportedLanguage } from '../pageObjects/pages/settings/LanguageScreen'
 import steps from '../steps';
 
 describe('Settings', () => {
-  describe.skip('General', () => {
+  describe('General', () => {
     beforeEach(async () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());
       await app.developerRoom.tapOnSkipOnboardingButton();
@@ -23,7 +23,7 @@ describe('Settings', () => {
       });
     });
 
-    describe('@regression', () => {
+    describe.skip('@regression', () => {
       describe('@android @ios', () => {
         it('should be possible to turn on advanced options', async () => {
           await app.settings.settingsScreen.tapOnAdvancedOptions();

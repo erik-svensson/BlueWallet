@@ -82,7 +82,7 @@ const Dashboard = () => {
       await actions.tap(this.getTransactionElement(transaction));
     },
 
-    async scrollTo(element: Detox.DetoxAny) {
+    async scrollTo(element: Detox.IndexableNativeElement) {
       await actions.scrollToElement(element, this.self);
     },
 
@@ -110,6 +110,14 @@ const Dashboard = () => {
 
     async scrollToCancelButton() {
       await actions.scrollToElement(this.cancelButton, this.self, { pixels: 200, direction: 'up' });
+    },
+
+    async scrollToWallet(walletName: string) {
+      await actions.scrollToElement(this.getWalletCardElement(walletName), this.self, {
+        pixels: 200,
+        direction: 'down',
+        startY: 0.5,
+      });
     },
   });
 

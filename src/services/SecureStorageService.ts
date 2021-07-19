@@ -26,4 +26,8 @@ export default class SecureStorageService {
 
     return sha256(value).toString() === securedStoredPassword;
   }
+
+  async removeSecuredPassword(key: string) {
+    return await RNSecureKeyStore.remove(key);
+  }
 }

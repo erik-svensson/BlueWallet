@@ -12,7 +12,7 @@ export const Mnemonic = ({ mnemonic, testID }: Props) => (
   <View testID={testID} style={styles.mnemonicPhraseContainer}>
     {mnemonic.split(' ').map((word, index) => (
       <View style={styles.chipContainer} key={index + word}>
-        <Chip label={`${index + 1}. ${word}`} />
+        <Chip label={`${index + 1}. ${word}`} testID={`mnemonic-word-${index}`} />
       </View>
     ))}
   </View>

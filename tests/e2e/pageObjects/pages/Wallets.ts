@@ -1,6 +1,7 @@
-import { by, element } from 'detox';
+import { by, element, waitFor } from 'detox';
 
 import actions from '../../actions';
+import ConfirmSeedScreen from '../common/ConfirmSeedScreen';
 import MessageScreen from '../common/MessageScreen';
 import ScanQrCodeScreen from '../common/ScanQrCodeScreen';
 import { BasicWalletType, WalletType } from '../types';
@@ -56,12 +57,28 @@ const Wallets = () => {
       },
     });
 
-    const SuccessScreen = () => ({
+    const SeedScreen = () => ({
       closeButton: element(by.id('create-wallet-close-button')),
       mnemonic: element(by.id('create-wallet-mnemonic')),
+      mnemonicWord: (index: number) => element(by.id(`mnemonic-word-${index}`)),
 
       async tapOnCloseButton() {
         await actions.tap(this.closeButton);
+      },
+
+      async waitUntilDisplayed(timeout = 120 * 1000) {
+        await waitFor(this.mnemonic)
+          .toBeVisible()
+          .withTimeout(timeout);
+      },
+
+      async getSeed() {
+        const getWord = (index: number) => actions.getElementsText(this.mnemonicWord(index));
+        const indexes = [...Array(12).keys()];
+        const seed = await Promise.all(indexes.map(getWord));
+        const removedKeys = seed.map(s => s.match(/[a-z]+/)!.toString());
+
+        return removedKeys;
       },
     });
 
@@ -71,7 +88,9 @@ const Wallets = () => {
       addCancelKeyScreen: AddCancelKeyScreen(),
       scanQrCodeScreen: ScanQrCodeScreen(),
       loadingScreen: MessageScreen('processingState'),
-      successScreen: SuccessScreen(),
+      seedScreen: SeedScreen(),
+      confirmSeedScreen: ConfirmSeedScreen(),
+      successScreen: MessageScreen('success'),
     };
   };
 

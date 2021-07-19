@@ -224,6 +224,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       'Xin hãy kiên nhẫn trong khi chúng tôi tạo ra xác thực cho bạn.\nNó có thể mất một thời gian.',
     creatingWallet: 'Tạo ví của bạn',
+    creatingWalletSuccess: 'Bạn đã tạo ví thành công. ',
     creatingWalletDescription: 'Xin hãy kiên nhẫn trong khi chúng tôi tạo ví cho bạn.\nNó có thể mất một thời gian.',
     generateAddressesError: 'không thể tạo địa chỉ',
     hooray: 'Hoan hô!',
@@ -461,6 +462,7 @@ module.exports = {
   settings: {
     about: 'Trong khoảng',
     terms: 'Điều khoản & Bảo mật',
+    factoryReset: 'Khôi phục cài đặt gốc',
     aboutUs: 'Về chúng tôi',
     advancedOptions: 'tùy chọn nâng cao',
     Biometrics: 'cho phép sinh trắc học',
@@ -475,6 +477,13 @@ module.exports = {
     notSupportedFingerPrint: 'Điện thoại của bạn không hỗ trợ dấu vân tay',
     security: 'Bảo vệ',
     TouchID: 'Cho phép vân tay',
+    factory: {
+      title: 'Khôi phục cài đặt gốc',
+      text:
+        'Bạn có chắc chắn muốn khôi phục Gold Wallet về cài đặt gốc? Tất cả thông tin ví và dữ liệu của bạn sẽ bị xoá. Hãy nhớ rằng bạn sẽ phải nhập ví của mình lại từ đầu.',
+      noButton: 'Không',
+      yesButton: 'Đúng',
+    },
   },
   tabNavigator: {
     addressBook: 'Sổ địa chỉ',
@@ -587,6 +596,13 @@ module.exports = {
       subtitle: 'Đặt tên cho ví của bạn',
       title: 'Thêm ví mới',
       walletType: 'Loại Ví',
+    },
+    confirmSeed: {
+      header: 'Xác nhận cụm từ hạt giống',
+      title: 'Xác nhận giai đoạn sao lưu',
+      description: 'Nhấp chọn các từ theo đúng thứ tự để xác nhận bản sao lưu của bạn.',
+      button: 'Xác nhận',
+      error: 'Thứ tự của cụm từ hạt giống không chính xác.',
     },
     addSuccess: {
       description:

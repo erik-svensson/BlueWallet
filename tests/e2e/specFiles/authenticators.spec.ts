@@ -37,7 +37,7 @@ describe('Authenticators', () => {
         await app.authenticators.addNewAuthenticator.createScreen.typeName('My Auth');
         await app.authenticators.addNewAuthenticator.createScreen.submit();
         await app.authenticators.addNewAuthenticator.publicKeyScreen.proceed();
-        await app.authenticators.addNewAuthenticator.loadingScreen.waitUntilEnded();
+        await app.authenticators.addNewAuthenticator.seedPhraseScreen.waitUntilDisplayed();
         await app.authenticators.addNewAuthenticator.seedPhraseScreen.proceed();
       });
     });
