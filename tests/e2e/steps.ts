@@ -113,7 +113,14 @@ async function importWallet(options: ImportWalletOptions) {
   await app.wallets.importWallet.successScreen.close();
 
   if (emailAddress) {
-    // TODO: Finish this part later on.
+    await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
+
+    const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+
+    await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
+    await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
+
+    await app.wallets.subscribeToEmailNotifications.successScreen.close();
   }
 }
 
