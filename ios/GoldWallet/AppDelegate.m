@@ -5,6 +5,7 @@
 #import <React/RCTLinkingManager.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <React/RCTBridge.h>
 #import <Firebase.h>
 #import "RNBootSplash.h"
 #import "ReactNativeConfig.h"
@@ -20,15 +21,11 @@
    }
   
   [FIRMessaging messaging].autoInitEnabled = YES;
-  NSURL *jsCodeLocation;
 
-  jsCodeLocation = [CodePush bundleURL];
-
-
-  RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
+  RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
+  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                       moduleName:[ReactNativeConfig envFor:@"APPLICATION_NAME"]
-                                               initialProperties:nil
-                                                   launchOptions:launchOptions];
+                                               initialProperties:nil];
   rootView.backgroundColor = [UIColor whiteColor];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -94,5 +91,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   [RNCPushNotificationIOS didReceiveNotificationResponse:response];
 }
 
+- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
+{
+  #if DEBUG
+    return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+  #else
+    return [CodePush bundleURL];
+  #endif
+}
 
 @end
