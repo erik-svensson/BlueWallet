@@ -111,7 +111,7 @@ const Actions = () => {
       await waitFor(target)
         .toBeVisible()
         .whileElement(by.id(scrollable))
-        .scroll(pixels, 'down');
+        .scroll(pixels, 'down', NaN, 0.5);
 
       return;
     } catch (error) {}
@@ -120,7 +120,7 @@ const Actions = () => {
       await waitFor(target)
         .toBeVisible()
         .whileElement(by.id(scrollable))
-        .scroll(pixels, 'up');
+        .scroll(pixels, 'up', NaN, 0.5);
 
       return;
     } catch (error) {

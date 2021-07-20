@@ -23,7 +23,7 @@ describe('Adding wallet', () => {
       describe('@android @ios @smoke', () => {
         //FIX EMAIL FETCH AFTER FINAL TEMPLATE AGREED
         xit('should be possible to create a new 3-Key Vault wallet', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
           await app.wallets.addNewWallet.createScreen.chooseType('3-Key Vault');
@@ -53,7 +53,7 @@ describe('Adding wallet', () => {
 
       describe('@android @ios @regression', () => {
         it('should be possible to create a new 2-Key Vault wallet', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
           await app.wallets.addNewWallet.createScreen.chooseType('2-Key Vault');
@@ -78,7 +78,7 @@ describe('Adding wallet', () => {
         });
 
         it('should be possible to create a new Standard HD P2SH wallet', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
           await app.wallets.addNewWallet.createScreen.chooseType('Standard HD P2SH');
@@ -108,7 +108,7 @@ describe('Adding wallet', () => {
     describe.skip('Import', () => {
       describe('@android @ios @smoke', () => {
         it('should be possible to import an existing 3-Key Vault wallet', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
           await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('3-Key Vault');
@@ -135,7 +135,7 @@ describe('Adding wallet', () => {
 
       describe('@android @ios @regression', () => {
         it('should be possible to import an existing 2-Key Vault wallet', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
           await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('2-Key Vault');
@@ -157,7 +157,7 @@ describe('Adding wallet', () => {
         });
 
         it('should be possible to import an existing Standard wallet', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
           await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('Standard HD P2SH');
