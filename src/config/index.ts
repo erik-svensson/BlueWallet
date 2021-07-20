@@ -1,8 +1,6 @@
 import { alt_networks, Network } from 'bitcoinjs-lib';
 import Config from 'react-native-config';
 
-import { isIos } from 'app/styles/helpers';
-
 export default {
   environment: Config.ENVIRONMENT,
   isBeta: Config.IS_BETA === 'true',
@@ -17,5 +15,6 @@ export default {
   explorerUrl: Config.EXPLORER_URL,
   sentryDsn: Config.SENTRY_DSN,
   emailNotificationsApi: Config.EMAIL_NOTIFICATIONS_API,
-  codepushDeploymentKey: isIos() ? Config.CODEPUSH_DEPLOYMENT_KEY_IOS : Config.CODEPUSH_DEPLOYMENT_KEY_ANDROID,
+  codepushDeploymentKeyIOS: Config.CODEPUSH_DEPLOYMENT_KEY_IOS,
+  codepushDeploymentKeyAndroid: Config.CODEPUSH_DEPLOYMENT_KEY_ANDROID,
 };

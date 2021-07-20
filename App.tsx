@@ -13,6 +13,7 @@ import NotificationsServices from 'app/services/NotificationServices';
 import { AppSettingsAction } from 'app/state/appSettings/actions';
 import { AuthenticationAction } from 'app/state/authentication/actions';
 import { persistor, store } from 'app/state/store';
+import { isIos } from 'app/styles/helpers';
 
 import config from './src/config';
 
@@ -35,7 +36,7 @@ const codePushOptions = {
   minimumBackgroundDuration: 30 * 60, // 30 minutes
   updateDialog: true,
   // TODO: Fix deployment keys for ios
-  deploymentKey: config.codepushDeploymentKey,
+  deploymentKey: isIos() ? config.codepushDeploymentKeyIOS : config.codepushDeploymentKeyAndroid,
 };
 
 if (!__DEV__) {
