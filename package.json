@@ -200,6 +200,7 @@
     "react-native-tcp-socket": "^4.2.0",
     "react-native-tooltip": "git+https://github.com/marcosrdz/react-native-tooltip.git",
     "react-native-vector-icons": "6.6.0",
+    "react-native-version-number": "^0.3.6",
     "react-native-webview": "^10.10.2",
     "react-redux": "^7.2.0",
     "react-test-renderer": "16.13.1",
