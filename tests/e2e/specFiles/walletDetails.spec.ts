@@ -4,6 +4,7 @@ import { WALLETS_WITH_COINS } from '../helpers/consts';
 import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
 import steps from '../steps';
+import { WalletType } from '../types';
 
 describe('Wallet details', () => {
   const walletName = 'Scrooge McDuck wallet';
@@ -18,11 +19,11 @@ describe('Wallet details', () => {
 
   beforeEach(async () => {
     await steps.importWallet({
-      type: '3-Key Vault',
+      type: WalletType.KEY_3,
       name: walletName,
-      fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-      cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
-      seedPhrase: WALLETS_WITH_COINS['3-Key Vault'].SEED_PHRASE,
+      fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+      cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
+      seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
     });
   });
 

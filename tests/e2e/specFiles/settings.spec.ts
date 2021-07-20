@@ -7,6 +7,7 @@ import { isBeta, randomizeEmailAddress } from '../helpers/utils';
 import app from '../pageObjects';
 import { SupportedLanguage } from '../pageObjects/pages/settings/LanguageScreen';
 import steps from '../steps';
+import { WalletType } from '../types';
 
 describe('Settings', () => {
   describe('General', () => {
@@ -34,9 +35,9 @@ describe('Settings', () => {
 
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
-          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios['Standard HD P2SH']).toBeVisible();
-          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios['Standard HD SegWit']).toBeVisible();
-          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios['Standard P2SH']).toBeVisible();
+          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios[WalletType.S_HD_P2SH]).toBeVisible();
+          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios[WalletType.S_HD_SEGWIT]).toBeVisible();
+          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios[WalletType.S_P2SH]).toBeVisible();
         });
 
         it('should be possible change PIN', async () => {
@@ -157,7 +158,7 @@ describe('Settings', () => {
           const walletName = 'Goofy wallet';
 
           await steps.createWallet({
-            type: '3-Key Vault',
+            type: WalletType.KEY_3,
             name: walletName,
             fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -186,7 +187,7 @@ describe('Settings', () => {
 
         it('should be possible to add an email address and subscribe multiple wallets to notifications', async () => {
           await steps.createWallet({
-            type: '3-Key Vault',
+            type: WalletType.KEY_3,
             name: 'Main',
             fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -194,7 +195,7 @@ describe('Settings', () => {
 
           // TODO: Un-comment it once BTCV2-1515 is solved.
           // await steps.createWallet({
-          //   type: '3-Key Vault',
+          //   type: WalletType.KEY_3,
           //   name: 'Secondary',
           //   fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
           //   cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -223,7 +224,7 @@ describe('Settings', () => {
 
         it('should be possible to add an email address and without subscribing to notifications if a wallet exists', async () => {
           await steps.createWallet({
-            type: '3-Key Vault',
+            type: WalletType.KEY_3,
             name: 'Main',
             fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -329,7 +330,7 @@ describe('Settings', () => {
           const walletName = 'Goofy wallet';
 
           await steps.createWallet({
-            type: '3-Key Vault',
+            type: WalletType.KEY_3,
             name: walletName,
             fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -356,7 +357,7 @@ describe('Settings', () => {
 
         it("should be possible to remove the email address and not change the wallet's notifications", async () => {
           await steps.createWallet({
-            type: '3-Key Vault',
+            type: WalletType.KEY_3,
             name: 'Goofy wallet',
             fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -478,7 +479,7 @@ describe('Settings', () => {
             const walletName = 'Goofy wallet';
 
             await steps.createWallet({
-              type: '3-Key Vault',
+              type: WalletType.KEY_3,
               name: walletName,
               fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
               cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,

@@ -4,6 +4,7 @@ import { WALLETS_WITH_COINS } from '../../helpers/consts';
 import { isBeta } from '../../helpers/utils';
 import app from '../../pageObjects';
 import steps from '../../steps';
+import { WalletType } from '../../types';
 
 const DATA_FOR_TRANSACTIONS = {
   DEFAULT_VALUE: 'Amount',
@@ -22,10 +23,10 @@ describe('Transactions', () => {
     describe('3-Key Vault', () => {
       beforeEach(async () => {
         await steps.createWallet({
-          type: '3-Key Vault',
+          type: WalletType.KEY_3,
           name: '3-Key',
-          fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-          cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
         });
       });
 
@@ -46,10 +47,10 @@ describe('Transactions', () => {
     describe('3-Key Vault', () => {
       beforeEach(async () => {
         await steps.createWallet({
-          type: '3-Key Vault',
+          type: WalletType.KEY_3,
           name: '3-Key',
-          fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-          cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
         });
       });
 
@@ -70,9 +71,9 @@ describe('Transactions', () => {
     describe('2-Key Vault', () => {
       beforeEach(async () => {
         await steps.createWallet({
-          type: '2-Key Vault',
+          type: WalletType.KEY_2,
           name: '2-Key',
-          cancelPublicKey: WALLETS_WITH_COINS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_2].CANCEL_KEY.PUBLIC_KEY,
         });
       });
 
@@ -93,8 +94,8 @@ describe('Transactions', () => {
     describe('Standard HD P2SH', () => {
       beforeEach(async () => {
         await steps.createWallet({
-          type: 'Standard HD P2SH',
-          name: 'Standard HD P2SH',
+          type: WalletType.S_HD_P2SH,
+          name: 'P2SH',
         });
       });
 
@@ -115,8 +116,8 @@ describe('Transactions', () => {
     describe('Standard P2SH', () => {
       beforeEach(async () => {
         await steps.createWallet({
-          type: 'Standard HD P2SH',
-          name: 'Standard P2SH',
+          type: WalletType.S_HD_P2SH,
+          name: 'P2SH',
         });
       });
 
@@ -138,8 +139,8 @@ describe('Transactions', () => {
   describe('Standard HD SegWit', () => {
     beforeEach(async () => {
       await steps.createWallet({
-        type: 'Standard HD P2SH',
-        name: 'Standard HD SegWit',
+        type: WalletType.S_HD_P2SH,
+        name: 'P2SH',
       });
     });
 

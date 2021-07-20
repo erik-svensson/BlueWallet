@@ -4,6 +4,7 @@ import { expectToBeDisabled } from '../../assertions';
 import { isBeta } from '../../helpers/utils';
 import app from '../../pageObjects';
 import steps from '../../steps';
+import { WalletType } from '../../types';
 
 describe('Adding wallet', () => {
   describe('General', () => {
@@ -59,7 +60,7 @@ describe('Adding wallet', () => {
           const walletName = 'My Wallet';
 
           await steps.createWallet({
-            type: 'Standard HD P2SH',
+            type: WalletType.S_HD_P2SH,
             name: walletName,
           });
 
@@ -76,7 +77,7 @@ describe('Adding wallet', () => {
           const walletName = 'My Wallet';
 
           await steps.createWallet({
-            type: 'Standard HD P2SH',
+            type: WalletType.S_HD_P2SH,
             name: walletName,
           });
 
