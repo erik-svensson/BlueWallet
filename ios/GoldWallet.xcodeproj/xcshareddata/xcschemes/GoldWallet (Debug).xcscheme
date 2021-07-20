@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "cp &quot;${PROJECT_DIR}/../.env.dev.testnet&quot; &quot;${PROJECT_DIR}/../.env&quot;&#10;cp -r &quot;${PROJECT_DIR}/GoogleService-Info-prod.plist&quot; &quot;${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist&quot;&#10;">
+               scriptText = "cp &quot;${PROJECT_DIR}/../.env.prod.mainnet&quot; &quot;${PROJECT_DIR}/../.env&quot;&#10;cp -r &quot;${PROJECT_DIR}/GoogleService-Info-prod.plist&quot; &quot;${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist&quot;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"

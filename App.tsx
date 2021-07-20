@@ -1,9 +1,8 @@
 import * as Sentry from '@sentry/react-native';
 import React, { Component } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import { View, StyleSheet, LogBox, Platform } from 'react-native';
+import { View, StyleSheet, LogBox } from 'react-native';
 import codePush from 'react-native-code-push';
-import Config from 'react-native-config';
 import VersionNumber from 'react-native-version-number';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -36,7 +35,7 @@ const codePushOptions = {
   minimumBackgroundDuration: 30 * 60, // 30 minutes
   updateDialog: true,
   // TODO: Fix deployment keys for ios
-  deploymentKey: Platform.OS === 'ios' ? Config.CODEPUSH_DEPLOYMENT_KEY_IOS : Config.CODEPUSH_DEPLOYMENT_KEY_ANDROID,
+  deploymentKey: config.codepushDeploymentKey,
 };
 
 if (!__DEV__) {
