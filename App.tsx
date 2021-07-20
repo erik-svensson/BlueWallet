@@ -22,7 +22,6 @@ LogBox.ignoreAllLogs(process.env.LOG_BOX_IGNORE === 'true');
 if (!__DEV__) {
   Sentry.init({
     dsn: config.sentryDsn,
-    tracesSampleRate: 0.25,
     debug: config.environment === 'dev',
     environment: config.environment,
   });
