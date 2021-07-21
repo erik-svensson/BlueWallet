@@ -64,7 +64,7 @@ describe('Wallet details', () => {
       await expect(app.walletDetails.showXpubScreen.xpub).toBeVisible();
 
       await app.walletDetails.showXpubScreen.tapOnCopyButton();
-      // TODO: Add assertion
+      await app.walletDetails.showXpubScreen.checkIfCopied();
     });
 
     it('should be possible to delete the wallet', async () => {

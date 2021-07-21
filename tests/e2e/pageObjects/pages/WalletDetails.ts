@@ -1,4 +1,4 @@
-import { by, element } from 'detox';
+import { by, element, expect } from 'detox';
 
 import actions from '../../actions';
 import DeleteScreen from '../common/DeleteScreen';
@@ -52,6 +52,13 @@ const WalletDetails = () => {
 
     async tapOnCopyButton() {
       await actions.tap(this.copyButton);
+    },
+
+    async checkIfCopied() {
+      // NOTE: Proper solution would be to check device clipboard
+      // Currently not implemented in detox
+      // https://github.com/wix/detox/issues/222
+      expect(element(by.text('Copied!'))).toBeVisible();
     },
   });
 
