@@ -71,7 +71,7 @@ describe('Address book', () => {
         await app.addressBook.contactsScreen.tapOnCreateButton();
         await app.addressBook.newContact.addNewContactScreen.typeName(`Heisenberg`);
         await app.addressBook.newContact.addNewContactScreen.typeAddress('fOoBa5bAZ');
-        await app.addressBook.newContact.addNewContactScreen.submit(); // TODO: Remove it once it's fixed in the app
+        await app.addressBook.newContact.addNewContactScreen.submit();
         await waitFor(app.addressBook.newContact.addNewContactScreen.addressValidationError)
           .toBeVisible()
           .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
