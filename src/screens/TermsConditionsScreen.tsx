@@ -157,7 +157,9 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
         }
         header={<Header title={i18n.termsConditions.header} />}
       >
-        <Text style={styles.title}>{i18n.termsConditions.title}</Text>
+        <Text style={styles.title} testID="terms-and-conditions-title">
+          {i18n.termsConditions.title}
+        </Text>
         <WebView
           source={{ html: `${this.langVersion}` }}
           style={[styles.text, { height: this.state.height | 0 }]}

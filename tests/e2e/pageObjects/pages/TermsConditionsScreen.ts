@@ -1,10 +1,12 @@
 import { by, element } from 'detox';
 
 import actions from '../../actions';
+import { wait } from '../../helpers/utils';
 
 const TermsConditionsScreen = () => ({
   termsConditions: element(by.id('terms-conditions-screen')),
 
+  header: element(by.id('terms-and-conditions-title')),
   disagreeButton: element(by.id('disagree-button')),
   agreeButton: element(by.id('agree-button')),
   termsConditionsCheckbox: element(by.id('terms-and-conditions-checkbox')),
@@ -25,6 +27,15 @@ const TermsConditionsScreen = () => ({
 
   async tapOnAgreeButton() {
     await actions.tap(this.agreeButton);
+  },
+
+  // NOTE: Explicit wait cannot be avoided at the moment.
+  // the T&C content is loaded asynchronously in the WebView component
+  // and there is no possibility to wait for it to appear
+  // This should be revisited if detox implements webview operations
+  async waitUntilDisplayed() {
+    await actions.waitForElement(this.header, 20 * 1000);
+    await wait(5000);
   },
 });
 
