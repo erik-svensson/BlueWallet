@@ -47,8 +47,11 @@ describe('Settings', () => {
           await app.settings.changePin.newPinScreen.typePin('1111');
           await app.settings.changePin.confirmPinScreen.typePin('1111');
 
-          // TODO: Add more assertions
           await expect(app.settings.changePin.successScreen.icon).toBeVisible();
+          await app.settings.changePin.successScreen.close();
+          await app.settings.settingsScreen.tapOnChangePin();
+          await app.settings.changePin.currentPinScreen.typePin('1111');
+          await expect(app.settings.changePin.newPinScreen.pinInput).toBeVisible();
         });
 
         it('should display an error validation message if typed current PIN is incorrect', async () => {
