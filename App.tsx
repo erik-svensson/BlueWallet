@@ -34,7 +34,7 @@ const codePushOptions = {
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
   installMode: codePush.InstallMode.IMMEDIATE,
   minimumBackgroundDuration: 30 * 60, // 30 minutes
-  updateDialog: true,
+  updateDialog: false,
   // TODO: Fix deployment keys for ios
   deploymentKey: isIos() ? config.codepushDeploymentKeyIOS : config.codepushDeploymentKeyAndroid,
 };
