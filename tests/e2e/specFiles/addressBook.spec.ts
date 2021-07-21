@@ -61,8 +61,7 @@ describe('Address book', () => {
 
       it("shouldn't be possible to create a new contact if name is invalid", async () => {
         await app.addressBook.contactsScreen.tapOnCreateButton();
-        await app.addressBook.newContact.addNewContactScreen.typeName('Foo-name!');
-        await app.addressBook.newContact.addNewContactScreen.submit();
+        await app.addressBook.newContact.addNewContactScreen.typeName('Foo-name!;');
         await waitFor(app.addressBook.newContact.addNewContactScreen.nameValidationError)
           .toBeVisible()
           .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
@@ -70,6 +69,7 @@ describe('Address book', () => {
 
       it("shouldn't be possible to create a new contact if address is invalid", async () => {
         await app.addressBook.contactsScreen.tapOnCreateButton();
+        await app.addressBook.newContact.addNewContactScreen.typeName(`Heisenberg`);
         await app.addressBook.newContact.addNewContactScreen.typeAddress('fOoBa5bAZ');
         await app.addressBook.newContact.addNewContactScreen.submit(); // TODO: Remove it once it's fixed in the app
         await waitFor(app.addressBook.newContact.addNewContactScreen.addressValidationError)

@@ -47,7 +47,7 @@ describe('Dashboard', () => {
       await expect(app.dashboard.dashboardScreen.getWalletDetailsButtonElement('All wallets')).toBeNotVisible();
     });
 
-    it('should be possible to swtich between wallets using the wallets carousel', async () => {
+    it('should be possible to switch between wallets using the wallets carousel', async () => {
       const walletNames = ['Main', 'Secondary', 'Tertiary'];
 
       await steps.createWallet({
@@ -65,6 +65,7 @@ describe('Dashboard', () => {
         name: walletNames[2],
       });
 
+      await app.dashboard.dashboardScreen.scrollDown();
       await expect(app.dashboard.dashboardScreen.getWalletCardElement('All wallets')).toBeVisible();
 
       await app.dashboard.dashboardScreen.switchWalletWithCarousel('left');
@@ -77,9 +78,11 @@ describe('Dashboard', () => {
       await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletNames[2])).toBeVisible();
 
       await app.dashboard.dashboardScreen.switchWalletWithCarousel('right');
+      await app.dashboard.dashboardScreen.scrollToWallet(walletNames[1]);
       await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletNames[1])).toBeVisible();
 
       await app.dashboard.dashboardScreen.switchWalletWithCarousel('right');
+      await app.dashboard.dashboardScreen.scrollToWallet(walletNames[0]);
       await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletNames[0])).toBeVisible();
 
       await app.dashboard.dashboardScreen.switchWalletWithCarousel('right');
@@ -298,7 +301,8 @@ describe('Dashboard', () => {
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
 
-        await app.transactionDetails.tapOnViewInBlockExplorerButton();
+        await app.transactionDetails.scrollToBlockExplorerButton();
+        expect(app.transactionDetails.viewInBlockExplorerButton).toBeVisible();
       });
     });
   });
