@@ -93,7 +93,7 @@ android {
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
-            resValue "string", "CodePushDeploymentKey", project.env.get("CODEPUSH_DEPLOYMENT_KEY_ANDROID") ?: "''"
+            resValue "string", "CodePushDeploymentKey", project.env.get("CODEPUSH_DEPLOYMENT_KEY_ANDROID")
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
         }
@@ -101,7 +101,7 @@ android {
         debug {
             debuggable true
             minifyEnabled enableProguardInReleaseBuilds
-            resValue "string", "CodePushDeploymentKey", '""'
+            resValue "string", "CodePushDeploymentKey", project.env.get("CODEPUSH_DEPLOYMENT_KEY_ANDROID")
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
         }
