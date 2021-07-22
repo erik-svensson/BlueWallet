@@ -1,5 +1,6 @@
 import { expect } from 'detox';
 
+import { expectToBeCopied } from '../assertions';
 import { WALLETS_WITH_COINS } from '../helpers/consts';
 import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
@@ -64,7 +65,7 @@ describe('Wallet details', () => {
       await expect(app.walletDetails.showXpubScreen.xpub).toBeVisible();
 
       await app.walletDetails.showXpubScreen.tapOnCopyButton();
-      await app.walletDetails.showXpubScreen.checkIfCopied();
+      await expectToBeCopied();
     });
 
     it('should be possible to delete the wallet', async () => {

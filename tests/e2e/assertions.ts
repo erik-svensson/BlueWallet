@@ -1,4 +1,4 @@
-import Detox, { expect } from 'detox';
+import Detox, { by, element, expect } from 'detox';
 
 // FIX: This function does not do what it's supposed to
 // when tapping the button
@@ -11,4 +11,11 @@ export const expectToBeDisabled = async (element: Detox.IndexableNativeElement):
   } catch (error) {
     return;
   }
+};
+
+export const expectToBeCopied = async () => {
+  // NOTE: Proper solution would be to check device clipboard
+  // Currently not implemented in detox
+  // https://github.com/wix/detox/issues/222
+  expect(element(by.text('Copied!'))).toBeVisible();
 };
