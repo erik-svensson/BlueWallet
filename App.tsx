@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { View, StyleSheet, LogBox } from 'react-native';
 import codePush from 'react-native-code-push';
-import VersionNumber from 'react-native-version-number';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -22,7 +21,7 @@ const i18n = require('./loc');
 LogBox.ignoreAllLogs(process.env.LOG_BOX_IGNORE === 'true');
 
 const sentryOptions = {
-  dsn: config.sentryDsn,
+  dsn: isIos() ? config.sentryDsnIOS : config.sentryDsnAndroid,
   tracesSampleRate: 0.25,
   debug: config.environment === 'dev',
   environment: config.environment,
@@ -35,24 +34,11 @@ const codePushOptions = {
   installMode: codePush.InstallMode.IMMEDIATE,
   minimumBackgroundDuration: 30 * 60, // 30 minutes
   updateDialog: false,
-  // TODO: Fix deployment keys for ios
   deploymentKey: isIos() ? config.codepushDeploymentKeyIOS : config.codepushDeploymentKeyAndroid,
 };
 
 if (!__DEV__) {
   Sentry.init(sentryOptions);
-
-  if (VersionNumber.bundleIdentifier && VersionNumber.appVersion && VersionNumber.buildVersion) {
-    Sentry.setRelease(`${VersionNumber.bundleIdentifier}@${VersionNumber.appVersion}+${VersionNumber.buildVersion}`);
-  }
-
-  codePush.getUpdateMetadata().then(update => {
-    // Init sentry after update check finished
-    if (update) {
-      // Set release depends on codepush update
-      Sentry.setRelease(update.appVersion + '-codepush:' + update.label);
-    }
-  });
 }
 
 class CodePushClass extends Component<null, null> {
@@ -107,7 +93,7 @@ class App extends React.PureComponent {
   }
 }
 
-export default App;
+export default Sentry.withTouchEventBoundary(App, {});
 
 const styles = StyleSheet.create({
   wrapper: {
