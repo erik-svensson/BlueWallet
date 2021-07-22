@@ -1,4 +1,4 @@
-import { by, element } from 'detox';
+import { by, device, element } from 'detox';
 
 import actions from '../../../actions';
 
@@ -33,7 +33,13 @@ const LanguageScreen = () => ({
   },
 
   async confirmLanguageChange() {
-    await actions.tap(element(by.text('Confirm')));
+    if (device.getPlatform() === 'android') {
+      await element(by.text('CONFIRM')).tap();
+    } else {
+      await element(by.label('Confirm'))
+        .atIndex(0)
+        .tap();
+    }
   },
 });
 

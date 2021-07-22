@@ -1,8 +1,8 @@
 import { expect as jestExpect } from '@jest/globals';
-import { expect, waitFor } from 'detox';
+import { expect } from 'detox';
 
 import gmailClient from '../gmail';
-import { DEFAULT_EMAIL_ADDRESS, DEFAULT_UNLOCK_PIN, ECDSA_KEYS, WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers/consts';
+import { DEFAULT_EMAIL_ADDRESS, DEFAULT_UNLOCK_PIN, ECDSA_KEYS } from '../helpers/consts';
 import { isBeta, randomizeEmailAddress } from '../helpers/utils';
 import app from '../pageObjects';
 import { SupportedLanguage } from '../pageObjects/pages/settings/LanguageScreen';
@@ -86,9 +86,7 @@ describe('Settings', () => {
 
           await expect(app.settings.aboutUsScreen.goToOurGithubButton).toBeVisible();
         });
-      });
 
-      describe('@ios', () => {
         const walletsInLocalLanguages: { [key in Exclude<SupportedLanguage, 'English'>]: string } = {
           Chinese: '钱包',
           Spanish: 'Monederos',
@@ -101,18 +99,17 @@ describe('Settings', () => {
         };
 
         Object.keys(walletsInLocalLanguages).forEach(language =>
-          xit(`should be possible to change language from English to ${language}`, async () => {
+          it(`should be possible to change language from English to ${language}`, async () => {
             await app.settings.settingsScreen.tapOnLanguage();
             await app.settings.languageScreen.chooseLanguage(language as SupportedLanguage);
             await app.settings.languageScreen.confirmLanguageChange();
 
-            // TODO: To make it working, use element.getAttributes('title'). It's supported only for iOS and Detox must be upgraded first
-            await waitFor(app.dashboard.dashboardScreen.header)
-              .toHaveText(walletsInLocalLanguages[language])
-              .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
+            await expect(app.dashboard.dashboardScreen.header).toHaveText(walletsInLocalLanguages[language]);
           }),
         );
+      });
 
+      describe('@ios', () => {
         // TODO: For now, it's not possible to test it. Requires changes in the app
         xit('should be possible to enable biometric and unlock the app using biometric method', async () => {});
 
