@@ -12,8 +12,8 @@ const TermsConditionsScreen = () => ({
   termsConditionsCheckbox: element(by.id('terms-and-conditions-checkbox')),
   privacyPolicyCheckbox: element(by.id('privacy-policy-checkbox')),
   popup: {
-    noButton: element(by.id('')),
-    yesButton: element(by.id('')),
+    noButton: element(by.id('modal-no')),
+    yesButton: element(by.id('modal-yes')),
   },
 
   async scrollDown() {
@@ -27,6 +27,18 @@ const TermsConditionsScreen = () => ({
 
   async tapOnAgreeButton() {
     await actions.tap(this.agreeButton);
+  },
+
+  async tapOnDisagreeButton() {
+    await actions.tap(this.disagreeButton);
+  },
+
+  async tapYesOnModal() {
+    await actions.tap(this.popup.yesButton);
+  },
+
+  async tapNoOnModal() {
+    await actions.tap(this.popup.noButton);
   },
 
   // NOTE: Explicit wait cannot be avoided at the moment.

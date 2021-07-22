@@ -113,10 +113,14 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
         <Text style={styles.modalText}>{i18n.termsConditions.modal.text}</Text>
         <View style={styles.buttonWrapper}>
           <TouchableOpacity onPress={this.handleNoButton}>
-            <Text style={styles.modalButton}>{`${i18n.termsConditions.modal.noButton}`.toUpperCase()}</Text>
+            <Text style={styles.modalButton} testID="modal-no">
+              {`${i18n.termsConditions.modal.noButton}`.toUpperCase()}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={this.handleYesButton}>
-            <Text style={styles.modalButton}>{`${i18n.termsConditions.modal.yesButton}`.toUpperCase()}</Text>
+            <Text style={styles.modalButton} testID="modal-yes">
+              {`${i18n.termsConditions.modal.yesButton}`.toUpperCase()}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
