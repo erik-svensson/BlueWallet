@@ -16,10 +16,11 @@ export interface Props {
 }
 
 export const SCREEN_CONTAINER_MARGIN = 20;
-const MARGIN_INSIDE_CARD = 22;
-const MAXIMUM_WORD_WIDTH = 100;
-const WORDS_LENGTH_INSIDE_COLUMN = 3;
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const MAXIMUM_WORD_WIDTH = 120;
+const WORDS_LENGTH_INSIDE_COLUMN = SCREEN_WIDTH > 400 ? 3 : 2;
+
+const MARGIN_INSIDE_CARD = 14;
 const SCREEN_HORIZONTAL_MARGIN = 28;
 const VIEW_WIDTH = SCREEN_WIDTH - SCREEN_HORIZONTAL_MARGIN * 2;
 
@@ -32,6 +33,7 @@ const getWordWidth = () => {
   const sumOfWordsMargin = MARGIN_INSIDE_CARD * WORDS_LENGTH_INSIDE_COLUMN * 2;
 
   const widthWithoutWords = sumOfCardMargin + sumOfScreenContainerMargin + sumOfWordsMargin;
+
   const windowWidth = SCREEN_WIDTH;
   const leftSpaceForWords = windowWidth - widthWithoutWords;
   const oneWordSpace = Math.floor(leftSpaceForWords / WORDS_LENGTH_INSIDE_COLUMN);
@@ -42,7 +44,7 @@ const wordWidth = getWordWidth();
 
 export const tagStyles = {
   width: wordWidth,
-  height: 27,
+  height: 37,
   margin: MARGIN_INSIDE_CARD,
 };
 
