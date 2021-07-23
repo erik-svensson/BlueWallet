@@ -16,4 +16,6 @@ export default {
   sentryDsn: Config.SENTRY_DSN,
   emailNotificationsApi: Config.EMAIL_NOTIFICATIONS_API,
   airdropApi: Config.AIRDROP_API,
+  codepushDeploymentKeyIOS: Config.CODEPUSH_DEPLOYMENT_KEY_IOS,
+  codepushDeploymentKeyAndroid: Config.CODEPUSH_DEPLOYMENT_KEY_ANDROID,
 };

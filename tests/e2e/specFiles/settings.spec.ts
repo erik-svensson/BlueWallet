@@ -23,7 +23,7 @@ describe('Settings', () => {
       });
     });
 
-    describe.skip('@regression', () => {
+    describe('@regression', () => {
       describe('@android @ios', () => {
         it('should be possible to turn on advanced options', async () => {
           await app.settings.settingsScreen.tapOnAdvancedOptions();
@@ -32,7 +32,7 @@ describe('Settings', () => {
           await app.header.tapOnBackButton();
           await app.navigationBar.changeTab('wallets');
 
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios['Standard HD P2SH']).toBeVisible();
           await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios['Standard HD SegWit']).toBeVisible();
@@ -119,7 +119,7 @@ describe('Settings', () => {
   });
 
   describe('Email notifications', () => {
-    describe('Add email', () => {
+    describe.skip('Add email', () => {
       beforeEach(async () => {
         isBeta() && (await app.onboarding.betaVersionScreen.close());
         await app.developerRoom.tapOnSkipOnboardingButton();
@@ -251,7 +251,7 @@ describe('Settings', () => {
       });
     });
 
-    describe('Change email address', () => {
+    describe.skip('Change email address', () => {
       // TODO: There must be better way to do it, without modifying the local variable
       let emailAddress: string;
 
@@ -301,7 +301,7 @@ describe('Settings', () => {
       });
     });
 
-    describe('Remove email address', () => {
+    describe.skip('Remove email address', () => {
       // TODO: There must be better way to do it, without modifying the local variable
       let emailAddress: string;
 
@@ -377,7 +377,7 @@ describe('Settings', () => {
       });
     });
 
-    describe('General', () => {
+    describe.skip('General', () => {
       describe('Without added email', () => {
         beforeEach(async () => {
           isBeta() && (await app.onboarding.betaVersionScreen.close());
@@ -460,7 +460,7 @@ describe('Settings', () => {
         });
       });
 
-      describe('With added email', () => {
+      describe.skip('With added email', () => {
         // TODO: There must be better way to do it, without modifying the local variable
         let emailAddress: string;
 

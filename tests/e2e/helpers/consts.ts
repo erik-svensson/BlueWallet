@@ -153,7 +153,7 @@ export const WALLETS_WITH_COINS = {
   },
 
   'Standard P2SH': {
-    SEED_PHRASE: 'cNVqz3DVCUXUSbFWVuth7CUqmgaqCz7yck2kDjt5zgUxgLkK4WZi',
+    SEED_PHRASE: 'cNkotrX9pRS2Se8Zr4YMssXbQ2XfJhirZLCgxbHPF87EvKKu5XtK',
   },
 
   'Standard HD Segwit': {

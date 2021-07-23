@@ -1,20 +1,28 @@
 import { waitFor } from 'detox';
 
 import { expectToBeDisabled } from '../../assertions';
+import { isBeta } from '../../helpers/utils';
 import app from '../../pageObjects';
 import steps from '../../steps';
 
 describe('Adding wallet', () => {
   describe('General', () => {
+    beforeEach(async () => {
+      isBeta() && (await app.onboarding.betaVersionScreen.close());
+      await app.developerRoom.tapOnSkipOnboardingButton();
+      await app.onboarding.addEmailNotificationScreen.skip();
+      await app.navigationBar.changeTab('wallets');
+    });
+
     describe('@android @ios @regression', () => {
       it("shouldn't be possible to create a new wallet with empty name", async () => {
-        await app.dashboard.dashboardScreen.tapOnAddButton();
+        await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
         await expectToBeDisabled(app.wallets.addNewWallet.createScreen.createWalletButton);
       });
 
       it("shouldn't be possible to import an existing wallet with empty name", async () => {
-        await app.dashboard.dashboardScreen.tapOnAddButton();
+        await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
         await app.wallets.addNewWallet.createScreen.tapOnImportButton();
         await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
@@ -22,8 +30,8 @@ describe('Adding wallet', () => {
         await expectToBeDisabled(app.wallets.addNewWallet.createScreen.createWalletButton);
       });
 
-      it("shouldn't be possible to create a new wallet with name including special characters", async () => {
-        await app.dashboard.dashboardScreen.tapOnAddButton();
+      it.skip("shouldn't be possible to create a new wallet with name including special characters", async () => {
+        await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
         await app.wallets.addNewWallet.createScreen.typeName('My-W@llet!');
         await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
@@ -32,8 +40,8 @@ describe('Adding wallet', () => {
           .withTimeout(20000);
       });
 
-      it("shouldn't be possible to import an existing wallet with name including special characters", async () => {
-        await app.dashboard.dashboardScreen.tapOnAddButton();
+      it.skip("shouldn't be possible to import an existing wallet with name including special characters", async () => {
+        await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
         await app.wallets.addNewWallet.createScreen.tapOnImportButton();
         await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
@@ -55,7 +63,7 @@ describe('Adding wallet', () => {
             name: walletName,
           });
 
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.typeName(walletName);
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
@@ -72,7 +80,7 @@ describe('Adding wallet', () => {
             name: walletName,
           });
 
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();

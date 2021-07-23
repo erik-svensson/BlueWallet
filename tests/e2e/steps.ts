@@ -28,7 +28,7 @@ const createWallet = async (options: CreateWalletOptions) => {
 
   await app.navigationBar.changeTab('wallets');
 
-  await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
+  await app.dashboard.dashboardScreen.tapOnAddWalletButton();
   await app.wallets.addNewWallet.createScreen.typeName(name);
   await app.wallets.addNewWallet.createScreen.chooseType(type);
   await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
@@ -43,8 +43,18 @@ const createWallet = async (options: CreateWalletOptions) => {
     await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
   }
 
-  await app.wallets.addNewWallet.successScreen.waitUntilDisplayed();
-  await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+  await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+
+  if (type !== 'Standard P2SH') {
+    const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
+
+    await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+    await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+  } else {
+    await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+  }
+
+  await app.wallets.addNewWallet.successScreen.close();
 
   if (emailAddress) {
     await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
@@ -66,7 +76,7 @@ const importWallet = async (options: ImportWalletOptions) => {
 
   await app.navigationBar.changeTab('wallets');
 
-  await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
+  await app.dashboard.dashboardScreen.tapOnAddWalletButton();
   await app.wallets.addNewWallet.createScreen.tapOnImportButton();
   await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(type);
   await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();

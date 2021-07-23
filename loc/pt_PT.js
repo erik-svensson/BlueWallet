@@ -226,6 +226,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       'Por favor, seja paciente enquanto criamos o seu autenticador.\n Pode demorar algum tempo.',
     creatingWallet: 'Criar a sua carteira',
+    creatingWalletSuccess: 'Criou com sucesso a sua carteira.',
     creatingWalletDescription:
       'Por favor, seja paciente enquanto nós criamos a sua carteira.\n Pode demorar algum tempo.',
     generateAddressesError: 'Não pode gerar endereços',
@@ -471,6 +472,7 @@ module.exports = {
   settings: {
     about: 'Sobre',
     terms: 'Termos e Privacidade',
+    factoryReset: 'Restaurar as configurações de fábrica',
     aboutUs: 'Sobre nós',
     advancedOptions: 'Opções avançadas',
     Biometrics: 'Permitir a biometria',
@@ -485,6 +487,13 @@ module.exports = {
     notSupportedFingerPrint: 'O seu dispositivo não suporta impressões digitais',
     security: 'Segurança',
     TouchID: 'Permitir impressão digital',
+    factory: {
+      title: 'Restaurar as configurações de fábrica',
+      text:
+        'Tem a certeza de que quer restaurar a Gold Wallet para as suas configurações de fábrica? Todas as suas carteiras e dados serão apagados. Lembre-se que terá de importar as suas carteiras de novo.',
+      noButton: 'Não',
+      yesButton: 'Sim',
+    },
   },
   tabNavigator: {
     addressBook: 'Livro de endereços',
@@ -599,6 +608,13 @@ module.exports = {
       subtitle: 'Dê um nome à sua carteira',
       title: 'Adicionar nova carteira',
       walletType: 'Tipo de carteira',
+    },
+    confirmSeed: {
+      header: 'Confirmar a frase semente',
+      title: 'Confirme a frase da cópia de segurança',
+      description: 'Clique nas palavras na ordem correta para confirmar a sua cópia de segurança.',
+      button: 'Confirmar',
+      error: 'El orden de la frase semilla es incorrecto.',
     },
     addSuccess: {
       description:

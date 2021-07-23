@@ -1,5 +1,6 @@
 /** A set of functions being a wrapper on the Detox's native methods to make developing tests even easier */
-import Detox, { by, waitFor } from 'detox';
+import Detox, { by, device, waitFor } from 'detox';
+import { getText } from 'detox-getprops';
 
 import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers/consts';
 
@@ -16,13 +17,17 @@ interface ScrollToElementOptions {
 }
 
 const Actions = () => {
-  const waitForElement = async (target: Detox.DetoxAny, timeout?: number) => {
+  const waitForElement = async (target: Detox.IndexableNativeElement | Detox.NativeElement, timeout?: number) => {
     await waitFor(target)
       .toBeVisible()
       .withTimeout(timeout || WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
   };
 
-  const typeText = async (target: Detox.DetoxAny, text: string, options?: TypeTextOptions) => {
+  const typeText = async (
+    target: Detox.IndexableNativeElement | Detox.NativeElement,
+    text: string,
+    options?: TypeTextOptions,
+  ) => {
     await waitForElement(target);
 
     if (options?.replace) {
@@ -37,7 +42,11 @@ const Actions = () => {
   };
 
   /** Pastes the whole string without typing. Use only during non-user behaviour testing. */
-  const replaceText = async (target: Detox.DetoxAny, text: string, options?: TypeTextOptions) => {
+  const replaceText = async (
+    target: Detox.IndexableNativeElement | Detox.NativeElement,
+    text: string,
+    options?: TypeTextOptions,
+  ) => {
     await waitForElement(target);
 
     if (options?.replace) {
@@ -51,18 +60,18 @@ const Actions = () => {
     await target.replaceText(text);
   };
 
-  const tap = async (target: Detox.DetoxAny) => {
+  const tap = async (target: Detox.IndexableNativeElement | Detox.NativeElement) => {
     await waitForElement(target);
     await target.tap();
   };
 
-  const multiTap = async (target: Detox.DetoxAny, times: number) => {
+  const multiTap = async (target: Detox.IndexableNativeElement | Detox.NativeElement, times: number) => {
     await waitForElement(target);
     await target.multiTap(times);
   };
 
   const scrollToElement = async (
-    target: Detox.DetoxAny,
+    target: Detox.IndexableNativeElement | Detox.NativeElement,
     scrollable: string,
     options?: Partial<ScrollToElementOptions>,
   ) => {
@@ -74,7 +83,10 @@ const Actions = () => {
       .scroll(pixels, direction, startX, startY);
   };
 
-  const swipeCarousel = async (carousel: Detox.DetoxAny, direction: 'left' | 'right') => {
+  const swipeCarousel = async (
+    carousel: Detox.IndexableNativeElement | Detox.NativeElement,
+    direction: 'left' | 'right',
+  ) => {
     await waitFor(carousel)
       .toBeVisible()
       .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
@@ -92,14 +104,14 @@ const Actions = () => {
   };
 
   /** Scrolls down and up to find an element */
-  const searchForElement = async (target: Detox.DetoxAny, scrollable: string) => {
+  const searchForElement = async (target: Detox.IndexableNativeElement | Detox.NativeElement, scrollable: string) => {
     const pixels = 100;
 
     try {
       await waitFor(target)
         .toBeVisible()
         .whileElement(by.id(scrollable))
-        .scroll(pixels, 'down');
+        .scroll(pixels, 'down', NaN, 0.5);
 
       return;
     } catch (error) {}
@@ -108,11 +120,24 @@ const Actions = () => {
       await waitFor(target)
         .toBeVisible()
         .whileElement(by.id(scrollable))
-        .scroll(pixels, 'up');
+        .scroll(pixels, 'up', NaN, 0.5);
 
       return;
     } catch (error) {
       throw error;
+    }
+  };
+
+  const getElementsText = async (target: Detox.IndexableNativeElement | Detox.NativeElement): Promise<string> => {
+    // ignores are necessary because of inaccurate/missing type definitions
+    if (device.getPlatform() === 'android') {
+      // @ts-ignore
+      return getText(target);
+    } else {
+      // @ts-ignore
+      const attr = await target.getAttributes();
+
+      return attr.text;
     }
   };
 
@@ -126,6 +151,7 @@ const Actions = () => {
     swipeCarousel,
     refreshView,
     searchForElement,
+    getElementsText,
   };
 };
 

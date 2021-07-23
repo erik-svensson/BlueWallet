@@ -37,12 +37,12 @@ describe('Wallet details', () => {
 
   describe('@ios @android @regression', () => {
     it('should be possible to rename the wallet', async () => {
-      const newWalletName = 'Huey, Dewey and Louie wallet';
+      const newWalletName = 'xyz';
 
       await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
       await app.walletDetails.mainScreen.renameWalletTo(newWalletName);
-      await expect(app.walletDetails.mainScreen.walletName).toHaveLabel(newWalletName);
+      await expect(app.walletDetails.mainScreen.walletName).toHaveText(newWalletName);
     });
 
     it('should be possible to check if wallet seed phrase is visible', async () => {

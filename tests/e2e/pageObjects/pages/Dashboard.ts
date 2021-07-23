@@ -8,9 +8,8 @@ const Dashboard = () => {
     self: 'dashboard-screen',
 
     header: element(by.id('dashboard-header')),
-    addButton: element(by.id('add-wallet-button')),
-    createWalletButton: element(by.id('create-wallet-button')),
-    //TODO: IF No wallets select create-wallet-button, else use add-wallet-button
+    addAnotherButton: element(by.id('add-wallet-button')),
+    addFirstWalletButton: element(by.id('create-wallet-button')),
     filterButton: element(by.id('filter-transactions-button')),
 
     walletsCarousel: element(by.id('wallets-carousel')),
@@ -30,11 +29,12 @@ const Dashboard = () => {
 
     getTransactionElement: (id: string) => element(by.id(`transaction-item-${id}`)),
 
-    async tapOnCreateWalletButton() {
-      await actions.tap(this.createWalletButton);
-    },
-    async tapOnAddButton() {
-      await actions.tap(this.addButton);
+    async tapOnAddWalletButton() {
+      try {
+        await actions.tap(this.addFirstWalletButton);
+      } catch (e) {
+        await actions.tap(this.addAnotherButton);
+      }
     },
 
     async tapOnFilterButton() {
@@ -82,7 +82,7 @@ const Dashboard = () => {
       await actions.tap(this.getTransactionElement(transaction));
     },
 
-    async scrollTo(element: Detox.DetoxAny) {
+    async scrollTo(element: Detox.IndexableNativeElement) {
       await actions.scrollToElement(element, this.self);
     },
 
@@ -118,6 +118,9 @@ const Dashboard = () => {
         direction: 'down',
         startY: 0.5,
       });
+    },
+    async scrollDown() {
+      await element(by.id(this.self)).scroll(200, 'down', NaN, 0.5);
     },
   });
 
