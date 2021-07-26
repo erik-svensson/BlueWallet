@@ -105,7 +105,7 @@ const Authenticators = () => {
 
   const Details = () => {
     const DetailsScreen = () => ({
-      scrollView: element(by.id('authenticator-details-screen')), // TODO: Consider to rename it
+      scrollView: element(by.id('authenticator-details-screen')),
 
       authenticatorName: element(by.id('authenticator-name')),
       nameInput: element(by.id('rename-authenticator')),

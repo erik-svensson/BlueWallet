@@ -4,6 +4,7 @@ import { WALLETS_WITH_COINS, DEFAULT_TRANSACTION_PASSWORD } from '../../helpers/
 import { isBeta, randomString } from '../../helpers/utils';
 import app from '../../pageObjects';
 import steps from '../../steps';
+import { WalletType } from '../../types';
 
 const DATA_FOR_TRANSACTIONS = {
   AMOUNT_TO_SEND: '0.0001',
@@ -22,17 +23,17 @@ describe('Transactions', () => {
       // TODO: Test is disabled due to long transaction confirmations.
       xit('should be possible to cancel transaction for 3-Key Vault wallet', async () => {
         const note = randomString();
-        const wallet = WALLETS_WITH_COINS['3-Key Vault'];
+        const wallet = WALLETS_WITH_COINS[WalletType.KEY_3];
 
         await steps.importWallet({
-          type: '3-Key Vault',
+          type: WalletType.KEY_3,
           name: '3-Key wallet',
           fastPublicKey: wallet.FAST_KEY.PUBLIC_KEY,
           cancelPublicKey: wallet.CANCEL_KEY.PUBLIC_KEY,
           seedPhrase: wallet.SEED_PHRASE,
         });
         await steps.sendCoins({
-          type: '3-Key Vault',
+          type: WalletType.KEY_3,
           amount: DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND,
           walletAddress: WALLETS_WITH_COINS['3-Key moneybox'].WALLET_ADDRESS,
           transactionNote: note,
@@ -65,16 +66,16 @@ describe('Transactions', () => {
       // TODO: Test is disabled due to long transaction confirmations.
       xit('should be possible to cancel transaction for 2-Key Vault wallet', async () => {
         const note = randomString();
-        const wallet = WALLETS_WITH_COINS['2-Key Vault'];
+        const wallet = WALLETS_WITH_COINS[WalletType.KEY_2];
 
         await steps.importWallet({
-          type: '2-Key Vault',
+          type: WalletType.KEY_2,
           name: '2-Key wallet',
           cancelPublicKey: wallet.CANCEL_KEY.PUBLIC_KEY,
           seedPhrase: wallet.SEED_PHRASE,
         });
         await steps.sendCoins({
-          type: '2-Key Vault',
+          type: WalletType.KEY_2,
           amount: DATA_FOR_TRANSACTIONS.AMOUNT_TO_SEND,
           walletAddress: WALLETS_WITH_COINS['3-Keys moneybox'].WALLET_ADDRESS,
           transactionNote: note,

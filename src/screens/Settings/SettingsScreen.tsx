@@ -62,7 +62,12 @@ export const SettingsScreen = (props: Props) => {
 
   const renderGeneralSettings = () => (
     <>
-      <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} />
+      <ListItem
+        testID="language-settings-item"
+        onPress={navigateToSelectLanguage}
+        title={i18n.settings.language}
+        source={icons.languageIcon}
+      />
       <ListItem
         testID="advanced-options-settings-item"
         title={i18n.settings.advancedOptions}

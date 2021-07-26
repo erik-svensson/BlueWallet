@@ -105,7 +105,6 @@ const SeedPhraseConfirmScreen: FC<Props> = props => {
 
   return (
     <ScreenTemplate
-      noScroll
       keyboardShouldPersistTaps={'always'}
       footer={
         <>

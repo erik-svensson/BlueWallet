@@ -58,7 +58,9 @@ export class Header extends PureComponent<Props> {
       <GradientView variant={GradientView.Variant.Primary} style={styles.container}>
         <>
           {this.renderLeftItem()}
-          <EllipsisText style={styles.title}>{title}</EllipsisText>
+          <EllipsisText testID="dashboard-header" style={styles.title}>
+            {title}
+          </EllipsisText>
           {!!addFunction && (
             <TouchableOpacity testID={addButtonTestID} style={styles.rightElement} onPress={addFunction}>
               <Image source={icons.addIcon} style={styles.addIcon} />
