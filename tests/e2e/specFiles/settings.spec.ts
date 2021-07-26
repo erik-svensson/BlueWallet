@@ -1,15 +1,16 @@
 import { expect as jestExpect } from '@jest/globals';
-import { expect, waitFor } from 'detox';
+import { expect } from 'detox';
 
 import gmailClient from '../gmail';
-import { DEFAULT_EMAIL_ADDRESS, DEFAULT_UNLOCK_PIN, ECDSA_KEYS, WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers/consts';
+import { DEFAULT_EMAIL_ADDRESS, DEFAULT_UNLOCK_PIN, ECDSA_KEYS } from '../helpers/consts';
 import { isBeta, randomizeEmailAddress } from '../helpers/utils';
 import app from '../pageObjects';
 import { SupportedLanguage } from '../pageObjects/pages/settings/LanguageScreen';
 import steps from '../steps';
+import { WalletType } from '../types';
 
 describe('Settings', () => {
-  describe.skip('General', () => {
+  describe('General', () => {
     beforeEach(async () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());
       await app.developerRoom.tapOnSkipOnboardingButton();
@@ -32,11 +33,11 @@ describe('Settings', () => {
           await app.header.tapOnBackButton();
           await app.navigationBar.changeTab('wallets');
 
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
-          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios['Standard HD P2SH']).toBeVisible();
-          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios['Standard HD SegWit']).toBeVisible();
-          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios['Standard P2SH']).toBeVisible();
+          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios[WalletType.S_HD_P2SH]).toBeVisible();
+          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios[WalletType.S_HD_SEGWIT]).toBeVisible();
+          await expect(app.wallets.addNewWallet.createScreen.walletTypeRadios[WalletType.S_P2SH]).toBeVisible();
         });
 
         it('should be possible change PIN', async () => {
@@ -46,8 +47,11 @@ describe('Settings', () => {
           await app.settings.changePin.newPinScreen.typePin('1111');
           await app.settings.changePin.confirmPinScreen.typePin('1111');
 
-          // TODO: Add more assertions
           await expect(app.settings.changePin.successScreen.icon).toBeVisible();
+          await app.settings.changePin.successScreen.close();
+          await app.settings.settingsScreen.tapOnChangePin();
+          await app.settings.changePin.currentPinScreen.typePin('1111');
+          await expect(app.settings.changePin.newPinScreen.pinInput).toBeVisible();
         });
 
         it('should display an error validation message if typed current PIN is incorrect', async () => {
@@ -82,9 +86,7 @@ describe('Settings', () => {
 
           await expect(app.settings.aboutUsScreen.goToOurGithubButton).toBeVisible();
         });
-      });
 
-      describe('@ios', () => {
         const walletsInLocalLanguages: { [key in Exclude<SupportedLanguage, 'English'>]: string } = {
           Chinese: '钱包',
           Spanish: 'Monederos',
@@ -97,18 +99,17 @@ describe('Settings', () => {
         };
 
         Object.keys(walletsInLocalLanguages).forEach(language =>
-          xit(`should be possible to change language from English to ${language}`, async () => {
+          it(`should be possible to change language from English to ${language}`, async () => {
             await app.settings.settingsScreen.tapOnLanguage();
             await app.settings.languageScreen.chooseLanguage(language as SupportedLanguage);
             await app.settings.languageScreen.confirmLanguageChange();
 
-            // TODO: To make it working, use element.getAttributes('title'). It's supported only for iOS and Detox must be upgraded first
-            await waitFor(app.dashboard.dashboardScreen.header)
-              .toHaveText(walletsInLocalLanguages[language])
-              .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
+            await expect(app.dashboard.dashboardScreen.header).toHaveText(walletsInLocalLanguages[language]);
           }),
         );
+      });
 
+      describe('@ios', () => {
         // TODO: For now, it's not possible to test it. Requires changes in the app
         xit('should be possible to enable biometric and unlock the app using biometric method', async () => {});
 
@@ -119,7 +120,7 @@ describe('Settings', () => {
   });
 
   describe('Email notifications', () => {
-    describe('Add email', () => {
+    describe.skip('Add email', () => {
       beforeEach(async () => {
         isBeta() && (await app.onboarding.betaVersionScreen.close());
         await app.developerRoom.tapOnSkipOnboardingButton();
@@ -157,7 +158,7 @@ describe('Settings', () => {
           const walletName = 'Goofy wallet';
 
           await steps.createWallet({
-            type: '3-Key Vault',
+            type: WalletType.KEY_3,
             name: walletName,
             fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -186,7 +187,7 @@ describe('Settings', () => {
 
         it('should be possible to add an email address and subscribe multiple wallets to notifications', async () => {
           await steps.createWallet({
-            type: '3-Key Vault',
+            type: WalletType.KEY_3,
             name: 'Main',
             fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -194,7 +195,7 @@ describe('Settings', () => {
 
           // TODO: Un-comment it once BTCV2-1515 is solved.
           // await steps.createWallet({
-          //   type: '3-Key Vault',
+          //   type: WalletType.KEY_3,
           //   name: 'Secondary',
           //   fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
           //   cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -223,7 +224,7 @@ describe('Settings', () => {
 
         it('should be possible to add an email address and without subscribing to notifications if a wallet exists', async () => {
           await steps.createWallet({
-            type: '3-Key Vault',
+            type: WalletType.KEY_3,
             name: 'Main',
             fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -251,7 +252,7 @@ describe('Settings', () => {
       });
     });
 
-    describe('Change email address', () => {
+    describe.skip('Change email address', () => {
       // TODO: There must be better way to do it, without modifying the local variable
       let emailAddress: string;
 
@@ -301,7 +302,7 @@ describe('Settings', () => {
       });
     });
 
-    describe('Remove email address', () => {
+    describe.skip('Remove email address', () => {
       // TODO: There must be better way to do it, without modifying the local variable
       let emailAddress: string;
 
@@ -329,7 +330,7 @@ describe('Settings', () => {
           const walletName = 'Goofy wallet';
 
           await steps.createWallet({
-            type: '3-Key Vault',
+            type: WalletType.KEY_3,
             name: walletName,
             fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -356,7 +357,7 @@ describe('Settings', () => {
 
         it("should be possible to remove the email address and not change the wallet's notifications", async () => {
           await steps.createWallet({
-            type: '3-Key Vault',
+            type: WalletType.KEY_3,
             name: 'Goofy wallet',
             fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
@@ -377,7 +378,7 @@ describe('Settings', () => {
       });
     });
 
-    describe('General', () => {
+    describe.skip('General', () => {
       describe('Without added email', () => {
         beforeEach(async () => {
           isBeta() && (await app.onboarding.betaVersionScreen.close());
@@ -460,7 +461,7 @@ describe('Settings', () => {
         });
       });
 
-      describe('With added email', () => {
+      describe.skip('With added email', () => {
         // TODO: There must be better way to do it, without modifying the local variable
         let emailAddress: string;
 
@@ -478,7 +479,7 @@ describe('Settings', () => {
             const walletName = 'Goofy wallet';
 
             await steps.createWallet({
-              type: '3-Key Vault',
+              type: WalletType.KEY_3,
               name: walletName,
               fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
               cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,

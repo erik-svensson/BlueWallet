@@ -1,10 +1,22 @@
+/* eslint-disable no-redeclare */
 /**
  * Set of helper functions that perform actions that require "more than one click on UI".
  * Usefully especially if we need to set up a state before the actual test
  */
 import gmailClient from './gmail';
 import app from './pageObjects';
-import { CreateWalletOptions, ImportWalletOptions, SendCoinsOptions } from './pageObjects/types';
+import {
+  CreateWalletOptions,
+  ImportWalletOptions,
+  SendCoinsOptions,
+  StandardWalletOptions,
+  TwoKeyWalletOptions,
+  ThreeKeyWalletOptions,
+  ImportStandardWalletOptions,
+  Import2KeyWalletOptions,
+  Import3KeyWalletOptions,
+  WalletType,
+} from './types';
 
 /** Passes through the screens from Create PIN until Confirm Transaction Password */
 const passThroughOnboarding = async (pin: string, password: string) => {
@@ -21,30 +33,41 @@ const passThroughOnboarding = async (pin: string, password: string) => {
 };
 
 /** Passes through the screens to create a wallet */
-const createWallet = async (options: CreateWalletOptions) => {
-  // TODO: "fastPublicKey" should be required if the type === '3-Key Vault'.
-  // The same with 2-Key Vault. It'd be best to overload the function IMHO
+async function createWallet(options: StandardWalletOptions): Promise<void>;
+async function createWallet(options: TwoKeyWalletOptions): Promise<void>;
+async function createWallet(options: ThreeKeyWalletOptions): Promise<void>;
+async function createWallet(options: CreateWalletOptions): Promise<void> {
   const { type, name, fastPublicKey, cancelPublicKey, emailAddress } = options;
 
   await app.navigationBar.changeTab('wallets');
 
-  await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
+  await app.dashboard.dashboardScreen.tapOnAddWalletButton();
   await app.wallets.addNewWallet.createScreen.typeName(name);
   await app.wallets.addNewWallet.createScreen.chooseType(type);
   await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
-  if (type === '3-Key Vault') {
+  if (type === WalletType.KEY_3) {
     await app.wallets.addNewWallet.addFastKeyScreen.tapScanOnQrCode();
     await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(fastPublicKey!);
   }
 
-  if (type === '3-Key Vault' || type === '2-Key Vault') {
+  if (type === WalletType.KEY_3 || type === WalletType.KEY_2) {
     await app.wallets.addNewWallet.addFastKeyScreen.tapScanOnQrCode();
     await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
   }
 
-  await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
-  await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
+  await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+
+  if (type !== WalletType.S_P2SH) {
+    const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
+
+    await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+    await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+  } else {
+    await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+  }
+
+  await app.wallets.addNewWallet.successScreen.close();
 
   if (emailAddress) {
     await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
@@ -56,17 +79,18 @@ const createWallet = async (options: CreateWalletOptions) => {
 
     await app.wallets.subscribeToEmailNotifications.successScreen.close();
   }
-};
+}
 
 /** Passes through the screens to import a wallet */
-const importWallet = async (options: ImportWalletOptions) => {
-  // TODO: "fastPublicKey" should be required if the type === '3-Key Vault'.
-  // The same with 2-Key Vault. It'd be best to overload the function IMHO
+async function importWallet(options: ImportStandardWalletOptions): Promise<void>;
+async function importWallet(options: Import2KeyWalletOptions): Promise<void>;
+async function importWallet(options: Import3KeyWalletOptions): Promise<void>;
+async function importWallet(options: ImportWalletOptions) {
   const { type, name, seedPhrase, fastPublicKey, cancelPublicKey, emailAddress } = options;
 
   await app.navigationBar.changeTab('wallets');
 
-  await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
+  await app.dashboard.dashboardScreen.tapOnAddWalletButton();
   await app.wallets.addNewWallet.createScreen.tapOnImportButton();
   await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(type);
   await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
@@ -75,12 +99,12 @@ const importWallet = async (options: ImportWalletOptions) => {
   await app.wallets.importWallet.importScreen.pasteSeedPhrase(seedPhrase);
   await app.wallets.importWallet.importScreen.submit();
 
-  if (type === '3-Key Vault') {
+  if (type === WalletType.KEY_3) {
     await app.wallets.importWallet.addFastKeyScreen.tapScanOnQrCode();
     await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(fastPublicKey!);
   }
 
-  if (type === '3-Key Vault' || type === '2-Key Vault') {
+  if (type === WalletType.KEY_3 || type === WalletType.KEY_2) {
     await app.wallets.importWallet.addFastKeyScreen.tapScanOnQrCode();
     await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
   }
@@ -89,9 +113,16 @@ const importWallet = async (options: ImportWalletOptions) => {
   await app.wallets.importWallet.successScreen.close();
 
   if (emailAddress) {
-    // TODO: Finish this part later on.
+    await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
+
+    const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+
+    await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
+    await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
+
+    await app.wallets.subscribeToEmailNotifications.successScreen.close();
   }
-};
+}
 
 /** Passes through the screens to create an authenticator */
 const createAuthenticator = async (name: string) => {
@@ -101,7 +132,6 @@ const createAuthenticator = async (name: string) => {
 
   await app.authenticators.addNewAuthenticator.createScreen.typeName(name);
   await app.authenticators.addNewAuthenticator.createScreen.submit();
-  await app.authenticators.addNewAuthenticator.loadingScreen.waitUntilEnded();
   await app.authenticators.addNewAuthenticator.publicKeyScreen.proceed();
   await app.authenticators.addNewAuthenticator.seedPhraseScreen.proceed();
 };
@@ -134,7 +164,7 @@ const sendCoins = async (options: SendCoinsOptions) => {
   if (transactionNote !== undefined) {
     await app.transactionsSend.sendCoinsMainScreen.typeNote(transactionNote);
   }
-  if (type === '3-Key Vault') {
+  if (type === WalletType.KEY_3) {
     await app.transactionsSend.sendCoinsMainScreen.chooseTransactionType(transactionType!);
   }
 

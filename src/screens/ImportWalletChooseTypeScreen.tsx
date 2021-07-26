@@ -1,3 +1,4 @@
+import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -5,12 +6,15 @@ import { StyleSheet, View } from 'react-native';
 import { ScreenTemplate, Text, Header, Button, RadioButton } from 'app/components';
 import { Route, RootStackParams, ImportWalletType } from 'app/consts';
 import { HDSegwitP2SHArWallet, HDSegwitP2SHAirWallet } from 'app/legacy';
+import { NavigationService } from 'app/services';
 import { palette, typography } from 'app/styles';
 
 const i18n = require('../../loc');
 
 interface Props {
   navigation: StackNavigationProp<RootStackParams, Route.ImportWalletChooseType>;
+  route: RouteProp<RootStackParams, Route.ImportWalletChooseType>;
+  error: boolean;
 }
 
 interface State {
@@ -34,7 +38,13 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
 
   onSelect = (selectedWallet: ImportWalletType) => this.setState({ selectedWallet });
 
+  goToDashboard = () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
+
   render() {
+    const {
+      route: { params },
+    } = this.props;
+
     return (
       <ScreenTemplate
         footer={
@@ -50,7 +60,13 @@ export class ImportWalletChooseTypeScreen extends React.PureComponent<Props, Sta
             />
           </>
         }
-        header={<Header isBackArrow title={i18n.wallets.importWallet.header} />}
+        header={
+          <Header
+            isBackArrow
+            title={i18n.wallets.importWallet.header}
+            onBackArrow={params && params.error ? this.goToDashboard : NavigationService.goBack}
+          />
+        }
       >
         <View style={styles.titleContainer}>
           <Text style={styles.title}>{i18n.wallets.importWallet.title}</Text>

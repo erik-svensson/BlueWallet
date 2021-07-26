@@ -56,7 +56,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   setLabel = (label: string) => this.setState({ label: label.trim() });
 
-  navigateToImportWallet = () => this.props.navigation.navigate(Route.ImportWalletChooseType);
+  navigateToImportWallet = () => this.props.navigation.navigate(Route.ImportWalletChooseType, { error: false });
 
   createARWallet = (recoveryPublicKey: string) => {
     const { navigation } = this.props;
@@ -129,7 +129,16 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           onResend: () => this.props.subscribe([wallet], email),
         });
       },
-      onBack: () => this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+      onBack: () =>
+        CreateMessage({
+          title: i18n.message.hooray,
+          description: i18n.message.creatingWalletSuccess,
+          type: MessageType.success,
+          buttonProps: {
+            title: i18n.onboarding.successCompletedButton,
+            onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+          },
+        }),
       isBackArrow: false,
     });
   };
@@ -142,8 +151,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
         navigation.navigate(Route.CreateWalletSuccess, {
+          isP2SH: this.state.WalletClass === SegwitP2SHWallet,
           secret: w.getSecret(),
-          onButtonPress: !!email ? () => this.navigateToConfirmEmailSubscription(wallet) : undefined,
+          handleNavigationSubscription: !!email ? () => this.navigateToConfirmEmailSubscription(wallet) : undefined,
         });
       },
       onFailure: () => onError(),

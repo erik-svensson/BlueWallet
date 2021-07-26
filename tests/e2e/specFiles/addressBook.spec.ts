@@ -1,15 +1,18 @@
 import { expect, waitFor } from 'detox';
 
-import { WAIT_FOR_ELEMENT_TIMEOUT } from '../helpers/consts';
+import { expectToBeCopied } from '../assertions';
+import { WAIT_FOR_ELEMENT_TIMEOUT, WALLETS } from '../helpers/consts';
 import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
-import { createNewContact } from '../steps';
+import steps, { createNewContact } from '../steps';
+import { WalletType } from '../types';
 
 describe('Address book', () => {
   beforeEach(async () => {
     isBeta() && (await app.onboarding.betaVersionScreen.close());
     await app.developerRoom.tapOnSkipOnboardingButton();
     await app.onboarding.addEmailNotificationScreen.skip();
+
     await app.navigationBar.changeTab('address book');
   });
 
@@ -50,7 +53,7 @@ describe('Address book', () => {
       it('should be possible to create a new contact by typing address manually', async () => {
         await app.addressBook.contactsScreen.tapOnCreateButton();
         await app.addressBook.newContact.addNewContactScreen.typeName(`Heisenberg`);
-        await app.addressBook.newContact.addNewContactScreen.typeAddress('2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+        await app.addressBook.newContact.addNewContactScreen.typeAddress('2NA5kx7ztNhCBVogN2kLtNPBMXA3fdkX2Cc');
         await app.addressBook.newContact.addNewContactScreen.submit();
         await expect(app.addressBook.newContact.successScreen.icon).toBeVisible();
       });
@@ -61,8 +64,7 @@ describe('Address book', () => {
 
       it("shouldn't be possible to create a new contact if name is invalid", async () => {
         await app.addressBook.contactsScreen.tapOnCreateButton();
-        await app.addressBook.newContact.addNewContactScreen.typeName('Foo-name!');
-        await app.addressBook.newContact.addNewContactScreen.submit();
+        await app.addressBook.newContact.addNewContactScreen.typeName('Foo-name!;');
         await waitFor(app.addressBook.newContact.addNewContactScreen.nameValidationError)
           .toBeVisible()
           .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
@@ -70,8 +72,9 @@ describe('Address book', () => {
 
       it("shouldn't be possible to create a new contact if address is invalid", async () => {
         await app.addressBook.contactsScreen.tapOnCreateButton();
+        await app.addressBook.newContact.addNewContactScreen.typeName(`Heisenberg`);
         await app.addressBook.newContact.addNewContactScreen.typeAddress('fOoBa5bAZ');
-        await app.addressBook.newContact.addNewContactScreen.submit(); // TODO: Remove it once it's fixed in the app
+        await app.addressBook.newContact.addNewContactScreen.submit();
         await waitFor(app.addressBook.newContact.addNewContactScreen.addressValidationError)
           .toBeVisible()
           .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
@@ -83,7 +86,7 @@ describe('Address book', () => {
     const contactName = 'Heisenberg';
 
     beforeEach(async () => {
-      await createNewContact(contactName, '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+      await createNewContact(contactName, '2NA5kx7ztNhCBVogN2kLtNPBMXA3fdkX2Cc');
       await app.addressBook.contactsScreen.tapOnContact('Heisenberg');
     });
 
@@ -94,9 +97,9 @@ describe('Address book', () => {
     });
 
     describe('@android @ios @regression', () => {
-      xit('should be possible to copy address of the contact', async () => {
+      it('should be possible to copy address of the contact', async () => {
         await app.addressBook.details.detailsScreen.tapOnCopyAddressButton();
-        // TODO: Add assertion. Currently there is no way to check clipbaord content in Detox
+        await expectToBeCopied();
       });
 
       it('should be possible to delete a contact', async () => {
@@ -105,10 +108,19 @@ describe('Address book', () => {
         await expect(app.addressBook.details.deleteSuccessScreen.icon).toBeVisible();
       });
 
-      xit("should be possible to get access to Send coins screen from the contact's details", async () => {
-        await app.addressBook.details.detailsScreen.tapOnDeleteButton();
+      it("should be possible to get access to Send coins screen from the contact's details", async () => {
+        await app.header.tapOnBackButton();
+        await steps.importWallet({
+          type: WalletType.KEY_3,
+          name: 'Main',
+          seedPhrase: WALLETS[WalletType.KEY_3].SEED_PHRASE,
+          fastPublicKey: WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
+        });
+        await app.navigationBar.changeTab('address book');
+        await app.addressBook.contactsScreen.tapOnContact('Heisenberg');
+
         await app.addressBook.details.detailsScreen.tapOnSendCoinsButton();
-        // TODO: Add assertion once Send coin screen is implemented
       });
 
       it('should be possible to display QR code of the contact', async () => {
@@ -116,10 +128,10 @@ describe('Address book', () => {
         await expect(app.addressBook.details.qrCodeScreen.qrCode).toBeVisible();
       });
 
-      xit('should be possible to share QR code of the contact', async () => {
+      it('should be possible to share QR code of the contact', async () => {
         await app.addressBook.details.detailsScreen.tapOnShowQrCodeButton();
         await app.addressBook.details.qrCodeScreen.tapOnShareButton();
-        // TODO: Add assertion. I don't know how to assert whether share button worked or not.
+        // NOTE: Currently it's not possible to test share functionality
       });
     });
   });

@@ -225,6 +225,7 @@ module.exports = {
     creatingAuthenticatorDescription:
       'Por favor, tenga paciencia mientras creamos su autentificador.\n Puede tardar un poco. ',
     creatingWallet: 'Creando su monedero ',
+    creatingWalletSuccess: 'Ha creado correctamente su billetera.',
     creatingWalletDescription: 'Por favor, tenga paciencia mientras creamos su monedero.\n Puede tardar un poco.',
     generateAddressesError: 'No se pueden generar direcciones ',
     hooray: '¡Hurra! ',
@@ -471,6 +472,7 @@ module.exports = {
   settings: {
     about: 'Acerca de ',
     terms: 'Condiciones y Privacidad ',
+    factoryReset: 'Restablecer la configuración de fábrica',
     aboutUs: 'Acerca de nosotros ',
     advancedOptions: 'Opciones avanzadas ',
     Biometrics: 'Permitir la biometría ',
@@ -485,6 +487,13 @@ module.exports = {
     notSupportedFingerPrint: 'Su dispositivo no es compatible con la huella dactilar ',
     security: 'Seguridad ',
     TouchID: 'Permitir huella digital ',
+    factory: {
+      title: 'Restablecer la configuración de fábrica',
+      text:
+        '¿Está seguro de que quiere restaurar Gold Wallet a su configuración de fábrica? Todos tus monederos y datos serán borrados. Recuerde que tendrá que importar sus monederos de nuevo.',
+      noButton: 'No',
+      yesButton: 'Sí',
+    },
   },
   tabNavigator: {
     addressBook: 'Libreta de direcciones ',
@@ -600,6 +609,13 @@ module.exports = {
       title: 'Añadir nuevo monedero ',
       walletType: 'Tipo de monedero ',
     },
+    confirmSeed: {
+      header: 'Confirmar frase semilla',
+      title: 'Confirme la frase de respaldo',
+      description: 'Pulse las palabras en el orden correcto para confirmar su respaldo de seguridad.',
+      button: 'Confirmar',
+      error: 'El orden de la frase semilla es incorrecto.',
+    },
     addSuccess: {
       description:
         'Anote esta frase de la semilla en algún lugar seguro. Es su copia de seguridad en caso de que necesite restaurar su monedero. ',
@@ -617,7 +633,7 @@ module.exports = {
       receive: 'Recibir ',
       recover: 'Cancelar ',
       send: 'Enviar ',
-      title: 'Monederos ',
+      title: 'Monederos',
       wallet: 'monedero ',
     },
     deleteWallet: {

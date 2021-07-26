@@ -2,10 +2,10 @@ import { expect as jestExpect } from '@jest/globals';
 import { expect } from 'detox';
 
 import { WALLETS_WITH_COINS, WALLETS } from '../helpers/consts';
-import { TransactionStatus, TransactionType } from '../helpers/types';
 import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
 import steps from '../steps';
+import { TransactionStatus, TransactionType, WalletType } from '../types';
 
 describe('Dashboard', () => {
   beforeEach(async () => {
@@ -23,7 +23,7 @@ describe('Dashboard', () => {
       const walletName = 'My Wallet';
 
       await steps.createWallet({
-        type: 'Standard HD P2SH',
+        type: WalletType.S_HD_P2SH,
         name: walletName,
       });
 
@@ -34,12 +34,12 @@ describe('Dashboard', () => {
   describe('@android @ios @regression', () => {
     it('should display a wallets carousel if more than one wallet is added ', async () => {
       await steps.createWallet({
-        type: 'Standard HD P2SH',
+        type: WalletType.S_HD_P2SH,
         name: 'Main',
       });
 
       await steps.createWallet({
-        type: 'Standard HD P2SH',
+        type: WalletType.S_HD_P2SH,
         name: 'Secondary',
       });
 
@@ -47,24 +47,25 @@ describe('Dashboard', () => {
       await expect(app.dashboard.dashboardScreen.getWalletDetailsButtonElement('All wallets')).toBeNotVisible();
     });
 
-    it('should be possible to swtich between wallets using the wallets carousel', async () => {
+    it('should be possible to switch between wallets using the wallets carousel', async () => {
       const walletNames = ['Main', 'Secondary', 'Tertiary'];
 
       await steps.createWallet({
-        type: 'Standard HD P2SH',
+        type: WalletType.S_HD_P2SH,
         name: walletNames[0],
       });
 
       await steps.createWallet({
-        type: 'Standard HD P2SH',
+        type: WalletType.S_HD_P2SH,
         name: walletNames[1],
       });
 
       await steps.createWallet({
-        type: 'Standard HD P2SH',
+        type: WalletType.S_HD_P2SH,
         name: walletNames[2],
       });
 
+      await app.dashboard.dashboardScreen.scrollDown();
       await expect(app.dashboard.dashboardScreen.getWalletCardElement('All wallets')).toBeVisible();
 
       await app.dashboard.dashboardScreen.switchWalletWithCarousel('left');
@@ -77,9 +78,11 @@ describe('Dashboard', () => {
       await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletNames[2])).toBeVisible();
 
       await app.dashboard.dashboardScreen.switchWalletWithCarousel('right');
+      await app.dashboard.dashboardScreen.scrollToWallet(walletNames[1]);
       await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletNames[1])).toBeVisible();
 
       await app.dashboard.dashboardScreen.switchWalletWithCarousel('right');
+      await app.dashboard.dashboardScreen.scrollToWallet(walletNames[0]);
       await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletNames[0])).toBeVisible();
 
       await app.dashboard.dashboardScreen.switchWalletWithCarousel('right');
@@ -90,12 +93,12 @@ describe('Dashboard', () => {
       const walletNames = ['Main', 'Secondary'];
 
       await steps.createWallet({
-        type: 'Standard HD P2SH',
+        type: WalletType.S_HD_P2SH,
         name: walletNames[0],
       });
 
       await steps.createWallet({
-        type: 'Standard HD P2SH',
+        type: WalletType.S_HD_P2SH,
         name: walletNames[1],
       });
 
@@ -108,7 +111,7 @@ describe('Dashboard', () => {
 
     it('should be displayed Send and Cancel buttons for Standard wallets', async () => {
       await steps.createWallet({
-        type: 'Standard HD P2SH',
+        type: WalletType.S_HD_P2SH,
         name: 'My Wallet',
       });
 
@@ -120,9 +123,9 @@ describe('Dashboard', () => {
 
     it('should be displayed Send, Receive, and Cancel buttons for 2 Key Vault wallets', async () => {
       await steps.createWallet({
-        type: '2-Key Vault',
+        type: WalletType.KEY_2,
         name: 'My Wallet',
-        cancelPublicKey: WALLETS_WITH_COINS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_2].CANCEL_KEY.PUBLIC_KEY,
       });
 
       await expect(app.dashboard.dashboardScreen.recieveButton).toBeVisible();
@@ -132,10 +135,10 @@ describe('Dashboard', () => {
 
     it('should be displayed Send, Receive, and Cancel buttons for 3 Key Vault wallets', async () => {
       await steps.createWallet({
-        type: '3-Key Vault',
+        type: WalletType.KEY_3,
         name: 'My Wallet',
-        fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-        cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+        fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
       });
 
       await expect(app.dashboard.dashboardScreen.recieveButton).toBeVisible();
@@ -145,10 +148,10 @@ describe('Dashboard', () => {
 
     it('should display "No transaction to show" icon if there\'s no transactions to show', async () => {
       await steps.createWallet({
-        type: '3-Key Vault',
+        type: WalletType.KEY_3,
         name: 'Main Wallet',
-        fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-        cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+        fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
       });
 
       await app.dashboard.dashboardScreen.scrollTo(app.dashboard.dashboardScreen.noTransactionsIcon);
@@ -157,21 +160,21 @@ describe('Dashboard', () => {
 
     // Unskip it once the issue is solved
     it.skip('should display transactions of all added wallets under "All wallets" tile', async () => {
-      const transactions = [...WALLETS['3-Key Vault'].TRANSACTIONS, ...WALLETS['2-Key Vault'].TRANSACTIONS];
+      const transactions = [...WALLETS[WalletType.KEY_3].TRANSACTIONS, ...WALLETS[WalletType.KEY_2].TRANSACTIONS];
 
       await steps.importWallet({
-        type: '2-Key Vault',
+        type: WalletType.KEY_2,
         name: 'Secondary',
-        seedPhrase: WALLETS['2-Key Vault'].SEED_PHRASE,
-        cancelPublicKey: WALLETS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+        seedPhrase: WALLETS[WalletType.KEY_2].SEED_PHRASE,
+        cancelPublicKey: WALLETS[WalletType.KEY_2].CANCEL_KEY.PUBLIC_KEY,
       });
 
       await steps.importWallet({
-        type: '3-Key Vault',
+        type: WalletType.KEY_3,
         name: 'Main',
-        seedPhrase: WALLETS['3-Key Vault'].SEED_PHRASE,
-        fastPublicKey: WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-        cancelPublicKey: WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+        seedPhrase: WALLETS[WalletType.KEY_3].SEED_PHRASE,
+        fastPublicKey: WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
       });
 
       for (const transaction of transactions) {
@@ -182,27 +185,27 @@ describe('Dashboard', () => {
     // Unskip it once the issue is solved
     it.skip('should display only transactions of the wallet that is currently selected', async () => {
       await steps.importWallet({
-        type: '3-Key Vault',
+        type: WalletType.KEY_3,
         name: 'Main',
-        seedPhrase: WALLETS['3-Key Vault'].SEED_PHRASE,
-        fastPublicKey: WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-        cancelPublicKey: WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+        seedPhrase: WALLETS[WalletType.KEY_3].SEED_PHRASE,
+        fastPublicKey: WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
       });
 
       await steps.importWallet({
-        type: '2-Key Vault',
+        type: WalletType.KEY_2,
         name: 'Secondary',
-        seedPhrase: WALLETS['2-Key Vault'].SEED_PHRASE,
-        cancelPublicKey: WALLETS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+        seedPhrase: WALLETS[WalletType.KEY_2].SEED_PHRASE,
+        cancelPublicKey: WALLETS[WalletType.KEY_2].CANCEL_KEY.PUBLIC_KEY,
       });
 
       await app.dashboard.dashboardScreen.switchWalletWithDropdown('Main');
 
-      for (const transaction of WALLETS['3-Key Vault'].TRANSACTIONS) {
+      for (const transaction of WALLETS[WalletType.KEY_3].TRANSACTIONS) {
         await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
       }
 
-      for (const transaction of WALLETS['2-Key Vault'].TRANSACTIONS) {
+      for (const transaction of WALLETS[WalletType.KEY_2].TRANSACTIONS) {
         jestExpect(await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id)).toThrowError();
       }
     });
@@ -216,14 +219,14 @@ describe('Dashboard', () => {
     describe('@android @ios @smoke', () => {
       it('should be displayed all transaction details ', async () => {
         await steps.importWallet({
-          type: '3-Key Vault',
+          type: WalletType.KEY_3,
           name: 'Main',
-          seedPhrase: WALLETS['3-Key Vault'].SEED_PHRASE,
-          fastPublicKey: WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-          cancelPublicKey: WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          seedPhrase: WALLETS[WalletType.KEY_3].SEED_PHRASE,
+          fastPublicKey: WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
         });
 
-        const transaction = WALLETS['3-Key Vault'].TRANSACTIONS[0];
+        const transaction = WALLETS[WalletType.KEY_3].TRANSACTIONS[0];
 
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
@@ -235,14 +238,14 @@ describe('Dashboard', () => {
     describe('@android @ios @regression', () => {
       it('should be possible to copy the "from" address', async () => {
         await steps.importWallet({
-          type: '3-Key Vault',
+          type: WalletType.KEY_3,
           name: 'Main',
-          seedPhrase: WALLETS['3-Key Vault'].SEED_PHRASE,
-          fastPublicKey: WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-          cancelPublicKey: WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          seedPhrase: WALLETS[WalletType.KEY_3].SEED_PHRASE,
+          fastPublicKey: WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
         });
 
-        const transaction = WALLETS['3-Key Vault'].TRANSACTIONS[0];
+        const transaction = WALLETS[WalletType.KEY_3].TRANSACTIONS[0];
 
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
@@ -252,14 +255,14 @@ describe('Dashboard', () => {
 
       it('should be possible to copy the "to" address', async () => {
         await steps.importWallet({
-          type: '3-Key Vault',
+          type: WalletType.KEY_3,
           name: 'Main',
-          seedPhrase: WALLETS['3-Key Vault'].SEED_PHRASE,
-          fastPublicKey: WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-          cancelPublicKey: WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          seedPhrase: WALLETS[WalletType.KEY_3].SEED_PHRASE,
+          fastPublicKey: WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
         });
 
-        const transaction = WALLETS['3-Key Vault'].TRANSACTIONS[0];
+        const transaction = WALLETS[WalletType.KEY_3].TRANSACTIONS[0];
 
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
@@ -269,14 +272,14 @@ describe('Dashboard', () => {
 
       it('should be possible to copy the "transaction id" address', async () => {
         await steps.importWallet({
-          type: '3-Key Vault',
+          type: WalletType.KEY_3,
           name: 'Main',
-          seedPhrase: WALLETS['3-Key Vault'].SEED_PHRASE,
-          fastPublicKey: WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-          cancelPublicKey: WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          seedPhrase: WALLETS[WalletType.KEY_3].SEED_PHRASE,
+          fastPublicKey: WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
         });
 
-        const transaction = WALLETS['3-Key Vault'].TRANSACTIONS[0];
+        const transaction = WALLETS[WalletType.KEY_3].TRANSACTIONS[0];
 
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
@@ -286,19 +289,20 @@ describe('Dashboard', () => {
 
       it('should be possible to view the transaction in Explorer', async () => {
         await steps.importWallet({
-          type: '3-Key Vault',
+          type: WalletType.KEY_3,
           name: 'Main',
-          seedPhrase: WALLETS['3-Key Vault'].SEED_PHRASE,
-          fastPublicKey: WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-          cancelPublicKey: WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+          seedPhrase: WALLETS[WalletType.KEY_3].SEED_PHRASE,
+          fastPublicKey: WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          cancelPublicKey: WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
         });
 
-        const transaction = WALLETS['3-Key Vault'].TRANSACTIONS[0];
+        const transaction = WALLETS[WalletType.KEY_3].TRANSACTIONS[0];
 
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
 
-        await app.transactionDetails.tapOnViewInBlockExplorerButton();
+        await app.transactionDetails.scrollToBlockExplorerButton();
+        expect(app.transactionDetails.viewInBlockExplorerButton).toBeVisible();
       });
     });
   });
@@ -306,21 +310,21 @@ describe('Dashboard', () => {
   describe('Filters', () => {
     beforeEach(async () => {
       await steps.importWallet({
-        type: '3-Key Vault',
+        type: WalletType.KEY_3,
         name: 'Main',
-        seedPhrase: WALLETS['3-Key Vault'].SEED_PHRASE,
-        fastPublicKey: WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-        cancelPublicKey: WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+        seedPhrase: WALLETS[WalletType.KEY_3].SEED_PHRASE,
+        fastPublicKey: WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
       });
     });
 
     describe('@android @ios @regression', () => {
       it('should be possible to filter by Received transaction type', async () => {
-        const receivedTransactions = WALLETS['3-Key Vault'].TRANSACTIONS.filter(
+        const receivedTransactions = WALLETS[WalletType.KEY_3].TRANSACTIONS.filter(
           transaction => transaction.type === TransactionType.RECEIVED,
         );
 
-        const restTransactions = WALLETS['3-Key Vault'].TRANSACTIONS.filter(
+        const restTransactions = WALLETS[WalletType.KEY_3].TRANSACTIONS.filter(
           transaction => !receivedTransactions.includes(transaction),
         );
 
@@ -338,11 +342,11 @@ describe('Dashboard', () => {
       });
 
       it('should be possible to filter by Sent transaction type', async () => {
-        const receivedTransactions = WALLETS['3-Key Vault'].TRANSACTIONS.filter(
+        const receivedTransactions = WALLETS[WalletType.KEY_3].TRANSACTIONS.filter(
           transaction => transaction.type === TransactionType.SENT,
         );
 
-        const restTransactions = WALLETS['3-Key Vault'].TRANSACTIONS.filter(
+        const restTransactions = WALLETS[WalletType.KEY_3].TRANSACTIONS.filter(
           transaction => !receivedTransactions.includes(transaction),
         );
 
@@ -362,16 +366,16 @@ describe('Dashboard', () => {
       // This test isn't finished yet.
       it.skip('should be possible to filter by sender', async () => {
         const fromAddress = '2NFCCzE2oWvMx2Z4hvgfsmDHqD4eo3Gczpe';
-        const transactions = WALLETS['3-Key Vault'].TRANSACTIONS.filter(
+        const transactions = WALLETS[WalletType.KEY_3].TRANSACTIONS.filter(
           transaction => transaction.from === fromAddress,
         );
 
-        const restTransactions = WALLETS['3-Key Vault'].TRANSACTIONS.filter(
+        const restTransactions = WALLETS[WalletType.KEY_3].TRANSACTIONS.filter(
           transaction => !transactions.includes(transaction),
         );
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
-        await app.filtersScreen.chooseContactToFilterBy(fromAddress);
+        await app.filtersScreen.chooseContactToFilterBy();
         await app.filtersScreen.tapOnApplyFiltersButton();
 
         for (const transaction of transactions) {
@@ -386,9 +390,9 @@ describe('Dashboard', () => {
       it.skip('should be possible to filter by date', async () => {});
 
       it('should be possible to filter by amount', async () => {
-        const transactions = WALLETS['3-Key Vault'].TRANSACTIONS.filter(transaction => transaction.amount >= 0.01);
+        const transactions = WALLETS[WalletType.KEY_3].TRANSACTIONS.filter(transaction => transaction.amount >= 0.01);
 
-        const restTransactions = WALLETS['3-Key Vault'].TRANSACTIONS.filter(
+        const restTransactions = WALLETS[WalletType.KEY_3].TRANSACTIONS.filter(
           transaction => !transactions.includes(transaction),
         );
 
@@ -406,11 +410,11 @@ describe('Dashboard', () => {
       });
 
       it('should be possible to filter by CANCELED status', async () => {
-        const transactions = WALLETS['3-Key Vault'].TRANSACTIONS.filter(
+        const transactions = WALLETS[WalletType.KEY_3].TRANSACTIONS.filter(
           transaction => transaction.status === TransactionStatus.CANCELED_DONE,
         );
 
-        const restTransactions = WALLETS['3-Key Vault'].TRANSACTIONS.filter(
+        const restTransactions = WALLETS[WalletType.KEY_3].TRANSACTIONS.filter(
           transaction => !transactions.includes(transaction),
         );
 
@@ -437,7 +441,7 @@ describe('Dashboard', () => {
       });
 
       it('should be possible to clear all applied filters from Dashboard screen', async () => {
-        const transactions = WALLETS['3-Key Vault'].TRANSACTIONS;
+        const transactions = WALLETS[WalletType.KEY_3].TRANSACTIONS;
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
         await app.filtersScreen.tapOnStatusOption(TransactionStatus.CANCELED_DONE);
@@ -451,7 +455,7 @@ describe('Dashboard', () => {
       });
 
       it('should be possible to clear all applied filters from Filter transactions screen', async () => {
-        const transactions = WALLETS['3-Key Vault'].TRANSACTIONS;
+        const transactions = WALLETS[WalletType.KEY_3].TRANSACTIONS;
 
         await app.dashboard.dashboardScreen.tapOnFilterButton();
         await app.filtersScreen.tapOnStatusOption(TransactionStatus.CANCELED_DONE);

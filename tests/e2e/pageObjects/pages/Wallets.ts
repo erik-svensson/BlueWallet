@@ -1,9 +1,10 @@
-import { by, element } from 'detox';
+import { by, element, waitFor } from 'detox';
 
 import actions from '../../actions';
+import { BasicWalletType, WalletType } from '../../types';
+import ConfirmSeedScreen from '../common/ConfirmSeedScreen';
 import MessageScreen from '../common/MessageScreen';
 import ScanQrCodeScreen from '../common/ScanQrCodeScreen';
-import { BasicWalletType, WalletType } from '../types';
 
 const Wallets = () => {
   const AddNewWallet = () => {
@@ -12,11 +13,11 @@ const Wallets = () => {
       nameValidationError: element(by.id('create-wallet-name-input-validation-error')),
 
       walletTypeRadios: {
-        '3-Key Vault': element(by.id('create-3-key-vault-radio')),
-        '2-Key Vault': element(by.id('create-2-key-vault-radio')),
-        'Standard HD P2SH': element(by.id('create-hd-p2sh-radio')),
-        'Standard P2SH': element(by.id('create-segwit-p2sh-radio')),
-        'Standard HD SegWit': element(by.id('create-hd-segwit-p2sh-radio')),
+        [WalletType.KEY_3]: element(by.id('create-3-key-vault-radio')),
+        [WalletType.KEY_2]: element(by.id('create-2-key-vault-radio')),
+        [WalletType.S_HD_P2SH]: element(by.id('create-hd-p2sh-radio')),
+        [WalletType.S_P2SH]: element(by.id('create-segwit-p2sh-radio')),
+        [WalletType.S_HD_SEGWIT]: element(by.id('create-hd-segwit-p2sh-radio')),
       },
 
       createWalletButton: element(by.id('creates-wallet-button')),
@@ -56,12 +57,28 @@ const Wallets = () => {
       },
     });
 
-    const SuccessScreen = () => ({
+    const SeedScreen = () => ({
       closeButton: element(by.id('create-wallet-close-button')),
       mnemonic: element(by.id('create-wallet-mnemonic')),
+      mnemonicWord: (index: number) => element(by.id(`mnemonic-word-${index}`)),
 
       async tapOnCloseButton() {
         await actions.tap(this.closeButton);
+      },
+
+      async waitUntilDisplayed(timeout = 120 * 1000) {
+        await waitFor(this.mnemonic)
+          .toBeVisible()
+          .withTimeout(timeout);
+      },
+
+      async getSeed() {
+        const getWord = (index: number) => actions.getElementsText(this.mnemonicWord(index));
+        const indexes = [...Array(12).keys()];
+        const seed = await Promise.all(indexes.map(getWord));
+        const removedKeys = seed.map(s => s.match(/[a-z]+/)!.toString());
+
+        return removedKeys;
       },
     });
 
@@ -71,17 +88,18 @@ const Wallets = () => {
       addCancelKeyScreen: AddCancelKeyScreen(),
       scanQrCodeScreen: ScanQrCodeScreen(),
       loadingScreen: MessageScreen('processingState'),
-      successScreen: SuccessScreen(),
+      seedScreen: SeedScreen(),
+      confirmSeedScreen: ConfirmSeedScreen(),
+      successScreen: MessageScreen('success'),
     };
   };
 
   const ImportWallet = () => {
     const ChooseWalletTypeScreen = () => ({
       walletTypeRadios: {
-        '3-Key Vault': element(by.id('import-3-key-vault-radio')),
-        '2-Key Vault': element(by.id('import-2-key-vault-radio')),
-        // eslint-disable-next-line prettier/prettier
-        'Standard HD P2SH': element(by.id('import-standard-wallet-radio')),
+        [WalletType.KEY_3]: element(by.id('import-3-key-vault-radio')),
+        [WalletType.KEY_2]: element(by.id('import-2-key-vault-radio')),
+        [WalletType.S_HD_P2SH]: element(by.id('import-standard-wallet-radio')),
       },
       proceedButton: element(by.id('confirm-import-button')),
 

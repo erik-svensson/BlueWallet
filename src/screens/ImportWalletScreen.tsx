@@ -93,7 +93,7 @@ export class ImportWalletScreen extends Component<Props, State> {
   showErrorMessageScreen = ({
     title = i18n.message.somethingWentWrong,
     description = i18n.message.somethingWentWrongWhileCreatingWallet,
-    onPress = () => this.props.navigation.navigate(Route.ImportWalletChooseType),
+    onPress = () => this.props.navigation.navigate(Route.ImportWalletChooseType, { error: true }),
     buttonTitle = i18n.message.returnToWalletChoose,
   }: {
     title?: string;
