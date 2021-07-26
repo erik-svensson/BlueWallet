@@ -1,9 +1,10 @@
-import { waitFor } from 'detox';
+import { expect, waitFor } from 'detox';
 
 import { expectToBeDisabled } from '../../assertions';
 import { isBeta } from '../../helpers/utils';
 import app from '../../pageObjects';
 import steps from '../../steps';
+import { WalletType } from '../../types';
 
 describe('Adding wallet', () => {
   describe('General', () => {
@@ -18,7 +19,9 @@ describe('Adding wallet', () => {
       it("shouldn't be possible to create a new wallet with empty name", async () => {
         await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
-        await expectToBeDisabled(app.wallets.addNewWallet.createScreen.createWalletButton);
+        await expectToBeDisabled(app.wallets.addNewWallet.createScreen.createWalletButton, () =>
+          expect(app.wallets.addNewWallet.createScreen.nameInput).toBeVisible(),
+        );
       });
 
       it("shouldn't be possible to import an existing wallet with empty name", async () => {
@@ -27,7 +30,9 @@ describe('Adding wallet', () => {
         await app.wallets.addNewWallet.createScreen.tapOnImportButton();
         await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
-        await expectToBeDisabled(app.wallets.addNewWallet.createScreen.createWalletButton);
+        await expectToBeDisabled(app.wallets.importWallet.importScreen.submitButton, () =>
+          expect(app.wallets.importWallet.importScreen.nameInput).toBeVisible(),
+        );
       });
 
       it.skip("shouldn't be possible to create a new wallet with name including special characters", async () => {
@@ -59,7 +64,7 @@ describe('Adding wallet', () => {
           const walletName = 'My Wallet';
 
           await steps.createWallet({
-            type: 'Standard HD P2SH',
+            type: WalletType.S_HD_P2SH,
             name: walletName,
           });
 
@@ -76,7 +81,7 @@ describe('Adding wallet', () => {
           const walletName = 'My Wallet';
 
           await steps.createWallet({
-            type: 'Standard HD P2SH',
+            type: WalletType.S_HD_P2SH,
             name: walletName,
           });
 

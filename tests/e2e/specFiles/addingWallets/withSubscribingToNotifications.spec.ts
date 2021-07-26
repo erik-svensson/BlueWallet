@@ -4,6 +4,7 @@ import gmailClient from '../../gmail';
 import { DEFAULT_EMAIL_ADDRESS, ECDSA_KEYS, WALLETS } from '../../helpers/consts';
 import { isBeta, randomizeEmailAddress } from '../../helpers/utils';
 import app from '../../pageObjects';
+import { WalletType } from '../../types';
 
 describe('Adding wallet', () => {
   describe('With subscribing to the notifications', () => {
@@ -26,7 +27,7 @@ describe('Adding wallet', () => {
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
-          await app.wallets.addNewWallet.createScreen.chooseType('3-Key Vault');
+          await app.wallets.addNewWallet.createScreen.chooseType(WalletType.KEY_3);
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
           await app.wallets.addNewWallet.addFastKeyScreen.tapScanOnQrCode();
@@ -56,7 +57,7 @@ describe('Adding wallet', () => {
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
-          await app.wallets.addNewWallet.createScreen.chooseType('2-Key Vault');
+          await app.wallets.addNewWallet.createScreen.chooseType(WalletType.KEY_2);
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
           await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
@@ -81,7 +82,7 @@ describe('Adding wallet', () => {
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
-          await app.wallets.addNewWallet.createScreen.chooseType('Standard HD P2SH');
+          await app.wallets.addNewWallet.createScreen.chooseType(WalletType.S_HD_P2SH);
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
           await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
@@ -111,19 +112,21 @@ describe('Adding wallet', () => {
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('3-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(WalletType.KEY_3);
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
           await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
-          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['3-Key Vault'].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS[WalletType.KEY_3].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.addFastKeyScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY);
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
+            WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          );
 
           await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
-            WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+            WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
           );
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
@@ -138,16 +141,16 @@ describe('Adding wallet', () => {
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('2-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(WalletType.KEY_2);
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
           await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
-          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['2-Key Vault'].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS[WalletType.KEY_2].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
-            WALLETS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+            WALLETS[WalletType.KEY_2].CANCEL_KEY.PUBLIC_KEY,
           );
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
@@ -160,11 +163,11 @@ describe('Adding wallet', () => {
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('Standard HD P2SH');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(WalletType.S_HD_P2SH);
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
           await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
-          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['Standard HD P2SH'].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS[WalletType.S_HD_P2SH].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();

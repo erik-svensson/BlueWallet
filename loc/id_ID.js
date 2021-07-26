@@ -631,7 +631,7 @@ module.exports = {
       receive: 'Terima',
       recover: 'Batalkan',
       send: 'Kirim',
-      title: 'Dompet ',
+      title: 'Dompet',
       wallet: 'Dompet ',
     },
     deleteWallet: {

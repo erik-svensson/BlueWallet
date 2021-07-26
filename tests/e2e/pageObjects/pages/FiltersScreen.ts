@@ -1,7 +1,7 @@
 import { by, element } from 'detox';
 
 import actions from '../../actions';
-import { TransactionStatus } from '../../helpers/types';
+import { TransactionStatus } from '../../types';
 import Header from '../common/Header';
 
 const FiltersScreen = () => ({
@@ -31,7 +31,7 @@ const FiltersScreen = () => ({
     await actions.tap(this.filterBySentOption);
   },
 
-  async chooseContactToFilterBy(contactName: string) {
+  async chooseContactToFilterBy() {
     await actions.tap(this.filterByFromSenderInput);
   },
 

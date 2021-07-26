@@ -633,7 +633,7 @@ module.exports = {
       receive: 'Recibir ',
       recover: 'Cancelar ',
       send: 'Enviar ',
-      title: 'Monederos ',
+      title: 'Monederos',
       wallet: 'monedero ',
     },
     deleteWallet: {
