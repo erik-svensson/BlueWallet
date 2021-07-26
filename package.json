@@ -1,6 +1,6 @@
 {
   "name": "goldwallet",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/plugin-transform-react-jsx": "^7.12.12",
@@ -37,6 +37,7 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "babel-plugin-transform-remove-console": "^6.9.4",
+    "cz-conventional-changelog": "3.3.0",
     "detox": "18.19.0",
     "detox-getprops": "^0.1.2",
     "eslint": "^6.8.0",
@@ -139,6 +140,7 @@
     "buffer": "5.2.1",
     "buffer-reverse": "1.0.1",
     "coinselect": "3.1.11",
+    "commitizen": "^4.2.4",
     "crypto-js": "3.1.9-1",
     "dayjs": "1.8.27",
     "ecurve": "^1.0.6",
@@ -247,6 +249,11 @@
     "hooks": {
       "pre-commit": "yarn precommit",
       "pre-push": "yarn test"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
     }
   }
 }
