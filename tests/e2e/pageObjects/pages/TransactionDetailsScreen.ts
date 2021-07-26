@@ -27,8 +27,12 @@ const TransactionDetailsScreen = () => ({
   },
 
   async tapOnViewInBlockExplorerButton() {
-    await actions.scrollToElement(this.viewInBlockExplorerButton, this.self);
+    await this.scrollToBlockExplorerButton();
     await actions.tap(this.viewInBlockExplorerButton);
+  },
+
+  async scrollToBlockExplorerButton() {
+    await actions.scrollToElement(this.viewInBlockExplorerButton, this.self);
   },
 });
 

@@ -7,7 +7,6 @@ import fs from 'fs';
 import { OAuth2Client } from 'google-auth-library';
 import { google } from 'googleapis';
 import { Base64 } from 'js-base64';
-import readline from 'readline';
 
 import poll from './helpers/utils';
 

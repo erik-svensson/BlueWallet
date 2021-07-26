@@ -1,16 +1,19 @@
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { icons } from 'app/assets';
-import { Image, ScreenTemplate, Header, ListItem } from 'app/components';
+import { Image, ScreenTemplate, Header, ListItem, CustomModal } from 'app/components';
 import { Route, MainTabNavigatorParams, RootStackParams, Wallet } from 'app/consts';
+import { factoryReset } from 'app/helpers/factoryReset';
 import { logoSource } from 'app/helpers/images';
 import { BiometricService, AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { updateBiometricSetting } from 'app/state/appSettings/actions';
+import { unsubscribeDeviceToken } from 'app/state/notifications/actions';
+import { fonts, palette, typography } from 'app/styles';
 
 import { LabeledSettingsRow } from './LabeledSettingsRow';
 
@@ -24,6 +27,7 @@ interface Props {
 }
 
 export const SettingsScreen = (props: Props) => {
+  const dispatch = useDispatch();
   const { navigation } = props;
   const { isBiometricsEnabled } = useSelector((state: ApplicationState) => ({
     isBiometricsEnabled: state.appSettings.isBiometricsEnabled,
@@ -32,12 +36,11 @@ export const SettingsScreen = (props: Props) => {
     language: state.appSettings.language,
   }));
   const [biometryTypeAvailable, setBiometryTypeAvailable] = useState(false);
+  const [showWarring, setShowWarring] = useState(false);
 
   useEffect(() => {
     refreshBiometricsAvailability();
   }, [biometryTypeAvailable]);
-
-  const dispatch = useDispatch();
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
 
@@ -59,7 +62,12 @@ export const SettingsScreen = (props: Props) => {
 
   const renderGeneralSettings = () => (
     <>
-      <ListItem onPress={navigateToSelectLanguage} title={i18n.settings.language} source={icons.languageIcon} />
+      <ListItem
+        testID="language-settings-item"
+        onPress={navigateToSelectLanguage}
+        title={i18n.settings.language}
+        source={icons.languageIcon}
+      />
       <ListItem
         testID="advanced-options-settings-item"
         title={i18n.settings.advancedOptions}
@@ -77,6 +85,42 @@ export const SettingsScreen = (props: Props) => {
 
   const goToChangePin = () => {
     navigation.navigate(Route.CurrentPin);
+  };
+
+  const renderContent = () => (
+    <View style={styles.content}>
+      <Text style={styles.modalTitle}>{i18n.settings.factory.title}</Text>
+      <Text style={styles.modalText}>{i18n.settings.factory.text}</Text>
+      <View style={styles.buttonWrapper}>
+        <TouchableOpacity onPress={handleNoButton}>
+          <Text style={styles.modalButton}>{`${i18n.settings.factory.noButton}`.toUpperCase()}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleYesButton}>
+          <Text style={styles.modalButton}>{`${i18n.settings.factory.yesButton}`.toUpperCase()}</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  const closeModals = () => {
+    setShowWarring(false);
+  };
+
+  const toggleModal = () => {
+    setShowWarring(!showWarring);
+  };
+
+  const handleResetFactory = () => {
+    toggleModal();
+  };
+
+  const handleNoButton = () => {
+    setShowWarring(false);
+  };
+
+  const handleYesButton = () => {
+    dispatch(unsubscribeDeviceToken());
+    factoryReset();
   };
 
   const refreshBiometricsAvailability = async () => {
@@ -118,18 +162,23 @@ export const SettingsScreen = (props: Props) => {
         source={icons.infoIcon}
       />
       <ListItem onPress={navigateToTermsConditions} title={i18n.settings.terms} source={icons.termsIcon} />
+      <ListItem onPress={handleResetFactory} title={i18n.settings.factoryReset} source={icons.resetFactory} />
     </>
   );
 
   return (
     <>
-      <AppStateManager handleAppComesToForeground={refreshBiometricsAvailability} />
+      <AppStateManager
+        handleAppComesToForeground={refreshBiometricsAvailability}
+        handleAppComesToBackground={closeModals}
+      />
       <Header title={i18n.settings.header} />
       <ScreenTemplate>
         <Image testID="goldwallet-logo" source={logoSource} style={styles.logo} resizeMode="contain" />
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.security}>{renderSecuritySettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.about}>{renderAboutSettings()}</LabeledSettingsRow>
+        <CustomModal show={showWarring}>{renderContent()}</CustomModal>
       </ScreenTemplate>
     </>
   );
@@ -140,5 +189,40 @@ const styles = StyleSheet.create({
     height: 82,
     width: '100%',
     paddingTop: 3,
+  },
+  content: {
+    backgroundColor: palette.background,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    borderRadius: 4,
+    borderColor: palette.textBlack,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: fonts.ubuntu.bold,
+    marginTop: 16,
+    marginHorizontal: 23,
+  },
+  modalText: {
+    fontFamily: fonts.ubuntu.regular,
+    fontSize: 15,
+    lineHeight: 22.5,
+    color: palette.textGrey,
+    marginHorizontal: 23,
+    marginTop: 10,
+  },
+  buttonWrapper: {
+    paddingTop: 15,
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+  },
+  modalButton: {
+    ...typography.button,
+    paddingVertical: 10,
+    textAlign: 'right',
+    color: palette.secondary,
+    marginHorizontal: 23,
   },
 });

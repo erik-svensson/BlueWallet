@@ -1,8 +1,9 @@
-import { waitFor } from 'detox';
+import { expect } from 'detox';
 
 import { ECDSA_KEYS, WALLETS } from '../../helpers/consts';
 import { isBeta } from '../../helpers/utils';
 import app from '../../pageObjects';
+import { WalletType } from '../../types';
 
 describe('Adding wallet', () => {
   describe('Without subscribing to the notifications', () => {
@@ -14,12 +15,14 @@ describe('Adding wallet', () => {
     });
 
     describe('Create', () => {
+      const walletName = 'My Wallet';
+
       describe('@android @ios @smoke', () => {
         it('should be possible to create a new 3-Key Vault wallet', async () => {
-          await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
-          await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
-          await app.wallets.addNewWallet.createScreen.chooseType('3-Key Vault');
+          await app.wallets.addNewWallet.createScreen.typeName(walletName);
+          await app.wallets.addNewWallet.createScreen.chooseType(WalletType.KEY_3);
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
           await app.wallets.addNewWallet.addFastKeyScreen.tapScanOnQrCode();
@@ -28,47 +31,54 @@ describe('Adding wallet', () => {
           await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY);
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+          const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+          await app.wallets.addNewWallet.successScreen.close();
+
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
       });
 
       describe('@android @ios @regression', () => {
         it('should be possible to create a new 2-Key Vault wallet', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
-          await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
-          await app.wallets.addNewWallet.createScreen.chooseType('2-Key Vault');
+          await app.wallets.addNewWallet.createScreen.typeName(walletName);
+          await app.wallets.addNewWallet.createScreen.chooseType(WalletType.KEY_2);
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
           await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY);
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+          const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+          await app.wallets.addNewWallet.successScreen.close();
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
 
         it('should be possible to create a new Standard HD P2SH wallet', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
-          await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
-          await app.wallets.addNewWallet.createScreen.chooseType('Standard HD P2SH');
+          await app.wallets.addNewWallet.createScreen.typeName(walletName);
+          await app.wallets.addNewWallet.createScreen.chooseType(WalletType.S_HD_P2SH);
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+          const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
 
-          await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+          await app.wallets.addNewWallet.successScreen.close();
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
 
         describe('Advanced wallets', () => {
@@ -81,183 +91,184 @@ describe('Adding wallet', () => {
           });
 
           it('should be possible to create a new Standard P2SH wallet', async () => {
-            await app.dashboard.dashboardScreen.tapOnAddButton();
+            await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
-            await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
-            await app.wallets.addNewWallet.createScreen.chooseType('Standard P2SH');
+            await app.wallets.addNewWallet.createScreen.typeName(walletName);
+            await app.wallets.addNewWallet.createScreen.chooseType(WalletType.S_P2SH);
             await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
-            await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
-
-            await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-            await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
-              .toBeVisible()
-              .withTimeout(20000);
+            await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+            await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+            await app.wallets.addNewWallet.successScreen.close();
+            await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+            await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
           });
 
           it('should be possible to create a new Standard HD SegWit wallet', async () => {
-            await app.dashboard.dashboardScreen.tapOnAddButton();
+            await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
-            await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
-            await app.wallets.addNewWallet.createScreen.chooseType('Standard HD SegWit');
+            await app.wallets.addNewWallet.createScreen.typeName(walletName);
+            await app.wallets.addNewWallet.createScreen.chooseType(WalletType.S_HD_SEGWIT);
             await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
-            await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+            await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+            const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
 
-            await app.wallets.addNewWallet.successScreen.tapOnCloseButton();
-            await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Wallet'))
-              .toBeVisible()
-              .withTimeout(20000);
+            await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+            await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+            await app.wallets.addNewWallet.successScreen.close();
+            await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+            await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
           });
         });
       });
     });
 
     describe('Import', () => {
+      const walletName = 'My Imported Wallet';
+
       describe('@android @ios @smoke', () => {
         it('should be possible to import an existing 3-Key Vault wallet by typing seed phrase', async () => {
-          await app.dashboard.dashboardScreen.tapOnCreateWalletButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('3-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(WalletType.KEY_3);
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
-          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
-          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['3-Key Vault'].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.typeName(walletName);
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS[WalletType.KEY_3].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.addFastKeyScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY);
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
+            WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          );
 
           await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
-            WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+            WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
           );
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
           await app.wallets.importWallet.successScreen.close();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
       });
 
       describe('@android @ios @regression', () => {
         it('should be possible to import an existing 3-Key Vault wallet by scaning QR code', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('3-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(WalletType.KEY_3);
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
-          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
+          await app.wallets.importWallet.importScreen.typeName(walletName);
           await app.wallets.importWallet.importScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['3-Key Vault'].SEED_PHRASE);
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS[WalletType.KEY_3].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.addFastKeyScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['3-Key Vault'].FAST_KEY.PUBLIC_KEY);
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
+            WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+          );
 
           await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
-            WALLETS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+            WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
           );
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
           await app.wallets.importWallet.successScreen.close();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
 
         it('should be possible to import an existing 2-Key Vault wallet by typing seed phrase', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('2-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(WalletType.KEY_2);
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
-          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
-          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['2-Key Vault'].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.typeName(walletName);
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS[WalletType.KEY_2].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
-            WALLETS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+            WALLETS[WalletType.KEY_2].CANCEL_KEY.PUBLIC_KEY,
           );
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
           await app.wallets.importWallet.successScreen.close();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
 
         it('should be possible to import an existing 2-Key Vault wallet by scaning QR code', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('2-Key Vault');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(WalletType.KEY_2);
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
-          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
+          await app.wallets.importWallet.importScreen.typeName(walletName);
           await app.wallets.importWallet.importScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['2-Key Vault'].SEED_PHRASE);
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS[WalletType.KEY_2].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
-            WALLETS['2-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
+            WALLETS[WalletType.KEY_2].CANCEL_KEY.PUBLIC_KEY,
           );
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
           await app.wallets.importWallet.successScreen.close();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
 
         it('should be possible to import an existing Standard wallet by typing seed phrase', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('Standard HD P2SH');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(WalletType.S_HD_P2SH);
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
-          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
-          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS['Standard HD P2SH'].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.typeName(walletName);
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS[WalletType.S_HD_P2SH].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
           await app.wallets.importWallet.successScreen.close();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
 
         it('should be possible to import an existing Standard wallet by scaning QR code', async () => {
-          await app.dashboard.dashboardScreen.tapOnAddButton();
+          await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
-          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType('Standard HD P2SH');
+          await app.wallets.importWallet.chooseWalletTypeScreen.chooseType(WalletType.S_HD_P2SH);
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
-          await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
+          await app.wallets.importWallet.importScreen.typeName(walletName);
           await app.wallets.importWallet.importScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS['Standard HD P2SH'].SEED_PHRASE);
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(WALLETS[WalletType.S_HD_P2SH].SEED_PHRASE);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
 
           await app.wallets.importWallet.successScreen.close();
-          await waitFor(app.dashboard.dashboardScreen.getWalletCardElement('My Imported Wallet'))
-            .toBeVisible()
-            .withTimeout(20000);
+          await app.dashboard.dashboardScreen.scrollToWallet(walletName);
+          await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
         });
       });
     });

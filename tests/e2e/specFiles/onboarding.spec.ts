@@ -32,7 +32,7 @@ describe('Onboarding', () => {
     });
   });
 
-  it('should be possible to pass onboarding and add an email address', async () => {
+  it.skip('should be possible to pass onboarding and add an email address', async () => {
     const emailAddress = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
 
     await app.onboarding.createPinScreen.typePin('1111');
@@ -57,7 +57,7 @@ describe('Onboarding', () => {
       .withTimeout(20000);
   });
 
-  it('should be possible to resend the code while adding an email address', async () => {
+  it.skip('should be possible to resend the code while adding an email address', async () => {
     const emailAddress = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
 
     await app.onboarding.createPinScreen.typePin('1111');
@@ -140,7 +140,7 @@ describe('Onboarding', () => {
       await expect(app.onboarding.confirmEmailAddressScreen.pincodeValidationError).toBeVisible();
     });
 
-    it('should be displayed an error message and send a code if exceeded a limit of attempts of sending codes', async () => {
+    it.skip('should be displayed an error message and send a code if exceeded a limit of attempts of sending codes', async () => {
       const emailAddress = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
 
       await app.onboarding.createPinScreen.typePin('1111');

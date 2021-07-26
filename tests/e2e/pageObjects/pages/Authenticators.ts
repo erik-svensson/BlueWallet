@@ -1,4 +1,4 @@
-import { by, element } from 'detox';
+import { by, element, waitFor } from 'detox';
 
 import actions from '../../actions';
 import DeleteScreen from '../common/DeleteScreen';
@@ -55,9 +55,16 @@ const Authenticators = () => {
 
     const SeedPhraseScreen = () => ({
       proceedButton: element(by.id('seed-phrase-proceed-button')),
+      mnemonic: element(by.id('authenticator-mnemonic')),
 
       async proceed() {
         await actions.tap(this.proceedButton);
+      },
+
+      async waitUntilDisplayed(timeout = 20 * 1000) {
+        waitFor(this.mnemonic)
+          .toBeVisible()
+          .withTimeout(timeout);
       },
     });
 
@@ -98,7 +105,7 @@ const Authenticators = () => {
 
   const Details = () => {
     const DetailsScreen = () => ({
-      scrollView: element(by.id('authenticator-details-screen')), // TODO: Consider to rename it
+      scrollView: element(by.id('authenticator-details-screen')),
 
       authenticatorName: element(by.id('authenticator-name')),
       nameInput: element(by.id('rename-authenticator')),

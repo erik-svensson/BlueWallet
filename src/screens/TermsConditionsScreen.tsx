@@ -113,10 +113,14 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
         <Text style={styles.modalText}>{i18n.termsConditions.modal.text}</Text>
         <View style={styles.buttonWrapper}>
           <TouchableOpacity onPress={this.handleNoButton}>
-            <Text style={styles.modalButton}>{`${i18n.termsConditions.modal.noButton}`.toUpperCase()}</Text>
+            <Text style={styles.modalButton} testID="modal-no">
+              {`${i18n.termsConditions.modal.noButton}`.toUpperCase()}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={this.handleYesButton}>
-            <Text style={styles.modalButton}>{`${i18n.termsConditions.modal.yesButton}`.toUpperCase()}</Text>
+            <Text style={styles.modalButton} testID="modal-yes">
+              {`${i18n.termsConditions.modal.yesButton}`.toUpperCase()}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -157,7 +161,9 @@ export class TermsConditionsScreen extends React.PureComponent<Props, State> {
         }
         header={<Header title={i18n.termsConditions.header} />}
       >
-        <Text style={styles.title}>{i18n.termsConditions.title}</Text>
+        <Text style={styles.title} testID="terms-and-conditions-title">
+          {i18n.termsConditions.title}
+        </Text>
         <WebView
           source={{ html: `${this.langVersion}` }}
           style={[styles.text, { height: this.state.height | 0 }]}

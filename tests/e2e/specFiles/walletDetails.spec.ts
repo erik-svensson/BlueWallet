@@ -1,9 +1,11 @@
 import { expect } from 'detox';
 
+import { expectToBeCopied } from '../assertions';
 import { WALLETS_WITH_COINS } from '../helpers/consts';
 import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
 import steps from '../steps';
+import { WalletType } from '../types';
 
 describe('Wallet details', () => {
   const walletName = 'Scrooge McDuck wallet';
@@ -18,11 +20,11 @@ describe('Wallet details', () => {
 
   beforeEach(async () => {
     await steps.importWallet({
-      type: '3-Key Vault',
+      type: WalletType.KEY_3,
       name: walletName,
-      fastPublicKey: WALLETS_WITH_COINS['3-Key Vault'].FAST_KEY.PUBLIC_KEY,
-      cancelPublicKey: WALLETS_WITH_COINS['3-Key Vault'].CANCEL_KEY.PUBLIC_KEY,
-      seedPhrase: WALLETS_WITH_COINS['3-Key Vault'].SEED_PHRASE,
+      fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+      cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
+      seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
     });
   });
 
@@ -37,12 +39,12 @@ describe('Wallet details', () => {
 
   describe('@ios @android @regression', () => {
     it('should be possible to rename the wallet', async () => {
-      const newWalletName = 'Huey, Dewey and Louie wallet';
+      const newWalletName = 'xyz';
 
       await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
       await app.walletDetails.mainScreen.renameWalletTo(newWalletName);
-      await expect(app.walletDetails.mainScreen.walletName).toHaveLabel(newWalletName);
+      await expect(app.walletDetails.mainScreen.walletName).toHaveText(newWalletName);
     });
 
     it('should be possible to check if wallet seed phrase is visible', async () => {
@@ -63,7 +65,7 @@ describe('Wallet details', () => {
       await expect(app.walletDetails.showXpubScreen.xpub).toBeVisible();
 
       await app.walletDetails.showXpubScreen.tapOnCopyButton();
-      // TODO: Add assertion
+      await expectToBeCopied();
     });
 
     it('should be possible to delete the wallet', async () => {

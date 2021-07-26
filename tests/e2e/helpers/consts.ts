@@ -1,4 +1,4 @@
-import { ECDSA, TransactionStatus, TransactionType } from './types';
+import { ECDSA, TransactionStatus, TransactionType, WalletType } from '../types';
 
 export const WAIT_FOR_ELEMENT_TIMEOUT = {
   DEFAULT: 10 * 1000,
@@ -28,7 +28,7 @@ export const ECDSA_KEYS: { FAST_KEY: ECDSA; CANCEL_KEY: ECDSA } = {
 
 /** Wallets used to test displaying transaction. Don't make any transactions using those */
 export const WALLETS = {
-  '3-Key Vault': {
+  [WalletType.KEY_3]: {
     SEED_PHRASE: 'muscle danger eternal venture zoo kiss taste menu swap story category side',
     FAST_KEY: {
       PUBLIC_KEY:
@@ -80,7 +80,7 @@ export const WALLETS = {
       },
     ],
   },
-  '2-Key Vault': {
+  [WalletType.KEY_2]: {
     SEED_PHRASE: 'reduce entire guitar kite frozen brand major rebuild grab joy only kingdom',
     CANCEL_KEY: {
       PUBLIC_KEY:
@@ -115,14 +115,14 @@ export const WALLETS = {
       },
     ],
   },
-  'Standard HD P2SH': {
+  [WalletType.S_HD_P2SH]: {
     SEED_PHRASE: 'gym happy rebuild vibrant armed owner enforce leader leave crash grab lazy',
   },
 };
 
 /** Wallets full of coins to test making transactions. */
 export const WALLETS_WITH_COINS = {
-  '3-Key Vault': {
+  [WalletType.KEY_3]: {
     SEED_PHRASE: 'cancel distance owner rapid symbol display destroy history dirt ready mango lazy',
     FAST_KEY: {
       PUBLIC_KEY:
@@ -138,7 +138,7 @@ export const WALLETS_WITH_COINS = {
     },
   },
 
-  '2-Key Vault': {
+  [WalletType.KEY_2]: {
     SEED_PHRASE: 'obscure analyst search hawk undo embody curtain master slice skill correct flee',
     CANCEL_KEY: {
       PUBLIC_KEY:
@@ -148,12 +148,12 @@ export const WALLETS_WITH_COINS = {
     },
   },
 
-  'Standard HD P2SH': {
+  [WalletType.S_HD_P2SH]: {
     SEED_PHRASE: 'roof jump holiday jaguar calm mammal vapor acoustic marine modify hope enemy',
   },
 
-  'Standard P2SH': {
-    SEED_PHRASE: 'cNVqz3DVCUXUSbFWVuth7CUqmgaqCz7yck2kDjt5zgUxgLkK4WZi',
+  [WalletType.S_P2SH]: {
+    SEED_PHRASE: 'cNkotrX9pRS2Se8Zr4YMssXbQ2XfJhirZLCgxbHPF87EvKKu5XtK',
   },
 
   'Standard HD Segwit': {
