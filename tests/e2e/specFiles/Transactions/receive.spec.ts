@@ -95,7 +95,7 @@ describe('Transactions', () => {
       beforeEach(async () => {
         await steps.createWallet({
           type: WalletType.S_HD_P2SH,
-          name: 'P2SH',
+          name: 'HD P2SH',
         });
       });
 
@@ -113,47 +113,56 @@ describe('Transactions', () => {
       });
     });
 
-    describe('Standard P2SH', () => {
+    describe('Advanced wallets', () => {
       beforeEach(async () => {
-        await steps.createWallet({
-          type: WalletType.S_HD_P2SH,
-          name: 'P2SH',
+        await app.navigationBar.changeTab('settings');
+        await app.settings.settingsScreen.tapOnAdvancedOptions();
+        await app.settings.advancedOptionsScreen.tapOnAdvancedOptionsSwitch();
+        await app.header.tapOnBackButton();
+      });
+
+      describe('Standard P2SH', () => {
+        beforeEach(async () => {
+          await steps.createWallet({
+            type: WalletType.S_P2SH,
+            name: 'P2SH',
+          });
+        });
+
+        describe('@iOS @regression', () => {
+          it('should be possible to see QRCode, wallet address and receive amount', async () => {
+            await app.dashboard.dashboardScreen.tapOnReceiveButton();
+            await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
+            await expect(app.transactionsReceive.walletAddressText).toBeVisible();
+            await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.DEFAULT_VALUE);
+            await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER);
+            await expect(app.transactionsReceive.receiveAmountText).toHaveText(
+              DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER,
+            );
+          });
         });
       });
 
-      describe('@iOS @regression', () => {
-        it('should be possible to see QRCode, wallet address and receive amount', async () => {
-          await app.dashboard.dashboardScreen.tapOnReceiveButton();
-          await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
-          await expect(app.transactionsReceive.walletAddressText).toBeVisible();
-          await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.DEFAULT_VALUE);
-          await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER);
-          await expect(app.transactionsReceive.receiveAmountText).toHaveText(
-            DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER,
-          );
+      describe('Standard HD SegWit', () => {
+        beforeEach(async () => {
+          await steps.createWallet({
+            type: WalletType.S_HD_SEGWIT,
+            name: 'SegWit',
+          });
         });
-      });
-    });
-  });
 
-  describe('Standard HD SegWit', () => {
-    beforeEach(async () => {
-      await steps.createWallet({
-        type: WalletType.S_HD_P2SH,
-        name: 'P2SH',
-      });
-    });
-
-    describe('@iOS @regression', () => {
-      it('should be possible to see QRCode, wallet address and receive amount', async () => {
-        await app.dashboard.dashboardScreen.tapOnReceiveButton();
-        await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
-        await expect(app.transactionsReceive.walletAddressText).toBeVisible();
-        await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.DEFAULT_VALUE);
-        await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER);
-        await expect(app.transactionsReceive.receiveAmountText).toHaveText(
-          DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER,
-        );
+        describe('@iOS @regression', () => {
+          it('should be possible to see QRCode, wallet address and receive amount', async () => {
+            await app.dashboard.dashboardScreen.tapOnReceiveButton();
+            await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
+            await expect(app.transactionsReceive.walletAddressText).toBeVisible();
+            await expect(app.transactionsReceive.receiveAmountText).toHaveText(DATA_FOR_TRANSACTIONS.DEFAULT_VALUE);
+            await app.transactionsReceive.typeAmountToReceive(DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER);
+            await expect(app.transactionsReceive.receiveAmountText).toHaveText(
+              DATA_FOR_TRANSACTIONS.AMOUNT_TO_RECEIVE.INTEGER,
+            );
+          });
+        });
       });
     });
   });
