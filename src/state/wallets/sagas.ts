@@ -155,7 +155,8 @@ export function* refreshWalletSaga(action: RefreshWalletAction | unknown) {
 
   const { id } = action as RefreshWalletAction;
 
-  const walletToRefresh: Wallet = cloneDeep(yield select(getByIdWallet, id));
+  const selectedWallet: Wallet = yield select(getByIdWallet, id);
+  const walletToRefresh: Wallet = cloneDeep(selectedWallet);
 
   try {
     if (!walletToRefresh) {
@@ -180,7 +181,7 @@ export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
   try {
     yield BlueElectrum.waitTillConnected();
 
-    const result = yield BlueElectrum.broadcast(txDecoded.toHex());
+    const result: Promise<any> = yield BlueElectrum.broadcast(txDecoded.toHex());
 
     yield put(sendTransactionSuccess());
     if (meta?.onSuccess) {

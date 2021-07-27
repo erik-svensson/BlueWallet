@@ -46,10 +46,10 @@ function emitBlockchainHeaders() {
 }
 
 export function* listenBlockchainHeadersSaga() {
-  const chan = yield call(emitBlockchainHeaders);
+  const chan: unknown = yield call(emitBlockchainHeaders);
 
   while (true) {
-    const { height } = yield take(chan);
+    const { height } = yield take(chan as any);
 
     yield put(setBlockHeight(height));
   }
@@ -81,11 +81,11 @@ function emitScriptHashesChange() {
 }
 
 export function* listenScriptHashesSaga() {
-  const chan = yield call(emitScriptHashesChange);
+  const chan: unknown = yield call(emitScriptHashesChange);
 
   while (true) {
-    const event = yield take(chan);
-    const [scriptHash] = event;
+    const event: string[] = yield take(chan as any);
+    const [scriptHash]: string[] = event;
 
     yield put(scriptHashChanged(scriptHash));
   }
@@ -105,10 +105,10 @@ function emitOnConnect() {
 }
 
 export function* listenOnConnect() {
-  const chan = yield call(emitOnConnect);
+  const chan: unknown = yield call(emitOnConnect);
 
   while (true) {
-    yield take(chan);
+    yield take(chan as any);
     yield put(connectionConnected());
   }
 }
@@ -127,12 +127,14 @@ function emitOnClose() {
 }
 
 export function* listenOnClose() {
-  const chan = yield call(emitOnClose);
+  const chan: unknown = yield call(emitOnClose);
 
   while (true) {
-    yield take(chan);
-    const isInternetReachable = yield select(isInternetReachableSelector);
-    const { isInitialized } = (yield select()).wallets;
+    yield take(chan as any);
+    const isInternetReachable: boolean = yield select(isInternetReachableSelector);
+    const {
+      wallets: { isInitialized },
+    } = yield select();
 
     if (isInternetReachable && isInitialized) {
       yield put(
@@ -149,7 +151,9 @@ export function* listenOnClose() {
 
 export function* subscribeToScriptHashes() {
   try {
-    const { wallets } = (yield select()).wallets;
+    const {
+      wallets: { wallets },
+    } = yield select();
 
     const walletsScriptHashes = compose(
       flatten,
@@ -174,8 +178,8 @@ export function* subscribeToScriptHashes() {
 
 export function* checkConnection() {
   try {
-    const currentIsInternetReachable = yield select(isInternetReachableSelector);
-    const currentIsServerConnectedSelector = yield select(isServerConnectedSelector);
+    const currentIsInternetReachable: boolean = yield select(isInternetReachableSelector);
+    const currentIsServerConnectedSelector: boolean = yield select(isServerConnectedSelector);
 
     let internetState: NetInfoState | undefined = undefined;
 
@@ -234,12 +238,14 @@ function emitInternetConnectionChange() {
 }
 
 export function* listenToInternetConnection() {
-  const chan = yield call(emitInternetConnectionChange);
+  const chan: unknown = yield call(emitInternetConnectionChange);
 
   while (true) {
-    const { isInternetReachable } = yield take(chan);
-    const currentIsInternetReachable = yield select(isInternetReachableSelector);
-    const { isInitialized } = (yield select()).wallets;
+    const { isInternetReachable } = yield take(chan as any);
+    const currentIsInternetReachable: boolean = yield select(isInternetReachableSelector);
+    const {
+      wallets: { isInitialized },
+    } = yield select();
 
     if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
       yield put(
