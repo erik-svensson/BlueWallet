@@ -213,7 +213,7 @@ export function* checkConnection() {
   } catch (e) {
     logger.error('electrumX sagas', `checkConnection error: ${e.message}`);
   }
-  RNBootSplash.hide({ duration: 250 });
+  RNBootSplash.hide({ fade: true });
 }
 
 function emitInternetConnectionChange() {

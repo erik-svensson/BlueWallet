@@ -11,3 +11,5 @@
 
 -keep class io.goldwallet.wallet.BuildConfig { *; }
 -keepresources string/build_config_package
+-keep class com.facebook.hermes.unicode.** { *; }
+-keep class com.facebook.jni.** { *; }
