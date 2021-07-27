@@ -12,9 +12,6 @@ const withCheckNetworkConnection = <P extends Record<string, any>>(Component: Re
   const isInternetReachable = useSelector(selectors.isInternetReachable);
   const isServerConnected = useSelector(selectors.isServerConnected);
 
-  console.log('isInternetReachable', isInternetReachable);
-  console.log('isServerConnected', isServerConnected);
-
   const checkNetworkConnection = (callback: CheckNetworkConnectionCallback) => {
     if (!isInternetReachable) {
       Alert.alert(i18n.connectionIssue.noInternetTitle, i18n.connectionIssue.offlineMessageDescription2);

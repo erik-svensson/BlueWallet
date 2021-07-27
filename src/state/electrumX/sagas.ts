@@ -183,12 +183,16 @@ export function* checkConnection() {
       if (internetState !== undefined) {
         yield delay(500);
       }
-      internetState = yield call(() => NetInfo.fetch());
+      internetState = yield call(NetInfo.fetch);
     }
+
     const { isInternetReachable } = internetState;
 
-    const isServerConnected = yield call(() => BlueElectrum.ping());
-    const { isInitialized } = (yield select()).wallets;
+    const isServerConnected: boolean = yield BlueElectrum.ping();
+
+    const {
+      wallets: { isInitialized },
+    } = yield select();
 
     if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
       yield put(
@@ -212,8 +216,9 @@ export function* checkConnection() {
     yield put(setServerConnection(isServerConnected));
   } catch (e) {
     logger.error('electrumX sagas', `checkConnection error: ${e.message}`);
+  } finally {
+    RNBootSplash.hide({ fade: true });
   }
-  RNBootSplash.hide({ fade: true });
 }
 
 function emitInternetConnectionChange() {
