@@ -175,7 +175,7 @@
     "react-native-elements": "2.3.2",
     "react-native-exit-app": "^1.1.0",
     "react-native-fast-image": "^8.1.5",
-    "react-native-flipper": "^0.99.0",
+    "react-native-flipper": "^0.100.0",
     "react-native-fs": "2.13.3",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-handoff": "git+https://github.com/marcosrdz/react-native-handoff.git",
