@@ -1,9 +1,9 @@
 import { expect as jestExpect } from '@jest/globals';
-import { expect } from 'detox';
+import { device, expect } from 'detox';
 
-import gmailClient from '../gmail';
-import { DEFAULT_EMAIL_ADDRESS, DEFAULT_UNLOCK_PIN, ECDSA_KEYS } from '../helpers/consts';
-import { isBeta, randomizeEmailAddress } from '../helpers/utils';
+import { DEFAULT_UNLOCK_PIN, ECDSA_KEYS } from '../helpers/consts';
+import { isBeta } from '../helpers/utils';
+import mailing, { Subject } from '../mailing';
 import app from '../pageObjects';
 import { SupportedLanguage } from '../pageObjects/pages/settings/LanguageScreen';
 import steps from '../steps';
@@ -120,7 +120,7 @@ describe('Settings', () => {
   });
 
   describe('Email notifications', () => {
-    describe.skip('Add email', () => {
+    describe('Add email', () => {
       beforeEach(async () => {
         isBeta() && (await app.onboarding.betaVersionScreen.close());
         await app.developerRoom.tapOnSkipOnboardingButton();
@@ -138,7 +138,7 @@ describe('Settings', () => {
 
       describe('@android @ios @regression', () => {
         it('should be possible to add an email address if a user skipped this step on onboarding', async () => {
-          const email = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+          const email = mailing.generateAddress();
 
           await app.settings.settingsScreen.tapOnEmailNotifications();
           await app.settings.emailNotifications.noEmailAddedScreen.tapOnTapEmailButton();
@@ -146,7 +146,7 @@ describe('Settings', () => {
           await app.settings.emailNotifications.addEmailAddressScreen.typeEmail(email);
           await app.settings.emailNotifications.addEmailAddressScreen.submit();
 
-          const code = await gmailClient.getEmailVerificationCode({ receiver: email });
+          const code = await mailing.getCode(email, Subject.ADD_EMAIL);
 
           await app.settings.emailNotifications.confirmEmailAddressScreen.typeCode(code);
           await app.settings.emailNotifications.confirmEmailAddressScreen.submit();
@@ -166,7 +166,7 @@ describe('Settings', () => {
 
           await app.navigationBar.changeTab('settings');
 
-          const email = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+          const email = mailing.generateAddress();
 
           await app.settings.settingsScreen.tapOnEmailNotifications();
           await app.settings.emailNotifications.noEmailAddedScreen.tapOnTapEmailButton();
@@ -177,7 +177,7 @@ describe('Settings', () => {
           await app.settings.emailNotifications.getNotificationsScreen.selectWallet(walletName);
           await app.settings.emailNotifications.getNotificationsScreen.tapOnConfirmButton();
 
-          const code = await gmailClient.getActionVerificationCode({ receiver: email });
+          const code = await mailing.getCode(email, Subject.SUBSCRIBE);
 
           await app.settings.emailNotifications.verifyActionScreen.typeCode(code);
           await app.settings.emailNotifications.verifyActionScreen.submit();
@@ -187,21 +187,16 @@ describe('Settings', () => {
 
         it('should be possible to add an email address and subscribe multiple wallets to notifications', async () => {
           await steps.createWallet({
-            type: WalletType.KEY_3,
+            type: WalletType.S_HD_P2SH,
             name: 'Main',
-            fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
-            cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
           });
 
-          // TODO: Un-comment it once BTCV2-1515 is solved.
-          // await steps.createWallet({
-          //   type: WalletType.KEY_3,
-          //   name: 'Secondary',
-          //   fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
-          //   cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
-          // });
+          await steps.createWallet({
+            type: WalletType.S_HD_P2SH,
+            name: 'Secondary',
+          });
 
-          const email = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+          const email = mailing.generateAddress();
 
           await app.navigationBar.changeTab('settings');
 
@@ -214,7 +209,7 @@ describe('Settings', () => {
           await app.settings.emailNotifications.getNotificationsScreen.selectAllWallets();
           await app.settings.emailNotifications.getNotificationsScreen.tapOnConfirmButton();
 
-          const code = await gmailClient.getActionVerificationCode({ receiver: email });
+          const code = await mailing.getCode(email, Subject.SUBSCRIBE);
 
           await app.settings.emailNotifications.verifyActionScreen.typeCode(code);
           await app.settings.emailNotifications.verifyActionScreen.submit();
@@ -230,7 +225,7 @@ describe('Settings', () => {
             cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
           });
 
-          const email = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+          const email = mailing.generateAddress();
 
           await app.navigationBar.changeTab('settings');
 
@@ -242,7 +237,7 @@ describe('Settings', () => {
 
           await app.settings.emailNotifications.getNotificationsScreen.tapOnSkipButton();
 
-          const code = await gmailClient.getEmailVerificationCode({ receiver: email });
+          const code = await mailing.getCode(email, Subject.ADD_EMAIL);
 
           await app.settings.emailNotifications.confirmEmailAddressScreen.typeCode(code);
           await app.settings.emailNotifications.confirmEmailAddressScreen.submit();
@@ -252,47 +247,29 @@ describe('Settings', () => {
       });
     });
 
-    describe.skip('Change email address', () => {
-      // TODO: There must be better way to do it, without modifying the local variable
+    describe('Change email address', () => {
       let emailAddress: string;
 
       beforeEach(async () => {
-        emailAddress = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+        emailAddress = mailing.generateAddress();
 
         isBeta() && (await app.onboarding.betaVersionScreen.close());
         await app.developerRoom.typeEmailAddress(emailAddress);
         await app.developerRoom.tapOnSkipOnboardingWithEmailButton();
-        await app.navigationBar.changeTab('settings');
       });
 
       describe('@android @ios @regression', () => {
         it('should be possible to change the email address without having any wallets added', async () => {
-          const newEmail = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+          const newEmail = mailing.generateAddress();
 
+          await app.navigationBar.changeTab('settings');
           await app.settings.settingsScreen.tapOnEmailNotifications();
 
           await app.settings.emailNotifications.configureNotificationsScreen.tapOnChangeEmailButton();
           await app.settings.emailNotifications.changeEmailScreen.typeEmail(newEmail);
           await app.settings.emailNotifications.changeEmailScreen.submit();
 
-          const code = await gmailClient.getEmailVerificationCode({ receiver: newEmail });
-
-          await app.settings.emailNotifications.confirmEmailAddressScreen.typeCode(code);
-          await app.settings.emailNotifications.confirmEmailAddressScreen.submit();
-
-          await expect(app.settings.emailNotifications.successScreen.icon).toBeVisible();
-        });
-
-        it('should be possible to change the email address and change wallets subscriptions', async () => {
-          const newEmail = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
-
-          await app.settings.settingsScreen.tapOnEmailNotifications();
-
-          await app.settings.emailNotifications.configureNotificationsScreen.tapOnChangeEmailButton();
-          await app.settings.emailNotifications.changeEmailScreen.typeEmail(newEmail);
-          await app.settings.emailNotifications.changeEmailScreen.submit();
-
-          const code = await gmailClient.getEmailVerificationCode({ receiver: newEmail });
+          const code = await mailing.getCode(newEmail, Subject.ADD_EMAIL);
 
           await app.settings.emailNotifications.confirmEmailAddressScreen.typeCode(code);
           await app.settings.emailNotifications.confirmEmailAddressScreen.submit();
@@ -300,14 +277,43 @@ describe('Settings', () => {
           await expect(app.settings.emailNotifications.successScreen.icon).toBeVisible();
         });
       });
+
+      describe('@ios @regression', () => {
+        it('should be possible to change the email address and change wallets subscriptions', async () => {
+          const newEmail = mailing.generateAddress();
+
+          await steps.createWallet({
+            emailAddress,
+            name: 'wallet',
+            type: WalletType.S_HD_P2SH,
+          });
+
+          await app.navigationBar.changeTab('settings');
+          await app.settings.settingsScreen.tapOnEmailNotifications();
+
+          await app.settings.emailNotifications.configureNotificationsScreen.tapOnChangeEmailButton();
+          await app.settings.emailNotifications.changeEmailScreen.typeEmail(newEmail);
+          await app.settings.emailNotifications.changeEmailScreen.submit();
+
+          const code = await mailing.getCode(emailAddress, Subject.CHANGE_EMAIL);
+
+          await app.settings.emailNotifications.verifyActionScreen.typeCode(code);
+          await app.settings.emailNotifications.verifyActionScreen.submit();
+
+          const secondCode = await mailing.getCode(newEmail, Subject.CHANGE_EMAIL);
+
+          await app.settings.emailNotifications.verifyActionScreen.typeCode(secondCode);
+          await app.settings.emailNotifications.verifyActionScreen.submit();
+          await expect(app.settings.emailNotifications.successScreen.icon).toBeVisible();
+        });
+      });
     });
 
-    describe.skip('Remove email address', () => {
-      // TODO: There must be better way to do it, without modifying the local variable
+    describe('Remove email address', () => {
       let emailAddress: string;
 
       beforeEach(async () => {
-        emailAddress = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+        emailAddress = mailing.generateAddress();
 
         isBeta() && (await app.onboarding.betaVersionScreen.close());
         await app.developerRoom.typeEmailAddress(emailAddress);
@@ -315,7 +321,7 @@ describe('Settings', () => {
         await app.navigationBar.changeTab('settings');
       });
 
-      describe('@android @ios @regression', () => {
+      describe('@ios @regression', () => {
         it('should be possible to remove the email address without having any wallets added', async () => {
           await app.settings.settingsScreen.tapOnEmailNotifications();
 
@@ -325,15 +331,12 @@ describe('Settings', () => {
           await expect(app.settings.emailNotifications.successScreen.icon).toBeVisible();
         });
 
-        // TODO: Fix this. It doesn't work because getActionVerificationCode() reads the previous email and uses invalid code
-        it.skip('should be possible to remove the email address and unsubscribe a wallet from notifications', async () => {
+        it('should be possible to remove the email address and unsubscribe a wallet from notifications', async () => {
           const walletName = 'Goofy wallet';
 
           await steps.createWallet({
-            type: WalletType.KEY_3,
+            type: WalletType.S_HD_P2SH,
             name: walletName,
-            fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
-            cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
             emailAddress,
           });
 
@@ -347,7 +350,7 @@ describe('Settings', () => {
           await app.settings.emailNotifications.getNotificationsScreen.selectWallet(walletName);
           await app.settings.emailNotifications.getNotificationsScreen.tapOnConfirmButton();
 
-          const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+          const code = await mailing.getCode(emailAddress, Subject.UNSUBSCRIBE);
 
           await app.settings.emailNotifications.verifyActionScreen.typeCode(code);
           await app.settings.emailNotifications.verifyActionScreen.submit();
@@ -357,10 +360,8 @@ describe('Settings', () => {
 
         it("should be possible to remove the email address and not change the wallet's notifications", async () => {
           await steps.createWallet({
-            type: WalletType.KEY_3,
+            type: WalletType.S_HD_P2SH,
             name: 'Goofy wallet',
-            fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
-            cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
             emailAddress,
           });
 
@@ -378,7 +379,7 @@ describe('Settings', () => {
       });
     });
 
-    describe.skip('General', () => {
+    describe('General', () => {
       describe('Without added email', () => {
         beforeEach(async () => {
           isBeta() && (await app.onboarding.betaVersionScreen.close());
@@ -389,7 +390,7 @@ describe('Settings', () => {
 
         describe('@android @ios @regression', () => {
           it('should be possible to resend the code', async () => {
-            const email = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+            const email = mailing.generateAddress();
 
             await app.settings.settingsScreen.tapOnEmailNotifications();
             await app.settings.emailNotifications.noEmailAddedScreen.tapOnTapEmailButton();
@@ -397,16 +398,19 @@ describe('Settings', () => {
             await app.settings.emailNotifications.addEmailAddressScreen.typeEmail(email);
             await app.settings.emailNotifications.addEmailAddressScreen.submit();
 
-            await gmailClient.getEmailVerificationCode({ receiver: email });
+            await mailing.ignoreEmail(email);
 
+            // NOTE: disabling synchronization because after tapping resend
+            // some background process prevent detox from continuing the test
+            await device.disableSynchronization();
             await app.settings.emailNotifications.confirmEmailAddressScreen.tapOnResendButton();
 
-            const code = await gmailClient.getEmailVerificationCode({ receiver: email });
+            const code = await mailing.getCode(email, Subject.ADD_EMAIL);
 
             jestExpect(code).toBeDefined();
           });
 
-          it('should be displayed an error message if typed email address is invalid ', async () => {
+          it('should display an error message if typed email address is invalid ', async () => {
             await app.settings.settingsScreen.tapOnEmailNotifications();
             await app.settings.emailNotifications.noEmailAddedScreen.tapOnTapEmailButton();
 
@@ -416,22 +420,20 @@ describe('Settings', () => {
             await expect(app.settings.emailNotifications.addEmailAddressScreen.emailValidationError).toBeVisible();
           });
 
-          it('should be displayed an error message if typed code is invalid', async () => {
-            const email = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+          it('should display an error message if typed code is invalid', async () => {
+            const email = mailing.generateAddress();
 
             await app.settings.settingsScreen.tapOnEmailNotifications();
             await app.settings.emailNotifications.noEmailAddedScreen.tapOnTapEmailButton();
 
             await app.settings.emailNotifications.addEmailAddressScreen.typeEmail(email);
             await app.settings.emailNotifications.addEmailAddressScreen.submit();
-
-            await gmailClient.getEmailVerificationCode({ receiver: email });
 
             await app.settings.emailNotifications.confirmEmailAddressScreen.typeCode('1111');
           });
 
           it('should be displayed an error message and send a code if exceeded a limit of attempts of sending codes', async () => {
-            const email = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+            const email = mailing.generateAddress();
 
             await app.settings.settingsScreen.tapOnEmailNotifications();
             await app.settings.emailNotifications.noEmailAddedScreen.tapOnTapEmailButton();
@@ -439,7 +441,7 @@ describe('Settings', () => {
             await app.settings.emailNotifications.addEmailAddressScreen.typeEmail(email);
             await app.settings.emailNotifications.addEmailAddressScreen.submit();
 
-            await gmailClient.getEmailVerificationCode({ receiver: email });
+            await mailing.ignoreEmail(email);
 
             await app.settings.emailNotifications.confirmEmailAddressScreen.typeCode('1111');
             await app.settings.emailNotifications.confirmEmailAddressScreen.submit();
@@ -448,25 +450,21 @@ describe('Settings', () => {
             await app.settings.emailNotifications.confirmEmailAddressScreen.typeCode('3333');
             await app.settings.emailNotifications.confirmEmailAddressScreen.submit();
 
-            const code = await gmailClient.getEmailVerificationCode({ receiver: email });
+            const code = await mailing.getCode(email, Subject.ADD_EMAIL);
 
             await expect(
               app.settings.emailNotifications.confirmEmailAddressScreen.pincodeValidationError,
             ).toBeVisible();
-            // TODO: Probably this test should be improved because now you can't be sure that the code is taken from the email
-            // that has been sent after the last attempt. One way would be marking as read an email after read but it doesn't seem
-            // to be a completely bulletproof solution. As Olek suggested, it'd be better to add a label "Used".
             jestExpect(code).toBeDefined();
           });
         });
       });
 
-      describe.skip('With added email', () => {
-        // TODO: There must be better way to do it, without modifying the local variable
+      describe('With added email', () => {
         let emailAddress: string;
 
         beforeEach(async () => {
-          emailAddress = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
+          emailAddress = mailing.generateAddress();
 
           isBeta() && (await app.onboarding.betaVersionScreen.close());
           await app.developerRoom.typeEmailAddress(emailAddress);
@@ -474,15 +472,13 @@ describe('Settings', () => {
           await app.navigationBar.changeTab('settings');
         });
 
-        describe('@android @ios @regression', () => {
+        describe('@ios @regression', () => {
           it('should be possible to get access to the wallet details from Email Notifications settings', async () => {
             const walletName = 'Goofy wallet';
 
             await steps.createWallet({
-              type: WalletType.KEY_3,
+              type: WalletType.S_HD_P2SH,
               name: walletName,
-              fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
-              cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
               emailAddress,
             });
 

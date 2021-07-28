@@ -3,7 +3,7 @@
  * Set of helper functions that perform actions that require "more than one click on UI".
  * Usefully especially if we need to set up a state before the actual test
  */
-import gmailClient from './gmail';
+import mailing, { Subject } from './mailing';
 import app from './pageObjects';
 import {
   CreateWalletOptions,
@@ -19,7 +19,7 @@ import {
 } from './types';
 
 /** Passes through the screens from Create PIN until Confirm Transaction Password */
-const passThroughOnboarding = async (pin: string, password: string) => {
+const passThroughOnboarding = async (pin: string, password: string, emailAddress?: string) => {
   await app.onboarding.createPinScreen.typePin(pin);
   await app.onboarding.confirmPinScreen.typePin(pin);
 
@@ -29,6 +29,18 @@ const passThroughOnboarding = async (pin: string, password: string) => {
   await app.onboarding.confirmPasswordScreen.typePassword(password);
   await app.onboarding.confirmPasswordScreen.submit();
 
+  if (emailAddress) {
+    await app.onboarding.addEmailNotificationScreen.typeEmailAddress(emailAddress);
+    await app.onboarding.addEmailNotificationScreen.submit();
+
+    const code = await mailing.getCode(emailAddress, Subject.ADD_EMAIL);
+
+    await app.onboarding.confirmEmailAddressScreen.typeCode(code);
+    await app.onboarding.confirmEmailAddressScreen.submit();
+  } else {
+    await app.onboarding.addEmailNotificationScreen.skip();
+  }
+
   await app.onboarding.successScreen.close();
 };
 
@@ -37,7 +49,7 @@ async function createWallet(options: StandardWalletOptions): Promise<void>;
 async function createWallet(options: TwoKeyWalletOptions): Promise<void>;
 async function createWallet(options: ThreeKeyWalletOptions): Promise<void>;
 async function createWallet(options: CreateWalletOptions): Promise<void> {
-  const { type, name, fastPublicKey, cancelPublicKey, emailAddress } = options;
+  const { type, name, fastPublicKey, cancelPublicKey, emailAddress, skipEmailSubscription } = options;
 
   await app.navigationBar.changeTab('wallets');
 
@@ -67,17 +79,20 @@ async function createWallet(options: CreateWalletOptions): Promise<void> {
     await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
   }
 
-  await app.wallets.addNewWallet.successScreen.close();
-
   if (emailAddress) {
     await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
-    const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+    const code = await mailing.getCode(emailAddress, Subject.SUBSCRIBE);
 
     await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
     await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
 
     await app.wallets.subscribeToEmailNotifications.successScreen.close();
+  } else if (skipEmailSubscription) {
+    await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnNo();
+    await app.wallets.subscribeToEmailNotifications.successScreen.close();
+  } else {
+    await app.wallets.importWallet.successScreen.close();
   }
 }
 
@@ -86,7 +101,7 @@ async function importWallet(options: ImportStandardWalletOptions): Promise<void>
 async function importWallet(options: Import2KeyWalletOptions): Promise<void>;
 async function importWallet(options: Import3KeyWalletOptions): Promise<void>;
 async function importWallet(options: ImportWalletOptions) {
-  const { type, name, seedPhrase, fastPublicKey, cancelPublicKey, emailAddress } = options;
+  const { type, name, seedPhrase, fastPublicKey, cancelPublicKey, emailAddress, skipEmailSubscription } = options;
 
   await app.navigationBar.changeTab('wallets');
 
@@ -109,18 +124,20 @@ async function importWallet(options: ImportWalletOptions) {
     await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
   }
 
-  await app.wallets.importWallet.loadingScreen.waitUntilEnded();
-  await app.wallets.importWallet.successScreen.close();
-
   if (emailAddress) {
     await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
-    const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+    const code = await mailing.getCode(emailAddress, Subject.SUBSCRIBE);
 
     await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
     await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
 
     await app.wallets.subscribeToEmailNotifications.successScreen.close();
+  } else if (skipEmailSubscription) {
+    await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnNo();
+    await app.wallets.subscribeToEmailNotifications.successScreen.close();
+  } else {
+    await app.wallets.importWallet.successScreen.close();
   }
 }
 
