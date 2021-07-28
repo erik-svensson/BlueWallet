@@ -10,8 +10,8 @@ export function takeLatestPerKey(
     const tasks = {};
 
     while (true) {
-      const action: any = yield take(patternOrChannel);
-      const key: any = yield call(keySelector, action);
+      const action: string = yield take(patternOrChannel);
+      const key: string = yield call(keySelector, action);
 
       if (tasks[key]) {
         yield cancel(tasks[key]);
