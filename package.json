@@ -168,7 +168,7 @@
     "react-native-camera": "^3.33.0",
     "react-native-code-push": "^7.0.1",
     "react-native-config": "1.4.0",
-    "react-native-confirmation-code-field": "6.5.1",
+    "react-native-confirmation-code-field": "7.1.0",
     "react-native-default-preference": "1.4.1",
     "react-native-device-info": "^6.0.2",
     "react-native-drag-sort": "^2.4.2",
