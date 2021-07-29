@@ -43,6 +43,7 @@ export const SettingsScreen = (props: Props) => {
   }, [biometryTypeAvailable]);
 
   const navigateToAboutUs = () => navigation.navigate(Route.AboutUs);
+  const navigateToDeveloperInfo = () => navigation.navigate(Route.Developer);
 
   const navigateToTermsConditions = () => navigation.navigate(Route.TermsConditions, { language });
 
@@ -166,6 +167,12 @@ export const SettingsScreen = (props: Props) => {
     </>
   );
 
+  const devSettings = () => (
+    <>
+      <ListItem onPress={navigateToDeveloperInfo} title={i18n.settings.devInfo} source={icons.resetFactory} />
+    </>
+  );
+
   return (
     <>
       <AppStateManager
@@ -178,6 +185,8 @@ export const SettingsScreen = (props: Props) => {
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.security}>{renderSecuritySettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.about}>{renderAboutSettings()}</LabeledSettingsRow>
+        {__DEV__ && <LabeledSettingsRow label={i18n.settings.developer}>{devSettings()}</LabeledSettingsRow>}
+
         <CustomModal show={showWarring}>{renderContent()}</CustomModal>
       </ScreenTemplate>
     </>

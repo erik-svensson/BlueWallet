@@ -49,6 +49,12 @@ module.exports = {
     runSelfTest: 'Run self test',
     title: 'Gold wallet is a free and open source Bitcoin Vault wallet. Licensed MIT.',
   },
+  developer: {
+    config: 'Local Config',
+    header: 'Developer',
+    api: 'API',
+    environment: 'Environment',
+  },
   advancedOptions: {
     description:
       'Enabling Advanced options will allow you to choose from wallet types listed below: \n P2SH, HD P2SH, HD segwit.',
@@ -459,6 +465,8 @@ module.exports = {
     about: 'About',
     terms: 'Terms & Privacy',
     factoryReset: 'Factory reset',
+    devInfo: 'Developer information',
+    developer: 'Developer',
     aboutUs: 'About us',
     advancedOptions: 'Advanced options',
     Biometrics: 'Allow biometrics',
