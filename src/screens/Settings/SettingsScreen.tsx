@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { Image, ScreenTemplate, Header, ListItem, CustomModal } from 'app/components';
+import config from 'app/config';
 import { Route, MainTabNavigatorParams, RootStackParams, Wallet } from 'app/consts';
 import { factoryReset } from 'app/helpers/factoryReset';
 import { logoSource } from 'app/helpers/images';
@@ -185,7 +186,9 @@ export const SettingsScreen = (props: Props) => {
         <LabeledSettingsRow label={i18n.settings.general}>{renderGeneralSettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.security}>{renderSecuritySettings()}</LabeledSettingsRow>
         <LabeledSettingsRow label={i18n.settings.about}>{renderAboutSettings()}</LabeledSettingsRow>
-        {__DEV__ && <LabeledSettingsRow label={i18n.settings.developer}>{devSettings()}</LabeledSettingsRow>}
+        {config.environment !== 'production' && (
+          <LabeledSettingsRow label={i18n.settings.developer}>{devSettings()}</LabeledSettingsRow>
+        )}
 
         <CustomModal show={showWarring}>{renderContent()}</CustomModal>
       </ScreenTemplate>
