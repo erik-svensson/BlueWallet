@@ -51,6 +51,9 @@ module.exports = {
   },
   developer: {
     config: 'Local Config',
+    firebase: 'Firebase',
+    FCMToken: 'FCMToken',
+    copied: 'Copied',
     header: 'Developer',
     api: 'API',
     environment: 'Environment',
