@@ -6,7 +6,9 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': 'babel-jest',
   },
-  transformIgnorePatterns: ['node_modules/(?!(jest-)?react-native|react-navigation|@react-native-community|@sentry/*)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(jest-)?@react-native|react-native|react-navigation|@react-native-community|@sentry/*)',
+  ],
   coveragePathIgnorePatterns: ['/node_modules/'],
   collectCoverageFrom: ['src/**/*.{js,ts,tsx}', 'class/**/*.{js,ts,tsx}', 'utils/**/*.{js,ts,tsx}'],
   // coverageThreshold: {
