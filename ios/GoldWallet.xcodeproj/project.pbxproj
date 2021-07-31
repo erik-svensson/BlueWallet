@@ -537,6 +537,7 @@
 				10AE7495979FC764B7DC21E1 /* [CP] Copy Pods Resources */,
 				693F6B2FBA1C9F0751D77389 /* [CP-User] [RNFB] Core Configuration */,
 				90F4FDB52C44F1C7168BD719 /* [CP-User] [RNFB] Crashlytics Configuration */,
+				17F647805F9A5D13414F19D2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -725,6 +726,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GoldWallet Dev/Pods-GoldWallet Dev-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		17F647805F9A5D13414F19D2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-GoldWallet Dev/Pods-GoldWallet Dev-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL/OpenSSL.framework/OpenSSL",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OpenSSL.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-GoldWallet Dev/Pods-GoldWallet Dev-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2E266C02CB669B237C891CCC /* [CP-User] [RNFB] Core Configuration */ = {
@@ -1336,7 +1355,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				EXCLUDED_ARCHS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1622,7 +1641,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				EXCLUDED_ARCHS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "arm64 ";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;

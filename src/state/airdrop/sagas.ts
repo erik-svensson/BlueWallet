@@ -56,10 +56,12 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     const ids: string[] = [];
 
     if (wallets.length > 0) {
+      //@ts-ignore
       const walletsWithHashes = yield Promise.all(
         wallets.map(async (wallet: Wallet) => ({ ...wallet, hash: await helpers.getWalletHashedPublicKeys(wallet) })),
       );
       const hashes = walletsWithHashes.map((wallet: Wallet) => wallet.hash);
+      //@ts-ignore
       const response = yield call(checkWalletsSubscription, { hashes });
 
       if (response.result === Result.error) {

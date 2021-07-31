@@ -1,6 +1,6 @@
 import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 
-import { CONST } from 'app/consts';
+import { CONST, USER_VERSIONS } from 'app/consts';
 import { SecureStorageService, StoreService } from 'app/services';
 
 import {
@@ -27,8 +27,8 @@ export function* checkCredentialsSaga(action: CheckCredentialsAction | unknown) 
   const { meta } = action as CheckCredentialsAction;
 
   try {
-    const pin = yield call(SecureStorageService.getSecuredValue, CONST.pin);
-    const transactionPassword = yield call(SecureStorageService.getSecuredValue, CONST.transactionPassword);
+    const pin: string = yield call(SecureStorageService.getSecuredValue, CONST.pin);
+    const transactionPassword: string = yield call(SecureStorageService.getSecuredValue, CONST.transactionPassword);
     const credentials = {
       isPinSet: !!pin,
       isTxPasswordSet: !!transactionPassword,
@@ -50,7 +50,7 @@ export function* authenticateSaga(action: AuthenticateAction | unknown) {
   const { meta, payload } = action as AuthenticateAction;
 
   try {
-    const storedPin = yield call(SecureStorageService.getSecuredValue, CONST.pin);
+    const storedPin: string = yield call(SecureStorageService.getSecuredValue, CONST.pin);
 
     if (payload.pin !== storedPin) {
       throw new Error('Wrong pin');
@@ -106,7 +106,7 @@ export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) 
 }
 
 export function* checkTcSaga() {
-  const tcVersion = yield call(StoreService.getStoreValue, CONST.tcVersion);
+  const tcVersion: string = yield call(StoreService.getStoreValue, CONST.tcVersion);
 
   if (tcVersion && Number(tcVersion) >= CONST.tcVersionRequired) {
     yield put(setIsTcAccepted(true));
@@ -126,10 +126,10 @@ export function* setUserVersionSaga(action: SetUserVersionAction | unknown) {
 }
 
 export function* checkUserVersionSaga() {
-  const userVersion = yield call(StoreService.getStoreValue, CONST.userVersion);
+  const userVersion: string = yield call(StoreService.getStoreValue, CONST.userVersion);
 
   if (userVersion) {
-    yield put(setUserVersionSuccess(userVersion));
+    yield put(setUserVersionSuccess(userVersion as USER_VERSIONS));
   }
 }
 

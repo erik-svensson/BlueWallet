@@ -153,11 +153,13 @@ module.exports.getTransactionsByAddress = async function(address) {
 
 module.exports.ping = async function() {
   try {
+    await wait(200); // TODO: For some reason sometimes Android not not load (infinity internet connection error)
     await mainClient.server_ping();
   } catch (_) {
     mainConnected = false;
     return false;
   }
+
   return true;
 };
 

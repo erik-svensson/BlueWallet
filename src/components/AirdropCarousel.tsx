@@ -16,6 +16,7 @@ interface Props {
 export const AirdropCarousel: FC<Props> = ({ items, styles, setRef, onItemSnap }) => (
   <Carousel
     ref={setRef}
+    //@ts-ignore
     containerCustomStyle={styles}
     data={items}
     renderItem={({ item }: { item: AirdropCarouselCardData }) => (

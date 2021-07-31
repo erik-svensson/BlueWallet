@@ -173,6 +173,7 @@ export enum Route {
   EditText = 'EditText',
   AboutUs = 'AboutUs',
   AddEmail = 'AddEmail',
+  Developer = 'Developer',
   TermsConditions = 'TermsConditions',
   SelectLanguage = 'SelectLanguage',
   ActionSheet = 'ActionSheet',
@@ -532,6 +533,7 @@ export type RootStackParams = {
   };
   [Route.SelectLanguage]: undefined;
   [Route.AboutUs]: undefined;
+  [Route.Developer]: undefined;
   [Route.TermsConditions]: { language: string };
   [Route.AdvancedOptions]: undefined;
   [Route.CurrentPin]: undefined;

@@ -21,6 +21,6 @@ export const ifIphoneX = (iPhoneXValue: any, regularValue: any) => (isIphoneX() 
 
 export const getStatusBarHeight = (): number =>
   Platform.select({
-    ios: ifIphoneX(44, 20),
+    ios: ifIphoneX(44, 35),
     android: StatusBar.currentHeight,
   });
