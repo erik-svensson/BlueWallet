@@ -1,8 +1,9 @@
 import { expect } from 'detox';
 
-import { expectToBeCopied } from '../assertions';
+import { expectToBeCopied, expectElementWithTextToBeVisible } from '../assertions';
 import { WALLETS_WITH_COINS } from '../helpers/consts';
 import { isBeta } from '../helpers/utils';
+import mailing from '../mailing';
 import app from '../pageObjects';
 import steps from '../steps';
 import { WalletType } from '../types';
@@ -10,25 +11,20 @@ import { WalletType } from '../types';
 describe('Wallet details', () => {
   const walletName = 'Scrooge McDuck wallet';
 
-  beforeEach(async () => {
-    isBeta() && (await app.onboarding.betaVersionScreen.close());
-
-    await app.developerRoom.tapOnSkipOnboardingButton();
-    await app.onboarding.addEmailNotificationScreen.skip();
-    await app.navigationBar.changeTab('wallets');
-  });
-
-  beforeEach(async () => {
-    await steps.importWallet({
-      type: WalletType.KEY_3,
-      name: walletName,
-      fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
-      cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
-      seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
-    });
-  });
-
   describe('@ios @android @smoke', () => {
+    beforeEach(async () => {
+      isBeta() && (await app.onboarding.betaVersionScreen.close());
+
+      await app.developerRoom.tapOnSkipOnboardingButton();
+      await app.onboarding.addEmailNotificationScreen.skip();
+      await steps.importWallet({
+        type: WalletType.KEY_3,
+        name: walletName,
+        fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
+        seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
+      });
+    });
     it('should be possible to check details', async () => {
       await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
 
@@ -38,6 +34,19 @@ describe('Wallet details', () => {
   });
 
   describe('@ios @android @regression', () => {
+    beforeEach(async () => {
+      isBeta() && (await app.onboarding.betaVersionScreen.close());
+
+      await app.developerRoom.tapOnSkipOnboardingButton();
+      await app.onboarding.addEmailNotificationScreen.skip();
+      await steps.importWallet({
+        type: WalletType.KEY_3,
+        name: walletName,
+        fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
+        seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
+      });
+    });
     it('should be possible to rename the wallet', async () => {
       const newWalletName = 'xyz';
 
@@ -86,10 +95,49 @@ describe('Wallet details', () => {
       await expect(app.walletDetails.mainScreen.walletName).toBeVisible();
     });
 
-    it('should display "Subscribe to notifications" button if an email is added but wallet doesn\'t subscribe yet', async () => {});
+    it('should display "Subscribe to notifications" button if an email address is not added yet', async () => {
+      await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
+      await expect(app.walletDetails.mainScreen.manageSubscriptionButton).toBeVisible();
+      await expectElementWithTextToBeVisible('Subscribe to email notifications');
+    });
+  });
 
-    it('should display "Subscribe to notifications" button if an email address is not added yet', async () => {});
+  describe('@ios @android @regression', () => {
+    let emailAddress: string;
 
-    it('should display "Unsubscribe to notifications" button if an email address is added and wallet subscribes it', async () => {});
+    beforeEach(async () => {
+      emailAddress = mailing.generateAddress();
+      isBeta() && (await app.onboarding.betaVersionScreen.close());
+      await app.developerRoom.typeEmailAddress(emailAddress);
+      await app.developerRoom.tapOnSkipOnboardingWithEmailButton();
+    });
+
+    it('should display "Subscribe to notifications" button if an email is added but wallet doesn\'t subscribe yet', async () => {
+      await steps.importWallet({
+        type: WalletType.KEY_3,
+        name: walletName,
+        fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
+        seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
+        skipEmailSubscription: true,
+      });
+      await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
+      await expect(app.walletDetails.mainScreen.manageSubscriptionButton).toBeVisible();
+      await expectElementWithTextToBeVisible('Subscribe to email notifications');
+    });
+
+    it('should display "Unsubscribe to notifications" button if an email address is added and wallet subscribes it', async () => {
+      await steps.importWallet({
+        type: WalletType.KEY_3,
+        name: walletName,
+        fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
+        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
+        seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
+        emailAddress,
+      });
+      await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
+      await expect(app.walletDetails.mainScreen.manageSubscriptionButton).toBeVisible();
+      await expectElementWithTextToBeVisible('Unsubscribe from email notifications');
+    });
   });
 });

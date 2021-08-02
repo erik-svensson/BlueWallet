@@ -19,6 +19,7 @@ export interface ImportWalletOptions {
   fastPublicKey?: string;
   cancelPublicKey?: string;
   emailAddress?: string;
+  skipEmailSubscription?: boolean;
 }
 
 export interface CreateWalletOptions {
@@ -27,11 +28,13 @@ export interface CreateWalletOptions {
   fastPublicKey?: string;
   cancelPublicKey?: string;
   emailAddress?: string;
+  skipEmailSubscription?: boolean;
 }
 
 interface CommonWalletOptions {
   name: string;
   emailAddress?: string;
+  skipEmailSubscription?: boolean;
 }
 
 interface CommonImportWalletOptions extends CommonWalletOptions {
