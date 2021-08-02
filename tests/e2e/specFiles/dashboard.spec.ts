@@ -1,11 +1,11 @@
 import { expect as jestExpect } from '@jest/globals';
 import { expect } from 'detox';
 
-import data, { ecdsaKeys } from '../data';
+import { ecdsaKeys, walletsData } from '../data';
 import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
 import steps from '../steps';
-import { TransactionStatus, TransactionType, WalletType } from '../types';
+import { DataTxProperties, TransactionStatus, TransactionType, WalletType } from '../types';
 
 describe('Dashboard', () => {
   beforeEach(async () => {
@@ -159,20 +159,20 @@ describe('Dashboard', () => {
     // Unskip it once the issue is solved
     it.skip('should display transactions of all added wallets under "All wallets" tile', async () => {
       const transactions = [
-        ...data.frozenTxWallets[WalletType.KEY_3].transactions,
-        ...data.frozenTxWallets[WalletType.KEY_2].transactions,
+        ...walletsData.frozenTxWallets[WalletType.KEY_3].transactions,
+        ...walletsData.frozenTxWallets[WalletType.KEY_2].transactions,
       ];
 
       await steps.importWallet({
         type: WalletType.KEY_2,
         name: 'Secondary',
-        secrets: data.frozenTxWallets[WalletType.KEY_2],
+        secrets: walletsData.frozenTxWallets[WalletType.KEY_2],
       });
 
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: 'Main',
-        secrets: data.frozenTxWallets[WalletType.KEY_3],
+        secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
       });
 
       for (const transaction of transactions) {
@@ -185,22 +185,22 @@ describe('Dashboard', () => {
       await steps.importWallet({
         type: WalletType.KEY_2,
         name: 'Secondary',
-        secrets: data.frozenTxWallets[WalletType.KEY_2],
+        secrets: walletsData.frozenTxWallets[WalletType.KEY_2],
       });
 
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: 'Main',
-        secrets: data.frozenTxWallets[WalletType.KEY_3],
+        secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
       });
 
       await app.dashboard.dashboardScreen.switchWalletWithDropdown('Main');
 
-      for (const transaction of data.frozenTxWallets[WalletType.KEY_3].transactions) {
+      for (const transaction of walletsData.frozenTxWallets[WalletType.KEY_3].transactions) {
         await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id);
       }
 
-      for (const transaction of data.frozenTxWallets[WalletType.KEY_2].transactions) {
+      for (const transaction of walletsData.frozenTxWallets[WalletType.KEY_2].transactions) {
         jestExpect(await app.dashboard.dashboardScreen.searchForTransactionWith(transaction.id)).toThrowError();
       }
     });
@@ -216,10 +216,10 @@ describe('Dashboard', () => {
         await steps.importWallet({
           type: WalletType.KEY_3,
           name: 'Main',
-          secrets: data.frozenTxWallets[WalletType.KEY_3],
+          secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
         });
 
-        const transaction = data.frozenTxWallets[WalletType.KEY_3].transactions[0];
+        const transaction = walletsData.frozenTxWallets[WalletType.KEY_3].transactions[0];
 
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
@@ -233,10 +233,10 @@ describe('Dashboard', () => {
         await steps.importWallet({
           type: WalletType.KEY_3,
           name: 'Main',
-          secrets: data.frozenTxWallets[WalletType.KEY_3],
+          secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
         });
 
-        const transaction = data.frozenTxWallets[WalletType.KEY_3].transactions[0];
+        const transaction = walletsData.frozenTxWallets[WalletType.KEY_3].transactions[0];
 
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
@@ -248,10 +248,10 @@ describe('Dashboard', () => {
         await steps.importWallet({
           type: WalletType.KEY_3,
           name: 'Main',
-          secrets: data.frozenTxWallets[WalletType.KEY_3],
+          secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
         });
 
-        const transaction = data.frozenTxWallets[WalletType.KEY_3].transactions[0];
+        const transaction = walletsData.frozenTxWallets[WalletType.KEY_3].transactions[0];
 
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
@@ -263,10 +263,10 @@ describe('Dashboard', () => {
         await steps.importWallet({
           type: WalletType.KEY_3,
           name: 'Main',
-          secrets: data.frozenTxWallets[WalletType.KEY_3],
+          secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
         });
 
-        const transaction = data.frozenTxWallets[WalletType.KEY_3].transactions[0];
+        const transaction = walletsData.frozenTxWallets[WalletType.KEY_3].transactions[0];
 
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
@@ -278,10 +278,10 @@ describe('Dashboard', () => {
         await steps.importWallet({
           type: WalletType.KEY_3,
           name: 'Main',
-          secrets: data.frozenTxWallets[WalletType.KEY_3],
+          secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
         });
 
-        const transaction = data.frozenTxWallets[WalletType.KEY_3].transactions[0];
+        const transaction = walletsData.frozenTxWallets[WalletType.KEY_3].transactions[0];
 
         await app.dashboard.dashboardScreen.scrollToTransactionWith(transaction.id);
         await app.dashboard.dashboardScreen.tapOnTransaction(transaction.id);
@@ -293,13 +293,13 @@ describe('Dashboard', () => {
   });
 
   describe('Filters', () => {
-    const { transactions } = data.frozenTxWallets[WalletType.KEY_3];
+    const transactions: Array<DataTxProperties> = walletsData.frozenTxWallets[WalletType.KEY_3].transactions;
 
     beforeEach(async () => {
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: 'Main',
-        secrets: data.frozenTxWallets[WalletType.KEY_3],
+        secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
       });
     });
 

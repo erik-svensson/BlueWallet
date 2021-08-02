@@ -1,7 +1,7 @@
 import { expect } from 'detox';
 
 import { expectToBeCopied, expectElementWithTextToBeVisible } from '../assertions';
-import data from '../data';
+import { walletsData } from '../data';
 import { isBeta } from '../helpers/utils';
 import mailing from '../mailing';
 import app from '../pageObjects';
@@ -20,7 +20,7 @@ describe('Wallet details', () => {
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: walletName,
-        secrets: data.frozenTxWallets[WalletType.KEY_3],
+        secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
       });
     });
     it('should be possible to check details', async () => {
@@ -40,7 +40,7 @@ describe('Wallet details', () => {
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: walletName,
-        secrets: data.frozenTxWallets[WalletType.KEY_3],
+        secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
       });
     });
     it('should be possible to rename the wallet', async () => {
@@ -112,7 +112,7 @@ describe('Wallet details', () => {
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: walletName,
-        secrets: data.frozenTxWallets[WalletType.KEY_3],
+        secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
         skipEmailSubscription: true,
       });
       await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
@@ -124,7 +124,7 @@ describe('Wallet details', () => {
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: walletName,
-        secrets: data.frozenTxWallets[WalletType.KEY_3],
+        secrets: walletsData.frozenTxWallets[WalletType.KEY_3],
         emailAddress,
       });
       await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);

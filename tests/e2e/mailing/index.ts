@@ -1,6 +1,11 @@
+import dotenv from 'dotenv';
 import { JSDOM } from 'jsdom';
 import mailosaur from 'mailosaur';
 import { SearchCriteria, Message } from 'mailosaur/lib/models';
+
+import { envData } from '../data';
+
+dotenv.config({ path: 'tests/e2e/.env.e2e' });
 
 const API_KEY = process.env['MAILOSAUR_API_KEY'];
 const SERVER_ID = process.env['MAILOSAUR_SERVER_ID'];
@@ -10,8 +15,6 @@ if (!API_KEY || !SERVER_ID) {
     'Please provide Mailosaur API key and server id in MAILOSAUR_API_KEY and MAILOSAUR_SERVER_ID env variables.',
   );
 }
-
-const EMAIL_NOTIFICATIONS_SENDER = 'postmaster@btcv-notifcations-email.rnd.land';
 
 export enum Subject {
   ADD_EMAIL = 'BTCV Team: you requested to add an email for BTCV Email Notifications',
@@ -79,7 +82,7 @@ async function getMessage(criteria: SearchCriteria): Promise<Message> {
     SERVER_ID!,
     {
       ...criteria,
-      sentFrom: EMAIL_NOTIFICATIONS_SENDER,
+      sentFrom: envData.emailNotificationSenderAddress,
     },
     {
       timeout: 2 * 60 * 1000,

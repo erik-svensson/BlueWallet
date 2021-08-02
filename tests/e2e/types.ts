@@ -38,7 +38,7 @@ export interface DataActiveTxWallets {
   [WalletType.S_HD_SEGWIT]: SecretsStandard;
 }
 
-interface DataTxProperties {
+export interface DataTxProperties {
   id: string;
   type: TransactionType;
   status: TransactionStatus;
@@ -65,6 +65,10 @@ export interface DataTestWallets {
     address: string;
   } & Secrets3Key;
   contactAddress: string;
+}
+
+export interface DataTestEnv {
+  emailNotificationSenderAddress: string;
 }
 
 export interface ImportWalletOptions {

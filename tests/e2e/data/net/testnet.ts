@@ -5,7 +5,7 @@ import {
   TransactionStatus,
   TransactionType,
   WalletType,
-} from '../types';
+} from '../../types';
 
 /** Wallets used to test displaying transaction. Don't make any transactions using those */
 const frozenTxWallets: DataFrozenTxWallets = {

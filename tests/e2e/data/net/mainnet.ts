@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { DataTestWallets } from '../types';
+import { DataTestWallets } from '../../types';
 
 const getData = (): DataTestWallets => {
   console.log('Searching for mainnet test data');

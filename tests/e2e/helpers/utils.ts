@@ -23,7 +23,7 @@ export const wait = (miliseconds: number) =>
   });
 
 // HACK: unofficial, undocumented way to obtain the name of current detox configuration
-export function getBuildType() {
+export function getBuildEnv() {
   const configurationName = getArgValue('configuration');
   const flavour = configurationName.match(/dev|stage|prod/);
 
