@@ -2,8 +2,14 @@ import { JSDOM } from 'jsdom';
 import mailosaur from 'mailosaur';
 import { SearchCriteria, Message } from 'mailosaur/lib/models';
 
-const API_KEY = 'LZZQ6LWDs9QMgQrU';
-const SERVER_ID = 'snmbkwnw';
+const API_KEY = process.env['MAILOSAUR_API_KEY'];
+const SERVER_ID = process.env['MAILOSAUR_SERVER_ID'];
+
+if (!API_KEY || !SERVER_ID) {
+  throw new Error(
+    'Please provide Mailosaur API key and server id in MAILOSAUR_API_KEY and MAILOSAUR_SERVER_ID env variables.',
+  );
+}
 
 const EMAIL_NOTIFICATIONS_SENDER = 'postmaster@btcv-notifcations-email.rnd.land';
 
@@ -70,7 +76,7 @@ const mailing: Mailing = {
  */
 async function getMessage(criteria: SearchCriteria): Promise<Message> {
   return client.messages.get(
-    SERVER_ID,
+    SERVER_ID!,
     {
       ...criteria,
       sentFrom: EMAIL_NOTIFICATIONS_SENDER,
