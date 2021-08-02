@@ -24,7 +24,7 @@ apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.grad
 project.ext.react = [
     entryFile: "index.js",
     devDisabledInStaging: true,
-    enableHermes: true
+    enableHermes: false
 ]
 
 project.ext.sentryCli = [
@@ -159,6 +159,7 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }
+    implementation 'com.facebook.soloader:soloader:0.9.0+'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
