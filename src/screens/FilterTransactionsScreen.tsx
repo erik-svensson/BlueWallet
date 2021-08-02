@@ -158,7 +158,6 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
               <View key={Index.From}>
                 <InputItem
                   key={Index.From}
-                  testID="filter-by-from-sender-input"
                   editable={false}
                   label={i18n.filterTransactions.fromDate}
                   value={fromDate}
@@ -265,7 +264,14 @@ class FilterTransactionsScreen extends PureComponent<Props, State> {
   renderCardContent = (label: string) => (
     <View>
       <View style={styles.spacing20}>
-        <InputItem label={label} value={this.props.filters.address} editable={false} onChangeText={this.setAddress} />
+        <InputItem
+          label={label}
+          value={this.props.filters.address}
+          editable={false}
+          onChangeText={this.setAddress}
+          testID="filter-by-from-sender-input"
+        />
+
         <Image style={styles.image} source={images.nextBlackArrow} />
         <TouchableOpacity onPress={() => this.navigateToChooseContactList(label)} style={styles.buttonOverlay} />
       </View>

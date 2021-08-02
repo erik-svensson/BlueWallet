@@ -1,6 +1,6 @@
 import { expect } from 'detox';
 
-import { WALLETS_WITH_COINS } from '../../helpers/consts';
+import { ecdsaKeys } from '../../data';
 import { isBeta } from '../../helpers/utils';
 import app from '../../pageObjects';
 import steps from '../../steps';
@@ -25,12 +25,11 @@ describe('Transactions', () => {
         await steps.createWallet({
           type: WalletType.KEY_3,
           name: '3-Key',
-          fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
-          cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
+          secrets: ecdsaKeys,
         });
       });
 
-      describe('@iOS @smoke', () => {
+      describe('@ios @smoke', () => {
         it('should be possible to see QRCode, wallet address and receive amount (integer amount)', async () => {
           await app.dashboard.dashboardScreen.tapOnReceiveButton();
           await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
@@ -42,19 +41,8 @@ describe('Transactions', () => {
           );
         });
       });
-    });
 
-    describe('3-Key Vault', () => {
-      beforeEach(async () => {
-        await steps.createWallet({
-          type: WalletType.KEY_3,
-          name: '3-Key',
-          fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
-          cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
-        });
-      });
-
-      describe('@iOS @smoke', () => {
+      describe('@ios @smoke', () => {
         it('should be possible to see QRCode, wallet address and receive amount (decimal amount)', async () => {
           await app.dashboard.dashboardScreen.tapOnReceiveButton();
           await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
@@ -73,11 +61,11 @@ describe('Transactions', () => {
         await steps.createWallet({
           type: WalletType.KEY_2,
           name: '2-Key',
-          cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_2].CANCEL_KEY.PUBLIC_KEY,
+          secrets: ecdsaKeys,
         });
       });
 
-      describe('@iOS @regression', () => {
+      describe('@ios @regression', () => {
         it('should be possible to see QRCode, wallet address and receive amount', async () => {
           await app.dashboard.dashboardScreen.tapOnReceiveButton();
           await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
@@ -99,7 +87,7 @@ describe('Transactions', () => {
         });
       });
 
-      describe('@iOS @regression', () => {
+      describe('@ios @regression', () => {
         it('should be possible to see QRCode, wallet address and receive amount', async () => {
           await app.dashboard.dashboardScreen.tapOnReceiveButton();
           await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
@@ -129,7 +117,7 @@ describe('Transactions', () => {
           });
         });
 
-        describe('@iOS @regression', () => {
+        describe('@ios @regression', () => {
           it('should be possible to see QRCode, wallet address and receive amount', async () => {
             await app.dashboard.dashboardScreen.tapOnReceiveButton();
             await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();
@@ -151,7 +139,7 @@ describe('Transactions', () => {
           });
         });
 
-        describe('@iOS @regression', () => {
+        describe('@ios @regression', () => {
           it('should be possible to see QRCode, wallet address and receive amount', async () => {
             await app.dashboard.dashboardScreen.tapOnReceiveButton();
             await expect(app.transactionsReceive.qrCodeIcon).toBeVisible();

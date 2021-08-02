@@ -80,3 +80,6 @@ credentials.json
 token.json
 
 *.vim
+
+# test data
+tests/e2e/data/mainnet-wallets.json

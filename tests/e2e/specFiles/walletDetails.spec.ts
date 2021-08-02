@@ -1,7 +1,7 @@
 import { expect } from 'detox';
 
 import { expectToBeCopied, expectElementWithTextToBeVisible } from '../assertions';
-import { WALLETS_WITH_COINS } from '../helpers/consts';
+import data from '../data';
 import { isBeta } from '../helpers/utils';
 import mailing from '../mailing';
 import app from '../pageObjects';
@@ -20,9 +20,7 @@ describe('Wallet details', () => {
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: walletName,
-        fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
-        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
-        seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
+        secrets: data.frozenTxWallets[WalletType.KEY_3],
       });
     });
     it('should be possible to check details', async () => {
@@ -42,9 +40,7 @@ describe('Wallet details', () => {
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: walletName,
-        fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
-        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
-        seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
+        secrets: data.frozenTxWallets[WalletType.KEY_3],
       });
     });
     it('should be possible to rename the wallet', async () => {
@@ -116,9 +112,7 @@ describe('Wallet details', () => {
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: walletName,
-        fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
-        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
-        seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
+        secrets: data.frozenTxWallets[WalletType.KEY_3],
         skipEmailSubscription: true,
       });
       await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);
@@ -130,9 +124,7 @@ describe('Wallet details', () => {
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: walletName,
-        fastPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
-        cancelPublicKey: WALLETS_WITH_COINS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
-        seedPhrase: WALLETS_WITH_COINS[WalletType.KEY_3].SEED_PHRASE,
+        secrets: data.frozenTxWallets[WalletType.KEY_3],
         emailAddress,
       });
       await app.dashboard.dashboardScreen.tapOnWalletDetailsButton(walletName);

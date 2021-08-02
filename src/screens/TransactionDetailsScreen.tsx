@@ -76,7 +76,7 @@ class TransactionDetailsScreen extends Component<Props> {
         <View style={styles.walletInfoContainer}>
           <View style={styles.walletIconContainer}>
             <Image
-              source={this.isMinusValue ? icons.arrowRight : icons.arrowLeft}
+              source={this.isMinusValue ? icons.arrowLeft : icons.arrowRight}
               style={styles.arrowIcon}
               resizeMode="contain"
             />

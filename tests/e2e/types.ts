@@ -1,23 +1,76 @@
 export type SecureTransactionType = 'Secure' | 'Secure Fast';
 
 export enum WalletType {
-  S_HD_P2SH,
-  S_P2SH,
-  S_HD_SEGWIT,
-  KEY_2,
-  KEY_3,
+  S_HD_P2SH = 'Standard HD P2SH',
+  S_P2SH = 'Standard P2SH',
+  S_HD_SEGWIT = 'Standard HD SegWit',
+  KEY_2 = '2-Key Vault',
+  KEY_3 = '3-Key Vault',
 }
 
 export type BasicWalletType = WalletType.S_HD_P2SH | WalletType.KEY_2 | WalletType.KEY_3;
 
 export type StandardWalletType = WalletType.S_HD_P2SH | WalletType.S_HD_SEGWIT | WalletType.S_P2SH;
 
+export interface ECDSA {
+  publicKey: string;
+  privateKeyPhrase: string;
+  privateKey: string;
+}
+
+interface SecretsStandard {
+  seedPhrase: string;
+}
+
+interface Secrets2Key extends SecretsStandard {
+  cancelKey: ECDSA;
+}
+
+interface Secrets3Key extends Secrets2Key {
+  fastKey: ECDSA;
+}
+
+export interface DataActiveTxWallets {
+  [WalletType.KEY_3]: Secrets3Key;
+  [WalletType.KEY_2]: Secrets2Key;
+  [WalletType.S_HD_P2SH]: SecretsStandard;
+  [WalletType.S_P2SH]: SecretsStandard;
+  [WalletType.S_HD_SEGWIT]: SecretsStandard;
+}
+
+interface DataTxProperties {
+  id: string;
+  type: TransactionType;
+  status: TransactionStatus;
+  from: string;
+  amount: number;
+}
+
+interface DataTx {
+  transactions: Array<DataTxProperties>;
+}
+
+export interface DataFrozenTxWallets {
+  [WalletType.KEY_3]: Secrets3Key & DataTx;
+  [WalletType.KEY_2]: Secrets2Key & DataTx;
+  [WalletType.S_HD_P2SH]: SecretsStandard & DataTx;
+  [WalletType.S_P2SH]: SecretsStandard & DataTx;
+  [WalletType.S_HD_SEGWIT]: SecretsStandard & DataTx;
+}
+
+export interface DataTestWallets {
+  frozenTxWallets: DataFrozenTxWallets;
+  activeTxWallets: DataActiveTxWallets;
+  moneybox: {
+    address: string;
+  } & Secrets3Key;
+  contactAddress: string;
+}
+
 export interface ImportWalletOptions {
   type: BasicWalletType;
   name: string;
-  seedPhrase: string;
-  fastPublicKey?: string;
-  cancelPublicKey?: string;
+  secrets: SecretsStandard & Partial<Secrets3Key>;
   emailAddress?: string;
   skipEmailSubscription?: boolean;
 }
@@ -25,44 +78,45 @@ export interface ImportWalletOptions {
 export interface CreateWalletOptions {
   type: WalletType;
   name: string;
-  fastPublicKey?: string;
-  cancelPublicKey?: string;
+  secrets?: Partial<Omit<Secrets3Key, 'seedPhrase'>>;
   emailAddress?: string;
   skipEmailSubscription?: boolean;
 }
 
-interface CommonWalletOptions {
+interface CommonAddWalletOptions {
   name: string;
   emailAddress?: string;
   skipEmailSubscription?: boolean;
 }
 
-interface CommonImportWalletOptions extends CommonWalletOptions {
-  seedPhrase: string;
-}
-
-export interface StandardWalletOptions extends CommonWalletOptions {
+export interface CreateStandardWalletOptions extends CommonAddWalletOptions {
   type: StandardWalletType;
 }
 
-export interface TwoKeyWalletOptions extends CommonWalletOptions {
+export interface Create2KeyWalletOptions extends CommonAddWalletOptions {
   type: WalletType.KEY_2;
-  cancelPublicKey: string;
+  secrets: Omit<Secrets2Key, 'seedPhrase'>;
 }
 
-export interface ThreeKeyWalletOptions extends CommonWalletOptions {
+export interface Create3KeyWalletOptions extends CommonAddWalletOptions {
   type: WalletType.KEY_3;
-  fastPublicKey: string;
-  cancelPublicKey: string;
+  secrets: Omit<Secrets3Key, 'seedPhrase'>;
 }
 
-export interface ImportStandardWalletOptions extends CommonImportWalletOptions {
+export interface ImportStandardWalletOptions extends CommonAddWalletOptions {
+  secrets: SecretsStandard;
   type: WalletType.S_HD_P2SH;
 }
 
-export interface Import2KeyWalletOptions extends TwoKeyWalletOptions, CommonImportWalletOptions {}
+export interface Import2KeyWalletOptions extends CommonAddWalletOptions {
+  secrets: Secrets2Key;
+  type: WalletType.KEY_2;
+}
 
-export interface Import3KeyWalletOptions extends ThreeKeyWalletOptions, CommonImportWalletOptions {}
+export interface Import3KeyWalletOptions extends CommonAddWalletOptions {
+  secrets: Secrets3Key;
+  type: WalletType.KEY_3;
+}
 
 export interface SendCoinsOptions {
   type: WalletType;
@@ -83,10 +137,4 @@ export enum TransactionStatus {
   DONE = 'DONE',
   CANCELED = 'CANCELED',
   CANCELED_DONE = 'CANCELED_DONE',
-}
-
-export interface ECDSA {
-  PUBLIC_KEY: string;
-  PRIVATE_KEY_PHRASE: string;
-  PRIVATE_KEY: string;
 }
