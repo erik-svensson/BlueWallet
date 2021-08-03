@@ -37,6 +37,11 @@
       "binaryPath": "android/app/build/outputs/apk/dev/debug/app-dev-debug.apk",
       "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleDevDebug assembleDevDebugAndroidTest -DtestBuildType=debug && cd .."
     },
+    "android.dev.release": {
+      "type": "android.apk",
+      "binaryPath": "android/app/build/outputs/apk/dev/debug/app-dev-release.apk",
+      "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleDevRelease assembleDevReleaseAndroidTest -DtestBuildType=release && cd .."
+    },
     "android.stage.debug": {
       "type": "android.apk",
       "binaryPath": "android/app/build/outputs/apk/stage/debug/app-stage-debug.apk",
@@ -90,6 +95,10 @@
     "android.emu.dev.debug": {
       "device": "pixel.emu",
       "app": "android.dev.debug"
+    },
+    "android.emu.dev.release": {
+      "device": "pixel.emu",
+      "app": "android.dev.release"
     },
     "android.emu.stage.debug": {
       "device": "pixel.emu",
