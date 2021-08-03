@@ -39,7 +39,7 @@
     },
     "android.dev.release": {
       "type": "android.apk",
-      "binaryPath": "android/app/build/outputs/apk/dev/debug/app-dev-release.apk",
+      "binaryPath": "android/app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk",
       "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleDevRelease assembleDevReleaseAndroidTest -DtestBuildType=release && cd .."
     },
     "android.stage.debug": {
