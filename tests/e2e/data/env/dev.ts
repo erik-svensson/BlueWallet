@@ -1,1 +1,1 @@
-export const emailNotificationSenderAddress = 'postmaster@btcv-notifcations-email.rnd.land';
+export const emailNotificationSenderAddress = process.env.EMAIL_NOTIFICATIONS_ADDRESS_NONPROD as string;

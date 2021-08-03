@@ -82,5 +82,4 @@ token.json
 *.vim
 
 # e2e test data & secrets
-tests/e2e/data/net/mainnet-wallets.json
 tests/e2e/.env.e2e

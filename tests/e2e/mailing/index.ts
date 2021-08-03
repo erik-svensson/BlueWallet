@@ -1,11 +1,8 @@
-import dotenv from 'dotenv';
 import { JSDOM } from 'jsdom';
 import mailosaur from 'mailosaur';
 import { SearchCriteria, Message } from 'mailosaur/lib/models';
 
 import { envData } from '../data';
-
-dotenv.config({ path: 'tests/e2e/.env.e2e' });
 
 const API_KEY = process.env['MAILOSAUR_API_KEY'];
 const SERVER_ID = process.env['MAILOSAUR_SERVER_ID'];
