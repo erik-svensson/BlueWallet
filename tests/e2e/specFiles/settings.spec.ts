@@ -120,7 +120,7 @@ describe('Settings', () => {
   });
 
   describe('Email notifications', () => {
-    describe('Add email', () => {
+    describe.skip('Add email', () => {
       beforeEach(async () => {
         isBeta() && (await app.onboarding.betaVersionScreen.close());
         await app.developerRoom.tapOnSkipOnboardingButton();
@@ -379,7 +379,7 @@ describe('Settings', () => {
       });
     });
 
-    describe('General', () => {
+    describe.skip('General', () => {
       describe('Without added email', () => {
         beforeEach(async () => {
           isBeta() && (await app.onboarding.betaVersionScreen.close());
