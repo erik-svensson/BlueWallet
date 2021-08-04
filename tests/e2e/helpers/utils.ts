@@ -1,7 +1,5 @@
-interface PollOptions {
-  interval: number;
-  retries: number;
-}
+// @ts-ignore
+import { getArgValue } from 'detox/src/utils/argparse';
 
 /**
  * Checks if current configuration includes "beta" word.
@@ -18,36 +16,16 @@ export const randomString = () =>
     .toString(36)
     .substring(7);
 
-/** Edits email address to include a wildcard. Output: email+{randomNumber}@domain.com */
-export const randomizeEmailAddress = (email: string) => {
-  const randomNumberString = Math.floor(Math.random() * 1000000000).toString();
-  const atIndex = email.indexOf('@');
-
-  return email.substr(0, atIndex) + `+${randomNumberString}` + email.substr(atIndex);
-};
-
 /** Waits x miliseconds */
 export const wait = (miliseconds: number) =>
   new Promise(resolve => {
     setTimeout(resolve, miliseconds);
   });
 
-/** Invokes a method by polling until it doesn't return an exception.  */
-const poll = async <T>(fn: () => T | PromiseLike<T>, options?: Partial<PollOptions>): Promise<T> => {
-  const { interval = 500, retries = 5 } = options || { interval: 500, retries: 5 };
+// HACK: unofficial, undocumented way to obtain the name of current detox configuration
+export function getBuildEnv() {
+  const configurationName = getArgValue('configuration');
+  const flavour = configurationName.match(/dev|stage|prod/);
 
-  console.log(`Invoking ${fn.name}: ${JSON.stringify({ interval: 500, retries })}`);
-
-  try {
-    return await fn();
-  } catch (error) {
-    if (retries < 0) {
-      throw new Error(`The polled function didn't return a result. Details: ${error.message}`);
-    }
-
-    await wait(interval);
-    return await poll(fn, { interval, retries: retries - 1 });
-  }
-};
-
-export default poll;
+  return flavour.toString();
+}

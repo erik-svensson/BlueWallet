@@ -1,7 +1,7 @@
 import { expect as jestExpect } from '@jest/globals';
 import { device, expect } from 'detox';
 
-import { DEFAULT_UNLOCK_PIN, ECDSA_KEYS } from '../helpers/consts';
+import { DEFAULT_UNLOCK_PIN, ecdsaKeys } from '../data';
 import { isBeta } from '../helpers/utils';
 import mailing, { Subject } from '../mailing';
 import app from '../pageObjects';
@@ -160,8 +160,7 @@ describe('Settings', () => {
           await steps.createWallet({
             type: WalletType.KEY_3,
             name: walletName,
-            fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
-            cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
+            secrets: ecdsaKeys,
           });
 
           await app.navigationBar.changeTab('settings');
@@ -221,8 +220,7 @@ describe('Settings', () => {
           await steps.createWallet({
             type: WalletType.KEY_3,
             name: 'Main',
-            fastPublicKey: ECDSA_KEYS.FAST_KEY.PUBLIC_KEY,
-            cancelPublicKey: ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY,
+            secrets: ecdsaKeys,
           });
 
           const email = mailing.generateAddress();

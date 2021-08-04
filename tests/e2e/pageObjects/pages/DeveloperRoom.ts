@@ -27,7 +27,7 @@ const DeveloperRoom = () => ({
   },
 
   async typeEmailAddress(email: string) {
-    await actions.typeText(this.emailAddressInput, email, { replace: true });
+    await actions.replaceText(this.emailAddressInput, email, { replace: true });
   },
 });
 
