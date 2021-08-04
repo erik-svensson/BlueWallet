@@ -33,6 +33,7 @@ export const AirdropFloatingButton: FC<Props> = ({
   }, [navigation, thankYouSeen]);
 
   const onButtonPress = () => {
+    //@ts-ignore
     if (isAfterAirdrop()) {
       return navigation.navigate(Route.AirdropDashboard);
     }
@@ -44,7 +45,7 @@ export const AirdropFloatingButton: FC<Props> = ({
   };
 
   return (
-    <TouchableOpacity style={[styles.clearButton, { bottom: position ? 100 : 0 }]} onPress={onButtonPress}>
+    <TouchableOpacity style={[styles.clearButton, { bottom: position ? 120 : 0 }]} onPress={onButtonPress}>
       <Image source={icons.airdropFloating} style={styles.airdropIcon} />
     </TouchableOpacity>
   );

@@ -1,9 +1,11 @@
 import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import { Countdown } from 'app/components';
 import { CONST, Wallet } from 'app/consts';
 import { getFormattedAirdropDate } from 'app/helpers/airdrop';
+import { selectors } from 'app/state/airdrop';
 import { SubscribeWalletActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
@@ -21,6 +23,8 @@ interface Props {
 }
 
 export const AirdropInProgress: FC<Props> = props => {
+  const airdropDate = useSelector(selectors.airdropDate);
+
   return (
     <>
       <View style={styles.infoContainer}>
@@ -30,10 +34,10 @@ export const AirdropInProgress: FC<Props> = props => {
         </Text>
         <Text style={styles.description}>
           {i18n.airdrop.dateOfAirdrop}&nbsp;
-          {getFormattedAirdropDate()}
+          {getFormattedAirdropDate(airdropDate)}
         </Text>
       </View>
-      <Countdown dataEnd={CONST.airdropDate} />
+      <Countdown dataEnd={airdropDate} />
       <AirdropInProgressContent {...props} />
     </>
   );

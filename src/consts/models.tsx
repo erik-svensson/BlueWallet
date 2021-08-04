@@ -260,14 +260,7 @@ export interface Wallet {
 }
 
 export interface WalletPayload {
-  name: string;
-  gap_limit: number;
-  address_range: string;
-  derivation_path?: string;
-  xpub: string;
-  address_type: string;
-  instant_public_key?: string;
-  recovery_public_key?: string;
+  wallet: string;
 }
 
 export interface ActionMeta {

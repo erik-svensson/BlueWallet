@@ -1,12 +1,20 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, Alert, View } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
-import { icons } from 'app/assets';
-import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioButton, Image } from 'app/components';
-import { Route, Wallet, RootStackParams, ActionMeta, CONST, WalletType, ConfirmAddressFlowType } from 'app/consts';
+import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioButton } from 'app/components';
+import {
+  Route,
+  Wallet,
+  RootStackParams,
+  ActionMeta,
+  CONST,
+  WalletType,
+  ConfirmAddressFlowType,
+  DateType,
+} from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { isAfterAirdrop } from 'app/helpers/airdrop';
@@ -18,6 +26,7 @@ import {
   HDSegwitP2SHAirWallet,
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
+import { selectors as airdropSelector } from 'app/state/airdrop';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
 import {
   subscribeWallet as subscribeWalletAction,
@@ -41,6 +50,7 @@ interface Props {
   walletsLabels: string[];
   email: string;
   error: string;
+  airdropDate: string | DateType;
 }
 
 interface State {
@@ -122,7 +132,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   };
 
   navigateToConfirmEmailSubscription = (wallet: Wallet) => {
-    const { navigation, email } = this.props;
+    const { navigation, email, airdropDate } = this.props;
 
     navigation.navigate(Route.Confirm, {
       title: i18n.notifications.notifications,
@@ -135,14 +145,15 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
           wallets: [wallet],
-          onSuccess: isAfterAirdrop()
+          onSuccess: isAfterAirdrop(airdropDate)
             ? this.navigateToSuccesfullNotificationSubscriptionMessage
             : () => this.navigateToAirdropWalletSubscription(wallet, true),
           onResend: () => this.props.subscribe([wallet], email),
         });
       },
       onBack: () =>
-        isAfterAirdrop()
+        //TODO change logic if is after + if is email
+        isAfterAirdrop(airdropDate)
           ? this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard })
           : this.navigateToAirdropWalletSubscription(wallet),
     });
@@ -150,7 +161,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
-    const { navigation, createWallet } = this.props;
+    const { navigation, createWallet, airdropDate } = this.props;
 
     wallet.setLabel(label);
 
@@ -161,7 +172,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           secret: w.getSecret(),
           handleNavigationSubscription: true
             ? () => this.navigateToConfirmEmailSubscription(wallet)
-            : () => (isAfterAirdrop() ? undefined : this.navigateToAirdropWalletSubscription(wallet)),
+            : () => (isAfterAirdrop(airdropDate) ? undefined : this.navigateToAirdropWalletSubscription(wallet)),
         });
       },
       onFailure: () => onError(),
@@ -295,8 +306,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   renderAdvancedSection() {
     const { isAdvancedOptionsEnabled } = this.props.appSettings;
 
-    const isNotAfterAirdrop = !isAfterAirdrop();
-
     return (
       <>
         <Text style={styles.advancedOptionsLabel}>{i18n.wallets.add.walletType}</Text>
@@ -308,17 +317,14 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           checked={this.state.WalletClass === HDSegwitP2SHArWallet}
           onPress={this.onSelect}
         />
-        <View style={isNotAfterAirdrop && styles.frame}>
-          <RadioButton
-            testID="create-3-key-vault-radio"
-            title={HDSegwitP2SHAirWallet.typeReadable}
-            subtitle={i18n.wallets.add.air}
-            value={HDSegwitP2SHAirWallet}
-            checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
-            onPress={this.onSelect}
-          />
-          {isNotAfterAirdrop && <Image source={icons.airdrop} style={styles.airdropIcon} />}
-        </View>
+        <RadioButton
+          testID="create-3-key-vault-radio"
+          title={HDSegwitP2SHAirWallet.typeReadable}
+          subtitle={i18n.wallets.add.air}
+          value={HDSegwitP2SHAirWallet}
+          checked={this.state.WalletClass === HDSegwitP2SHAirWallet}
+          onPress={this.onSelect}
+        />
         <RadioButton
           testID="create-hd-p2sh-radio"
           title={isAdvancedOptionsEnabled ? i18n.wallets.add.legacyHDP2SHTitle : i18n.wallets.add.legacyTitle}
@@ -352,6 +358,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   }
 
   render() {
+    console.log(this.props.airdropDate, '>>>>>');
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps={'always'}
@@ -393,6 +400,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   walletsLabels: walletsSelector.getWalletsLabels(state),
   email: storedEmail(state),
   error: readableError(state),
+  airdropDate: airdropSelector.airdropDate(state),
 });
 
 const mapDispatchToProps = {
@@ -422,21 +430,6 @@ const styles = StyleSheet.create({
   },
   importButtonContainer: {
     marginTop: 12,
-  },
-  frame: {
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 7,
-    paddingHorizontal: 4,
-    borderColor: palette.secondary,
-    position: 'relative',
-  },
-  airdropIcon: {
-    width: 13,
-    height: 12,
-    position: 'absolute',
-    right: 7,
-    top: 7,
   },
   notificationDescription: {
     ...typography.caption,

@@ -1,3 +1,5 @@
+import { DateType } from 'app/consts';
+
 import { AirdropAction, AirdropActionType } from './actions';
 
 export interface AirdropState {
@@ -7,6 +9,7 @@ export interface AirdropState {
   error: string;
   subscribedIds: string[];
   usersQuantity: number;
+  endAirdrop: string | DateType;
 }
 
 const initialState: AirdropState = {
@@ -16,6 +19,7 @@ const initialState: AirdropState = {
   subscribedIds: [],
   error: '',
   usersQuantity: 0,
+  endAirdrop: '',
 };
 
 export const airdropReducer = (state = initialState, action: AirdropActionType): AirdropState => {
@@ -32,23 +36,23 @@ export const airdropReducer = (state = initialState, action: AirdropActionType):
       };
     case AirdropAction.CheckSubscription:
     case AirdropAction.SubscribeWallet:
-    case AirdropAction.GetUsersQuantity:
+    case AirdropAction.GetAirdropStatusBalance:
       return {
         ...state,
         isLoading: true,
       };
     case AirdropAction.SubscribeWalletFailure:
     case AirdropAction.CheckSubscriptionFailure:
-    case AirdropAction.GetUsersQuantityFailure:
+    case AirdropAction.GetAirdropStatusBalanceFailure:
       return {
         ...state,
         error: action.error,
         isLoading: false,
       };
-    case AirdropAction.GetUsersQuantitySuccess:
+    case AirdropAction.GetAirdropStatusBalanceSuccess:
       return {
         ...state,
-        usersQuantity: action.payload.users,
+        usersQuantity: action.users,
         error: '',
         isLoading: false,
       };
@@ -65,6 +69,11 @@ export const airdropReducer = (state = initialState, action: AirdropActionType):
         subscribedIds: [...state.subscribedIds, action.payload.id],
         error: '',
         isLoading: false,
+      };
+    case AirdropAction.SetEndDateAirdrop:
+      return {
+        ...state,
+        endAirdrop: action.date,
       };
     default:
       return state;

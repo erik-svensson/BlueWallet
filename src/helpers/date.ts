@@ -18,7 +18,7 @@ export const secondsToFormat = (seconds: number, format: string) => {
 
 export const formatDate = (date: DateType | string, format = 'DD/MM/YY') => dayjs(date).format(format);
 
-export const getTimeDiff = (startDate: DateType, endDate: DateType) => {
+export const getTimeDiff = (startDate: DateType, endDate: DateType | string) => {
   const startDateDayjs = dayjs(startDate);
   const endDateDayjs = dayjs(endDate);
 
@@ -48,4 +48,4 @@ export const getTimezoneOffset = () => {
   return `GMT ${offset < 0 ? '-' : '+'}${dayjs.duration({ minutes: offset }).asHours()}`;
 };
 
-export const isAfter = (startDate: DateType, endDate: DateType) => dayjs(startDate).isAfter(dayjs(endDate));
+export const isAfter = (startDate: DateType, endDate: DateType | string) => dayjs(startDate).isAfter(dayjs(endDate));

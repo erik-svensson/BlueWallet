@@ -1,14 +1,14 @@
-import { CONST, AirdropGoal, AirdropCarouselCardData } from 'app/consts';
+import { CONST, AirdropGoal, AirdropCarouselCardData, DateType } from 'app/consts';
 import { formatDate, getTimezoneOffset, isAfter } from 'app/helpers/date';
 
 import { formatToBtcvWithoutSign, satoshiToBtc } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
 
-export const getFormattedAirdropDate = () =>
-  `${formatDate(CONST.airdropDate.local(), 'DD/MM/YYYY h a')} ${getTimezoneOffset()}`;
+export const getFormattedAirdropDate = (airdropDate: string | DateType) =>
+  `${formatDate(airdropDate, 'DD/MM/YYYY h a')} ${getTimezoneOffset()}`;
 
-export const isAfterAirdrop = () => isAfter(new Date(), CONST.airdropDate);
+export const isAfterAirdrop = (airdropDate: DateType | string) => isAfter(new Date(), airdropDate);
 
 export const getReadableOrder = () => [
   i18n.order.first,
@@ -49,6 +49,7 @@ export const getCommunityItem = (usersQuantity: number): AirdropCarouselCardData
 };
 
 export const getCarouselItem = (data: { balance: number; label: string }): AirdropCarouselCardData => {
+  //@ts-ignore
   const _isAfterAirdrop = isAfterAirdrop();
 
   const airdropGoals: AirdropGoal[] = [

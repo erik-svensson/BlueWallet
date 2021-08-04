@@ -61,6 +61,7 @@ module.exports = {
     },
     createWallet: {
       doYouWantToTakePart: 'Do you want to take part in the Airdrop?',
+      title: 'Airdrop is live!',
     },
     dashboard: {
       createNewWallet: 'Create new wallet',
@@ -86,7 +87,7 @@ module.exports = {
       description: 'We want to share ${airdropTotalDollarsToShare} in BTCV to reward you for being with us!',
       listHeader: 'Requirements for the Airdrop:',
       points: {
-        0: '3-Key Vault Wallet',
+        0: 'Any BTCV Wallet',
         1: 'At least {airdropMinimumBTCVRequired} BTCV stored on the wallet*',
       },
       rewardExplanation: '*Your reward depends on how many coins you have in the general pool.',

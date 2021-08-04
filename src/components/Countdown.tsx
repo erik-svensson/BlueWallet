@@ -27,7 +27,7 @@ const Cells: FC<CellsProps> = ({ text, title }) => (
 );
 
 interface Props {
-  dataEnd: DateType;
+  dataEnd: DateType | string;
 }
 
 const numberToCellString = (n: number) => n.toString().padStart(2, '0');

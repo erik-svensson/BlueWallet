@@ -1,7 +1,13 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 
-import { subscribeWallet, checkWalletsSubscription, getUsersQuantity } from 'app/api/airdrop/client';
-import { Wallet, WalletPayload } from 'app/consts';
+import {
+  subscribeAirdropWallet,
+  checkWalletsAirdropSubscription,
+  checkBalance,
+  checkBalanceWallet,
+} from 'app/api/airdrop/client';
+import { Wallet } from 'app/consts';
+import { getUtcDate } from 'app/helpers/date';
 import * as helpers from 'app/helpers/wallets';
 
 import {
@@ -12,8 +18,9 @@ import {
   CheckSubscriptionAction,
   checkSubscriptionSuccess,
   checkSubscriptionFailure,
-  getUsersQuantitySuccess,
-  getUsersQuantityFailure,
+  getAirdropStatusBalanceSuccess,
+  getAirdropStatusBalanceFailure,
+  setEndDateAirdropAction,
 } from './actions';
 
 enum Result {
@@ -25,12 +32,15 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   const { payload, meta } = action as SubscribeWalletAction;
 
   try {
-    const walletPayload: WalletPayload = yield call(helpers.walletToAddressesGenerationBase, payload);
-    const response: { msg?: string; result: Result } = yield call(subscribeWallet, walletPayload);
+    const walletPayload: string = yield call(helpers.getWalletHashedPublicKeys, payload);
+
+    const response: { msg?: string; result: Result } = yield call(subscribeAirdropWallet, { wallet: walletPayload });
 
     if (response.result === Result.error) {
       throw new Error(response.result);
     }
+
+    //   //TODO:
     if (response.result === Result.success) {
       yield put(subscribeWalletSuccess(payload.id));
 
@@ -60,6 +70,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       const walletsWithHashes = yield Promise.all(
         wallets.map(async (wallet: Wallet) => ({ ...wallet, hash: await helpers.getWalletHashedPublicKeys(wallet) })),
       );
+
       const hashes = walletsWithHashes.map((wallet: Wallet) => wallet.hash);
       //@ts-ignore
       const response = yield call(checkWalletsSubscription, { hashes });
@@ -68,10 +79,14 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
         throw new Error(response.result);
       }
 
-      walletsWithHashes.forEach((wallet: Wallet, index: number) => {
-        if (response.result[index]) {
-          ids.push(wallet.id);
-        }
+      walletsWithHashes.forEach((wallet: Wallet) => {
+        Object.fromEntries(
+          Object.entries(response.result).filter(async ([key, value]) => {
+            if (wallet.hash === key && !!value) {
+              ids.push(wallet.id);
+            }
+          }),
+        );
       });
     }
 
@@ -81,23 +96,21 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   }
 }
 
-export function* getUsersQuantitySaga() {
+export function* getAirdropStatusBalanceSaga() {
   try {
-    const response: { msg?: string; result: Result; users: number } = yield call(getUsersQuantity);
+    //@ts-ignore
+    const response = yield call(checkBalance);
+    const { result } = response;
 
-    if (response.result === Result.error) {
-      throw new Error(response.result);
-    }
-    if (response.result === Result.success) {
-      yield put(getUsersQuantitySuccess(response.users));
-    }
+    yield put(setEndDateAirdropAction(getUtcDate(result.ends)));
+    yield put(getAirdropStatusBalanceSuccess(result.users));
   } catch (error) {
-    yield put(getUsersQuantityFailure(error.msg));
+    yield put(getAirdropStatusBalanceFailure(error.msg));
   }
 }
 
 export default [
   takeEvery(AirdropAction.CheckSubscription, checkSubscriptionSaga),
   takeEvery(AirdropAction.SubscribeWallet, subscribeWalletSaga),
-  takeEvery(AirdropAction.GetUsersQuantity, getUsersQuantitySaga),
+  takeEvery(AirdropAction.GetAirdropStatusBalance, getAirdropStatusBalanceSaga),
 ];

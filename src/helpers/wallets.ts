@@ -19,6 +19,7 @@ export const walletToAddressesGenerationBase = async (wallet: Wallet): Promise<W
   }
 
   return {
+    //@ts-ignore
     name: wallet.label,
     gap_limit: CONST.walletsDefaultGapLimit,
     address_range: CONST.walletsDefaultAddressRange,

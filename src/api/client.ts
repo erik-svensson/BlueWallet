@@ -14,12 +14,14 @@ const createHttpClient = (baseUrl: string) => {
   });
 
   const onRequest = (request: AxiosRequestConfig) => {
+    console.info(request);
     console.info('http', `--> ${request.method?.toUpperCase()} ${request.baseURL}${request.url}`);
 
     return request;
   };
 
   const onResponse = (response: AxiosResponse<any>) => {
+    console.info(response);
     console.info('http', `<-- ${response.status} ${response.config.baseURL}${response.config.url}`);
 
     console.log(JSON.stringify(response.data, null, 2));

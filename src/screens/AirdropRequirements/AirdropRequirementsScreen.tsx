@@ -1,4 +1,3 @@
-import { CommonActions } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
 import { Image, Text, StyleSheet, View, TouchableOpacity } from 'react-native';
@@ -7,9 +6,10 @@ import { connect } from 'react-redux';
 import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
-import { CONST } from 'app/consts/models';
+import { CONST, DateType } from 'app/consts/models';
 import { getFormattedAirdropDate } from 'app/helpers/airdrop';
-import { actions } from 'app/state/airdrop';
+import { ApplicationState } from 'app/state';
+import { actions, selectors } from 'app/state/airdrop';
 import { CompleteThankYouFlowActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
@@ -21,6 +21,7 @@ interface ActionProps {
 
 type Props = {
   navigation: StackNavigationProp<RootStackParams, Route.AirdropRequirements>;
+  airdropDate: string | DateType;
 } & ActionProps;
 
 class AirdropRequirementsScreen extends Component<Props> {
@@ -35,6 +36,8 @@ class AirdropRequirementsScreen extends Component<Props> {
   };
 
   render() {
+    const { airdropDate } = this.props;
+
     return (
       <ScreenTemplate
         header={<Header isBackArrow title={i18n.airdrop.title} />}
@@ -79,7 +82,7 @@ class AirdropRequirementsScreen extends Component<Props> {
         </View>
         <View style={styles.dateInfoContainer}>
           <Text style={styles.description}>{i18n.airdrop.dateOfAirdrop}&nbsp;</Text>
-          <Text style={styles.date}>{getFormattedAirdropDate()}</Text>
+          <Text style={styles.date}>{getFormattedAirdropDate(airdropDate)}</Text>
         </View>
         <Text style={styles.explanation}>{i18n.airdrop.requirements.rewardExplanation}</Text>
       </ScreenTemplate>
@@ -87,11 +90,15 @@ class AirdropRequirementsScreen extends Component<Props> {
   }
 }
 
+const mapStateToProps = (state: ApplicationState) => ({
+  airdropDate: selectors.airdropDate(state),
+});
+
 const mapDispatchToProps: ActionProps = {
   completeThankYouFlow: actions.completeThankYouFlow,
 };
 
-export default connect(null, mapDispatchToProps)(AirdropRequirementsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(AirdropRequirementsScreen);
 
 const styles = StyleSheet.create({
   subtitle: {

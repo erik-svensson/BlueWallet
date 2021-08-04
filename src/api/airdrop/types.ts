@@ -6,7 +6,7 @@ export interface ResultResponse {
 }
 
 export interface AirdropCheckWalletsSubscription {
-  hashes: string[];
+  wallets: string[];
 }
 
 export interface AirdropCheckSubscriptionResponse {
@@ -26,7 +26,7 @@ export interface CheckBalancesResponse {
   msg?: string;
 }
 
-export interface GetUsersQuantityResponse {
-  result: Result.ERROR | Result.SUCCESS;
-  users: number;
+export interface AirdropCheckBalanceWallet {
+  badge: string;
+  balance: string;
 }

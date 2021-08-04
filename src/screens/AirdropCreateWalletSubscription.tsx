@@ -57,6 +57,7 @@ const ShareComponent = () => (
 
 class AirdropCreateWalletSubscription extends Component<Props> {
   onYesPress = () => {
+    //TODO: fix real subscription
     const { navigation, route, subscribeWallet } = this.props;
     const { notificationsTurnedOn, parentRouteName, wallet } = route.params;
     const description = notificationsTurnedOn
@@ -122,7 +123,10 @@ class AirdropCreateWalletSubscription extends Component<Props> {
             <Loader size={87} />
           </View>
         ) : (
-          <Text style={styles.description}>{i18n.airdrop.createWallet.doYouWantToTakePart}</Text>
+          <>
+            <Text style={styles.title}>{i18n.airdrop.createWallet.title}</Text>
+            <Text style={styles.description}>{i18n.airdrop.createWallet.doYouWantToTakePart}</Text>
+          </>
         )}
       </ScreenTemplate>
     );
@@ -147,6 +151,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
   },
+  title: { ...typography.headline4, textAlign: 'center', marginBottom: 20 },
   loadingContainer: {
     display: 'flex',
     flex: 1,

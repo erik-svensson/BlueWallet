@@ -7,7 +7,11 @@ import { ScreenTemplate, Button, Header } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import { actions, selectors } from 'app/state/airdrop';
-import { MarkThankYouSeenActionCreator } from 'app/state/airdrop/actions';
+import {
+  MarkThankYouSeenActionCreator,
+  GetAirdropStatusBalanceActionCreator,
+  getAirdropStatusBalance,
+} from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');
@@ -18,6 +22,7 @@ interface MapStateProps {
 
 interface ActionProps {
   markThankYouSeen: MarkThankYouSeenActionCreator;
+  getAirdropStatusBalance: GetAirdropStatusBalanceActionCreator;
 }
 
 type Props = {
@@ -27,8 +32,9 @@ type Props = {
 
 class AirdropThankYouScreen extends Component<Props> {
   componentDidMount() {
-    const { thankYouSeen, markThankYouSeen } = this.props;
+    const { thankYouSeen, markThankYouSeen, getAirdropStatusBalance } = this.props;
 
+    getAirdropStatusBalance();
     if (!thankYouSeen) {
       markThankYouSeen();
     }
@@ -73,6 +79,7 @@ const mapStateToProps = (state: ApplicationState): MapStateProps => ({
 
 const mapDispatchToProps: ActionProps = {
   markThankYouSeen: actions.markThankYouSeen,
+  getAirdropStatusBalance,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AirdropThankYouScreen);

@@ -1,4 +1,4 @@
-import { Wallet, ActionMeta } from 'app/consts';
+import { Wallet, ActionMeta, DateType } from 'app/consts';
 
 export enum AirdropAction {
   ThankYouSeen = 'ThankYouSeen',
@@ -9,22 +9,23 @@ export enum AirdropAction {
   CheckSubscription = 'CheckSubscription',
   CheckSubscriptionSuccess = 'CheckSubscriptionSuccess',
   CheckSubscriptionFailure = 'CheckSubscriptionFailure',
-  GetUsersQuantity = 'GetUsersQuantity',
-  GetUsersQuantitySuccess = 'GetUsersQuantitySuccess',
-  GetUsersQuantityFailure = 'GetUsersQuantityFailure',
+  GetAirdropStatusBalance = 'GetAirdropStatusBalance',
+  GetAirdropStatusBalanceSuccess = 'GetAirdropStatusBalanceSuccess',
+  GetAirdropStatusBalanceFailure = 'GetAirdropStatusBalanceFailure',
+  SetEndDateAirdrop = 'SetEndDateAirdrop',
 }
 
-export interface GetUsersQuantityAction {
-  type: AirdropAction.GetUsersQuantity;
+export interface GetAirdropStatusBalanceAction {
+  type: AirdropAction.GetAirdropStatusBalance;
 }
 
-export interface GetUsersQuantitySuccessAction {
-  type: AirdropAction.GetUsersQuantitySuccess;
-  payload: { users: number };
+export interface GetAirdropStatusBalanceSuccessAction {
+  type: AirdropAction.GetAirdropStatusBalanceSuccess;
+  users: number;
 }
 
-export interface GetUsersQuantityFailureAction {
-  type: AirdropAction.GetUsersQuantityFailure;
+export interface GetAirdropStatusBalanceFailureAction {
+  type: AirdropAction.GetAirdropStatusBalanceFailure;
   error: string;
 }
 
@@ -69,6 +70,11 @@ export interface CheckSubscriptionFailureAction {
 export interface CheckSubscriptionSuccessAction {
   type: AirdropAction.CheckSubscriptionSuccess;
   payload: { subscribedIds: string[] };
+}
+
+export interface SetEndDateAirdropAction {
+  type: AirdropAction.SetEndDateAirdrop;
+  date: string | DateType;
 }
 
 export type MarkThankYouSeenActionCreator = () => ThankYouSeenAction;
@@ -126,24 +132,31 @@ export const checkSubscriptionFailure: CheckSubscriptionFailureActionCreator = e
   error,
 });
 
-export type GetUsersQuantityActionCreator = () => GetUsersQuantityAction;
+export type GetAirdropStatusBalanceActionCreator = () => GetAirdropStatusBalanceAction;
 
-export const getUsersQuantity: GetUsersQuantityActionCreator = () => ({
-  type: AirdropAction.GetUsersQuantity,
+export const getAirdropStatusBalance: GetAirdropStatusBalanceActionCreator = () => ({
+  type: AirdropAction.GetAirdropStatusBalance,
 });
 
-export type GetUsersQuantitySuccessActionCreator = (users: number) => GetUsersQuantitySuccessAction;
+export type GetAirdropStatusBalanceSuccessActionCreator = (users: number) => GetAirdropStatusBalanceSuccessAction;
 
-export const getUsersQuantitySuccess: GetUsersQuantitySuccessActionCreator = users => ({
-  type: AirdropAction.GetUsersQuantitySuccess,
-  payload: { users },
+export const getAirdropStatusBalanceSuccess: GetAirdropStatusBalanceSuccessActionCreator = users => ({
+  type: AirdropAction.GetAirdropStatusBalanceSuccess,
+  users,
 });
 
-export type GetUsersQuantityFailureActionCreator = (error: string) => GetUsersQuantityFailureAction;
+export type GetAirdropStatusBalanceFailureActionCreator = (error: string) => GetAirdropStatusBalanceFailureAction;
 
-export const getUsersQuantityFailure: GetUsersQuantityFailureActionCreator = error => ({
-  type: AirdropAction.GetUsersQuantityFailure,
+export const getAirdropStatusBalanceFailure: GetAirdropStatusBalanceFailureActionCreator = error => ({
+  type: AirdropAction.GetAirdropStatusBalanceFailure,
   error,
+});
+
+export type SetEndDateAirdropActionCreator = (date: string | DateType) => SetEndDateAirdropAction;
+
+export const setEndDateAirdropAction: SetEndDateAirdropActionCreator = (date: string | DateType) => ({
+  type: AirdropAction.SetEndDateAirdrop,
+  date,
 });
 
 export type AirdropActionType =
@@ -155,6 +168,7 @@ export type AirdropActionType =
   | CheckSubscriptionSuccessAction
   | SubscribeWalletSuccessAction
   | CheckSubscriptionFailureAction
-  | GetUsersQuantityAction
-  | GetUsersQuantitySuccessAction
-  | GetUsersQuantityFailureAction;
+  | GetAirdropStatusBalanceAction
+  | GetAirdropStatusBalanceSuccessAction
+  | GetAirdropStatusBalanceFailureAction
+  | SetEndDateAirdropAction;
