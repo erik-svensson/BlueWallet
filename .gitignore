@@ -80,3 +80,6 @@ credentials.json
 token.json
 
 *.vim
+
+# e2e test data & secrets
+tests/e2e/.env.e2e

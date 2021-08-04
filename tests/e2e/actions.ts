@@ -2,7 +2,7 @@
 import Detox, { by, device, waitFor } from 'detox';
 import { getText } from 'detox-getprops';
 
-import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers/consts';
+import { WAIT_FOR_ELEMENT_TIMEOUT } from './data';
 
 interface TypeTextOptions {
   replace?: boolean;

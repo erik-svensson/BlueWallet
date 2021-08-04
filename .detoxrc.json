@@ -1,38 +1,103 @@
 {
   "testRunner": "jest",
   "runnerConfig": "tests/e2e/config.json",
+  "apps": {
+    "ios.dev.debug": {
+      "type": "ios.app",
+      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/GoldWallet Dev.app",
+      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Dev (Debug)\" -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -quiet"
+    },
+    "ios.dev.release": {
+      "type": "ios.app",
+      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet Dev.app",
+      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Dev (Release)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet"
+    },
+    "ios.stage.debug": {
+      "type": "ios.app",
+      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/GoldWallet Stage.app",
+      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Stage (Debug)\" -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -quiet"
+    },
+    "ios.stage.release": {
+      "type": "ios.app",
+      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet Stage.app",
+      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Stage (Release)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet"
+    },
+    "ios.prod.debug": {
+      "type": "ios.app",
+      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/GoldWallet Prod.app",
+      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Prod (Debug)\" -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -quiet"
+    },
+    "ios.prod.release": {
+      "type": "ios.app",
+      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet Prod.app",
+      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Prod (Release)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet"
+    },
+    "android.dev.debug": {
+      "type": "android.apk",
+      "binaryPath": "android/app/build/outputs/apk/dev/debug/app-dev-debug.apk",
+      "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleDevDebug assembleDevDebugAndroidTest -DtestBuildType=debug && cd .."
+    },
+    "android.stage.debug": {
+      "type": "android.apk",
+      "binaryPath": "android/app/build/outputs/apk/stage/debug/app-stage-debug.apk",
+      "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleStageDebug assembleStageDebugAndroidTest -DtestBuildType=debug && cd .."
+    },
+    "android.prod.debug": {
+      "type": "android.apk",
+      "binaryPath": "android/app/build/outputs/apk/prod/debug/app-prod-debug.apk",
+      "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleProdDebug assembleProdDebugAndroidTest -DtestBuildType=debug && cd .."
+    }
+  },
+  "devices": {
+    "iphone.sim": {
+      "type": "ios.simulator",
+      "device": {
+        "type": "iPhone 11"
+      }
+    },
+    "pixel.emu": {
+      "type": "android.emulator",
+      "device": {
+        "avdName": "Pixel_API_28_AOSP"
+      }
+    }
+  },
   "configurations": {
     "ios.sim.dev.debug": {
-      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet Dev.app",
-      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Dev (Release)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
-      "type": "ios.simulator",
-      "device": {
-        "type": "iPhone 11"
-      }
+      "device": "iphone.sim",
+      "app": "ios.dev.debug"
     },
-    "ios.sim.dev.staging": {
-      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/GoldWallet Stage.app",
-      "build": "RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true xcodebuild -workspace ios/GoldWallet.xcworkspace -UseNewBuildSystem=NO -scheme \"GoldWallet Stage (Release)\" -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -quiet",
-      "type": "ios.simulator",
-      "device": {
-        "type": "iPhone 11"
-      }
+    "ios.sim.dev.release": {
+      "device": "iphone.sim",
+      "app": "ios.dev.release"
     },
-    "android.emu.prod.debug": {
-      "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleProdDebug assembleProdDebugAndroidTest -DtestBuildType=debug && cd ..",
-      "type": "android.emulator",
-      "binaryPath": "android/app/build/outputs/apk/prod/debug/app-prod-debug.apk",
-      "device": {
-        "avdName": "Pixel_API_28_AOSP"
-      }
+    "ios.sim.stage.debug": {
+      "device": "iphone.sim",
+      "app": "ios.stage.debug"
+    },
+    "ios.sim.stage.release": {
+      "device": "iphone.sim",
+      "app": "ios.stage.release"
+    },
+    "ios.sim.prod.debug": {
+      "device": "iphone.sim",
+      "app": "ios.prod.debug"
+    },
+    "ios.sim.prod.release": {
+      "device": "iphone.sim",
+      "app": "ios.prod.release"
     },
     "android.emu.dev.debug": {
-      "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleDevDebug assembleDevDebugAndroidTest -DtestBuildType=debug && cd ..",
-      "type": "android.emulator",
-      "binaryPath": "android/app/build/outputs/apk/dev/debug/app-dev-debug.apk",
-      "device": {
-        "avdName": "Pixel_API_28_AOSP"
-      }
+      "device": "pixel.emu",
+      "app": "android.dev.debug"
+    },
+    "android.emu.stage.debug": {
+      "device": "pixel.emu",
+      "app": "android.stage.debug"
+    },
+    "android.emu.prod.debug": {
+      "device": "pixel.emu",
+      "app": "android.prod.debug"
     }
   }
 }

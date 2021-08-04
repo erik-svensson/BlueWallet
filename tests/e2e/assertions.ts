@@ -1,6 +1,6 @@
 import Detox, { by, element, expect, waitFor } from 'detox';
 
-import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers/consts';
+import { WAIT_FOR_ELEMENT_TIMEOUT } from './data';
 
 // There is no easy way to check if a button is disabled
 // In theory tap method should throw an error if tapping a disabled element, however that's not always the case
