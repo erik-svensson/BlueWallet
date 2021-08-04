@@ -221,7 +221,7 @@ export function* checkConnection() {
   } catch (e) {
     logger.error('electrumX sagas', `checkConnection error: ${e.message}`);
   } finally {
-    RNBootSplash.hide({ fade: true });
+    RNBootSplash.hide();
   }
 }
 
@@ -241,8 +241,11 @@ export function* listenToInternetConnection() {
   const chan: unknown = yield call(emitInternetConnectionChange);
 
   while (true) {
+    yield delay(2000); // In case connection with electrum lost we should wait to reconnect before showing alert;
+
     const { isInternetReachable } = yield take(chan as any);
     const currentIsInternetReachable: boolean = yield select(isInternetReachableSelector);
+
     const {
       wallets: { isInitialized },
     } = yield select();
