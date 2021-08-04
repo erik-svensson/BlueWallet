@@ -1,19 +1,17 @@
 import { waitFor } from 'detox';
 
-import gmailClient from '../../gmail';
-import { DEFAULT_EMAIL_ADDRESS, ECDSA_KEYS, WALLETS } from '../../helpers/consts';
-import { isBeta, randomizeEmailAddress } from '../../helpers/utils';
+import { ECDSA_KEYS, WALLETS } from '../../helpers/consts';
+import { isBeta } from '../../helpers/utils';
+import mailing, { Subject } from '../../mailing';
 import app from '../../pageObjects';
 import { WalletType } from '../../types';
 
 describe('Adding wallet', () => {
   describe('With subscribing to the notifications', () => {
-    // TODO: There must be better way to do it, without modifying the local variable
     let emailAddress: string;
 
     beforeEach(async () => {
-      emailAddress = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
-
+      emailAddress = mailing.generateAddress();
       isBeta() && (await app.onboarding.betaVersionScreen.close());
       await app.developerRoom.typeEmailAddress(emailAddress);
       await app.developerRoom.tapOnSkipOnboardingWithEmailButton();
@@ -22,8 +20,7 @@ describe('Adding wallet', () => {
 
     describe('Create', () => {
       describe('@android @ios @smoke', () => {
-        //FIX EMAIL FETCH AFTER FINAL TEMPLATE AGREED
-        xit('should be possible to create a new 3-Key Vault wallet', async () => {
+        it('should be possible to create a new 3-Key Vault wallet', async () => {
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
@@ -36,12 +33,14 @@ describe('Adding wallet', () => {
           await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY);
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+          const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
 
           await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
           await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
-          const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+          const code = await mailing.getCode(emailAddress, Subject.SUBSCRIBE);
 
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
@@ -63,12 +62,14 @@ describe('Adding wallet', () => {
           await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
           await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY);
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+          const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
 
           await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
           await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
-          const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+          const code = await mailing.getCode(emailAddress, Subject.SUBSCRIBE);
 
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
@@ -85,12 +86,14 @@ describe('Adding wallet', () => {
           await app.wallets.addNewWallet.createScreen.chooseType(WalletType.S_HD_P2SH);
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+          const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
 
           await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
           await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
-          const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+          const code = await mailing.getCode(emailAddress, Subject.SUBSCRIBE);
 
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();

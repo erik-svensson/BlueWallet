@@ -24,7 +24,7 @@ apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.grad
 project.ext.react = [
     entryFile: "index.js",
     devDisabledInStaging: true,
-    enableHermes: true
+    enableHermes: false
 ]
 
 project.ext.sentryCli = [
@@ -74,8 +74,8 @@ android {
         resValue "string", "build_config_package", "io.goldwallet.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 13
-        versionName "6.4.0"
+        versionCode 14
+        versionName "6.4.1"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
@@ -159,6 +159,7 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }
+    implementation 'com.facebook.soloader:soloader:0.9.0+'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"

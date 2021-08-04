@@ -1,4 +1,6 @@
-import Detox, { by, element, expect } from 'detox';
+import Detox, { by, element, expect, waitFor } from 'detox';
+
+import { WAIT_FOR_ELEMENT_TIMEOUT } from './helpers/consts';
 
 // There is no easy way to check if a button is disabled
 // In theory tap method should throw an error if tapping a disabled element, however that's not always the case
@@ -26,5 +28,15 @@ export const expectToBeCopied = async () => {
   // NOTE: Proper solution would be to check device clipboard
   // Currently not implemented in detox
   // https://github.com/wix/detox/issues/222
-  expect(element(by.text('Copied!'))).toBeVisible();
+  await expect(element(by.text('Copied!'))).toBeVisible();
+};
+
+export const expectElementWithTextToBeVisible = async (text: string) => {
+  try {
+    await expect(element(by.text(text))).toBeVisible();
+  } catch (e) {
+    await waitFor(element(by.text(text)))
+      .toBeVisible()
+      .withTimeout(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
+  }
 };
