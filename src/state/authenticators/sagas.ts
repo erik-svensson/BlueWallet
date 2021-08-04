@@ -101,12 +101,12 @@ export function* signTransactionSaga(action: SignTransactionAction | unknown) {
   } = action as SignTransactionAction;
 
   try {
-    const authenticators = yield select(list);
+    const authenticators: Authenticator[] = yield select(list);
 
     for (let i = 0; i < authenticators.length; i++) {
       try {
         const authenticator = authenticators[i];
-        const finalizedPsbt = yield authenticator.signAndFinalizePSBT(encodedPsbt);
+        const finalizedPsbt: string = yield authenticator.signAndFinalizePSBT(encodedPsbt);
 
         yield put(signTransactionSuccess());
         if (meta?.onSuccess) {

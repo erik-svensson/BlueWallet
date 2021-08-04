@@ -1,19 +1,17 @@
 import { waitFor } from 'detox';
 
-import gmailClient from '../../gmail';
-import { DEFAULT_EMAIL_ADDRESS, ECDSA_KEYS, WALLETS } from '../../helpers/consts';
-import { isBeta, randomizeEmailAddress } from '../../helpers/utils';
+import { ecdsaKeys, walletsData } from '../../data';
+import { isBeta } from '../../helpers/utils';
+import mailing, { Subject } from '../../mailing';
 import app from '../../pageObjects';
 import { WalletType } from '../../types';
 
 describe('Adding wallet', () => {
   describe('With subscribing to the notifications', () => {
-    // TODO: There must be better way to do it, without modifying the local variable
     let emailAddress: string;
 
     beforeEach(async () => {
-      emailAddress = randomizeEmailAddress(DEFAULT_EMAIL_ADDRESS);
-
+      emailAddress = mailing.generateAddress();
       isBeta() && (await app.onboarding.betaVersionScreen.close());
       await app.developerRoom.typeEmailAddress(emailAddress);
       await app.developerRoom.tapOnSkipOnboardingWithEmailButton();
@@ -22,8 +20,7 @@ describe('Adding wallet', () => {
 
     describe('Create', () => {
       describe('@android @ios @smoke', () => {
-        //FIX EMAIL FETCH AFTER FINAL TEMPLATE AGREED
-        xit('should be possible to create a new 3-Key Vault wallet', async () => {
+        it('should be possible to create a new 3-Key Vault wallet', async () => {
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.typeName('My Wallet');
@@ -31,17 +28,19 @@ describe('Adding wallet', () => {
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
           await app.wallets.addNewWallet.addFastKeyScreen.tapScanOnQrCode();
-          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.FAST_KEY.PUBLIC_KEY);
+          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ecdsaKeys.fastKey.publicKey);
 
           await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
-          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY);
+          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ecdsaKeys.cancelKey.publicKey);
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+          const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
 
           await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
           await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
-          const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+          const code = await mailing.getCode(emailAddress, Subject.SUBSCRIBE);
 
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
@@ -61,14 +60,16 @@ describe('Adding wallet', () => {
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
           await app.wallets.addNewWallet.addCancelKeyScreen.tapScanOnQrCode();
-          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ECDSA_KEYS.CANCEL_KEY.PUBLIC_KEY);
+          await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(ecdsaKeys.cancelKey.publicKey);
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+          const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
 
           await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
           await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
-          const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+          const code = await mailing.getCode(emailAddress, Subject.SUBSCRIBE);
 
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
@@ -85,12 +86,14 @@ describe('Adding wallet', () => {
           await app.wallets.addNewWallet.createScreen.chooseType(WalletType.S_HD_P2SH);
           await app.wallets.addNewWallet.createScreen.tapOnCreateButton();
 
-          await app.wallets.addNewWallet.loadingScreen.waitUntilEnded();
+          await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
+          const seed = await app.wallets.addNewWallet.seedScreen.getSeed();
 
           await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+          await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
           await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnYes();
 
-          const code = await gmailClient.getActionVerificationCode({ receiver: emailAddress });
+          const code = await mailing.getCode(emailAddress, Subject.SUBSCRIBE);
 
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
@@ -109,6 +112,8 @@ describe('Adding wallet', () => {
     describe.skip('Import', () => {
       describe('@android @ios @smoke', () => {
         it('should be possible to import an existing 3-Key Vault wallet', async () => {
+          const secrets = walletsData.frozenTxWallets[WalletType.KEY_3];
+
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
@@ -116,18 +121,14 @@ describe('Adding wallet', () => {
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
           await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
-          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS[WalletType.KEY_3].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(secrets.seedPhrase);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.addFastKeyScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
-            WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
-          );
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(secrets.fastKey.publicKey);
 
           await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
-            WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
-          );
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(secrets.cancelKey.publicKey);
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
           await waitFor(app.wallets.importWallet.successScreen.icon)
@@ -138,6 +139,8 @@ describe('Adding wallet', () => {
 
       describe('@android @ios @regression', () => {
         it('should be possible to import an existing 2-Key Vault wallet', async () => {
+          const secrets = walletsData.frozenTxWallets[WalletType.KEY_2];
+
           await app.dashboard.dashboardScreen.tapOnAddWalletButton();
 
           await app.wallets.addNewWallet.createScreen.tapOnImportButton();
@@ -145,13 +148,11 @@ describe('Adding wallet', () => {
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
           await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
-          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS[WalletType.KEY_2].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(secrets.seedPhrase);
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.addCancelKeyScreen.tapScanOnQrCode();
-          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(
-            WALLETS[WalletType.KEY_2].CANCEL_KEY.PUBLIC_KEY,
-          );
+          await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(secrets.cancelKey.publicKey);
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();
           await waitFor(app.wallets.importWallet.successScreen.icon)
@@ -167,7 +168,9 @@ describe('Adding wallet', () => {
           await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
           await app.wallets.importWallet.importScreen.typeName('My Imported Wallet');
-          await app.wallets.importWallet.importScreen.typeSeedPhrase(WALLETS[WalletType.S_HD_P2SH].SEED_PHRASE);
+          await app.wallets.importWallet.importScreen.typeSeedPhrase(
+            walletsData.frozenTxWallets[WalletType.S_HD_P2SH].seedPhrase,
+          );
           await app.wallets.importWallet.importScreen.submit();
 
           await app.wallets.importWallet.loadingScreen.waitUntilEnded();

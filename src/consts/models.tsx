@@ -151,6 +151,7 @@ export enum Route {
   SendCoinsConfirm = 'SendCoinsConfirm',
   EditText = 'EditText',
   AboutUs = 'AboutUs',
+  Developer = 'Developer',
   TermsConditions = 'TermsConditions',
   SelectLanguage = 'SelectLanguage',
   ActionSheet = 'ActionSheet',
@@ -501,6 +502,7 @@ export type RootStackParams = {
   };
   [Route.SelectLanguage]: undefined;
   [Route.AboutUs]: undefined;
+  [Route.Developer]: undefined;
   [Route.TermsConditions]: { language: string };
   [Route.AdvancedOptions]: undefined;
   [Route.CurrentPin]: undefined;

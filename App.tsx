@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { View, StyleSheet, LogBox } from 'react-native';
 import codePush from 'react-native-code-push';
+import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -87,6 +88,7 @@ class App extends React.PureComponent {
               <NotificationsServices />
             </PersistGate>
           </Provider>
+          <Toast ref={ref => Toast.setRef(ref)} />
         </I18nextProvider>
       </>
     );
