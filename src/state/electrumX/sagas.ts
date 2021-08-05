@@ -221,7 +221,7 @@ export function* checkConnection() {
   } catch (e) {
     logger.error('electrumX sagas', `checkConnection error: ${e.message}`);
   } finally {
-    RNBootSplash.hide();
+    RNBootSplash.hide({ fade: true });
   }
 }
 
@@ -241,24 +241,26 @@ export function* listenToInternetConnection() {
   const chan: unknown = yield call(emitInternetConnectionChange);
 
   while (true) {
-    yield delay(2000); // In case connection with electrum lost we should wait to reconnect before showing alert;
-
     const { isInternetReachable } = yield take(chan as any);
-    const currentIsInternetReachable: boolean = yield select(isInternetReachableSelector);
 
-    const {
-      wallets: { isInitialized },
-    } = yield select();
+    // We don't want unknown network status to be counted as no network status. Wait for boolean status to be accurate
+    if (isInternetReachable !== null) {
+      const currentIsInternetReachable: boolean = yield select(isInternetReachableSelector);
 
-    if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
-      yield put(
-        addToastMessage({
-          title: i18n.connectionIssue.offlineMessageTitle,
-          description: i18n.connectionIssue.offlineMessageDescription,
-        }),
-      );
+      const {
+        wallets: { isInitialized },
+      } = yield select();
+
+      if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
+        yield put(
+          addToastMessage({
+            title: i18n.connectionIssue.offlineMessageTitle,
+            description: i18n.connectionIssue.offlineMessageDescription,
+          }),
+        );
+      }
+      yield put(setInternetConnection(!!isInternetReachable));
     }
-    yield put(setInternetConnection(!!isInternetReachable));
   }
 }
 
