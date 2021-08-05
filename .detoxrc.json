@@ -37,6 +37,12 @@
       "binaryPath": "android/app/build/outputs/apk/dev/debug/app-dev-debug.apk",
       "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleDevDebug assembleDevDebugAndroidTest -DtestBuildType=debug && cd .."
     },
+    "android.dev.release": {
+      "type": "android.apk",
+      "binaryPath": "android/app/build/outputs/apk/dev/release/app-dev-release-bitrise-signed.apk",
+      "testBinaryPath": "android/app/build/outputs/apk/androidTest/dev/release/app-dev-release-androidTest-bitrise-signed.apk",
+      "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleDevRelease assembleDevReleaseAndroidTest -DtestBuildType=release && cd .."
+    },
     "android.stage.debug": {
       "type": "android.apk",
       "binaryPath": "android/app/build/outputs/apk/stage/debug/app-stage-debug.apk",
@@ -98,6 +104,10 @@
     "android.emu.prod.debug": {
       "device": "pixel.emu",
       "app": "android.prod.debug"
+    },
+    "android.emu.dev.release": {
+      "device": "pixel.emu",
+      "app": "android.dev.release"
     }
   }
 }
