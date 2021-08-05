@@ -234,7 +234,7 @@ class DashboardScreen extends Component<Props, State> {
           reference={this.transactionListRef}
           refreshing={isLoading}
           onRefresh={this.refreshTransactions}
-          ListHeaderComponent={<>{this.renderWallets()}</>}
+          ListHeaderComponent={this.renderWallets()}
           search={query}
           transactions={this.getTransactions()}
           transactionNotes={this.props.transactionNotes}

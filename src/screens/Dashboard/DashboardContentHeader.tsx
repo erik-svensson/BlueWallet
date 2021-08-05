@@ -45,7 +45,7 @@ export const DashboardContentHeader = ({
         label={<Text style={styles.buttonDescription}>{i18n.wallets.dashboard.availableBalance}</Text>}
         onSelectPress={onSelectPress}
       />
-      {incomingBalance !== undefined && (
+      {incomingBalance !== undefined && incomingBalance > 0 && (
         <View style={styles.pendingBalanceWrapper}>
           <Text style={styles.pendingBalanceText}>{i18n.formatBalance(Number(incomingBalance), unit, true)}</Text>
 
