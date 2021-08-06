@@ -48,10 +48,22 @@
       "binaryPath": "android/app/build/outputs/apk/stage/debug/app-stage-debug.apk",
       "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleStageDebug assembleStageDebugAndroidTest -DtestBuildType=debug && cd .."
     },
+    "android.stage.release": {
+      "type": "android.apk",
+      "binaryPath": "android/app/build/outputs/apk/stage/release/app-stage-release-bitrise-signed.apk",
+      "testBinaryPath": "android/app/build/outputs/apk/androidTest/stage/release/app-stage-release-androidTest-bitrise-signed.apk",
+      "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleStageRelease assembleStageReleaseAndroidTest -DtestBuildType=release && cd .."
+    },
     "android.prod.debug": {
       "type": "android.apk",
       "binaryPath": "android/app/build/outputs/apk/prod/debug/app-prod-debug.apk",
       "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleProdDebug assembleProdDebugAndroidTest -DtestBuildType=debug && cd .."
+    },
+    "android.prod.release": {
+      "type": "android.apk",
+      "binaryPath": "android/app/build/outputs/apk/prod/release/app-prod-release-bitrise-signed.apk",
+      "testBinaryPath": "android/app/build/outputs/apk/androidTest/prod/release/app-prod-release-androidTest-bitrise-signed.apk",
+      "build": "cd android && RN_SRC_EXT=e2e.tsx CHAMBER_OF_SECRETS=true ./gradlew assembleProdRelease assembleProdReleaseAndroidTest -DtestBuildType=release && cd .."
     }
   },
   "devices": {
@@ -97,17 +109,25 @@
       "device": "pixel.emu",
       "app": "android.dev.debug"
     },
+    "android.emu.dev.release": {
+      "device": "pixel.emu",
+      "app": "android.dev.release"
+    },
     "android.emu.stage.debug": {
       "device": "pixel.emu",
       "app": "android.stage.debug"
+    },
+    "android.emu.stage.release": {
+      "device": "pixel.emu",
+      "app": "android.stage.release"
     },
     "android.emu.prod.debug": {
       "device": "pixel.emu",
       "app": "android.prod.debug"
     },
-    "android.emu.dev.release": {
+    "android.emu.prod.release": {
       "device": "pixel.emu",
-      "app": "android.dev.release"
+      "app": "android.prod.release"
     }
   }
 }
