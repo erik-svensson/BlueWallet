@@ -15,6 +15,7 @@ export { default as ContactDetailsScreen } from './ContactDetailsScreen';
 export { default as TransactionDetailsScreen } from './TransactionDetailsScreen';
 export { default as ReceiveCoinsScreen } from './ReceiveCoinsScreen';
 export { AboutUsScreen } from './Settings/AboutUsScreen';
+export { DeveloperScreen } from './Settings/DeveloperScreen';
 export { TermsConditionsSettingsScreen } from './Settings/TermsConditionsSettingsScreen';
 export { default as AdvancedOptionsScreen } from './Settings/AdvancedOptionsScreen';
 export { SelectLanguageScreen } from './Settings/SelectLanguageScreen';

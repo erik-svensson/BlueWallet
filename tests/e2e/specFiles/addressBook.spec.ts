@@ -1,7 +1,7 @@
 import { expect, waitFor } from 'detox';
 
 import { expectToBeCopied } from '../assertions';
-import { WAIT_FOR_ELEMENT_TIMEOUT, WALLETS } from '../helpers/consts';
+import { WAIT_FOR_ELEMENT_TIMEOUT, walletsData } from '../data';
 import { isBeta } from '../helpers/utils';
 import app from '../pageObjects';
 import steps, { createNewContact } from '../steps';
@@ -25,21 +25,21 @@ describe('Address book', () => {
 
     describe('@android @ios @regression', () => {
       it('should display "No results" if couldn\'t find a contact using Search feature', async () => {
-        await createNewContact('Heisenberg', '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+        await createNewContact('Heisenberg', walletsData.contactAddress);
 
         await app.addressBook.contactsScreen.typeInSearchbar('Walter');
         await expect(app.addressBook.contactsScreen.noContactsFoundIcon).toBeVisible();
       });
 
       it('should be possible to find a contact using Search feature', async () => {
-        await createNewContact('Heisenberg', '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+        await createNewContact('Heisenberg', walletsData.contactAddress);
 
         await app.addressBook.contactsScreen.typeInSearchbar('Heisenberg');
         await expect(app.addressBook.contactsScreen.getContactElement('Heisenberg')).toBeVisible();
       });
 
       it('should be possible to clear content of the searchbox by clicking on clear button', async () => {
-        await createNewContact('Heisenberg', '2N6MAzhNc6LkMU6paWrPQpXLAs79rP7UnCi');
+        await createNewContact('Heisenberg', walletsData.contactAddress);
 
         await app.addressBook.contactsScreen.typeInSearchbar('Test');
         await app.addressBook.contactsScreen.clearSearchbar();
@@ -53,7 +53,7 @@ describe('Address book', () => {
       it('should be possible to create a new contact by typing address manually', async () => {
         await app.addressBook.contactsScreen.tapOnCreateButton();
         await app.addressBook.newContact.addNewContactScreen.typeName(`Heisenberg`);
-        await app.addressBook.newContact.addNewContactScreen.typeAddress('2NA5kx7ztNhCBVogN2kLtNPBMXA3fdkX2Cc');
+        await app.addressBook.newContact.addNewContactScreen.typeAddress(walletsData.contactAddress);
         await app.addressBook.newContact.addNewContactScreen.submit();
         await expect(app.addressBook.newContact.successScreen.icon).toBeVisible();
       });
@@ -86,7 +86,7 @@ describe('Address book', () => {
     const contactName = 'Heisenberg';
 
     beforeEach(async () => {
-      await createNewContact(contactName, '2NA5kx7ztNhCBVogN2kLtNPBMXA3fdkX2Cc');
+      await createNewContact(contactName, walletsData.contactAddress);
       await app.addressBook.contactsScreen.tapOnContact('Heisenberg');
     });
 
@@ -113,9 +113,7 @@ describe('Address book', () => {
         await steps.importWallet({
           type: WalletType.KEY_3,
           name: 'Main',
-          seedPhrase: WALLETS[WalletType.KEY_3].SEED_PHRASE,
-          fastPublicKey: WALLETS[WalletType.KEY_3].FAST_KEY.PUBLIC_KEY,
-          cancelPublicKey: WALLETS[WalletType.KEY_3].CANCEL_KEY.PUBLIC_KEY,
+          secrets: walletsData.activeTxWallets[WalletType.KEY_3],
         });
         await app.navigationBar.changeTab('address book');
         await app.addressBook.contactsScreen.tapOnContact('Heisenberg');

@@ -1,6 +1,6 @@
 import { takeEvery, takeLatest, put, call, all, select } from 'redux-saga/effects';
 
-import { verifyEmail } from 'app/api';
+import { CheckSubscriptionResponse, verifyEmail } from 'app/api';
 import {
   subscribeEmail,
   authenticate,
@@ -66,7 +66,7 @@ export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailActi
 
   try {
     const { pin } = yield call(verifyEmail, { email });
-    const decryptedCode = yield decryptCode(email, pin);
+    const decryptedCode: string = yield decryptCode(email, pin);
 
     yield put(verifyNotificationEmailSuccess(decryptedCode));
 
@@ -89,10 +89,13 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   } = action as SubscribeWalletAction;
 
   try {
-    const walletsGenerationBase = yield all(wallets.map(wallet => call(walletToAddressesGenerationBase, wallet)));
+    const walletsGenerationBase: Promise<any> = yield all(
+      wallets.map(wallet => call(walletToAddressesGenerationBase, wallet)),
+    );
 
-    const lang = yield select(appSettingsSelectors.language);
-    const { session_token } = yield call(subscribeEmail, {
+    const lang: string = yield select(appSettingsSelectors.language);
+    // TODO: fix types
+    const { session_token } = yield call(subscribeEmail as any, {
       email,
       wallets: walletsGenerationBase,
       lang,
@@ -119,7 +122,7 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
   } = action as UnsubscribeWalletAction;
 
   try {
-    const hashes = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
+    const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
     const { session_token } = yield call(unsubscribeEmail, { hashes, email });
 
@@ -163,7 +166,7 @@ export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
   } = action;
 
   try {
-    const hashes = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
+    const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
     const { session_token } = yield call(modifyEmail, {
       hashes,
@@ -188,11 +191,11 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   } = action;
 
   try {
-    const walletWithHashes = yield Promise.all(
+    const walletWithHashes: Wallet[] = yield Promise.all(
       wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
     );
     const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
-    const response = yield call(checkSubscriptionEmail, { hashes, email });
+    const response: CheckSubscriptionResponse = yield call(checkSubscriptionEmail as any, { hashes, email });
     const ids: string[] = [];
 
     walletWithHashes.forEach((wallet: Wallet, index: number) => {
@@ -216,7 +219,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
 }
 
 export function* unsubscribeDeviceTokenSaga() {
-  const fcm = yield select(appSettingsSelectors.fcmToken);
+  const fcm: string = yield select(appSettingsSelectors.fcmToken);
 
   yield call(removeDeviceFCM, { fcm });
 }
@@ -224,12 +227,12 @@ export function* unsubscribeDeviceTokenSaga() {
 export function* subscribeDeviceTokenSaga(action: SubscribeDeviceTokenAction) {
   const { payload: wallets } = action;
 
-  const fcm = yield select(appSettingsSelectors.fcmToken);
-  const language = yield select(appSettingsSelectors.language);
-  const isPushnotificationsEnabled = yield select(appSettingsSelectors.pushnotificationsEnabled);
+  const fcm: string = yield select(appSettingsSelectors.fcmToken);
+  const language: string = yield select(appSettingsSelectors.language);
+  const isPushnotificationsEnabled: boolean = yield select(appSettingsSelectors.pushnotificationsEnabled);
 
   if (isPushnotificationsEnabled) {
-    const hashes = yield all(wallets.wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
+    const hashes: string[] = yield all(wallets.wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
     yield call(subscribeDeviceFCM, {
       fcm,

@@ -26,6 +26,7 @@ import {
   ContactListScreen,
   SelectLanguageScreen,
   AboutUsScreen,
+  DeveloperScreen,
   TermsConditionsSettingsScreen,
   AdvancedOptionsScreen,
   CreatePinScreen,
@@ -139,6 +140,7 @@ export const RootNavigator: FC<Props> = ({
       <Stack.Screen name={Route.ChooseContactList} component={ContactListScreen} />
       <Stack.Screen name={Route.SelectLanguage} component={SelectLanguageScreen} />
       <Stack.Screen name={Route.AboutUs} component={AboutUsScreen} />
+      <Stack.Screen name={Route.Developer} component={DeveloperScreen} />
       <Stack.Screen name={Route.TermsConditions} component={TermsConditionsSettingsScreen} />
       <Stack.Screen name={Route.AdvancedOptions} component={AdvancedOptionsScreen} />
       <Stack.Screen name={Route.CurrentPin} component={CurrentPinScreen} options={{ gestureEnabled: false }} />
