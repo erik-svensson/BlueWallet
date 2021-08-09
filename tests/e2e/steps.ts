@@ -9,9 +9,9 @@ import {
   CreateWalletOptions,
   ImportWalletOptions,
   SendCoinsOptions,
-  StandardWalletOptions,
-  TwoKeyWalletOptions,
-  ThreeKeyWalletOptions,
+  CreateStandardWalletOptions,
+  Create2KeyWalletOptions,
+  Create3KeyWalletOptions,
   ImportStandardWalletOptions,
   Import2KeyWalletOptions,
   Import3KeyWalletOptions,
@@ -45,11 +45,11 @@ const passThroughOnboarding = async (pin: string, password: string, emailAddress
 };
 
 /** Passes through the screens to create a wallet */
-async function createWallet(options: StandardWalletOptions): Promise<void>;
-async function createWallet(options: TwoKeyWalletOptions): Promise<void>;
-async function createWallet(options: ThreeKeyWalletOptions): Promise<void>;
+async function createWallet(options: CreateStandardWalletOptions): Promise<void>;
+async function createWallet(options: Create2KeyWalletOptions): Promise<void>;
+async function createWallet(options: Create3KeyWalletOptions): Promise<void>;
 async function createWallet(options: CreateWalletOptions): Promise<void> {
-  const { type, name, fastPublicKey, cancelPublicKey, emailAddress, skipEmailSubscription } = options;
+  const { type, name, secrets, emailAddress, skipEmailSubscription } = options;
 
   await app.navigationBar.changeTab('wallets');
 
@@ -60,12 +60,12 @@ async function createWallet(options: CreateWalletOptions): Promise<void> {
 
   if (type === WalletType.KEY_3) {
     await app.wallets.addNewWallet.addFastKeyScreen.tapScanOnQrCode();
-    await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(fastPublicKey!);
+    await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(secrets!.fastKey!.publicKey);
   }
 
   if (type === WalletType.KEY_3 || type === WalletType.KEY_2) {
     await app.wallets.addNewWallet.addFastKeyScreen.tapScanOnQrCode();
-    await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
+    await app.wallets.addNewWallet.scanQrCodeScreen.scanCustomString(secrets!.cancelKey!.publicKey);
   }
 
   await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
@@ -101,7 +101,7 @@ async function importWallet(options: ImportStandardWalletOptions): Promise<void>
 async function importWallet(options: Import2KeyWalletOptions): Promise<void>;
 async function importWallet(options: Import3KeyWalletOptions): Promise<void>;
 async function importWallet(options: ImportWalletOptions) {
-  const { type, name, seedPhrase, fastPublicKey, cancelPublicKey, emailAddress, skipEmailSubscription } = options;
+  const { type, name, secrets, emailAddress, skipEmailSubscription } = options;
 
   await app.navigationBar.changeTab('wallets');
 
@@ -111,17 +111,17 @@ async function importWallet(options: ImportWalletOptions) {
   await app.wallets.importWallet.chooseWalletTypeScreen.tapOnProceedButton();
 
   await app.wallets.importWallet.importScreen.typeName(name);
-  await app.wallets.importWallet.importScreen.pasteSeedPhrase(seedPhrase);
+  await app.wallets.importWallet.importScreen.pasteSeedPhrase(secrets.seedPhrase);
   await app.wallets.importWallet.importScreen.submit();
 
   if (type === WalletType.KEY_3) {
     await app.wallets.importWallet.addFastKeyScreen.tapScanOnQrCode();
-    await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(fastPublicKey!);
+    await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(secrets.fastKey!.publicKey);
   }
 
   if (type === WalletType.KEY_3 || type === WalletType.KEY_2) {
     await app.wallets.importWallet.addFastKeyScreen.tapScanOnQrCode();
-    await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(cancelPublicKey!);
+    await app.wallets.importWallet.scanQrCodeScreen.scanCustomString(secrets.cancelKey!.publicKey);
   }
 
   if (emailAddress) {

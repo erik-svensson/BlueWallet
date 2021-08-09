@@ -37,8 +37,9 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  [RNBootSplash initWithStoryboard:@"Launch Screen" rootView:rootView];
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  [RNBootSplash initWithStoryboard:@"Launch Screen" rootView:rootView];
+  
   return YES;
 }
 

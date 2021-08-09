@@ -242,20 +242,25 @@ export function* listenToInternetConnection() {
 
   while (true) {
     const { isInternetReachable } = yield take(chan as any);
-    const currentIsInternetReachable: boolean = yield select(isInternetReachableSelector);
-    const {
-      wallets: { isInitialized },
-    } = yield select();
 
-    if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
-      yield put(
-        addToastMessage({
-          title: i18n.connectionIssue.offlineMessageTitle,
-          description: i18n.connectionIssue.offlineMessageDescription,
-        }),
-      );
+    // We don't want unknown network status to be counted as no network status. Wait for boolean status to be accurate
+    if (isInternetReachable !== null) {
+      const currentIsInternetReachable: boolean = yield select(isInternetReachableSelector);
+
+      const {
+        wallets: { isInitialized },
+      } = yield select();
+
+      if (isInitialized && currentIsInternetReachable && !isInternetReachable) {
+        yield put(
+          addToastMessage({
+            title: i18n.connectionIssue.offlineMessageTitle,
+            description: i18n.connectionIssue.offlineMessageDescription,
+          }),
+        );
+      }
+      yield put(setInternetConnection(!!isInternetReachable));
     }
-    yield put(setInternetConnection(!!isInternetReachable));
   }
 }
 

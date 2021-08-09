@@ -3,6 +3,9 @@
  * test suite in the project.
  */
 import { device } from 'detox';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: 'tests/e2e/.env.e2e' });
 
 beforeEach(async () => {
   await device.launchApp({
