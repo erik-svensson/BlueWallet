@@ -33,19 +33,18 @@ export enum EmailNotificationsError {
 
 const httpClient = createHttpClient(config.emailNotificationsApi);
 
-export const subscribeEmail = (data: SubscribePayload): Promise<SubscribeResponse> =>
-  httpClient.post(`/subscribe/`, data);
+export const subscribeEmail = (data: SubscribePayload): Promise<SubscribeResponse> => httpClient.post(`/email/`, data);
 
 export const unsubscribeEmail = (data: UnsubscribePayload): Promise<UnsubscribePayload> =>
   httpClient.post(`/unsubscribe/`, data);
 
 export const authenticate = (data: AuthenticatePayload): Promise<AuthenticatePayload> =>
-  httpClient.post(`/authenticate/`, data);
+  httpClient.post(`/authenticate_email/`, data);
 
 export const modifyEmail = (data: ModifyPayload): Promise<ModifyResponse> => httpClient.put(`/modify/`, data);
 
 export const checkSubscriptionEmail = (data: CheckSubscriptionPayload): Promise<CheckSubscriptionResponse> =>
-  httpClient.post(`/check_subscription`, data);
+  httpClient.post(`/is_subscribed_email`, data);
 
 export const verifyEmail = (data: VerifyEmailPayload): Promise<VerifyEmailResponse> =>
   httpClient.post(`/verify_email/`, data);

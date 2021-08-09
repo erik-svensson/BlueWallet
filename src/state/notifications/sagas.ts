@@ -89,15 +89,13 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   } = action as SubscribeWalletAction;
 
   try {
-    const walletsGenerationBase: Promise<any> = yield all(
-      wallets.map(wallet => call(walletToAddressesGenerationBase, wallet)),
-    );
+    const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
     const lang: string = yield select(appSettingsSelectors.language);
     // TODO: fix types
     const { session_token } = yield call(subscribeEmail as any, {
       email,
-      wallets: walletsGenerationBase,
+      wallets: hashes,
       lang,
     });
 
