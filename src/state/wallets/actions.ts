@@ -1,6 +1,6 @@
 import { Transaction } from 'bitcoinjs-lib';
 
-import { AuthenticatePayload } from 'app/api/wallet/types';
+import { Authenticate, AuthenticatePayload } from 'app/api/wallet/types';
 import { Wallet, ActionMeta } from 'app/consts';
 
 export enum WalletsAction {
@@ -31,6 +31,9 @@ export enum WalletsAction {
   RegisterWallet = 'RegisterWallet',
   RegisterWalletSuccess = 'RegisterWalletSuccess',
   RegisterWalletFailure = 'RegisterWalletFailure',
+  AuthenticateWallet = 'AuthenticateWallet',
+  AuthenticateWalletSuccess = 'AuthenticateWalletSuccess',
+  AuthenticateWalletFailure = 'AuthenticateWalletFailure',
 }
 
 export interface LoadWalletsAction {
@@ -161,10 +164,22 @@ export interface RegisterWalletAction {
 }
 export interface RegisterWalletSuccessAction {
   type: WalletsAction.RegisterWalletSuccess;
-  data: AuthenticatePayload;
+  data: Authenticate;
 }
 export interface RegisterWalletFailureAction {
   type: WalletsAction.RegisterWalletFailure;
+  error: Error;
+}
+
+export interface AuthenticateWalletAction {
+  type: WalletsAction.AuthenticateWallet;
+  payload: Authenticate;
+}
+export interface AuthenticateWalletSuccessAction {
+  type: WalletsAction.AuthenticateWalletSuccess;
+}
+export interface AuthenticateWalletFailureAction {
+  type: WalletsAction.AuthenticateWalletFailure;
   error: Error;
 }
 
@@ -195,7 +210,10 @@ export type WalletsActionType =
   | IsRegisteredWalletFailureAction
   | RegisterWalletAction
   | RegisterWalletSuccessAction
-  | RegisterWalletFailureAction;
+  | RegisterWalletFailureAction
+  | AuthenticateWalletAction
+  | AuthenticateWalletSuccessAction
+  | AuthenticateWalletFailureAction;
 
 export const loadWallets = (): LoadWalletsAction => ({
   type: WalletsAction.LoadWallets,
@@ -333,12 +351,26 @@ export const registerWallet = (wallets: Wallet[]): RegisterWalletAction => ({
   wallets,
 });
 
-export const registerWalletSuccess = (data: AuthenticatePayload): RegisterWalletSuccessAction => ({
+export const registerWalletSuccess = (data: Authenticate): RegisterWalletSuccessAction => ({
   type: WalletsAction.RegisterWalletSuccess,
   data,
 });
 
 export const registerWalletFailure = (error: Error): RegisterWalletFailureAction => ({
   type: WalletsAction.RegisterWalletFailure,
+  error,
+});
+
+export const authenticateWallet = (payload: Authenticate): AuthenticateWalletAction => ({
+  type: WalletsAction.AuthenticateWallet,
+  payload,
+});
+
+export const authenticateWalletSuccess = (): AuthenticateWalletSuccessAction => ({
+  type: WalletsAction.AuthenticateWalletSuccess,
+});
+
+export const authenticateWalletFailure = (error: Error): AuthenticateWalletFailureAction => ({
+  type: WalletsAction.AuthenticateWalletFailure,
   error,
 });

@@ -10,4 +10,4 @@ export const isRegistered = (data: IsRegisteredPayload): Promise<IsRegisteredRes
 
 export const register = (data: RegisterPayload): Promise<AuthenticatePayload> => httpClient.post(`/register/`, data);
 
-export const authenticate = (data: AuthenticatePayload): Promise<null> => httpClient.post(`/authenticate/`, data);
+export const authenticate = (data: AuthenticatePayload): Promise<any> => httpClient.post(`/authenticate/`, data);

@@ -5,6 +5,11 @@ export interface AuthenticateData {
   pin: string;
 }
 
+export interface Authenticate {
+  session_token: string;
+  data: AuthenticateData[];
+}
+
 export interface IsRegisteredPayload {
   hashes: string[];
 }
@@ -18,6 +23,5 @@ export interface RegisterPayload {
 }
 
 export interface AuthenticatePayload {
-  session_token: string;
-  data: AuthenticateData[];
+  payload: Authenticate;
 }
