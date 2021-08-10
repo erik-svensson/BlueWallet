@@ -1,7 +1,7 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <!-- Base application theme, only Light without Night -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:editTextStyle">@style/AppEditTextStyle</item>
         <item name="editTextStyle">@style/AppEditTextStyle</item> <!-- For compatibility with the support library -->
