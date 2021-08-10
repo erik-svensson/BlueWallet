@@ -2,6 +2,7 @@ import { cloneDeep } from 'lodash';
 import { Alert } from 'react-native';
 import { takeEvery, takeLatest, put, all, call, select, delay } from 'redux-saga/effects';
 
+import { isRegistered } from 'app/api/wallet/client';
 import config from 'app/config';
 import { Wallet } from 'app/consts';
 import { takeLatestPerKey } from 'app/helpers/sagas';
@@ -33,6 +34,9 @@ import {
   refreshWalletSuccess,
   refreshWalletFailure,
   RefreshWalletAction,
+  IsRegisteredWalletAction,
+  checkWalletIsRegisteredSuccess,
+  checkWalletIsRegisteredFailure,
 } from './actions';
 import { getById as getByIdWallet, wallets as walletsSelector } from './selectors';
 
@@ -207,6 +211,20 @@ export function* scripHashHasChangedSaga(action: electrumXActions.ScriptHashChan
   }
 }
 
+export function* isRegisteredWalletSaga(action: IsRegisteredWalletAction | unknown) {
+  const { hashes } = action as IsRegisteredWalletAction;
+
+  try {
+    const { response } = yield call(isRegistered, {
+      hashes,
+    });
+
+    yield put(checkWalletIsRegisteredSuccess(response));
+  } catch (error) {
+    yield put(checkWalletIsRegisteredFailure(error));
+  }
+}
+
 export default [
   takeLatestPerKey(WalletsAction.RefreshWallet, refreshWalletSaga, ({ id }: { id: string }) => id),
   takeEvery(electrumXActions.ElectrumXAction.ScriptHashChanged, scripHashHasChangedSaga),
@@ -216,4 +234,5 @@ export default [
   takeEvery(WalletsAction.ImportWallet, importWalletSaga),
   takeEvery(WalletsAction.UpdateWallet, updateWalletSaga),
   takeEvery(WalletsAction.SendTransaction, sendTransactionSaga),
+  takeEvery(WalletsAction.IsRegisteredWallet, isRegisteredWalletSaga),
 ];

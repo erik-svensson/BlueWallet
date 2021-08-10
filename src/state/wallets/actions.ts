@@ -24,6 +24,9 @@ export enum WalletsAction {
   RefreshWallet = 'RefreshWallet',
   RefreshWalletSuccess = 'RefreshWalletSuccess',
   RefreshWalletFailure = 'SendTransactionFailure',
+  IsRegisteredWallet = 'IsRegisteredWallet',
+  IsRegisteredWalletSuccess = 'IsRegisteredWalletSuccess',
+  IsRegisteredWalletFailure = 'IsRegisteredWalletFailure',
 }
 
 export interface LoadWalletsAction {
@@ -135,6 +138,19 @@ export interface RefreshWalletFailureAction {
   error: Error;
 }
 
+export interface IsRegisteredWalletAction {
+  type: WalletsAction.IsRegisteredWallet;
+  hashes: string[];
+}
+export interface IsRegisteredWalletSuccessAction {
+  type: WalletsAction.IsRegisteredWalletSuccess;
+  hashes: boolean[];
+}
+export interface IsRegisteredWalletFailureAction {
+  type: WalletsAction.IsRegisteredWalletFailure;
+  error: Error;
+}
+
 export type WalletsActionType =
   | LoadWalletsSuccessAction
   | LoadWalletsFailureAction
@@ -156,7 +172,10 @@ export type WalletsActionType =
   | SendTransactionSuccessAction
   | RefreshWalletAction
   | RefreshWalletSuccessAction
-  | RefreshWalletFailureAction;
+  | RefreshWalletFailureAction
+  | IsRegisteredWalletAction
+  | IsRegisteredWalletSuccessAction
+  | IsRegisteredWalletFailureAction;
 
 export const loadWallets = (): LoadWalletsAction => ({
   type: WalletsAction.LoadWallets,
@@ -271,5 +290,20 @@ export const refreshWalletSuccess = (wallet: Wallet): RefreshWalletSuccessAction
 
 export const refreshWalletFailure = (error: Error): RefreshWalletFailureAction => ({
   type: WalletsAction.RefreshWalletFailure,
+  error,
+});
+
+export const checkWalletIsRegistered = (hashes: string[]): IsRegisteredWalletAction => ({
+  type: WalletsAction.IsRegisteredWallet,
+  hashes,
+});
+
+export const checkWalletIsRegisteredSuccess = (hashes: boolean[]): IsRegisteredWalletSuccessAction => ({
+  type: WalletsAction.IsRegisteredWalletSuccess,
+  hashes,
+});
+
+export const checkWalletIsRegisteredFailure = (error: Error): IsRegisteredWalletFailureAction => ({
+  type: WalletsAction.IsRegisteredWalletFailure,
   error,
 });
