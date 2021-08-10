@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 
 import { Countdown } from 'app/components';
 import { CONST, Wallet } from 'app/consts';
-import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { selectors } from 'app/state/airdrop';
 import { SubscribeWalletActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
@@ -24,6 +23,7 @@ interface Props {
 
 export const AirdropInProgress: FC<Props> = props => {
   const airdropDate = useSelector(selectors.airdropDate);
+  const getFormattedAirdropDate = useSelector(selectors.getFormattedAirdropDate);
 
   return (
     <>
@@ -34,7 +34,7 @@ export const AirdropInProgress: FC<Props> = props => {
         </Text>
         <Text style={styles.description}>
           {i18n.airdrop.dateOfAirdrop}&nbsp;
-          {getFormattedAirdropDate(airdropDate)}
+          {getFormattedAirdropDate}
         </Text>
       </View>
       <Countdown dataEnd={airdropDate} />

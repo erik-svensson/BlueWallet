@@ -7,7 +7,6 @@ import { icons } from 'app/assets';
 import { ScreenTemplate, Button, Header } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
 import { CONST, DateType } from 'app/consts/models';
-import { getFormattedAirdropDate } from 'app/helpers/airdrop';
 import { ApplicationState } from 'app/state';
 import { actions, selectors } from 'app/state/airdrop';
 import { CompleteThankYouFlowActionCreator } from 'app/state/airdrop/actions';
@@ -21,7 +20,7 @@ interface ActionProps {
 
 type Props = {
   navigation: StackNavigationProp<RootStackParams, Route.AirdropRequirements>;
-  airdropDate: string | DateType;
+  getFormattedAirdropDate: string | DateType;
 } & ActionProps;
 
 class AirdropRequirementsScreen extends Component<Props> {
@@ -36,7 +35,7 @@ class AirdropRequirementsScreen extends Component<Props> {
   };
 
   render() {
-    const { airdropDate } = this.props;
+    const { getFormattedAirdropDate } = this.props;
 
     return (
       <ScreenTemplate
@@ -82,7 +81,7 @@ class AirdropRequirementsScreen extends Component<Props> {
         </View>
         <View style={styles.dateInfoContainer}>
           <Text style={styles.description}>{i18n.airdrop.dateOfAirdrop}&nbsp;</Text>
-          <Text style={styles.date}>{getFormattedAirdropDate(airdropDate)}</Text>
+          <Text style={styles.date}>{getFormattedAirdropDate}</Text>
         </View>
         <Text style={styles.explanation}>{i18n.airdrop.requirements.rewardExplanation}</Text>
       </ScreenTemplate>
@@ -91,7 +90,7 @@ class AirdropRequirementsScreen extends Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  airdropDate: selectors.airdropDate(state),
+  getFormattedAirdropDate: selectors.getFormattedAirdropDate(state),
 });
 
 const mapDispatchToProps: ActionProps = {

@@ -5,11 +5,6 @@ import { formatToBtcvWithoutSign, satoshiToBtc } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
 
-export const getFormattedAirdropDate = (airdropDate: string | DateType) =>
-  `${formatDate(airdropDate, 'DD/MM/YYYY h a')} ${getTimezoneOffset()}`;
-
-export const isAfterAirdrop = (airdropDate: DateType | string) => isAfter(new Date(), airdropDate);
-
 export const getReadableOrder = () => [
   i18n.order.first,
   i18n.order.second,

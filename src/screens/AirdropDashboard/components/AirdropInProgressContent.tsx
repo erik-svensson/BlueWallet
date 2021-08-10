@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { images } from 'app/assets';
 import { Image, AirdropWalletsList, AirdropCarousel } from 'app/components';
 import { Wallet, AirdropCarouselCardData } from 'app/consts';
-import { isAfterAirdrop, getCarouselItem, getCommunityItem } from 'app/helpers/airdrop';
+import { getCarouselItem, getCommunityItem } from 'app/helpers/airdrop';
 import { selectors } from 'app/state/airdrop';
 import { SubscribeWalletActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
@@ -33,7 +33,7 @@ export const AirdropInProgressContent: FC<Props> = ({
   subscribeWallet,
   usersQuantity,
 }) => {
-  const airdropDate = useSelector(selectors.airdropDate);
+  const isAfterAirdrop = useSelector(selectors.isAfterAirdrop);
   const [communityCarouselActive, setCommunityCarouselActive] = useState(false);
   const [loadingWalletsIds, setLoadingWalletsIds] = useState<string[]>([]);
   let _carouselRef: Carousel<AirdropCarouselCardData>;
@@ -77,7 +77,7 @@ export const AirdropInProgressContent: FC<Props> = ({
   const getCarouselItems = (subscribedWallets: Wallet[], usersQuantity: number): AirdropCarouselCardData[] => {
     const renderableWallets = subscribedWallets.map(getCarouselItem);
 
-    return isAfterAirdrop(airdropDate) ? renderableWallets : [...renderableWallets, getCommunityItem(usersQuantity)];
+    return isAfterAirdrop ? renderableWallets : [...renderableWallets, getCommunityItem(usersQuantity)];
   };
 
   if (error) {
