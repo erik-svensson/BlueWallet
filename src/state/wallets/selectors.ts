@@ -338,3 +338,7 @@ export const hasWallets = createSelector(wallets, walletsList => walletsList.len
 export const isLoading = createSelector(local, state => state.isLoading);
 
 export const isInitialized = createSelector(local, state => state.isInitialized);
+
+export const isRegisteredWallets = createSelector(local, state => state.isRegisteredWallets);
+
+export const walletToRegister = createSelector(local, state => state.walletToRegister);
