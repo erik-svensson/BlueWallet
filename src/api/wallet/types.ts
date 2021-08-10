@@ -1,11 +1,4 @@
-export interface Wallet {
-  name: string;
-  xpub: string;
-  derivation_path: string[];
-  gap_limit: string;
-  recovery_public_key: string;
-  instant_public_key: string;
-}
+import { Wallet } from 'app/consts';
 
 export interface AuthenticateData {
   hash: string;
@@ -21,7 +14,7 @@ export interface IsRegisteredResponse {
 }
 
 export interface RegisterPayload {
-  wallets: Wallet[];
+  payload: { wallets: Wallet[] };
 }
 
 export interface AuthenticatePayload {
