@@ -9,25 +9,25 @@ export enum AirdropAction {
   CheckSubscription = 'CheckSubscription',
   CheckSubscriptionSuccess = 'CheckSubscriptionSuccess',
   CheckSubscriptionFailure = 'CheckSubscriptionFailure',
-  GetAirdropStatusBalance = 'GetAirdropStatusBalance',
-  GetAirdropStatusBalanceSuccess = 'GetAirdropStatusBalanceSuccess',
-  GetAirdropStatusBalanceFailure = 'GetAirdropStatusBalanceFailure',
+  GetAirdropStatus = 'GetAirdropStatus',
+  GetAirdropStatusSuccess = 'GetAirdropStatusSuccess',
+  GetAirdropStatusFailure = 'GetAirdropStatusFailure',
   SetEndDateAirdrop = 'SetEndDateAirdrop',
   SetAirdropCommunityGoals = 'SetAirdropCommunityGoals',
   SetAirdropBadges = 'SetAirdropBadges',
 }
 
-export interface GetAirdropStatusBalanceAction {
-  type: AirdropAction.GetAirdropStatusBalance;
+export interface GetAirdropStatusAction {
+  type: AirdropAction.GetAirdropStatus;
 }
 
-export interface GetAirdropStatusBalanceSuccessAction {
-  type: AirdropAction.GetAirdropStatusBalanceSuccess;
+export interface GetAirdropStatusSuccessAction {
+  type: AirdropAction.GetAirdropStatusSuccess;
   users: number;
 }
 
-export interface GetAirdropStatusBalanceFailureAction {
-  type: AirdropAction.GetAirdropStatusBalanceFailure;
+export interface GetAirdropStatusFailureAction {
+  type: AirdropAction.GetAirdropStatusFailure;
   error: string;
 }
 
@@ -144,23 +144,23 @@ export const checkSubscriptionFailure: CheckSubscriptionFailureActionCreator = e
   error,
 });
 
-export type GetAirdropStatusBalanceActionCreator = () => GetAirdropStatusBalanceAction;
+export type GetAirdropStatusActionCreator = () => GetAirdropStatusAction;
 
-export const getAirdropStatusBalance: GetAirdropStatusBalanceActionCreator = () => ({
-  type: AirdropAction.GetAirdropStatusBalance,
+export const getAirdropStatus: GetAirdropStatusActionCreator = () => ({
+  type: AirdropAction.GetAirdropStatus,
 });
 
-export type GetAirdropStatusBalanceSuccessActionCreator = (users: number) => GetAirdropStatusBalanceSuccessAction;
+export type GetAirdropStatusSuccessActionCreator = (users: number) => GetAirdropStatusSuccessAction;
 
-export const getAirdropStatusBalanceSuccess: GetAirdropStatusBalanceSuccessActionCreator = users => ({
-  type: AirdropAction.GetAirdropStatusBalanceSuccess,
+export const getAirdropStatusSuccess: GetAirdropStatusSuccessActionCreator = users => ({
+  type: AirdropAction.GetAirdropStatusSuccess,
   users,
 });
 
-export type GetAirdropStatusBalanceFailureActionCreator = (error: string) => GetAirdropStatusBalanceFailureAction;
+export type GetAirdropStatusFailureActionCreator = (error: string) => GetAirdropStatusFailureAction;
 
-export const getAirdropStatusBalanceFailure: GetAirdropStatusBalanceFailureActionCreator = error => ({
-  type: AirdropAction.GetAirdropStatusBalanceFailure,
+export const getAirdropStatusFailure: GetAirdropStatusFailureActionCreator = error => ({
+  type: AirdropAction.GetAirdropStatusFailure,
   error,
 });
 
@@ -194,9 +194,9 @@ export type AirdropActionType =
   | CheckSubscriptionSuccessAction
   | SubscribeWalletSuccessAction
   | CheckSubscriptionFailureAction
-  | GetAirdropStatusBalanceAction
-  | GetAirdropStatusBalanceSuccessAction
-  | GetAirdropStatusBalanceFailureAction
+  | GetAirdropStatusAction
+  | GetAirdropStatusSuccessAction
+  | GetAirdropStatusFailureAction
   | SetEndDateAirdropAction
   | SetAirdropCommunityGoalsAction
   | SetAirdropBadgesAction;

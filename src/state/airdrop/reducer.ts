@@ -40,20 +40,20 @@ export const airdropReducer = (state = initialState, action: AirdropActionType):
       };
     case AirdropAction.CheckSubscription:
     case AirdropAction.SubscribeWallet:
-    case AirdropAction.GetAirdropStatusBalance:
+    case AirdropAction.GetAirdropStatus:
       return {
         ...state,
         isLoading: true,
       };
     case AirdropAction.SubscribeWalletFailure:
     case AirdropAction.CheckSubscriptionFailure:
-    case AirdropAction.GetAirdropStatusBalanceFailure:
+    case AirdropAction.GetAirdropStatusFailure:
       return {
         ...state,
         error: action.error,
         isLoading: false,
       };
-    case AirdropAction.GetAirdropStatusBalanceSuccess:
+    case AirdropAction.GetAirdropStatusSuccess:
       return {
         ...state,
         usersQuantity: action.users,

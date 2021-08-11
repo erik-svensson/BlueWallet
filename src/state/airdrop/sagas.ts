@@ -13,8 +13,8 @@ import {
   CheckSubscriptionAction,
   checkSubscriptionSuccess,
   checkSubscriptionFailure,
-  getAirdropStatusBalanceSuccess,
-  getAirdropStatusBalanceFailure,
+  getAirdropStatusSuccess,
+  getAirdropStatusFailure,
   setEndDateAirdropAction,
   setAirdropCommunityGoalsAction,
   setAirdropBadgesAction,
@@ -93,7 +93,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   }
 }
 
-export function* getAirdropStatusBalanceSaga() {
+export function* getAirdropStatusSaga() {
   try {
     //@ts-ignore
     const response = yield call(checkBalance);
@@ -102,7 +102,7 @@ export function* getAirdropStatusBalanceSaga() {
     const airdropBadges: AirdropGoal[] = [];
 
     yield put(setEndDateAirdropAction(getUtcDate(result.ends)));
-    yield put(getAirdropStatusBalanceSuccess(result.users));
+    yield put(getAirdropStatusSuccess(result.users));
     const goals = result.goals;
     const amounts = result.award_amount;
     const badges = result.badges;
@@ -121,12 +121,12 @@ export function* getAirdropStatusBalanceSaga() {
     }
     yield put(setAirdropBadgesAction(airdropBadges));
   } catch (error) {
-    yield put(getAirdropStatusBalanceFailure(error.msg));
+    yield put(getAirdropStatusFailure(error.msg));
   }
 }
 
 export default [
   takeEvery(AirdropAction.CheckSubscription, checkSubscriptionSaga),
   takeEvery(AirdropAction.SubscribeWallet, subscribeWalletSaga),
-  takeEvery(AirdropAction.GetAirdropStatusBalance, getAirdropStatusBalanceSaga),
+  takeEvery(AirdropAction.GetAirdropStatus, getAirdropStatusSaga),
 ];

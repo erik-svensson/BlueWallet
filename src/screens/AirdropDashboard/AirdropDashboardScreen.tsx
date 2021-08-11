@@ -8,12 +8,12 @@ import { Header, ScreenTemplate } from 'app/components';
 import { Route, RootStackParams, Wallet } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import {
-  getAirdropStatusBalance,
+  getAirdropStatus,
   checkSubscription,
   CheckSubscriptionActionCreator,
   subscribeWallet,
   SubscribeWalletActionCreator,
-  GetAirdropStatusBalanceActionCreator,
+  GetAirdropStatusActionCreator,
 } from 'app/state/airdrop/actions';
 import * as airdropSelectors from 'app/state/airdrop/selectors';
 
@@ -35,7 +35,7 @@ interface Props {
   subscribedWallets: Wallet[];
   availableWallets: Wallet[];
   subscribeWallet: SubscribeWalletActionCreator;
-  getAirdropStatusBalance: GetAirdropStatusBalanceActionCreator;
+  getAirdropStatus: GetAirdropStatusActionCreator;
   usersQuantity: number;
 }
 
@@ -45,7 +45,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
   usersQuantity,
   checkSubscription,
   subscribedWallets,
-  getAirdropStatusBalance,
+  getAirdropStatus,
   subscribeWallet,
   availableWallets,
   isLoading,
@@ -54,8 +54,8 @@ export const AirdropDashboardScreen: FC<Props> = ({
   isAfterAirdrop,
 }) => {
   useEffect(() => {
-    getAirdropStatusBalance();
-  }, [getAirdropStatusBalance]);
+    getAirdropStatus();
+  }, [getAirdropStatus]);
 
   useEffect(() => {
     checkSubscription(wallets);
@@ -104,7 +104,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   checkSubscription,
   subscribeWallet,
-  getAirdropStatusBalance,
+  getAirdropStatus,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AirdropDashboardScreen);
