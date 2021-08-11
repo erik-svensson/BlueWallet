@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 
-import { Authenticate } from 'app/api/wallet/types';
+import { RegisterResponse } from 'app/api/wallet/types';
 import { Wallet } from 'app/consts';
 
 import { WalletsAction, WalletsActionType } from './actions';
@@ -8,7 +8,7 @@ import { WalletsAction, WalletsActionType } from './actions';
 export interface WalletsState {
   wallets: Wallet[];
   isRegisteredWallets: boolean[];
-  walletToRegister: Authenticate | null;
+  walletToRegister: RegisterResponse | null;
   isInitialized: boolean;
   isLoading: boolean;
   error: Error | null;
@@ -68,6 +68,7 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
     case WalletsAction.IsRegisteredWalletFailure:
     case WalletsAction.RegisterWalletFailure:
     case WalletsAction.AuthenticateWalletFailure:
+    case WalletsAction.PrepareWalletsFailure:
       return {
         ...state,
         isLoading: false,

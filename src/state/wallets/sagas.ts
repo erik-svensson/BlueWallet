@@ -1,8 +1,9 @@
 import { cloneDeep } from 'lodash';
 import { Alert } from 'react-native';
-import { takeEvery, takeLatest, put, all, call, select, delay } from 'redux-saga/effects';
+import { takeEvery, takeLatest, put, all, call, select, delay, take } from 'redux-saga/effects';
 
 import { authenticate, isRegistered, register } from 'app/api/wallet/client';
+import { Authenticate, RegisterResponse } from 'app/api/wallet/types';
 import config from 'app/config';
 import { Wallet } from 'app/consts';
 import { takeLatestPerKey } from 'app/helpers/sagas';
@@ -47,8 +48,16 @@ import {
   PrepareWalletAction,
   checkWalletIsRegistered,
   registerWallet,
+  authenticateWallet,
+  prepareWalletsSuccess,
+  prepareWalletsFailure,
 } from './actions';
-import { getById as getByIdWallet, wallets as walletsSelector, isRegisteredWallets, allWallets } from './selectors';
+import {
+  getById as getByIdWallet,
+  wallets as walletsSelector,
+  isRegisteredWallets,
+  walletToRegister,
+} from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
 const i18n = require('../../../loc');
@@ -227,11 +236,11 @@ export function* isRegisteredWalletSaga(action: IsRegisteredWalletAction | unkno
   const hashes: string[] = yield all(wallets.map(wallet => call(helpers.getWalletHashedPublicKeys, wallet)));
 
   try {
-    const { response } = yield call(isRegistered, {
-      hashes,
+    const { result } = yield call(isRegistered, {
+      wallets: hashes,
     });
 
-    yield put(checkWalletIsRegisteredSuccess(response));
+    yield put(checkWalletIsRegisteredSuccess(result));
   } catch (error) {
     yield put(checkWalletIsRegisteredFailure(error));
   }
@@ -241,11 +250,11 @@ export function* registerWalletSaga(action: RegisterWalletAction | unknown) {
   const { wallets } = action as RegisterWalletAction;
 
   try {
-    const { session_token, data } = yield call(register, {
-      payload: { wallets },
+    const { session_token, result } = yield call(register, {
+      wallets,
     });
 
-    yield put(registerWalletSuccess({ session_token, data }));
+    yield put(registerWalletSuccess({ session_token, result }));
   } catch (error) {
     yield put(registerWalletFailure(error));
   }
@@ -255,9 +264,7 @@ export function* authenticateWalletSaga(action: AuthenticateWalletAction | unkno
   const { payload } = action as AuthenticateWalletAction;
 
   try {
-    yield call(authenticate, {
-      payload,
-    });
+    yield call(authenticate, payload);
 
     yield put(authenticateWalletSuccess());
   } catch (error) {
@@ -271,26 +278,51 @@ export function* prepareWalletsSaga(action: PrepareWalletAction | unknown) {
   try {
     yield put(checkWalletIsRegistered(wallets));
 
+    yield take([WalletsAction.IsRegisteredWalletSuccess]);
+
     const selectedWallets: boolean[] = yield select(isRegisteredWallets);
 
-    const walletsToRegister = selectedWallets.filter(wl => !wl);
+    const walletsHashesToRegister = Object.entries(selectedWallets).filter(wl => {
+      const [, value] = wl;
 
-    if (walletsToRegister.length) {
-      const allExistingWallets: boolean[] = yield select(allWallets);
+      return !value;
+    });
 
-      // const walletsGenerationBase: Promise<any> = yield all(
-      //   wallets.map(wallet => call(helpers.walletToAddressesGenerationBase, wallet)),
-      // );
+    if (walletsHashesToRegister.length) {
+      const walletsToRegister = [];
 
-      // for (const wallet of walletsToRegister) {
-      //   const walletToRegister = allExistingWallets;
-      //   const walletPayload: string = yield call(helpers.getWalletHashedPublicKeys, payload);
+      for (const wl of wallets) {
+        const walletHash: string = yield call(helpers.getWalletHashedPublicKeys, wl);
+        const walletNeedRegistration = walletsHashesToRegister.find(([key]) => key === walletHash);
 
-      //   yield put(registerWallet(hashes));
-      // }
+        if (walletNeedRegistration) {
+          walletsToRegister.push(wl);
+        }
+      }
+
+      const walletsGenerationBase: Wallet[] = yield all(
+        walletsToRegister.map(wallet => call(helpers.walletToAddressesGenerationBase, wallet)),
+      );
+
+      yield put(registerWallet(walletsGenerationBase));
+
+      yield take([WalletsAction.RegisterWalletSuccess]);
+
+      const { session_token, result }: RegisterResponse = yield select(walletToRegister);
+
+      const parsedWalletDataToActivate = {
+        session_token,
+        data: result,
+      };
+
+      yield put(authenticateWallet(parsedWalletDataToActivate));
+
+      yield take([WalletsAction.AuthenticateWalletSuccess]);
+
+      yield put(prepareWalletsSuccess());
     }
   } catch (error) {
-    yield put(checkWalletIsRegisteredFailure(error));
+    yield put(prepareWalletsFailure(error));
   }
 }
 
@@ -306,5 +338,5 @@ export default [
   takeEvery(WalletsAction.IsRegisteredWallet, isRegisteredWalletSaga),
   takeEvery(WalletsAction.RegisterWallet, registerWalletSaga),
   takeEvery(WalletsAction.AuthenticateWallet, authenticateWalletSaga),
-  takeEvery(WalletsAction.PrepareWallets, prepareWalletsSaga),
+  takeLatest(WalletsAction.PrepareWallets, prepareWalletsSaga),
 ];

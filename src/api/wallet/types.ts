@@ -7,11 +7,13 @@ export interface AuthenticateData {
 
 export interface Authenticate {
   session_token: string;
-  data: AuthenticateData[];
+  data: {
+    [key: string]: string;
+  };
 }
 
 export interface IsRegisteredPayload {
-  hashes: string[];
+  wallets: string[];
 }
 
 export interface IsRegisteredResponse {
@@ -19,7 +21,12 @@ export interface IsRegisteredResponse {
 }
 
 export interface RegisterPayload {
-  payload: { wallets: Wallet[] };
+  wallets: Wallet[];
+}
+
+export interface RegisterResponse {
+  session_token: string;
+  result: { [key: string]: string };
 }
 
 export interface AuthenticatePayload {
