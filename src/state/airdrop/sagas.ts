@@ -1,11 +1,6 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 
-import {
-  subscribeAirdropWallet,
-  checkWalletsAirdropSubscription,
-  checkBalance,
-  checkBalanceWallet,
-} from 'app/api/airdrop/client';
+import { subscribeAirdropWallet, checkBalance } from 'app/api/airdrop/client';
 import { AirdropGoal, Wallet } from 'app/consts';
 import { getUtcDate } from 'app/helpers/date';
 import * as helpers from 'app/helpers/wallets';

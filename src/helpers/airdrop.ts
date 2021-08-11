@@ -1,5 +1,4 @@
 import { CONST, AirdropGoal, AirdropCarouselCardData, DateType } from 'app/consts';
-import { formatDate, getTimezoneOffset, isAfter } from 'app/helpers/date';
 
 import { formatToBtcvWithoutSign, satoshiToBtc } from '../../utils/bitcoin';
 

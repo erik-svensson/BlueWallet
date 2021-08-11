@@ -1,10 +1,9 @@
 import { createSelector } from 'reselect';
 
-import { Wallet, CONST, AirdropGoal, AirdropCarouselCardData, DateType } from 'app/consts';
+import { Wallet, AirdropGoal } from 'app/consts';
 import { formatDate, getTimezoneOffset, isAfter } from 'app/helpers/date';
 import { ApplicationState } from 'app/state';
 
-import { formatToBtcvWithoutSign, satoshiToBtc } from '../../../utils/bitcoin';
 import { wallets } from '../wallets/selectors';
 import { AirdropState } from './reducer';
 
