@@ -6,6 +6,7 @@ import { authenticate, isRegistered, register } from 'app/api/wallet/client';
 import config from 'app/config';
 import { Wallet } from 'app/consts';
 import { takeLatestPerKey } from 'app/helpers/sagas';
+import * as helpers from 'app/helpers/wallets';
 import { BlueApp } from 'app/legacy';
 
 import { messages } from '../../../error';
@@ -43,8 +44,11 @@ import {
   AuthenticateWalletAction,
   authenticateWalletSuccess,
   authenticateWalletFailure,
+  PrepareWalletAction,
+  checkWalletIsRegistered,
+  registerWallet,
 } from './actions';
-import { getById as getByIdWallet, wallets as walletsSelector } from './selectors';
+import { getById as getByIdWallet, wallets as walletsSelector, isRegisteredWallets, allWallets } from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
 const i18n = require('../../../loc');
@@ -218,7 +222,9 @@ export function* scripHashHasChangedSaga(action: electrumXActions.ScriptHashChan
 }
 
 export function* isRegisteredWalletSaga(action: IsRegisteredWalletAction | unknown) {
-  const { hashes } = action as IsRegisteredWalletAction;
+  const { wallets } = action as IsRegisteredWalletAction;
+
+  const hashes: string[] = yield all(wallets.map(wallet => call(helpers.getWalletHashedPublicKeys, wallet)));
 
   try {
     const { response } = yield call(isRegistered, {
@@ -259,6 +265,35 @@ export function* authenticateWalletSaga(action: AuthenticateWalletAction | unkno
   }
 }
 
+export function* prepareWalletsSaga(action: PrepareWalletAction | unknown) {
+  const { wallets } = action as PrepareWalletAction;
+
+  try {
+    yield put(checkWalletIsRegistered(wallets));
+
+    const selectedWallets: boolean[] = yield select(isRegisteredWallets);
+
+    const walletsToRegister = selectedWallets.filter(wl => !wl);
+
+    if (walletsToRegister.length) {
+      const allExistingWallets: boolean[] = yield select(allWallets);
+
+      // const walletsGenerationBase: Promise<any> = yield all(
+      //   wallets.map(wallet => call(helpers.walletToAddressesGenerationBase, wallet)),
+      // );
+
+      // for (const wallet of walletsToRegister) {
+      //   const walletToRegister = allExistingWallets;
+      //   const walletPayload: string = yield call(helpers.getWalletHashedPublicKeys, payload);
+
+      //   yield put(registerWallet(hashes));
+      // }
+    }
+  } catch (error) {
+    yield put(checkWalletIsRegisteredFailure(error));
+  }
+}
+
 export default [
   takeLatestPerKey(WalletsAction.RefreshWallet, refreshWalletSaga, ({ id }: { id: string }) => id),
   takeEvery(electrumXActions.ElectrumXAction.ScriptHashChanged, scripHashHasChangedSaga),
@@ -271,4 +306,5 @@ export default [
   takeEvery(WalletsAction.IsRegisteredWallet, isRegisteredWalletSaga),
   takeEvery(WalletsAction.RegisterWallet, registerWalletSaga),
   takeEvery(WalletsAction.AuthenticateWallet, authenticateWalletSaga),
+  takeEvery(WalletsAction.PrepareWallets, prepareWalletsSaga),
 ];

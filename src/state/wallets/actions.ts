@@ -1,6 +1,6 @@
 import { Transaction } from 'bitcoinjs-lib';
 
-import { Authenticate, AuthenticatePayload } from 'app/api/wallet/types';
+import { Authenticate } from 'app/api/wallet/types';
 import { Wallet, ActionMeta } from 'app/consts';
 
 export enum WalletsAction {
@@ -34,6 +34,7 @@ export enum WalletsAction {
   AuthenticateWallet = 'AuthenticateWallet',
   AuthenticateWalletSuccess = 'AuthenticateWalletSuccess',
   AuthenticateWalletFailure = 'AuthenticateWalletFailure',
+  PrepareWallets = 'PrepareWallets',
 }
 
 export interface LoadWalletsAction {
@@ -147,7 +148,7 @@ export interface RefreshWalletFailureAction {
 
 export interface IsRegisteredWalletAction {
   type: WalletsAction.IsRegisteredWallet;
-  hashes: string[];
+  wallets: Wallet[];
 }
 export interface IsRegisteredWalletSuccessAction {
   type: WalletsAction.IsRegisteredWalletSuccess;
@@ -183,6 +184,11 @@ export interface AuthenticateWalletFailureAction {
   error: Error;
 }
 
+export interface PrepareWalletAction {
+  type: WalletsAction.PrepareWallets;
+  wallets: Wallet[];
+}
+
 export type WalletsActionType =
   | LoadWalletsSuccessAction
   | LoadWalletsFailureAction
@@ -213,7 +219,8 @@ export type WalletsActionType =
   | RegisterWalletFailureAction
   | AuthenticateWalletAction
   | AuthenticateWalletSuccessAction
-  | AuthenticateWalletFailureAction;
+  | AuthenticateWalletFailureAction
+  | PrepareWalletAction;
 
 export const loadWallets = (): LoadWalletsAction => ({
   type: WalletsAction.LoadWallets,
@@ -331,9 +338,9 @@ export const refreshWalletFailure = (error: Error): RefreshWalletFailureAction =
   error,
 });
 
-export const checkWalletIsRegistered = (hashes: string[]): IsRegisteredWalletAction => ({
+export const checkWalletIsRegistered = (wallets: Wallet[]): IsRegisteredWalletAction => ({
   type: WalletsAction.IsRegisteredWallet,
-  hashes,
+  wallets,
 });
 
 export const checkWalletIsRegisteredSuccess = (hashes: boolean[]): IsRegisteredWalletSuccessAction => ({
@@ -373,4 +380,9 @@ export const authenticateWalletSuccess = (): AuthenticateWalletSuccessAction => 
 export const authenticateWalletFailure = (error: Error): AuthenticateWalletFailureAction => ({
   type: WalletsAction.AuthenticateWalletFailure,
   error,
+});
+
+export const prepareWallets = (wallets: Wallet[]): PrepareWalletAction => ({
+  type: WalletsAction.PrepareWallets,
+  wallets,
 });
