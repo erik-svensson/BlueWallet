@@ -2,11 +2,12 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import { icons } from 'app/assets';
 import { Image } from 'app/components';
 import { Route, RootStackParams, MainTabNavigatorParams } from 'app/consts';
-import { isAfterAirdrop } from 'app/helpers/airdrop';
+import { selectors } from 'app/state/airdrop';
 
 type Props = {
   thankYouSeen: boolean;
@@ -24,6 +25,8 @@ export const AirdropFloatingButton: FC<Props> = ({
   navigation,
   position,
 }: Props) => {
+  const isAfterAirdrop = useSelector(selectors.isAfterAirdrop);
+
   // TODO: this implementation doesn't work.
   // As discussed with Paweł, We have to merge PasswordNavigator with MainStackNavigator, otherwise it fails miserably.
   useEffect(() => {
@@ -33,8 +36,7 @@ export const AirdropFloatingButton: FC<Props> = ({
   }, [navigation, thankYouSeen]);
 
   const onButtonPress = () => {
-    //@ts-ignore
-    if (isAfterAirdrop()) {
+    if (isAfterAirdrop) {
       return navigation.navigate(Route.AirdropDashboard);
     }
     if (!thankYouFlowCompleted) {

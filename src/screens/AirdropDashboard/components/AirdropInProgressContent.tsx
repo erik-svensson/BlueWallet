@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { images } from 'app/assets';
 import { Image, AirdropWalletsList, AirdropCarousel } from 'app/components';
 import { Wallet, AirdropCarouselCardData } from 'app/consts';
-import { isAfterAirdrop, getCarouselItem, getCommunityItem } from 'app/helpers/airdrop';
+import { getCarouselItem } from 'app/helpers/airdrop';
 import { selectors } from 'app/state/airdrop';
 import { SubscribeWalletActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
@@ -33,7 +33,9 @@ export const AirdropInProgressContent: FC<Props> = ({
   subscribeWallet,
   usersQuantity,
 }) => {
-  const airdropDate = useSelector(selectors.airdropDate);
+  const isAfterAirdrop = useSelector(selectors.isAfterAirdrop);
+  const airdropGoals = useSelector(selectors.goals);
+  const getCommunityItem = useSelector(selectors.getCommunityItem);
   const [communityCarouselActive, setCommunityCarouselActive] = useState(false);
   const [loadingWalletsIds, setLoadingWalletsIds] = useState<string[]>([]);
   let _carouselRef: Carousel<AirdropCarouselCardData>;
@@ -74,10 +76,10 @@ export const AirdropInProgressContent: FC<Props> = ({
 
   const userHasSubscribedWallets = subscribedWallets?.length > 0;
 
-  const getCarouselItems = (subscribedWallets: Wallet[], usersQuantity: number): AirdropCarouselCardData[] => {
-    const renderableWallets = subscribedWallets.map(getCarouselItem);
+  const getCarouselItems = (subscribedWallets: Wallet[]): AirdropCarouselCardData[] => {
+    const renderableWallets = subscribedWallets.map(data => getCarouselItem(data, isAfterAirdrop, airdropGoals));
 
-    return isAfterAirdrop(airdropDate) ? renderableWallets : [...renderableWallets, getCommunityItem(usersQuantity)];
+    return isAfterAirdrop ? renderableWallets : [...renderableWallets, getCommunityItem];
   };
 
   if (error) {
@@ -94,7 +96,7 @@ export const AirdropInProgressContent: FC<Props> = ({
         <>
           <AirdropCarousel
             styles={styles.carouselStyles}
-            items={getCarouselItems(subscribedWallets, usersQuantity)}
+            items={getCarouselItems(subscribedWallets)}
             setRef={setRef}
             onItemSnap={onCarouselItemSnap}
           />

@@ -1,12 +1,7 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 
-import {
-  subscribeAirdropWallet,
-  checkWalletsAirdropSubscription,
-  checkBalance,
-  checkBalanceWallet,
-} from 'app/api/airdrop/client';
-import { Wallet } from 'app/consts';
+import { subscribeAirdropWallet, checkBalance } from 'app/api/airdrop/client';
+import { AirdropGoal, Wallet } from 'app/consts';
 import { getUtcDate } from 'app/helpers/date';
 import * as helpers from 'app/helpers/wallets';
 
@@ -18,9 +13,11 @@ import {
   CheckSubscriptionAction,
   checkSubscriptionSuccess,
   checkSubscriptionFailure,
-  getAirdropStatusBalanceSuccess,
-  getAirdropStatusBalanceFailure,
+  getAirdropStatusSuccess,
+  getAirdropStatusFailure,
   setEndDateAirdropAction,
+  setAirdropCommunityGoalsAction,
+  setAirdropBadgesAction,
 } from './actions';
 
 enum Result {
@@ -96,21 +93,40 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   }
 }
 
-export function* getAirdropStatusBalanceSaga() {
+export function* getAirdropStatusSaga() {
   try {
     //@ts-ignore
     const response = yield call(checkBalance);
     const { result } = response;
+    const airdropCommunityGoals: AirdropGoal[] = [];
+    const airdropBadges: AirdropGoal[] = [];
 
     yield put(setEndDateAirdropAction(getUtcDate(result.ends)));
-    yield put(getAirdropStatusBalanceSuccess(result.users));
+    yield put(getAirdropStatusSuccess(result.users));
+    const goals = result.goals;
+    const amounts = result.award_amount;
+    const badges = result.badges;
+
+    for (const [goal, goalValue] of Object.entries(goals)) {
+      for (const [amount, amountValue] of Object.entries(amounts)) {
+        if (goal === amount) {
+          airdropCommunityGoals.push({ threshold: Number(goal), value: amountValue as string });
+        }
+      }
+    }
+    yield put(setAirdropCommunityGoalsAction(airdropCommunityGoals));
+
+    for (const [badge, badgeValue] of Object.entries(badges)) {
+      airdropBadges.push({ threshold: Number(badge), value: badgeValue as string });
+    }
+    yield put(setAirdropBadgesAction(airdropBadges));
   } catch (error) {
-    yield put(getAirdropStatusBalanceFailure(error.msg));
+    yield put(getAirdropStatusFailure(error.msg));
   }
 }
 
 export default [
   takeEvery(AirdropAction.CheckSubscription, checkSubscriptionSaga),
   takeEvery(AirdropAction.SubscribeWallet, subscribeWalletSaga),
-  takeEvery(AirdropAction.GetAirdropStatusBalance, getAirdropStatusBalanceSaga),
+  takeEvery(AirdropAction.GetAirdropStatus, getAirdropStatusSaga),
 ];

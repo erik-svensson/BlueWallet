@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import { AirdropGoal } from 'app/consts';
-import { airdropCommunityGoals } from 'app/helpers/airdrop';
+import { selectors } from 'app/state/airdrop';
 
 import { CommunityGoalsListItem } from './';
 
@@ -11,6 +12,8 @@ interface CommunityAchievementsListProps {
 }
 
 export const CommunityAchievementsList: FC<CommunityAchievementsListProps> = ({ usersQuantity }) => {
+  const airdropCommunityGoals = useSelector(selectors.goals);
+
   const getListGoals = (usersQuantity: number): AirdropGoal[] => {
     const currentGoal =
       airdropCommunityGoals.find(goal => goal.threshold > usersQuantity) ||

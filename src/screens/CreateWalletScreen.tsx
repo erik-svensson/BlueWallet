@@ -5,19 +5,9 @@ import { StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
 import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioButton } from 'app/components';
-import {
-  Route,
-  Wallet,
-  RootStackParams,
-  ActionMeta,
-  CONST,
-  WalletType,
-  ConfirmAddressFlowType,
-  DateType,
-} from 'app/consts';
+import { Route, Wallet, RootStackParams, ActionMeta, CONST, WalletType, ConfirmAddressFlowType } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
-import { isAfterAirdrop } from 'app/helpers/airdrop';
 import {
   HDSegwitBech32Wallet,
   HDSegwitP2SHWallet,
@@ -50,7 +40,7 @@ interface Props {
   walletsLabels: string[];
   email: string;
   error: string;
-  airdropDate: string | DateType;
+  isAfterAirdrop: boolean;
 }
 
 interface State {
@@ -132,7 +122,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   };
 
   navigateToConfirmEmailSubscription = (wallet: Wallet) => {
-    const { navigation, email, airdropDate } = this.props;
+    const { navigation, email, isAfterAirdrop } = this.props;
 
     navigation.navigate(Route.Confirm, {
       title: i18n.notifications.notifications,
@@ -145,7 +135,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           email,
           flowType: ConfirmAddressFlowType.SUBSCRIBE,
           wallets: [wallet],
-          onSuccess: isAfterAirdrop(airdropDate)
+          onSuccess: isAfterAirdrop
             ? this.navigateToSuccesfullNotificationSubscriptionMessage
             : () => this.navigateToAirdropWalletSubscription(wallet, true),
           onResend: () => this.props.subscribe([wallet], email),
@@ -153,7 +143,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       },
       onBack: () =>
         //TODO change logic if is after + if is email
-        isAfterAirdrop(airdropDate)
+        isAfterAirdrop
           ? this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard })
           : this.navigateToAirdropWalletSubscription(wallet),
     });
@@ -161,7 +151,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
-    const { navigation, createWallet, airdropDate } = this.props;
+    const { navigation, createWallet, isAfterAirdrop } = this.props;
 
     wallet.setLabel(label);
 
@@ -172,7 +162,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           secret: w.getSecret(),
           handleNavigationSubscription: true
             ? () => this.navigateToConfirmEmailSubscription(wallet)
-            : () => (isAfterAirdrop(airdropDate) ? undefined : this.navigateToAirdropWalletSubscription(wallet)),
+            : () => (isAfterAirdrop ? undefined : this.navigateToAirdropWalletSubscription(wallet)),
         });
       },
       onFailure: () => onError(),
@@ -358,7 +348,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   }
 
   render() {
-    console.log(this.props.airdropDate, '>>>>>');
     return (
       <ScreenTemplate
         keyboardShouldPersistTaps={'always'}
@@ -400,7 +389,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   walletsLabels: walletsSelector.getWalletsLabels(state),
   email: storedEmail(state),
   error: readableError(state),
-  airdropDate: airdropSelector.airdropDate(state),
+  isAfterAirdrop: airdropSelector.isAfterAirdrop(state),
 });
 
 const mapDispatchToProps = {

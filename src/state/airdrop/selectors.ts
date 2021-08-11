@@ -1,10 +1,13 @@
 import { createSelector } from 'reselect';
 
-import { Wallet } from 'app/consts';
+import { Wallet, AirdropGoal } from 'app/consts';
+import { formatDate, getTimezoneOffset, isAfter } from 'app/helpers/date';
 import { ApplicationState } from 'app/state';
 
 import { wallets } from '../wallets/selectors';
 import { AirdropState } from './reducer';
+
+const i18n = require('../../../loc');
 
 const local = (state: ApplicationState): AirdropState => state.airdrop;
 
@@ -23,3 +26,41 @@ export const airdropUsersQuantity = createSelector(local, state => state.usersQu
 export const isLoading = createSelector(local, state => state.isLoading);
 export const hasError = createSelector(local, state => !!state.error);
 export const airdropDate = createSelector(local, state => state.endAirdrop);
+export const goals = createSelector(local, state => state.airdropCommunityGoals);
+export const badges = createSelector(local, state => state.badges);
+
+export const getFormattedAirdropDate = createSelector(
+  local,
+  state => `${formatDate(state.endAirdrop as string, 'DD/MM/YYYY h a')} ${getTimezoneOffset()}`,
+);
+
+export const isAfterAirdrop = createSelector(local, state => isAfter(new Date(), state.endAirdrop));
+
+export const getCommunityItem = createSelector(local, state => {
+  const usersQuantity = state.usersQuantity;
+  const goals = state.airdropCommunityGoals;
+  const getReadableOrder = () => [
+    i18n.order.first,
+    i18n.order.second,
+    i18n.order.third,
+    i18n.order.fourth,
+    i18n.order.fifth,
+    i18n.order.sixth,
+  ];
+  const unreachedGoals = goals.filter((goal: AirdropGoal) => goal.threshold > usersQuantity);
+  const nextGoal = unreachedGoals[0] || goals[goals.length - 1];
+  const nextGoalIndex = goals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
+
+  return {
+    header: i18n.airdrop.community.carouselItemHeader,
+    circleInnerFirstLine: `${usersQuantity} ${
+      usersQuantity == 1 ? i18n.airdrop.community.user : i18n.airdrop.community.users
+    }`,
+    circleInnerSecondLine: i18n.airdrop.community.airdropParticipants,
+    footerFirstLine: i18n.formatString(i18n.airdrop.community.goal, {
+      order: getReadableOrder()[nextGoalIndex],
+    }),
+    footerSecondLine: `${nextGoal.threshold} ${i18n.airdrop.community.users}`,
+    circleFillPercentage: (usersQuantity / nextGoal.threshold) * 100,
+  };
+});
