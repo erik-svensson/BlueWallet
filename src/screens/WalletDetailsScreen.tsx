@@ -10,6 +10,7 @@ import { Wallet, Route, RootStackParams, ActionMeta, CONST, ConfirmAddressFlowTy
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
+import { selectors as electrumXSelectors } from 'app/state/electrumX';
 import { reducer as notificationReducer } from 'app/state/notifications';
 import {
   checkSubscription,
@@ -50,6 +51,7 @@ interface Props {
   email: string;
   isSubscribed: boolean;
   isLoading: boolean;
+  isInternetReachable: boolean;
 }
 
 export class WalletDetailsScreen extends React.PureComponent<Props> {
@@ -261,6 +263,7 @@ export class WalletDetailsScreen extends React.PureComponent<Props> {
               title={isSubscribed ? i18n.wallets.details.unsubscribeWallet : i18n.wallets.details.subscribeWallet}
               containerStyle={styles.button}
               loading={isLoading}
+              disabled={!this.props.isInternetReachable}
             />
             <FlatButton
               testID="delete-wallet-button"
@@ -308,6 +311,7 @@ const mapStateToProps = (
     isLoading: isLoading(state),
     isSubscribed: isWalletSubscribed(state, id),
     error: readableError(state),
+    isInternetReachable: electrumXSelectors.isInternetReachable(state),
   };
 };
 
