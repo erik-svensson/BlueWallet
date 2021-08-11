@@ -1,7 +1,7 @@
 import { ECDSA } from '../types';
 
 export const WAIT_FOR_ELEMENT_TIMEOUT = {
-  DEFAULT: 10 * 1000,
+  DEFAULT: process.env.CI === 'true' ? 30 * 1000 : 10 * 1000,
   TRANSACTION_CONFIRMATION: 120 * 1000,
 };
 
