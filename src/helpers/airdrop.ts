@@ -14,34 +14,34 @@ export const getReadableOrder = () => [
   i18n.order.sixth,
 ];
 
-export const lastThresholdBeforeInfinity = 20000;
+// export const lastThresholdBeforeInfinity = 20000;
 
-export const airdropCommunityGoals: AirdropGoal[] = [
-  { threshold: 2500, value: '25000' },
-  { threshold: 5000, value: '50000' },
-  { threshold: 10000, value: '100000' },
-  { threshold: lastThresholdBeforeInfinity, value: '200000' },
-  { threshold: 40000, value: '500000' }, // TODO: for now it s 400000 so users can see some progress in progress bar, but in reality if it s 20k+ it s already unlocked
-];
+// export const airdropCommunityGoals: AirdropGoal[] = [
+//   { threshold: 2500, value: '25000' },
+//   { threshold: 5000, value: '50000' },
+//   { threshold: 10000, value: '100000' },
+//   { threshold: lastThresholdBeforeInfinity, value: '200000' },
+//   { threshold: 40000, value: '500000' }, // TODO: for now it s 400000 so users can see some progress in progress bar, but in reality if it s 20k+ it s already unlocked
+// ];
 
-export const getCommunityItem = (usersQuantity: number): AirdropCarouselCardData => {
-  const unreachedGoals = airdropCommunityGoals.filter((goal: AirdropGoal) => goal.threshold > usersQuantity);
-  const nextGoal = unreachedGoals[0] || airdropCommunityGoals[airdropCommunityGoals.length - 1];
-  const nextGoalIndex = airdropCommunityGoals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
+// export const getCommunityItem = (usersQuantity: number): AirdropCarouselCardData => {
+//   const unreachedGoals = airdropCommunityGoals.filter((goal: AirdropGoal) => goal.threshold > usersQuantity);
+//   const nextGoal = unreachedGoals[0] || airdropCommunityGoals[airdropCommunityGoals.length - 1];
+//   const nextGoalIndex = airdropCommunityGoals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
 
-  return {
-    header: i18n.airdrop.community.carouselItemHeader,
-    circleInnerFirstLine: `${usersQuantity} ${
-      usersQuantity == 1 ? i18n.airdrop.community.user : i18n.airdrop.community.users
-    }`,
-    circleInnerSecondLine: i18n.airdrop.community.airdropParticipants,
-    footerFirstLine: i18n.formatString(i18n.airdrop.community.goal, {
-      order: getReadableOrder()[nextGoalIndex],
-    }),
-    footerSecondLine: `${nextGoal.threshold} ${i18n.airdrop.community.users}`,
-    circleFillPercentage: (usersQuantity / nextGoal.threshold) * 100,
-  };
-};
+//   return {
+//     header: i18n.airdrop.community.carouselItemHeader,
+//     circleInnerFirstLine: `${usersQuantity} ${
+//       usersQuantity == 1 ? i18n.airdrop.community.user : i18n.airdrop.community.users
+//     }`,
+//     circleInnerSecondLine: i18n.airdrop.community.airdropParticipants,
+//     footerFirstLine: i18n.formatString(i18n.airdrop.community.goal, {
+//       order: getReadableOrder()[nextGoalIndex],
+//     }),
+//     footerSecondLine: `${nextGoal.threshold} ${i18n.airdrop.community.users}`,
+//     circleFillPercentage: (usersQuantity / nextGoal.threshold) * 100,
+//   };
+// };
 
 export const getCarouselItem = (data: { balance: number; label: string }): AirdropCarouselCardData => {
   //@ts-ignore

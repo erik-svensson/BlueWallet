@@ -1,4 +1,4 @@
-import { DateType } from 'app/consts';
+import { AirdropGoal, DateType } from 'app/consts';
 
 import { AirdropAction, AirdropActionType } from './actions';
 
@@ -10,6 +10,8 @@ export interface AirdropState {
   subscribedIds: string[];
   usersQuantity: number;
   endAirdrop: string | DateType;
+  airdropCommunityGoals: AirdropGoal[];
+  badges: AirdropGoal[];
 }
 
 const initialState: AirdropState = {
@@ -20,6 +22,8 @@ const initialState: AirdropState = {
   error: '',
   usersQuantity: 0,
   endAirdrop: '',
+  airdropCommunityGoals: [],
+  badges: [],
 };
 
 export const airdropReducer = (state = initialState, action: AirdropActionType): AirdropState => {
@@ -74,6 +78,16 @@ export const airdropReducer = (state = initialState, action: AirdropActionType):
       return {
         ...state,
         endAirdrop: action.date,
+      };
+    case AirdropAction.SetAirdropCommunityGoals:
+      return {
+        ...state,
+        airdropCommunityGoals: action.date,
+      };
+    case AirdropAction.SetAirdropBadges:
+      return {
+        ...state,
+        badges: action.date,
       };
     default:
       return state;

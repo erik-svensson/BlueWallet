@@ -1,4 +1,4 @@
-import { Wallet, ActionMeta, DateType } from 'app/consts';
+import { Wallet, ActionMeta, DateType, AirdropGoal } from 'app/consts';
 
 export enum AirdropAction {
   ThankYouSeen = 'ThankYouSeen',
@@ -13,6 +13,8 @@ export enum AirdropAction {
   GetAirdropStatusBalanceSuccess = 'GetAirdropStatusBalanceSuccess',
   GetAirdropStatusBalanceFailure = 'GetAirdropStatusBalanceFailure',
   SetEndDateAirdrop = 'SetEndDateAirdrop',
+  SetAirdropCommunityGoals = 'SetAirdropCommunityGoals',
+  SetAirdropBadges = 'SetAirdropBadges',
 }
 
 export interface GetAirdropStatusBalanceAction {
@@ -75,6 +77,16 @@ export interface CheckSubscriptionSuccessAction {
 export interface SetEndDateAirdropAction {
   type: AirdropAction.SetEndDateAirdrop;
   date: string | DateType;
+}
+
+export interface SetAirdropCommunityGoalsAction {
+  type: AirdropAction.SetAirdropCommunityGoals;
+  date: AirdropGoal[];
+}
+
+export interface SetAirdropBadgesAction {
+  type: AirdropAction.SetAirdropBadges;
+  date: AirdropGoal[];
 }
 
 export type MarkThankYouSeenActionCreator = () => ThankYouSeenAction;
@@ -159,6 +171,20 @@ export const setEndDateAirdropAction: SetEndDateAirdropActionCreator = (date: st
   date,
 });
 
+export type SetAirdropCommunityGoalsActionCreator = (date: AirdropGoal[]) => SetAirdropCommunityGoalsAction;
+
+export const setAirdropCommunityGoalsAction: SetAirdropCommunityGoalsActionCreator = (date: AirdropGoal[]) => ({
+  type: AirdropAction.SetAirdropCommunityGoals,
+  date,
+});
+
+export type SetAirdropBadgesActionCreator = (date: AirdropGoal[]) => SetAirdropBadgesAction;
+
+export const setAirdropBadgesAction: SetAirdropBadgesActionCreator = (date: AirdropGoal[]) => ({
+  type: AirdropAction.SetAirdropBadges,
+  date,
+});
+
 export type AirdropActionType =
   | ThankYouSeenAction
   | ThankYouFlowCompleted
@@ -171,4 +197,6 @@ export type AirdropActionType =
   | GetAirdropStatusBalanceAction
   | GetAirdropStatusBalanceSuccessAction
   | GetAirdropStatusBalanceFailureAction
-  | SetEndDateAirdropAction;
+  | SetEndDateAirdropAction
+  | SetAirdropCommunityGoalsAction
+  | SetAirdropBadgesAction;
