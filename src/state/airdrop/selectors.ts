@@ -30,17 +30,12 @@ export const airdropDate = createSelector(local, state => state.endAirdrop);
 export const goals = createSelector(local, state => state.airdropCommunityGoals);
 export const badges = createSelector(local, state => state.badges);
 
-export const getFormattedAirdropDate = createSelector(local, state => {
-  const date = state.endAirdrop;
+export const getFormattedAirdropDate = createSelector(
+  local,
+  state => `${formatDate(state.endAirdrop as string, 'DD/MM/YYYY h a')} ${getTimezoneOffset()}`,
+);
 
-  return `${formatDate(date as string, 'DD/MM/YYYY h a')} ${getTimezoneOffset()}`;
-});
-
-export const isAfterAirdrop = createSelector(local, state => {
-  const date = state.endAirdrop;
-
-  return isAfter(new Date(), date);
-});
+export const isAfterAirdrop = createSelector(local, state => isAfter(new Date(), state.endAirdrop));
 
 export const getCommunityItem = createSelector(local, state => {
   const usersQuantity = state.usersQuantity;
