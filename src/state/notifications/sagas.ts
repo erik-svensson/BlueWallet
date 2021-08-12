@@ -12,7 +12,7 @@ import {
 } from 'app/api/emailNotifications/client';
 import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
-import { getWalletHashedPublicKeys, walletToAddressesGenerationBase } from 'app/helpers/wallets';
+import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 
 import * as appSettingsSelectors from '../appSettings/selectors';
 import { prepareWallets, WalletsAction } from '../wallets/actions';
