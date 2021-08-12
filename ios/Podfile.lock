@@ -406,7 +406,7 @@ PODS:
     - React-Core
   - react-native-randombytes (3.5.3):
     - React
-  - react-native-safe-area-context (3.2.0):
+  - react-native-safe-area-context (3.3.0):
     - React-Core
   - react-native-slider (2.0.0-rc.1):
     - React
@@ -505,18 +505,18 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.8)
     - SDWebImageWebPCoder (~> 0.6.1)
-  - RNFBAnalytics (12.3.0):
+  - RNFBAnalytics (12.4.0):
     - Firebase/Analytics (= 8.4.0)
     - React-Core
     - RNFBApp
-  - RNFBApp (12.3.0):
+  - RNFBApp (12.4.0):
     - Firebase/CoreOnly (= 8.4.0)
     - React-Core
-  - RNFBCrashlytics (12.3.0):
+  - RNFBCrashlytics (12.4.0):
     - Firebase/Crashlytics (= 8.4.0)
     - React-Core
     - RNFBApp
-  - RNFBMessaging (12.3.0):
+  - RNFBMessaging (12.4.0):
     - Firebase/Messaging (= 8.4.0)
     - React-Core
     - RNFBApp
@@ -859,7 +859,7 @@ SPEC CHECKSUMS:
   CodePush: 9bb93f52a44ee80b72739d89dead9c7e86c3bd3a
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: 482cfbfb1c36db6e16e230b2df6af5bb132a8177
+  FBReactNativeSpec: 81ba71db3062ee7fae63b8c55a5dad186f8728cf
   Firebase: 54cdc8bc9c9b3de54f43dab86e62f5a76b47034f
   FirebaseAnalytics: 4751d6a49598a2b58da678cc07df696bcd809ab9
   FirebaseCore: 31f389c37ac1ea52454a53d3081f2d7019485a4a
@@ -908,7 +908,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 7a85cf7b0a53845f03ae52fb4592a2748ded069b
   react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
-  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
+  react-native-safe-area-context: 61c8c484a3a9e7d1fda19f7b1794b35bbfd2262a
   react-native-slider: 884693dd50f84745baa511ecdcde4c16f32182fb
   react-native-tcp-socket: 1a243d385da15f271506d5fc609f8c5f4d5b8156
   react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
@@ -936,10 +936,10 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 9b6aba9ffaed69ecb72bd13c7bcb0debf277bc9f
   RNExitApp: c4e052df2568b43bec8a37c7cd61194d4cfee2c3
   RNFastImage: a7384db75df352500261e8e8f1ac2026def26102
-  RNFBAnalytics: 8ba84c2d31c64374d054c8621b998f25145ffddc
-  RNFBApp: 64c90ab78b6010ed5c3ade026dfe5ff6442c21fd
-  RNFBCrashlytics: 1de18b8cc36d9bcf86407c4a354399228cc84a61
-  RNFBMessaging: 35a027803f202ecaf911e66a940ca0c5690cb6a0
+  RNFBAnalytics: be6180b4a5b4c7675f54278d341a653cf3ac59ec
+  RNFBApp: 97b2da195d4606716b284a7c8a988dd8ed5cec41
+  RNFBCrashlytics: 347db4a99a802d41f58762bd9d4913d04970adf7
+  RNFBMessaging: ee81245484ef7e835975d09c2cd4000dfa2ae5e7
   RNFS: c9bbde46b0d59619f8e7b735991c60e0f73d22c1
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNHandoff: d3b0754cca3a6bcd9b25f544f733f7f033ccf5fa
@@ -963,4 +963,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 3e3240968a6b643bf5b28b675e2744c1f0d7623c
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2

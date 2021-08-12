@@ -38,3 +38,36 @@ target 'GoldWallet Dev' do
     react_native_post_install(installer)
   end
 end
+
+if [ "${CONFIGURATION}" = "Debug" ]; then
+  "${PODS_ROOT}/SwiftLint/swiftlint"
+ else
+  echo "Not running SwiftLint/swiftlint because we are building for Release"
+ fi
+ if [ "${CONFIGURATION}" = "Release" ]; then
+  "${PODS_ROOT}/FirebaseCrashlytics/run"
+else
+  echo "Not running FirebaseCrashlytics/run because we are building for debug"
+fi
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      if config.name == 'Debug'
+        config.build_settings['OTHER_SWIFT_FLAGS'] = ['$(inherited)', '-Onone']
+        config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-O'
+      end
+    end
+  end
+ end
+ post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      if config.name == 'Debug'
+        config.build_settings['SWIFT_COMPILATION_MODE'] = 'singlefile'
+      else
+        config.build_settings['SWIFT_COMPILATION_MODE'] = 'wholemodule'
+      end
+    end
+  end
+ end
