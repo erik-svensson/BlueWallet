@@ -15,8 +15,6 @@ export default {
   explorerUrl: Config.EXPLORER_URL,
   sentryDsnIOS: Config.SENTRY_DSN_IOS,
   sentryDsnAndroid: Config.SENTRY_DSN_ANDROID,
-  emailNotificationsApi: Config.EMAIL_NOTIFICATIONS_API,
-  airdropApi: Config.AIRDROP_API,
   apiBaseUrl: Config.API_BASE_URL,
   codepushDeploymentKeyIOS: Config.CODEPUSH_DEPLOYMENT_KEY_IOS,
   codepushDeploymentKeyAndroid: Config.CODEPUSH_DEPLOYMENT_KEY_ANDROID,
