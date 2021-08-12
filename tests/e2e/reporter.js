@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 
 /**
@@ -10,30 +10,73 @@ class MyCustomReporter {
     this._options = options;
   }
 
-  onRunComplete(_, results) {
-    // NOTE: https://github.com/facebook/jest/issues/6924
-    // const passed = results.success;
-    const passed = results.numFailedTests === 0;
+  async onRunComplete(_, results) {
+    const tmpDirPath = path.resolve(process.cwd(), 'artifacts', 'tmp');
+    const tmpFilePath = path.resolve(tmpDirPath, 'results.json');
+    const testResultsPath = path.resolve(process.cwd(), 'artifacts', 'testResult.txt');
 
-    const str = [];
+    await fs.mkdir(tmpDirPath, { recursive: true });
 
-    str.push(passed ? 'All tests passed!' : 'Some tests have failed!');
-    str.push('');
-    str.push(`Passed: ${results.numPassedTests}`);
-    str.push(`Failed: ${results.numFailedTests}`);
-    str.push(`Skipped: ${results.numPendingTests}`);
+    let mergedResult;
 
-    if (!passed) {
-      const failedTests = results.testResults
-        .filter(suite => suite.numFailingTests > 0)
-        .flatMap(suite => suite.testResults.filter(tc => tc.status === 'failed').map(tc => tc.fullName));
+    try {
+      const f = await fs.readFile(tmpFilePath, 'utf8');
 
-      str.push(`\r\nFailed test cases:`);
-      str.push(`\t${failedTests.join('\r\n\t')}`);
+      mergedResult = mergeResults(JSON.parse(f), results.testResults);
+    } catch (e) {
+      mergedResult = results.testResults;
+    } finally {
+      await fs.writeFile(tmpFilePath, JSON.stringify(mergedResult), 'utf8');
     }
 
-    fs.writeFileSync(path.resolve(process.cwd(), 'artifacts', 'testResult.txt'), str.join('\r\n'), 'utf8');
+    const stats = getStats(mergedResult);
+
+    const summary = parseStatsToSummary(stats);
+
+    await fs.writeFile(testResultsPath, summary, 'utf8');
   }
+}
+
+function mergeResults(prevRes, currRes) {
+  return prevRes.map(suite => currRes.find(s => s.testFilePath === suite.testFilePath) || suite);
+}
+
+function getStats(results) {
+  return results.reduce(
+    (stats, suite) => {
+      suite.testResults.forEach(tc => {
+        stats[tc.status]++;
+        if (tc.status === 'failed' && !stats.failedNames.find(name => name === tc.fullName)) {
+          stats.failedNames.push(tc.fullName);
+        }
+      });
+      return stats;
+    },
+    {
+      passed: 0,
+      failed: 0,
+      pending: 0,
+      failedNames: [],
+    },
+  );
+}
+
+function parseStatsToSummary(stats) {
+  const summary = [];
+  const passed = stats.failed === 0;
+
+  summary.push(passed ? 'All tests passed!' : 'Some tests have failed!');
+  summary.push('');
+  summary.push(`Passed: ${stats.passed}`);
+  summary.push(`Failed: ${stats.failed}`);
+  summary.push(`Skipped: ${stats.pending}`);
+
+  if (!passed) {
+    summary.push(`\r\nFailed test cases:`);
+    summary.push(`\t${stats.failedNames.join('\r\n\t')}`);
+  }
+
+  return summary.join('\r\n');
 }
 
 module.exports = MyCustomReporter;
