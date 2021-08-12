@@ -1,4 +1,4 @@
-import { takeEvery, takeLatest, put, call, all, select } from 'redux-saga/effects';
+import { takeEvery, takeLatest, put, call, all, select, take } from 'redux-saga/effects';
 
 import { CheckSubscriptionResponse, verifyEmail } from 'app/api';
 import {
@@ -12,9 +12,10 @@ import {
 } from 'app/api/emailNotifications/client';
 import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
-import { getWalletHashedPublicKeys, walletToAddressesGenerationBase } from 'app/helpers/wallets';
+import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 
 import * as appSettingsSelectors from '../appSettings/selectors';
+import { prepareWallets, WalletsAction } from '../wallets/actions';
 import {
   createNotificationEmailFailure,
   createNotificationEmailSuccess,
@@ -89,14 +90,18 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   } = action as SubscribeWalletAction;
 
   try {
+    yield put(prepareWallets(wallets));
+
+    yield take([WalletsAction.PrepareWalletsSuccess]);
+
     const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
-    const lang: string = yield select(appSettingsSelectors.language);
+    const language: string = yield select(appSettingsSelectors.language);
     // TODO: fix types
     const { session_token } = yield call(subscribeEmail as any, {
       email,
       wallets: hashes,
-      lang,
+      language,
     });
 
     yield put(subscribeWalletSuccess(session_token));
@@ -122,7 +127,7 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
   try {
     const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
-    const { session_token } = yield call(unsubscribeEmail, { hashes, email });
+    const { session_token } = yield call(unsubscribeEmail, { wallets: hashes, email });
 
     yield put(unsubscribeWalletSuccess(session_token));
 
@@ -193,7 +198,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
     );
     const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
-    const response: CheckSubscriptionResponse = yield call(checkSubscriptionEmail as any, { hashes, email });
+    const response: CheckSubscriptionResponse = yield call(checkSubscriptionEmail as any, { wallets: hashes, email });
     const ids: string[] = [];
 
     walletWithHashes.forEach((wallet: Wallet, index: number) => {

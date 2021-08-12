@@ -5,7 +5,7 @@ import createHttpClient from '../client';
 import { Result } from '../types';
 import { AirdropCheckWalletsSubscription } from './types';
 
-const httpClient = createHttpClient(config.airdropApi);
+const httpClient = createHttpClient(config.apiBaseUrl);
 
 export const checkWalletsAirdropSubscription = (
   data: AirdropCheckWalletsSubscription,

@@ -31,7 +31,7 @@ export enum EmailNotificationsError {
   INVALID_EMAIL_NAME = 'Invalid wallet name',
 }
 
-const httpClient = createHttpClient(config.emailNotificationsApi);
+const httpClient = createHttpClient(config.apiBaseUrl);
 
 export const subscribeEmail = (data: SubscribePayload): Promise<SubscribeResponse> => httpClient.post(`/email/`, data);
 
