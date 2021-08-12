@@ -1,6 +1,7 @@
 import { by, element } from 'detox';
 
 import actions from '../../actions';
+import { WAIT_FOR_ELEMENT_TIMEOUT } from '../../data';
 import { wait } from '../../helpers/utils';
 
 const TermsConditionsScreen = () => ({
@@ -46,8 +47,8 @@ const TermsConditionsScreen = () => ({
   // and there is no possibility to wait for it to appear
   // This should be revisited if detox implements webview operations
   async waitUntilDisplayed() {
-    await actions.waitForElement(this.header, 20 * 1000);
-    await wait(5000);
+    await actions.waitForElement(this.header, WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
+    await wait(WAIT_FOR_ELEMENT_TIMEOUT.DEFAULT);
   },
 });
 
