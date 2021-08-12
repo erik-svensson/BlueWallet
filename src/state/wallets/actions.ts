@@ -1,5 +1,6 @@
 import { Transaction } from 'bitcoinjs-lib';
 
+import { Authenticate, RegisterResponse } from 'app/api/wallet/types';
 import { Wallet, ActionMeta } from 'app/consts';
 
 export enum WalletsAction {
@@ -24,6 +25,18 @@ export enum WalletsAction {
   RefreshWallet = 'RefreshWallet',
   RefreshWalletSuccess = 'RefreshWalletSuccess',
   RefreshWalletFailure = 'SendTransactionFailure',
+  IsRegisteredWallet = 'IsRegisteredWallet',
+  IsRegisteredWalletSuccess = 'IsRegisteredWalletSuccess',
+  IsRegisteredWalletFailure = 'IsRegisteredWalletFailure',
+  RegisterWallet = 'RegisterWallet',
+  RegisterWalletSuccess = 'RegisterWalletSuccess',
+  RegisterWalletFailure = 'RegisterWalletFailure',
+  AuthenticateWallet = 'AuthenticateWallet',
+  AuthenticateWalletSuccess = 'AuthenticateWalletSuccess',
+  AuthenticateWalletFailure = 'AuthenticateWalletFailure',
+  PrepareWallets = 'PrepareWallets',
+  PrepareWalletsSuccess = 'PrepareWalletsSuccess',
+  PrepareWalletsFailure = 'PrepareWalletsFailure',
 }
 
 export interface LoadWalletsAction {
@@ -135,6 +148,56 @@ export interface RefreshWalletFailureAction {
   error: Error;
 }
 
+export interface IsRegisteredWalletAction {
+  type: WalletsAction.IsRegisteredWallet;
+  wallets: Wallet[];
+}
+export interface IsRegisteredWalletSuccessAction {
+  type: WalletsAction.IsRegisteredWalletSuccess;
+  hashes: boolean[];
+}
+export interface IsRegisteredWalletFailureAction {
+  type: WalletsAction.IsRegisteredWalletFailure;
+  error: Error;
+}
+
+export interface RegisterWalletAction {
+  type: WalletsAction.RegisterWallet;
+  wallets: Wallet[];
+}
+export interface RegisterWalletSuccessAction {
+  type: WalletsAction.RegisterWalletSuccess;
+  data: RegisterResponse;
+}
+export interface RegisterWalletFailureAction {
+  type: WalletsAction.RegisterWalletFailure;
+  error: Error;
+}
+
+export interface AuthenticateWalletAction {
+  type: WalletsAction.AuthenticateWallet;
+  payload: Authenticate;
+}
+export interface AuthenticateWalletSuccessAction {
+  type: WalletsAction.AuthenticateWalletSuccess;
+}
+export interface AuthenticateWalletFailureAction {
+  type: WalletsAction.AuthenticateWalletFailure;
+  error: Error;
+}
+
+export interface PrepareWalletAction {
+  type: WalletsAction.PrepareWallets;
+  wallets: Wallet[];
+}
+export interface PrepareWalletSuccessAction {
+  type: WalletsAction.PrepareWalletsSuccess;
+}
+export interface PrepareWalletFailureAction {
+  type: WalletsAction.PrepareWalletsFailure;
+  error: Error;
+}
+
 export type WalletsActionType =
   | LoadWalletsSuccessAction
   | LoadWalletsFailureAction
@@ -156,7 +219,19 @@ export type WalletsActionType =
   | SendTransactionSuccessAction
   | RefreshWalletAction
   | RefreshWalletSuccessAction
-  | RefreshWalletFailureAction;
+  | RefreshWalletFailureAction
+  | IsRegisteredWalletAction
+  | IsRegisteredWalletSuccessAction
+  | IsRegisteredWalletFailureAction
+  | RegisterWalletAction
+  | RegisterWalletSuccessAction
+  | RegisterWalletFailureAction
+  | AuthenticateWalletAction
+  | AuthenticateWalletSuccessAction
+  | AuthenticateWalletFailureAction
+  | PrepareWalletAction
+  | PrepareWalletSuccessAction
+  | PrepareWalletFailureAction;
 
 export const loadWallets = (): LoadWalletsAction => ({
   type: WalletsAction.LoadWallets,
@@ -271,5 +346,61 @@ export const refreshWalletSuccess = (wallet: Wallet): RefreshWalletSuccessAction
 
 export const refreshWalletFailure = (error: Error): RefreshWalletFailureAction => ({
   type: WalletsAction.RefreshWalletFailure,
+  error,
+});
+
+export const checkWalletIsRegistered = (wallets: Wallet[]): IsRegisteredWalletAction => ({
+  type: WalletsAction.IsRegisteredWallet,
+  wallets,
+});
+
+export const checkWalletIsRegisteredSuccess = (hashes: boolean[]): IsRegisteredWalletSuccessAction => ({
+  type: WalletsAction.IsRegisteredWalletSuccess,
+  hashes,
+});
+
+export const checkWalletIsRegisteredFailure = (error: Error): IsRegisteredWalletFailureAction => ({
+  type: WalletsAction.IsRegisteredWalletFailure,
+  error,
+});
+
+export const registerWallet = (wallets: Wallet[]): RegisterWalletAction => ({
+  type: WalletsAction.RegisterWallet,
+  wallets,
+});
+
+export const registerWalletSuccess = (data: RegisterResponse): RegisterWalletSuccessAction => ({
+  type: WalletsAction.RegisterWalletSuccess,
+  data,
+});
+
+export const registerWalletFailure = (error: Error): RegisterWalletFailureAction => ({
+  type: WalletsAction.RegisterWalletFailure,
+  error,
+});
+
+export const authenticateWallet = (payload: Authenticate): AuthenticateWalletAction => ({
+  type: WalletsAction.AuthenticateWallet,
+  payload,
+});
+
+export const authenticateWalletSuccess = (): AuthenticateWalletSuccessAction => ({
+  type: WalletsAction.AuthenticateWalletSuccess,
+});
+
+export const authenticateWalletFailure = (error: Error): AuthenticateWalletFailureAction => ({
+  type: WalletsAction.AuthenticateWalletFailure,
+  error,
+});
+
+export const prepareWallets = (wallets: Wallet[]): PrepareWalletAction => ({
+  type: WalletsAction.PrepareWallets,
+  wallets,
+});
+export const prepareWalletsSuccess = (): PrepareWalletSuccessAction => ({
+  type: WalletsAction.PrepareWalletsSuccess,
+});
+export const prepareWalletsFailure = (error: Error): PrepareWalletFailureAction => ({
+  type: WalletsAction.PrepareWalletsFailure,
   error,
 });

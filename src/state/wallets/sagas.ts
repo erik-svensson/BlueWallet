@@ -1,10 +1,13 @@
 import { cloneDeep } from 'lodash';
 import { Alert } from 'react-native';
-import { takeEvery, takeLatest, put, all, call, select, delay } from 'redux-saga/effects';
+import { takeEvery, takeLatest, put, all, call, select, delay, take } from 'redux-saga/effects';
 
+import { authenticate, isRegistered, register } from 'app/api/wallet/client';
+import { Authenticate, RegisterResponse } from 'app/api/wallet/types';
 import config from 'app/config';
 import { Wallet } from 'app/consts';
 import { takeLatestPerKey } from 'app/helpers/sagas';
+import * as helpers from 'app/helpers/wallets';
 import { BlueApp } from 'app/legacy';
 
 import { messages } from '../../../error';
@@ -33,8 +36,28 @@ import {
   refreshWalletSuccess,
   refreshWalletFailure,
   RefreshWalletAction,
+  IsRegisteredWalletAction,
+  checkWalletIsRegisteredSuccess,
+  checkWalletIsRegisteredFailure,
+  RegisterWalletAction,
+  registerWalletSuccess,
+  registerWalletFailure,
+  AuthenticateWalletAction,
+  authenticateWalletSuccess,
+  authenticateWalletFailure,
+  PrepareWalletAction,
+  checkWalletIsRegistered,
+  registerWallet,
+  authenticateWallet,
+  prepareWalletsSuccess,
+  prepareWalletsFailure,
 } from './actions';
-import { getById as getByIdWallet, wallets as walletsSelector } from './selectors';
+import {
+  getById as getByIdWallet,
+  wallets as walletsSelector,
+  isRegisteredWallets,
+  walletToRegister,
+} from './selectors';
 
 const BlueElectrum = require('../../../BlueElectrum');
 const i18n = require('../../../loc');
@@ -207,6 +230,102 @@ export function* scripHashHasChangedSaga(action: electrumXActions.ScriptHashChan
   }
 }
 
+export function* isRegisteredWalletSaga(action: IsRegisteredWalletAction | unknown) {
+  const { wallets } = action as IsRegisteredWalletAction;
+
+  const hashes: string[] = yield all(wallets.map(wallet => call(helpers.getWalletHashedPublicKeys, wallet)));
+
+  try {
+    const { result } = yield call(isRegistered, {
+      wallets: hashes,
+    });
+
+    yield put(checkWalletIsRegisteredSuccess(result));
+  } catch (error) {
+    yield put(checkWalletIsRegisteredFailure(error));
+  }
+}
+
+export function* registerWalletSaga(action: RegisterWalletAction | unknown) {
+  const { wallets } = action as RegisterWalletAction;
+
+  try {
+    const { session_token, result } = yield call(register, {
+      wallets,
+    });
+
+    yield put(registerWalletSuccess({ session_token, result }));
+  } catch (error) {
+    yield put(registerWalletFailure(error));
+  }
+}
+
+export function* authenticateWalletSaga(action: AuthenticateWalletAction | unknown) {
+  const { payload } = action as AuthenticateWalletAction;
+
+  try {
+    yield call(authenticate, payload);
+
+    yield put(authenticateWalletSuccess());
+  } catch (error) {
+    yield put(authenticateWalletFailure(error));
+  }
+}
+
+export function* prepareWalletsSaga(action: PrepareWalletAction | unknown) {
+  const { wallets } = action as PrepareWalletAction;
+
+  try {
+    yield put(checkWalletIsRegistered(wallets));
+
+    yield take([WalletsAction.IsRegisteredWalletSuccess]);
+
+    const selectedWallets: boolean[] = yield select(isRegisteredWallets);
+
+    const walletsHashesToRegister = Object.entries(selectedWallets).filter(wl => {
+      const [, value] = wl;
+
+      return !value;
+    });
+
+    if (walletsHashesToRegister.length) {
+      const walletsToRegister = [];
+
+      for (const wl of wallets) {
+        const walletHash: string = yield call(helpers.getWalletHashedPublicKeys, wl);
+        const walletNeedRegistration = walletsHashesToRegister.find(([key]) => key === walletHash);
+
+        if (walletNeedRegistration) {
+          walletsToRegister.push(wl);
+        }
+      }
+
+      const walletsGenerationBase: Wallet[] = yield all(
+        walletsToRegister.map(wallet => call(helpers.walletToAddressesGenerationBase, wallet)),
+      );
+
+      yield put(registerWallet(walletsGenerationBase));
+
+      yield take([WalletsAction.RegisterWalletSuccess]);
+
+      const { session_token, result }: RegisterResponse = yield select(walletToRegister);
+
+      const parsedWalletDataToActivate = {
+        session_token,
+        data: result,
+      };
+
+      yield put(authenticateWallet(parsedWalletDataToActivate));
+
+      yield take([WalletsAction.AuthenticateWalletSuccess]);
+
+      yield put(prepareWalletsSuccess());
+    }
+  } catch (error) {
+    yield put(prepareWalletsFailure(error));
+  }
+}
+
 export default [
   takeLatestPerKey(WalletsAction.RefreshWallet, refreshWalletSaga, ({ id }: { id: string }) => id),
   takeEvery(electrumXActions.ElectrumXAction.ScriptHashChanged, scripHashHasChangedSaga),
@@ -216,4 +335,8 @@ export default [
   takeEvery(WalletsAction.ImportWallet, importWalletSaga),
   takeEvery(WalletsAction.UpdateWallet, updateWalletSaga),
   takeEvery(WalletsAction.SendTransaction, sendTransactionSaga),
+  takeEvery(WalletsAction.IsRegisteredWallet, isRegisteredWalletSaga),
+  takeEvery(WalletsAction.RegisterWallet, registerWalletSaga),
+  takeEvery(WalletsAction.AuthenticateWallet, authenticateWalletSaga),
+  takeLatest(WalletsAction.PrepareWallets, prepareWalletsSaga),
 ];

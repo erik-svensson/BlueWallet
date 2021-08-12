@@ -1,11 +1,14 @@
 import { cloneDeep } from 'lodash';
 
+import { RegisterResponse } from 'app/api/wallet/types';
 import { Wallet } from 'app/consts';
 
 import { WalletsAction, WalletsActionType } from './actions';
 
 export interface WalletsState {
   wallets: Wallet[];
+  isRegisteredWallets: boolean[];
+  walletToRegister: RegisterResponse | null;
   isInitialized: boolean;
   isLoading: boolean;
   error: Error | null;
@@ -13,6 +16,8 @@ export interface WalletsState {
 
 const initialState: WalletsState = {
   wallets: [],
+  isRegisteredWallets: [],
+  walletToRegister: null,
   isInitialized: false,
   isLoading: false,
   error: null,
@@ -24,6 +29,9 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
     case WalletsAction.DeleteWallet:
     case WalletsAction.CreateWallet:
     case WalletsAction.ImportWallet:
+    case WalletsAction.IsRegisteredWallet:
+    case WalletsAction.RegisterWallet:
+    case WalletsAction.AuthenticateWallet:
       return {
         ...state,
         isLoading: true,
@@ -57,6 +65,10 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
     case WalletsAction.CreateWalletFailure:
     case WalletsAction.ImportWalletFailure:
     case WalletsAction.RefreshWalletFailure:
+    case WalletsAction.IsRegisteredWalletFailure:
+    case WalletsAction.RegisterWalletFailure:
+    case WalletsAction.AuthenticateWalletFailure:
+    case WalletsAction.PrepareWalletsFailure:
       return {
         ...state,
         isLoading: false,
@@ -72,6 +84,26 @@ export const walletsReducer = (state = initialState, action: WalletsActionType):
           }
           return wallet;
         }),
+      };
+    case WalletsAction.IsRegisteredWalletSuccess:
+      return {
+        ...state,
+        isRegisteredWallets: action.hashes,
+        isLoading: false,
+        error: null,
+      };
+    case WalletsAction.RegisterWalletSuccess:
+      return {
+        ...state,
+        walletToRegister: action.data,
+        isLoading: false,
+        error: null,
+      };
+    case WalletsAction.AuthenticateWalletSuccess:
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
       };
     default:
       return state;
