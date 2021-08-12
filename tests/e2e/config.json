@@ -1,23 +1,25 @@
 {
-    "preset": "ts-jest",
-    "testEnvironment": "./environment",
-    "testRunner": "jest-circus/runner",
-    "testTimeout": 180000,
-    "testRegex": "\\.spec\\.ts$",
-    "setupFilesAfterEnv": ["./setupTests.ts"],
-    "reporters": ["detox/runners/jest/streamlineReporter",
-      ["jest-junit",
-        {
-          "suiteName": "GoldWalletUITests",
-          "outputDirectory": "./artifacts",
-          "outputName": "testReport.xml",
-          "classNameTemplate": "{classname}",
-          "titleTemplate": "{title}",
-          "ancestorSeparator": " › ",
-          "usePathForSuiteName": "true"
-        }
-      ]
-
+  "preset": "ts-jest",
+  "testEnvironment": "./environment",
+  "testRunner": "jest-circus/runner",
+  "testTimeout": 180000,
+  "testRegex": "\\.spec\\.ts$",
+  "setupFilesAfterEnv": ["./setupTests.ts"],
+  "reporters": [
+    "detox/runners/jest/streamlineReporter",
+    [
+      "jest-junit",
+      {
+        "suiteName": "GoldWalletUITests",
+        "outputDirectory": "./artifacts",
+        "outputName": "testReport.xml",
+        "classNameTemplate": "{classname}",
+        "titleTemplate": "{title}",
+        "ancestorSeparator": " › ",
+        "usePathForSuiteName": "true"
+      }
     ],
-    "verbose": true
+      "<rootDir>/reporter.js"
+  ],
+  "verbose": true
 }
