@@ -5,7 +5,7 @@ import { Result } from '../types';
 export interface SubscribePayload {
   wallets: WalletPayload[];
   email: string;
-  lang: string;
+  language: string;
 }
 
 export interface SubscribeResponse {
@@ -52,7 +52,7 @@ export interface VerifyEmailResponse {
 }
 
 export interface UnsubscribePayload {
-  hashes: string[];
+  wallets: string[];
   email: string;
 }
 
