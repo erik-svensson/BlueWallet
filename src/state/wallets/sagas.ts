@@ -320,6 +320,8 @@ export function* prepareWalletsSaga(action: PrepareWalletAction | unknown) {
       yield take([WalletsAction.AuthenticateWalletSuccess]);
 
       yield put(prepareWalletsSuccess());
+    } else {
+      yield put(prepareWalletsSuccess());
     }
   } catch (error) {
     yield put(prepareWalletsFailure(error));
