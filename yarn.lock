@@ -3922,6 +3922,18 @@ code-push@^4.0.4:
     superagent-proxy "^2.1.0"
     yazl "^2.5.1"
 
+code-push@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/code-push/-/code-push-4.0.4.tgz#e25b16981dba5794dd249e104fa5408c593b4b4f"
+  integrity sha512-CIxGvXt4o/iiYSSZT7mhkAz0EeCJms3255PIs3BMawHptnBRrXUAma4JKRwSlldmZhpO425WXHZRaHc9HorM3A==
+  dependencies:
+    appcenter-file-upload-client "0.0.24"
+    recursive-fs "^2.1.0"
+    slash "^3.0.0"
+    superagent "^5.3.1"
+    superagent-proxy "^2.1.0"
+    yazl "^2.5.1"
+
 coinselect@3.1.11:
   version "3.1.11"
   resolved "https://registry.yarnpkg.com/coinselect/-/coinselect-3.1.11.tgz#e1f063bd1a5882f6735ee0519b9d8b5ac4a93099"
