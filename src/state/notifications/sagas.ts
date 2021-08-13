@@ -92,22 +92,24 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   try {
     yield put(prepareWallets(wallets));
 
-    yield take([WalletsAction.PrepareWalletsSuccess]);
+    const { type } = yield take([WalletsAction.PrepareWalletsSuccess, WalletsAction.PrepareWalletsFailure]);
 
-    const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
+    if (type === WalletsAction.PrepareWalletsSuccess) {
+      const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
-    const language: string = yield select(appSettingsSelectors.language);
-    // TODO: fix types
-    const { session_token } = yield call(subscribeEmail as any, {
-      email,
-      wallets: hashes,
-      language,
-    });
+      const language: string = yield select(appSettingsSelectors.language);
+      // TODO: fix types
+      const { session_token } = yield call(subscribeEmail as any, {
+        email,
+        wallets: hashes,
+        language,
+      });
 
-    yield put(subscribeWalletSuccess(session_token));
+      yield put(subscribeWalletSuccess(session_token));
 
-    if (meta?.onSuccess) {
-      meta.onSuccess();
+      if (meta?.onSuccess) {
+        meta.onSuccess();
+      }
     }
   } catch (error) {
     yield put(subscribeWalletFailure(error.message));
@@ -194,23 +196,27 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   } = action;
 
   try {
-    const walletWithHashes: Wallet[] = yield Promise.all(
-      wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
-    );
-    const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
-    const response: CheckSubscriptionResponse = yield call(checkSubscriptionEmail as any, { wallets: hashes, email });
-    const ids: string[] = [];
+    if (email) {
+      const walletWithHashes: Wallet[] = yield Promise.all(
+        wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
+      );
+      const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
+      const response: CheckSubscriptionResponse = yield call(checkSubscriptionEmail as any, { wallets: hashes, email });
+      const ids: string[] = [];
 
-    walletWithHashes.forEach((wallet: Wallet, index: number) => {
-      if (response.result[index]) {
-        ids.push(wallet.id);
+      walletWithHashes.forEach((wallet: Wallet, index: number) => {
+        if (response.result[index]) {
+          ids.push(wallet.id);
+        }
+      });
+
+      yield put(checkSubscriptionSuccess(ids));
+
+      if (meta?.onSuccess) {
+        meta.onSuccess(ids);
       }
-    });
-
-    yield put(checkSubscriptionSuccess(ids));
-
-    if (meta?.onSuccess) {
-      meta.onSuccess(ids);
+    } else {
+      yield put(checkSubscriptionFailure('No email assigned to account'));
     }
   } catch (error) {
     yield put(checkSubscriptionFailure(error.message));

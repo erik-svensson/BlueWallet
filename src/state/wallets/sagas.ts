@@ -278,50 +278,67 @@ export function* prepareWalletsSaga(action: PrepareWalletAction | unknown) {
   try {
     yield put(checkWalletIsRegistered(wallets));
 
-    yield take([WalletsAction.IsRegisteredWalletSuccess]);
+    const { type } = yield take([WalletsAction.IsRegisteredWalletSuccess, WalletsAction.IsRegisteredWalletFailure]);
 
-    const selectedWallets: boolean[] = yield select(isRegisteredWallets);
+    if (type === WalletsAction.IsRegisteredWalletSuccess) {
+      const selectedWallets: boolean[] = yield select(isRegisteredWallets);
 
-    const walletsHashesToRegister = Object.entries(selectedWallets).filter(wl => {
-      const [, value] = wl;
+      const walletsHashesToRegister = Object.entries(selectedWallets).filter(wl => {
+        const [, value] = wl;
 
-      return !value;
-    });
+        return !value;
+      });
 
-    if (walletsHashesToRegister.length) {
-      const walletsToRegister = [];
+      if (walletsHashesToRegister.length) {
+        const walletsToRegister = [];
 
-      for (const wl of wallets) {
-        const walletHash: string = yield call(helpers.getWalletHashedPublicKeys, wl);
-        const walletNeedRegistration = walletsHashesToRegister.find(([key]) => key === walletHash);
+        for (const wl of wallets) {
+          const walletHash: string = yield call(helpers.getWalletHashedPublicKeys, wl);
+          const walletNeedRegistration = walletsHashesToRegister.find(([key]) => key === walletHash);
 
-        if (walletNeedRegistration) {
-          walletsToRegister.push(wl);
+          if (walletNeedRegistration) {
+            walletsToRegister.push(wl);
+          }
         }
+
+        const walletsGenerationBase: Wallet[] = yield all(
+          walletsToRegister.map(wallet => call(helpers.walletToAddressesGenerationBase, wallet)),
+        );
+
+        yield put(registerWallet(walletsGenerationBase));
+
+        const { type: registerWalletType } = yield take([
+          WalletsAction.RegisterWalletSuccess,
+          WalletsAction.RegisterWalletFailure,
+        ]);
+
+        if (registerWalletType === WalletsAction.RegisterWalletSuccess) {
+          const { session_token, result }: RegisterResponse = yield select(walletToRegister);
+
+          const parsedWalletDataToActivate = {
+            session_token,
+            data: result,
+          };
+
+          yield put(authenticateWallet(parsedWalletDataToActivate));
+        } else {
+          throw new Error('Wallet registration failed');
+        }
+        const { type: AuthenticateType } = yield take([
+          WalletsAction.AuthenticateWalletSuccess,
+          WalletsAction.AuthenticateWalletFailure,
+        ]);
+
+        if (AuthenticateType === WalletsAction.AuthenticateWalletSuccess) {
+          yield put(prepareWalletsSuccess());
+        } else {
+          throw new Error('Wallet authentication failed');
+        }
+      } else {
+        yield put(prepareWalletsSuccess());
       }
-
-      const walletsGenerationBase: Wallet[] = yield all(
-        walletsToRegister.map(wallet => call(helpers.walletToAddressesGenerationBase, wallet)),
-      );
-
-      yield put(registerWallet(walletsGenerationBase));
-
-      yield take([WalletsAction.RegisterWalletSuccess]);
-
-      const { session_token, result }: RegisterResponse = yield select(walletToRegister);
-
-      const parsedWalletDataToActivate = {
-        session_token,
-        data: result,
-      };
-
-      yield put(authenticateWallet(parsedWalletDataToActivate));
-
-      yield take([WalletsAction.AuthenticateWalletSuccess]);
-
-      yield put(prepareWalletsSuccess());
     } else {
-      yield put(prepareWalletsSuccess());
+      throw new Error('Wallet registration check failed');
     }
   } catch (error) {
     yield put(prepareWalletsFailure(error));

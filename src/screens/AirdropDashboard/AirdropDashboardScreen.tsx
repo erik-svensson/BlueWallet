@@ -59,7 +59,8 @@ export const AirdropDashboardScreen: FC<Props> = ({
 
   useEffect(() => {
     checkSubscription(wallets);
-  }, [checkSubscription, wallets]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const airdropFinished = isAfterAirdrop;
 
