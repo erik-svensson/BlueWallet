@@ -8,6 +8,9 @@ export interface ResultResponse {
 export interface AirdropCheckWalletsSubscription {
   wallets: string[];
 }
+export interface AirdropCheckWalletsSubscriptionResponse {
+  result: { [key: string]: number } | 'error';
+}
 
 export interface AirdropCheckSubscriptionResponse {
   result: boolean[];

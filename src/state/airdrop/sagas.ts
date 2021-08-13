@@ -1,10 +1,12 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, put, call, take, all } from 'redux-saga/effects';
 
-import { subscribeAirdropWallet, checkBalance } from 'app/api/airdrop/client';
+import { subscribeAirdropWallet, checkBalance, checkWalletsAirdropSubscription } from 'app/api/airdrop/client';
+import { AirdropCheckWalletsSubscriptionResponse } from 'app/api/airdrop/types';
 import { AirdropGoal, Wallet } from 'app/consts';
 import { getUtcDate } from 'app/helpers/date';
 import * as helpers from 'app/helpers/wallets';
 
+import { prepareWallets, WalletsAction } from '../wallets/actions';
 import {
   AirdropAction,
   SubscribeWalletAction,
@@ -20,6 +22,10 @@ import {
   setAirdropBadgesAction,
 } from './actions';
 
+interface WalletWithHash extends Wallet {
+  hash: string;
+}
+
 enum Result {
   error = 'error',
   success = 'success',
@@ -29,20 +35,26 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   const { payload, meta } = action as SubscribeWalletAction;
 
   try {
-    const walletPayload: string = yield call(helpers.getWalletHashedPublicKeys, payload);
+    yield put(prepareWallets([payload]));
 
-    const response: { msg?: string; result: Result } = yield call(subscribeAirdropWallet, { wallet: walletPayload });
+    const { type } = yield take([WalletsAction.PrepareWalletsSuccess, WalletsAction.PrepareWalletsFailure]);
 
-    if (response.result === Result.error) {
-      throw new Error(response.result);
-    }
+    if (type === WalletsAction.PrepareWalletsSuccess) {
+      const walletHash: string = yield call(helpers.getWalletHashedPublicKeys, payload);
 
-    //   //TODO:
-    if (response.result === Result.success) {
-      yield put(subscribeWalletSuccess(payload.id));
+      const response: { msg?: string; result: Result } = yield call(subscribeAirdropWallet, { wallet: walletHash });
 
-      if (meta?.onSuccess) {
-        meta.onSuccess();
+      if (response.result === Result.error) {
+        throw new Error(response.result);
+      }
+
+      //   //TODO:
+      if (response.result === Result.success) {
+        yield put(subscribeWalletSuccess(payload.id));
+
+        if (meta?.onSuccess) {
+          meta.onSuccess();
+        }
       }
     }
   } catch (error) {
@@ -62,32 +74,40 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   try {
     const ids: string[] = [];
 
-    if (wallets.length > 0) {
-      //@ts-ignore
-      const walletsWithHashes = yield Promise.all(
-        wallets.map(async (wallet: Wallet) => ({ ...wallet, hash: await helpers.getWalletHashedPublicKeys(wallet) })),
-      );
+    yield put(prepareWallets(wallets));
 
-      const hashes = walletsWithHashes.map((wallet: Wallet) => wallet.hash);
-      //@ts-ignore
-      const response = yield call(checkWalletsSubscription, { hashes });
+    const { type } = yield take([WalletsAction.PrepareWalletsSuccess, WalletsAction.PrepareWalletsFailure]);
 
-      if (response.result === Result.error) {
-        throw new Error(response.result);
+    if (type === WalletsAction.PrepareWalletsFailure) {
+      throw new Error('Prepare wallet saga failed');
+    } else {
+      if (wallets.length > 0) {
+        const walletsWithHashes: WalletWithHash[] = yield all(
+          wallets.map(async (wallet: Wallet) => ({ ...wallet, hash: await helpers.getWalletHashedPublicKeys(wallet) })),
+        );
+
+        const hashes = walletsWithHashes.map((wallet: WalletWithHash) => wallet.hash);
+        const response: AirdropCheckWalletsSubscriptionResponse = yield call(checkWalletsAirdropSubscription, {
+          wallets: hashes,
+        });
+
+        if (response.result === Result.error) {
+          throw new Error(response.result);
+        }
+
+        walletsWithHashes.forEach((wallet: Wallet) => {
+          Object.fromEntries(
+            Object.entries(response.result).filter(async ([key, value]) => {
+              if (wallet.hash === key && !!value) {
+                ids.push(wallet.id);
+              }
+            }),
+          );
+        });
       }
 
-      walletsWithHashes.forEach((wallet: Wallet) => {
-        Object.fromEntries(
-          Object.entries(response.result).filter(async ([key, value]) => {
-            if (wallet.hash === key && !!value) {
-              ids.push(wallet.id);
-            }
-          }),
-        );
-      });
+      yield put(checkSubscriptionSuccess(ids));
     }
-
-    yield put(checkSubscriptionSuccess(ids));
   } catch (error) {
     yield put(checkSubscriptionFailure(error.msg));
   }
