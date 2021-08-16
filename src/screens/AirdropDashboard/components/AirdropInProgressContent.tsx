@@ -34,7 +34,7 @@ export const AirdropInProgressContent: FC<Props> = ({
   usersQuantity,
 }) => {
   const isAfterAirdrop = useSelector(selectors.isAfterAirdrop);
-  const airdropGoals = useSelector(selectors.goals);
+  const airdropGoals = useSelector(selectors.badges);
   const readableGoals = useSelector(selectors.readableGoals);
   const getCommunityItem = useSelector(selectors.getCommunityItem);
   const [communityCarouselActive, setCommunityCarouselActive] = useState(false);

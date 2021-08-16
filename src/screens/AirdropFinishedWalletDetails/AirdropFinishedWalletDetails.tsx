@@ -17,7 +17,7 @@ type Props = {
 
 export const AirdropFinishedWalletDetails: FC<Props> = ({ route }: Props) => {
   const isAfterAirdrop = useSelector(selectors.isAfterAirdrop);
-  const airdropGoals = useSelector(selectors.goals);
+  const airdropGoals = useSelector(selectors.badges);
   const readableGoals = useSelector(selectors.readableGoals);
 
   return (
