@@ -12,7 +12,7 @@
       {
         "suiteName": "GoldWalletUITests",
         "outputDirectory": "./artifacts",
-        "outputName": "testReport.xml",
+        "uniqueOutputName": "true",
         "classNameTemplate": "{classname}",
         "titleTemplate": "{title}",
         "ancestorSeparator": " › ",
