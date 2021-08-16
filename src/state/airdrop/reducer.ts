@@ -12,6 +12,7 @@ export interface AirdropState {
   endAirdrop: string | DateType;
   airdropCommunityGoals: AirdropGoal[];
   badges: AirdropGoal[];
+  readableGoals: string[];
 }
 
 const initialState: AirdropState = {
@@ -24,6 +25,7 @@ const initialState: AirdropState = {
   endAirdrop: '',
   airdropCommunityGoals: [],
   badges: [],
+  readableGoals: [],
 };
 
 export const airdropReducer = (state = initialState, action: AirdropActionType): AirdropState => {
@@ -88,6 +90,11 @@ export const airdropReducer = (state = initialState, action: AirdropActionType):
       return {
         ...state,
         badges: action.date,
+      };
+    case AirdropAction.GetReadableOrder:
+      return {
+        ...state,
+        readableGoals: action.date,
       };
     default:
       return state;

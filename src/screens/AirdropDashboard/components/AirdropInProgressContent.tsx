@@ -35,6 +35,7 @@ export const AirdropInProgressContent: FC<Props> = ({
 }) => {
   const isAfterAirdrop = useSelector(selectors.isAfterAirdrop);
   const airdropGoals = useSelector(selectors.goals);
+  const readableGoals = useSelector(selectors.readableGoals);
   const getCommunityItem = useSelector(selectors.getCommunityItem);
   const [communityCarouselActive, setCommunityCarouselActive] = useState(false);
   const [loadingWalletsIds, setLoadingWalletsIds] = useState<string[]>([]);
@@ -77,7 +78,9 @@ export const AirdropInProgressContent: FC<Props> = ({
   const userHasSubscribedWallets = subscribedWallets?.length > 0;
 
   const getCarouselItems = (subscribedWallets: Wallet[]): AirdropCarouselCardData[] => {
-    const renderableWallets = subscribedWallets.map(data => getCarouselItem(data, isAfterAirdrop, airdropGoals));
+    const renderableWallets = subscribedWallets.map(data =>
+      getCarouselItem(data, isAfterAirdrop, airdropGoals, readableGoals),
+    );
 
     return isAfterAirdrop ? renderableWallets : [...renderableWallets, getCommunityItem];
   };

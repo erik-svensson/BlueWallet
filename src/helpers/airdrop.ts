@@ -4,19 +4,11 @@ import { formatToBtcvWithoutSign, satoshiToBtc } from '../../utils/bitcoin';
 
 const i18n = require('../../loc');
 
-export const getReadableOrder = () => [
-  i18n.order.first,
-  i18n.order.second,
-  i18n.order.third,
-  i18n.order.fourth,
-  i18n.order.fifth,
-  i18n.order.sixth,
-];
-
 export const getCarouselItem = (
   data: { balance: number; label: string },
   isAfterAirdrop: boolean,
   airdropGoals: AirdropGoal[],
+  readableGoals: string[],
 ): AirdropCarouselCardData => {
   const btcvBalance = satoshiToBtc(data.balance);
   const balance = formatToBtcvWithoutSign(btcvBalance);
@@ -37,7 +29,7 @@ export const getCarouselItem = (
     footerFirstLine: isAfterAirdrop
       ? i18n.airdrop.walletsCarousel.youReachedGoal
       : i18n.formatString(i18n.airdrop.walletsCarousel.yourNextGoal, {
-          order: getReadableOrder()[nextGoalIndex],
+          order: readableGoals[nextGoalIndex],
         }),
     footerSecondLine: i18n.formatString(i18n.airdrop.walletsCarousel.avatarTeaser, {
       goalName: isAfterAirdrop ? previousGoal.value : nextGoal.value,

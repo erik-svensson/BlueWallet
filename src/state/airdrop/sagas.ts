@@ -20,6 +20,8 @@ import {
   setEndDateAirdropAction,
   setAirdropCommunityGoalsAction,
   setAirdropBadgesAction,
+  completeThankYouFlow,
+  getReadableOrderAction,
 } from './actions';
 
 interface WalletWithHash extends Wallet {
@@ -48,8 +50,8 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
         throw new Error(response.result);
       }
 
-      //   //TODO:
       if (response.result === Result.success) {
+        yield put(completeThankYouFlow());
         yield put(subscribeWalletSuccess(payload.id));
 
         if (meta?.onSuccess) {
@@ -120,6 +122,7 @@ export function* getAirdropStatusSaga() {
     const { result } = response;
     const airdropCommunityGoals: AirdropGoal[] = [];
     const airdropBadges: AirdropGoal[] = [];
+    const readableGoals: string[] = [];
 
     yield put(setEndDateAirdropAction(getUtcDate(result.ends)));
     yield put(getAirdropStatusSuccess(result.users));
@@ -128,12 +131,14 @@ export function* getAirdropStatusSaga() {
     const badges = result.badges;
 
     for (const [goal, goalValue] of Object.entries(goals)) {
+      readableGoals.push(goalValue as string);
       for (const [amount, amountValue] of Object.entries(amounts)) {
         if (goal === amount) {
           airdropCommunityGoals.push({ threshold: Number(goal), value: amountValue as string });
         }
       }
     }
+    yield put(getReadableOrderAction(readableGoals));
     yield put(setAirdropCommunityGoalsAction(airdropCommunityGoals));
 
     for (const [badge, badgeValue] of Object.entries(badges)) {

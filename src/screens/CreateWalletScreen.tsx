@@ -151,7 +151,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
 
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
-    const { navigation, createWallet, isAfterAirdrop } = this.props;
+    const { navigation, createWallet, isAfterAirdrop, email } = this.props;
 
     wallet.setLabel(label);
 
@@ -160,7 +160,7 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
         navigation.navigate(Route.CreateWalletSuccess, {
           isP2SH: this.state.WalletClass === SegwitP2SHWallet,
           secret: w.getSecret(),
-          handleNavigationSubscription: true
+          handleNavigationSubscription: !!email
             ? () => this.navigateToConfirmEmailSubscription(wallet)
             : () => (isAfterAirdrop ? undefined : this.navigateToAirdropWalletSubscription(wallet)),
         });

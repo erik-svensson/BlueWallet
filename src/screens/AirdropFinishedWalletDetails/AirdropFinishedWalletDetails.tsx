@@ -18,6 +18,7 @@ type Props = {
 export const AirdropFinishedWalletDetails: FC<Props> = ({ route }: Props) => {
   const isAfterAirdrop = useSelector(selectors.isAfterAirdrop);
   const airdropGoals = useSelector(selectors.goals);
+  const readableGoals = useSelector(selectors.readableGoals);
 
   return (
     <ScreenTemplate header={<Header isBackArrow title={i18n.airdrop.title} />}>
@@ -31,6 +32,7 @@ export const AirdropFinishedWalletDetails: FC<Props> = ({ route }: Props) => {
             },
             isAfterAirdrop,
             airdropGoals,
+            readableGoals,
           )}
         />
       </View>

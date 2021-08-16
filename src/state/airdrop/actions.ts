@@ -15,6 +15,7 @@ export enum AirdropAction {
   SetEndDateAirdrop = 'SetEndDateAirdrop',
   SetAirdropCommunityGoals = 'SetAirdropCommunityGoals',
   SetAirdropBadges = 'SetAirdropBadges',
+  GetReadableOrder = 'GetReadableOrder',
 }
 
 export interface GetAirdropStatusAction {
@@ -87,6 +88,11 @@ export interface SetAirdropCommunityGoalsAction {
 export interface SetAirdropBadgesAction {
   type: AirdropAction.SetAirdropBadges;
   date: AirdropGoal[];
+}
+
+export interface GetReadableOrderAction {
+  type: AirdropAction.GetReadableOrder;
+  date: string[];
 }
 
 export type MarkThankYouSeenActionCreator = () => ThankYouSeenAction;
@@ -185,6 +191,13 @@ export const setAirdropBadgesAction: SetAirdropBadgesActionCreator = (date: Aird
   date,
 });
 
+export type GetReadableOrderActionCreator = (date: string[]) => GetReadableOrderAction;
+
+export const getReadableOrderAction: GetReadableOrderActionCreator = (date: string[]) => ({
+  type: AirdropAction.GetReadableOrder,
+  date,
+});
+
 export type AirdropActionType =
   | ThankYouSeenAction
   | ThankYouFlowCompleted
@@ -199,4 +212,5 @@ export type AirdropActionType =
   | GetAirdropStatusFailureAction
   | SetEndDateAirdropAction
   | SetAirdropCommunityGoalsAction
-  | SetAirdropBadgesAction;
+  | SetAirdropBadgesAction
+  | GetReadableOrderAction;
