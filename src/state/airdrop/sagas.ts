@@ -6,7 +6,7 @@ import {
   checkWalletsAirdropSubscription,
   checkBalanceWallet,
 } from 'app/api/airdrop/client';
-import { AirdropCheckWalletsSubscriptionResponse, AirdropCheckBalanceWalletResponse } from 'app/api/airdrop/types';
+import { AirdropCheckWalletsSubscriptionResponse } from 'app/api/airdrop/types';
 import { AirdropGoal, Wallet } from 'app/consts';
 import { getUtcDate } from 'app/helpers/date';
 import * as helpers from 'app/helpers/wallets';
@@ -26,7 +26,6 @@ import {
   setAirdropCommunityGoalsAction,
   setAirdropBadgesAction,
   completeThankYouFlow,
-  getReadableOrderAction,
   setAirdropsWalletsBalanceAction,
 } from './actions';
 
@@ -103,7 +102,11 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
           walletsWithHashes.map(async (wallet: WalletWithHash) => {
             const responseResult = await checkBalanceWallet({ wallet: wallet.hash });
 
-            return { wallet: wallet.id, balance: parseFloat(responseResult.result.balance).toFixed(8) };
+            if (responseResult.result) {
+              return { wallet: wallet.id, balance: parseFloat(responseResult.result.balance).toFixed(8) };
+            } else {
+              return { wallet: '0', balance: '0' };
+            }
           }),
         );
 
