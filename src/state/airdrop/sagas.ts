@@ -1,7 +1,12 @@
 import { takeEvery, put, call, take, all } from 'redux-saga/effects';
 
-import { subscribeAirdropWallet, checkBalance, checkWalletsAirdropSubscription } from 'app/api/airdrop/client';
-import { AirdropCheckWalletsSubscriptionResponse } from 'app/api/airdrop/types';
+import {
+  subscribeAirdropWallet,
+  checkBalance,
+  checkWalletsAirdropSubscription,
+  checkBalanceWallet,
+} from 'app/api/airdrop/client';
+import { AirdropCheckWalletsSubscriptionResponse, AirdropCheckBalanceWalletResponse } from 'app/api/airdrop/types';
 import { AirdropGoal, Wallet } from 'app/consts';
 import { getUtcDate } from 'app/helpers/date';
 import * as helpers from 'app/helpers/wallets';
@@ -22,6 +27,7 @@ import {
   setAirdropBadgesAction,
   completeThankYouFlow,
   getReadableOrderAction,
+  setAirdropsWalletsBalanceAction,
 } from './actions';
 
 interface WalletWithHash extends Wallet {
@@ -93,6 +99,16 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
           wallets: hashes,
         });
 
+        const balance: [] = yield all(
+          walletsWithHashes.map(async (wallet: WalletWithHash) => {
+            const responseResult = await checkBalanceWallet({ wallet: wallet.hash });
+
+            return { wallet: wallet.id, balance: parseFloat(responseResult.result.balance).toFixed(8) };
+          }),
+        );
+
+        yield put(setAirdropsWalletsBalanceAction(balance));
+
         if (response.result === Result.error) {
           throw new Error(response.result);
         }
@@ -122,7 +138,6 @@ export function* getAirdropStatusSaga() {
     const { result } = response;
     const airdropCommunityGoals: AirdropGoal[] = [];
     const airdropBadges: AirdropGoal[] = [];
-    const readableGoals: string[] = [];
 
     yield put(setEndDateAirdropAction(getUtcDate(result.ends)));
     yield put(getAirdropStatusSuccess(result.users));
@@ -131,14 +146,12 @@ export function* getAirdropStatusSaga() {
     const badges = result.badges;
 
     for (const [goal, goalValue] of Object.entries(goals)) {
-      readableGoals.push(goalValue as string);
       for (const [amount, amountValue] of Object.entries(amounts)) {
         if (goal === amount) {
           airdropCommunityGoals.push({ threshold: Number(goal), value: amountValue as string });
         }
       }
     }
-    yield put(getReadableOrderAction(readableGoals));
     yield put(setAirdropCommunityGoalsAction(airdropCommunityGoals));
 
     for (const [badge, badgeValue] of Object.entries(badges)) {

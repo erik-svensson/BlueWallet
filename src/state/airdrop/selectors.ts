@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { Wallet, AirdropGoal } from 'app/consts';
+import { getReadableCommunityGoals } from 'app/helpers/airdrop';
 import { formatDate, getTimezoneOffset, isAfter } from 'app/helpers/date';
 import { ApplicationState } from 'app/state';
 
@@ -28,7 +29,7 @@ export const hasError = createSelector(local, state => !!state.error);
 export const airdropDate = createSelector(local, state => state.endAirdrop);
 export const goals = createSelector(local, state => state.airdropCommunityGoals);
 export const badges = createSelector(local, state => state.badges);
-export const readableGoals = createSelector(local, state => state.readableGoals);
+export const airdropsWalletBalance = createSelector(local, state => state.airdropsWalletBalance);
 
 export const getFormattedAirdropDate = createSelector(
   local,
@@ -40,7 +41,6 @@ export const isAfterAirdrop = createSelector(local, state => isAfter(new Date(),
 export const getCommunityItem = createSelector(local, state => {
   const usersQuantity = state.usersQuantity;
   const goals = state.airdropCommunityGoals;
-  const readable = state.readableGoals;
 
   const unreachedGoals = goals.filter((goal: AirdropGoal) => goal.threshold > usersQuantity);
   const nextGoal = unreachedGoals[0] || goals[goals.length - 1];
@@ -52,9 +52,7 @@ export const getCommunityItem = createSelector(local, state => {
       usersQuantity == 1 ? i18n.airdrop.community.user : i18n.airdrop.community.users
     }`,
     circleInnerSecondLine: i18n.airdrop.community.airdropParticipants,
-    footerFirstLine: i18n.formatString(i18n.airdrop.community.goal, {
-      order: readable[nextGoalIndex],
-    }),
+    footerFirstLine: getReadableCommunityGoals()[nextGoalIndex],
     footerSecondLine: `${nextGoal.threshold} ${i18n.airdrop.community.users}`,
     circleFillPercentage: (usersQuantity / nextGoal.threshold) * 100,
   };

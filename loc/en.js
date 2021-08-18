@@ -44,6 +44,18 @@ module.exports = {
   airdrop: {
     title: 'Airdrop',
     dateOfAirdrop: 'Date of Airdrop:',
+    readableCommunityGoals: {
+      first: 'The first goal',
+      second: 'The second goal',
+      third: 'The third goal',
+      fourth: 'The fourth goal',
+    },
+    readableGoals: {
+      first: 'Your first goal',
+      second: 'Your second goal',
+      third: 'Your third goal',
+      fourth: 'Your fourth goal',
+    },
     community: {
       header: 'Airdrop rewards',
       name: 'Community',
@@ -52,7 +64,7 @@ module.exports = {
       user: 'user',
       users: 'users',
       airdropParticipants: 'Airdrop participants',
-      goal: 'The {order} goal:',
+      goal: 'The {order} goal:', //TODO:
       unlockToIncrease: 'Unlock to increase Airdrop to {reward}$',
       thresholdUsers: '{threshold} users',
     },
@@ -102,7 +114,7 @@ module.exports = {
       crab: 'Crab',
       shark: 'Shark',
       whale: 'Whale',
-      yourNextGoal: 'Your {order} goal:',
+      yourNextGoal: 'Your {order}:', //TODO
       avatarTeaser: 'Become a {goalName}: {goalThreshold} {unit}',
       youReachedGoal: 'You reached goal: ',
     },

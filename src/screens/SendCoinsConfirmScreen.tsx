@@ -194,6 +194,10 @@ class SendCoinsConfirmScreen extends Component<Props> {
     );
   };
 
+  goBackToSendScreen = () => {
+    this.props.navigation.navigate(Route.SendCoins, {});
+  };
+
   render() {
     const {
       route: { params },
@@ -205,7 +209,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
     return (
       <ScreenTemplate
         footer={ScreenFooter(this.goToUnlockScreen, this.goToDetails, buttonTitle)}
-        header={<Header isBackArrow title={headerTitle || i18n.send.header} />}
+        header={<Header isBackArrow title={headerTitle || i18n.send.header} onBackArrow={this.goBackToSendScreen} />}
       >
         <View style={styles.container}>
           <View>

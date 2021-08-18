@@ -3,7 +3,11 @@ import { WalletPayload } from 'app/consts';
 
 import createHttpClient from '../client';
 import { Result } from '../types';
-import { AirdropCheckWalletsSubscription, AirdropCheckWalletsSubscriptionResponse } from './types';
+import {
+  AirdropCheckWalletsSubscription,
+  AirdropCheckWalletsSubscriptionResponse,
+  AirdropCheckBalanceWalletResponse,
+} from './types';
 
 const httpClient = createHttpClient(config.apiBaseUrl);
 
@@ -16,4 +20,5 @@ export const subscribeAirdropWallet = (data: WalletPayload): Promise<WalletPaylo
 
 export const checkBalance = (): Promise<Result> => httpClient.get(`/airdrop/`);
 
-export const checkBalanceWallet = (wallet: any): Promise<Result> => httpClient.get(`/airdrop/${wallet}`);
+export const checkBalanceWallet = (data: any): Promise<AirdropCheckBalanceWalletResponse> =>
+  httpClient.get(`/airdrop/${data.wallet}`);

@@ -29,7 +29,9 @@ export interface CheckBalancesResponse {
   msg?: string;
 }
 
-export interface AirdropCheckBalanceWallet {
-  badge: string;
-  balance: string;
+export interface AirdropCheckBalanceWalletResponse {
+  result: {
+    badge: string;
+    balance: string;
+  };
 }

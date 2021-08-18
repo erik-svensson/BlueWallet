@@ -130,6 +130,11 @@ enum AdditionalTags {
   UNBLOCKED = 'UNBLOCKED',
 }
 
+export interface AirdropBalance {
+  balance: number;
+  wallet: string;
+}
+
 export type TagsType = TransactionStatus | AdditionalTags;
 
 export const Tags = { ...TransactionStatus, ...AdditionalTags };
