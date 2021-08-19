@@ -10,6 +10,7 @@ export interface AppSettingsState {
   isToast: boolean;
   fcmToken: string;
   badge: number;
+  delayTime: number;
 }
 
 const initialState: AppSettingsState = {
@@ -20,6 +21,7 @@ const initialState: AppSettingsState = {
   isToast: false,
   fcmToken: '',
   badge: 0,
+  delayTime: 0,
 };
 
 export const appSettingsReducer = (state = initialState, action: AppSettingsActionType): AppSettingsState => {
@@ -58,6 +60,11 @@ export const appSettingsReducer = (state = initialState, action: AppSettingsActi
       return {
         ...state,
         badge: 0,
+      };
+    case AppSettingsAction.SetDelayTime:
+      return {
+        ...state,
+        delayTime: action.delayTime,
       };
     case AppSettingsAction.UpdateSelectedLanguage:
       return {

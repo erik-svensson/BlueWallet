@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/react-native';
+import dayjs from 'dayjs';
 import React, { Component } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { View, StyleSheet, LogBox } from 'react-native';
@@ -56,13 +57,25 @@ class App extends React.PureComponent {
   };
 
   lockScreen = () => {
+    const backDate = dayjs().add(10, 'second');
+
     store.dispatch({
-      type: AuthenticationAction.SetIsAuthenticated,
-      isAuthenticated: false,
+      type: AppSettingsAction.SetDelayTime,
+      delayTime: backDate.unix(),
     });
   };
 
   setUnlockScreenKey = () => {
+    const currentDate = dayjs().unix();
+    const delayTime = store.getState().appSettings.delayTime;
+
+    if (currentDate > delayTime) {
+      store.dispatch({
+        type: AuthenticationAction.SetIsAuthenticated,
+        isAuthenticated: false,
+      });
+    }
+
     this.setState({
       unlockKey: getNewKey(),
     });

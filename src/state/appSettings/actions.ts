@@ -7,6 +7,7 @@ export enum AppSettingsAction {
   SetFCMToken = 'SetFCMToken',
   CountBadge = 'CountBadge',
   ClearBadge = 'ClearBadge',
+  SetDelayTime = 'SetDelayTime',
 }
 
 export interface UpdateBiometricSettingAction {
@@ -43,6 +44,11 @@ export interface ClearBadgeAction {
   type: AppSettingsAction.ClearBadge;
 }
 
+export interface SetDelayTimeAction {
+  type: AppSettingsAction.SetDelayTime;
+  delayTime: number;
+}
+
 export interface UpdateSelectedLanguageAction {
   type: AppSettingsAction.UpdateSelectedLanguage;
   value: string;
@@ -56,7 +62,8 @@ export type AppSettingsActionType =
   | SetIsToastAction
   | SetFCMTokenAction
   | CountBadgeAction
-  | ClearBadgeAction;
+  | ClearBadgeAction
+  | SetDelayTimeAction;
 
 export const updateBiometricSetting = (value: boolean): UpdateBiometricSettingAction => ({
   type: AppSettingsAction.UpdateBiometricSetting,
@@ -95,4 +102,9 @@ export const countBadge = (value: number): CountBadgeAction => ({
 
 export const clearBadge = (): ClearBadgeAction => ({
   type: AppSettingsAction.ClearBadge,
+});
+
+export const setDelayTime = (delayTime: any): SetDelayTimeAction => ({
+  type: AppSettingsAction.SetDelayTime,
+  delayTime,
 });
