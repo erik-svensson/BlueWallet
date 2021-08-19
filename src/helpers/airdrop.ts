@@ -30,14 +30,14 @@ export const getCarouselItem = (
     }
   })[0];
 
-  const balance = formatToBtcvWithoutSign(data.balance);
+  const balance = formatToBtcvWithoutSign(airdropBalance.balance);
 
-  const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > data.balance);
+  const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > airdropBalance.balance);
   // TODO: edge case of "all goals reached" not covered by designs. Awaiting UX input. For now returning last one - "whale"
   const nextGoal = unreachedGoals[0] || airdropGoals[airdropGoals.length - 1];
   const nextGoalIndex = airdropGoals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
 
-  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= data.balance);
+  const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= airdropBalance.balance);
   // TODO: edge case of "none goals reached" not covered by designs. Awaiting UX input. For now returning first one - "shrimp"
   const previousGoal = reachedGoals[reachedGoals.length - 1] || airdropGoals[0];
 
@@ -51,6 +51,6 @@ export const getCarouselItem = (
       goalThreshold: isAfterAirdrop ? previousGoal.threshold : nextGoal.threshold,
       unit: CONST.preferredBalanceUnit,
     }),
-    circleFillPercentage: (data.balance / nextGoal.threshold) * 100,
+    circleFillPercentage: (airdropBalance.balance / nextGoal.threshold) * 100,
   };
 };
