@@ -100,21 +100,18 @@ class AirdropCreateWalletSubscription extends Component<Props> {
         header={<Header title={i18n.airdrop.title} />}
         footer={
           <View style={styles.buttonsContainer}>
-            <Button
-              testID="airdrop-register-no"
-              type="outline"
-              style={styles.noButton}
-              onPress={this.onNoPress}
-              title={i18n._.no}
-              disabled={isLoading}
-            />
-            <Button
-              testID="airdrop-register-yes"
-              onPress={this.onYesPress}
-              style={styles.yesButton}
-              title={i18n._.yes}
-              disabled={isLoading}
-            />
+            <View style={styles.noButtonContainer}>
+              <Button
+                testID="airdrop-register-no"
+                type="outline"
+                onPress={this.onNoPress}
+                title={i18n._.no}
+                disabled={isLoading}
+              />
+            </View>
+            <View style={styles.yesButtonContainer}>
+              <Button testID="airdrop-register-yes" onPress={this.onYesPress} title={i18n._.yes} disabled={isLoading} />
+            </View>
           </View>
         }
       >
@@ -159,9 +156,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
   },
-  buttonsContainer: { flexDirection: 'row', width: '50%' },
-  noButton: { paddingRight: 10, width: '100%' },
-  yesButton: { paddingLeft: 10, width: '100%' },
+  buttonsContainer: { display: 'flex', flexDirection: 'row', width: '100%' },
+  noButtonContainer: { flex: 1, paddingRight: 25 },
+  yesButtonContainer: { flex: 1, paddingLeft: 25 },
   shareComponent: {
     display: 'flex',
     flex: 1,
