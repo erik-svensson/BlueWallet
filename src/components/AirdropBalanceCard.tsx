@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
+import { EllipsisText } from 'app/components';
 import { AirdropCarouselCardData } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
@@ -11,7 +12,7 @@ interface Props {
 
 export const AirdropBalanceCard: FC<Props> = ({ data }) => (
   <View>
-    <Text style={styles.header}>{data.header}</Text>
+    <EllipsisText style={styles.header}>{data.header}</EllipsisText>
     <AnimatedCircularProgress
       size={155}
       width={8}

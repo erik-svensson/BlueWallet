@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
-import { Loader } from 'app/components';
+import { Loader, EllipsisText } from 'app/components';
 import { Wallet } from 'app/consts';
 import { typography, palette } from 'app/styles';
 
@@ -21,7 +21,7 @@ interface ItemProps {
 const AirdropWalletsListItem: FC<ItemProps> = ({ wallet, callToAction, loading }) => (
   <View style={styles.listElement}>
     <View style={styles.textContainer}>
-      <Text style={styles.itemName}>{wallet.label}</Text>
+      <EllipsisText style={styles.itemName}>{wallet.label}</EllipsisText>
       <Text style={styles.itemDescription}>{`${wallet.getAddressForTransaction()}`}</Text>
     </View>
     {loading ? (
