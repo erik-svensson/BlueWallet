@@ -97,6 +97,6 @@ const styles = StyleSheet.create({
     color: palette.textGrey,
   },
   buttonsContainer: { display: 'flex', flexDirection: 'row', width: '100%' },
-  notNowButtonContainer: { flex: 1, paddingRight: 10 },
-  learnMoreButtonContainer: { flex: 1, paddingLeft: 10 },
+  notNowButtonContainer: { flex: 1, paddingRight: 25 },
+  learnMoreButtonContainer: { flex: 1, paddingLeft: 25 },
 });
