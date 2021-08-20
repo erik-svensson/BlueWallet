@@ -24,11 +24,13 @@ export const getCarouselItem = (
   airdropGoals: AirdropGoal[],
   airdropsWalletBalance: [],
 ): AirdropCarouselCardData => {
-  const airdropBalance: AirdropBalance = airdropsWalletBalance.filter((obj: AirdropBalance) => {
-    if (obj.wallet === data.id) {
-      return obj.balance;
-    }
-  })[0];
+  console.log(airdropsWalletBalance);
+  const airdropBalance: AirdropBalance = (airdropsWalletBalance &&
+    airdropsWalletBalance.filter((obj: AirdropBalance) => {
+      if (obj.wallet === data.id) {
+        return obj.balance;
+      }
+    })[0]) || { wallet: data.id, balance: 0 };
 
   const balance = formatToBtcvWithoutSign(airdropBalance.balance);
 
