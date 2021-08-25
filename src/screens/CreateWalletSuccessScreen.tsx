@@ -37,19 +37,17 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
 
     //TODO: till we don't know what we have to do with seed phrase for P2SH
     if (isP2SH) {
-      if (handleNavigationSubscription) {
-        handleNavigationSubscription();
-      } else {
-        CreateMessage({
-          title: i18n.message.hooray,
-          description: i18n.message.creatingWalletSuccess,
-          type: MessageType.success,
-          buttonProps: {
-            title: i18n.onboarding.successCompletedButton,
-            onPress: () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
-          },
-        });
-      }
+      return CreateMessage({
+        title: i18n.message.hooray,
+        description: i18n.message.creatingWalletSuccess,
+        type: MessageType.success,
+        buttonProps: {
+          title: i18n._.next,
+          onPress: handleNavigationSubscription
+            ? () => handleNavigationSubscription()
+            : () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+        },
+      });
     } else {
       navigation.navigate(Route.SeedPhraseConfirm, { secret, handleNavigationSubscription });
     }
