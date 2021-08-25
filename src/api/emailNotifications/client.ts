@@ -12,6 +12,9 @@ import {
   SubscribeResponse,
   ModifyResponse,
   CheckSubscriptionResponse,
+  CheckSubscriptionPushPayload,
+  UnsubscribePushPayload,
+  UnsubscribePushResponse,
 } from './types';
 
 export enum EmailNotificationsError {
@@ -36,7 +39,7 @@ const httpClient = createHttpClient(config.apiBaseUrl);
 export const subscribeEmail = (data: SubscribePayload): Promise<SubscribeResponse> => httpClient.post(`/email/`, data);
 
 export const unsubscribeEmail = (data: UnsubscribePayload): Promise<UnsubscribePayload> =>
-  httpClient.post(`/unsubscribe/`, data);
+  httpClient.delete(`/email/`, data);
 
 export const authenticate = (data: AuthenticatePayload): Promise<AuthenticatePayload> =>
   httpClient.post(`/authenticate_email/`, data);
@@ -49,6 +52,12 @@ export const checkSubscriptionEmail = (data: CheckSubscriptionPayload): Promise<
 export const verifyEmail = (data: VerifyEmailPayload): Promise<VerifyEmailResponse> =>
   httpClient.post(`/verify_email/`, data);
 
+export const checkSubscriptionPush = (data: CheckSubscriptionPushPayload): Promise<CheckSubscriptionResponse> =>
+  httpClient.post(`/is_subscribed_push`, data);
+
 export const subscribeDeviceFCM = (data: any): Promise<any> => httpClient.post(`/push/`, data);
 
 export const removeDeviceFCM = (data: any): Promise<any> => httpClient.put(`/push/`, data);
+
+export const unsubscribePush = (data: UnsubscribePushPayload): Promise<UnsubscribePushResponse> =>
+  httpClient.delete(`/push/`, data);

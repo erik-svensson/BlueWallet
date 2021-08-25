@@ -12,6 +12,7 @@ export interface NotificationState {
   isLoading: boolean;
   sessionToken: string;
   subscribedIds: string[];
+  subscribedPushIds: string[];
   resendStartTime: number;
 }
 
@@ -23,6 +24,7 @@ const initialState: NotificationState = {
   isLoading: false,
   sessionToken: '',
   subscribedIds: [],
+  subscribedPushIds: [],
   resendStartTime: 0,
 };
 
@@ -104,6 +106,14 @@ const reducer = (state = initialState, action: NotificationActionType): Notifica
         ...state,
         error: '',
         subscribedIds: action.payload.subscribedIds,
+        isLoading: false,
+      };
+    }
+    case NotificationAction.CheckSubscriptionPushSuccessAction: {
+      return {
+        ...state,
+        error: '',
+        subscribedPushIds: action.payload.subscribedPushIds,
         isLoading: false,
       };
     }

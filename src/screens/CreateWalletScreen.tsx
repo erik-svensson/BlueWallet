@@ -20,7 +20,7 @@ import { selectors as airdropSelector } from 'app/state/airdrop';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
 import {
   subscribeWallet as subscribeWalletAction,
-  subscribeDeviceToken as subscribeDeviceTokenAction,
+  subscribePushAllWallets as subscribePushAllWalletsAction,
   SubscribeWalletActionCreator,
 } from 'app/state/notifications/actions';
 import { storedEmail, readableError } from 'app/state/notifications/selectors';
@@ -395,7 +395,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   createWallet: createWalletAction,
   subscribe: subscribeWalletAction,
-  subscribeFcmToken: subscribeDeviceTokenAction,
+  subscribeFcmToken: subscribePushAllWalletsAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateWalletScreen);

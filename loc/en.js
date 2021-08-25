@@ -61,12 +61,12 @@ module.exports = {
       name: 'Community',
       description: 'Check the rewards and community progress',
       carouselItemHeader: 'Community progress',
-      user: 'user',
-      users: 'users',
+      wallet: 'wallet',
+      wallets: 'wallets',
       airdropParticipants: 'Airdrop participants',
       goal: 'The {order} goal:', //TODO:
-      unlockToIncrease: 'Unlock to increase Airdrop to {reward}$',
-      thresholdUsers: '{threshold} users',
+      unlockToIncrease: 'Unlock to increase Airdrop to ${reward}',
+      thresholdWallets: '{threshold} wallets',
     },
     circularWalletBalance: {
       yourBalance: 'Your balance',
@@ -363,6 +363,25 @@ module.exports = {
     successSubscription: 'Hooray!\n You have successfully subscribed to notifications.',
   },
   notifications: {
+    main: {
+      header: 'Notifications',
+      title: 'Configure your notifications',
+      description: 'You can choose which notifications you want to receive.',
+    },
+    email: {
+      header: 'Email notifications',
+      description:
+        'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
+      title: 'Wallets',
+    },
+    push: {
+      header: 'Push notifications',
+      title: 'Wallets',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sit turpis elit nunc a, leo, sed neque. Aliquam pulvinar purus mi amet curabitur felis.',
+    },
+    emailNotificationsNavigate: 'Email notifications',
+    pushNotificationsNavigate: 'Push notifications',
     addYourAddress: 'Add your email address',
     addYourEmailFor: 'Add your email for notifications',
     addEmail: 'Add email',
@@ -372,8 +391,6 @@ module.exports = {
     change: 'Change your email',
     title: 'Configure your notifications',
     yourEmail: 'Your email',
-    description:
-      'You can change your email address. It is used to send you transaction notifications from chosen wallets.',
     delete: 'Delete email',
     invalidAddressError: 'Enter a valid email address',
     yourSubscriptions: 'Your subscriptions',
@@ -418,8 +435,7 @@ module.exports = {
     noSubscriptionDescription: 'You are not subscribed to any notifications.',
     genericError: "Something went wrong. We're sorry.",
     pushnotificationsSettings: {
-      title: 'Allow app notifications',
-      label: 'Settings',
+      title: 'Turn notifications on for all wallets',
     },
   },
   onboarding: {

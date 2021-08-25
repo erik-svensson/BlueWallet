@@ -205,6 +205,8 @@ export enum Route {
   AirdropRequirements = 'AirdropRequirements',
   AirdropFinishedWalletDetails = 'AirdropFinishedWalletDetails',
   Notifications = 'Notifications',
+  NotificationsEmail = 'NotificationsEmail',
+  NotificationsPush = 'NotificationsPush',
   ConfirmEmail = 'ConfirmEmail',
   ChooseWalletsForNotification = 'ChooseWalletsForNotification',
   AirdropCreateWalletSubscription = 'AirdropCreateWalletSubscription',
@@ -580,6 +582,14 @@ export type RootStackParams = {
     walletsToSubscribe?: Wallet[];
   };
   [Route.Notifications]: {
+    onBackArrow: () => void;
+    wallet: Wallet;
+  };
+  [Route.NotificationsEmail]: {
+    onBackArrow: () => void;
+    wallet: Wallet;
+  };
+  [Route.NotificationsPush]: {
     onBackArrow: () => void;
     wallet: Wallet;
   };

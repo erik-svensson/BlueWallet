@@ -17,7 +17,7 @@ import {
   CheckSubscriptionAction,
   subscribeWallet as subscribeWalletAction,
   unsubscribeWallet as unsubscribeWalletAction,
-  subscribeDeviceToken as subscribeDeviceTokenAction,
+  subscribePushAllWallets as subscribePushAllWalletsAction,
   SubscribeWalletActionCreator,
   UnsubscribeWalletActionCreator,
 } from 'app/state/notifications/actions';
@@ -320,7 +320,7 @@ const mapDispatchToProps = {
   deleteWallet: deleteWalletAction,
   subscribe: subscribeWalletAction,
   unsubscribe: unsubscribeWalletAction,
-  subscribeFcmToken: subscribeDeviceTokenAction,
+  subscribeFcmToken: subscribePushAllWalletsAction,
   checkSubscription,
 };
 

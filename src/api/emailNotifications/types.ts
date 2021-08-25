@@ -38,6 +38,11 @@ export interface CheckSubscriptionPayload {
   email: string;
 }
 
+export interface CheckSubscriptionPushPayload {
+  wallets: string[];
+  fcmToken: string;
+}
+
 export interface CheckSubscriptionResponse {
   result: boolean[];
 }
@@ -52,11 +57,25 @@ export interface VerifyEmailResponse {
 }
 
 export interface UnsubscribePayload {
-  wallets: string[];
-  email: string;
+  data: {
+    wallets: string[];
+    email: string;
+  };
 }
 
 export interface UnsubscribeEmailResponse {
+  result: Result;
+  sessionToken: string;
+}
+
+export interface UnsubscribePushPayload {
+  data: {
+    fcm: string;
+    wallets: string[];
+  };
+}
+
+export interface UnsubscribePushResponse {
   result: Result;
   sessionToken: string;
 }

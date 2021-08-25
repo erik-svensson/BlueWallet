@@ -52,6 +52,8 @@ import {
   OptionsAuthenticatorScreen,
   ChunkedQrCode,
   NotificationScreen,
+  NotificationEmailScreen,
+  NotificationPushScreen,
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
   CreateTransactionPassword,
@@ -177,6 +179,8 @@ export const RootNavigator: FC<Props> = ({
       <Stack.Screen name={Route.OptionsAuthenticator} component={OptionsAuthenticatorScreen} />
       <Stack.Screen name={Route.ChunkedQrCode} component={ChunkedQrCode} />
       <Stack.Screen name={Route.Notifications} component={NotificationScreen} />
+      <Stack.Screen name={Route.NotificationsEmail} component={NotificationEmailScreen} />
+      <Stack.Screen name={Route.NotificationsPush} component={NotificationPushScreen} />
       <Stack.Screen name={Route.ConfirmEmail} component={ConfirmEmailScreen} />
       <Stack.Screen name={Route.AirdropTermsAndConditions} component={AirdropTermsAndConditionsScreen} />
       <Stack.Screen name={Route.AirdropDashboard} component={AirdropDashboardScreen} />

@@ -20,7 +20,7 @@ import {
   setError as setErrorAction,
   startResend as startResendAction,
   resetResendTime as resetResendTimeAction,
-  subscribeDeviceToken as subscribeDeviceTokenAction,
+  subscribePushAllWallets as subscribePushAllWalletsAction,
   ResetResendTimeAction,
   StartResendAction,
 } from 'app/state/notifications/actions';
@@ -250,7 +250,7 @@ const mapDispatchToProps = {
   setError: setErrorAction,
   startResend: startResendAction,
   resetResendTime: resetResendTimeAction,
-  subscribeFcmToken: subscribeDeviceTokenAction,
+  subscribeFcmToken: subscribePushAllWalletsAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmEmailScreen);

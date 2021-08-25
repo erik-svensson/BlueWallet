@@ -55,3 +55,4 @@ export { AirdropWalletsList } from './AirdropWalletsList';
 export { TimeoutButton } from './TimeoutButton';
 export { Tags } from './Tags';
 export { Tag } from './Tag';
+export { StyledSwitch } from './StyledSwitch';

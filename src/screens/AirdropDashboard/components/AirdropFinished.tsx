@@ -37,7 +37,12 @@ const CallToAction: FC<CallToActionProps> = ({ data, navigation }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.arrowContainer} testID="forward-button" onPress={() => goToWalletDetails(data)}>
+    <TouchableOpacity
+      style={styles.arrowContainer}
+      testID="forward-button"
+      onPress={() => goToWalletDetails(data)}
+      hitSlop={{ top: 30, left: 30, bottom: 30, right: 30 }}
+    >
       <Image style={styles.image} source={images.forwardArrow} />
     </TouchableOpacity>
   );

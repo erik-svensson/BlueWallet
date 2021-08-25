@@ -42,7 +42,7 @@ export const CommunityGoalsListItem: FC<CommunityGoalsListItemProps> = props => 
         borderRadius={20}
       />
       <Text style={styles.threshold}>
-        {i18n.formatString(i18n.airdrop.community.thresholdUsers, {
+        {i18n.formatString(i18n.airdrop.community.thresholdWallets, {
           threshold,
         })}
       </Text>

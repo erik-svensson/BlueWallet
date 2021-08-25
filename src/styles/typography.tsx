@@ -79,7 +79,7 @@ export const typography = StyleSheet.create({
     fontSize: 21,
   },
   subtitle6: {
-    fontFamily: fonts.ubuntu.medium,
+    fontFamily: fonts.ubuntu.regular,
     fontSize: 14,
     lineHeight: 19,
   },

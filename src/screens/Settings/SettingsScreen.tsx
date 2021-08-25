@@ -13,7 +13,7 @@ import { logoSource } from 'app/helpers/images';
 import { BiometricService, AppStateManager } from 'app/services';
 import { ApplicationState } from 'app/state';
 import { updateBiometricSetting } from 'app/state/appSettings/actions';
-import { unsubscribeDeviceToken } from 'app/state/notifications/actions';
+import { unsubscribePushAllWallets } from 'app/state/notifications/actions';
 import { fonts, palette, typography } from 'app/styles';
 
 import { LabeledSettingsRow } from './LabeledSettingsRow';
@@ -121,7 +121,7 @@ export const SettingsScreen = (props: Props) => {
   };
 
   const handleYesButton = () => {
-    dispatch(unsubscribeDeviceToken());
+    dispatch(unsubscribePushAllWallets());
     factoryReset();
   };
 

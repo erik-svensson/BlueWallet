@@ -25,7 +25,7 @@ import {
   checkSubscription,
   CheckSubscriptionAction,
   subscribeWallet as subscribeWalletAction,
-  subscribeDeviceToken as subscribeDeviceTokenAction,
+  subscribePushAllWallets as subscribePushAllWalletsAction,
   SubscribeWalletActionCreator,
 } from 'app/state/notifications/actions';
 import { isNotificationEmailSet, storedEmail, readableError } from 'app/state/notifications/selectors';
@@ -609,7 +609,7 @@ const mapDispatchToProps = {
   importWallet: importWalletAction,
   checkSubscription,
   subscribe: subscribeWalletAction,
-  subscribeFcmToken: subscribeDeviceTokenAction,
+  subscribeFcmToken: subscribePushAllWalletsAction,
 };
 
 export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(ImportWalletScreen);

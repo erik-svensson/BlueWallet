@@ -58,6 +58,8 @@ export { default as LocalConfirmNotificationCodeScreen } from './LocalConfirmNot
 export { default as AirdropCreateWalletSubscription } from './AirdropCreateWalletSubscription';
 export {
   NotificationScreen,
+  NotificationEmailScreen,
+  NotificationPushScreen,
   ConfirmEmailScreen,
   ChooseWalletsForNotificationScreen,
   AddNotificationEmailScreen,

@@ -49,11 +49,11 @@ export const getCommunityItem = createSelector(local, state => {
   return {
     header: i18n.airdrop.community.carouselItemHeader,
     circleInnerFirstLine: `${usersQuantity} ${
-      usersQuantity == 1 ? i18n.airdrop.community.user : i18n.airdrop.community.users
+      usersQuantity == 1 ? i18n.airdrop.community.wallet : i18n.airdrop.community.wallets
     }`,
     circleInnerSecondLine: i18n.airdrop.community.airdropParticipants,
     footerFirstLine: getReadableCommunityGoals()[nextGoalIndex],
-    footerSecondLine: `${nextGoal.threshold} ${i18n.airdrop.community.users}`,
+    footerSecondLine: `${nextGoal.threshold} ${i18n.airdrop.community.wallets}`,
     circleFillPercentage: (usersQuantity / nextGoal.threshold) * 100,
   };
 });

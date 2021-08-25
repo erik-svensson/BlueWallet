@@ -24,6 +24,8 @@ import { WalletsState } from './reducer';
 
 const local = (state: ApplicationState): WalletsState => state.wallets;
 const store = (state: ApplicationState) => state;
+
+export const subscribedPushIds = createSelector(store, state => state.notifications.subscribedPushIds);
 const subscribedIds = createSelector(store, state => state.notifications.subscribedIds);
 
 export const wallets = createSelector(local, state => {
@@ -103,6 +105,10 @@ export const allWallets = createSelector(wallets, allWallet, (walletsList, aw) =
 });
 
 export const subscribedWallets = createSelector(subscribedIds, wallets, (ids, walletsList) =>
+  walletsList.filter(wallet => ids.some(id => id === wallet.id)),
+);
+
+export const subscribedWalletsPush = createSelector(subscribedPushIds, wallets, (ids, walletsList) =>
   walletsList.filter(wallet => ids.some(id => id === wallet.id)),
 );
 

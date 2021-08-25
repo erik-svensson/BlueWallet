@@ -103,6 +103,18 @@ export const AirdropInProgressContent: FC<Props> = ({
             setRef={setRef}
             onItemSnap={onCarouselItemSnap}
           />
+          {availableWallets?.length > 0 && !communityCarouselActive && (
+            <View style={styles.walletsListContainer}>
+              <AirdropWalletsList
+                wallets={availableWallets}
+                title={i18n.airdrop.dashboard.availableWallets}
+                itemCallToAction={(wallet: Wallet) => (
+                  <AvailableWalletAction onActionClick={() => _subscribeWallet(wallet)} />
+                )}
+                loadingWalletsIds={loadingWalletsIds}
+              />
+            </View>
+          )}
           {!communityCarouselActive && (
             <View style={styles.walletsListContainer}>
               <AirdropWalletsList
@@ -120,18 +132,6 @@ export const AirdropInProgressContent: FC<Props> = ({
           <Image source={images.airdrop} style={styles.airdropImage} />
           <Text style={styles.description}>{i18n.airdrop.dashboard.desc2}</Text>
         </>
-      )}
-      {availableWallets?.length > 0 && !communityCarouselActive && (
-        <View style={styles.walletsListContainer}>
-          <AirdropWalletsList
-            wallets={availableWallets}
-            title={i18n.airdrop.dashboard.availableWallets}
-            itemCallToAction={(wallet: Wallet) => (
-              <AvailableWalletAction onActionClick={() => _subscribeWallet(wallet)} />
-            )}
-            loadingWalletsIds={loadingWalletsIds}
-          />
-        </View>
       )}
       {userHasSubscribedWallets && !communityCarouselActive && (
         <View style={styles.communitySectionContainer}>

@@ -27,8 +27,11 @@ export enum NotificationAction {
   UpdateNotificationEmailFailureAction = 'UpdateNotificationEmailFailureAction',
   StartResendAction = 'StartResendAction',
   ResetResendTimeAction = 'ResetResendTimeAction',
-  UnsubscribeDeviceTokenAction = 'UnsubscribeDeviceTokenAction',
-  SubscribeDeviceTokenAction = 'SubscribeDeviceTokenAction',
+  CheckSubscriptionPushAction = 'CheckSubscriptionPushAction',
+  CheckSubscriptionPushSuccessAction = 'CheckSubscriptionPushSuccessAction',
+  CheckSubscriptionPushFailureAction = 'CheckSubscriptionPushFailureAction',
+  UnsubscribePushAllWalletsAction = 'UnsubscribePushAllWalletsAction',
+  SubscribePushAllWalletsAction = 'SubscribePushAllWalletsAction',
 }
 
 export interface SetErrorAction {
@@ -146,6 +149,22 @@ export interface CheckSubscriptionFailureAction {
   error: string;
 }
 
+export interface CheckSubscriptionPushAction {
+  type: NotificationAction.CheckSubscriptionPushAction;
+  payload: { wallets: Wallet[] };
+  meta?: ActionMeta;
+}
+export interface CheckSubscriptionPushSuccessAction {
+  type: NotificationAction.CheckSubscriptionPushSuccessAction;
+  payload: {
+    subscribedPushIds: string[];
+  };
+}
+export interface CheckSubscriptionPushFailureAction {
+  type: NotificationAction.CheckSubscriptionPushFailureAction;
+  error: string;
+}
+
 export interface UpdateNotificationEmailAction {
   type: NotificationAction.UpdateNotificationEmailAction;
   payload: { wallets: Wallet[]; currentEmail: string; newEmail: string };
@@ -170,12 +189,12 @@ export interface ResetResendTimeAction {
   type: NotificationAction.ResetResendTimeAction;
 }
 
-export interface UnsubscribeDeviceTokenAction {
-  type: NotificationAction.UnsubscribeDeviceTokenAction;
+export interface UnsubscribePushAllWalletsAction {
+  type: NotificationAction.UnsubscribePushAllWalletsAction;
 }
 
-export interface SubscribeDeviceTokenAction {
-  type: NotificationAction.SubscribeDeviceTokenAction;
+export interface SubscribePushAllWalletsAction {
+  type: NotificationAction.SubscribePushAllWalletsAction;
   payload: { wallets: Wallet[] };
 }
 
@@ -199,14 +218,17 @@ export type NotificationActionType =
   | CheckSubscriptionAction
   | CheckSubscriptionSuccessAction
   | CheckSubscriptionFailureAction
+  | CheckSubscriptionPushAction
+  | CheckSubscriptionPushSuccessAction
+  | CheckSubscriptionPushFailureAction
   | SetErrorAction
   | UpdateNotificationEmailAction
   | UpdateNotificationEmailSuccessAction
   | UpdateNotificationEmailFailureAction
   | StartResendAction
   | ResetResendTimeAction
-  | UnsubscribeDeviceTokenAction
-  | SubscribeDeviceTokenAction;
+  | UnsubscribePushAllWalletsAction
+  | SubscribePushAllWalletsAction;
 
 export type CreateNotificationEmailActionCreator = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 export const createNotificationEmail: CreateNotificationEmailActionCreator = (email, meta) => ({
@@ -336,6 +358,28 @@ export const checkSubscriptionFailure = (error: string): CheckSubscriptionFailur
   error,
 });
 
+export type CheckSubscriptionPushActionCreator = (wallets: Wallet[], meta?: ActionMeta) => CheckSubscriptionPushAction;
+
+export const checkSubscriptionPush: CheckSubscriptionPushActionCreator = (wallets, meta) => ({
+  type: NotificationAction.CheckSubscriptionPushAction,
+  payload: {
+    wallets,
+  },
+  meta,
+});
+
+export const checkSubscriptionPushSuccess = (subscribedPushIds: string[]): CheckSubscriptionPushSuccessAction => ({
+  type: NotificationAction.CheckSubscriptionPushSuccessAction,
+  payload: {
+    subscribedPushIds,
+  },
+});
+
+export const checkSubscriptionPushFailure = (error: string): CheckSubscriptionPushFailureAction => ({
+  type: NotificationAction.CheckSubscriptionPushFailureAction,
+  error,
+});
+
 export type SetErrorActionCreator = (error: string) => SetErrorAction;
 export const setError: SetErrorActionCreator = error => ({
   type: NotificationAction.SetErrorAction,
@@ -384,11 +428,11 @@ export const resetResendTime = (): ResetResendTimeAction => ({
   type: NotificationAction.ResetResendTimeAction,
 });
 
-export const unsubscribeDeviceToken = (): UnsubscribeDeviceTokenAction => ({
-  type: NotificationAction.UnsubscribeDeviceTokenAction,
+export const unsubscribePushAllWallets = (): UnsubscribePushAllWalletsAction => ({
+  type: NotificationAction.UnsubscribePushAllWalletsAction,
 });
 
-export const subscribeDeviceToken = (wallets: Wallet[]): SubscribeDeviceTokenAction => ({
-  type: NotificationAction.SubscribeDeviceTokenAction,
+export const subscribePushAllWallets = (wallets: Wallet[]): SubscribePushAllWalletsAction => ({
+  type: NotificationAction.SubscribePushAllWalletsAction,
   payload: { wallets },
 });
