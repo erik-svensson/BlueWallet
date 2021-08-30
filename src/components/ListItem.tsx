@@ -46,7 +46,7 @@ export const ListItem = ({
     if (isSwitch()) {
       setSwitchValueState(switchValue!);
     }
-  }, []);
+  }, [switchValue, isSwitch]);
 
   const handleOnItemPress = () => {
     !!onPress && onPress();

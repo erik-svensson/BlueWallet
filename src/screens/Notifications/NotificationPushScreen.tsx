@@ -12,7 +12,7 @@ import { pushnotificationsEnabled } from 'app/state/appSettings/selectors';
 import {
   CheckSubscriptionPushAction,
   checkSubscriptionPush as checkSubscriptionPushAction,
-  unsubscribePushAllWallets as unsubscribePushAllWalletsAction,
+  unsubscribePushWallet as unsubscribePushWalletAction,
   subscribePushAllWallets as subscribePushAllWalletsAction,
 } from 'app/state/notifications/actions';
 import { storedEmail } from 'app/state/notifications/selectors';
@@ -26,12 +26,12 @@ interface Props {
   route: RouteProp<RootStackParams, Route.Notifications>;
   email: string;
   updatePushnotificationsSettings: (value: boolean) => void;
-  unsubscribePushAllWallets: () => void;
   checkSubscriptionPush: (wallets: Wallet[]) => CheckSubscriptionPushAction;
   subscribedWalletsPush: string[];
   wallets: Wallet[];
   isPushnotificationsEnabled: boolean;
   subscribePushWallet: (wallet: Wallet[]) => void;
+  unsubscribePushWallet: (wallet: Wallet[]) => void;
 }
 export class NotificationScreen extends Component<Props> {
   componentDidMount() {
@@ -41,12 +41,11 @@ export class NotificationScreen extends Component<Props> {
   }
 
   onSwitchPress = (item: Wallet) => {
-    const { subscribedWalletsPush, subscribePushWallet, wallets } = this.props;
-    //TODO:
+    const { subscribedWalletsPush, subscribePushWallet, wallets, unsubscribePushWallet } = this.props;
     const selectedWallet = wallets.filter((wallet: Wallet) => wallet.id === item.id)[0];
 
     if (subscribedWalletsPush.includes(item.id)) {
-      // TODO: unsuscribe
+      unsubscribePushWallet([selectedWallet]);
     } else {
       subscribePushWallet([selectedWallet]);
     }
@@ -73,12 +72,14 @@ export class NotificationScreen extends Component<Props> {
   };
 
   handlePushnotificationsAllWalletChange = (value: boolean) => {
-    this.props.updatePushnotificationsSettings(value);
+    const { updatePushnotificationsSettings, unsubscribePushWallet, subscribePushWallet, wallets } = this.props;
+
+    updatePushnotificationsSettings(value);
 
     if (!value) {
-      this.props.unsubscribePushAllWallets();
+      unsubscribePushWallet(wallets);
     } else {
-      this.props.subscribePushWallet(this.props.wallets);
+      subscribePushWallet(wallets);
     }
   };
 
@@ -139,8 +140,8 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   checkSubscriptionPush: checkSubscriptionPushAction,
   updatePushnotificationsSettings: updatePushnotificationsSettingsAction,
-  unsubscribePushAllWallets: unsubscribePushAllWalletsAction,
   subscribePushWallet: subscribePushAllWalletsAction,
+  unsubscribePushWallet: unsubscribePushWalletAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationScreen);

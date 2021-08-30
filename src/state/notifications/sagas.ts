@@ -7,15 +7,19 @@ import {
   checkSubscriptionEmail,
   unsubscribeEmail,
   modifyEmail,
-  subscribeDeviceFCM,
+  subscribePush,
   removeDeviceFCM,
+  checkSubscriptionPush as checkSubscriptionPushApi,
+  unsubscribePush,
 } from 'app/api/emailNotifications/client';
 import { Wallet } from 'app/consts';
 import { decryptCode } from 'app/helpers/decode';
 import { getWalletHashedPublicKeys } from 'app/helpers/wallets';
 
+import { updatePushnotificationsSetting } from '../appSettings/actions';
 import * as appSettingsSelectors from '../appSettings/selectors';
-import { prepareWallets, WalletsAction } from '../wallets/actions';
+import { prepareWallets, WalletsAction, authenticateWallet } from '../wallets/actions';
+import * as walletsSelectors from '../wallets/selectors';
 import {
   createNotificationEmailFailure,
   createNotificationEmailSuccess,
@@ -39,7 +43,11 @@ import {
   UpdateNotificationEmailAction,
   updateNotificationEmailSuccess,
   updateNotificationEmailFailure,
-  SubscribeDeviceTokenAction,
+  SubscribePushAllWalletsAction,
+  CheckSubscriptionPushAction,
+  checkSubscriptionPushFailure,
+  checkSubscriptionPushSuccess,
+  UnsubscribePushWalletAction,
 } from './actions';
 
 export function* createNotificationEmailSaga(action: CreateNotificationEmailAction | unknown) {
@@ -129,7 +137,7 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
   try {
     const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
-    const { session_token } = yield call(unsubscribeEmail, { wallets: hashes, email });
+    const { session_token } = yield call(unsubscribeEmail, { data: { wallets: hashes, email } });
 
     yield put(unsubscribeWalletSuccess(session_token));
 
@@ -227,28 +235,143 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
   }
 }
 
-export function* unsubscribeDeviceTokenSaga() {
+export function* checkSubscriptionPushSaga(action: CheckSubscriptionPushAction) {
+  const {
+    meta,
+    payload: { wallets },
+  } = action;
+
+  try {
+    const fcm: string = yield select(appSettingsSelectors.fcmToken);
+
+    if (fcm) {
+      const walletWithHashes: Wallet[] = yield Promise.all(
+        wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
+      );
+      const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
+      const response: CheckSubscriptionResponse = yield call(checkSubscriptionPushApi as any, {
+        wallets: hashes,
+        fcm,
+      });
+      const ids: string[] = [];
+
+      walletWithHashes.forEach((wallet: Wallet, index: number) => {
+        if (response.result[index]) {
+          ids.push(wallet.id);
+        }
+      });
+
+      yield put(checkSubscriptionPushSuccess(ids));
+
+      if (meta?.onSuccess) {
+        meta.onSuccess(ids);
+      }
+    } else {
+      yield put(checkSubscriptionPushFailure('No fcmToken assigned to account'));
+    }
+  } catch (error) {
+    yield put(checkSubscriptionPushFailure(error.message));
+
+    if (meta?.onFailure) {
+      meta.onFailure(error.message);
+    }
+  }
+}
+
+export function* unsubscribePushAllWalletsSaga() {
   const fcm: string = yield select(appSettingsSelectors.fcmToken);
 
   yield call(removeDeviceFCM, { fcm });
 }
 
-export function* subscribeDeviceTokenSaga(action: SubscribeDeviceTokenAction) {
-  const { payload: wallets } = action;
+export function* unsubscribePushWalletSaga(action: UnsubscribePushWalletAction) {
+  const {
+    payload: { wallets },
+  } = action;
 
-  const fcm: string = yield select(appSettingsSelectors.fcmToken);
-  const language: string = yield select(appSettingsSelectors.language);
-  const isPushnotificationsEnabled: boolean = yield select(appSettingsSelectors.pushnotificationsEnabled);
+  try {
+    const fcm: string = yield select(appSettingsSelectors.fcmToken);
+    const isPushnotificationsEnabled: boolean = yield select(appSettingsSelectors.pushnotificationsEnabled);
+    const subscribedPushIds: string[] = yield select(walletsSelectors.subscribedPushIds);
 
-  if (isPushnotificationsEnabled) {
-    const hashes: string[] = yield all(wallets.wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
+    if (fcm) {
+      const walletWithHashes: Wallet[] = yield Promise.all(
+        wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
+      );
 
-    yield call(subscribeDeviceFCM, {
-      fcm,
-      wallets: hashes,
-      language,
-    });
-  }
+      const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
+      //@ts-ignore
+      const response: any = yield call(unsubscribePush as any, {
+        data: {
+          wallets: hashes,
+          fcm,
+        },
+      });
+
+      const parsedWalletDataToActivate = {
+        session_token: response.session_token,
+        data: response.result,
+      };
+
+      yield put(authenticateWallet(parsedWalletDataToActivate));
+
+      if (wallets.length === 1) {
+        const filteredSubscribedPushIds = subscribedPushIds.filter(id => id !== wallets[0].id);
+
+        yield put(checkSubscriptionPushSuccess([...filteredSubscribedPushIds]));
+      } else {
+        yield put(checkSubscriptionPushSuccess([]));
+      }
+
+      if (wallets.length === 1 && isPushnotificationsEnabled) {
+        yield put(updatePushnotificationsSetting(false));
+      }
+    }
+  } catch (error) {}
+}
+
+export function* subscribePushWalletsSaga(action: SubscribePushAllWalletsAction) {
+  const {
+    payload: { wallets },
+  } = action;
+
+  try {
+    yield put(prepareWallets(wallets));
+
+    const walletWithHashes: Wallet[] = yield Promise.all(
+      wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
+    );
+
+    const { type } = yield take([WalletsAction.PrepareWalletsSuccess, WalletsAction.PrepareWalletsFailure]);
+
+    if (type === WalletsAction.PrepareWalletsSuccess) {
+      const fcm: string = yield select(appSettingsSelectors.fcmToken);
+      const language: string = yield select(appSettingsSelectors.language);
+      const isPushnotificationsEnabled: boolean = yield select(appSettingsSelectors.pushnotificationsEnabled);
+      const subscribedPushIds: string[] = yield select(walletsSelectors.subscribedPushIds);
+      const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
+
+      yield call(subscribePush, {
+        fcm,
+        wallets: hashes,
+        language,
+      });
+      const ids: string[] = [];
+
+      walletWithHashes.forEach((wallet: Wallet, index: number) => {
+        ids.push(wallet.id);
+      });
+
+      if (wallets.length === 1) {
+        yield put(checkSubscriptionPushSuccess([...subscribedPushIds, ...ids]));
+      } else {
+        yield put(checkSubscriptionPushSuccess(ids));
+      }
+      if (wallets.length === subscribedPushIds.length && !isPushnotificationsEnabled) {
+        yield put(updatePushnotificationsSetting(true));
+      }
+    }
+  } catch (error) {}
 }
 
 export default [
@@ -259,6 +382,8 @@ export default [
   takeEvery(NotificationAction.AuthenticateEmailAction, authenticateEmailSaga),
   takeEvery(NotificationAction.UnsubscribeWalletAction, unsubscribeWalletSaga),
   takeLatest(NotificationAction.UpdateNotificationEmailAction, updateEmailSaga),
-  takeEvery(NotificationAction.UnsubscribeDeviceTokenAction, unsubscribeDeviceTokenSaga),
-  takeEvery(NotificationAction.SubscribeDeviceTokenAction, subscribeDeviceTokenSaga),
+  takeLatest(NotificationAction.CheckSubscriptionPushAction, checkSubscriptionPushSaga),
+  takeEvery(NotificationAction.UnsubscribePushAllWalletsAction, unsubscribePushAllWalletsSaga),
+  takeEvery(NotificationAction.SubscribePushAllWalletsAction, subscribePushWalletsSaga),
+  takeEvery(NotificationAction.UnsubscribePushWalletAction, unsubscribePushWalletSaga),
 ];

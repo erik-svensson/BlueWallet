@@ -32,6 +32,7 @@ export enum NotificationAction {
   CheckSubscriptionPushFailureAction = 'CheckSubscriptionPushFailureAction',
   UnsubscribePushAllWalletsAction = 'UnsubscribePushAllWalletsAction',
   SubscribePushAllWalletsAction = 'SubscribePushAllWalletsAction',
+  UnsubscribePushWalletAction = 'UnsubscribePushWalletAction',
 }
 
 export interface SetErrorAction {
@@ -193,6 +194,10 @@ export interface UnsubscribePushAllWalletsAction {
   type: NotificationAction.UnsubscribePushAllWalletsAction;
 }
 
+export interface UnsubscribePushWalletAction {
+  type: NotificationAction.UnsubscribePushWalletAction;
+  payload: { wallets: Wallet[] };
+}
 export interface SubscribePushAllWalletsAction {
   type: NotificationAction.SubscribePushAllWalletsAction;
   payload: { wallets: Wallet[] };
@@ -228,7 +233,8 @@ export type NotificationActionType =
   | StartResendAction
   | ResetResendTimeAction
   | UnsubscribePushAllWalletsAction
-  | SubscribePushAllWalletsAction;
+  | SubscribePushAllWalletsAction
+  | UnsubscribePushWalletAction;
 
 export type CreateNotificationEmailActionCreator = (email: string, meta?: ActionMeta) => CreateNotificationEmailAction;
 export const createNotificationEmail: CreateNotificationEmailActionCreator = (email, meta) => ({
@@ -434,5 +440,10 @@ export const unsubscribePushAllWallets = (): UnsubscribePushAllWalletsAction => 
 
 export const subscribePushAllWallets = (wallets: Wallet[]): SubscribePushAllWalletsAction => ({
   type: NotificationAction.SubscribePushAllWalletsAction,
+  payload: { wallets },
+});
+
+export const unsubscribePushWallet = (wallets: Wallet[]): UnsubscribePushWalletAction => ({
+  type: NotificationAction.UnsubscribePushWalletAction,
   payload: { wallets },
 });

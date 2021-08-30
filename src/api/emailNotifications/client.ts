@@ -55,9 +55,9 @@ export const verifyEmail = (data: VerifyEmailPayload): Promise<VerifyEmailRespon
 export const checkSubscriptionPush = (data: CheckSubscriptionPushPayload): Promise<CheckSubscriptionResponse> =>
   httpClient.post(`/is_subscribed_push`, data);
 
-export const subscribeDeviceFCM = (data: any): Promise<any> => httpClient.post(`/push/`, data);
-
-export const removeDeviceFCM = (data: any): Promise<any> => httpClient.put(`/push/`, data);
+export const subscribePush = (data: any): Promise<any> => httpClient.post(`/push/`, data);
 
 export const unsubscribePush = (data: UnsubscribePushPayload): Promise<UnsubscribePushResponse> =>
   httpClient.delete(`/push/`, data);
+
+export const removeDeviceFCM = (data: any): Promise<any> => httpClient.put(`/push/`, data);

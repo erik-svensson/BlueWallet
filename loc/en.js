@@ -378,7 +378,7 @@ module.exports = {
       header: 'Push notifications',
       title: 'Wallets',
       description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sit turpis elit nunc a, leo, sed neque. Aliquam pulvinar purus mi amet curabitur felis.',
+        'You can change your push notifications settings. It is used to send you transaction notifications from chosen wallets.',
     },
     emailNotificationsNavigate: 'Email notifications',
     pushNotificationsNavigate: 'Push notifications',
