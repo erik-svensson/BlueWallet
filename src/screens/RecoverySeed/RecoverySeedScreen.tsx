@@ -119,7 +119,10 @@ export class RecoverySeedScreen extends Component<Props, State> {
             });
           } catch (e) {
             this.setState({ isLoading: false });
-            Alert.alert(e.message);
+
+            if (e instanceof Error) {
+              Alert.alert(e.message);
+            }
           }
         });
       },

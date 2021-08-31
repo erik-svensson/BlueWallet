@@ -65,6 +65,7 @@ export class TextAreaItem extends PureComponent<Props, State> {
 const styles = StyleSheet.create({
   input: {
     ...typography.caption,
+    color: palette.textBlack,
     height: 100,
     padding: 16,
     paddingTop: 16,

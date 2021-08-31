@@ -654,8 +654,8 @@ module.exports = {
       nameLabel: 'Nombre ',
       showWalletXPUB: 'Mostrar monedero XPUB ',
       typeLabel: 'Tipo',
-      subscribeWallet: 'Suscribirse a las notificaciones por correo electrónico ',
-      unsubscribeWallet: 'Darse de baja de las notificaciones por correo electrónico ',
+      subscribeWallet: 'Suscribirse a las notificaciones por email',
+      unsubscribeWallet: 'Darse de baja de las notificaciones por email ',
     },
     errors: {
       duplicatedPublicKey: 'La clave pública ya ha sido añadida ',

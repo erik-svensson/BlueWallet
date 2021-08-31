@@ -396,15 +396,17 @@ class SendCoinsScreen extends Component<Props, State> {
                 }),
               );
             } catch (error) {
-              CreateMessage({
-                title: i18n.send.error.title,
-                description: error.message,
-                type: MessageType.error,
-                buttonProps: {
-                  title: i18n._.cancel,
-                  onPress: this.confirmTransaction,
-                },
-              });
+              if (error instanceof Error) {
+                CreateMessage({
+                  title: i18n.send.error.title,
+                  description: error.message,
+                  type: MessageType.error,
+                  buttonProps: {
+                    title: i18n._.cancel,
+                    onPress: this.confirmTransaction,
+                  },
+                });
+              }
             }
           });
         }
@@ -433,8 +435,10 @@ class SendCoinsScreen extends Component<Props, State> {
     try {
       await this.createTransactionByWallet(wallet);
     } catch (err) {
-      Alert.alert(err.message);
       this.setState({ isLoading: false });
+      if (err instanceof Error) {
+        Alert.alert(err.message);
+      }
     }
   };
 

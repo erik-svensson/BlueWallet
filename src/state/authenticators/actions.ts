@@ -89,7 +89,7 @@ export interface UpdateAuthenticatorSuccessAction {
 
 export interface UpdateAuthenticatorFailureAction {
   type: AuthenticatorsAction.UpdateAuthenticatorFailure;
-  error: Error;
+  error: string;
 }
 
 export type AuthenticatorsActionType =
@@ -185,7 +185,7 @@ export const updateAuthenticatorSuccess = (authenticator: IAuthenticator): Updat
   authenticator,
 });
 
-export const updateAuthenticatorFailure = (error: Error): UpdateAuthenticatorFailureAction => ({
+export const updateAuthenticatorFailure = (error: string): UpdateAuthenticatorFailureAction => ({
   type: AuthenticatorsAction.UpdateAuthenticatorFailure,
   error,
 });
