@@ -16,6 +16,9 @@ The first ever Bitcoin Vault wallet.
 * For iOS: 
     * Xcode
     * [CocoaPods](https://cocoapods.org/)
+* Supported devices:
+    * iOS 14+
+    * Android 8+
 
 **If you haven't launched any React Native projects before, you should check [Setting up the development environment · React Native](https://reactnative.dev/docs/environment-setup) to set up your local development environment correctly.**
 
