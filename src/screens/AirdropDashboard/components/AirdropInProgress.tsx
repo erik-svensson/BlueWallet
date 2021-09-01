@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { Countdown } from 'app/components';
-import { CONST, Wallet } from 'app/consts';
+import { Wallet } from 'app/consts';
 import { selectors } from 'app/state/airdrop';
 import { SubscribeWalletActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';

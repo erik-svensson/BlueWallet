@@ -24,7 +24,6 @@ export const getCarouselItem = (
   airdropGoals: AirdropGoal[],
   airdropsWalletBalance: [],
 ): AirdropCarouselCardData => {
-  console.log(airdropsWalletBalance);
   const airdropBalance: AirdropBalance = (airdropsWalletBalance &&
     airdropsWalletBalance.filter((obj: AirdropBalance) => {
       if (obj.wallet === data.id) {

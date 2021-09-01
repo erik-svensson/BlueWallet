@@ -349,6 +349,7 @@ export function* subscribePushWalletsSaga(action: SubscribePushAllWalletsAction)
       const language: string = yield select(appSettingsSelectors.language);
       const isPushnotificationsEnabled: boolean = yield select(appSettingsSelectors.pushnotificationsEnabled);
       const subscribedPushIds: string[] = yield select(walletsSelectors.subscribedPushIds);
+      const allWallets: string[] = yield select(walletsSelectors.allWallets);
       const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
       yield call(subscribePush, {
@@ -358,16 +359,13 @@ export function* subscribePushWalletsSaga(action: SubscribePushAllWalletsAction)
       });
       const ids: string[] = [];
 
-      walletWithHashes.forEach((wallet: Wallet, index: number) => {
+      walletWithHashes.forEach((wallet: Wallet) => {
         ids.push(wallet.id);
       });
 
-      if (wallets.length === 1) {
-        yield put(checkSubscriptionPushSuccess([...subscribedPushIds, ...ids]));
-      } else {
-        yield put(checkSubscriptionPushSuccess(ids));
-      }
-      if (wallets.length === subscribedPushIds.length && !isPushnotificationsEnabled) {
+      yield put(checkSubscriptionPushSuccess([...subscribedPushIds, ...ids]));
+
+      if (allWallets.length - 1 === subscribedPushIds.length + 1 && !isPushnotificationsEnabled) {
         yield put(updatePushnotificationsSetting(true));
       }
     }

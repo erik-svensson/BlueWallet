@@ -33,7 +33,7 @@ export const airdropsWalletBalance = createSelector(local, state => state.airdro
 
 export const getFormattedAirdropDate = createSelector(
   local,
-  state => `${formatDate(state.endAirdrop as string, 'DD/MM/YYYY h a')} ${getTimezoneOffset()}`,
+  state => `${formatDate(state.endAirdrop as string, 'DD/MM/YYYY h A')} ${getTimezoneOffset()}`,
 );
 
 export const isAfterAirdrop = createSelector(local, state => isAfter(new Date(), state.endAirdrop));

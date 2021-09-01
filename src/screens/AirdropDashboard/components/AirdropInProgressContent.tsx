@@ -9,6 +9,7 @@ import { Wallet, AirdropCarouselCardData } from 'app/consts';
 import { getCarouselItem } from 'app/helpers/airdrop';
 import { selectors } from 'app/state/airdrop';
 import { SubscribeWalletActionCreator } from 'app/state/airdrop/actions';
+import { selectors as walletsSelectors } from 'app/state/wallets';
 import { typography, palette } from 'app/styles';
 
 import { AvailableWalletAction, RegisteredWalletAction, CommunitySection, CommunityAchievementsList } from './';
@@ -35,6 +36,7 @@ export const AirdropInProgressContent: FC<Props> = ({
 }) => {
   const isAfterAirdrop = useSelector(selectors.isAfterAirdrop);
   const airdropGoals = useSelector(selectors.badges);
+  const allWallets = useSelector(walletsSelectors.allWallets);
   const getCommunityItem = useSelector(selectors.getCommunityItem);
   const airdropsWalletBalance = useSelector(selectors.airdropsWalletBalance);
   const [communityCarouselActive, setCommunityCarouselActive] = useState(false);
@@ -75,7 +77,7 @@ export const AirdropInProgressContent: FC<Props> = ({
     setCommunityCarouselActive(index === subscribedWallets.length);
   };
 
-  const userHasSubscribedWallets = subscribedWallets?.length > 0;
+  const userHasSubscribedWallets = subscribedWallets?.length > 0 || allWallets.length > 0;
 
   const getCarouselItems = (subscribedWallets: Wallet[]): AirdropCarouselCardData[] => {
     const renderableWallets = subscribedWallets.map(data =>

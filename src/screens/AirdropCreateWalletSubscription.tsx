@@ -175,7 +175,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',
-    marginTop: 8,
   },
   facebookButtonContainer: {
     marginRight: 23,
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     display: 'flex',
     flex: 1,
-    marginTop: 19,
+    marginTop: 10,
     marginBottom: 10,
   },
 });

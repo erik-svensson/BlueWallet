@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate, ListItem, EllipsisText, StyledSwitch } from 'app/components';
@@ -42,6 +42,7 @@ export class NotificationScreen extends Component<Props> {
 
   onSwitchPress = (item: Wallet) => {
     const { subscribedWalletsPush, subscribePushWallet, wallets, unsubscribePushWallet } = this.props;
+
     const selectedWallet = wallets.filter((wallet: Wallet) => wallet.id === item.id)[0];
 
     if (subscribedWalletsPush.includes(item.id)) {
@@ -72,18 +73,24 @@ export class NotificationScreen extends Component<Props> {
   };
 
   handlePushnotificationsAllWalletChange = (value: boolean) => {
-    const { updatePushnotificationsSettings, unsubscribePushWallet, subscribePushWallet, wallets } = this.props;
+    const {
+      updatePushnotificationsSettings,
+      unsubscribePushWallet,
+      subscribePushWallet,
+      wallets,
+      subscribedWalletsPush,
+    } = this.props;
 
     updatePushnotificationsSettings(value);
+    const selectedWallet = wallets.filter(w => !subscribedWalletsPush.includes(w.id));
+    const unSelectedWallet = wallets.filter(w => subscribedWalletsPush.includes(w.id));
 
     if (!value) {
-      unsubscribePushWallet(wallets);
+      unsubscribePushWallet(unSelectedWallet);
     } else {
-      subscribePushWallet(wallets);
+      subscribePushWallet(selectedWallet);
     }
   };
-
-  handlePushnotificationsWalletChange = () => {};
 
   render() {
     const {
@@ -111,7 +118,7 @@ export class NotificationScreen extends Component<Props> {
             onSwitchValueChange={this.handlePushnotificationsAllWalletChange}
           />
           {!!wallets.length ? (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
               <FlatList
                 data={wallets}
                 renderItem={item => this.renderItem(item.item)}
@@ -119,7 +126,7 @@ export class NotificationScreen extends Component<Props> {
                 showsVerticalScrollIndicator={false}
                 style={{ flexGrow: 0 }}
               />
-            </View>
+            </ScrollView>
           ) : (
             // TODO: other text for empty wallet
             <Text style={styles.noSubscriptionDescription}>{i18n.notifications.noSubscriptionDescription}</Text>
