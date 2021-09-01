@@ -24,14 +24,15 @@ export default class AppStateManager extends PureComponent<Props, State> {
   }
 
   handleAppStateChange = (nextAppState: string) => {
-    const { handleAppComesToBackground, handleAppComesToForeground } = this.props;
+    const { handleAppComesToForeground, handleAppComesToBackground } = this.props;
     const { appState } = this.state;
 
-    if ((appState === 'background' || appState === 'inactive') && nextAppState === 'active') {
+    // TODO: inactive state always invoked by biometric scan, so we can't use inactive state to show lock screen, so only background state valid option. It may be changed or fixed later
+    if (appState === 'background' && nextAppState === 'active') {
       !!handleAppComesToForeground && handleAppComesToForeground();
     }
 
-    if (nextAppState !== 'active') {
+    if (nextAppState === 'background') {
       !!handleAppComesToBackground && handleAppComesToBackground();
     }
 
