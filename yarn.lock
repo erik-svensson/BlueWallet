@@ -9717,7 +9717,7 @@ prompts@^2.0.1, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@15.7.2, prop-types@^15.5.10, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -10040,10 +10040,10 @@ react-native-config-node@^0.0.3:
   dependencies:
     dotenv "^8.2.0"
 
-react-native-config@1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.4.0.tgz#76e6ba1194a4c23d2e687a0630458238692eec4b"
-  integrity sha512-j8/a9FieWRgyqIG/Bkz3mWH5M3/JYYoZWQWDIPgXve3AGhVR39mDYNyPmezetX/HgG3WX62U6+P+LmnAMQegDA==
+react-native-config@1.4.4:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/react-native-config/-/react-native-config-1.4.4.tgz#e0e10802d1e61ef051040c84dfd19f85a5984620"
+  integrity sha512-bu47sJHn/HrB7COAWBI8DieAhrbFLINHFE2HBCcVkDu0Y5ScrMs6vL+jhIm+pMSgxouseLhXG8h7xYYpxE38PA==
 
 react-native-confirmation-code-field@7.1.0:
   version "7.1.0"
@@ -10106,10 +10106,10 @@ react-native-fast-image@^8.1.5:
   resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.3.7.tgz#c4877de17903101f6d94b6736a4f7e5d7b019224"
   integrity sha512-J++Ad04PTUe4YgjyGv63gfgV8Fz1gZKAgQHpblf8Z87D9dxfc8UfXHTPv9VLGdTJU4IzdTnQqzoFgDtWdsvBsQ==
 
-react-native-flipper@^0.104.0:
-  version "0.104.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.104.0.tgz#f380a6b1c17f3d30dcefcb7767735beec16ede76"
-  integrity sha512-zzW2HiD9I9KTW+g+nIull2qkVVj0ivIYMRes38E1r+syOKIrzV1BNKlA9glX1x31gcQFmFCv/ibDv61KnC6Q2A==
+react-native-flipper@^0.105.0:
+  version "0.105.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.105.0.tgz#9f437e8149e170f0b9cc9925ddabb8b65f186c97"
+  integrity sha512-qiaUljC68hMSTXm49bxhMzr9G4FTtkLGvcRqrLCoYo1UPToHup5KvGBFol+R1P1X3Waeg486iCkX3zvhV9+ZbQ==
 
 react-native-fs@2.13.3:
   version "2.13.3"
