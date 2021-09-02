@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
   socialsContainer: {
     display: 'flex',
     flex: 1,
+    marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     display: 'flex',
     flex: 1,
-    marginTop: 10,
+    marginTop: 5,
     marginBottom: 10,
   },
 });

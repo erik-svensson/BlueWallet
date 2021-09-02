@@ -33,6 +33,11 @@ interface WalletWithHash extends Wallet {
   hash: string;
 }
 
+interface WalletHash {
+  hash: string;
+  id: string;
+}
+
 enum Result {
   error = 'error',
   success = 'success',
@@ -80,6 +85,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
 
   try {
     const ids: string[] = [];
+    const walletsHash: WalletHash[] = [];
 
     yield put(prepareWallets(wallets));
 
@@ -94,23 +100,10 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
         );
 
         const hashes = walletsWithHashes.map((wallet: WalletWithHash) => wallet.hash);
+
         const response: AirdropCheckWalletsSubscriptionResponse = yield call(checkWalletsAirdropSubscription, {
           wallets: hashes,
         });
-
-        const balance: [] = yield all(
-          walletsWithHashes.map(async (wallet: WalletWithHash) => {
-            const responseResult = await checkBalanceWallet({ wallet: wallet.hash });
-
-            if (responseResult.result) {
-              return { wallet: wallet.id, balance: parseFloat(responseResult.result.balance).toFixed(8) };
-            } else {
-              return { wallet: '0', balance: '0' };
-            }
-          }),
-        );
-
-        yield put(setAirdropsWalletsBalanceAction(balance));
 
         if (response.result === Result.error) {
           throw new Error(response.result);
@@ -120,6 +113,7 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
           Object.fromEntries(
             Object.entries(response.result).filter(async ([key, value]) => {
               if (wallet.hash === key && !!value) {
+                walletsHash.push({ hash: wallet.hash, id: wallet.id });
                 ids.push(wallet.id);
               }
             }),
@@ -128,6 +122,20 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       }
 
       yield put(checkSubscriptionSuccess(ids));
+
+      const balance: [] = yield all(
+        walletsHash.map(async (wallet: WalletHash) => {
+          const responseResult = await checkBalanceWallet({ wallet: wallet.hash });
+
+          if (responseResult.result) {
+            return { wallet: wallet.id, balance: responseResult.result.balance };
+          } else {
+            return { wallet: '0', balance: '0' };
+          }
+        }),
+      );
+
+      yield put(setAirdropsWalletsBalanceAction(balance));
     }
   } catch (error) {
     yield put(checkSubscriptionFailure(error.msg));

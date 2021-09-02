@@ -118,15 +118,15 @@ export class NotificationScreen extends Component<Props> {
             onSwitchValueChange={this.handlePushnotificationsAllWalletChange}
           />
           {!!wallets.length ? (
-            <ScrollView style={styles.container}>
+            <View style={{ flex: 1, paddingTop: 40, paddingBottom: 10 }}>
               <FlatList
                 data={wallets}
                 renderItem={item => this.renderItem(item.item)}
                 keyExtractor={item => item.id}
                 showsVerticalScrollIndicator={false}
-                style={{ flexGrow: 0 }}
+                style={{ flex: 1 }}
               />
-            </ScrollView>
+            </View>
           ) : (
             // TODO: other text for empty wallet
             <Text style={styles.noSubscriptionDescription}>{i18n.notifications.noSubscriptionDescription}</Text>
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingTop: 40,
+    flex: 1,
   },
   col1: { flexDirection: 'column', width: '60%' },
   col2: { flexDirection: 'column', width: '10%' },
