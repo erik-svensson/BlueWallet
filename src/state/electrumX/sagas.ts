@@ -62,7 +62,9 @@ export function* fetchBlockchainHeadersSaga() {
 
     yield put(fetchBlockHeightSuccess(blockHeight));
   } catch (err) {
-    yield put(fetchBlockHeightFailure(err.message));
+    if (err instanceof Error) {
+      yield put(fetchBlockHeightFailure(err.message));
+    }
   }
 }
 
@@ -172,7 +174,9 @@ export function* subscribeToScriptHashes() {
 
     yield put(setSubscribedScriptHashes(walletsScriptHashes));
   } catch (e) {
-    logger.error('electrumX sagas', `subscribeToScriptHashes error: ${e.message}`);
+    if (e instanceof Error) {
+      logger.error('electrumX sagas', `subscribeToScriptHashes error: ${e.message}`);
+    }
   }
 }
 
@@ -219,7 +223,9 @@ export function* checkConnection() {
     yield put(setInternetConnection(!!isInternetReachable));
     yield put(setServerConnection(isServerConnected));
   } catch (e) {
-    logger.error('electrumX sagas', `checkConnection error: ${e.message}`);
+    if (e instanceof Error) {
+      logger.error('electrumX sagas', `checkConnection error: ${e.message}`);
+    }
   } finally {
     RNBootSplash.hide({ fade: true });
   }

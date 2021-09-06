@@ -52,7 +52,9 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(createNotificationEmailFailure(error.message));
+    if (error instanceof Error) {
+      yield put(createNotificationEmailFailure(error.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
@@ -74,7 +76,9 @@ export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailActi
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(verifyNotificationEmailFailure(error.message));
+    if (error instanceof Error) {
+      yield put(verifyNotificationEmailFailure(error.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
@@ -107,7 +111,9 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(subscribeWalletFailure(error.message));
+    if (error instanceof Error) {
+      yield put(subscribeWalletFailure(error.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
@@ -132,7 +138,9 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(unsubscribeWalletFailure(error.message));
+    if (error instanceof Error) {
+      yield put(unsubscribeWalletFailure(error.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
@@ -151,7 +159,9 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(authenticateEmailFailure(error.message));
+    if (error instanceof Error) {
+      yield put(authenticateEmailFailure(error.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
@@ -180,7 +190,9 @@ export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(updateNotificationEmailFailure(error.message));
+    if (error instanceof Error) {
+      yield put(updateNotificationEmailFailure(error.message));
+    }
   }
 }
 
@@ -210,10 +222,12 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       meta.onSuccess(ids);
     }
   } catch (error) {
-    yield put(checkSubscriptionFailure(error.message));
+    if (error instanceof Error) {
+      yield put(checkSubscriptionFailure(error.message));
 
-    if (meta?.onFailure) {
-      meta.onFailure(error.message);
+      if (meta?.onFailure) {
+        meta.onFailure(error.message);
+      }
     }
   }
 }
