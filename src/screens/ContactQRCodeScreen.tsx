@@ -31,7 +31,9 @@ export class ContactQRCodeScreen extends React.PureComponent<Props> {
       try {
         Share.open(shareImageBase64);
       } catch (error) {
-        logger.warn('ContactQRCode', error.message);
+        if (error instanceof Error) {
+          logger.warn('ContactQRCode', error.message);
+        }
       }
     });
   };

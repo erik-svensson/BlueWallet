@@ -41,7 +41,9 @@ export default class BiometricService {
         return success;
       }
     } catch (e) {
-      logger.error('BiometricSerivce', `cancelled by user: ${e.message}`);
+      if (e instanceof Error) {
+        logger.error('BiometricSerivce', `cancelled by user: ${e.message}`);
+      }
     }
   };
 
