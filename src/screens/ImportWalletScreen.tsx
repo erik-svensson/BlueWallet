@@ -21,6 +21,11 @@ import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { withCheckNetworkConnection, CheckNetworkConnectionCallback } from 'app/hocs';
 import { preventScreenshots, allowScreenshots } from 'app/services/ScreenshotsService';
 import { ApplicationState } from 'app/state';
+import { selectors as airdropSelector } from 'app/state/airdrop';
+import {
+  airdropCheckSubscription,
+  CheckSubscriptionAction as AirdropCheckScubscription,
+} from 'app/state/airdrop/actions';
 import {
   checkSubscription,
   CheckSubscriptionAction,
@@ -54,10 +59,12 @@ interface Props {
   wallets: Wallet[];
   isNotificationEmailSet: boolean;
   email: string;
-  subscribeFcmToken: (wallet: Wallet[]) => void;
+  subscribeWalletToPush: (wallet: Wallet[]) => void;
   subscribe: SubscribeWalletActionCreator;
   error: string;
+  isAfterAirdrop: boolean;
   checkNetworkConnection: (callback: CheckNetworkConnectionCallback) => void;
+  airdropCheckSubscription: (wallets: Wallet[], meta?: ActionMeta) => AirdropCheckScubscription;
   checkSubscription: (wallets: Wallet[], email: string, meta?: ActionMeta) => CheckSubscriptionAction;
 }
 
@@ -113,7 +120,7 @@ export class ImportWalletScreen extends Component<Props, State> {
 
   showSuccessImportMessageScreen = (wallet?: Wallet) => {
     if (wallet) {
-      this.props.subscribeFcmToken([wallet]);
+      this.props.subscribeWalletToPush([wallet]);
     }
 
     CreateMessage({
@@ -123,7 +130,28 @@ export class ImportWalletScreen extends Component<Props, State> {
       buttonProps: {
         title: i18n.message.returnToDashboard,
         onPress: () => {
-          this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
+          const { email, checkSubscription, isAfterAirdrop } = this.props;
+
+          if (wallet) {
+            if (email) {
+              return checkSubscription([wallet], email, {
+                onSuccess: (ids: string[]) => {
+                  const isWalletSubscribed = ids.some(id => id === wallet.id);
+
+                  isWalletSubscribed
+                    ? this.showSuccessImportMessageScreen(wallet)
+                    : this.navigateToConfirmEmailSubscription(wallet);
+                },
+                onFailure: () => {
+                  this.showSuccessImportMessageScreen();
+                },
+              });
+            }
+            if (!isAfterAirdrop) {
+              this.isAfterAirdropCheck(wallet);
+            }
+            this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
+          }
         },
       },
     });
@@ -176,8 +204,25 @@ export class ImportWalletScreen extends Component<Props, State> {
     </>
   );
 
+  isAfterAirdropCheck = (wallet: Wallet) => {
+    const { airdropCheckSubscription } = this.props;
+
+    return airdropCheckSubscription([wallet], {
+      onSuccess: (ids: string[]) => {
+        const isAirdropWalletSubscribed = ids.some(id => id === wallet.id);
+
+        isAirdropWalletSubscribed
+          ? this.showSuccessImportMessageScreen(wallet)
+          : this.navigateToAirdropWalletSubscription(wallet);
+      },
+      onFailure: () => {
+        this.showSuccessImportMessageScreen();
+      },
+    });
+  };
+
   navigateToConfirmEmailSubscription = (wallet: Wallet) => {
-    const { navigation, email } = this.props;
+    const { navigation, email, isAfterAirdrop } = this.props;
 
     navigation.navigate(Route.Confirm, {
       title: i18n.notifications.notifications,
@@ -194,8 +239,24 @@ export class ImportWalletScreen extends Component<Props, State> {
         });
       },
 
-      onBack: () => this.showSuccessImportMessageScreen(),
+      onBack: () => {
+        if (!isAfterAirdrop) {
+          this.isAfterAirdropCheck(wallet);
+        } else {
+          return this.showSuccessImportMessageScreen();
+        }
+      },
       isBackArrow: false,
+    });
+  };
+
+  navigateToAirdropWalletSubscription = (wallet: Wallet) => {
+    const { navigation } = this.props;
+
+    navigation.navigate(Route.AirdropCreateWalletSubscription, {
+      wallet,
+      notificationsTurnedOn: false,
+      parentRouteName: 'ImportWallet',
     });
   };
 
@@ -212,7 +273,7 @@ export class ImportWalletScreen extends Component<Props, State> {
   };
 
   saveWallet = async (newWallet: any) => {
-    const { wallets, email, checkSubscription } = this.props;
+    const { wallets } = this.props;
 
     if (wallets.some(wallet => wallet.secret === newWallet.secret)) {
       return this.showErrorMessageScreen({
@@ -225,21 +286,7 @@ export class ImportWalletScreen extends Component<Props, State> {
     newWallet.setLabel(this.state.label);
 
     this.importWallet(newWallet, () => {
-      if (email) {
-        return checkSubscription([newWallet], email, {
-          onSuccess: (ids: string[]) => {
-            const isWalletSubscribed = ids.some(id => id === newWallet.id);
-
-            isWalletSubscribed
-              ? this.showSuccessImportMessageScreen(newWallet)
-              : this.navigateToConfirmEmailSubscription(newWallet);
-          },
-          onFailure: () => {
-            this.showSuccessImportMessageScreen();
-          },
-        });
-      }
-      this.showSuccessImportMessageScreen();
+      this.showSuccessImportMessageScreen(newWallet);
     });
   };
 
@@ -603,13 +650,15 @@ const mapStateToProps = (state: ApplicationState) => ({
   isNotificationEmailSet: isNotificationEmailSet(state),
   email: storedEmail(state),
   error: readableError(state),
+  isAfterAirdrop: airdropSelector.isAfterAirdrop(state),
 });
 
 const mapDispatchToProps = {
   importWallet: importWalletAction,
   checkSubscription,
+  airdropCheckSubscription,
   subscribe: subscribeWalletAction,
-  subscribeFcmToken: subscribePushAllWalletsAction,
+  subscribeWalletToPush: subscribePushAllWalletsAction,
 };
 
 export default compose(withCheckNetworkConnection, connect(mapStateToProps, mapDispatchToProps))(ImportWalletScreen);
