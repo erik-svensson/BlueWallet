@@ -2,8 +2,9 @@
   "name": "goldwallet",
   "version": "6.4.0",
   "devDependencies": {
-    "@babel/core": "^7.12.9",
+    "@babel/cli": "^7.8.4",
     "@babel/preset-env": "7.5.0",
+    "@babel/core": "^7.12.9",
     "@babel/preset-react": "^7.12.10",
     "@babel/preset-typescript": "^7.9.0",
     "@babel/runtime": "^7.12.5",
@@ -19,7 +20,6 @@
     "@types/react": "^16.9.31",
     "@types/react-native": "^0.63.37",
     "@types/react-native-background-timer": "^2.0.0",
-    "@types/react-native-calendars": "^1.20.7",
     "@types/react-native-share": "^3.1.0",
     "@types/react-native-snap-carousel": "^3.8.1",
     "@types/react-navigation": "^3.4.0",
@@ -27,6 +27,7 @@
     "@types/redux-saga": "^0.10.5",
     "@types/reselect": "^2.2.0",
     "@types/uuid": "^3.4.8",
+    "@types/react-native-calendars": "^1.20.7",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "assert": "^2.0.0",
@@ -46,7 +47,6 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-react-native": "^3.8.1",
-    "flipper-plugin-redux-debugger": "^2.0.0",
     "googleapis": ">=39.1.0",
     "husky": "^4.2.3",
     "jail-monkey": "^2.3.2",
@@ -68,7 +68,9 @@
     "redux-devtools-extension": "^2.13.8",
     "rn-nodeify": "github:tradle/rn-nodeify",
     "ts-jest": "^26.4.1",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "flipper-plugin-redux-debugger": "^2.0.0",
+    "react-test-renderer": "17.0.2"
   },
   "scripts": {
     "postinstall": "./node_modules/.bin/rn-nodeify --install buffer,events,process,stream,util,inherits,fs,path --hack; npx jetify",
