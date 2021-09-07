@@ -64,7 +64,11 @@ adb reverse tcp:8099 tcp:8099
 
 echo "Running tests $(date)"
 sed -i.bu "s/ADD_DEVICE_ID_HERE/$UDID/" .detoxrc.json
-cat package.json
+
+
+set -o allexport
+source .test.env
+set +o allexport
 
 yarn test:detox --configuration android.bitbar.dev.debug -t @smoke --loglevel verbose --detectOpenHandles > detox.log 2>&1
 scriptExitStatus=$?
