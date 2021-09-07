@@ -129,7 +129,7 @@
       "device": "pixel.emu",
       "app": "android.prod.release"
     },
-    "android.bitbar.dev.release": {
+    "android.bitbar.dev": {
       "app": "android.dev.release",
       "session": {
         "server": "ws://localhost:8099",
