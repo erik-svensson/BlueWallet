@@ -128,6 +128,17 @@
     "android.emu.prod.release": {
       "device": "pixel.emu",
       "app": "android.prod.release"
+    },
+    "android.bibar.dev.release": {
+      "android.bitbar.dev.release": {
+        "app": "android.dev.release",
+        "session": {
+          "server": "ws://localhost:8099",
+          "sessionId": "test"
+        },
+        "type": "android.attached",
+        "name": "ADD_DEVICE_ID_HERE"
+      }
     }
   }
 }
