@@ -21,3 +21,6 @@ yarn install
 adb reverse tcp:8099 tcp:8099
 
 yarn test:detox --configuration android.bitbar.dev -t @smoke --loglevel verbose --detectOpenHandles
+
+adb uninstall io.goldwallet.wallet.dev
+adb uninstall io.goldwallet.wallet.dev.test
