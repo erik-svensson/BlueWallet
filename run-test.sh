@@ -13,10 +13,6 @@ UDID="$(adb devices | grep device | tr "\n" " " | awk '{print $5}')"
 export UDID
 sed -i.bu "s/ADD_DEVICE_ID_HERE/$UDID/" .detoxrc.json
 
-set -o allexport
-source .test.env
-set +o allexport
-
 yarn install
 
 # "${PWD}/node_modules/.bin/detox" run-server > detox-server.log 2>&1 &
