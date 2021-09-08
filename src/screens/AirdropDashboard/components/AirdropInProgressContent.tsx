@@ -36,6 +36,7 @@ export const AirdropInProgressContent: FC<Props> = ({
 }) => {
   const isAfterAirdrop = useSelector(selectors.isAfterAirdrop);
   const airdropGoals = useSelector(selectors.badges);
+  const airdropCommunityGoals = useSelector(selectors.goals);
   const allWallets = useSelector(walletsSelectors.allWallets);
   const getCommunityItem = useSelector(selectors.getCommunityItem);
   const airdropsWalletBalance = useSelector(selectors.airdropsWalletBalance);
@@ -84,7 +85,9 @@ export const AirdropInProgressContent: FC<Props> = ({
       getCarouselItem(data, isAfterAirdrop, airdropGoals, airdropsWalletBalance),
     );
 
-    return isAfterAirdrop ? renderableWallets : [...renderableWallets, getCommunityItem];
+    return isAfterAirdrop || !airdropCommunityGoals.length
+      ? renderableWallets
+      : [...renderableWallets, getCommunityItem];
   };
 
   if (error) {
