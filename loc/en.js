@@ -64,7 +64,7 @@ module.exports = {
       wallet: 'wallet',
       wallets: 'wallets',
       airdropParticipants: 'Airdrop participants',
-      goal: 'The {order} goal:', //TODO:
+      goal: 'The {order} goal:',
       unlockToIncrease: 'Unlock to increase Airdrop to ${reward}',
       thresholdWallets: '{threshold} wallets',
     },
@@ -99,11 +99,10 @@ module.exports = {
       description: 'We want to share ${airdropTotalDollarsToShare} in BTCV to reward you for being with us!',
       listHeader: 'Requirements for the Airdrop:',
       points: {
-        0: 'Any BTCV Wallet',
-        1: 'At least {airdropMinimumBTCVRequired} BTCV stored on the wallet*',
+        '0': 'Any BTCV Wallet',
+        '1': 'At least {airdropMinimumBTCVRequired} BTCV stored on the wallet*',
       },
       rewardExplanation: '*Your reward depends on how many coins you have in the general pool.',
-      soundsGreat: 'Sounds great!',
       termsAndConditions: {
         read: 'Read',
         termsAndConditions: 'Terms and Conditions',
@@ -114,7 +113,7 @@ module.exports = {
       crab: 'Crab',
       shark: 'Shark',
       whale: 'Whale',
-      yourNextGoal: 'Your {order}:', //TODO
+      yourNextGoal: 'Your {order}:',
       avatarTeaser: 'Become a {goalName}: {goalThreshold} {unit}',
       youReachedGoal: 'You reached goal: ',
     },
@@ -142,7 +141,10 @@ module.exports = {
     text: '',
     readTermsConditions: 'I’ve read Terms & Conditions',
     readPrivacyPolicy: 'I’ve read Privacy Policy',
-    buttons: { agree: 'I agree', disagree: 'I disagree' },
+    buttons: {
+      agree: 'I agree',
+      disagree: 'I disagree',
+    },
     modal: {
       header: 'Are you sure?',
       text:
@@ -195,8 +197,12 @@ module.exports = {
       description: 'Enter this PIN into the Electrum Vault desktop application to finish the pairing process.',
       subtitle: 'Enter PIN',
     },
-    errors: { noEmpty: 'Field can not empty' },
-    export: { title: 'Export authenticator' },
+    errors: {
+      noEmpty: 'Field can not empty',
+    },
+    export: {
+      title: 'Export authenticator',
+    },
     import: {
       code: 'Code:',
       desc1: 'Write down the seed phrase or scan the QR code of the authenticator you want to import.',
@@ -436,7 +442,9 @@ module.exports = {
     genericError: "Something went wrong. We're sorry.",
     pushnotificationsSettings: {
       title: 'Turn notifications on for all wallets',
+      label: '',
     },
+    description: '',
   },
   onboarding: {
     changePin: 'Change PIN',
@@ -548,7 +556,7 @@ module.exports = {
     },
     error: {
       doubleSpentFunds: 'You are trying to spend funds that have been already spent.',
-      notExistingFunds: `You are trying to spend funds that don't exists.`,
+      notExistingFunds: "You are trying to spend funds that don't exists.",
       dust: 'You are trying to send for a small amount',
       description: 'Before creating a transaction, you must first add a Bitcoin Vault wallet.',
       title: 'Error',
@@ -684,7 +692,9 @@ module.exports = {
       pending: 'pending',
       unblocked: 'unblocked',
     },
-    list: { conf: 'Confirmations' },
+    list: {
+      conf: 'Confirmations',
+    },
     transactionTypeLabel: {
       canceled: 'Canceled',
       secure: 'Secure',
@@ -787,11 +797,19 @@ module.exports = {
       invalidQrCode: 'Invalid QR code',
       invalidSign: "Couldn't sign transaction",
       noIndexForWord: "Couldn't find index for word: {word}",
-      wrongNetwork: `You have wallet on the network {walletNetworkName} while the app network is {appNetworkName}. Please contact our support on the Telegram.`,
+      wrongNetwork:
+        'You have wallet on the network {walletNetworkName} while the app network is {appNetworkName}. Please contact our support on the Telegram.',
     },
-    export: { title: 'wallet export' },
-    exportWallet: { header: 'Export wallet', title: 'Seed phrase' },
-    exportWalletXpub: { header: 'Wallet XPUB' },
+    export: {
+      title: 'wallet export',
+    },
+    exportWallet: {
+      header: 'Export wallet',
+      title: 'Seed phrase',
+    },
+    exportWalletXpub: {
+      header: 'Wallet XPUB',
+    },
     import: {
       do_import: 'Import',
       error: 'Failed to import. Please, make sure that the provided data is valid.',
@@ -856,7 +874,10 @@ module.exports = {
       none: 'None',
       pendingBalance: 'Blocked balance',
     },
-    walletModal: { btcv: 'BTCV', wallets: 'Wallets' },
+    walletModal: {
+      btcv: 'BTCV',
+      wallets: 'Wallets',
+    },
   },
   connectionIssue: {
     noInternetTitle: 'No internet connection',

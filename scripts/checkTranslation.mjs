@@ -4,7 +4,6 @@ import path from 'path';
 
 import en from '../loc/en';
 import es from '../loc/es';
-import id from '../loc/id_ID';
 import jo from '../loc/jp_JP';
 import ko from '../loc/ko_KR';
 import pt from '../loc/pt_PT';
@@ -51,7 +50,6 @@ const writeToNewTranslationFile = (file, name) => {
 };
 
 writeToNewTranslationFile(es, 'es');
-writeToNewTranslationFile(id, 'id');
 writeToNewTranslationFile(jo, 'jo');
 writeToNewTranslationFile(ko, 'ko');
 writeToNewTranslationFile(pt, 'pt');
