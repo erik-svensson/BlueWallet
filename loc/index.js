@@ -47,9 +47,6 @@ const init = async lang => {
       case 'ja':
         require('dayjs/locale/ja');
         break;
-      case 'id':
-        require('dayjs/locale/id');
-        break;
       case 'tr':
         require('dayjs/locale/tr');
         break;
@@ -75,7 +72,6 @@ strings = new Localization({
   pt: require('./pt_PT.js'),
   es: require('./es.js'),
   ja: require('./jp_JP.js'),
-  id: require('./id_ID.js'),
   zh: require('./zh_cn.js'),
   tr: require('./tr_TR.js'),
   vi: require('./vi_VN.js'),
