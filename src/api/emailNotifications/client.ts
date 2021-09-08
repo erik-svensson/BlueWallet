@@ -60,4 +60,4 @@ export const subscribePush = (data: any): Promise<any> => httpClient.post(`/push
 export const unsubscribePush = (data: UnsubscribePushPayload): Promise<UnsubscribePushResponse> =>
   httpClient.delete(`/push/`, data);
 
-export const removeDeviceFCM = (data: any): Promise<any> => httpClient.put(`/push/`, data);
+export const removeDeviceFCM = (data: any): Promise<any> => httpClient.delete(`/push/`, data);

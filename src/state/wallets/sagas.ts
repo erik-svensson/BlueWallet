@@ -124,6 +124,7 @@ export function* createWalletSaga(action: CreateWalletAction | unknown) {
     yield BlueApp.saveToDisk();
 
     yield put(createWalletSuccess(wallet));
+
     if (meta?.onSuccess) {
       meta.onSuccess(wallet);
     }
@@ -233,9 +234,9 @@ export function* scripHashHasChangedSaga(action: electrumXActions.ScriptHashChan
 export function* isRegisteredWalletSaga(action: IsRegisteredWalletAction | unknown) {
   const { wallets } = action as IsRegisteredWalletAction;
 
-  const hashes: string[] = yield all(wallets.map(wallet => call(helpers.getWalletHashedPublicKeys, wallet)));
-
   try {
+    const hashes: string[] = yield all(wallets.map(wallet => call(helpers.getWalletHashedPublicKeys, wallet)));
+
     const { result } = yield call(isRegistered, {
       wallets: hashes,
     });
