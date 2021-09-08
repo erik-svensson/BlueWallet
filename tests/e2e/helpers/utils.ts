@@ -22,10 +22,24 @@ export const wait = (miliseconds: number) =>
     setTimeout(resolve, miliseconds);
   });
 
-// HACK: unofficial, undocumented way to obtain the name of current detox configuration
 export function getBuildEnv() {
-  const configurationName = getArgValue('configuration');
-  const flavour = configurationName.match(/dev|stage|prod/);
+  const configurationName = process.env.DETOX_CONFIGURATION;
 
-  return flavour.toString();
+  const env = configurationName?.match(/dev|stage|prod/);
+
+  if (!env) {
+    throw new Error(
+      'Could not obtain current Detox configuration. DETOX_CONFIGURATION env variable not set or does not contain expected environment part: dev, stage or prod.',
+    );
+  } else {
+    return env.toString();
+  }
+}
+
+export function isEmulator() {
+  const configurationName = process.env.DETOX_CONFIGURATION;
+
+  const isEmu = configurationName?.match(/\.emu\.|\.sim\./);
+
+  return isEmu;
 }
