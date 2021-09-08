@@ -47,6 +47,6 @@ yarn merge-detox-reports
 
 if test -f "artifacts/testReport.xml"; then
   sed '/<testcase .* time="0">/,/<\/testcase>/d' artifacts/testReport.xml > artifacts/testReport-clean.xml
-  mv artifacts/testReport-clean.xml TEST-ALL.xml
+  mv artifacts/testReport-clean.xml TEST-all.xml
   find artifacts -type f -name "*.mp4" -exec bash -c 'move_video "$0"' {} \;
 fi
