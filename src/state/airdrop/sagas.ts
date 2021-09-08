@@ -78,9 +78,10 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
   }
 }
 
-export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
+export function* airdropCheckSubscriptionSaga(action: CheckSubscriptionAction) {
   const {
     payload: { wallets },
+    meta,
   } = action;
 
   try {
@@ -122,6 +123,9 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       }
 
       yield put(checkSubscriptionSuccess(ids));
+      if (meta?.onSuccess) {
+        meta.onSuccess(ids);
+      }
 
       const balance: [] = yield all(
         walletsHash.map(async (wallet: WalletHash) => {
@@ -139,6 +143,10 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
     }
   } catch (error) {
     yield put(checkSubscriptionFailure(error.msg));
+
+    if (meta?.onFailure) {
+      meta.onFailure();
+    }
   }
 }
 
@@ -175,7 +183,7 @@ export function* getAirdropStatusSaga() {
 }
 
 export default [
-  takeEvery(AirdropAction.CheckSubscription, checkSubscriptionSaga),
+  takeEvery(AirdropAction.CheckSubscription, airdropCheckSubscriptionSaga),
   takeEvery(AirdropAction.SubscribeWallet, subscribeWalletSaga),
   takeEvery(AirdropAction.GetAirdropStatus, getAirdropStatusSaga),
 ];

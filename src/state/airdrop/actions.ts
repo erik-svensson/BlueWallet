@@ -64,6 +64,7 @@ export interface CheckSubscriptionAction {
   payload: {
     wallets: Wallet[];
   };
+  meta?: ActionMeta;
 }
 
 export interface CheckSubscriptionFailureAction {
@@ -135,11 +136,12 @@ export const subscribeWalletFailure = (error: string): SubscribeWalletFailureAct
   error,
 });
 
-export type CheckSubscriptionActionCreator = (wallets: Wallet[]) => CheckSubscriptionAction;
+export type CheckSubscriptionActionCreator = (wallets: Wallet[], meta?: ActionMeta) => CheckSubscriptionAction;
 
-export const checkSubscription: CheckSubscriptionActionCreator = wallets => ({
+export const airdropCheckSubscription: CheckSubscriptionActionCreator = (wallets, meta) => ({
   type: AirdropAction.CheckSubscription,
   payload: { wallets },
+  meta,
 });
 
 export type CheckSubscriptionSuccessActionCreator = (subscribedIds: string[]) => CheckSubscriptionSuccessAction;

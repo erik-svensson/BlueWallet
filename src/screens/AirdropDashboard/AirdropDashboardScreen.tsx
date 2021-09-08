@@ -9,7 +9,7 @@ import { Route, RootStackParams, Wallet } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import {
   getAirdropStatus,
-  checkSubscription,
+  airdropCheckSubscription,
   CheckSubscriptionActionCreator,
   subscribeWallet,
   SubscribeWalletActionCreator,
@@ -26,7 +26,7 @@ interface Props {
   error: boolean;
   isAfterAirdrop: boolean;
   isLoading: boolean;
-  checkSubscription: CheckSubscriptionActionCreator;
+  airdropCheckSubscription: CheckSubscriptionActionCreator;
   route: RouteProp<RootStackParams, Route.AirdropDashboard>;
   navigation: CompositeNavigationProp<
     StackNavigationProp<RootStackParams, Route.MainTabStackNavigator>,
@@ -43,7 +43,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
   navigation,
   wallets,
   usersQuantity,
-  checkSubscription,
+  airdropCheckSubscription,
   subscribedWallets,
   getAirdropStatus,
   subscribeWallet,
@@ -58,7 +58,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
   }, [getAirdropStatus]);
 
   useEffect(() => {
-    checkSubscription(wallets);
+    airdropCheckSubscription(wallets);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -103,7 +103,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const mapDispatchToProps = {
-  checkSubscription,
+  airdropCheckSubscription,
   subscribeWallet,
   getAirdropStatus,
 };
