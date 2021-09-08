@@ -26,7 +26,7 @@ yarn detox run-server > detox-server.log 2>&1 &
 # allow device to contact host by localhost
 adb reverse tcp:8099 tcp:8099
 
-yarn test:detox --configuration android.bitbar.dev -t @smoke --loglevel verbose --detectOpenHandles
+yarn test:detox --configuration android.bitbar.dev -t @smoke --loglevel verbose --detectOpenHandles || true
 
 adb uninstall io.goldwallet.wallet.dev
 adb uninstall io.goldwallet.wallet.dev.test
@@ -42,6 +42,8 @@ move_video() {
 }
 
 export -f move_video
+
+yarn merge-detox-reports
 
 if test -f "artifacts/testReport.xml"; then
   sed '/<testcase .* time="0">/,/<\/testcase>/d' artifacts/testReport.xml > artifacts/testReport-clean.xml
