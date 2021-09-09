@@ -6,7 +6,7 @@ const i18n = require('../../loc');
 export const checkDeviceSecurity = () => {
   isPinOrFingerprintSet().then(isPinOrFingerprintSet => {
     if (!isPinOrFingerprintSet) {
-      Alert.alert(i18n.security.title, i18n.security.noPinOrFingerprintSet);
+      // Alert.alert(i18n.security.title, i18n.security.noPinOrFingerprintSet);
     }
   });
 };

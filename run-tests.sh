@@ -26,7 +26,7 @@ yarn detox run-server > detox-server.log 2>&1 &
 # allow device to contact host by localhost
 adb reverse tcp:8099 tcp:8099
 
-yarn test:detox --configuration android.bitbar.dev -t @smoke --loglevel verbose --detectOpenHandles || true
+yarn test:detox --configuration android.bitbar.dev -t @smoke --loglevel verbose --detectOpenHandles --record-videos failing --retries 2 || true
 
 adb uninstall io.goldwallet.wallet.dev
 adb uninstall io.goldwallet.wallet.dev.test

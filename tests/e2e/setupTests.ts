@@ -17,9 +17,9 @@ beforeEach(async () => {
     permissions: { notifications: 'YES' },
   });
 
-  if (device.getPlatform() === 'android' && !isEmulator()) {
-    await element(by.text('OK')).tap();
-  }
+  // if (device.getPlatform() === 'android' && !isEmulator()) {
+  //   await element(by.text('OK')).tap();
+  // }
 });
 
 afterAll(async () => {
