@@ -1,3 +1,4 @@
+import logger from 'app/../logger';
 import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 
 import { CONST, USER_VERSIONS } from 'app/consts';
@@ -45,6 +46,8 @@ export function* checkCredentialsSaga(action: CheckCredentialsAction | unknown) 
         meta.onFailure(e.message);
       }
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -70,6 +73,8 @@ export function* authenticateSaga(action: AuthenticateAction | unknown) {
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -91,6 +96,8 @@ export function* createPinSaga(action: CreatePinAction | unknown) {
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -110,6 +117,8 @@ export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) 
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -132,6 +141,8 @@ export function* setUserVersionSaga(action: SetUserVersionAction | unknown) {
     if (e instanceof Error) {
       yield put(setUserVersionFailure(e.message));
     }
+
+    logger.captureException(e);
   }
 }
 

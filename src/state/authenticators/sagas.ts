@@ -1,3 +1,4 @@
+import logger from 'app/../logger';
 import { cloneDeep } from 'lodash';
 import { takeLatest, takeEvery, put, select } from 'redux-saga/effects';
 
@@ -58,6 +59,8 @@ export function* deleteAuthenticatorSaga(action: DeleteAuthenticatorAction | unk
         meta.onFailure(e.message);
       }
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -84,6 +87,8 @@ export function* createAuthenticatorSaga(action: CreateAuthenticatorAction | unk
         meta.onFailure(e.message);
       }
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -99,6 +104,8 @@ export function* updateAuthenticatorSaga(action: UpdateAuthenticatorAction | unk
     if (e instanceof Error) {
       yield put(updateAuthenticatorFailure(e.message));
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -131,6 +138,8 @@ export function* signTransactionSaga(action: SignTransactionAction | unknown) {
         meta.onFailure(e.message);
       }
     }
+
+    logger.captureException(e);
   }
 }
 

@@ -13,7 +13,10 @@ const BlueApp = new AppStorage();
 
 async function startAndDecrypt(retry) {
   if (BlueApp.getWallets().length > 0) {
-    logger.info('BlueApp', `App already has some wallets, so we are in already started state, exiting startAndDecrypt`);
+    logger.info({
+      message: 'App already has some wallets, so we are in already started state, exiting startAndDecrypt',
+      category: 'BlueApp',
+    });
     return;
   }
   let password = false;
@@ -26,7 +29,10 @@ async function startAndDecrypt(retry) {
   const success = await BlueApp.loadFromDisk(password);
 
   if (success) {
-    logger.info('BlueApp', `loaded from disk`);
+    logger.info({
+      message: 'loaded from disk',
+      category: 'BlueApp',
+    });
 
     EV(EV.enum.WALLETS_COUNT_CHANGED);
     EV(EV.enum.TRANSACTIONS_COUNT_CHANGED);
@@ -50,6 +56,9 @@ async function startAndDecrypt(retry) {
           console.log('balance not changed');
         }
       } //  end of timeToRefresh
+    } catch (Err) {
+      noErr = false;
+      console.warn(Err);
     } catch (Err) {
       noErr = false;
       console.warn(Err);

@@ -100,7 +100,10 @@ function emitOnConnect() {
     });
 
     return () => {
-      logger.info('electrmumX sagas', 'unsubscribed from BlueElectrum.subscribeToOnConnect');
+      logger.info({
+        message: 'unsubscribed from BlueElectrum.subscribeToOnConnect',
+        category: 'electrmumX sagas',
+      });
       BlueElectrum.subscribeToOnConnect(noop);
     };
   });
@@ -122,7 +125,10 @@ function emitOnClose() {
     });
 
     return () => {
-      logger.info('electrmumX sagas', 'unsubscribed from BlueElectrum.subscribeToOnClose');
+      logger.info({
+        message: 'unsubscribed from BlueElectrum.subscribeToOnClose',
+        category: 'electrmumX sagas',
+      });
       BlueElectrum.subscribeToOnClose(noop);
     };
   });
@@ -175,7 +181,10 @@ export function* subscribeToScriptHashes() {
     yield put(setSubscribedScriptHashes(walletsScriptHashes));
   } catch (e) {
     if (e instanceof Error) {
-      logger.error('electrumX sagas', `subscribeToScriptHashes error: ${e.message}`);
+      logger.error({
+        message: `subscribeToScriptHashes error: ${e.message}`,
+        category: 'electrmumX sagas',
+      });
     }
   }
 }
@@ -224,7 +233,10 @@ export function* checkConnection() {
     yield put(setServerConnection(isServerConnected));
   } catch (e) {
     if (e instanceof Error) {
-      logger.error('electrumX sagas', `checkConnection error: ${e.message}`);
+      logger.error({
+        message: `checkConnection error: ${e.message}`,
+        category: 'electrmumX sagas',
+      });
     }
   } finally {
     RNBootSplash.hide({ fade: true });
