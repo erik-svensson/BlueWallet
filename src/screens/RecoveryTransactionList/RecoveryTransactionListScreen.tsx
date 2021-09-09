@@ -205,14 +205,17 @@ const styles = StyleSheet.create({
   },
   listViewWrapper: { paddingBottom: 20, height: '90%' },
   contentContainer: {
+    flexGrow: 1,
     paddingHorizontal: 20,
     paddingTop: 24,
   },
   container: {
-    height: '100%',
+    flex: 1,
     backgroundColor: palette.white,
   },
   noTransactionsContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   noTransactionsImage: { height: 167, width: 167, marginVertical: 30 },
