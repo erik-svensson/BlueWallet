@@ -95,7 +95,10 @@ class ReceiveCoinsScreen extends Component<Props, State> {
       Share.open({
         message,
       }).catch(error => {
-        logger.warn('ReceiveCoins', error.message);
+        logger.warn({
+          message: error.message,
+          category: 'ReceiveCoins',
+        });
       });
     } else {
       InteractionManager.runAfterInteractions(async () => {
@@ -106,7 +109,10 @@ class ReceiveCoinsScreen extends Component<Props, State> {
           };
 
           Share.open(shareImageBase64).catch(error => {
-            logger.warn('ReceiveCoins', error.message);
+            logger.warn({
+              message: error.message,
+              category: 'ReceiveCoins',
+            });
           });
         });
       });

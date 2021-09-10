@@ -1,3 +1,4 @@
+import logger from 'app/../logger';
 import { takeEvery, takeLatest, put, call, all, select } from 'redux-saga/effects';
 
 import { CheckSubscriptionResponse, verifyEmail } from 'app/api';
@@ -59,6 +60,8 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(error);
   }
 }
 
@@ -83,6 +86,8 @@ export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailActi
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(error);
   }
 }
 
@@ -118,6 +123,8 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(error);
   }
 }
 
@@ -145,6 +152,8 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(error);
   }
 }
 
@@ -166,6 +175,8 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(error);
   }
 }
 
@@ -193,6 +204,7 @@ export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
     if (error instanceof Error) {
       yield put(updateNotificationEmailFailure(error.message));
     }
+    logger.captureException(error);
   }
 }
 
@@ -229,30 +241,40 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
         meta.onFailure(error.message);
       }
     }
+
+    logger.captureException(error);
   }
 }
 
 export function* unsubscribeDeviceTokenSaga() {
-  const fcm: string = yield select(appSettingsSelectors.fcmToken);
+  try {
+    const fcm: string = yield select(appSettingsSelectors.fcmToken);
 
-  yield call(removeDeviceFCM, { fcm });
+    yield call(removeDeviceFCM, { fcm });
+  } catch (error) {
+    logger.captureException(error);
+  }
 }
 
 export function* subscribeDeviceTokenSaga(action: SubscribeDeviceTokenAction) {
   const { payload: wallets } = action;
 
-  const fcm: string = yield select(appSettingsSelectors.fcmToken);
-  const language: string = yield select(appSettingsSelectors.language);
-  const isPushnotificationsEnabled: boolean = yield select(appSettingsSelectors.pushnotificationsEnabled);
+  try {
+    const fcm: string = yield select(appSettingsSelectors.fcmToken);
+    const language: string = yield select(appSettingsSelectors.language);
+    const isPushnotificationsEnabled: boolean = yield select(appSettingsSelectors.pushnotificationsEnabled);
 
-  if (isPushnotificationsEnabled) {
-    const hashes: string[] = yield all(wallets.wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
+    if (isPushnotificationsEnabled) {
+      const hashes: string[] = yield all(wallets.wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
 
-    yield call(subscribeDeviceFCM, {
-      fcm,
-      wallets: hashes,
-      language,
-    });
+      yield call(subscribeDeviceFCM, {
+        fcm,
+        wallets: hashes,
+        language,
+      });
+    }
+  } catch (error) {
+    logger.captureException(error);
   }
 }
 
