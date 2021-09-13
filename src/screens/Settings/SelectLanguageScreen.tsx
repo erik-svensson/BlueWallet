@@ -52,7 +52,6 @@ export const SelectLanguageScreen = () => {
     { label: 'English (EN)', value: 'en' },
     { label: '中文 (ZH)', value: 'zh' },
     { label: 'Español (ES)', value: 'es' },
-    { label: 'Indonesian (ID)', value: 'id' },
     { label: '日本語 (JP)', value: 'ja' },
     { label: '한국어 (KO)', value: 'ko' },
     { label: 'Português (PT)', value: 'pt' },
