@@ -144,7 +144,10 @@ export class LegacyWallet extends AbstractWallet {
 
       await this.setTransactions(txids);
     } catch (err) {
-      logger.error('legacy-wallet', `fetchTransactions: ${err.message}`);
+      logger.error({
+        message: `fetchTransactions: ${err.message}`,
+        category: 'legacy-wallet',
+      });
     }
   }
 

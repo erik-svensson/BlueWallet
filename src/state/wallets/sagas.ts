@@ -71,20 +71,22 @@ export function* loadWalletsSaga() {
     const wallets = BlueApp.getWallets();
 
     yield put(loadWalletsSuccess(wallets));
-  } catch ({ message }) {
-    if (message.includes(messages.noMatchingScript)) {
-      const [address] = message.split(' ');
-      const walletNetworkName = checkAddressNetworkName(address);
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message.includes(messages.noMatchingScript)) {
+        const [address] = error.message.split(' ');
+        const walletNetworkName = checkAddressNetworkName(address);
 
-      Alert.alert(
-        i18n.send.error.title,
-        i18n.formatString(i18n.wallets.errors.wrongNetwork, {
-          walletNetworkName,
-          appNetworkName: config.networkName,
-        }),
-      );
+        Alert.alert(
+          i18n.send.error.title,
+          i18n.formatString(i18n.wallets.errors.wrongNetwork, {
+            walletNetworkName,
+            appNetworkName: config.networkName,
+          }),
+        );
+      }
+      yield put(loadWalletsFailure(error.message));
     }
-    yield put(loadWalletsFailure(message));
   }
 }
 
@@ -104,9 +106,11 @@ export function* deleteWalletSaga(action: DeleteWalletAction | unknown) {
       meta.onSuccess(wallet);
     }
   } catch (e) {
-    yield put(deleteWalletFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
+    if (e instanceof Error) {
+      yield put(deleteWalletFailure(e.message));
+      if (meta?.onFailure) {
+        meta.onFailure(e.message);
+      }
     }
   }
 }
@@ -129,9 +133,11 @@ export function* createWalletSaga(action: CreateWalletAction | unknown) {
       meta.onSuccess(wallet);
     }
   } catch (e) {
-    yield put(createWalletFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
+    if (e instanceof Error) {
+      yield put(createWalletFailure(e.message));
+      if (meta?.onFailure) {
+        meta.onFailure(e.message);
+      }
     }
   }
 }
@@ -152,9 +158,11 @@ export function* importWalletSaga(action: ImportWalletAction | unknown) {
       meta.onSuccess(wallet);
     }
   } catch (e) {
-    yield put(importWalletFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
+    if (e instanceof Error) {
+      yield put(importWalletFailure(e.message));
+      if (meta?.onFailure) {
+        meta.onFailure(e.message);
+      }
     }
   }
 }
@@ -169,7 +177,9 @@ export function* updateWalletSaga(action: UpdateWalletAction | unknown) {
 
     yield put(updateWalletSuccess(updatedWallet));
   } catch (e) {
-    yield put(updateWalletFailure(e.message));
+    if (e instanceof Error) {
+      yield put(updateWalletFailure(e.message));
+    }
   }
 }
 
@@ -192,7 +202,9 @@ export function* refreshWalletSaga(action: RefreshWalletAction | unknown) {
 
     yield put(refreshWalletSuccess(walletToRefresh));
   } catch (e) {
-    yield put(refreshWalletFailure(e.message));
+    if (e instanceof Error) {
+      yield put(refreshWalletFailure(e.message));
+    }
   }
 }
 
@@ -212,9 +224,11 @@ export function* sendTransactionSaga(action: SendTransactionAction | unknown) {
       meta.onSuccess(result);
     }
   } catch (e) {
-    yield put(sendTransactionFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
+    if (e instanceof Error) {
+      yield put(sendTransactionFailure(e.message));
+      if (meta?.onFailure) {
+        meta.onFailure(e.message);
+      }
     }
   }
 }
@@ -243,7 +257,9 @@ export function* isRegisteredWalletSaga(action: IsRegisteredWalletAction | unkno
 
     yield put(checkWalletIsRegisteredSuccess(result));
   } catch (error) {
-    yield put(checkWalletIsRegisteredFailure(error));
+    if (error instanceof Error) {
+      yield put(checkWalletIsRegisteredFailure(error));
+    }
   }
 }
 
@@ -257,7 +273,9 @@ export function* registerWalletSaga(action: RegisterWalletAction | unknown) {
 
     yield put(registerWalletSuccess({ session_token, result }));
   } catch (error) {
-    yield put(registerWalletFailure(error));
+    if (error instanceof Error) {
+      yield put(registerWalletFailure(error));
+    }
   }
 }
 
@@ -269,7 +287,9 @@ export function* authenticateWalletSaga(action: AuthenticateWalletAction | unkno
 
     yield put(authenticateWalletSuccess());
   } catch (error) {
-    yield put(authenticateWalletFailure(error));
+    if (error instanceof Error) {
+      yield put(authenticateWalletFailure(error));
+    }
   }
 }
 
@@ -342,7 +362,9 @@ export function* prepareWalletsSaga(action: PrepareWalletAction | unknown) {
       throw new Error('Wallet registration check failed');
     }
   } catch (error) {
-    yield put(prepareWalletsFailure(error));
+    if (error instanceof Error) {
+      yield put(prepareWalletsFailure(error));
+    }
   }
 }
 

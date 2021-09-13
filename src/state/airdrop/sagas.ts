@@ -70,8 +70,10 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
       }
     }
   } catch (error) {
-    yield put(subscribeWalletFailure(error.msg));
-
+    if (error instanceof Error) {
+      //@ts-ignore
+      yield put(subscribeWalletFailure(error.msg));
+    }
     if (meta?.onFailure) {
       meta.onFailure();
     }
@@ -142,8 +144,10 @@ export function* airdropCheckSubscriptionSaga(action: CheckSubscriptionAction) {
       yield put(setAirdropsWalletsBalanceAction(balance));
     }
   } catch (error) {
-    yield put(checkSubscriptionFailure(error.msg));
-
+    if (error instanceof Error) {
+      //@ts-ignore
+      yield put(checkSubscriptionFailure(error.msg));
+    }
     if (meta?.onFailure) {
       meta.onFailure();
     }
@@ -178,7 +182,10 @@ export function* getAirdropStatusSaga() {
     }
     yield put(setAirdropBadgesAction(airdropBadges));
   } catch (error) {
-    yield put(getAirdropStatusFailure(error.msg));
+    if (error instanceof Error) {
+      //@ts-ignore
+      yield put(getAirdropStatusFailure(error.msg));
+    }
   }
 }
 

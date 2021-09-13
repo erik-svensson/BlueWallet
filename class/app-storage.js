@@ -91,7 +91,10 @@ export class AppStorage {
       try {
         decrypted = encryption.decrypt(value, password);
       } catch (e) {
-        logger.error('app-storage', `decryptData: ${e.message}`);
+        logger.error({
+          message: `decryptData: ${e.message}`,
+          category: 'app-storage',
+        });
       }
 
       if (decrypted) {
@@ -257,7 +260,10 @@ export class AppStorage {
         return false; // failed loading data or loading/decryptin data
       }
     } catch (error) {
-      logger.error('app-storage', `loadFromDisk: ${error.message}`);
+      logger.error({
+        message: `loadFromDisk: ${error.message}`,
+        category: 'app-storage',
+      });
       return false;
     }
   }

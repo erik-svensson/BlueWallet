@@ -1,10 +1,9 @@
+import logger from 'app/../logger';
 import React, { FC } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Share, { Options } from 'react-native-share';
 
 import { Image } from 'app/components';
-
-import { captureException } from '../../error';
 
 interface Props {
   source: number;
@@ -18,7 +17,7 @@ export const SocialShareButton: FC<Props> = ({ source, shareOptions }) => {
     } catch (error) {
       const errorMsg = `SocialShareButton ${shareOptions.social} error: ${JSON.stringify(error)}`;
 
-      captureException(errorMsg);
+      logger.captureException(errorMsg);
     }
   };
 

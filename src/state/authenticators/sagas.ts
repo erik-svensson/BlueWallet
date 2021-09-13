@@ -1,3 +1,4 @@
+import logger from 'app/../logger';
 import { cloneDeep } from 'lodash';
 import { takeLatest, takeEvery, put, select } from 'redux-saga/effects';
 
@@ -30,7 +31,9 @@ export function* loadAuthenticatorsSaga() {
 
     yield put(loadAuthenticatorsSuccess(authenticators));
   } catch (e) {
-    yield put(loadAuthenticatorsFailure(e.message));
+    if (e instanceof Error) {
+      yield put(loadAuthenticatorsFailure(e.message));
+    }
   }
 }
 
@@ -50,10 +53,14 @@ export function* deleteAuthenticatorSaga(action: DeleteAuthenticatorAction | unk
       meta.onSuccess(authenticator);
     }
   } catch (e) {
-    yield put(deleteAuthenticatorFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
+    if (e instanceof Error) {
+      yield put(deleteAuthenticatorFailure(e.message));
+      if (meta?.onFailure) {
+        meta.onFailure(e.message);
+      }
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -74,10 +81,14 @@ export function* createAuthenticatorSaga(action: CreateAuthenticatorAction | unk
       meta.onSuccess(authenticator);
     }
   } catch (e) {
-    yield put(createAuthenticatorFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
+    if (e instanceof Error) {
+      yield put(createAuthenticatorFailure(e.message));
+      if (meta?.onFailure) {
+        meta.onFailure(e.message);
+      }
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -90,7 +101,11 @@ export function* updateAuthenticatorSaga(action: UpdateAuthenticatorAction | unk
     yield BlueApp.saveToDisk();
     yield put(updateAuthenticatorSuccess(updatedAuthenticator));
   } catch (e) {
-    yield put(updateAuthenticatorFailure(e.message));
+    if (e instanceof Error) {
+      yield put(updateAuthenticatorFailure(e.message));
+    }
+
+    logger.captureException(e);
   }
 }
 
@@ -117,10 +132,14 @@ export function* signTransactionSaga(action: SignTransactionAction | unknown) {
     }
     throw new Error(i18n.authenticators.sign.error);
   } catch (e) {
-    yield put(signTransactionFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
+    if (e instanceof Error) {
+      yield put(signTransactionFailure(e.message));
+      if (meta?.onFailure) {
+        meta.onFailure(e.message);
+      }
     }
+
+    logger.captureException(e);
   }
 }
 

@@ -1,3 +1,4 @@
+import logger from 'app/../logger';
 import { takeEvery, put } from 'redux-saga/effects';
 
 import {
@@ -21,7 +22,10 @@ export function* createTransactionNoteSaga(action: CreateTransactionNoteAction |
 
     yield put(createTransactionNoteSuccess(hash, note));
   } catch (e) {
-    yield put(createTransactionNoteFailure(e.message));
+    if (e instanceof Error) {
+      yield put(createTransactionNoteFailure(e.message));
+      logger.captureException(`createTransactionNoteSaga: ${e.message}`);
+    }
   }
 }
 

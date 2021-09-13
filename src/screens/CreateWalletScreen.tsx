@@ -195,7 +195,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
       navigation.goBack();
       this.createWalletMessage(wallet, onError);
     } catch (e) {
-      onError(e.message);
+      if (e instanceof Error) {
+        onError(e.message);
+      }
     }
   };
 
@@ -237,7 +239,9 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           wallet.addPublicKey(instantPublicKey);
           this.navigateToIntegrateRecoveryPublicKeyForAIR(wallet);
         } catch (e) {
-          this.showAlert(() => this.navigateToIntegrateInstantPublicKeyForAIR(), e.message);
+          if (e instanceof Error) {
+            this.showAlert(() => this.navigateToIntegrateInstantPublicKeyForAIR(), e.message);
+          }
         }
       },
       title: i18n.wallets.publicKey.instantSubtitle,

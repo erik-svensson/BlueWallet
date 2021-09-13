@@ -1,3 +1,4 @@
+import logger from 'app/../logger';
 import { takeEvery, takeLatest, put, call, all, select, take } from 'redux-saga/effects';
 
 import { CheckSubscriptionResponse, verifyEmail } from 'app/api';
@@ -61,11 +62,15 @@ export function* createNotificationEmailSaga(action: CreateNotificationEmailActi
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(createNotificationEmailFailure(error.message));
+    if (error instanceof Error) {
+      yield put(createNotificationEmailFailure(error.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(error);
   }
 }
 
@@ -83,11 +88,15 @@ export function* verifyNotificationEmailSaga(action: VerifyNotificationEmailActi
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(verifyNotificationEmailFailure(error.message));
+    if (error instanceof Error) {
+      yield put(verifyNotificationEmailFailure(error.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(error);
   }
 }
 
@@ -120,11 +129,15 @@ export function* subscribeWalletSaga(action: SubscribeWalletAction) {
       }
     }
   } catch (error) {
-    yield put(subscribeWalletFailure(error.message));
+    if (error instanceof Error) {
+      yield put(subscribeWalletFailure(error.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(error);
   }
 }
 
@@ -145,11 +158,15 @@ export function* unsubscribeWalletSaga(action: UnsubscribeWalletAction) {
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(unsubscribeWalletFailure(error.message));
+    if (error instanceof Error) {
+      yield put(unsubscribeWalletFailure(error.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(error);
   }
 }
 
@@ -164,11 +181,15 @@ export function* authenticateEmailSaga(action: AuthenticateEmailAction) {
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(authenticateEmailFailure(error.message));
+    if (error instanceof Error) {
+      yield put(authenticateEmailFailure(error.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(error);
   }
 }
 
@@ -193,7 +214,10 @@ export function* updateEmailSaga(action: UpdateNotificationEmailAction) {
       meta.onSuccess();
     }
   } catch (error) {
-    yield put(updateNotificationEmailFailure(error.message));
+    if (error instanceof Error) {
+      yield put(updateNotificationEmailFailure(error.message));
+    }
+    logger.captureException(error);
   }
 }
 
@@ -227,10 +251,12 @@ export function* checkSubscriptionSaga(action: CheckSubscriptionAction) {
       yield put(checkSubscriptionFailure('No email assigned to account'));
     }
   } catch (error) {
-    yield put(checkSubscriptionFailure(error.message));
+    if (error instanceof Error) {
+      yield put(checkSubscriptionFailure(error.message));
 
-    if (meta?.onFailure) {
-      meta.onFailure(error.message);
+      if (meta?.onFailure) {
+        meta.onFailure(error.message);
+      }
     }
   }
 }
@@ -270,18 +296,26 @@ export function* checkSubscriptionPushSaga(action: CheckSubscriptionPushAction) 
       yield put(checkSubscriptionPushFailure('No fcmToken assigned to account'));
     }
   } catch (error) {
-    yield put(checkSubscriptionPushFailure(error.message));
+    if (error instanceof Error) {
+      yield put(checkSubscriptionPushFailure(error.message));
 
-    if (meta?.onFailure) {
-      meta.onFailure(error.message);
+      if (meta?.onFailure) {
+        meta.onFailure(error.message);
+      }
     }
+
+    logger.captureException(error);
   }
 }
 
 export function* unsubscribePushAllWalletsSaga() {
-  const fcm: string = yield select(appSettingsSelectors.fcmToken);
+  try {
+    const fcm: string = yield select(appSettingsSelectors.fcmToken);
 
-  yield call(removeDeviceFCM, { fcm });
+    yield call(removeDeviceFCM, { fcm });
+  } catch (error) {
+    logger.captureException(error);
+  }
 }
 
 export function* unsubscribePushWalletSaga(action: UnsubscribePushWalletAction) {
@@ -369,7 +403,9 @@ export function* subscribePushWalletsSaga(action: SubscribePushAllWalletsAction)
         yield put(updatePushnotificationsSetting(true));
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    logger.captureException(error);
+  }
 }
 
 export default [

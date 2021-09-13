@@ -320,7 +320,9 @@ export class ImportWalletScreen extends Component<Props, State> {
               this.saveVaultWallet(wallet);
             });
           } catch (e) {
-            this.showAlert(e.message);
+            if (e instanceof Error) {
+              this.showAlert(e.message);
+            }
           }
         },
         headerTitle: i18n.wallets.importWallet.header,
@@ -329,7 +331,9 @@ export class ImportWalletScreen extends Component<Props, State> {
         withLink: false,
       });
     } catch (e) {
-      this.showAlert(e.message);
+      if (e instanceof Error) {
+        this.showAlert(e.message);
+      }
     }
   };
 
@@ -348,7 +352,9 @@ export class ImportWalletScreen extends Component<Props, State> {
             this.saveVaultWallet(wallet);
           });
         } catch (error) {
-          this.showAlert(error.message);
+          if (error instanceof Error) {
+            this.showAlert(error.message);
+          }
         }
       },
       headerTitle: i18n.wallets.importWallet.header,
@@ -369,7 +375,9 @@ export class ImportWalletScreen extends Component<Props, State> {
       wallet.setMnemonic(mnemonic);
       this.addInstantPublicKey(wallet);
     } catch (e) {
-      this.showAlert(e.message);
+      if (e instanceof Error) {
+        this.showAlert(e.message);
+      }
     }
   };
 
@@ -406,10 +414,12 @@ export class ImportWalletScreen extends Component<Props, State> {
         description: i18n.message.noTransactionsDesc,
       });
     } catch (error) {
-      this.showErrorMessageScreen({
-        title: i18n.message.generateAddressesError,
-        description: error.message,
-      });
+      if (error instanceof Error) {
+        this.showErrorMessageScreen({
+          title: i18n.message.generateAddressesError,
+          description: error.message,
+        });
+      }
     }
   };
 
@@ -440,7 +450,9 @@ export class ImportWalletScreen extends Component<Props, State> {
           wallet.addPublicKey(instantPublicKey);
           this.addRecoveryPublicKey(wallet);
         } catch (e) {
-          this.showAlert(e.message);
+          if (e instanceof Error) {
+            this.showAlert(e.message);
+          }
         }
       },
       withLink: false,
@@ -542,7 +554,9 @@ export class ImportWalletScreen extends Component<Props, State> {
 
       // TODO: try a raw private key
     } catch (e) {
-      this.showErrorMessageScreen({ description: e.message });
+      if (e instanceof Error) {
+        this.showErrorMessageScreen({ description: e.message });
+      }
     }
     this.showErrorMessageScreen({
       title: i18n.message.wrongMnemonic,

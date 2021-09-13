@@ -146,36 +146,41 @@ export class RecoveryTransactionListScreen extends PureComponent<Props, State> {
     return (
       <View style={styles.container}>
         <Header title={i18n.send.recovery.recover} isBackArrow />
-        <View style={styles.contentContainer}>
-          <WalletDropdown
-            onSelectPress={this.showModal}
-            balance={wallet.balance}
-            label={wallet.label}
-            unit={wallet.preferredBalanceUnit}
-          />
-          {!this.isEmptyList() && (
-            <TouchableOpacity onPress={toggleAll} style={styles.toggleAllWrapper}>
-              <CheckBox onPress={toggleAll} right checked={areAllTransactionsSelected} />
-            </TouchableOpacity>
-          )}
-          <SectionList
-            style={styles.listViewWrapper}
-            sections={getGroupedTransactions(transactions)}
-            keyExtractor={item => item.txid}
-            renderItem={this.renderItem}
-            stickySectionHeadersEnabled={false}
-            renderSectionHeader={this.renderSectionHeader}
-            ListEmptyComponent={this.renderListEmpty}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            testID="cancel-transaction-next-button"
-            onPress={this.submit}
-            disabled={!this.canSubmit()}
-            title={i18n.send.details.next}
-          />
-        </View>
+        <SectionList
+          contentContainerStyle={styles.contentContainer}
+          ListHeaderComponent={
+            <>
+              <WalletDropdown
+                onSelectPress={this.showModal}
+                balance={wallet.balance}
+                label={wallet.label}
+                unit={wallet.preferredBalanceUnit}
+              />
+              {!this.isEmptyList() && (
+                <TouchableOpacity onPress={toggleAll} style={styles.toggleAllWrapper}>
+                  <CheckBox onPress={toggleAll} right checked={areAllTransactionsSelected} />
+                </TouchableOpacity>
+              )}
+            </>
+          }
+          style={styles.listViewWrapper}
+          sections={getGroupedTransactions(transactions)}
+          keyExtractor={item => item.txid}
+          renderItem={this.renderItem}
+          stickySectionHeadersEnabled={false}
+          renderSectionHeader={this.renderSectionHeader}
+          ListEmptyComponent={this.renderListEmpty}
+          ListFooterComponent={
+            <View style={styles.buttonContainer}>
+              <Button
+                testID="cancel-transaction-next-button"
+                onPress={this.submit}
+                disabled={!this.canSubmit()}
+                title={i18n.send.details.next}
+              />
+            </View>
+          }
+        />
       </View>
     );
   }
@@ -200,14 +205,17 @@ const styles = StyleSheet.create({
   },
   listViewWrapper: { paddingBottom: 20, height: '90%' },
   contentContainer: {
+    flexGrow: 1,
     paddingHorizontal: 20,
     paddingTop: 24,
   },
   container: {
-    height: '100%',
+    flex: 1,
     backgroundColor: palette.white,
   },
   noTransactionsContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   noTransactionsImage: { height: 167, width: 167, marginVertical: 30 },
@@ -237,12 +245,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 15,
-    right: 15,
     backgroundColor: palette.background,
-    paddingHorizontal: 20,
     paddingVertical: 10,
   },
 });

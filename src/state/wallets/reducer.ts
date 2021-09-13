@@ -11,7 +11,7 @@ export interface WalletsState {
   walletToRegister: RegisterResponse | null;
   isInitialized: boolean;
   isLoading: boolean;
-  error: Error | null;
+  error: string | Error | null;
 }
 
 const initialState: WalletsState = {
