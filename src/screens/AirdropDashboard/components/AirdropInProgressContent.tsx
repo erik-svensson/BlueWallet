@@ -1,10 +1,11 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { useSelector } from 'react-redux';
 
 import { images } from 'app/assets';
 import { Image, AirdropWalletsList, AirdropCarousel } from 'app/components';
+import { ScreenTemplateContext } from 'app/components/context/ScreenTemplateContext';
 import { Wallet, AirdropCarouselCardData } from 'app/consts';
 import { getCarouselItem } from 'app/helpers/airdrop';
 import { selectors } from 'app/state/airdrop';
@@ -44,6 +45,8 @@ export const AirdropInProgressContent: FC<Props> = ({
   const [loadingWalletsIds, setLoadingWalletsIds] = useState<string[]>([]);
   let _carouselRef: Carousel<AirdropCarouselCardData>;
 
+  const { scrollViewRef } = useContext(ScreenTemplateContext);
+
   const setRef = (carouselRef: Carousel<AirdropCarouselCardData>) => {
     _carouselRef = carouselRef;
   };
@@ -62,16 +65,21 @@ export const AirdropInProgressContent: FC<Props> = ({
     setLoadingWalletsIds(stillLoading);
   }, [availableWallets, loading]);
 
-  const _subscribeWallet = (wallet: Wallet) => {
+  const _subscribeWallet = (wallet: Wallet) => () => {
     setLoadingWalletsIds([...loadingWalletsIds, wallet.id]);
 
     subscribeWallet(wallet);
   };
 
-  const setCarouselActiveElement = (wallet: Wallet) => {
-    const snapIndex = subscribedWallets.findIndex(w => w.id === wallet.id);
+  const setCarouselActiveElement = (wallet?: Wallet, index = 0) => () => {
+    let snapIndex = index || 0;
 
-    _carouselRef.snapToItem(snapIndex || 0, true);
+    if (wallet) {
+      snapIndex = subscribedWallets.findIndex(w => w.id === wallet.id);
+    }
+
+    _carouselRef.snapToItem(snapIndex || index, true);
+    scrollViewRef?.current?.scrollTo({ y: 0 });
   };
 
   const onCarouselItemSnap = (index: number) => {
@@ -114,7 +122,7 @@ export const AirdropInProgressContent: FC<Props> = ({
                 wallets={availableWallets}
                 title={i18n.airdrop.dashboard.availableWallets}
                 itemCallToAction={(wallet: Wallet) => (
-                  <AvailableWalletAction onActionClick={() => _subscribeWallet(wallet)} />
+                  <AvailableWalletAction onActionClick={_subscribeWallet(wallet)} />
                 )}
                 loadingWalletsIds={loadingWalletsIds}
               />
@@ -126,7 +134,7 @@ export const AirdropInProgressContent: FC<Props> = ({
                 wallets={subscribedWallets}
                 title={i18n.airdrop.dashboard.registeredWallets}
                 itemCallToAction={(wallet: Wallet) => (
-                  <RegisteredWalletAction onActionClick={() => setCarouselActiveElement(wallet)} />
+                  <RegisteredWalletAction onActionClick={setCarouselActiveElement(wallet)} />
                 )}
               />
             </View>
@@ -140,11 +148,7 @@ export const AirdropInProgressContent: FC<Props> = ({
       )}
       {userHasSubscribedWallets && !communityCarouselActive && (
         <View style={styles.communitySectionContainer}>
-          <CommunitySection
-            onActionClick={() => {
-              _carouselRef.snapToItem(subscribedWallets.length, true);
-            }}
-          />
+          <CommunitySection onActionClick={setCarouselActiveElement(undefined, subscribedWallets.length)} />
         </View>
       )}
       {communityCarouselActive && <CommunityAchievementsList usersQuantity={usersQuantity} />}

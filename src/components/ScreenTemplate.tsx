@@ -14,6 +14,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { palette } from 'app/styles';
 import { ifIphoneX, isIos } from 'app/styles/helpers';
 
+import { ScreenTemplateContext } from './context/ScreenTemplateContext';
+
 enum StatusBarColor {
   Light = 'light-content',
   Dark = 'dark-content',
@@ -59,35 +61,37 @@ export class ScreenTemplate extends React.PureComponent<Props> {
     const Container = noScroll ? View : ScrollView;
 
     return (
-      <SafeAreaProvider style={styles.container}>
-        <StatusBar barStyle={statusBarStyle} />
-        {header}
-        <Container
-          ref={this.scrollRef}
-          testID={testID}
-          style={[noScroll && styles.contentContainer, noScroll && contentContainer]}
-          contentContainerStyle={[styles.contentContainer, contentContainer]}
-          refreshControl={refreshControl}
-          keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-          onScroll={({ nativeEvent }) => {
-            if (isCloseToBottom !== undefined && allowedUserClick !== undefined) {
-              isCloseToBottom(nativeEvent) && allowedUserClick();
-            }
-          }}
-          scrollEventThrottle={400}
-        >
-          {children}
-        </Container>
-        {!!footer && (
-          <KeyboardAvoidingView
-            behavior={isIos() ? 'padding' : undefined}
-            style={styles.footer}
-            keyboardVerticalOffset={20}
+      <ScreenTemplateContext.Provider value={{ scrollViewRef: this.scrollRef }}>
+        <SafeAreaProvider style={styles.container}>
+          <StatusBar barStyle={statusBarStyle} />
+          {header}
+          <Container
+            ref={this.scrollRef}
+            testID={testID}
+            style={[noScroll && styles.contentContainer, noScroll && contentContainer]}
+            contentContainerStyle={[styles.contentContainer, contentContainer]}
+            refreshControl={refreshControl}
+            keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+            onScroll={({ nativeEvent }) => {
+              if (isCloseToBottom !== undefined && allowedUserClick !== undefined) {
+                isCloseToBottom(nativeEvent) && allowedUserClick();
+              }
+            }}
+            scrollEventThrottle={400}
           >
-            {footer}
-          </KeyboardAvoidingView>
-        )}
-      </SafeAreaProvider>
+            {children}
+          </Container>
+          {!!footer && (
+            <KeyboardAvoidingView
+              behavior={isIos() ? 'padding' : undefined}
+              style={styles.footer}
+              keyboardVerticalOffset={20}
+            >
+              {footer}
+            </KeyboardAvoidingView>
+          )}
+        </SafeAreaProvider>
+      </ScreenTemplateContext.Provider>
     );
   }
 }
