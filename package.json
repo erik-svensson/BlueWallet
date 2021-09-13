@@ -209,7 +209,7 @@
   "resolutions": {
     "node-fetch": "^2.6.1",
     "bl": "^4.0.3",
-    "semver": "^4.3.2"
+    "semver": "^7.3.5"
   },
   "react-native": {
     "path": "path-browserify",
