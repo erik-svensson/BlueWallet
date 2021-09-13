@@ -43,7 +43,7 @@ export const getCommunityItem = createSelector(local, state => {
   const goals = state.airdropCommunityGoals;
 
   const unreachedGoals = goals.filter((goal: AirdropGoal) => goal.threshold > usersQuantity);
-  const nextGoal = unreachedGoals[0] || goals[goals.length - 1];
+  const nextGoal = unreachedGoals[0] || goals[goals.length - 1] || { threshold: 0 };
   const nextGoalIndex = goals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
 
   return {
