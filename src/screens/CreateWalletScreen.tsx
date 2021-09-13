@@ -36,7 +36,7 @@ interface Props {
   appSettings: AppSettingsState;
   createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
   subscribe: SubscribeWalletActionCreator;
-  subscribeFcmToken: (wallet: Wallet[]) => void;
+  subscribeWalletToPush: (wallet: Wallet[]) => void;
   walletsLabels: string[];
   email: string;
   error: string;
@@ -102,7 +102,6 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     const { navigation } = this.props;
     //TODO:
 
-    this.props.subscribeFcmToken([wallet]);
     CreateMessage({
       title: i18n.contactDelete.success,
       description: i18n.message.successSubscription,
@@ -154,6 +153,10 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     const { navigation, createWallet, isAfterAirdrop, email } = this.props;
 
     wallet.setLabel(label);
+    // Timer need for sync process creation wallet too fast, no impact for flow
+    setTimeout(() => {
+      this.props.subscribeWalletToPush([wallet]);
+    }, 3000);
 
     createWallet(wallet, {
       onSuccess: (w: Wallet) => {
@@ -395,7 +398,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = {
   createWallet: createWalletAction,
   subscribe: subscribeWalletAction,
-  subscribeFcmToken: subscribePushAllWalletsAction,
+  subscribeWalletToPush: subscribePushAllWalletsAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateWalletScreen);

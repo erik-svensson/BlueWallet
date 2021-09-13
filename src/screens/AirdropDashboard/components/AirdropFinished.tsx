@@ -57,11 +57,15 @@ export const AirdropFinishedContent: FC<Props> = ({ navigation, error, loading, 
   }
 
   return (
-    <AirdropWalletsList
-      wallets={wallets}
-      title={i18n.airdrop.finished.registeredWallets}
-      itemCallToAction={data => <CallToAction data={data} navigation={navigation} />}
-    />
+    <>
+      {wallets.length > 0 && (
+        <AirdropWalletsList
+          wallets={wallets}
+          title={i18n.airdrop.finished.registeredWallets}
+          itemCallToAction={data => <CallToAction data={data} navigation={navigation} />}
+        />
+      )}
+    </>
   );
 };
 

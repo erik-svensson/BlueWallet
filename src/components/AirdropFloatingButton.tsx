@@ -30,7 +30,7 @@ export const AirdropFloatingButton: FC<Props> = ({
   // TODO: this implementation doesn't work.
   // As discussed with Paweł, We have to merge PasswordNavigator with MainStackNavigator, otherwise it fails miserably.
   useEffect(() => {
-    if (navigation && !thankYouSeen) {
+    if (!thankYouSeen) {
       navigation.navigate(Route.AirdropThankYou);
     }
   }, [navigation, thankYouSeen]);

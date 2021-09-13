@@ -117,7 +117,7 @@ export const AirdropInProgressContent: FC<Props> = ({
               />
             </View>
           )}
-          {!communityCarouselActive && (
+          {!communityCarouselActive && subscribedWallets.length > 0 && (
             <View style={styles.walletsListContainer}>
               <AirdropWalletsList
                 wallets={subscribedWallets}
