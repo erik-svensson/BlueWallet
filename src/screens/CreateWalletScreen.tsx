@@ -4,7 +4,16 @@ import React from 'react';
 import { StyleSheet, Alert } from 'react-native';
 import { connect } from 'react-redux';
 
-import { ScreenTemplate, Text, InputItem, Header, Button, FlatButton, RadioButton } from 'app/components';
+import {
+  ScreenTemplate,
+  Text,
+  InputItem,
+  Header,
+  Button,
+  FlatButton,
+  RadioButton,
+  ShareComponent,
+} from 'app/components';
 import { Route, Wallet, RootStackParams, ActionMeta, CONST, WalletType, ConfirmAddressFlowType } from 'app/consts';
 import { maxWalletNameLength } from 'app/consts/text';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
@@ -16,7 +25,11 @@ import {
   HDSegwitP2SHAirWallet,
 } from 'app/legacy';
 import { ApplicationState } from 'app/state';
-import { selectors as airdropSelector } from 'app/state/airdrop';
+import { selectors as airdropSelectors } from 'app/state/airdrop';
+import {
+  subscribeWallet,
+  SubscribeWalletActionCreator as SubscribeWalletAirdropActionCreator,
+} from 'app/state/airdrop/actions';
 import { AppSettingsState } from 'app/state/appSettings/reducer';
 import {
   subscribeWallet as subscribeWalletAction,
@@ -36,6 +49,7 @@ interface Props {
   appSettings: AppSettingsState;
   createWallet: (wallet: Wallet, meta?: ActionMeta) => CreateWalletAction;
   subscribe: SubscribeWalletActionCreator;
+  subscribeWallet: SubscribeWalletAirdropActionCreator;
   subscribeWalletToPush: (wallet: Wallet[]) => void;
   walletsLabels: string[];
   email: string;
@@ -98,9 +112,36 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
     </>
   );
 
-  navigateToSuccesfullNotificationSubscriptionMessage = (wallet: Wallet) => {
+  subscribeWalletOutFlow = (wallet: Wallet) => {
+    const { navigation, route, subscribeWallet } = this.props;
+    const { parentRouteName } = route.params;
+    const notificationsTurnedOn = parentRouteName !== Route.AirdropDashboard;
+    const description = notificationsTurnedOn
+      ? i18n.airdrop.createWalletSuccess.successWithNotifications
+      : i18n.airdrop.createWalletSuccess.success;
+
+    subscribeWallet(wallet, {
+      onSuccess: () =>
+        CreateMessage({
+          title: i18n.contactDelete.success,
+          description,
+          type: MessageType.success,
+          buttonProps: {
+            title: i18n.formatString(i18n.airdrop.createWalletSuccess.successCompletedButton, {
+              routeName: notificationsTurnedOn ? i18n.airdrop.title : i18n.wallets.dashboard.title,
+            }),
+            onPress: () =>
+              parentRouteName === Route.AirdropDashboard
+                ? navigation.navigate(Route.AirdropDashboard)
+                : navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+          },
+          footerComponent: <ShareComponent />,
+        }),
+    });
+  };
+
+  navigateToSuccesfullNotificationSubscriptionMessage = () => {
     const { navigation } = this.props;
-    //TODO:
 
     CreateMessage({
       title: i18n.contactDelete.success,
@@ -121,7 +162,8 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
   };
 
   navigateToConfirmEmailSubscription = (wallet: Wallet) => {
-    const { navigation, email, isAfterAirdrop } = this.props;
+    const { navigation, email, isAfterAirdrop, route } = this.props;
+    const { parentRouteName } = route.params;
 
     navigation.navigate(Route.Confirm, {
       title: i18n.notifications.notifications,
@@ -136,21 +178,26 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
           wallets: [wallet],
           onSuccess: isAfterAirdrop
             ? this.navigateToSuccesfullNotificationSubscriptionMessage
-            : () => this.navigateToAirdropWalletSubscription(wallet, true),
+            : () =>
+                parentRouteName === Route.AirdropDashboard
+                  ? this.subscribeWalletOutFlow(wallet)
+                  : this.navigateToAirdropWalletSubscription(wallet, true),
           onResend: () => this.props.subscribe([wallet], email),
         });
       },
       onBack: () =>
-        //TODO change logic if is after + if is email
         isAfterAirdrop
           ? this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard })
+          : parentRouteName === Route.AirdropDashboard
+          ? this.subscribeWalletOutFlow(wallet)
           : this.navigateToAirdropWalletSubscription(wallet),
     });
   };
 
   generateWallet = (wallet: Wallet, onError: Function) => {
     const { label } = this.state;
-    const { navigation, createWallet, isAfterAirdrop, email } = this.props;
+    const { navigation, createWallet, isAfterAirdrop, email, route } = this.props;
+    const { parentRouteName } = route.params;
 
     wallet.setLabel(label);
     // Timer need for sync process creation wallet too fast, no impact for flow
@@ -163,9 +210,12 @@ export class CreateWalletScreen extends React.PureComponent<Props, State> {
         navigation.navigate(Route.CreateWalletSuccess, {
           isP2SH: this.state.WalletClass === SegwitP2SHWallet,
           secret: w.getSecret(),
+          parentRouteName,
           handleNavigationSubscription: !!email
             ? () => this.navigateToConfirmEmailSubscription(wallet)
-            : () => (isAfterAirdrop ? undefined : this.navigateToAirdropWalletSubscription(wallet)),
+            : isAfterAirdrop || parentRouteName === Route.AirdropDashboard
+            ? undefined
+            : () => this.navigateToAirdropWalletSubscription(wallet),
         });
       },
       onFailure: () => onError(),
@@ -396,13 +446,14 @@ const mapStateToProps = (state: ApplicationState) => ({
   walletsLabels: walletsSelector.getWalletsLabels(state),
   email: storedEmail(state),
   error: readableError(state),
-  isAfterAirdrop: airdropSelector.isAfterAirdrop(state),
+  isAfterAirdrop: airdropSelectors.isAfterAirdrop(state),
 });
 
 const mapDispatchToProps = {
   createWallet: createWalletAction,
   subscribe: subscribeWalletAction,
   subscribeWalletToPush: subscribePushAllWalletsAction,
+  subscribeWallet,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateWalletScreen);

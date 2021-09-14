@@ -419,7 +419,7 @@ module.exports = {
     emailChangedSuccessMessage: '만세!\n사용자 이메일 주소가 성공적으로 업데이트되었습니다.',
     updateNotificationPreferences: '만세!\n알림 기본 설정이 성공적으로 업데이트되었습니다.',
     verifyAction: '이 작업을 확인하십시오',
-    verifyActionDescription: '요청을 확인하려면 받은 코드를 입력하십시오',
+    verifyActionDescription: '요청을 확인하려면 받은 코드를 입력하십시오 ',
     deleteEmail: '이메일 주소를 삭제하십시오',
     deleteYourEmail: '사용자 이메일을 삭제하십시오',
     deleteYourEmailDescription: '사용자 이메일 주소',

@@ -25,7 +25,6 @@ import {
   StartResendAction,
 } from 'app/state/notifications/actions';
 import * as notificationsSelectors from 'app/state/notifications/selectors';
-import { sessionToken, readableError, storedEmail } from 'app/state/notifications/selectors';
 import { typography, palette } from 'app/styles';
 
 const i18n = require('../../../loc');

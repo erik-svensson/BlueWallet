@@ -555,7 +555,12 @@ export type RootStackParams = {
   };
   [Route.ImportAuthenticator]: undefined;
   [Route.OptionsAuthenticator]: { id: string };
-  [Route.CreateWalletSuccess]: { secret: string; handleNavigationSubscription?: () => void; isP2SH?: boolean };
+  [Route.CreateWalletSuccess]: {
+    secret: string;
+    handleNavigationSubscription?: () => void;
+    isP2SH?: boolean;
+    parentRouteName: string;
+  };
   [Route.IntegrateKey]: {
     onBarCodeScan: (text: string) => void;
     title: string;

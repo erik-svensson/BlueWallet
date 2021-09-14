@@ -417,7 +417,7 @@ module.exports = {
     emailChangedSuccessMessage: 'おめでとうございます！\nメールアドレスの更新が完了しました。',
     updateNotificationPreferences: 'おめでとうございます！\n通知設定の更新が完了しました。',
     verifyAction: 'このアクションを確認する',
-    verifyActionDescription: 'リクエストを確認するには、お送りしたコードを入力してください',
+    verifyActionDescription: 'リクエストを確認するには、お送りしたコードを入力してください ',
     deleteEmail: 'メールアドレスの削除',
     deleteYourEmail: 'メールアドレスの削除',
     deleteYourEmailDescription: 'あなたのメールアドレス',

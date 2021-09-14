@@ -424,7 +424,7 @@ module.exports = {
     emailChangedSuccessMessage: 'İşte bu!\nEmail adresinizi başarılı bir şekilde güncellediniz.',
     updateNotificationPreferences: 'İşte bu!\nBildirim tercihlerinizi başarılı bir şekilde güncellediniz.',
     verifyAction: 'Bu eylemi doğrula',
-    verifyActionDescription: 'Talebi onaylamak için lütfen şuraya gönderdiğimiz kodu girin',
+    verifyActionDescription: 'Talebi onaylamak için lütfen şuraya gönderdiğimiz kodu girin ',
     deleteEmail: 'Email adresini sil',
     deleteYourEmail: "Email'inizi silin",
     deleteYourEmailDescription: 'email adresiniz',

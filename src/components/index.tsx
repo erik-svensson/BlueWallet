@@ -56,3 +56,4 @@ export { TimeoutButton } from './TimeoutButton';
 export { Tags } from './Tags';
 export { Tag } from './Tag';
 export { StyledSwitch } from './StyledSwitch';
+export { ShareComponent } from './ShareComponent';
