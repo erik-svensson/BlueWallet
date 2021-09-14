@@ -8,7 +8,10 @@ import { AppRegistry, LogBox } from 'react-native';
 import Main from './Main';
 import config from './src/config';
 
-LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+  '`new NativeEventEmitter()` was called with a non-null argument',
+]);
 
 if (!Error.captureStackTrace) {
   // captureStackTrace is only available when debugging
