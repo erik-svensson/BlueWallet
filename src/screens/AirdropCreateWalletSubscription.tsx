@@ -4,14 +4,7 @@ import React, { Component } from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import {
-  ScreenTemplate,
-  Button,
-  Header,
-  SocialShareFacebookButton,
-  SocialShareTwitterButton,
-  Loader,
-} from 'app/components';
+import { ScreenTemplate, Button, Header, Loader, ShareComponent } from 'app/components';
 import { Route, RootStackParams } from 'app/consts';
 import { CreateMessage, MessageType } from 'app/helpers/MessageCreator';
 import { ApplicationState } from 'app/state';
@@ -28,36 +21,8 @@ type Props = {
   subscribeWallet: SubscribeWalletActionCreator;
 };
 
-const shareReward = 0.01;
-const maxReward = 0.02;
-
-const ShareComponent = () => (
-  <View style={styles.shareComponent}>
-    <Text style={styles.shareDescription}>
-      {i18n.formatString(i18n.airdrop.createWalletSuccess.shareIt, { rewardValue: shareReward })}
-    </Text>
-    <View style={styles.socialsContainer}>
-      <View style={styles.facebookButtonContainer}>
-        {/* TODO: fill share buttons content */}
-        <SocialShareFacebookButton
-          // if valid URL is not provided, facebook throws error :|
-          shareOptions={{ url: 'http://www.medium.com', message: 'Waiting for Content', title: 'Waiting for content' }}
-        />
-      </View>
-      <SocialShareTwitterButton
-        // TODO: provide URL or leave as is. Otherwise (null) gets inserted at the end of message on twitter
-        shareOptions={{ url: '', message: 'Waiting for Content', title: 'Waiting for content' }}
-      />
-    </View>
-    <Text style={styles.maximumReward}>
-      {i18n.formatString(i18n.airdrop.createWalletSuccess.maxReward, { rewardValue: maxReward })}
-    </Text>
-  </View>
-);
-
 class AirdropCreateWalletSubscription extends Component<Props> {
   onYesPress = () => {
-    //TODO: fix real subscription
     const { navigation, route, subscribeWallet } = this.props;
     const { notificationsTurnedOn, parentRouteName, wallet } = route.params;
     const description = notificationsTurnedOn
@@ -159,36 +124,4 @@ const styles = StyleSheet.create({
   buttonsContainer: { display: 'flex', flexDirection: 'row', width: '100%' },
   noButtonContainer: { flex: 1, paddingRight: 25 },
   yesButtonContainer: { flex: 1, paddingLeft: 25 },
-  shareComponent: {
-    display: 'flex',
-    flex: 1,
-  },
-  shareDescription: {
-    ...typography.body,
-    color: palette.textGrey,
-    textAlign: 'center',
-    lineHeight: 19,
-  },
-  socialsContainer: {
-    display: 'flex',
-    flex: 1,
-    marginTop: 5,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-  facebookButtonContainer: {
-    marginRight: 23,
-  },
-  maximumReward: {
-    ...typography.body,
-    color: palette.textGrey,
-    textAlign: 'center',
-    fontSize: 10,
-    lineHeight: 19,
-    display: 'flex',
-    flex: 1,
-    marginTop: 5,
-    marginBottom: 10,
-  },
 });

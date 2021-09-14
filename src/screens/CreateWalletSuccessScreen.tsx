@@ -31,7 +31,7 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
     const {
       navigation,
       route: {
-        params: { secret, handleNavigationSubscription, isP2SH },
+        params: { secret, handleNavigationSubscription, isP2SH, parentRouteName },
       },
     } = this.props;
 
@@ -45,7 +45,10 @@ export class CreateWalletSuccessScreen extends React.PureComponent<Props> {
           title: i18n._.next,
           onPress: handleNavigationSubscription
             ? () => handleNavigationSubscription()
-            : () => navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
+            : () =>
+                parentRouteName === Route.AirdropDashboard
+                  ? navigation.navigate(Route.AirdropDashboard)
+                  : navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard }),
         },
       });
     } else {

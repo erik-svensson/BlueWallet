@@ -424,7 +424,7 @@ module.exports = {
     emailChangedSuccessMessage: 'Hoan hô!\nBạn đã cập nhật thành công địa chỉ email của bạn.',
     updateNotificationPreferences: 'Hoan hô!\nBạn đã cập nhật thành công tùy chọn thông báo.',
     verifyAction: 'Xác nhận hành động này',
-    verifyActionDescription: 'Để xác nhận yêu cầu, vui lòng nhập mã chúng tôi gửi đến',
+    verifyActionDescription: 'Để xác nhận yêu cầu, vui lòng nhập mã chúng tôi gửi đến ',
     deleteEmail: 'Xóa địa chỉ email',
     deleteYourEmail: 'Xóa email của bạn',
     deleteYourEmailDescription: 'địa chỉ email của bạn',

@@ -407,7 +407,7 @@ module.exports = {
     emailChangedSuccessMessage: '太棒啦！\n您已成功更新您的电子邮件地址。',
     updateNotificationPreferences: '太棒啦！\n您已经成功更新了通知首选项。',
     verifyAction: '验证此动作',
-    verifyActionDescription: '为了确认请求，请输入我们发送的代码',
+    verifyActionDescription: '为了确认请求，请输入我们发送的代码 ',
     deleteEmail: '删除电子邮件地址',
     deleteYourEmail: '删除您的电子邮件',
     deleteYourEmailDescription: '您的电子邮件地址',
