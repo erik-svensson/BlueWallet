@@ -191,7 +191,7 @@
     "react-native-toast-message": "^1.4.9",
     "react-native-vector-icons": "6.6.0",
     "react-native-version-number": "^0.3.6",
-    "react-native-webview": "^10.10.2",
+    "react-native-webview": "^11.13.0",
     "react-redux": "^7.2.0",
     "readable-stream": "3.4.0",
     "redux": "^4.0.5",
@@ -205,6 +205,11 @@
     "util": "0.12.1",
     "uuid": "^3.4.0",
     "wif": "2.0.6"
+  },
+  "resolutions": {
+    "node-fetch": "^2.6.1",
+    "bl": "^4.0.3",
+    "semver": "^7.3.5"
   },
   "react-native": {
     "path": "path-browserify",
