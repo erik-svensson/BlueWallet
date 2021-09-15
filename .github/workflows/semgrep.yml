@@ -21,9 +21,13 @@ jobs:
         with:
           config: >- # more at semgrep.dev/explore
             p/security-audit
+            p/typescript
+            p/insecure-transport
+            p/command-injection
             p/secrets
             p/react
             p/r2c-ci
+            p/top-ten-owasp
 
         # == Optional settings in the `with:` block
         #   p/top-ten-owasp
