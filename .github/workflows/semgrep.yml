@@ -1,12 +1,11 @@
 name: Semgrep
 
 on:
-  # Scan changed files in PRs, block on new issues only (existing issues ignored)
-  pull_request: {}
-
-  # Scan all files on branches, block on any issues
-  # push:
-  #   branches: ["master", "main"]
+  push:
+    branches: [ $default-branch, $protected-branches, main, develop, stage ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ main, develop, stage]
 
 jobs:
   semgrep:
