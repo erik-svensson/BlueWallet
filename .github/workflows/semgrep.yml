@@ -27,10 +27,9 @@ jobs:
             p/secrets
             p/react
             p/r2c-ci
-            p/top-ten-owasp
+            p/owasp-top-ten
 
         # == Optional settings in the `with:` block
-        #   p/top-ten-owasp
 
         # Instead of `config:`, use rules set in Semgrep App.
         # Get your token from semgrep.dev/manage/settings.
