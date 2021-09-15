@@ -28,6 +28,7 @@ jobs:
             p/react
             p/r2c-ci
             p/owasp-top-ten
+            p/r2c-best-practices
 
         # == Optional settings in the `with:` block
 
