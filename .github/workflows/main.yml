@@ -33,5 +33,5 @@ jobs:
       - name: Run audit
         run: yarn audit
   
-      - name: Validate PR title with commitizen
-        uses: CashStory/commitizen-action-pr@1.0.1
+      #- name: Validate PR title with commitizen
+      #  uses: CashStory/commitizen-action-pr@1.0.1
