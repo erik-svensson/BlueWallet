@@ -23,7 +23,6 @@ jobs:
             p/security-audit
             p/secrets
             p/react
-            p/top-ten-owasp
             p/r2c-ci
 
         # == Optional settings in the `with:` block
