@@ -5790,10 +5790,10 @@ googleapis-common@^5.0.2:
     url-template "^2.0.8"
     uuid "^8.0.0"
 
-googleapis@>=39.1.0:
-  version "85.0.0"
-  resolved "https://registry.yarnpkg.com/googleapis/-/googleapis-85.0.0.tgz#a23198e9e4ba75c7ed3168341b972c4d40d74a9c"
-  integrity sha512-9zFsCbxz/642PROcYJsg/CCm89U1qe15c0Wtv7bmZ8cWYLD1Jszc5z+xTNoXZxnomLbvQaHeKBCPh7RdAccYOA==
+googleapis@>=87.0.0:
+  version "87.0.0"
+  resolved "https://registry.yarnpkg.com/googleapis/-/googleapis-87.0.0.tgz#b4fabbc4d7496491a67ac531b698d16983c00c8f"
+  integrity sha512-/SfRpfshQoluC309qRkNWUiTkUN5uQtP/TuPvYbw/7khiJJnxrhP632zPZPKT+8zEPe5/j5hYzMnJKywJNeFvw==
   dependencies:
     google-auth-library "^7.0.2"
     googleapis-common "^5.0.2"
@@ -8222,7 +8222,7 @@ node-dir@^0.1.17:
   dependencies:
     minimatch "^3.0.2"
 
-node-fetch@2.6.1, node-fetch@^1.0.1, node-fetch@^2.0.0-alpha.8, node-fetch@^2.2.0, node-fetch@^2.6.0, node-fetch@^2.6.1:
+node-fetch@2.6.1, node-fetch@^1.0.1, node-fetch@^2.2.0, node-fetch@^2.6.0, node-fetch@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
