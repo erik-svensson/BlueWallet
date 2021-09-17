@@ -3,9 +3,9 @@ import { Alert } from 'react-native';
 import { takeEvery, takeLatest, put, all, call, select, delay, take } from 'redux-saga/effects';
 
 import { authenticate, isRegistered, register } from 'app/api/wallet/client';
-import { Authenticate, RegisterResponse } from 'app/api/wallet/types';
+import { RegisterResponse } from 'app/api/wallet/types';
 import config from 'app/config';
-import { Wallet } from 'app/consts';
+import { Wallet, WALLETS_ADDRESSES_TYPES } from 'app/consts';
 import { takeLatestPerKey } from 'app/helpers/sagas';
 import * as helpers from 'app/helpers/wallets';
 import { BlueApp } from 'app/legacy';
@@ -13,6 +13,7 @@ import { BlueApp } from 'app/legacy';
 import { messages } from '../../../error';
 import { checkAddressNetworkName } from '../../../utils/bitcoin';
 import { actions as electrumXActions } from '../electrumX';
+import { encryptPin } from '../encryption/actions';
 import {
   WalletsAction,
   loadWalletsSuccess,
@@ -249,6 +250,17 @@ export function* isRegisteredWalletSaga(action: IsRegisteredWalletAction | unkno
   const { wallets } = action as IsRegisteredWalletAction;
 
   try {
+    // const privKey = yield wallets[5].getXpriv();
+    // const pubkey = yield wallets[5].getXpub();
+    // const keyPair = yield wallets[5].getKeyPair();
+
+    // console.log('privKey', privKey);
+    // console.log('pubkey', pubkey);
+    // console.log('keyPair', keyPair);
+
+    // console.log('WALLETS_ADDRESSES_TYPE3', WALLETS_ADDRESSES_TYPES[wallets[5].type]);
+    // yield put(encryptPin({ data: 'some-test-data', pubkey, keyPair }));
+
     const hashes: string[] = yield all(wallets.map(wallet => call(helpers.getWalletHashedPublicKeys, wallet)));
 
     const { result } = yield call(isRegistered, {

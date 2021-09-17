@@ -180,6 +180,36 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
     return this._xpub;
   }
 
+  async getXpriv() {
+    if (this._xpriv) {
+      return this._xpriv; // cache hit
+    }
+    // first, getting xpub
+    this.seed = await this.getSeed();
+    const root = HDNode.fromSeed(this.seed, config.network);
+    const path = this._getPath();
+    const child = root.derivePath(path);
+
+    this._xpriv = child.toBase58();
+
+    return this._xpriv;
+  }
+
+  async getKeyPair() {
+    if (this._keyPair) {
+      return this._keyPair; // cache hit
+    }
+    // first, getting xpub
+    this.seed = await this.getSeed();
+    const root = HDNode.fromSeed(this.seed, config.network);
+    const path = this._getPath();
+    const child = root.derivePath(path);
+
+    this._keyPair = { public: child.publicKey, private: child.privateKey };
+
+    return this._keyPair;
+  }
+
   async generateNode0() {
     if (!this._node0) {
       const xpub = ypubToXpub(await this.getXpub());
