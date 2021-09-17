@@ -31,15 +31,6 @@ jobs:
             p/r2c-ci
             p/owasp-top-ten
 
-        # == Optional settings in the `with:` block
-
-        # Never fail the build due to findings on pushes.
-        # Instead, just collect findings for semgrep.dev/manage/findings
-        #   auditOn: push
-
-        # Change job timeout (default is 1800 seconds; set to 0 to disable)
-        # env:
-        #   SEMGREP_TIMEOUT: 300
 
       # Upload findings to GitHub Advanced Security Dashboard [step 2/2]
       - name: Upload SARIF file for GitHub Advanced Security Dashboard
