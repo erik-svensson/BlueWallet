@@ -20,6 +20,7 @@ jobs:
       - uses: returntocorp/semgrep-action@v1
         with:
           generateSarif: "1"
+          auditOn: push
           config: >- # more at semgrep.dev/explore
             p/security-audit
             p/typescript
@@ -29,21 +30,12 @@ jobs:
             p/react
             p/r2c-ci
             p/owasp-top-ten
-            p/r2c-best-practices
 
         # == Optional settings in the `with:` block
-
-        # Instead of `config:`, use rules set in Semgrep App.
-        # Get your token from semgrep.dev/manage/settings.
-        #   publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
 
         # Never fail the build due to findings on pushes.
         # Instead, just collect findings for semgrep.dev/manage/findings
         #   auditOn: push
-
-        # Upload findings to GitHub Advanced Security Dashboard [step 1/2]
-        # See also the next step.
-
 
         # Change job timeout (default is 1800 seconds; set to 0 to disable)
         # env:
