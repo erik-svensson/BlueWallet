@@ -15,8 +15,7 @@ updates:
       interval: "daily"
 
   # Maintain dependencies for yarn
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "daily"
-
