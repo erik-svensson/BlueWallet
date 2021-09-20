@@ -250,16 +250,17 @@ export function* isRegisteredWalletSaga(action: IsRegisteredWalletAction | unkno
   const { wallets } = action as IsRegisteredWalletAction;
 
   try {
+    console.log('isRegisteredWalletSaga');
     // const privKey = yield wallets[5].getXpriv();
-    // const pubkey = yield wallets[5].getXpub();
-    // const keyPair = yield wallets[5].getKeyPair();
+    const pubkey = yield wallets[0].getXpub();
+    const keyPair = yield wallets[0].getKeyPair();
 
     // console.log('privKey', privKey);
-    // console.log('pubkey', pubkey);
-    // console.log('keyPair', keyPair);
+    console.log('pubkey', pubkey);
+    console.log('keyPair', keyPair);
 
     // console.log('WALLETS_ADDRESSES_TYPE3', WALLETS_ADDRESSES_TYPES[wallets[5].type]);
-    // yield put(encryptPin({ data: 'some-test-data', pubkey, keyPair }));
+    yield put(encryptPin({ data: 'some-test-data', pubkey, keyPair }));
 
     const hashes: string[] = yield all(wallets.map(wallet => call(helpers.getWalletHashedPublicKeys, wallet)));
 

@@ -6,6 +6,8 @@ import { EncryptPinResponse, EncryptPinResponseFailure } from 'app/api/encryptio
 
 import { EncryptionAction, EncryptPinAction, encryptPinSuccess, encryptPinFailure } from './actions';
 
+const eccrypto = require('eccrypto');
+
 enum Result {
   error = 'error',
   success = 'success',
@@ -49,17 +51,18 @@ export function* encryptPinSaga(action: EncryptPinAction) {
     // const keyPair = eccryptoJS.generateKeyPair();
 
     // const str = 'test message to encrypt';
-    // const msg = eccryptoJS.utf8ToBuffer(payload.data);
+    console.log('encryption msg');
+    const msg = eccryptoJS.utf8ToBuffer(payload.data);
 
-    // // console.log('start encryption', payload.keyPair, keyPair.publicKey);
+    console.log('start encryption', payload.keyPair);
 
-    // const encrypted = yield eccryptoJS.encrypt(payload.keyPair.public, msg);
+    const encrypted = yield eccrypto.encrypt(payload.keyPair.public, msg);
 
-    // console.log('encrypted', encrypted);
+    console.log('encrypted', encrypted);
 
-    // const decrypted = yield eccryptoJS.decrypt(payload.keyPair.private, encrypted);
+    const decrypted = yield eccrypto.decrypt(payload.keyPair.private, encrypted);
 
-    // console.log('decrypted', decrypted.toString());
+    console.log('decrypted', decrypted.toString());
 
     if (response.result === Result.error) {
       throw new Error(response.msg);
