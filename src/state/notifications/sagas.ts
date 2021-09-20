@@ -329,26 +329,6 @@ export function* unsubscribePushWalletSaga(action: UnsubscribePushWalletAction) 
     const subscribedPushIds: string[] = yield select(walletsSelectors.subscribedPushIds);
 
     if (fcm) {
-      const walletWithHashes: Wallet[] = yield Promise.all(
-        wallets.map(async wallet => ({ ...wallet, hash: await getWalletHashedPublicKeys(wallet) })),
-      );
-
-      const hashes = walletWithHashes.map((wallet: Wallet) => wallet.hash);
-      //@ts-ignore
-      const response: any = yield call(unsubscribePush as any, {
-        data: {
-          wallets: hashes,
-          fcm,
-        },
-      });
-
-      const parsedWalletDataToActivate = {
-        session_token: response.session_token,
-        data: response.result,
-      };
-
-      yield put(authenticateWallet(parsedWalletDataToActivate));
-
       if (wallets.length === 1) {
         const filteredSubscribedPushIds = subscribedPushIds.filter(id => id !== wallets[0].id);
 
