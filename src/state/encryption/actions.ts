@@ -1,5 +1,3 @@
-import { EncryptPinPayload } from 'app/api/encryption/types';
-
 export enum EncryptionAction {
   EncryptPin = 'EncryptPin',
   EncryptPinSuccess = 'EncryptPinSuccess',
@@ -7,10 +5,13 @@ export enum EncryptionAction {
 }
 
 export type EncryptionActionType = EncryptPinAction | EncryptPinSuccessAction | EncryptPinFailureAction;
-
+export type ActionPayload = {
+  data: string;
+  keyPair: { private: string; public: string };
+};
 export interface EncryptPinAction {
   type: EncryptionAction.EncryptPin;
-  payload: EncryptPinPayload;
+  payload: ActionPayload;
 }
 
 export interface EncryptPinSuccessAction {
@@ -23,7 +24,7 @@ export interface EncryptPinFailureAction {
   error: string;
 }
 
-export type EncryptPinActionCreator = (payload: EncryptPinPayload) => EncryptPinAction;
+export type EncryptPinActionCreator = (payload: ActionPayload) => EncryptPinAction;
 
 export const encryptPin: EncryptPinActionCreator = payload => ({
   type: EncryptionAction.EncryptPin,

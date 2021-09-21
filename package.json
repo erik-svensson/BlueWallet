@@ -147,10 +147,9 @@
     "commitizen": "^4.2.4",
     "crypto-js": "3.1.9-1",
     "dayjs": "1.8.27",
-    "eccrypto": "^1.1.6",
-    "eccrypto-js": "^5.4.0",
     "ecurve": "^1.0.6",
     "electrum-client": "git+https://github.com/bitcoinvault/rn-electrum-client.git",
+    "electrum-ecies": "^1.1.8",
     "events": "1.1.1",
     "intl": "1.2.5",
     "jsencrypt": "^3.2.1",
@@ -203,7 +202,6 @@
     "react-native-toast-message": "^1.4.9",
     "react-native-vector-icons": "6.6.0",
     "react-native-version-number": "^0.3.6",
-    "react-native-virgil-crypto": "^0.6.1",
     "react-native-webview": "^10.10.2",
     "react-redux": "^7.2.0",
     "readable-stream": "3.4.0",
@@ -217,7 +215,6 @@
     "url": "0.11.0",
     "util": "0.12.1",
     "uuid": "^3.4.0",
-    "virgil-crypto": "^4.2.2",
     "wif": "2.0.6"
   },
   "react-native": {

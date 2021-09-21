@@ -13,7 +13,6 @@ def sharedPods
 
   pod 'react-native-config', :path => '../node_modules/react-native-config'
 
- 
 end
 
 target 'GoldWallet' do
@@ -26,14 +25,19 @@ end
 
 target 'GoldWallet Stage' do
   sharedPods
+
+
+    # Enables Flipper.
+    use_flipper!({ 'Flipper' => '0.104.0',  "Flipper-DoubleConversion" => "1.1.7"})
+
 end
 
 target 'GoldWallet Dev' do
   sharedPods  
 
-   # Enables Flipper.
-   use_flipper!({ 'Flipper' => '0.104.0',  "Flipper-DoubleConversion" => "1.1.7"})
 
+    # Enables Flipper.
+    use_flipper!({ 'Flipper' => '0.104.0',  "Flipper-DoubleConversion" => "1.1.7"})
   post_install do |installer|
     react_native_post_install(installer)
   end
