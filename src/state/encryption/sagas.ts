@@ -52,27 +52,37 @@ export function* encryptPinSaga(action: EncryptPinAction) {
 
     // const keyPair = eccryptoJS.generateKeyPair();
 
-    // const str = 'test message to encrypt';
-    console.log('encryption msg');
-    const buff = Buffer.from(response.result, 'base64');
+    const data =
+      'QklFMQMRs32uAWNKBijNq8JW3fp58+/76fs9uvdYn932CziWeoO+paGJPDFHWBJPbVSqPOCNnvXkptesL2PYqXyZYEgsIIfmdcx5aDSxHPc+0OAPfg==';
 
-    console.log('atob(response.result)', Buffer.from(response.result, 'base64'));
-    const ephemPublicKey = Buffer.from('02ceca806bf9b1a311c6f14055830a1a25b8d481ca849b9a4cd11ff14b23f6a0e3', 'base64');
-    const ciphertext = Buffer.from('a5a3f7c338030a4c6c9af42e6fcb2b72', 'base64');
-    const mac = Buffer.from('3f612d0fc1eb75fe07939da58fb4a72a76cb9d1ca03fb7e6f398e55403caee37', 'base64');
-    const iv = Buffer.from('681d66e3e9272ae23fd1f29d59d429fd', 'base64');
-    // const ephemPublicKey = buff.slice(4, 37);
-    // const ciphertext = buff.slice(37, -32);
-    // const mac = buff.slice(-32);
+    const buff1 = Buffer.from(data, 'base64');
+    const ivBase64 = 'xov4i5YRQRKbB66kK6VhqQ=';
 
-    console.log('atob(response.result)', ephemPublicKey, ciphertext, mac, iv);
+    console.log('buff1 length', buff1.length);
+    console.log('buff1', buff1);
+
+    const ephemPublicKey1 = buff1.slice(4, 37);
+    const ciphertext1 = buff1.slice(37, -32);
+    const mac1 = buff1.slice(-32);
+
+    // const ephemPublicKeyBase64 = ephemPublicKey1.toString('base64');
+    // const ciphertextBase64 = ciphertext1.toString('base64');
+    // const macBase64 = mac1.toString('base64');
+
+    // console.log('macBase64', macBase64);
+    // console.log('ephemPublicKey', ephemPublicKeyBase64);
+    // console.log('ciphertext', ciphertextBase64);
+
+    const iv = Buffer.from(ivBase64, 'base64');
+
     const msg = eccryptoJS.utf8ToBuffer(payload.data);
 
     console.log('start encryption', payload.keyPair);
-    console.log('start encryption', payload.keyPair.public.toString('base64'));
+    console.log('start encryption private', payload.keyPair.private.toString('base64'));
+    console.log('start encryption public', payload.keyPair.public.toString('base64'));
 
     // const encrypted = yield eccrypto.encrypt(payload.keyPair.public, msg);
-    const encrypted1 = { ephemPublicKey, ciphertext, mac, iv };
+    const encrypted1 = { ephemPublicKey: ephemPublicKey1, ciphertext: ciphertext1, mac: mac1, iv };
 
     console.log('encrypted', encrypted1);
 
