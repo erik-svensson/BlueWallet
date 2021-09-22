@@ -1,5 +1,8 @@
 /* global describe, it */
+import { HDSegwitP2SHWallet } from '../../class';
+
 const assert = require('assert');
+const ECIES = require('electrum-ecies');
 
 const c = require('../../encryption');
 
@@ -28,5 +31,23 @@ describe('unit - encryption', function() {
     );
 
     assert.ok(!decrypted);
+  });
+});
+
+describe('unit - ECIES encryption', function() {
+  it('encrypts and decrypts with wallet keypair', async function() {
+    const mnemonic = 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about';
+    const hd = new HDSegwitP2SHWallet();
+
+    await hd.setSecret(mnemonic);
+    const keyPair = await hd.getKeyPair();
+    const testText = 'test test';
+
+    // Encrypted data will be different every time function called;
+    const encryptedData = ECIES.encrypt(testText, keyPair.public);
+
+    const decryptedData = ECIES.decrypt(encryptedData, keyPair.private);
+
+    assert.equal(decryptedData, testText);
   });
 });
