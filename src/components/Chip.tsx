@@ -22,7 +22,7 @@ export class Chip extends React.PureComponent<Props> {
         <Text style={[styles.label, this.props.textStyle]} testID={this.props.testID}>
           {this.props.label}
         </Text>
-        {this.props.removable && <Image source={icons.blackCross} style={styles.icon} />}
+        {this.props.removable ? <Image source={icons.blackCross} style={styles.icon} /> : null}
       </View>
     );
   }

@@ -74,7 +74,7 @@ class App extends React.PureComponent {
   render() {
     return (
       <>
-        {!__DEV__ && <WithCodePush />}
+        {!__DEV__ ? <WithCodePush /> : null}
         <I18nextProvider i18n={i18n}>
           <Provider store={store}>
             <AppStateManager

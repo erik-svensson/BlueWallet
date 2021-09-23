@@ -177,7 +177,7 @@ class SendCoinsConfirmScreen extends Component<Props> {
 
     return (
       <View style={styles.balancesContainer}>
-        {isAlert && <Warning />}
+        {isAlert ? <Warning /> : null}
         <View style={styles.balanceWrapper}>
           <Text style={styles.balanceText}>
             {roundBtcToSatoshis(availableBalance)} {fromWallet.preferredBalanceUnit}

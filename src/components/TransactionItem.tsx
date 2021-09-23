@@ -43,7 +43,7 @@ export const TransactionItem = ({ item, onPress, testID }: Props) => {
         <Image source={icons.wallet} style={styles.wallet} resizeMode="contain" />
         <EllipsisText style={styles.walletLabel}>{item.walletLabel}</EllipsisText>
       </View>
-      {!!item.note && <Text style={typography.caption}>{item.note}</Text>}
+      {!!item.note ? <Text style={typography.caption}>{item.note}</Text> : null}
       <Text style={styles.label}>
         {item.time ? dayjs(item.received).format('LT') : i18n.transactions.details.timePending}
       </Text>

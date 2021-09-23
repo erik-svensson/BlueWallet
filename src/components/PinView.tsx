@@ -28,7 +28,7 @@ export class PinView extends Component<Props> {
                 },
               ]}
             >
-              {isFilled && <View style={styles.cellMask} />}
+              {isFilled ? <View style={styles.cellMask} /> : null}
             </View>
           );
         })}

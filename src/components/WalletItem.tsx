@@ -31,7 +31,7 @@ export const WalletItem = (props: WalletItemProps) => {
     <TouchableOpacity testID={testID} style={styles.container} onPress={onWalletPress}>
       <View>
         <Avatar variant={variant} title={title} />
-        {selected && <Image style={styles.image} source={images.successBadge} />}
+        {selected ? <Image style={styles.image} source={images.successBadge} /> : null}
       </View>
       <View style={styles.textContainer}>
         <Text style={typography.headline5}>{i18n.formatBalance(Number(value), unit, true)}</Text>

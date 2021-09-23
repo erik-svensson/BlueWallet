@@ -274,10 +274,10 @@ class Navigator extends React.Component<Props, State> {
           shouldRenderNotification={this.shouldRenderNotification()}
           userVersion={userVersion}
         />
-        {isAuthenticated && <Toasts />}
-        {isToast && <Toasts onClick={this.handleClickToast} />}
-        {this.shouldRenderConnectionIssues() && <ConnectionIssuesScreen />}
-        {this.shouldRenderUnlockScreen() && <UnlockScreen key={unlockKey} />}
+        {isAuthenticated ? <Toasts /> : null}
+        {isToast ? <Toasts onClick={this.handleClickToast} /> : null}
+        {this.shouldRenderConnectionIssues() ? <ConnectionIssuesScreen /> : null}
+        {this.shouldRenderUnlockScreen() ? <UnlockScreen key={unlockKey} /> : null}
       </>
     );
   };
