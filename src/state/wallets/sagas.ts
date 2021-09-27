@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { takeEvery, takeLatest, put, all, call, select, delay, take } from 'redux-saga/effects';
 
 import { authenticate, isRegistered, register } from 'app/api/wallet/client';
-import { Authenticate, RegisterResponse } from 'app/api/wallet/types';
+import { RegisterResponse } from 'app/api/wallet/types';
 import config from 'app/config';
 import { Wallet } from 'app/consts';
 import { takeLatestPerKey } from 'app/helpers/sagas';

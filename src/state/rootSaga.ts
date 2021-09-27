@@ -4,6 +4,7 @@ import { sagas as airdropSagas } from './airdrop';
 import { sagas as authenticationSagas } from './authentication';
 import { sagas as authenticatorsSagas } from './authenticators';
 import { sagas as electrumXSagas } from './electrumX';
+import { sagas as encryptionSagas } from './encryption';
 import { sagas as notificationSagas } from './notifications';
 import { sagas as toastMessagesSagas } from './toastMessages';
 import { sagas as transactionsNotesSagas } from './transactionsNotes';
@@ -19,5 +20,6 @@ export function* rootSaga() {
     ...toastMessagesSagas,
     ...notificationSagas,
     ...airdropSagas,
+    ...encryptionSagas,
   ]);
 }
