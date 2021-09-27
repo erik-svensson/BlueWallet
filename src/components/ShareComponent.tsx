@@ -4,8 +4,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { SocialShareFacebookButton, SocialShareTwitterButton } from 'app/components';
 import { palette, typography } from 'app/styles';
 
-const shareReward = 0.01;
-const maxReward = 0.02;
+const shareReward = 0.1;
+const maxReward = 0.2;
 
 const i18n = require('../../loc');
 
