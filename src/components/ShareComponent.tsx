@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import { SocialShareFacebookButton, SocialShareTwitterButton } from 'app/components';
+import { selectors } from 'app/state/airdrop';
 import { palette, typography } from 'app/styles';
 
 const shareReward = 0.01;
@@ -10,6 +12,8 @@ const maxReward = 0.02;
 const i18n = require('../../loc');
 
 export const ShareComponent = () => {
+  const socialLinks = useSelector(selectors.socialLinks);
+
   return (
     <View style={styles.shareComponent}>
       <Text style={styles.shareDescription}>
@@ -21,7 +25,7 @@ export const ShareComponent = () => {
           <SocialShareFacebookButton
             // if valid URL is not provided, facebook throws error :|
             shareOptions={{
-              url: 'http://www.medium.com',
+              url: socialLinks.facebook,
               message: 'Waiting for Content',
               title: 'Waiting for content',
             }}
@@ -29,7 +33,7 @@ export const ShareComponent = () => {
         </View>
         <SocialShareTwitterButton
           // TODO: provide URL or leave as is. Otherwise (null) gets inserted at the end of message on twitter
-          shareOptions={{ url: '', message: 'Waiting for Content', title: 'Waiting for content' }}
+          shareOptions={{ url: socialLinks.twitter, message: 'Waiting for Content', title: 'Waiting for content' }}
         />
       </View>
       <Text style={styles.maximumReward}>

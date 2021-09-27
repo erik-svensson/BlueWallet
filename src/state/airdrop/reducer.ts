@@ -1,6 +1,6 @@
 import { AirdropGoal, DateType } from 'app/consts';
 
-import { AirdropAction, AirdropActionType } from './actions';
+import { AirdropAction, AirdropActionType, SocialLinks } from './actions';
 
 export interface AirdropState {
   thankYouSeen: boolean;
@@ -13,6 +13,7 @@ export interface AirdropState {
   airdropCommunityGoals: AirdropGoal[];
   badges: AirdropGoal[];
   airdropsWalletBalance: [];
+  socialLinks: SocialLinks;
 }
 
 const initialState: AirdropState = {
@@ -26,6 +27,11 @@ const initialState: AirdropState = {
   airdropCommunityGoals: [],
   badges: [],
   airdropsWalletBalance: [],
+  socialLinks: {
+    medium: '',
+    facebook: '',
+    twitter: '',
+  },
 };
 
 export const airdropReducer = (state = initialState, action: AirdropActionType): AirdropState => {
@@ -40,6 +46,12 @@ export const airdropReducer = (state = initialState, action: AirdropActionType):
         ...state,
         thankYouFlowCompleted: true,
       };
+    case AirdropAction.GetSocialLinksSuccess: {
+      return {
+        ...state,
+        socialLinks: action.links,
+      };
+    }
     case AirdropAction.CheckSubscription:
     case AirdropAction.SubscribeWallet:
     case AirdropAction.GetAirdropStatus:

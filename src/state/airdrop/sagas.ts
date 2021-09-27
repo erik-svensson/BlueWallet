@@ -5,8 +5,9 @@ import {
   checkBalance,
   checkWalletsAirdropSubscription,
   checkBalanceWallet,
+  getSocialLinks,
 } from 'app/api/airdrop/client';
-import { AirdropCheckWalletsSubscriptionResponse } from 'app/api/airdrop/types';
+import { AirdropCheckWalletsSubscriptionResponse, AirdropSocialLinksResponse } from 'app/api/airdrop/types';
 import { AirdropGoal, Wallet } from 'app/consts';
 import { getUtcDate } from 'app/helpers/date';
 import * as helpers from 'app/helpers/wallets';
@@ -27,6 +28,7 @@ import {
   setAirdropBadgesAction,
   completeThankYouFlow,
   setAirdropsWalletsBalanceAction,
+  getSocialLinksSuccess,
 } from './actions';
 
 interface WalletWithHash extends Wallet {
@@ -154,10 +156,20 @@ export function* airdropCheckSubscriptionSaga(action: CheckSubscriptionAction) {
   }
 }
 
+export function* getSocialLinksSaga() {
+  try {
+    const response: AirdropSocialLinksResponse = yield call(getSocialLinks);
+    const { result } = response;
+
+    yield put(getSocialLinksSuccess(result));
+  } catch (error) {}
+}
+
 export function* getAirdropStatusSaga() {
   try {
     //@ts-ignore
     const response = yield call(checkBalance);
+
     const { result } = response;
     const airdropCommunityGoals: AirdropGoal[] = [];
     const airdropBadges: AirdropGoal[] = [];
@@ -193,4 +205,5 @@ export default [
   takeEvery(AirdropAction.CheckSubscription, airdropCheckSubscriptionSaga),
   takeEvery(AirdropAction.SubscribeWallet, subscribeWalletSaga),
   takeEvery(AirdropAction.GetAirdropStatus, getAirdropStatusSaga),
+  takeEvery(AirdropAction.GetSocialLinks, getSocialLinksSaga),
 ];

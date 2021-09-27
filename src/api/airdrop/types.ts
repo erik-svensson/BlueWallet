@@ -35,3 +35,11 @@ export interface AirdropCheckBalanceWalletResponse {
     balance: string;
   };
 }
+
+export interface AirdropSocialLinksResponse {
+  result: {
+    medium: string;
+    twitter: string;
+    facebook: string;
+  };
+}
