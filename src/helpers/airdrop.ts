@@ -35,7 +35,7 @@ export const getCarouselItem = (
 
   const unreachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold > airdropBalance.balance);
   // TODO: edge case of "all goals reached" not covered by designs. Awaiting UX input. For now returning last one - "whale"
-  const nextGoal = unreachedGoals[0] || airdropGoals[airdropGoals.length - 1];
+  const nextGoal = unreachedGoals[0] || airdropGoals[airdropGoals.length - 1] || { value: 0, threshold: 1 };
   const nextGoalIndex = airdropGoals.findIndex((goal: AirdropGoal) => goal.threshold === nextGoal.threshold);
 
   const reachedGoals = airdropGoals.filter((goal: AirdropGoal) => goal.threshold <= airdropBalance.balance);

@@ -153,6 +153,14 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
     return bitcoin.ECPair.fromPrivateKey(child.privateKey, { network: config.network }).toWIF();
   }
 
+  async getRootDerivedPath() {
+    this.seed = await this.getSeed();
+    const root = HDNode.fromSeed(this.seed, config.network);
+    const path = this._getPath();
+
+    return root.derivePath(path);
+  }
+
   /**
    * Returning ypub actually, not xpub. Keeping same method name
    * for compatibility.
@@ -163,11 +171,11 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
     if (this._xpub) {
       return this._xpub; // cache hit
     }
+
     // first, getting xpub
-    this.seed = await this.getSeed();
-    const root = HDNode.fromSeed(this.seed, config.network);
-    const path = this._getPath();
-    const child = root.derivePath(path).neutered();
+    const rootDerivedPath = await this.getRootDerivedPath();
+    const child = rootDerivedPath.neutered();
+
     const xpub = child.toBase58();
 
     // bitcoinjs does not support ypub yet, so we just convert it from xpub
@@ -178,6 +186,30 @@ export class AbstractHDSegwitP2SHWallet extends AbstractHDWallet {
     this._xpub = b58.encode(data);
 
     return this._xpub;
+  }
+
+  async getXpriv() {
+    if (this._xpriv) {
+      return this._xpriv; // cache hit
+    }
+    // first, getting xpub
+    const rootChild = await this.getRootDerivedPath();
+
+    this._xpriv = rootChild.toBase58();
+
+    return this._xpriv;
+  }
+
+  async getKeyPair() {
+    if (this._keyPair) {
+      return this._keyPair; // cache hit
+    }
+    // first, getting xpub
+    const rootChild = await this.getRootDerivedPath();
+
+    this._keyPair = { public: rootChild.publicKey, private: rootChild.privateKey };
+
+    return this._keyPair;
   }
 
   async generateNode0() {
