@@ -66,7 +66,9 @@ class AirdropThankYouScreen extends Component<Props> {
           </View>
         }
       >
-        <Text style={styles.subtitle}>{i18n.airdrop.itIsAlive.subtitle}</Text>
+        <Text style={styles.subtitle} testID="airdrop-title">
+          {i18n.airdrop.itIsAlive.subtitle}
+        </Text>
         <Text style={styles.description}>{i18n.airdrop.itIsAlive.description}</Text>
       </ScreenTemplate>
     );

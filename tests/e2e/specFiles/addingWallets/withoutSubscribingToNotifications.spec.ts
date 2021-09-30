@@ -11,6 +11,7 @@ describe('Adding wallet', () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());
       await app.developerRoom.tapOnSkipOnboardingButton();
       await app.onboarding.addEmailNotificationScreen.skip();
+      await app.airdrop.dashboard.skipIfActive();
       await app.navigationBar.changeTab('wallets');
     });
 
@@ -36,6 +37,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
           await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+          await app.airdrop.walletCreation.skipWalletSubscription();
           await app.wallets.addNewWallet.successScreen.close();
 
           await app.dashboard.dashboardScreen.scrollToWallet(walletName);
@@ -59,6 +61,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
           await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+          await app.airdrop.walletCreation.skipWalletSubscription();
           await app.wallets.addNewWallet.successScreen.close();
           await app.dashboard.dashboardScreen.scrollToWallet(walletName);
           await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
@@ -76,6 +79,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
           await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+          await app.airdrop.walletCreation.skipWalletSubscription();
           await app.wallets.addNewWallet.successScreen.close();
           await app.dashboard.dashboardScreen.scrollToWallet(walletName);
           await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
@@ -99,6 +103,7 @@ describe('Adding wallet', () => {
 
             await app.wallets.addNewWallet.seedScreen.waitUntilDisplayed();
             await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
+            await app.airdrop.walletCreation.skipWalletSubscription();
             await app.wallets.addNewWallet.successScreen.close();
             await app.dashboard.dashboardScreen.scrollToWallet(walletName);
             await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();
@@ -116,6 +121,7 @@ describe('Adding wallet', () => {
 
             await app.wallets.addNewWallet.seedScreen.tapOnCloseButton();
             await app.wallets.addNewWallet.confirmSeedScreen.confirmSeed(seed);
+            await app.airdrop.walletCreation.skipWalletSubscription();
             await app.wallets.addNewWallet.successScreen.close();
             await app.dashboard.dashboardScreen.scrollToWallet(walletName);
             await expect(app.dashboard.dashboardScreen.getWalletCardElement(walletName)).toBeVisible();

@@ -12,7 +12,7 @@ describe('Address book', () => {
     isBeta() && (await app.onboarding.betaVersionScreen.close());
     await app.developerRoom.tapOnSkipOnboardingButton();
     await app.onboarding.addEmailNotificationScreen.skip();
-
+    await app.airdrop.dashboard.skipIfActive();
     await app.navigationBar.changeTab('address book');
   });
 
@@ -108,7 +108,7 @@ describe('Address book', () => {
         await expect(app.addressBook.details.deleteSuccessScreen.icon).toBeVisible();
       });
 
-      it("should be possible to get access to Send coins screen from the contact's details", async () => {
+      it.only("should be possible to get access to Send coins screen from the contact's details", async () => {
         await app.header.tapOnBackButton();
         await steps.importWallet({
           type: WalletType.KEY_3,

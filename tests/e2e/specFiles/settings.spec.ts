@@ -15,6 +15,7 @@ describe('Settings', () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());
       await app.developerRoom.tapOnSkipOnboardingButton();
       await app.onboarding.addEmailNotificationScreen.skip();
+      await app.airdrop.dashboard.skipIfActive();
       await app.navigationBar.changeTab('settings');
     });
 

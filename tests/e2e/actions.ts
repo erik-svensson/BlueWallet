@@ -1,5 +1,5 @@
 /** A set of functions being a wrapper on the Detox's native methods to make developing tests even easier */
-import Detox, { by, device, waitFor } from 'detox';
+import Detox, { by, device, expect, waitFor } from 'detox';
 import { getText } from 'detox-getprops';
 
 import { WAIT_FOR_ELEMENT_TIMEOUT } from './data';
@@ -141,6 +141,15 @@ const Actions = () => {
     }
   };
 
+  const isDisplayed = async (...targets: Array<Detox.NativeElement>): Promise<boolean> => {
+    try {
+      await Promise.all(targets.map(t => expect(t).toBeVisible()));
+    } catch (e) {
+      return false;
+    }
+    return true;
+  };
+
   return {
     waitForElement,
     typeText,
@@ -152,6 +161,7 @@ const Actions = () => {
     refreshView,
     searchForElement,
     getElementsText,
+    isDisplayed,
   };
 };
 

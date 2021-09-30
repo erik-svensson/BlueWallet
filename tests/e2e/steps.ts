@@ -86,14 +86,11 @@ async function createWallet(options: CreateWalletOptions): Promise<void> {
 
     await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
     await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
-
-    await app.wallets.subscribeToEmailNotifications.successScreen.close();
   } else if (skipEmailSubscription) {
     await app.wallets.subscribeToEmailNotifications.getNotificationsScreen.tapOnNo();
-    await app.wallets.subscribeToEmailNotifications.successScreen.close();
-  } else {
-    await app.wallets.importWallet.successScreen.close();
   }
+  await app.airdrop.walletCreation.skipWalletSubscription();
+  await app.wallets.subscribeToEmailNotifications.successScreen.close();
 }
 
 /** Passes through the screens to import a wallet */

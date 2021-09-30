@@ -28,7 +28,9 @@ export const AirdropInProgress: FC<Props> = props => {
   return (
     <>
       <View style={styles.infoContainer}>
-        <Text style={typography.headline4}>{i18n.airdrop.title}</Text>
+        <Text style={typography.headline4} testID="airdrop-in-progress">
+          {i18n.airdrop.title}
+        </Text>
         <Text style={[styles.description, styles.spaceTop]}>
           {props.subscribedWallets?.length > 0 ? i18n.airdrop.dashboard.desc1WithWallets : i18n.airdrop.dashboard.desc1}
         </Text>

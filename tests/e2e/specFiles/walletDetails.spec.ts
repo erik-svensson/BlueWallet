@@ -17,6 +17,7 @@ describe('Wallet details', () => {
 
       await app.developerRoom.tapOnSkipOnboardingButton();
       await app.onboarding.addEmailNotificationScreen.skip();
+      await app.airdrop.dashboard.skipIfActive();
       await steps.importWallet({
         type: WalletType.KEY_3,
         name: walletName,

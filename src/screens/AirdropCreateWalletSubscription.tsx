@@ -86,7 +86,9 @@ class AirdropCreateWalletSubscription extends Component<Props> {
           </View>
         ) : (
           <>
-            <Text style={styles.title}>{i18n.airdrop.createWallet.title}</Text>
+            <Text style={styles.title} testID="airdrop-register-title">
+              {i18n.airdrop.createWallet.title}
+            </Text>
             <Text style={styles.description}>{i18n.airdrop.createWallet.doYouWantToTakePart}</Text>
           </>
         )}

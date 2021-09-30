@@ -1,6 +1,7 @@
 import Header from './common/Header';
 import NavigationBar from './common/NavigationBar';
 import AddressBook from './pages/AddressBook';
+import Airdrop from './pages/Airdrop';
 import Authenticators from './pages/Authenticators';
 import BetaVersionScreen from './pages/BetaVersionScreen';
 import Dashboard from './pages/Dashboard';
@@ -48,6 +49,7 @@ const app = {
   transactionsSend: TransactionsSend(),
   transactionsReceive: TransactionsReceive(),
   walletDetails: WalletDetails(),
+  airdrop: Airdrop(),
 };
 
 export default app;

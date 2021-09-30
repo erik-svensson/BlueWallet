@@ -12,6 +12,7 @@ describe('Adding wallet', () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());
       await app.developerRoom.tapOnSkipOnboardingButton();
       await app.onboarding.addEmailNotificationScreen.skip();
+      await app.airdrop.dashboard.skipIfActive();
       await app.navigationBar.changeTab('wallets');
     });
 
@@ -58,7 +59,7 @@ describe('Adding wallet', () => {
       });
     });
 
-    describe('Non-unique wallet name', () => {
+    describe.only('Non-unique wallet name', () => {
       describe('@android @ios @regression', () => {
         it("shouldn't be possible to create a new wallet with non-unique name", async () => {
           const walletName = 'My Wallet';

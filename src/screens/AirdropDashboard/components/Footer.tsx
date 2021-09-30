@@ -25,6 +25,7 @@ export const Footer: FC<Props> = ({ navigation, route }) => (
         navigation.navigate(Route.CreateWallet, { parentRouteName: route.name });
       }}
       containerStyle={styles.buttonContainer}
+      testID="skip-airdrop"
     />
     <View style={styles.termsAndConditions}>
       <Text style={styles.description}>{i18n.airdrop.requirements.termsAndConditions.read}&nbsp;</Text>

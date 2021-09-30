@@ -12,6 +12,7 @@ describe('Dashboard', () => {
     isBeta() && (await app.onboarding.betaVersionScreen.close());
     await app.developerRoom.tapOnSkipOnboardingButton();
     await app.onboarding.addEmailNotificationScreen.skip();
+    await app.airdrop.dashboard.skipIfActive();
   });
 
   describe('@android @ios @smoke', () => {

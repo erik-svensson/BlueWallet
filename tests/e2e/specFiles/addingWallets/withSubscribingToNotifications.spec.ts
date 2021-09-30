@@ -15,6 +15,7 @@ describe('Adding wallet', () => {
       isBeta() && (await app.onboarding.betaVersionScreen.close());
       await app.developerRoom.typeEmailAddress(emailAddress);
       await app.developerRoom.tapOnSkipOnboardingWithEmailButton();
+      await app.airdrop.dashboard.skipIfActive();
       await app.navigationBar.changeTab('wallets');
     });
 
@@ -44,6 +45,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
+          await app.airdrop.walletCreation.skipWalletSubscription();
 
           await waitFor(app.wallets.subscribeToEmailNotifications.successScreen.icon)
             .toBeVisible()
@@ -73,6 +75,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
+          await app.airdrop.walletCreation.skipWalletSubscription();
 
           await waitFor(app.wallets.subscribeToEmailNotifications.successScreen.icon)
             .toBeVisible()
@@ -97,6 +100,7 @@ describe('Adding wallet', () => {
 
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.typeCode(code);
           await app.wallets.subscribeToEmailNotifications.verifyActionScreen.submit();
+          await app.airdrop.walletCreation.skipWalletSubscription();
 
           await waitFor(app.wallets.subscribeToEmailNotifications.successScreen.icon)
             .toBeVisible()
