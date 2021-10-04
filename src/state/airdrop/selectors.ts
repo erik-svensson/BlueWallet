@@ -30,6 +30,7 @@ export const airdropDate = createSelector(local, state => state.endAirdrop);
 export const goals = createSelector(local, state => state.airdropCommunityGoals);
 export const badges = createSelector(local, state => state.badges);
 export const airdropsWalletBalance = createSelector(local, state => state.airdropsWalletBalance);
+export const socialLinks = createSelector(local, state => state.socialLinks);
 
 export const getFormattedAirdropDate = createSelector(
   local,

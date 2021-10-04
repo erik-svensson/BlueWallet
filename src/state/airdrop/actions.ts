@@ -1,5 +1,11 @@
 import { Wallet, ActionMeta, DateType, AirdropGoal } from 'app/consts';
 
+export interface SocialLinks {
+  medium: string;
+  facebook: string;
+  twitter: string;
+}
+
 export enum AirdropAction {
   ThankYouSeen = 'ThankYouSeen',
   ThankYouFlowCompleted = 'ThankYouFlowCompleted',
@@ -17,6 +23,8 @@ export enum AirdropAction {
   SetAirdropBadges = 'SetAirdropBadges',
   GetReadableOrder = 'GetReadableOrder',
   SetAirdropsWalletsBalance = 'SetAirdropsWalletsBalance',
+  GetSocialLinks = 'GetSocialLinks',
+  GetSocialLinksSuccess = 'GetSocialLinksSuccess',
 }
 
 export interface GetAirdropStatusAction {
@@ -33,6 +41,13 @@ export interface GetAirdropStatusFailureAction {
   error: string;
 }
 
+export interface GetSocialLinksAction {
+  type: AirdropAction.GetSocialLinks;
+}
+export interface GetSocialLinksSuccessAction {
+  type: AirdropAction.GetSocialLinksSuccess;
+  links: SocialLinks;
+}
 export interface ThankYouSeenAction {
   type: AirdropAction.ThankYouSeen;
 }
@@ -178,6 +193,19 @@ export const getAirdropStatusFailure: GetAirdropStatusFailureActionCreator = err
   error,
 });
 
+export type GetSocialLinksActionCreator = () => GetSocialLinksAction;
+
+export const getSocialLinks: GetSocialLinksActionCreator = () => ({
+  type: AirdropAction.GetSocialLinks,
+});
+
+export type GetSocialLinksSuccessActionCreator = (links: SocialLinks) => GetSocialLinksSuccessAction;
+
+export const getSocialLinksSuccess: GetSocialLinksSuccessActionCreator = links => ({
+  type: AirdropAction.GetSocialLinksSuccess,
+  links,
+});
+
 export type SetEndDateAirdropActionCreator = (date: string | DateType) => SetEndDateAirdropAction;
 
 export const setEndDateAirdropAction: SetEndDateAirdropActionCreator = (date: string | DateType) => ({
@@ -229,4 +257,6 @@ export type AirdropActionType =
   | SetAirdropCommunityGoalsAction
   | SetAirdropBadgesAction
   | GetReadableOrderAction
-  | SetAirdropsWalletsBalanceAction;
+  | SetAirdropsWalletsBalanceAction
+  | GetSocialLinksAction
+  | GetSocialLinksSuccessAction;

@@ -10,7 +10,9 @@ import { actions, selectors } from 'app/state/airdrop';
 import {
   MarkThankYouSeenActionCreator,
   GetAirdropStatusActionCreator,
+  GetSocialLinksActionCreator,
   getAirdropStatus,
+  getSocialLinks,
 } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
 
@@ -23,6 +25,7 @@ interface MapStateProps {
 interface ActionProps {
   markThankYouSeen: MarkThankYouSeenActionCreator;
   getAirdropStatus: GetAirdropStatusActionCreator;
+  getSocialLinks: GetSocialLinksActionCreator;
 }
 
 type Props = {
@@ -32,8 +35,9 @@ type Props = {
 
 class AirdropThankYouScreen extends Component<Props> {
   componentDidMount() {
-    const { thankYouSeen, markThankYouSeen, getAirdropStatus } = this.props;
+    const { thankYouSeen, markThankYouSeen, getAirdropStatus, getSocialLinks } = this.props;
 
+    getSocialLinks();
     getAirdropStatus();
     if (!thankYouSeen) {
       markThankYouSeen();
@@ -80,6 +84,7 @@ const mapStateToProps = (state: ApplicationState): MapStateProps => ({
 const mapDispatchToProps: ActionProps = {
   markThankYouSeen: actions.markThankYouSeen,
   getAirdropStatus,
+  getSocialLinks,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AirdropThankYouScreen);

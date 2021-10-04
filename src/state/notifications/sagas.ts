@@ -329,6 +329,14 @@ export function* unsubscribePushWalletSaga(action: UnsubscribePushWalletAction) 
     const subscribedPushIds: string[] = yield select(walletsSelectors.subscribedPushIds);
 
     if (fcm) {
+      const hashes: string[] = yield all(wallets.map(wallet => call(getWalletHashedPublicKeys, wallet)));
+
+      yield call(unsubscribePush, {
+        data: {
+          fcm,
+          wallets: hashes,
+        },
+      });
       if (wallets.length === 1) {
         const filteredSubscribedPushIds = subscribedPushIds.filter(id => id !== wallets[0].id);
 
@@ -371,6 +379,7 @@ export function* subscribePushWalletsSaga(action: SubscribePushAllWalletsAction)
         wallets: hashes,
         language,
       });
+
       const ids: string[] = [];
 
       walletWithHashes.forEach((wallet: Wallet) => {
