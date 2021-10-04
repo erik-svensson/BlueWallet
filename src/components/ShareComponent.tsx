@@ -6,8 +6,8 @@ import { SocialShareFacebookButton, SocialShareTwitterButton } from 'app/compone
 import { selectors } from 'app/state/airdrop';
 import { palette, typography } from 'app/styles';
 
-const shareReward = 0.01;
-const maxReward = 0.02;
+const shareReward = 0.1;
+const maxReward = 0.2;
 
 const i18n = require('../../loc');
 
