@@ -143,14 +143,15 @@ export class ImportWalletScreen extends Component<Props, State> {
                     : this.navigateToConfirmEmailSubscription(wallet);
                 },
                 onFailure: () => {
-                  this.showSuccessImportMessageScreen();
+                  this.showErrorMessageScreen({});
                 },
               });
             }
             if (!isAfterAirdrop) {
               this.isAfterAirdropCheck(wallet);
+            } else {
+              this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
             }
-            this.props.navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard });
           }
         },
       },
@@ -205,18 +206,18 @@ export class ImportWalletScreen extends Component<Props, State> {
   );
 
   isAfterAirdropCheck = (wallet: Wallet) => {
-    const { airdropCheckSubscription } = this.props;
+    const { airdropCheckSubscription, navigation } = this.props;
 
     return airdropCheckSubscription([wallet], {
       onSuccess: (ids: string[]) => {
         const isAirdropWalletSubscribed = ids.some(id => id === wallet.id);
 
         isAirdropWalletSubscribed
-          ? this.showSuccessImportMessageScreen(wallet)
+          ? navigation.navigate(Route.MainTabStackNavigator, { screen: Route.Dashboard })
           : this.navigateToAirdropWalletSubscription(wallet);
       },
       onFailure: () => {
-        this.showSuccessImportMessageScreen();
+        this.showErrorMessageScreen({});
       },
     });
   };
