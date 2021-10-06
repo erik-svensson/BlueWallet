@@ -2,10 +2,12 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import { images } from 'app/assets';
 import { AirdropStayTuned, AirdropWalletsList, Image } from 'app/components';
 import { RootStackParams, Route, Wallet } from 'app/consts';
+import { selectors } from 'app/state/airdrop';
 import { typography, palette } from 'app/styles';
 
 import { Error } from './Error';
@@ -70,6 +72,8 @@ export const AirdropFinishedContent: FC<Props> = ({ navigation, error, loading, 
 };
 
 export const AirdropFinished: FC<Props> = props => {
+  const socialLinks = useSelector(selectors.socialLinks);
+
   return (
     <View style={styles.container}>
       <Text style={styles.subtitle}>{i18n.airdrop.finished.subtitle}</Text>
@@ -79,7 +83,7 @@ export const AirdropFinished: FC<Props> = props => {
           <Text style={styles.description}>{i18n.airdrop.finished.readFullReport} </Text>
           <TouchableOpacity
             onPress={() => {
-              Linking.openURL('www.medium.com'); // TODO: replace with proper URL
+              Linking.openURL(socialLinks.medium);
             }}
           >
             <Text style={styles.link}>{i18n.airdrop.finished.medium}</Text>
