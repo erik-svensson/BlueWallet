@@ -500,7 +500,7 @@ module.exports = {
   },
   security: {
     jailBrokenPhone:
-      'Your device appears to be jailbroken. This may occurs security issues, crashes, or other problems. We do not recommend using GoldWallet with jailbroken device.',
+      'Your device has been rooted or jailbroken. Due to security reasons you can’t use the Gold Wallet app on a rooted or jailbroken device.',
     noPinOrFingerprintSet:
       'Your device appears to not have a PIN or fingerprint set. We do not recommend using GoldWallet with a not secured device.',
     rootedPhone:

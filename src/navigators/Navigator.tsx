@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import JailMonkey from 'jail-monkey';
 import React from 'react';
 import { isEmulator } from 'react-native-device-info';
+import RNExitApp from 'react-native-exit-app';
 import { connect } from 'react-redux';
 
 import config from 'app/config';
@@ -218,12 +219,20 @@ class Navigator extends React.Component<Props, State> {
         description: i18n.security.jailBrokenPhone,
         title: i18n.security.title,
         type: MessageType.error,
+        buttonProps: {
+          title: i18n.timeCounter.closeTheApp,
+          onPress: () => RNExitApp.exitApp(),
+        },
       });
     } else if (isAndroid()) {
       return RenderMessage({
         description: i18n.security.rootedPhone,
         title: i18n.security.title,
         type: MessageType.error,
+        buttonProps: {
+          title: i18n.timeCounter.closeTheApp,
+          onPress: () => RNExitApp.exitApp(),
+        },
       });
     }
   };
@@ -256,12 +265,12 @@ class Navigator extends React.Component<Props, State> {
       return <ChamberOfSecrets onButtonPress={this.handleOpenChamberOfSecrets} />;
     }
 
-    if (!isTcAccepted) {
-      return <TermsConditionsScreen />;
-    }
-
     if (!__DEV__ && JailMonkey.isJailBroken() && !this.state.isEmulator) {
       return this.preventOpenAppWithRootedPhone();
+    }
+
+    if (!isTcAccepted) {
+      return <TermsConditionsScreen />;
     }
 
     if (!__DEV__ && config.isBeta && !this.state.isBetaVersionRiskAccepted) {
