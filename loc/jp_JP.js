@@ -413,7 +413,7 @@ module.exports = {
     invalidName: 'ウォレット名は無効です',
     confirmCurrentTitle: '現在のメールアドレスを確認してください',
     confirmNewTitle: '新しいメールアドレスを確認してください',
-    confirmNewDescription: '新しいメールアドレスを確認してください。お送りしたコードを入力してください',
+    confirmNewDescription: '新しいメールアドレスを確認してください。お送りしたコードを入力してください ',
     emailChangedSuccessMessage: 'おめでとうございます！\nメールアドレスの更新が完了しました。',
     updateNotificationPreferences: 'おめでとうございます！\n通知設定の更新が完了しました。',
     verifyAction: 'このアクションを確認する',

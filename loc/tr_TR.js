@@ -436,7 +436,7 @@ module.exports = {
     no: 'Hayır',
     yes: 'Evet',
     notifications: 'Bildirimler',
-    receiveTransactionDescription: 'Email adresinize bu cüzdandan \nişlem bildirimleri gelmesini istiyor musunuz',
+    receiveTransactionDescription: 'Email adresinize bu cüzdandan \nişlem bildirimleri gelmesini istiyor musunuz\n',
     noteFirst: 'Not:',
     noteSecond: 'Email adresinizi değiştirmek \nisterseniz bu işlemi sonradan Ayarlardan yapabilirsiniz.',
     noSubscriptionDescription: 'Hiçbir bildirim aboneliğiniz \nbulunmuyor.',
