@@ -29,6 +29,8 @@ import {
   completeThankYouFlow,
   setAirdropsWalletsBalanceAction,
   getSocialLinksSuccess,
+  setIncubationDateAirdropAction,
+  setCampaignDateAirdropAction,
 } from './actions';
 
 interface WalletWithHash extends Wallet {
@@ -169,11 +171,16 @@ export function* getAirdropStatusSaga() {
   try {
     //@ts-ignore
     const response = yield call(checkBalance);
-
+    // temporal data
+    const incubationDate = '2021-12-06T10:36:00Z';
+    const campaignDate = '2021-12-06T10:40:00Z';
+    //
     const { result } = response;
     const airdropCommunityGoals: AirdropGoal[] = [];
     const airdropBadges: AirdropGoal[] = [];
 
+    yield put(setIncubationDateAirdropAction(getUtcDate(incubationDate)));
+    yield put(setCampaignDateAirdropAction(getUtcDate(campaignDate)));
     yield put(setEndDateAirdropAction(getUtcDate(result.ends)));
     yield put(getAirdropStatusSuccess(result.users));
     const goals = result.goals;

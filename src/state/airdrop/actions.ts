@@ -19,6 +19,8 @@ export enum AirdropAction {
   GetAirdropStatusSuccess = 'GetAirdropStatusSuccess',
   GetAirdropStatusFailure = 'GetAirdropStatusFailure',
   SetEndDateAirdrop = 'SetEndDateAirdrop',
+  SetIncubationDateAirdrop = 'SetIncubationDateAirdrop',
+  SetCampaignDateAirdrop = 'SetCampaignDateAirdrop',
   SetAirdropCommunityGoals = 'SetAirdropCommunityGoals',
   SetAirdropBadges = 'SetAirdropBadges',
   GetReadableOrder = 'GetReadableOrder',
@@ -94,6 +96,16 @@ export interface CheckSubscriptionSuccessAction {
 
 export interface SetEndDateAirdropAction {
   type: AirdropAction.SetEndDateAirdrop;
+  date: string | DateType;
+}
+
+export interface SetIncubationDateAirdropAction {
+  type: AirdropAction.SetIncubationDateAirdrop;
+  date: string | DateType;
+}
+
+export interface SetCampaignDateAirdropAction {
+  type: AirdropAction.SetCampaignDateAirdrop;
   date: string | DateType;
 }
 
@@ -213,6 +225,20 @@ export const setEndDateAirdropAction: SetEndDateAirdropActionCreator = (date: st
   date,
 });
 
+export type SetIncubationDateAirdropActionCreator = (date: string | DateType) => SetIncubationDateAirdropAction;
+
+export const setIncubationDateAirdropAction: SetIncubationDateAirdropActionCreator = (date: string | DateType) => ({
+  type: AirdropAction.SetIncubationDateAirdrop,
+  date,
+});
+
+export type SetCampaignDateAirdropActionCreator = (date: string | DateType) => SetCampaignDateAirdropAction;
+
+export const setCampaignDateAirdropAction: SetCampaignDateAirdropActionCreator = (date: string | DateType) => ({
+  type: AirdropAction.SetCampaignDateAirdrop,
+  date,
+});
+
 export type SetAirdropCommunityGoalsActionCreator = (date: AirdropGoal[]) => SetAirdropCommunityGoalsAction;
 
 export const setAirdropCommunityGoalsAction: SetAirdropCommunityGoalsActionCreator = (date: AirdropGoal[]) => ({
@@ -254,6 +280,8 @@ export type AirdropActionType =
   | GetAirdropStatusSuccessAction
   | GetAirdropStatusFailureAction
   | SetEndDateAirdropAction
+  | SetIncubationDateAirdropAction
+  | SetCampaignDateAirdropAction
   | SetAirdropCommunityGoalsAction
   | SetAirdropBadgesAction
   | GetReadableOrderAction

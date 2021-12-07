@@ -43,6 +43,23 @@ module.exports = {
   },
   airdrop: {
     title: 'Airdrop',
+    phase: {
+      end: {
+        title: 'Final Period',
+        desc:
+          'Keep at least 5 BTCV in your wallet until the end of the campaign. More BTCV means a bigger payout. This step lasts 30 days.',
+      },
+      incubation: {
+        title: 'Incubation',
+        desc:
+          'Add wallets with at least 5 BTCV before the campaign starts to maximize your Airdrop. This step lasts 5 days.',
+      },
+      campaign: {
+        title: 'Airdrop Campaign',
+        desc:
+          'Add wallets with at least 5 BTCV. Join early and stake as much as you can to get a bigger reward. This step lasts 60 days.',
+      },
+    },
     dateOfAirdrop: 'Date of Airdrop:',
     readableCommunityGoals: {
       first: 'The first goal',

@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { Countdown } from 'app/components';
 import { Wallet } from 'app/consts';
+import { isAfter } from 'app/helpers/date';
 import { selectors } from 'app/state/airdrop';
 import { SubscribeWalletActionCreator } from 'app/state/airdrop/actions';
 import { typography, palette } from 'app/styles';
@@ -22,22 +23,49 @@ interface Props {
 }
 
 export const AirdropInProgress: FC<Props> = props => {
-  const airdropDate = useSelector(selectors.airdropDate);
-  const getFormattedAirdropDate = useSelector(selectors.getFormattedAirdropDate);
+  const airdropEndDate = useSelector(selectors.airdropEndDate);
+  const airdropIncubationDate = useSelector(selectors.airdropIncubationDate);
+  const airdropCampaignDate = useSelector(selectors.airdropCampaignDate);
+
+  const checkPhaseDate = useCallback(() => {
+    if (isAfter(new Date(), airdropIncubationDate) && isAfter(new Date(), airdropCampaignDate)) {
+      return airdropEndDate;
+    } else if (isAfter(new Date(), airdropIncubationDate)) {
+      return airdropCampaignDate;
+    } else {
+      return airdropIncubationDate;
+    }
+  }, [airdropIncubationDate, airdropCampaignDate, airdropEndDate]);
+
+  const checkPhaseText = () => {
+    if (isAfter(new Date(), airdropIncubationDate) && isAfter(new Date(), airdropCampaignDate)) {
+      return 'end';
+    } else if (isAfter(new Date(), airdropIncubationDate)) {
+      return 'campaign';
+    } else {
+      return 'incubation';
+    }
+  };
 
   return (
     <>
       <View style={styles.infoContainer}>
-        <Text style={typography.headline4}>{i18n.airdrop.title}</Text>
-        <Text style={[styles.description, styles.spaceTop]}>
-          {props.subscribedWallets?.length > 0 ? i18n.airdrop.dashboard.desc1WithWallets : i18n.airdrop.dashboard.desc1}
+        <Text style={typography.headline4}>
+          {checkPhaseText() === 'incubation'
+            ? i18n.airdrop.phase.incubation.title
+            : checkPhaseText() === 'campaign'
+            ? i18n.airdrop.phase.campaign.title
+            : i18n.airdrop.phase.end.title}
         </Text>
         <Text style={styles.description}>
-          {i18n.airdrop.dateOfAirdrop}&nbsp;
-          {getFormattedAirdropDate}
+          {checkPhaseText() === 'incubation'
+            ? i18n.airdrop.phase.incubation.desc
+            : checkPhaseText() === 'campaign'
+            ? i18n.airdrop.phase.campaign.desc
+            : i18n.airdrop.phase.end.desc}
         </Text>
       </View>
-      <Countdown dataEnd={airdropDate} />
+      <Countdown dataEnd={checkPhaseDate()} />
       <AirdropInProgressContent {...props} />
     </>
   );
@@ -53,8 +81,5 @@ const styles = StyleSheet.create({
     color: palette.textGrey,
     textAlign: 'center',
     lineHeight: 19,
-  },
-  spaceTop: {
-    marginTop: 18,
   },
 });

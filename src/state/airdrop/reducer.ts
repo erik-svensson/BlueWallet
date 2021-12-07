@@ -10,6 +10,8 @@ export interface AirdropState {
   subscribedIds: string[];
   usersQuantity: number;
   endAirdrop: string | DateType;
+  incubationAirdrop: string | DateType;
+  campaignAirdrop: string | DateType;
   airdropCommunityGoals: AirdropGoal[];
   badges: AirdropGoal[];
   airdropsWalletBalance: [];
@@ -24,6 +26,8 @@ const initialState: AirdropState = {
   error: '',
   usersQuantity: 0,
   endAirdrop: '',
+  incubationAirdrop: '',
+  campaignAirdrop: '',
   airdropCommunityGoals: [],
   badges: [],
   airdropsWalletBalance: [],
@@ -92,6 +96,16 @@ export const airdropReducer = (state = initialState, action: AirdropActionType):
       return {
         ...state,
         endAirdrop: action.date,
+      };
+    case AirdropAction.SetIncubationDateAirdrop:
+      return {
+        ...state,
+        incubationAirdrop: action.date,
+      };
+    case AirdropAction.SetCampaignDateAirdrop:
+      return {
+        ...state,
+        campaignAirdrop: action.date,
       };
     case AirdropAction.SetAirdropCommunityGoals:
       return {

@@ -26,7 +26,9 @@ export const availableWallets = createSelector([wallets, subscribedIds], (wallet
 export const airdropUsersQuantity = createSelector(local, state => state.usersQuantity);
 export const isLoading = createSelector(local, state => state.isLoading);
 export const hasError = createSelector(local, state => !!state.error);
-export const airdropDate = createSelector(local, state => state.endAirdrop);
+export const airdropEndDate = createSelector(local, state => state.endAirdrop);
+export const airdropIncubationDate = createSelector(local, state => state.incubationAirdrop);
+export const airdropCampaignDate = createSelector(local, state => state.campaignAirdrop);
 export const goals = createSelector(local, state => state.airdropCommunityGoals);
 export const badges = createSelector(local, state => state.badges);
 export const airdropsWalletBalance = createSelector(local, state => state.airdropsWalletBalance);

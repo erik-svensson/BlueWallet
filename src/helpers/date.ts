@@ -48,4 +48,5 @@ export const getTimezoneOffset = () => {
   return `GMT ${offset < 0 ? '-' : '+'}${dayjs.duration({ minutes: offset }).asHours()}`;
 };
 
-export const isAfter = (startDate: DateType, endDate: DateType | string) => dayjs(startDate).isAfter(dayjs(endDate));
+export const isAfter = (startDate: DateType | string, endDate: DateType | string) =>
+  dayjs(startDate).isAfter(dayjs(endDate));
