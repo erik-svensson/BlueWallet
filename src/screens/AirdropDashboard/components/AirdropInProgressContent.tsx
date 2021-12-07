@@ -89,9 +89,7 @@ export const AirdropInProgressContent: FC<Props> = ({
   const userHasSubscribedWallets = subscribedWallets?.length > 0 || allWallets.length > 0;
 
   const getCarouselItems = (subscribedWallets: Wallet[]): AirdropCarouselCardData[] => {
-    const renderableWallets = subscribedWallets.map(data =>
-      getCarouselItem(data, isAfterAirdrop, airdropGoals, airdropsWalletBalance),
-    );
+    const renderableWallets = subscribedWallets.map(data => getCarouselItem(data, isAfterAirdrop, airdropGoals));
 
     return isAfterAirdrop || !airdropCommunityGoals.length
       ? renderableWallets

@@ -1,11 +1,11 @@
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Header, ScreenTemplate } from 'app/components';
-import { Route, RootStackParams, Wallet } from 'app/consts';
+import { Route, RootStackParams, Wallet, minBalanceForAirdrop } from 'app/consts';
 import { ApplicationState } from 'app/state';
 import {
   getAirdropStatus,
@@ -68,7 +68,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
   }, []);
 
   const airdropFinished = isAfterAirdrop;
-  const checkAvailableWallets = () => availableWallets.filter(wallet => wallet.balance >= 5);
+  const checkAvailableWallets = () => availableWallets.filter(wallet => wallet.balance >= minBalanceForAirdrop);
 
   return (
     <ScreenTemplate
