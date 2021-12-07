@@ -68,6 +68,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
   }, []);
 
   const airdropFinished = isAfterAirdrop;
+  const checkAvailableWallets = () => availableWallets.filter(wallet => wallet.balance >= 5);
 
   return (
     <ScreenTemplate
@@ -86,7 +87,7 @@ export const AirdropDashboardScreen: FC<Props> = ({
           <AirdropInProgress
             loading={isLoading}
             error={error}
-            availableWallets={availableWallets}
+            availableWallets={checkAvailableWallets()}
             subscribedWallets={subscribedWallets}
             subscribeWallet={subscribeWallet}
             usersQuantity={usersQuantity}
