@@ -33,7 +33,7 @@ export const es = `<!DOCTYPE html>
     Estos términos de uso se celebran entre tú y <b>CyberBit OÜ</b>, una empresa de responsabilidad limitada que opera de acuerdo con las leyes de Estonia, en la dirección:  Harju maakond, Tallinn, Kesklinna linnaosa, Pärnu mnt 158, 11317, Estonia, ("<b>Empresa</b>", "<b>nosotros</b>" o "<b>nos</b>").
 </p>
 <p>
-    Los siguientes términos y condiciones, y los demás documentos que se incluyen como referencia (conjuntamente, "Términos de uso"), regulan el acceso y uso que hagas de <a href="https://www.bitcoinvault.global">www.bitcoinvault.global</a>, , (el "Sitio web"), incluido la aplicación de escritorio ELECTRUM VAULT y la aplicación móvil GOLD WALLET asociadas (por separado, la "Aplicación" y conjuntamente las "Aplicaciones) y el acceso y uso que hagas de cualquier archivo multimedia, análisis, contenido, funcionalidad y servicios que se ofrecen en el Sitio Web y Aplicaciones, y el acceso y uso que hagas a cualquiera de los sitios y servicios relacionados.
+    Los siguientes términos y condiciones, y los demás documentos que se incluyen como referencia (conjuntamente, "Términos de uso"), regulan el acceso y uso que hagas de <a href="https://www.btcv.com">www.btcv.com</a>, , (el "Sitio web"), incluido la aplicación de escritorio ELECTRUM VAULT y la aplicación móvil GOLD WALLET asociadas (por separado, la "Aplicación" y conjuntamente las "Aplicaciones) y el acceso y uso que hagas de cualquier archivo multimedia, análisis, contenido, funcionalidad y servicios que se ofrecen en el Sitio Web y Aplicaciones, y el acceso y uso que hagas a cualquiera de los sitios y servicios relacionados.
 </p>
 <p>
     El Sitio web, las Aplicaciones y todos los demás archivos multimedia, análisis, contenido, funcionalidad, productos y servicios que ofrecemos se denominan "Producto". 
@@ -54,7 +54,7 @@ export const es = `<!DOCTYPE html>
     La falta o la demora de la Aplicación para hacer cumplir, o parcialmente cumplir, cualquiera de las disposiciones de estos Términos no se interpretará como una renuncia a ningún derecho.
 </p>
 <p>
-    Si tienes alguna pregunta o comentario relativos a estos Términos de uso, envíanos un mensaje en nuestro sitio web a <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a> o contacta con nosotros a través de Facebook, Telegram, Instagram o Twitter. Si no aceptas este Acuerdo o cualquier modificación de este Acuerdo, no utilices nuestros Servicios.
+    Si tienes alguna pregunta o comentario relativos a estos Términos de uso, envíanos un mensaje en nuestro sitio web a <a href="mailto:contact@btcv.com">contact@btcv.com</a> o contacta con nosotros a través de Facebook, Telegram, Instagram o Twitter. Si no aceptas este Acuerdo o cualquier modificación de este Acuerdo, no utilices nuestros Servicios.
 </p>
 <h3>
     Quién puede usar nuestro Sitio web y Productos, incl. Aplicaciones
@@ -155,7 +155,7 @@ Presta atención al proporcionar información personal en las Páginas web desde
     </li>
 </ol>
 <p>
-    Si quieres usar algún material de las Páginas web o de los Productos de modo diferente a los establecidos en esta sección, consúltanos en: <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+    Si quieres usar algún material de las Páginas web o de los Productos de modo diferente a los establecidos en esta sección, consúltanos en: <a href="mailto:contact@btcv.com">contact@btcv.com</a>
 </p>
 <p>
     Si imprimes, copias, modificas, descargas o de otro modo utilizas o das a cualquier persona acceso a cualquier parte de los Sitios web y Productos incumpliendo los Términos, tu derecho de usar los Sitios web y Productos se suspenderá inmediatamente y deberás, bajo nuestra discreción, devolver o destruir cualquier copia de los materiales que tengas. No se te transferirá ningún derecho, título o interés en o de los Sitios web o Productos ni ningún contenido de las Páginas web o Productos, y todos tus derechos no concedidos expresamente están reservados por nosotros. Cualquier uso de los Sitios web que no esté expresamente permitido en estos Términos de uso se considera un incumplimiento de estos Términos de uso y puede violar las leyes de copyright, de marca registrada y otras.
@@ -279,7 +279,7 @@ Presta atención al proporcionar información personal en las Páginas web desde
         Procesamos tus datos personales de conformidad con la Normativa General de Protección de Datos, es decir, la Normativa (EU) 2016/679 del Parlamento Europeo y del Consejo del 27 de abril de 2016) sobre la protección de las personas en relación con el procesamiento de sus datos personales y de la libre circulación de dichos datos, y el Reglamento 95/46/EC de derogación denominado a continuación como «RGPD».
     </li>
     <li>
-        El controlador de datos de tus datos personales es la Empresa. Puedes contactarnos por correo electrónico a <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+        El controlador de datos de tus datos personales es la Empresa. Puedes contactarnos por correo electrónico a <a href="mailto:contact@btcv.com">contact@btcv.com</a>
     </li>
     <li>
         Recopilamos la información que nos proporciones directamente al consentir recibir notificaciones por correo electrónico a tu dirección de correo. Adicionalmente, recopilamos cierta información técnica usando cookies que nos ayudan a funcionar y ofrecerte nuestros servicios. Las cookies son archivos con una pequeña cantidad de datos, que pueden incluir identificadores anónimos únicos. Las cookies se envían a tu navegador desde un sitio web y se almacenan en el disco duro de tu ordenador. Puede cambiar la configuración de su navegador para rechazar todas las cookies o indicar cuando se envíe una cookie. No obstante, si no acepta las cookies, es posible que no pueda utilizar partes de nuestro sitio web.
