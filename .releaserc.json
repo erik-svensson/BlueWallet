@@ -16,6 +16,11 @@
       ]
     }],
     "@semantic-release/release-notes-generator",
-    ["@semantic-release/changelog", { "changelogTitle": "# Changelog"} ]
+    ["@semantic-release/changelog", { "changelogTitle": "# Changelog"} ],
+    ["@semantic-release/git", { "message": "chore(release): Release v${nextRelease.version} [skip ci]" }],
+    ["@semantic-release/github", {
+        "failTitle": true,
+        "addReleases": "bottom"
+    }]
   ]
 }
