@@ -1,6 +1,11 @@
-name: "Lint PR Title"
+name: "Lint PR"
 
 on:
+  push:
+    branches: [ $default-branch, $protected-branches, main, develop, stage ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [$default-branch, main, develop, stage]
   pull_request_target:
     types:
       - opened
@@ -16,7 +21,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
         with:
           wip: true
-          requireScope: false
           # When using "Squash and merge" on a PR with only one commit, GitHub
           # will suggest using that commit message instead of the PR title for the
           # merge commit, and it's easy to commit this by mistake. Enable this option
