@@ -1,6 +1,6 @@
 {
   "preset": "conventionalcommits",
-  "branches": [ "main", "beta" ],
+  "branches": [ "main" ],
   "plugins": [
     ["@semantic-release/commit-analyzer", {
       "preset": "conventionalcommits",
