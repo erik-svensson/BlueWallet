@@ -1,3 +1,4 @@
+import logger from 'app/../logger';
 import { takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 
 import { CONST, USER_VERSIONS } from 'app/consts';
@@ -39,10 +40,14 @@ export function* checkCredentialsSaga(action: CheckCredentialsAction | unknown) 
       meta.onSuccess(credentials);
     }
   } catch (e) {
-    yield put(checkCredentialsFailure(e.message));
-    if (meta?.onFailure) {
-      meta.onFailure(e.message);
+    if (e instanceof Error) {
+      yield put(checkCredentialsFailure(e.message));
+      if (meta?.onFailure) {
+        meta.onFailure(e.message);
+      }
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -61,11 +66,15 @@ export function* authenticateSaga(action: AuthenticateAction | unknown) {
       meta.onSuccess();
     }
   } catch (e) {
-    yield put(authenticateFailure(e.message));
+    if (e instanceof Error) {
+      yield put(authenticateFailure(e.message));
+    }
 
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -81,10 +90,14 @@ export function* createPinSaga(action: CreatePinAction | unknown) {
       meta.onSuccess();
     }
   } catch (e) {
-    yield put(createPinFailure(e.message));
+    if (e instanceof Error) {
+      yield put(createPinFailure(e.message));
+    }
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -98,10 +111,14 @@ export function* createTxPasswordSaga(action: CreateTxPasswordAction | unknown) 
       meta.onSuccess();
     }
   } catch (e) {
-    yield put(createTxPasswordFailure(e.message));
+    if (e instanceof Error) {
+      yield put(createTxPasswordFailure(e.message));
+    }
     if (meta?.onFailure) {
       meta.onFailure();
     }
+
+    logger.captureException(e);
   }
 }
 
@@ -121,7 +138,11 @@ export function* setUserVersionSaga(action: SetUserVersionAction | unknown) {
 
     yield put(setUserVersionSuccess(payload.userVersion));
   } catch (e) {
-    yield put(setUserVersionFailure(e.message));
+    if (e instanceof Error) {
+      yield put(setUserVersionFailure(e.message));
+    }
+
+    logger.captureException(e);
   }
 }
 

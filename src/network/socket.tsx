@@ -35,16 +35,28 @@ export class Socket {
   setKeepAlive = () => {};
   setNoDelay = () => {};
   onData = (data: Uint8Array) => {
-    logger.info('socket', `onData lister has not beet setup yet, ${data}`);
+    logger.info({
+      message: `onData lister has not beet setup yet, ${data}`,
+      category: 'socket',
+    });
   };
   onError = (error: {}) => {
-    logger.error('socket', `onError lister has not beet setup yet, ${error}`);
+    logger.error({
+      message: `onError lister has not beet setup yet, ${error}`,
+      category: 'socket',
+    });
   };
   onConnect = (data: { host: string; port: number }) => {
-    logger.info('socket', `onConnect lister has not beet setup yet, ${data}`);
+    logger.info({
+      message: `onConnect lister has not beet setup yet, ${data}`,
+      category: 'socket',
+    });
   };
   onClose = (data: {}) => {
-    logger.info('socket', `onClose lister has not beet setup yet, ${data}`);
+    logger.info({
+      message: `onClose lister has not beet setup yet, ${data}`,
+      category: 'socket',
+    });
   };
 
   connect = (port: number, host: string, callback: SocketCallback) => {

@@ -133,7 +133,10 @@ const getTransactionStatus = (tx: Transaction, confirmations: number): Transacti
     case TxType.RECOVERY:
       return TransactionStatus.CANCELED_DONE;
     default:
-      logger.error('wallets selectors', `couldn't find status for tx ${JSON.stringify(tx)}`);
+      logger.error({
+        message: `couldn't find status for tx ${JSON.stringify(tx)}`,
+        category: 'wallets selectors',
+      });
       throw new Error(`Unkown tx_type: ${tx.tx_type}`);
   }
 };

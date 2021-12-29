@@ -36,12 +36,20 @@ export default class BiometricService {
       });
       const { success } = checkResult;
 
-      logger.info('BiometricSerivce', 'cancelled by user');
+      logger.info({
+        message: 'cancelled by user',
+        category: 'BiometricSerivce',
+      });
       if (success) {
         return success;
       }
     } catch (e) {
-      logger.error('BiometricSerivce', `cancelled by user: ${e.message}`);
+      if (e instanceof Error) {
+        logger.error({
+          message: `cancelled by user: ${e.message}`,
+          category: 'BiometricSerivce',
+        });
+      }
     }
   };
 

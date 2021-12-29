@@ -33,7 +33,7 @@ export const tr = `<!DOCTYPE html>
     Bu kullanım koşulları, Estonya yasaları kapsamında, aşağıdaki adreste usulüne uygun olarak kurulmuş ve varlığını geçerli şekilde sürdüren bir özel limited şirketi olan  <b>CyberBit OÜ</b>, ile sizin aranızda geçerlidir:  Harju maakond, Tallinn, Kesklinna linnaosa, Pärnu mnt 158, 11317, Estonya  ("<b>Şirket</b>", "<b>biz</b>" veya  "<b>bizi, tarafımızı, bize, tarafımıza</b>").
 </p>
 <p>
-    Aşağıdaki hüküm ve koşullar, atıfta bulunmak suretiyle açıkça dahil ettikleri belgelerle birlikte (toplu halde bu "Kullanım Koşulları"), <a href="https://www.bitcoinvault.global">www.bitcoinvault.global</a>, ("İnternet Sitesi") ile bağlantılı ELECTRUM VAULT masaüstü uygulaması ve GOLD WALLET mobil uygulamasını (münferit olarak "Uygulama" ve toplu halde "Uygulamalar") kullanımınız ve bunlara erişiminiz dahil olmak üzere adı geçen İnternet Sitesini kullanımınız ve buna erişiminizin yanı sıra herhangi bir İnternet Sitesi ve Uygulamalar aracılığıyla sunulan herhangi bir medya, analiz, içerik, işlevsellik ve hizmetlere erişiminiz ve bunları kullanımınızı düzenlemektedir.
+    Aşağıdaki hüküm ve koşullar, atıfta bulunmak suretiyle açıkça dahil ettikleri belgelerle birlikte (toplu halde bu "Kullanım Koşulları"), <a href="https://www.btcv.com">www.btcv.com</a>, ("İnternet Sitesi") ile bağlantılı ELECTRUM VAULT masaüstü uygulaması ve GOLD WALLET mobil uygulamasını (münferit olarak "Uygulama" ve toplu halde "Uygulamalar") kullanımınız ve bunlara erişiminiz dahil olmak üzere adı geçen İnternet Sitesini kullanımınız ve buna erişiminizin yanı sıra herhangi bir İnternet Sitesi ve Uygulamalar aracılığıyla sunulan herhangi bir medya, analiz, içerik, işlevsellik ve hizmetlere erişiminiz ve bunları kullanımınızı düzenlemektedir.
 </p>
 <p>
     Bizim tarafımızdan veya bizim aracılığımızla sunulan İnternet Sitesi, Uygulamalar ve tüm veya herhangi bir diğer medya aracı, analiz aracı, içerik, özellik, ürünler ve hizmetlerden “Ürün” olarak bahsedilecektir. 
@@ -54,7 +54,7 @@ export const tr = `<!DOCTYPE html>
     Bu Koşulların herhangi bir hükmünün yürürlüğe konması veya kısmen yürürlüğe konmasında Uygulama tarafından arıza veya gecikme olması herhangi bir haktan feragat anlamında yorumlanamaz.
 </p>
 <p>
-    Bu Kullanım Koşulları ile ilgili sorunuz varsa veya görüş bildirmek isterseniz lütfen lütfen <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a> adresi aracılığıyla İnternet Sitemiz üzerinden bize mesaj gönderin veya Facebook, Telegram, Instagram ya da Twitter üzerinden bizimle iletişime geçin. Bu Anlaşmayı veya Anlaşmada yapılacak herhangi bir değişikliği kabul etmiyorsanız Hizmetlerimizi kullanmamanız gerekir.
+    Bu Kullanım Koşulları ile ilgili sorunuz varsa veya görüş bildirmek isterseniz lütfen lütfen <a href="mailto:contact@btcv.com">contact@btcv.com</a> adresi aracılığıyla İnternet Sitemiz üzerinden bize mesaj gönderin veya Facebook, Telegram, Instagram ya da Twitter üzerinden bizimle iletişime geçin. Bu Anlaşmayı veya Anlaşmada yapılacak herhangi bir değişikliği kabul etmiyorsanız Hizmetlerimizi kullanmamanız gerekir.
 </p>
 <h3>
     İnternet Sitemizi ve Uygulamalar dahil olmak üzere Ürünleri kimler kullanabilir
@@ -155,7 +155,7 @@ export const tr = `<!DOCTYPE html>
     </li>
 </ol>
 <p>
-    İnternet Sitesi veya herhangi bir Ürün üzerinde bulunan materyallerin bu bölümde açıklanan dışında başka bir kullanımını yapmak istiyorsanız, lütfen talebinizi şu adrese gönderin: <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+    İnternet Sitesi veya herhangi bir Ürün üzerinde bulunan materyallerin bu bölümde açıklanan dışında başka bir kullanımını yapmak istiyorsanız, lütfen talebinizi şu adrese gönderin: <a href="mailto:contact@btcv.com">contact@btcv.com</a>
 </p>
 <p>
     İnternet Sitelerinin herhangi bir kısmına ve herhangi bir ürünü yazdırır, kopyalar, değiştirir, indirir veya başka şekilde kullanır ya da bunlara erişim olanağını herhangi bir başka kişiye sağlarsanız, İnternet Sitelerini ve herhangi bir Ürünü kullanma hakkınız derhal sona erecektir ve bizim tercihimize bağlı olarak oluşturduğunuz materyalleri iade etmeli ya da imha etmelisiniz. İnternet Siteleri veya herhangi bir Ürün veya İnternet Sitesindeki veya herhangi bir Üründeki herhangi bir içeriğe yönelik hiçbir hak, unvan veya menfaat size devredilmemektedir ve açıkça verilmeyen tüm haklar bizde saklıdır. İnternet Sitelerinin bu Kullanım Koşulları tarafından açıkça izin verilmemiş herhangi bir kullanımı, bu Kullanım Koşullarının bir ihlali olup telif hakkı, ticari marka ve diğer yasaları ihlal edebilir.
@@ -279,7 +279,7 @@ export const tr = `<!DOCTYPE html>
         Verilerinizi, Avrupa Parlamentosu ve Konseyinin kişisel verilerin işlenmesine ve bu verilerin serbest dolaşımına ilişkin olarak gerçek şahısların koruması hakkındaki ve 95/46/EC Yönergesini ilga eden 2016/679 sayılı ve 27 Nisan 2016 tarihli buradan itibaren “GVKY” olarak anılacak olan Genel Veri Koruma Yönetmeliği, yani Yönetmelik (AB) uyarınca işlemekteyiz.
     </li>
     <li>
-        Kişisel verilerinizin veri denetleyicisi Şirkettir. <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a> adresine e-posta göndererek bizimle iletişime geçebilirsiniz.
+        Kişisel verilerinizin veri denetleyicisi Şirkettir. <a href="mailto:contact@btcv.com">contact@btcv.com</a> adresine e-posta göndererek bizimle iletişime geçebilirsiniz.
     </li>
     <li>
         E-posta adresinizde e-posta bildirimleri almaya yönelik onayınıza bağlı olarak bize doğrudan sağladığınız bilgileri toplarız. Ayrıca işletmemize ve size hizmet sunmamıza yardımcı olması için çerezler kullanarak bazı teknik bilgileri de topluyoruz. Çerezler, anonim benzersiz bir tanımlayıcı içerebilen, küçük miktar veriye sahip dosyalardır. Çerezler bir websitesinden tarayıcınıza gönderilir ve bilgisayarınızın hard diskinde depolanır. Tarayıcınıza tüm çerezleri reddetme ya da çerezin ne zaman gönderildiğini göstermesi talimatı verebilirsiniz. Bununla birlikte, çerezleri kabul etmezseniz internet sitemizin bazı kısımlarını kullanamayabilirsiniz.

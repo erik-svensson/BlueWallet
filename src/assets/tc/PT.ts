@@ -33,7 +33,7 @@ export const pt = `<!DOCTYPE html>
     Estes termos de utilização são estabelecidos por si e entre si e  <b>CyberBit OÜ</b>,uma sociedade de responsabilidade limitada devidamente organizada e validamente existente ao abrigo das leis da Estónia, no endereço:  Harju maakond, Tallinn, Kesklinna linnaosa, Pärnu mnt 158, 11317, Estónia,  ("<b>Companhia</b>", "<b>nós</b>" ou "<b>nosso</b>").
 </p>
 <p>
-    Os seguintes termos e condições, juntamente com quaisquer documentos que incorporem expressamente por referência (conjuntamente, estes "Termos de Utilização"), regem o seu acesso e utilização de <a href="https://www.bitcoinvault.global">www.bitcoinvault.global</a>, (o "Website"), incluindo a aplicação associada ELECTRUM VAULT desktop e a aplicação móvel GOLD WALLET (cada uma, a "Aplicação" e conjuntamente, as "Aplicações") e o seu acesso e utilização de quaisquer meios de comunicação, análises, conteúdos, funcionalidades e serviços oferecidos em ou através de qualquer um dos sites e Aplicações, bem como o seu acesso e utilização de todos e quaisquer sites e serviços relacionados.
+    Os seguintes termos e condições, juntamente com quaisquer documentos que incorporem expressamente por referência (conjuntamente, estes "Termos de Utilização"), regem o seu acesso e utilização de <a href="https://www.btcv.com">www.btcv.com</a>, (o "Website"), incluindo a aplicação associada ELECTRUM VAULT desktop e a aplicação móvel GOLD WALLET (cada uma, a "Aplicação" e conjuntamente, as "Aplicações") e o seu acesso e utilização de quaisquer meios de comunicação, análises, conteúdos, funcionalidades e serviços oferecidos em ou através de qualquer um dos sites e Aplicações, bem como o seu acesso e utilização de todos e quaisquer sites e serviços relacionados.
 </p>
 <p>
     O Website, as Aplicações, e todos e quaisquer outros meios, análises, conteúdo, funcionalidade, produtos e serviços oferecidos por nós ou através de nós, são referidos como o "Produto".
@@ -54,7 +54,7 @@ export const pt = `<!DOCTYPE html>
     O incumprimento ou atraso da Aplicação na aplicação total ou parcial de qualquer disposição dos presentes Termos não deverá ser interpretado como uma renúncia a quaisquer direitos.
 </p>
 <p>
-    Se tiver quaisquer perguntas ou comentários relacionados com estes Termos de Utilização, envie-nos uma mensagem no nosso site em  <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a> ou contacte-nos através do Facebook, Telegramas, Instagram ou Twitter. Se não concordar com o presente Acordo ou quaisquer modificações ao mesmo, não deverá utilizar os nossos Serviços.
+    Se tiver quaisquer perguntas ou comentários relacionados com estes Termos de Utilização, envie-nos uma mensagem no nosso site em  <a href="mailto:contact@btcv.com">contact@btcv.com</a> ou contacte-nos através do Facebook, Telegramas, Instagram ou Twitter. Se não concordar com o presente Acordo ou quaisquer modificações ao mesmo, não deverá utilizar os nossos Serviços.
 </p>
 <h3>
     Quem pode utilizar o nosso Website e qualquer Produto, incluindo aplicações
@@ -155,7 +155,7 @@ Deve ter cuidado ao introduzir informações pessoais nos sites num computador p
     </li>
 </ol>
 <p>
-    Se desejar fazer qualquer uso de materiais nos sítios Web ou em quaisquer outros Produtos para além dos indicados nesta secção, queira dirigir o seu pedido para: <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+    Se desejar fazer qualquer uso de materiais nos sítios Web ou em quaisquer outros Produtos para além dos indicados nesta secção, queira dirigir o seu pedido para: <a href="mailto:contact@btcv.com">contact@btcv.com</a>
 </p>
 <p>
     Se imprimir, copiar, modificar, descarregar ou de outra forma utilizar ou fornecer a qualquer outra pessoa acesso a qualquer parte dos Websites e a quaisquer Produtos em violação dos Termos, o seu direito de utilizar os Websites e quaisquer Produtos cessará imediatamente e deverá, à nossa opção, devolver ou destruir quaisquer cópias dos materiais que tenha feito. Nenhum direito, título ou interesse nos ou para os Websites ou quaisquer Produtos ou qualquer conteúdo no Website ou quaisquer Produtos é transferido para si, e todos os direitos não expressamente concedidos são reservados por nós. Qualquer utilização dos websites não expressamente permitida por estes Termos de Utilização constitui uma violação destes Termos de Utilização e pode violar direitos de autor, marcas registadas e outras leis.
@@ -279,7 +279,7 @@ Deve ter cuidado ao introduzir informações pessoais nos sites num computador p
         Tratamos os seus dados pessoais em conformidade com o Regulamento Geral sobre a Proteção de Dados, ou seja, o Regulamento (UE) 2016/679 do Parlamento Europeu e do Conselho, de 27 de abril de 2016, relativo à proteção das pessoas singulares no que diz respeito ao tratamento de dados pessoais e à livre circulação desses dados, e que revoga a Diretiva 95/46/CE, a seguir designado por “RGPD”.
     </li>
     <li>
-        O responsável pelo tratamento dos seus dados pessoais é a Empresa. Pode contactar-nos por e-mail para <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+        O responsável pelo tratamento dos seus dados pessoais é a Empresa. Pode contactar-nos por e-mail para <a href="mailto:contact@btcv.com">contact@btcv.com</a>
     </li>
     <li>
         Recolhemos informações que nos fornece diretamente devido ao seu consentimento para receber notificações por correio eletrónico para o seu endereço eletrónico. Além disso, recolhemos determinadas informações técnicas utilizando cookies para nos ajudar a colocar em funcionamento e a levar até si os nossos serviços. Os cookies são ficheiros com uma pequena quantidade de dados, que podem incluir um identificador anónimo único. Os cookies são enviados para o seu navegador a partir de um site e armazenados no disco rígido do seu computador. Pode configurar o seu navegador de modo a recusar todos os cookies ou a indicar-lhe quando um cookie lhe está a ser enviado. No entanto, se não aceitar cookies, poderá não conseguir utilizar algumas partes do nosso site.
