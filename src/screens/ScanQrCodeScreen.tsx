@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Image, View, TouchableOpacity, StatusBar, StyleSheet, Dimensions } from 'react-native';
-import { BarCodeReadEvent, RNCamera } from 'react-native-camera';
+import BarCodeReadEvent, { RNCamera } from 'react-native-camera';
 
 import { images } from 'app/assets';
 import { Route, RootStackParams } from 'app/consts';
@@ -32,9 +32,10 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
     }
 
     this.setState({ isBarcodeRead: true });
-
+    //@ts-ignore
     if (event.data) {
       this.goBack();
+      //@ts-ignore
       onBarCodeScan(event.data);
     }
   };
@@ -53,6 +54,7 @@ export default class ScanQrCodeScreen extends React.PureComponent<Props> {
               buttonNegative: i18n.scanQrCode.cancel,
             }}
             style={{ flex: 1, justifyContent: 'space-between' }}
+            //@ts-ignore
             onBarCodeRead={this.onBarCodeScanned}
             barCodeTypes={[RNCamera.Constants.BarCodeType.qr]}
           />

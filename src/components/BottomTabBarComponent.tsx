@@ -12,7 +12,7 @@ import { GradientView } from './GradientView';
 export const BottomTabBarComponent = ({ state, descriptors, navigation }: BottomTabBarProps) => (
   <GradientView variant={GradientView.Variant.Primary}>
     <View style={styles.buttonsContainer}>
-      {state.routes.map((route, index) => {
+      {state.routes.map((route: any, index: any) => {
         const isFocused = state.index === index;
         const { options } = descriptors[route.key];
         const label = options.tabBarLabel;

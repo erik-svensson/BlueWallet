@@ -103,6 +103,7 @@ async function deleteMessage(id: string): Promise<void> {
  */
 function getCodeFormHtmlBody(htmlBody: string): string {
   const dom = new JSDOM(htmlBody);
+  //@ts-ignore
 
   return dom.window.document.querySelector('#id_pincode').textContent;
 }

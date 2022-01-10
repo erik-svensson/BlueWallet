@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-empty-function */
+
 import TcpSocket from 'react-native-tcp-socket';
 
 import { SocketCallback, SocketOptions } from 'app/consts';
@@ -14,6 +15,7 @@ export function connect(config: SocketOptions, callback: SocketCallback) {
       tls: true,
       tlsCheckValidity: config.rejectUnauthorized,
     },
+    //@ts-ignore
     callback,
   );
 
@@ -66,10 +68,12 @@ export class Socket {
         host,
         tls: false,
       },
+      //@ts-ignore
       callback,
     );
 
     _socket.on('data', data => {
+      //@ts-ignore
       this.onData(data);
     });
     _socket.on('error', error => {
@@ -78,7 +82,9 @@ export class Socket {
     _socket.on('close', data => {
       this.onClose(data);
     });
+    //@ts-ignore
     _socket.on('connect', data => {
+      //@ts-ignore
       this.onConnect(data);
     });
     this._socket = _socket;

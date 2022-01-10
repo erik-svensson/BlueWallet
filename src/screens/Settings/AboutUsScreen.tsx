@@ -39,7 +39,7 @@ export const AboutUsScreen = () => {
       GooglePackageName: config.applicationId,
       preferredAndroidMarket: AndroidMarket.Google,
       inAppDelay: 0,
-      fallbackPlatformURL: 'https://bitcoinvault.global',
+      fallbackPlatformURL: 'https://www.btcv.com',
     };
 
     Rate.rate(options, () => {
