@@ -1905,7 +1905,7 @@
     deep-equal "^2.0.5"
     nanoid "^3.1.23"
 
-"@react-navigation/native@5.10.0":
+"@react-navigation/native@5.9.8":
   version "5.9.8"
   resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-5.9.8.tgz#ac76ee6390ea7ce807486ca5c38d903e23433a97"
   integrity sha512-DNbcDHXQPSFDLn51kkVVJjT3V7jJy2GztNYZe/2bEg29mi5QEcHHcpifjMCtyFKntAOWzKlG88UicIQ17UEghg==
@@ -4953,15 +4953,15 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
-eventemitter3@^4.0.7:
-  version "4.0.7"
-  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
-  integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
-
 events@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
   integrity sha1-nr23Y1rQmccNzEwqH1AEKI6L2SQ=
+
+events@^3.1.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
+  integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
 
 exception-formatter@^1.0.4:
   version "1.0.7"
@@ -9400,13 +9400,13 @@ react-native-svg@9.5.1:
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-9.5.1.tgz#eb21fa7eb5d71649620541e6549c6ed425d80240"
   integrity sha512-cRGfomzG/5LEwuJ6ct3m5yccckeI9aj8BNYwDPVxOeJ84LuJuvk5OqcjlYNeEzOWmWiH+QrFXfpLH1ag04bUeQ==
 
-react-native-tcp-socket@^5.5.0:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-tcp-socket/-/react-native-tcp-socket-5.5.0.tgz#30ef81b20c21696b34de60195161234161478b4c"
-  integrity sha512-UgcDweEaZzLPK4N3O39ESE5J0UvSC1rFqveM57mS2euv9wXwmWbSIOPN//Fx0VzxnxY9cpwCrMh5DnYv5HOiKg==
+react-native-tcp-socket@4.5.5:
+  version "4.5.5"
+  resolved "https://registry.yarnpkg.com/react-native-tcp-socket/-/react-native-tcp-socket-4.5.5.tgz#64d73d630e3e8be7250d35c5c4d38d7034041334"
+  integrity sha512-KjzjTmxbg2QwAf7A498GKCfLACLTo/al0pX+w9wPGeDUphxHAc8X1WofRtFPPQEW+b2LIyqKyF+4Vn1nKhid9w==
   dependencies:
     buffer "^5.4.3"
-    eventemitter3 "^4.0.7"
+    events "^3.1.0"
 
 react-native-toast-message@1.4.9:
   version "1.4.9"

@@ -38,9 +38,9 @@ const codePushOptions = {
   deploymentKey: isIos() ? config.codepushDeploymentKeyIOS : config.codepushDeploymentKeyAndroid,
 };
 
-if (!__DEV__) {
-  Sentry.init(sentryOptions);
-}
+// if (!__DEV__) {
+//   Sentry.init(sentryOptions);
+// }
 
 class CodePushClass extends Component<null, null> {
   render() {
@@ -74,7 +74,7 @@ class App extends React.PureComponent {
   render() {
     return (
       <>
-        {!__DEV__ && <WithCodePush />}
+        {/* {!__DEV__ && <WithCodePush />} */}
         <I18nextProvider i18n={i18n}>
           <Provider store={store}>
             <AppStateManager
