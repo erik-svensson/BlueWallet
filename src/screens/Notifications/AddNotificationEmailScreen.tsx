@@ -52,11 +52,11 @@ class AddNotificationEmailScreen extends PureComponent<Props, State> {
 
   componentDidMount() {
     this.props.setError('');
-    this.props.navigation.addListener('focus', this.focusHandler);
+    // this.props.navigation.addListener('focus', this.focusHandler);
   }
 
   componentWillUnmount() {
-    this.props.navigation.removeListener('focus', this.focusHandler);
+    // this.props.navigation.removeListener('focus', this.focusHandler);
   }
 
   setEmail = (email: string): void => {
