@@ -14,7 +14,7 @@ export function connect(config: SocketOptions, callback: SocketCallback) {
       host: config.host,
       tls: true,
       tlsCheckValidity: config.rejectUnauthorized,
-      timeout: 10000,
+      reuseAddress: true,
     },
     //@ts-ignore
     callback,
@@ -68,6 +68,7 @@ export class Socket {
         port,
         host,
         tls: false,
+        reuseAddress: true,
       },
       //@ts-ignore
       callback,
