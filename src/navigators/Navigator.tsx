@@ -103,8 +103,8 @@ class Navigator extends React.Component<Props, State> {
     checkUserVersion();
     checkTc();
     checkCredentials();
-    startElectrumXListeners();
-    checkConnection();
+    // startElectrumXListeners();
+    // checkConnection();
     this.initLanguage();
     this.handleNotification();
 
