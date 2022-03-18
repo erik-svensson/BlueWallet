@@ -1,52 +1,35 @@
-name: iOS
+name: E2E (iOS)
 
-on: [push]
+on:
+  pull_request:
+    branches: [develop]
 
 jobs:
   build:
+    name: E2E (iOS)
     runs-on: macos-latest
-    timeout-minutes: 15
-
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_11.2.app
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
+      - uses: actions/checkout@v1
 
-    - name: Node
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
 
-    - name: Cache node modules
-      uses: actions/cache@v1
-      id: cache
-      with:
-        path: node_modules
-        key: node-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install Yarn Dependencies
+        run: yarn install
 
-    - name: Rebuild detox
-      if: steps.cache.outputs.cache-hit == 'true'
-      run: yarn detox clean-framework-cache && yarn detox build-framework-cache
+      - name: Install Pod Dependencies
+        run: cd ./ios && pod install && cd ..
 
-    - name: Install Dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
-      run: yarn install
+      - name: Install Detox Dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
 
-    - name: Cache Pods
-      uses: actions/cache@v1
-      id: podcache
-      with:
-        path: ios/Pods
-        key: pods-${{ hashFiles('**/Podfile.lock') }}
+      - name: Run Unit Test(s)
+        run: yarn test
 
-    - name: Update Pods
-      run: |
-        cd ios && pod install && cd ..
-    - run: brew tap wix/brew
-    - run: brew install applesimutils
-    - run: yarn detox build e2e --configuration ios.sim.dev.release
-    - run: yarn detox test e2e --configuration ios.sim.dev.release --cleanup --debug-synchronization 200 -t @smoke
+      - name: Run Detox Build
+        run: yarn e2e:build ios.sim.release
