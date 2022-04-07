@@ -64,7 +64,7 @@
     "promise-poller": "^1.9.1",
     "react-native-codegen": "^0.0.7",
     "react-native-config-node": "^0.0.3",
-    "react-native-default-preference": "1.4.1",
+    "react-native-default-preference": "1.4.4",
     "react-native-flipper": "^0.105.0",
     "react-test-renderer": "17.0.2",
     "redux-devtools-extension": "^2.13.8",
