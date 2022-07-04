@@ -48,7 +48,7 @@
     "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-react-native": "^3.8.1",
     "flipper-plugin-redux-debugger": "^2.0.0",
-    "googleapis": ">=39.1.0",
+    "googleapis": ">=105.0.0",
     "husky": "^4.2.3",
     "jail-monkey": "^2.3.2",
     "jest": "26.6.3",
