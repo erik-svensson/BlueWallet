@@ -186,7 +186,7 @@
     "react-native-secure-key-store": "^2.0.7",
     "react-native-share": "2.0.0",
     "react-native-snap-carousel": "3.9.1",
-    "react-native-svg": "9.5.1",
+    "react-native-svg": "13.3.0",
     "react-native-tcp-socket": "^4.2.0",
     "react-native-toast-message": "^1.4.9",
     "react-native-vector-icons": "6.6.0",
