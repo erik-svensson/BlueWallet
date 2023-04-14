@@ -99,6 +99,11 @@ async function connectMain() {
       category: 'BlueElectrum',
     });
   }
+
+  if (!mainConnected) {
+    await wait(50);
+    await connectMain;
+  }
 }
 
 module.exports.getBlockchainHeaders = function() {
@@ -192,7 +197,6 @@ module.exports.getTransactionsByAddress = async function(address) {
 
 module.exports.ping = async function() {
   try {
-    await wait(200); // TODO: For some reason sometimes Android not not load (infinity internet connection error)
     await mainClient.server_ping();
   } catch (_) {
     mainConnected = false;
@@ -547,8 +551,6 @@ module.exports.testConnection = async function(host, tcpPort) {
     await client.server_version('2.7.11', '1.4');
     await client.server_ping();
 
-    client.keepAlive = () => {}; // dirty hack to make it stop reconnecting
-    client.reconnect = () => {}; // dirty hack to make it stop reconnecting
     client.close();
     return true;
   } catch (_) {
@@ -557,8 +559,6 @@ module.exports.testConnection = async function(host, tcpPort) {
 };
 
 module.exports.forceDisconnect = () => {
-  mainClient.keepAlive = () => {}; // dirty hack to make it stop reconnecting
-  mainClient.reconnect = () => {}; // dirty hack to make it stop reconnecting
   mainClient.close();
 };
 

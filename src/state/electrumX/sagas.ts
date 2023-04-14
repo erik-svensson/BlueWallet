@@ -203,8 +203,9 @@ export function* checkConnection() {
       internetState = yield call(NetInfo.fetch);
     }
 
-    const { isInternetReachable } = internetState;
+    yield BlueElectrum.waitTillConnected();
 
+    const { isInternetReachable } = internetState;
     const isServerConnected: boolean = yield BlueElectrum.ping();
 
     const {

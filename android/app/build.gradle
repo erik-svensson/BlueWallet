@@ -21,7 +21,8 @@ project.ext.envConfigFiles = [
 project.ext.react = [
     entryFile: "index.js",
     devDisabledInStaging: true,
-    enableHermes: true
+    enableHermes: false,
+    deleteDebugFilesForVariant: { false }
 ]
 
 project.ext.sentryCli = [
@@ -90,7 +91,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 14
-        versionName "6.4.1"
+        versionName "6.5.1"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
         testBuildType System.getProperty('testBuildType', 'debug')  // This will later be used to control the test apk build type
@@ -178,6 +179,7 @@ dependencies {
     implementation project(path: ":@react-native-firebase_analytics")
     implementation platform('com.google.firebase:firebase-bom:28.2.0')
     implementation project(':@sentry_react-native')
+    implementation project(':react-native-secure-key-store')
     androidTestImplementation('com.wix:detox:+')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {

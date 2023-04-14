@@ -1,6 +1,8 @@
-import { Socket, connect } from 'app/network/socket';
+import TcpSocket from 'react-native-tcp-socket';
 
-global.net = { Socket };
+import { connect } from 'app/network/socket';
+
+global.net = TcpSocket;
 global.tls = { connect };
 
 if (typeof __dirname === 'undefined') global.__dirname = '/';
