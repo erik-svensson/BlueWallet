@@ -40,7 +40,7 @@ export const zh = `
         Pärnu mnt 158, 11317, Estonia（下称“公司”、“我们”或“我方”）。
     </p>
     <p>
-        以下条款和条件及其通过明确提述而纳入的任何文件（统称这些“使用条款”）对 <a href="https://www.bitcoinvault.global">www.bitcoinvault.global</a>
+        以下条款和条件及其通过明确提述而纳入的任何文件（统称这些“使用条款”）对 <a href="https://www.btcv.com">www.btcv.com</a>
         的访问和使用，包括相关 ELECTRUM VAULT 桌面应用程序和 GOLD
         WALLET 移动应用程序（下称“应用程序”）的访问和使用，以及您对网站和应用程序上或通过网站和应用程序提供的任何媒体、分析、内容、功能和服务的访问和使用，以及您对所有和任何相关网站和服务的访问和使用作出了相关规定。
     </p>
@@ -64,7 +64,7 @@ export const zh = `
     </p>
     <p>
         如果您对这些使用条款有任何疑问或意见，请在我们的网站
-        <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a> 上留言或者通过 Facebook、Telegram、Instagram
+        <a href="mailto:contact@btcv.com">contact@btcv.com</a> 上留言或者通过 Facebook、Telegram、Instagram
         或 Twitter 与我们联系。如果您不同意本协议或对本协议的任何修改，您不应使用我们的“服务”。
     </p>
     <h3>
@@ -171,7 +171,7 @@ export const zh = `
     </ol>
     <p>
         如果您希望使用本“网站”上的材料或本节中未列出的任何产品，请将您的请求发送至： <a
-            href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+            href="mailto:contact@btcv.com">contact@btcv.com</a>
     </p>
     <p>
         如果您违反“条款”打印、复制、修改、下载或以其他方式使用或向任何其他人提供对“网站”任何部分和任何“产品”的访问，您使用“网站”和任何“产品”的权利将立即终止，您必须根据我们作出的选择方案，返还或销毁您制作的任何材料副本。“网站”或任何“产品”或“网站”上的任何内容或任何“产品”的任何权利、所有权或权益均不会转让给您，我们保留所有未明确授予的权利。这些“使用条款”未明确允许的任何“网站”使用均违反这些“使用条款”，并可能违反版权法、商标法和其他法律。
@@ -298,7 +298,7 @@ export const zh = `
             条例（《关于涉及个人数据处理的个人保护及此类数据自由流动的指令》）处理您的个人数据，并废除指令 95/46 / EC（以下简称“GDPR”）。
         </li>
         <li>
-            您的个人数据的数据控制者是“公司”。您可以通过电子邮件联系我们 <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+            您的个人数据的数据控制者是“公司”。您可以通过电子邮件联系我们 <a href="mailto:contact@btcv.com">contact@btcv.com</a>
         </li>
         <li>
             鉴于您同意接收我们向您的电子邮件地址发送的电子邮件通知，我们将收集您直接提供给我们的信息。另外，我们使用 cookie 收集某些技术信息，以帮助我们运营并向您提供服务。cookie

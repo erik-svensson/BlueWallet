@@ -1,0 +1,39 @@
+name: Semgrep
+
+on:
+  push:
+    branches: [ $default-branch, $protected-branches, main, develop, stage ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ main, develop, stage]
+
+jobs:
+  semgrep:
+    name: Scan
+    runs-on: ubuntu-latest
+    # Skip any PR created by dependabot to avoid permission issues
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+      # Fetch project source
+      - uses: actions/checkout@v2
+
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          generateSarif: "1"
+          auditOn: push
+          config: >- # more at semgrep.dev/explore
+            p/security-audit
+            p/typescript
+            p/insecure-transport
+            p/command-injection
+            p/secrets
+            p/react
+            p/r2c-ci
+            p/owasp-top-ten
+
+      # Upload findings to GitHub Advanced Security Dashboard [step 2/2]
+      - name: Upload SARIF file for GitHub Advanced Security Dashboard
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: semgrep.sarif
+        if: always()

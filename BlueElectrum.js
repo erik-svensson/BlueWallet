@@ -44,12 +44,18 @@ const setNewHost = () => {
 
 const onClose = () => {
   setNewHost();
-  logger.info('BlueElectrum', 'closed connection to server');
+  logger.info({
+    message: 'closed connection to server',
+    category: 'BlueElectrum',
+  });
   mainConnected = false;
 };
 
 const onConnect = () => {
-  logger.info('BlueElectrum', 'connected to server');
+  logger.info({
+    message: 'connected to server',
+    category: 'BlueElectrum',
+  });
   mainConnected = true;
 };
 
@@ -57,7 +63,10 @@ async function connectMain() {
   const usingPeer = { host: getHost(), port: config.port, protocol: config.protocol };
 
   try {
-    logger.info('BlueElectrum', `begin connection: ${JSON.stringify(usingPeer)}`);
+    logger.info({
+      message: `begin connection: ${JSON.stringify(usingPeer)}`,
+      category: 'BlueElectrum',
+    });
     mainClient = new ElectrumClient(usingPeer.port, usingPeer.host, usingPeer.protocol);
 
     mainClient.onConnectionClose = () => onClose();
@@ -65,7 +74,10 @@ async function connectMain() {
     mainClient.onConnect = () => onConnect();
 
     mainClient.onError = function(e) {
-      logger.error('BlueElectrum', e.message);
+      logger.error({
+        message: e.message,
+        category: 'BlueElectrum',
+      });
     };
 
     const ver = await mainClient.initElectrum({
@@ -74,12 +86,23 @@ async function connectMain() {
     });
 
     if (ver && ver[0]) {
-      logger.info('BlueElectrum', `connected to, ${ver}`);
+      logger.info({
+        message: `connected to, ${ver}`,
+        category: 'BlueElectrum',
+      });
       mainConnected = true;
     }
   } catch (e) {
     mainConnected = false;
-    logger.error('BlueElectrum', `bad connection: ${JSON.stringify(usingPeer)}, Error: ${e.message}`);
+    logger.error({
+      message: `bad connection: ${JSON.stringify(usingPeer)}, Error: ${e.message}`,
+      category: 'BlueElectrum',
+    });
+  }
+
+  if (!mainConnected) {
+    await wait(50);
+    await connectMain;
   }
 }
 
@@ -117,23 +140,37 @@ connectMain();
  * @returns {Promise<Object>}
  */
 module.exports.getBalanceByAddress = async function(address) {
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
-  const script = bitcoin.address.toOutputScript(address, config.network);
-  const hash = bitcoin.crypto.sha256(script);
-  const reversedHash = Buffer.from(reverse(hash));
-  const balance = await mainClient.blockchainScripthash_getBalance(reversedHash.toString('hex'));
+  try {
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
+    const script = bitcoin.address.toOutputScript(address, config.network);
+    const hash = bitcoin.crypto.sha256(script);
+    const reversedHash = Buffer.from(reverse(hash));
+    const balance = await mainClient.blockchainScripthash_getBalance(reversedHash.toString('hex'));
 
-  balance.addr = address;
-  return balance;
+    balance.addr = address;
+    return balance;
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
+  }
 };
 
 module.exports.getConfig = async function() {
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
-  return {
-    host: mainClient.host,
-    port: mainClient.port,
-    status: mainClient.status,
-  };
+  try {
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
+    return {
+      host: mainClient.host,
+      port: mainClient.port,
+      status: mainClient.status,
+    };
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
+  }
 };
 
 /**
@@ -142,18 +179,24 @@ module.exports.getConfig = async function() {
  * @returns {Promise<Array>}
  */
 module.exports.getTransactionsByAddress = async function(address) {
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
-  const script = bitcoin.address.toOutputScript(address, config.network);
-  const hash = bitcoin.crypto.sha256(script);
-  const reversedHash = Buffer.from(reverse(hash));
-  const history = await mainClient.blockchainScripthash_getHistory(reversedHash.toString('hex'));
+  try {
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
+    const script = bitcoin.address.toOutputScript(address, config.network);
+    const hash = bitcoin.crypto.sha256(script);
+    const reversedHash = Buffer.from(reverse(hash));
+    const history = await mainClient.blockchainScripthash_getHistory(reversedHash.toString('hex'));
 
-  return history;
+    return history;
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
+  }
 };
 
 module.exports.ping = async function() {
   try {
-    await wait(200); // TODO: For some reason sometimes Android not not load (infinity internet connection error)
     await mainClient.server_ping();
   } catch (_) {
     mainConnected = false;
@@ -164,45 +207,52 @@ module.exports.ping = async function() {
 };
 
 module.exports.multiGetTransactionsFullByTxid = async function(txIds) {
-  const txs = await this.multiGetTransactionByTxid(uniq(txIds));
+  try {
+    const txs = await this.multiGetTransactionByTxid(uniq(txIds));
 
-  const inputsTxIds = difference(
-    compose(
-      uniq,
-      flatten,
-      map(tx => tx.vin.map(vin => vin.txid)),
-    )(txs),
-    txIds,
-  );
+    const inputsTxIds = difference(
+      compose(
+        uniq,
+        flatten,
+        map(tx => tx.vin.map(vin => vin.txid)),
+      )(txs),
+      txIds,
+    );
 
-  let inputsTxs = {};
+    let inputsTxs = {};
 
-  if (inputsTxIds.length > 0) {
-    inputsTxs = await this.multiGetTransactionByTxid(inputsTxIds);
+    if (inputsTxIds.length > 0) {
+      inputsTxs = await this.multiGetTransactionByTxid(inputsTxIds);
+    }
+
+    const allTxs = { ...txs, ...inputsTxs };
+
+    return compose(
+      // TODO: Add proper handling for coinbase transaction, this is quick fix with filtering them completly
+      fpFilter(tx => tx.inputs.length > 0),
+      values,
+      mapValues(tx => {
+        const inputs = tx.vin
+          .filter(input => input.txid)
+          .map(input => {
+            const prevOutputOfInput = allTxs[input.txid].vout[input.vout];
+
+            return { ...input, value: prevOutputOfInput.value, addresses: prevOutputOfInput.scriptPubKey.addresses };
+          });
+
+        const outputs = tx.vout
+          .filter(o => !!o.scriptPubKey.addresses)
+          .map(output => ({ ...output, addresses: output.scriptPubKey.addresses }));
+
+        return { ...tx, outputs, inputs };
+      }),
+    )(txs);
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
   }
-
-  const allTxs = { ...txs, ...inputsTxs };
-
-  return compose(
-    // TODO: Add proper handling for coinbase transaction, this is quick fix with filtering them completly
-    fpFilter(tx => tx.inputs.length > 0),
-    values,
-    mapValues(tx => {
-      const inputs = tx.vin
-        .filter(input => input.txid)
-        .map(input => {
-          const prevOutputOfInput = allTxs[input.txid].vout[input.vout];
-
-          return { ...input, value: prevOutputOfInput.value, addresses: prevOutputOfInput.scriptPubKey.addresses };
-        });
-
-      const outputs = tx.vout
-        .filter(o => !!o.scriptPubKey.addresses)
-        .map(output => ({ ...output, addresses: output.scriptPubKey.addresses }));
-
-      return { ...tx, outputs, inputs };
-    }),
-  )(txs);
 };
 
 module.exports.subscribeToSriptHashes = scriptHashes => {
@@ -220,129 +270,157 @@ module.exports.unsubscribeFromSriptHashes = scriptHashes => {
  * @returns {Promise<{balance: number, unconfirmed_balance: number, addresses: object}>}
  */
 module.exports.multiGetBalanceByAddress = async function(addresses, batchsize) {
-  batchsize = batchsize || 100;
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
-  const ret = { balance: 0, unconfirmed_balance: 0, incoming_balance: 0, outgoing_balance: 0, addresses: {} };
+  try {
+    batchsize = batchsize || 100;
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
+    const ret = { balance: 0, unconfirmed_balance: 0, incoming_balance: 0, outgoing_balance: 0, addresses: {} };
 
-  const chunks = splitIntoChunks(addresses, batchsize);
+    const chunks = splitIntoChunks(addresses, batchsize);
 
-  for (const chunk of chunks) {
-    const scripthashes = [];
-    const scripthash2addr = {};
+    for (const chunk of chunks) {
+      const scripthashes = [];
+      const scripthash2addr = {};
 
-    for (const addr of chunk) {
-      const script = bitcoin.address.toOutputScript(addr, config.network);
-      const hash = bitcoin.crypto.sha256(script);
-      let reversedHash = Buffer.from(reverse(hash));
+      for (const addr of chunk) {
+        const script = bitcoin.address.toOutputScript(addr, config.network);
+        const hash = bitcoin.crypto.sha256(script);
+        let reversedHash = Buffer.from(reverse(hash));
 
-      reversedHash = reversedHash.toString('hex');
-      scripthashes.push(reversedHash);
-      scripthash2addr[reversedHash] = addr;
+        reversedHash = reversedHash.toString('hex');
+        scripthashes.push(reversedHash);
+        scripthash2addr[reversedHash] = addr;
+      }
+
+      const balances = await mainClient.blockchainScripthash_getBalanceBatch(scripthashes);
+
+      for (const bal of balances) {
+        ret.incoming_balance += +bal.result.alert_incoming;
+        ret.outgoing_balance += +bal.result.alert_outgoing;
+        ret.balance += +bal.result.confirmed;
+        ret.unconfirmed_balance += +bal.result.unconfirmed;
+        ret.addresses[scripthash2addr[bal.param]] = bal.result;
+      }
     }
 
-    const balances = await mainClient.blockchainScripthash_getBalanceBatch(scripthashes);
-
-    for (const bal of balances) {
-      ret.incoming_balance += +bal.result.alert_incoming;
-      ret.outgoing_balance += +bal.result.alert_outgoing;
-      ret.balance += +bal.result.confirmed;
-      ret.unconfirmed_balance += +bal.result.unconfirmed;
-      ret.addresses[scripthash2addr[bal.param]] = bal.result;
-    }
+    return ret;
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
   }
-
-  return ret;
 };
 
 module.exports.multiGetUtxoByAddress = async function(addresses, batchsize) {
-  batchsize = batchsize || 100;
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
-  const ret = {};
-  const res = [];
-  const chunks = splitIntoChunks(addresses, batchsize);
+  try {
+    batchsize = batchsize || 100;
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
+    const ret = {};
+    const res = [];
+    const chunks = splitIntoChunks(addresses, batchsize);
 
-  for (const chunk of chunks) {
-    const scripthashes = [];
-    const scripthash2addr = {};
+    for (const chunk of chunks) {
+      const scripthashes = [];
+      const scripthash2addr = {};
 
-    for (const addr of chunk) {
-      const script = bitcoin.address.toOutputScript(addr, config.network);
-      const hash = bitcoin.crypto.sha256(script);
-      let reversedHash = Buffer.from(reverse(hash));
+      for (const addr of chunk) {
+        const script = bitcoin.address.toOutputScript(addr, config.network);
+        const hash = bitcoin.crypto.sha256(script);
+        let reversedHash = Buffer.from(reverse(hash));
 
-      reversedHash = reversedHash.toString('hex');
-      scripthashes.push(reversedHash);
-      scripthash2addr[reversedHash] = addr;
-    }
+        reversedHash = reversedHash.toString('hex');
+        scripthashes.push(reversedHash);
+        scripthash2addr[reversedHash] = addr;
+      }
 
-    const results = await mainClient.blockchainScripthash_listunspentBatch(scripthashes);
+      const results = await mainClient.blockchainScripthash_listunspentBatch(scripthashes);
 
-    for (const utxos of results) {
-      ret[scripthash2addr[utxos.param]] = utxos.result;
-      for (const utxo of ret[scripthash2addr[utxos.param]]) {
-        utxo.address = scripthash2addr[utxos.param];
-        utxo.txid = utxo.tx_hash;
-        utxo.vout = utxo.tx_pos;
-        utxo.spend_tx_num = utxo.spend_tx_num;
-        res.push(utxo);
+      for (const utxos of results) {
+        ret[scripthash2addr[utxos.param]] = utxos.result;
+        for (const utxo of ret[scripthash2addr[utxos.param]]) {
+          utxo.address = scripthash2addr[utxos.param];
+          utxo.txid = utxo.tx_hash;
+          utxo.vout = utxo.tx_pos;
+          utxo.spend_tx_num = utxo.spend_tx_num;
+          res.push(utxo);
+        }
       }
     }
-  }
 
-  return res;
+    return res;
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
+  }
 };
 
 module.exports.multiGetHistoryByAddress = async function(addresses, batchsize) {
-  batchsize = batchsize || 100;
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
-  const ret = {};
+  try {
+    batchsize = batchsize || 100;
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
+    const ret = {};
 
-  const chunks = splitIntoChunks(addresses, batchsize);
+    const chunks = splitIntoChunks(addresses, batchsize);
 
-  for (const chunk of chunks) {
-    const scripthashes = [];
-    const scripthash2addr = {};
+    for (const chunk of chunks) {
+      const scripthashes = [];
+      const scripthash2addr = {};
 
-    for (const addr of chunk) {
-      const script = bitcoin.address.toOutputScript(addr, config.network);
-      const hash = bitcoin.crypto.sha256(script);
-      let reversedHash = Buffer.from(reverse(hash));
+      for (const addr of chunk) {
+        const script = bitcoin.address.toOutputScript(addr, config.network);
+        const hash = bitcoin.crypto.sha256(script);
+        let reversedHash = Buffer.from(reverse(hash));
 
-      reversedHash = reversedHash.toString('hex');
-      scripthashes.push(reversedHash);
-      scripthash2addr[reversedHash] = addr;
-    }
+        reversedHash = reversedHash.toString('hex');
+        scripthashes.push(reversedHash);
+        scripthash2addr[reversedHash] = addr;
+      }
 
-    const results = await mainClient.blockchainScripthash_getHistoryBatch(scripthashes);
+      const results = await mainClient.blockchainScripthash_getHistoryBatch(scripthashes);
 
-    for (const history of results) {
-      ret[scripthash2addr[history.param]] = history.result;
-      for (const hist of ret[scripthash2addr[history.param]]) {
-        hist.address = scripthash2addr[history.param];
+      for (const history of results) {
+        ret[scripthash2addr[history.param]] = history.result;
+        for (const hist of ret[scripthash2addr[history.param]]) {
+          hist.address = scripthash2addr[history.param];
+        }
       }
     }
-  }
 
-  return ret;
+    return ret;
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
+  }
 };
 
 module.exports.multiGetTransactionByTxid = async function(txids, batchsize, verbose) {
-  batchsize = batchsize || 100;
-  verbose = verbose !== false;
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
-  const ret = {};
+  try {
+    batchsize = batchsize || 100;
+    verbose = verbose !== false;
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
+    const ret = {};
 
-  const chunks = splitIntoChunks(txids, batchsize);
+    const chunks = splitIntoChunks(txids, batchsize);
 
-  for (const chunk of chunks) {
-    const results = await mainClient.blockchainTransaction_getBatch(chunk, verbose);
+    for (const chunk of chunks) {
+      const results = await mainClient.blockchainTransaction_getBatch(chunk, verbose);
 
-    for (const txdata of results) {
-      ret[txdata.param] = txdata.result;
+      for (const txdata of results) {
+        ret[txdata.param] = txdata.result;
+      }
     }
-  }
 
-  return ret;
+    return ret;
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
+  }
 };
 /**
  * Simple waiter till `mainConnected` becomes true (which means
@@ -352,28 +430,42 @@ module.exports.multiGetTransactionByTxid = async function(txids, batchsize, verb
  * @returns {Promise<Promise<*> | Promise<*>>}
  */
 module.exports.waitTillConnected = async function() {
-  const retriesMax = 30;
+  try {
+    const retriesMax = 30;
 
-  for (let i = 0; i < retriesMax; i++) {
-    if (mainConnected) {
-      return true;
+    for (let i = 0; i < retriesMax; i++) {
+      if (mainConnected) {
+        return true;
+      }
+
+      await wait(1000);
     }
-
-    await wait(1000);
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError('Waiting for Electrum connection timeout');
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
   }
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError('Waiting for Electrum connection timeout');
 };
 
 module.exports.estimateFees = async function() {
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
-  let fast = await mainClient.blockchainEstimatefee(1);
-  let medium = await mainClient.blockchainEstimatefee(5);
-  let slow = await mainClient.blockchainEstimatefee(10);
+  try {
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
+    let fast = await mainClient.blockchainEstimatefee(1);
+    let medium = await mainClient.blockchainEstimatefee(5);
+    let slow = await mainClient.blockchainEstimatefee(10);
 
-  if (fast < 1) fast = 1;
-  if (medium < 1) medium = 1;
-  if (slow < 1) slow = 1;
-  return { fast, medium, slow };
+    if (fast < 1) fast = 1;
+    if (medium < 1) medium = 1;
+    if (slow < 1) slow = 1;
+    return { fast, medium, slow };
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
+  }
 };
 
 /**
@@ -383,44 +475,65 @@ module.exports.estimateFees = async function() {
  * @returns {Promise<number>} Satoshis per byte
  */
 module.exports.estimateFee = async function(numberOfBlocks) {
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
-  numberOfBlocks = numberOfBlocks || 1;
-  const coinUnitsPerKilobyte = await mainClient.blockchainEstimatefee(numberOfBlocks);
+  try {
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
+    numberOfBlocks = numberOfBlocks || 1;
+    const coinUnitsPerKilobyte = await mainClient.blockchainEstimatefee(numberOfBlocks);
 
-  if (coinUnitsPerKilobyte < 1) return 1;
-  return Math.round(
-    new BigNumber(coinUnitsPerKilobyte)
-      .dividedBy(1024)
-      .multipliedBy(100000000)
-      .toNumber(),
-  );
+    if (coinUnitsPerKilobyte < 1) return 1;
+    return Math.round(
+      new BigNumber(coinUnitsPerKilobyte)
+        .dividedBy(1024)
+        .multipliedBy(100000000)
+        .toNumber(),
+    );
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
+  }
 };
 
 module.exports.getDustValue = async () => {
-  const relayFee = await mainClient.blockchain_relayfee();
-  // magic numbers from electrum vault
+  try {
+    const relayFee = await mainClient.blockchain_relayfee();
+    // magic numbers from electrum vault
 
-  return btcToSatoshi((183 * 3 * relayFee) / 1000, 0);
+    return btcToSatoshi((183 * 3 * relayFee) / 1000, 0);
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
+  }
 };
 
 module.exports.broadcast = async function(hex) {
-  if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
   try {
-    return await mainClient.blockchainTransaction_broadcast(hex);
-  } catch (error) {
-    if (error?.code === 1) {
-      if (error.message.includes(messages.txnMempoolConflictCode18)) {
-        throw new AppErrors.DoubleSpentFundsError();
+    if (!mainConnected) throw new AppErrors.ElectrumXConnectionError();
+    try {
+      return await mainClient.blockchainTransaction_broadcast(hex);
+    } catch (error) {
+      if (error?.code === 1) {
+        if (error.message.includes(messages.txnMempoolConflictCode18)) {
+          throw new AppErrors.DoubleSpentFundsError();
+        }
+        if (error.message.includes(messages.missingInputs)) {
+          throw new AppErrors.NotExistingFundsError();
+        }
+        if (error.message.includes(messages.dustCode64)) {
+          throw new AppErrors.DustError();
+        }
+        throw new AppErrors.BroadcastError(error.message);
       }
-      if (error.message.includes(messages.missingInputs)) {
-        throw new AppErrors.NotExistingFundsError();
-      }
-      if (error.message.includes(messages.dustCode64)) {
-        throw new AppErrors.DustError();
-      }
-      throw new AppErrors.BroadcastError(error.message);
+      throw error;
     }
-    throw error;
+  } catch (error) {
+    logger.error({
+      message: error.message,
+      category: error.name,
+    });
   }
 };
 
@@ -438,8 +551,6 @@ module.exports.testConnection = async function(host, tcpPort) {
     await client.server_version('2.7.11', '1.4');
     await client.server_ping();
 
-    client.keepAlive = () => {}; // dirty hack to make it stop reconnecting
-    client.reconnect = () => {}; // dirty hack to make it stop reconnecting
     client.close();
     return true;
   } catch (_) {
@@ -448,8 +559,6 @@ module.exports.testConnection = async function(host, tcpPort) {
 };
 
 module.exports.forceDisconnect = () => {
-  mainClient.keepAlive = () => {}; // dirty hack to make it stop reconnecting
-  mainClient.reconnect = () => {}; // dirty hack to make it stop reconnecting
   mainClient.close();
 };
 

@@ -8,7 +8,7 @@ export interface WalletsState {
   wallets: Wallet[];
   isInitialized: boolean;
   isLoading: boolean;
-  error: Error | null;
+  error: string | null;
 }
 
 const initialState: WalletsState = {

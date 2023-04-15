@@ -37,7 +37,7 @@ export interface LoadWalletsSuccessAction {
 
 export interface LoadWalletsFailureAction {
   type: WalletsAction.LoadWalletsFailure;
-  error: Error;
+  error: string;
 }
 
 export interface DeleteWalletAction {
@@ -53,7 +53,7 @@ export interface DeleteWalletSuccessAction {
 
 export interface DeleteWalletFailureAction {
   type: WalletsAction.DeleteWalletFailure;
-  error: Error;
+  error: string;
 }
 
 export interface CreateWalletAction {
@@ -69,7 +69,7 @@ export interface CreateWalletSuccessAction {
 
 export interface CreateWalletFailureAction {
   type: WalletsAction.CreateWalletFailure;
-  error: Error;
+  error: string;
 }
 
 export interface ImportWalletAction {
@@ -85,7 +85,7 @@ export interface ImportWalletSuccessAction {
 
 export interface ImportWalletFailureAction {
   type: WalletsAction.ImportWalletFailure;
-  error: Error;
+  error: string;
 }
 
 export interface UpdateWalletAction {
@@ -100,7 +100,7 @@ export interface UpdateWalletSuccessAction {
 
 export interface UpdateWalletFailureAction {
   type: WalletsAction.UpdateWalletFailure;
-  error: Error;
+  error: string;
 }
 
 export interface SendTransactionAction {
@@ -117,7 +117,7 @@ export interface SendTransactionSuccessAction {
 
 export interface SendTransactionFailureAction {
   type: WalletsAction.SendTransactionFailure;
-  error: Error;
+  error: string;
 }
 
 export interface RefreshWalletAction {
@@ -132,7 +132,7 @@ export interface RefreshWalletSuccessAction {
 
 export interface RefreshWalletFailureAction {
   type: WalletsAction.RefreshWalletFailure;
-  error: Error;
+  error: string;
 }
 
 export type WalletsActionType =
@@ -167,7 +167,7 @@ export const loadWalletsSuccess = (wallets: Wallet[]): LoadWalletsSuccessAction 
   wallets,
 });
 
-export const loadWalletsFailure = (error: Error): LoadWalletsFailureAction => ({
+export const loadWalletsFailure = (error: string): LoadWalletsFailureAction => ({
   type: WalletsAction.LoadWalletsFailure,
   error,
 });
@@ -185,7 +185,7 @@ export const deleteWalletSuccess = (wallet: Wallet): DeleteWalletSuccessAction =
   wallet,
 });
 
-export const deleteWalletFailure = (error: Error): DeleteWalletFailureAction => ({
+export const deleteWalletFailure = (error: string): DeleteWalletFailureAction => ({
   type: WalletsAction.DeleteWalletFailure,
   error,
 });
@@ -203,7 +203,7 @@ export const createWalletSuccess = (wallet: Wallet): CreateWalletSuccessAction =
   wallet,
 });
 
-export const createWalletFailure = (error: Error): CreateWalletFailureAction => ({
+export const createWalletFailure = (error: string): CreateWalletFailureAction => ({
   type: WalletsAction.CreateWalletFailure,
   error,
 });
@@ -221,7 +221,7 @@ export const importWalletSuccess = (wallet: Wallet): ImportWalletSuccessAction =
   wallet,
 });
 
-export const importWalletFailure = (error: Error): ImportWalletFailureAction => ({
+export const importWalletFailure = (error: string): ImportWalletFailureAction => ({
   type: WalletsAction.ImportWalletFailure,
   error,
 });
@@ -236,7 +236,7 @@ export const updateWalletSuccess = (wallet: Wallet): UpdateWalletSuccessAction =
   wallet,
 });
 
-export const updateWalletFailure = (error: Error): UpdateWalletFailureAction => ({
+export const updateWalletFailure = (error: string): UpdateWalletFailureAction => ({
   type: WalletsAction.UpdateWalletFailure,
   error,
 });
@@ -254,7 +254,7 @@ export const sendTransactionSuccess = (): SendTransactionSuccessAction => ({
   type: WalletsAction.SendTransactionSuccess,
 });
 
-export const sendTransactionFailure = (error: Error): SendTransactionFailureAction => ({
+export const sendTransactionFailure = (error: string): SendTransactionFailureAction => ({
   type: WalletsAction.SendTransactionFailure,
   error,
 });
@@ -269,7 +269,7 @@ export const refreshWalletSuccess = (wallet: Wallet): RefreshWalletSuccessAction
   wallet,
 });
 
-export const refreshWalletFailure = (error: Error): RefreshWalletFailureAction => ({
+export const refreshWalletFailure = (error: string): RefreshWalletFailureAction => ({
   type: WalletsAction.RefreshWalletFailure,
   error,
 });

@@ -1,3 +1,4 @@
+import { useFlipper } from '@react-navigation/devtools';
 import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import React, { FC } from 'react';
 
@@ -56,6 +57,7 @@ import {
   UpdateEmailNotificationScreen,
   SeedPhraseConfirmScreen,
 } from 'app/screens';
+import { navigationRef } from 'app/services';
 
 import { MainTabNavigator } from './MainTabNavigator';
 
@@ -72,6 +74,8 @@ export const RootNavigator: FC<Props> = ({
   shouldRenderNotification,
   userVersion,
 }) => {
+  useFlipper(navigationRef);
+
   const getAddEmailInitialParams = () => {
     if (userVersion === USER_VERSIONS.BEFORE_NOTIFICATIONS_WERE_ADDED) {
       return getAppUpdateAddEmailParams();

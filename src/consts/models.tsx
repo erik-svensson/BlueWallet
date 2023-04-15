@@ -79,7 +79,7 @@ export interface SocketOptions {
   rejectUnauthorized: boolean;
 }
 
-export type SocketCallback = (address: string) => void;
+export type SocketCallback = () => void;
 
 export const ELECTRUM_VAULT_SEED_PREFIXES = {
   SEED_PREFIX: '01', // Standard wallet
