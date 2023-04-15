@@ -44,7 +44,7 @@ export const vi = `
     <p>
         ác điều khoản và điều kiện sau đây, cùng với bất kỳ tài liệu nào đi kèm rõ ràng bằng cách tham chiếu (gọi chung
         là “Điều khoản sử dụng), chi phối việc tiếp cận và sử dụng trang <a
-            href="https://www.bitcoinvault.global">www.bitcoinvault.global</a>, (“Trang web”), bao gồm ứng dụng ELECTRUM
+            href="https://www.btcv.com">www.btcv.com</a>, (“Trang web”), bao gồm ứng dụng ELECTRUM
         VAULT đi kèm trên máy tính và ứng dụng di động GOLD WALLET (mỗi ứng dụng được gọi riêng là “Ứng dụng” và gọi
         chung là “các Ứng dụng”), cũng như việc tiếp cận và sử dụng của quý vị với bất kỳ phương tiện truyền thông, phân
         tích, nội dung, chức năng và dịch vụ nào được cung cấp trên hoặc thông qua Trang web và bất kỳ Ứng dụng nào,
@@ -87,7 +87,7 @@ export const vi = `
     <p>
         Nếu quý vị có bất kỳ câu hỏi hay ý kiến nào liên quan đến các Điều khoản sử dụng này, vui lòng gửi tin nhắn cho
         chúng tôi trên trang web của chúng tôi theo địa chỉ
-        <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a> hoặc liên hệ với chúng tôi qua
+        <a href="mailto:contact@btcv.com">contact@btcv.com</a> hoặc liên hệ với chúng tôi qua
         Facebook, Telegram, Instagram hoặc Twitter. Nếu không đồng ý với Thỏa thuận này hay nội dung điều chỉnh bất kỳ
         của Thỏa thuận này, quý vị không nên sử dụng Dịch vụ của chúng tôi.
     </p>
@@ -255,7 +255,7 @@ export const vi = `
     <p>
         Nếu quý vị muốn sử dụng tài liệu trên các Trang web hoặc trong bất kỳ Sản phẩm nào với mục đích khác với mục
         đích được nêu trong phần này, vui lòng gửi yêu cầu của quý vị về địa chỉ: <a
-            href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+            href="mailto:contact@btcv.com">contact@btcv.com</a>
     </p>
     <p>
         Nếu quý vị in, sao chép, chỉnh sửa, tải xuống hoặc sử dụng hay cấp cho bất kỳ người nào khác quyền truy cập bất
@@ -470,7 +470,7 @@ export const vi = `
         </li>
         <li>
             Bên kiểm soát dữ liệu đối với dữ liệu cá nhân của quý vị là Công ty. Quý vị có thể liên hệ với chúng tôi
-            qua email tại địa chỉ <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+            qua email tại địa chỉ <a href="mailto:contact@btcv.com">contact@btcv.com</a>
         </li>
         <li>
             Chúng tôi thu thập các thông tin mà quý vị cung cấp trực tiếp cho chúng tôi do quý vị chấp thuận nhận

@@ -33,7 +33,7 @@ export const id = `<!DOCTYPE html>
     Ketentuan penggunaan ditandatangani oleh dan antara Anda dan <b>CyberBit OÜ</b>, perseroan terbatas yang didirikan secara legal dan beroperasi secara valid berdasarkan undang-undang Estonia, dengan alamat:  Harju maakond, Tallinn, Kesklinna linnaosa, Pärnu mnt 158, 11317, ("<b>Perusahaan</b>", "<b>kami</b>" atau "<b>kami</b>").
 </p>
 <p>
-    Syarat dan ketentuan berikut, beserta dokumen apa pun yang secara tegas diterapkan berdasarkan penyebutan (secara bersama-sama, “Ketentuan Pembelian” ini), mengatur akses dan penggunaan Anda atas <a href="https://www.bitcoinvault.global">www.bitcoinvault.global</a>, (”Situs Web”), termasuk aplikasi desktop ELECTRUM VAULT dan aplikasi seluler GOLD WALLET terkait (masing-masing dan secara bersama-sama, “Aplikasi”) serta akses serta penggunaan Anda atas media, analitik, konten, fungsionalitas, dan layanan yang ditawarkan pada atau melalui setiap Situs Web dan Aplikasi, serta akses dan penggunaan semua dan setiap situs serta layanan terkait oleh Anda.
+    Syarat dan ketentuan berikut, beserta dokumen apa pun yang secara tegas diterapkan berdasarkan penyebutan (secara bersama-sama, “Ketentuan Pembelian” ini), mengatur akses dan penggunaan Anda atas <a href="https://www.btcv.com">www.btcv.com</a>, (”Situs Web”), termasuk aplikasi desktop ELECTRUM VAULT dan aplikasi seluler GOLD WALLET terkait (masing-masing dan secara bersama-sama, “Aplikasi”) serta akses serta penggunaan Anda atas media, analitik, konten, fungsionalitas, dan layanan yang ditawarkan pada atau melalui setiap Situs Web dan Aplikasi, serta akses dan penggunaan semua dan setiap situs serta layanan terkait oleh Anda.
 </p>
 <p>
     Situs Web, Aplikasi, serta semua dan setiap media, analitik, konten, fungsionalitas, produk, dan layanan lainnya yang ditawarkan oleh kami atau melalui kami, disebut sebagai “Produk”.
@@ -54,7 +54,7 @@ export const id = `<!DOCTYPE html>
     Kegagalan atau penundaan oleh Aplikasi untuk menegakkan atau menegakkan sebagian dari ketentuan apa pun dalam Ketentuan ini tidak boleh ditafsirkan sebagai pengabaian hak apa pun.
 </p>
 <p>
-    Apabila Anda memiliki pertanyaan atau komentar apa pun terkait Ketentuan Penggunaan ini, kirim pesan melalui situs web kami di <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a> atau hubungi kami melalui Facebook, Telegram, Instagram, atau Twitter. Apabila Anda tidak menyetujui Perjanjian ini atau perubahan apa pun terhadap Perjanjian ini, Anda tidak boleh menggunakan Layanan kami.
+    Apabila Anda memiliki pertanyaan atau komentar apa pun terkait Ketentuan Penggunaan ini, kirim pesan melalui situs web kami di <a href="mailto:contact@btcv.com">contact@btcv.com</a> atau hubungi kami melalui Facebook, Telegram, Instagram, atau Twitter. Apabila Anda tidak menyetujui Perjanjian ini atau perubahan apa pun terhadap Perjanjian ini, Anda tidak boleh menggunakan Layanan kami.
 </p>
 <h3>
     Orang yang diizinkan menggunakan Situs Web kami dan Produk apa pun, termasuk Aplikasi
@@ -155,7 +155,7 @@ Anda harus berhati-hati saat memasukkan informasi pribadi ke Situs Web di komput
     </li>
 </ol>
 <p>
-    Apabila Anda ingin memanfaatkan materi apa pun di Situs Web atau dari Produk apa pun selain sebagaimana dijabarkan dalam bagian ini, kirimkanlah permintaan Anda ke: <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+    Apabila Anda ingin memanfaatkan materi apa pun di Situs Web atau dari Produk apa pun selain sebagaimana dijabarkan dalam bagian ini, kirimkanlah permintaan Anda ke: <a href="mailto:contact@btcv.com">contact@btcv.com</a>
 </p>
 <p>
     Apabila Anda mencetak, memodifikasi, mengunduh, ataupun menggunakan atau memberikan kepada orang lain akses ke bagian mana pun dari Situs Web dan Produk apa pun yang melanggar Ketentuan ini, hak Anda untuk menggunakan Situs Web dan Produk apa pun akan segera diakhiri dan Anda harus, atas pilihan kami, mengembalikan atau menghancurkan salinan materi apa pun yang telah Anda buat. Tidak ada hak, kepemilikan, atau kepentingan dalam atau terhadap Situs Web atau Produk apa pun maupun konten apa pun pada Situs Web atau Produk apa pun yang dialihkan kepada Anda, dan semua hak yang tidak secara tegas diberikan tetap menjadi milik kami. Penggunaan Situs Web apa pun yang tidak secara tegas diizinkan oleh Ketentuan Penggunaan ini merupakan pelanggaran terhadap Ketentuan Penggunaan ini dan akan melanggar hak cipta, merek dagang, dan undang-undang lainnya.
@@ -279,7 +279,7 @@ Anda harus berhati-hati saat memasukkan informasi pribadi ke Situs Web di komput
         Kami memproses data pribadi Anda sesuai dengan Peraturan Perlindungan Data Umum, yakni Peraturan (UE) 2016/679 dari Parlemen Eropa dan Dewan pada 27 April 2016) terkait perlindungan orang perseorangan sehubungan dengan pemrosesan data pribadi dan pergerakan bebas data tersebut, dan pencabutan Arahan 95/46/EC, yang selanjutnya disebut sebagai “GDPR”.
     </li>
     <li>
-        Pengendali data untuk data pribadi Anda adalah Perusahaan. Anda dapat menghubungi kami dengan email di <a href="mailto:contact@bitcoinvault.global">contact@bitcoinvault.global</a>
+        Pengendali data untuk data pribadi Anda adalah Perusahaan. Anda dapat menghubungi kami dengan email di <a href="mailto:contact@btcv.com">contact@btcv.com</a>
     </li>
     <li>
         Kami mengumpulkan informasi yang Anda berikan secara langsung kepada kami karena Anda setuju untuk menerima pemberitahuan email ke alamat email Anda. Selain itu, kami mengumpulkan informasi teknis tertentu menggunakan cookie yang membantu kami mengoperasikan dan menyediakan layanan bagi Anda. Cookie adalah file data berukuran kecil yang mungkin mencakup pengidentifikasi unik anonim. Cookie dikirim ke peramban Anda dari situs web dan disimpan pada hard drive komputer Anda. Anda dapat mengatur peramban Anda untuk menolak semua cookie atau memberi tahu Anda saat cookie dikirim. Namun demikian, jika Anda tidak menerima cookie, Anda mungkin tidak dapat menggunakan beberapa bagian situs web kami.
