@@ -38,7 +38,7 @@ export const MessageScreen = (props: Props) => {
       <Text style={styles.title}>{title}</Text>
       <Image testID={testID} source={source} style={[styles.image, imageStyle]} resizeMode="contain" />
       <Text style={styles.description}>{description}</Text>
-      {buttonProps && <Button testID="message-close-button" {...buttonProps} />}
+      {buttonProps ? <Button testID="message-close-button" {...buttonProps} /> : null}
     </View>
   );
 };

@@ -558,7 +558,7 @@ class SendCoinsScreen extends Component<Props, State> {
           unit={wallet.preferredBalanceUnit}
         />
         <View style={styles.inputsContainer}>
-          {this.isAlert(wallet) && <Warning />}
+          {this.isAlert(wallet) ? <Warning /> : null}
           {this.renderAmountInput()}
 
           <View style={styles.fee}>

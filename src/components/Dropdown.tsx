@@ -17,7 +17,7 @@ export const Dropdown = ({ title, label, testID, onSelectPress }: Props) => {
     <View style={styles.header}>
       <TouchableOpacity testID={testID} style={styles.chooseWalletButton} onPress={onSelectPress}>
         <Text style={styles.chooseWalletButtonText}>{title}</Text>
-        {onSelectPress && <Image source={icons.iconDropdown} style={styles.icon} />}
+        {onSelectPress ? <Image source={icons.iconDropdown} style={styles.icon} /> : null}
       </TouchableOpacity>
       <View style={styles.descriptionContainer}>{label}</View>
     </View>

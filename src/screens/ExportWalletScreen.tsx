@@ -30,7 +30,7 @@ export const ExportWalletScreen = ({ route }: Props) => {
     <ScreenTemplate header={<Header title={i18n.wallets.exportWallet.header} isBackArrow />}>
       <Text style={styles.title}>{i18n.wallets.exportWallet.title}</Text>
       <View testID="export-wallet-qr-code" style={styles.qrCodeContainer}>
-        {secret && <QRCode quietZone={10} value={secret} size={140} ecl={'H'} />}
+        {secret ? <QRCode quietZone={10} value={secret} size={140} ecl={'H'} /> : null}
       </View>
       <Mnemonic testID="export-wallet-seed-phrase" mnemonic={secret} />
 

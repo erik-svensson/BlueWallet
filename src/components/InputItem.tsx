@@ -131,7 +131,7 @@ export class InputItem extends Component<Props, State> {
     return (
       <View style={styles.container}>
         <Animated.Text style={[styles.label, { top, fontSize }]}>{label}</Animated.Text>
-        {!!suffix && <Text style={styles.suffix}>{suffix}</Text>}
+        {!!suffix ? <Text style={styles.suffix}>{suffix}</Text> : null}
         <BaseTextInput
           ref={this.inputItemRef}
           autoCorrect={false}

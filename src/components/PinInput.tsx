@@ -39,7 +39,7 @@ export class PinInput extends PureComponent<Props> {
         keyboardType="number-pad"
         renderCell={({ index, symbol, isFocused }) => (
           <View key={index.toString()} style={[styles.cell, isFocused && styles.cellFocused]}>
-            {!!symbol && <View style={styles.cellMask} />}
+            {!!symbol ? <View style={styles.cellMask} /> : null}
           </View>
         )}
       />

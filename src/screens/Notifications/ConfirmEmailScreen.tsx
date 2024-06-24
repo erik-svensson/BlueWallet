@@ -225,7 +225,7 @@ class ConfirmEmailScreen extends Component<Props, State> {
               onTextChange={this.onChange}
               isError={!!notificationError}
             />
-            {!!notificationError && <Text style={styles.error}>{notificationError}</Text>}
+            {!!notificationError ? <Text style={styles.error}>{notificationError}</Text> : null}
           </View>
         </>
       </ScreenTemplate>

@@ -29,7 +29,7 @@ export const SeedPhraseConfirmView: FC<Props> = ({
       <View style={[styles.mnemonicPhraseContainer, error ? { borderColor: palette.primary } : {}]}>
         <Tags words={orderedMnemonics} onTagsOrderChange={onSeedOrderChange} onRemove={onSeedRemovePress} removable />
       </View>
-      {error && <Text style={styles.errorText}>{i18n.wallets.confirmSeed.error}</Text>}
+      {error ? <Text style={styles.errorText}>{i18n.wallets.confirmSeed.error}</Text> : null}
       <View style={styles.mnemonicPhraseUnselectedContainer}>
         <Tags words={unorderedMnemonics} onTouch={onTouch} touchable />
       </View>
